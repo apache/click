@@ -230,13 +230,22 @@ public class Table extends AbstractControl {
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table{1}.css\"/>\n"
         + "<style type=\"text/css\"> th.sortable a '{'background: url({0}/click/column-sortable-dark{1}.gif) center right no-repeat;'}' th.ascending a '{'background: url({0}/click/column-ascending-dark{1}.gif) center right no-repeat;'}' th.descending a '{'background: url({0}/click/column-descending-dark{1}.gif) center right no-repeat;'}' </style>\n";
 
-    /** The table top banner position. */
+    /** The attached style pagination banner position. */
+    public static final int PAGINATOR_ATTACHED = 1;
+
+    /** The detached style pagination banner position. */
+    public static final int PAGINATOR_DETACHED = 2;
+
+    /** The attached style pagination banner position. */
+    public static final int PAGINATOR_INLINE = 3;
+
+    /** The table top pagination banner position. */
     public static final int POSITION_TOP = 1;
 
-    /** The table bottom banner position. */
+    /** The table bottom pagination banner position. */
     public static final int POSITION_BOTTOM = 2;
 
-    /** The table top and bottom banner. */
+    /** The table top and bottom pagination banner position. */
     public static final int POSITION_BOTH = 3;
 
     /** The control ActionLink page number parameter name: <tt>"ascending"</tt>. */
@@ -343,6 +352,16 @@ public class Table extends AbstractControl {
      */
     protected int pageSize;
 
+    /** The paginator used to render the table pagination controls. */
+    protected Paginator paginator;
+
+    /**
+     * The paginator attachment style:
+     * <tt>[ PAGINATOR_ATTACHED | PAGINATOR_DEATTACHED | PAGINATOR_INLINE ]</tt>.
+     * The default paginator attachment type is <tt>PAGINATOR_ATTACHED</tt>.
+     */
+    protected int paginatorAttachment = PAGINATOR_ATTACHED;
+
     /**
      * The default column render id attribute status. The default value is
      * false.
@@ -418,7 +437,7 @@ public class Table extends AbstractControl {
      * <tt>[ POSITION_TOP | POSITION_BOTTOM | POSITION_BOTH ]</tt>.
      * The default banner position is <tt>POSITION_BOTTOM</tt>.
      *
-     * @return the table pagination banner position.
+     * @return the table pagination banner position
      */
     public int getBannerPosition() {
         return bannerPosition;
@@ -803,6 +822,55 @@ public class Table extends AbstractControl {
     }
 
     /**
+     * Return the paginator for rendering the table pagination controls.
+     *
+     * @return the table paginator
+     */
+    public Paginator getPaginator() {
+        if (paginator == null) {
+            paginator = new DefaultPaginator();
+            paginator.setTable(this);
+        }
+        return paginator;
+    }
+
+    /**
+     * Set the paginator for rendering the table pagination controls.
+     *
+     * @param value the table paginator to set
+     */
+    public void setPaginator(Paginator value) {
+        if (paginator != null && paginator != value) {
+            paginator.setTable(null);
+        }
+        paginator = value;
+        if (paginator != null) {
+            paginator.setTable(this);
+        }
+    }
+
+    /**
+     * Return the paginator attachment style. Paginator attachment style values:
+     * <tt>[ PAGINATOR_ATTACHED | PAGINATOR_DEATTACHED | PAGINATOR_INLINE ]</tt>.
+     * The default paginator attachment type is <tt>PAGINATOR_ATTACHED</tt>.
+     *
+     * @return the paginator attachment style
+     */
+    public int getPaginatorAttachment() {
+        return paginatorAttachment;
+    }
+
+    /**
+     * Set Table pagination attachment style. Paginator attachment style values:
+     * <tt>[ PAGINATOR_ATTACHED | PAGINATOR_DEATTACHED | PAGINATOR_INLINE ]</tt>.
+     *
+     * @param value the table pagination attachment style
+     */
+    public void setPaginatorAttachment(int value) {
+        paginatorAttachment = value;
+    }
+
+    /**
      * Set the maximum page size in rows. A page size of 0
      * means there is no maximum page size.
      *
@@ -986,6 +1054,14 @@ public class Table extends AbstractControl {
                 "/net/sf/click/control/column-ascending-light.gif",
                 "/net/sf/click/control/column-descending-dark.gif",
                 "/net/sf/click/control/column-descending-light.gif",
+                "/net/sf/click/control/paging-first.gif",
+                "/net/sf/click/control/paging-first-disabled.gif",
+                "/net/sf/click/control/paging-last.gif",
+                "/net/sf/click/control/paging-last-disabled.gif",
+                "/net/sf/click/control/paging-next.gif",
+                "/net/sf/click/control/paging-next-disabled.gif",
+                "/net/sf/click/control/paging-prev.gif",
+                "/net/sf/click/control/paging-prev-disabled.gif",
                 "/net/sf/click/control/table.css"
             };
 
@@ -1116,13 +1192,18 @@ public class Table extends AbstractControl {
      */
     public void render(HtmlStringBuffer buffer) {
 
-        if (getBannerPosition() == POSITION_TOP
-            || getBannerPosition() == POSITION_BOTH) {
+        // Range sanity check.
+        int pageNumber = Math.min(getPageNumber(), getRowList().size() - 1);
+        pageNumber = Math.max(pageNumber, 0);
+        setPageNumber(pageNumber);
 
-            renderTableBanner(buffer);
-            renderPagingControls(buffer);
-            if (buffer.length() > 0) {
-                buffer.append("\n");
+        // If attached table top paginator configured render it.
+        if (getPaginatorAttachment() == PAGINATOR_ATTACHED) {
+            if (getBannerPosition() == POSITION_TOP || getBannerPosition() == POSITION_BOTH) {
+                renderPaginator(buffer);
+                if (buffer.length() > 0) {
+                    buffer.append("\n");
+                }
             }
         }
 
@@ -1148,21 +1229,26 @@ public class Table extends AbstractControl {
         buffer.closeTag();
         buffer.append("\n");
 
+        // Render table header
         renderHeaderRow(buffer);
 
         sortRowList();
 
+        // Render table body
         renderBodyRows(buffer);
+
+        // Render table footer
+        renderFooterRow(buffer);
 
         // Render table end.
         buffer.elementEnd(getTag());
         buffer.append("\n");
 
-        if (getBannerPosition() == POSITION_BOTTOM
-            || getBannerPosition() == POSITION_BOTH) {
-
-            renderTableBanner(buffer);
-            renderPagingControls(buffer);
+        // If attached table bottom paginator configured render it.
+        if (getPaginatorAttachment() == PAGINATOR_ATTACHED) {
+            if (getBannerPosition() == POSITION_BOTTOM || getBannerPosition() == POSITION_BOTH) {
+                renderPaginator(buffer);
+            }
         }
     }
 
@@ -1229,10 +1315,20 @@ public class Table extends AbstractControl {
     protected void renderBodyRows(HtmlStringBuffer buffer) {
         buffer.append("<tbody>\n");
 
-        // Range sanity check
-        int pageNumber = Math.min(getPageNumber(), getRowList().size() - 1);
-        pageNumber = Math.max(pageNumber, 0);
-        setPageNumber(pageNumber);
+        // If inline table top paginator configured render it.
+        if (getPaginatorAttachment() == PAGINATOR_INLINE) {
+            if (getBannerPosition() == POSITION_TOP || getBannerPosition() == POSITION_BOTH) {
+
+                buffer.append("<tr class=\"paging-inline\">\n");
+                buffer.append("<td class=\"paging-inline\" colspan=\"");
+                buffer.append(getColumnList().size());
+                buffer.append("\">");
+
+                renderPaginator(buffer);
+
+                buffer.append("</td></tr>\n");
+            }
+        }
 
         int firstRow = getFirstRow();
         int lastRow = getLastRow();
@@ -1272,7 +1368,33 @@ public class Table extends AbstractControl {
             }
         }
 
+        // If inline table bottom paginator configured render it.
+        if (getPaginatorAttachment() == PAGINATOR_INLINE) {
+            if (getBannerPosition() == POSITION_BOTTOM || getBannerPosition() == POSITION_BOTH) {
+
+                buffer.append("\n<tr class=\"paging-inline\">\n");
+                buffer.append("<td class=\"paging-inline\" colspan=\"");
+                buffer.append(getColumnList().size());
+                buffer.append("\">");
+
+                renderPaginator(buffer);
+
+                buffer.append("</td>\n</tr>\n");
+            }
+        }
+
         buffer.append("</tbody>");
+    }
+
+    /**
+     * Render the table header footer row. This method is designed to be
+     * overridden by Table subclasses which include a custom footer row.
+     * <p/>
+     * By default this method does not render a table footer.
+     *
+     * @param buffer the StringBuffer to render the footer row in
+     */
+    protected void renderFooterRow(HtmlStringBuffer buffer) {
     }
 
     /**
@@ -1309,10 +1431,24 @@ public class Table extends AbstractControl {
     }
 
     /**
+     * Render the table pagination display.
+     *
+     * @param buffer the StringBuffer to render the pagination display to
+     */
+    protected void renderPaginator(HtmlStringBuffer buffer) {
+        getPaginator().render(buffer);
+    }
+
+    /**
      * Render the table banner detailing number of rows and number displayed.
      * <p/>
      * See the <tt>/click-controls.properies</tt> for the HTML templates:
      * <tt>table-page-banner</tt> and <tt>table-page-banner-nolinks</tt>
+     *
+     * @deprecated use {@link #renderPaginator(HtmlStringBuffer)} instead, this
+     * method is provided to support backward compatibility older Click 1.4
+     * customized tables. In these scenarios please override {@link #renderPaginator(HtmlStringBuffer)}
+     * method to invoke {@link #renderTableBanner(HtmlStringBuffer)} and {@link #renderPagingControls(HtmlStringBuffer)}.
      *
      * @param buffer the StringBuffer to render the paging controls to
      */
@@ -1349,6 +1485,11 @@ public class Table extends AbstractControl {
      * <p/>
      * See the <tt>/click-controls.properies</tt> for the HTML templates:
      * <tt>table-page-links</tt> and <tt>table-page-links-nobanner</tt>
+     *
+     * @deprecated use {@link #renderPaginator(HtmlStringBuffer)} instead, this
+     * method is provided to support backward compatibility older Click 1.4
+     * customized tables. In these scenarios please override {@link #renderPaginator(HtmlStringBuffer)}
+     * method to invoke {@link #renderTableBanner(HtmlStringBuffer)} and {@link #renderPagingControls(HtmlStringBuffer)}.
      *
      * @param buffer the StringBuffer to render the paging controls to
      */
