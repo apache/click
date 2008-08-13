@@ -16,10 +16,7 @@
 package net.sf.click.extras.control;
 
 import net.sf.click.Control;
-import net.sf.click.control.AbstractContainer;
-import net.sf.click.control.AbstractControl;
 import net.sf.click.control.FieldSet;
-import net.sf.click.control.Form;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
@@ -48,7 +45,7 @@ public class HtmlFieldSet extends FieldSet {
     /**
      * Render the HTML representation of the FieldSet.
      * <p/>
-     * If FieldSet is contained within a {@link Form} instance, this method will
+     * If FieldSet is contained within a {@link net.sf.click.control.Form} instance, this method will
      * delegate rendering to {@link Form#renderFieldSet(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.FieldSet)}.
      * <p/>
      * The size of buffer is determined by {@link #getControlSizeEst()}.
@@ -87,10 +84,10 @@ public class HtmlFieldSet extends FieldSet {
         return super.toString();
     }
 
-    //-------------------------------------------- protected methods
+    // ------------------------------------------------------ Protected Methods
 
     /**
-     * @see AbstractControl#renderTagBegin(java.lang.String, net.sf.click.util.HtmlStringBuffer)
+     * @see net.sf.click.control.AbstractControl#renderTagBegin(java.lang.String, net.sf.click.util.HtmlStringBuffer)
      *
      * @param tagName the name of the tag to render
      * @param buffer the buffer to append the output to
@@ -111,7 +108,7 @@ public class HtmlFieldSet extends FieldSet {
     }
 
     /**
-     * @see AbstractContainer#renderContent(net.sf.click.util.HtmlStringBuffer)
+     * @see net.sf.click.control.AbstractContainer#renderContent(net.sf.click.util.HtmlStringBuffer)
      *
      * @param buffer the buffer to append the output to
      */
