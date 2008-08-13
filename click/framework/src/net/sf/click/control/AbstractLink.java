@@ -438,7 +438,30 @@ public abstract class AbstractLink extends AbstractControl {
 
             buffer.closeTag();
 
-            buffer.append(getLabel());
+            if (StringUtils.isBlank(getImageSrc())) {
+                buffer.append(getLabel());
+
+            } else {
+                buffer.elementStart("img");
+                buffer.appendAttribute("border", 0);
+                buffer.appendAttribute("class", "link");
+
+                if (getTitle() != null) {
+                    buffer.appendAttributeEscaped("alt", getTitle());
+                } else {
+                    buffer.appendAttributeEscaped("alt", getLabel());
+                }
+
+                String src = getImageSrc();
+                if (StringUtils.isNotBlank(src)) {
+                    if (src.charAt(0) == '/') {
+                        src = getContext().getRequest().getContextPath() + src;
+                    }
+                    buffer.appendAttribute("src", src);
+                }
+
+                buffer.elementEnd();
+            }
 
             buffer.elementEnd("span");
 
