@@ -112,6 +112,24 @@ public class ContainerUtils {
     }
 
     /**
+     * Return the list of hidden Fields for the given Container, recursively including
+     * any Fields contained in child containers. The list of returned fields
+     * will exclude any <tt>Button</tt> and <tt>Label</tt> fields.
+     *
+     * @param container the container to obtain the fields from
+     * @return the list of contained fields
+     */
+    public static List getHiddenFields(final Container container) {
+        if (container == null) {
+            throw new IllegalArgumentException("Null container parameter");
+        }
+
+        final List fields = new ArrayList();
+        addHiddenFields(container, fields);
+        return fields;
+    }
+
+    /**
      * Return a list of container fields which are not valid, not hidden and not
      * disabled.
      * <p/>
@@ -619,6 +637,39 @@ public class ContainerUtils {
                 addFields(childContainer, fields);
             } else if (control instanceof Field) {
                 fields.add(control);
+            }
+        }
+    }
+
+    /**
+     * Add hidden fields for the given Container to the specified field list,
+     * recursively including any Fields contained in child containers. The list
+     * of returned fields will exclude any <tt>Button</tt> or <tt>Label</tt>
+     * fields.
+     *
+     * @param container the container to obtain the hidden fields from
+     * @param the list of contained fields
+     */
+    private static void addHiddenFields(final Container container, final List fields) {
+        for (int i = 0; i < container.getControls().size(); i++) {
+            Control control = (Control) container.getControls().get(i);
+
+            if (control instanceof Container) {
+                if (control instanceof Field) {
+                    Field field = (Field) control;
+                    if (field.isHidden()) {
+                        fields.add(control);
+                    }
+                }
+
+                Container childContainer = (Container) control;
+                addHiddenFields(childContainer, fields);
+
+            } else if (control instanceof Field) {
+                Field field = (Field) control;
+                if (field.isHidden()) {
+                    fields.add(control);
+                }
             }
         }
     }
