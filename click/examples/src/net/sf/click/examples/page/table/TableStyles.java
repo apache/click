@@ -9,6 +9,7 @@ import net.sf.click.control.Label;
 import net.sf.click.control.Select;
 import net.sf.click.control.Table;
 import net.sf.click.examples.page.BorderPage;
+import net.sf.click.extras.control.InlinePaginator;
 
 /**
  * Provides an demonstration of Table control styles.
@@ -47,6 +48,9 @@ public class TableStyles extends BorderPage {
         table.setPageSize(10);
         table.setShowBanner(true);
         table.setSortable(true);
+
+        table.setPaginator(new InlinePaginator());
+        table.setPaginatorAttachment(Table.PAGINATOR_INLINE);
 
         Column column = new Column("id");
         column.setWidth("50px");
