@@ -77,6 +77,7 @@
    	</menu>
    
    	<menu label=" Table" path="#" imageSrc="/assets/images/icons-16px/table.png">
+		<menu label="Table Footer" path="table/table-footer.htm"/>
 		<menu label="Table Paging" path="table/table-paging.htm"/>
 		<menu label="Table Sorting" path="table/table-sorting.htm"/>
 		<menu label="Table Styles" path="table/table-styles.htm"/>
