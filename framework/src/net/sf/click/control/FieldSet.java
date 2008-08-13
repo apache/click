@@ -784,19 +784,6 @@ public class FieldSet extends Field implements Container {
             }
         }
 
-        // Render hidden fields
-//        List controls = getControls();
-//        for (int i = 0, size = controls.size(); i < size; i++) {
-//            Control control = (Control) controls.get(i);
-//            if (control instanceof Field) {
-//                Field field = (Field) control;
-//                if (field.isHidden()) {
-//                    field.render(buffer);
-//                    buffer.append("\n");
-//                }
-//            }
-//        }
-
         // Render Controls
         renderFields(buffer);
 
@@ -1141,18 +1128,14 @@ public class FieldSet extends Field implements Container {
                     "Field parameter cannot be null");
             }
             if (control == this) {
-                throw new IllegalArgumentException(
-                    "Cannot add container to itself");
+                throw new IllegalArgumentException("Cannot add container to itself");
             }
-//            if (control instanceof HiddenField) {
-//                String msg = "Not valid a valid field type: " + control.getClass().getName();
-//                throw new IllegalArgumentException(msg);
-//            }
+
             if (control instanceof Field) {
                 Field field = (Field) control;
                 if (StringUtils.isBlank(field.getName())) {
-                    String msg = "Field name not defined: " + field.getClass().
-                        getName();
+                    String msg =
+                        "Field name not defined: " + field.getClass().getName();
                     throw new IllegalArgumentException(msg);
                 }
                 if (getControlMap().containsKey(field.getName())
