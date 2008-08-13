@@ -1001,12 +1001,6 @@ public class ClickUtils {
             webResource = "/" + webResource;
         }
         webResource = webResource.replace('\\', '/');
-        Set resources = servletContext.getResourcePaths(webResource);
-        boolean resourceExists = (resources != null) ? !resources.isEmpty() : false;
-
-        if (resourceExists) {
-            return;
-        }
 
         // Load the resource data byte array
         byte[] resourceBytes = null;
@@ -1032,12 +1026,11 @@ public class ClickUtils {
         }
 
         // Cache resources in resources deployed map
-        if (!configService.getResourcesDeployed().containsKey(webResource)) {
-        	configService.getResourcesDeployed().put(webResource, resourceBytes);
-        }
-
-        // If resources can't be deployed then exit now
         if (!configService.isResourcesDeployable()) {
+            if (!configService.getResourcesDeployed().containsKey(webResource)) {
+                configService.getResourcesDeployed().put(webResource, resourceBytes);
+            }
+            // Exit at this point as the resources cannot be deployed
             return;
         }
 
