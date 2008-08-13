@@ -162,9 +162,6 @@ and new Table paginator support.
         method to any on your custom control rendering.</li>
         <li>Replace any Control <tt>toString()</tt> methods with an equivalent <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a>
         method. For further details see the example below.</li>
-        <li>FieldSet has been refactored as a <a href="click-api/net/sf/click/Container.html">Container</a>,
-        and does not extend from Field. Unless you created custom FieldSet implementations
-        this won't effect you. If you have created a custom FieldSet see <a href="#fieldset-upgrade">below</a> on how to upgrade.</li>
        </ol>
        Note that Click 1.5 is still compatible with Java JDK 1.4 or later.
       </li>
@@ -242,75 +239,7 @@ public class HtmlTable extends AbstractControl {
        Certain controls were retrofitted as containers. These include 
        <a href="click-api/net/sf/click/control/Form.html">Form</a>,
        <a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a>
-       and <a href="click-api/net/sf/click/control/Panel.html">Panel</a>. Except for
-       FieldSet this change should not effect backward compatibility. See the next
-       entry on how to upgrade FieldSet.
-      </li>
-      <li class="upgrade">
-       <a name="fieldset-upgrade" href="#"></a>
-       If you extended FieldSet you need to be aware that FieldSet does not extend
-       from Field anymore. Thus statements such as "<tt>if (field instanceof FieldSet)</tt>"
-       wont work. FieldSet is now a Container but still features most of
-       the methods it had before. However nonsensical methods such as <tt>getValue</tt>
-       and <tt>setValue</tt> were removed.
-       <p/>
-       Also keep in mind that Form won't include FieldSet from methods such as
-       <a href="click-api/net/sf/click/control/Form.html#getFields()">Form.getFields()</a>
-       or <a href="click-api/net/sf/click/control/Form.html#getFieldList()">Form.getFieldList()</a>.
-       Instead use the new Container methods <a href="click-api/net/sf/click/control/AbstractContainer.html#getControlMap()">Form.getControlMap()</a>
-       and <a href="click-api/net/sf/click/control/Container.html#getControls()">Form.getControls()</a>.
-       <p/>
-       As FieldSet is not a Field you might run into the following scenario. Say 
-       you created a custom Form and loop over all fields to perform logic depending
-       on the type of that Field e.g.:
-       <pre class="prettyprint">
-public class MyForm extends Form {
-    public render(HtmlStringBuffer buffer) {
-        List list = getFieldList();
-        renderFields(buffer, list);
-    }
-
-    public renderFields(HtmlStringBuffer buffer, List list) {
-        for(Iterator it = list.iterator(); it.hasNext(); ) {
-            Field field = (Field) it.next();  
-            if (field instanceof Label) {
-                ...
-            } else if (field instanceof FieldSet) {
-                renderFieldSet(field, buffer);
-            } else if (field instanceof Field) {
-                ...
-            }
-        }
-    }
-} </pre>
-      As already stated this example won't compile because FieldSet is not a field.
-      Instead you will have to loop over all the list of Controls instead of the
-      list of Fields for example:
-      <pre class="prettyprint">
-public class MyForm extends Form {
-    public render(HtmlStringBuffer buffer) {
-        //List list = getFieldList();
-        List list = getControls();
-        renderFields(buffer, list);
-    }
-
-    public renderFields(HtmlStringBuffer buffer, List list) {
-        for(Iterator it = list.iterator(); it.hasNext(); ) {
-            //Field field = (Field) it.next();  
-            Control control = (Control) it.next();
-            if (control instanceof Label) {
-                ...
-            } else if (control instanceof FieldSet) {
-                //renderFieldSet(field, buffer);
-                renderFieldSet(control, buffer);
-            } else if (control instanceof Field) {
-                ...
-            }
-        }
-    }
-} </pre>
-      In the example above we loop over the Form control list which includes all
-      fields and fieldsets.
+       and <a href="click-api/net/sf/click/control/Panel.html">Panel</a>.
       </li>
       <li class="upgrade">
        Click 1.5 introduces two new properties: <span style="color:navy;">file-size-limit-exceeded-error</span>
