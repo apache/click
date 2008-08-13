@@ -99,7 +99,7 @@ public class FieldSet extends Field implements Container {
 
     private static final long serialVersionUID = 1L;
 
-    // -------------------------------------------------------- Instance Variables
+    // ----------------------------------------------------- Instance Variables
 
     /** The map of field width values. */
     protected Map fieldWidths;
@@ -136,7 +136,7 @@ public class FieldSet extends Field implements Container {
     /** Internal container instance. */
     private AbstractContainer container = new InnerContainerField();
 
-    // ------------------------------------------------------ Constructorrs
+    // ----------------------------------------------------------- Constructors
 
     /**
      * Create a FieldSet with the given name.
@@ -166,7 +166,7 @@ public class FieldSet extends Field implements Container {
     public FieldSet() {
     }
 
-    // ------------------------------------------------------ Public Methods
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Add a Field to the FieldSet and return the added instance.
@@ -1070,7 +1070,7 @@ public class FieldSet extends Field implements Container {
         }
     }
 
-    // -------------------------------------------------------- Inner Class
+    // ------------------------------------------------------------ Inner Class
 
     /**
      * Inner class providing the container implementation for
@@ -1082,11 +1082,9 @@ public class FieldSet extends Field implements Container {
      */
     private class InnerContainerField extends AbstractContainer {
 
-        // -------------------------------------------------------- Constants
-
         private static final long serialVersionUID = 1L;
 
-        // -------------------------------------------------------- Public Methods
+        // ----------------------------------------------------- Public Methods
 
         /**
          * @see net.sf.click.control.Container#add(net.sf.click.Control).
@@ -1097,8 +1095,6 @@ public class FieldSet extends Field implements Container {
         public Control add(Control control) {
             int position = getControls().size();
 
-            // TODO: should we check for position here as FieldSet does not accept
-            // hidden fields
             if (control instanceof Field) {
                 Field newField = (Field) control;
 
@@ -1148,10 +1144,10 @@ public class FieldSet extends Field implements Container {
                 throw new IllegalArgumentException(
                     "Cannot add container to itself");
             }
-            if (control instanceof HiddenField) {
-                String msg = "Not valid a valid field type: " + control.getClass().getName();
-                throw new IllegalArgumentException(msg);
-            }
+//            if (control instanceof HiddenField) {
+//                String msg = "Not valid a valid field type: " + control.getClass().getName();
+//                throw new IllegalArgumentException(msg);
+//            }
             if (control instanceof Field) {
                 Field field = (Field) control;
                 if (StringUtils.isBlank(field.getName())) {
