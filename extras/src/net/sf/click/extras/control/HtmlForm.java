@@ -363,6 +363,7 @@ public class HtmlForm extends Form {
     /**
      * @see AbstractControl#getControlSizeEst()
      *
+     * @param formFields the list of form fields
      * @return the estimated rendered control size in characters
      */
     protected int getFormSizeEst(List formFields) {
