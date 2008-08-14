@@ -961,6 +961,9 @@ public class ClickUtils {
      * Deploy the specified classpath resource to the given target directory
      * under the web application root directory.
      * <p/>
+     * This method will <b>not</b> override any existing resources found in the
+     * target directory.
+     * <p/>
      * If an IOException or SecurityException occurs this method will log a
      * warning message.
      *
@@ -971,6 +974,9 @@ public class ClickUtils {
     public static void deployFile(ServletContext servletContext,
         String resource, String targetDir) {
 
+        // In the comments below is a step through example to help debugging:
+        // resource -> /net/sf/click/error.htm
+        // targetDir -> click
         if (servletContext == null) {
             throw new IllegalArgumentException("Null servletContext parameter");
         }
@@ -980,26 +986,28 @@ public class ClickUtils {
             throw new IllegalArgumentException(msg);
         }
 
+        // realTargetDir -> c:/apps/mycorp/web/
         String realTargetDir = servletContext.getRealPath("/") + File.separator;
 
         if (StringUtils.isNotBlank(targetDir)) {
+            // realTargetDir -> c:/apps/mycorp/web/click
             realTargetDir = realTargetDir + targetDir;
         }
 
         ConfigService configService = getConfigService(servletContext);
         LogService logger = configService.getLogService();
 
+        // targetFilename -> /net/sf/click/error.htm
         String targetFilename = resource;
         int index = resource.lastIndexOf('/');
         if (index != -1) {
+            // targetFilename -> error.htm
             targetFilename = resource.substring(index + 1);
         }
 
         // Determine whether resource exists
+        // webResource -> /click/error.htm
         String webResource = "/" + targetDir + "/" + targetFilename;
-        if (!webResource.startsWith("/")) {
-            webResource = "/" + webResource;
-        }
         webResource = webResource.replace('\\', '/');
 
         // Load the resource data byte array
@@ -1045,6 +1053,7 @@ public class ClickUtils {
                 }
             }
 
+            // destination -> c:/apps/mycorp/web/click/error.htm
             String destination = realTargetDir + File.separator + targetFilename;
 
             File destinationFile = new File(destination);
