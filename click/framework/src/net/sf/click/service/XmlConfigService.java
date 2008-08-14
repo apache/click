@@ -1165,11 +1165,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             // Extract the jar name from the entry
             if (path.indexOf('!') > 0) {
                 jarPath = path.substring(0, path.indexOf('!'));
-            }
-
-            // If jar name cannot be extracted, skip the resource
-            if (jarPath == null) {
-                logService.error("Cannot extract Jar from url '" + jarPath + "'");
+            } else {
+                // If jar name cannot be extracted, skip the resource
+                logService.trace("Path does not represent a Jar -> '" + path + "'");
                 continue;
             }
 
@@ -1493,11 +1491,17 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
     }
 
+    /**
+     * Return the list of templates within the web application
+     *
+     * @return list of all templates within the web application
+     */
     private List getTemplateFiles() {
         List fileList = new ArrayList();
 
         Set resources = servletContext.getResourcePaths("/");
 
+        // Add all resources withtin web application
         for (Iterator i = resources.iterator(); i.hasNext();) {
             String resource = (String) i.next();
 
