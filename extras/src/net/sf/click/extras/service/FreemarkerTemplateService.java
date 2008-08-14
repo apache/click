@@ -15,6 +15,10 @@
  */
 package net.sf.click.extras.service;
 
+import freemarker.cache.ClassTemplateLoader;
+import freemarker.cache.MultiTemplateLoader;
+import freemarker.cache.TemplateLoader;
+import freemarker.cache.WebappTemplateLoader;
 import java.io.Writer;
 import java.util.Map;
 
@@ -53,6 +57,8 @@ import org.apache.commons.lang.Validate;
  */
 public class FreemarkerTemplateService implements TemplateService {
 
+    // -------------------------------------------------------------- Variables
+
     /** The Freemarker engine configuration. */
     protected Configuration configuration;
 
@@ -61,6 +67,11 @@ public class FreemarkerTemplateService implements TemplateService {
      * is 24 hours.
      */
     protected int cacheDuration = 60 * 60 * 24;
+
+    /** The application configuration service. */
+    protected ConfigService configService;
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * @see TemplateService#onInit(javax.servlet.ServletContext)
@@ -72,7 +83,7 @@ public class FreemarkerTemplateService implements TemplateService {
 
         Validate.notNull(servletContext, "Null servletContext parameter");
 
-        ConfigService configService = ClickUtils.getConfigService(servletContext);
+        configService = ClickUtils.getConfigService(servletContext);
 
         // Attempt to match Freemarker Logger to configured LogService type
         LogService logService = configService.getLogService();
@@ -85,8 +96,15 @@ public class FreemarkerTemplateService implements TemplateService {
 
         configuration = new Configuration();
 
-        // Templates are stoted in the / directory of the Web app.
-        configuration.setServletContextForTemplateLoading(servletContext, "");
+        // Templates are stored in the / directory of the Web app.
+        WebappTemplateLoader webloader = new WebappTemplateLoader(servletContext);
+
+        // Templates are stored in the root of the classpath.
+        ClassTemplateLoader classLoader = new ClassTemplateLoader(getClass(), "/");
+        TemplateLoader[] loaders = new TemplateLoader[] { webloader, classLoader };
+        MultiTemplateLoader multiLoader = new MultiTemplateLoader(loaders);
+
+        configuration.setTemplateLoader(multiLoader);
 
         // Set the template cache duration in seconds
         if (configService.isProductionMode() | configService.isProfileMode()) {
