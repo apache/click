@@ -29,8 +29,8 @@ import net.sf.click.util.HtmlStringBuffer;
  * <p/>
  * This allows developers to provide a more flexible and CSS friendly layout.
  * <p/>
- * See this <a href="example">example</a> of how HtmlFieldSet is used to provide
- * a custom layout.
+ * See this <a href="http://www.avoka.com/click-examples/form/contact-details.htm">example</a>
+ * of how HtmlFieldSet is used to provide a custom layout.
  *
  * @author Bob Schellink
  */
