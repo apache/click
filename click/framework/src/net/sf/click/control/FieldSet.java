@@ -447,6 +447,17 @@ public class FieldSet extends Field implements Container {
     }
 
     /**
+     * Return the named field if contained in the fieldset, or null if not
+     * found.
+     *
+     * @param name the name of the field
+     * @return the named field if contained in the fieldset
+     */
+    public Field getField(String name) {
+        return (Field) getControl(name);
+    }
+
+    /**
      * Return the List of fields, ordered in addition order to the fieldset.
      *
      * @return the ordered List of fieldset fields
@@ -1124,8 +1135,7 @@ public class FieldSet extends Field implements Container {
          */
         public Control insert(Control control, int index) {
             if (control == null) {
-                throw new IllegalArgumentException(
-                    "Field parameter cannot be null");
+                throw new IllegalArgumentException("Field parameter cannot be null");
             }
             if (control == this) {
                 throw new IllegalArgumentException("Cannot add container to itself");
@@ -1141,9 +1151,8 @@ public class FieldSet extends Field implements Container {
                 if (getControlMap().containsKey(field.getName())
                     && !(field instanceof Label)) {
 
-                    throw new IllegalArgumentException(
-                        "FieldSet already contains field named: " + field.
-                        getName());
+                    String msg = "FieldSet already contains field named: ";
+                    throw new IllegalArgumentException(msg + field.getName());
                 }
                 getControls().add(index, field);
 
