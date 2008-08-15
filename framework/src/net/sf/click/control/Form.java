@@ -597,18 +597,6 @@ public class Form extends AbstractContainer {
      */
     protected String labelsPosition = POSITION_LEFT;
 
-    /** The field required label labelprefix. */
-    protected String labelRequiredPrefix;
-
-    /** The field required label suffix. */
-    protected String labelRequiredSuffix;
-
-    /** The field not required label labelprefix. */
-    protected String labelNotRequiredPrefix;
-
-    /** The field not required label suffix. */
-    protected String labelNotRequiredSuffix;
-
     /** The label &lt;td&gt; "style" attribute value. */
     protected String labelStyle;
 
