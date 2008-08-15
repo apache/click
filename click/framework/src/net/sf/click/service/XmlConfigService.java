@@ -1492,7 +1492,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
-     * Return the list of templates within the web application
+     * Return the list of templates within the web application.
      *
      * @return list of all templates within the web application
      */
