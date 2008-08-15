@@ -27,6 +27,7 @@ import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.control.Button;
 import net.sf.click.control.Field;
+import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.control.Label;
 import net.sf.click.service.LogService;
@@ -59,7 +60,8 @@ public class ContainerUtils {
     /**
      * Return the list of Fields for the given Container, recursively including
      * any Fields contained in child containers. The list of returned fields
-     * will exclude any <tt>Button</tt> and <tt>Label</tt> fields.
+     * will exclude any <tt>Button</tt>, <tt>FieldSet</tt> and <tt>Label</tt>
+     * fields.
      *
      * @param container the container to obtain the fields from
      * @return the list of contained fields
@@ -77,7 +79,7 @@ public class ContainerUtils {
     /**
      * Return the list of Fields for the given Container, recursively including
      * any Fields contained in child containers. The list of returned fields
-     * will exclude any <tt>Button</tt> fields.
+     * will exclude any <tt>Button</tt> and <tt>FieldSet</tt> fields.
      *
      * @param container the container to obtain the fields from
      * @return the list of contained fields
@@ -114,7 +116,8 @@ public class ContainerUtils {
     /**
      * Return the list of hidden Fields for the given Container, recursively including
      * any Fields contained in child containers. The list of returned fields
-     * will exclude any <tt>Button</tt> and <tt>Label</tt> fields.
+     * will exclude any <tt>Button</tt>, <tt>FieldSet</tt> and <tt>Label</tt>
+     * fields.
      *
      * @param container the container to obtain the fields from
      * @return the list of contained fields
@@ -616,8 +619,8 @@ public class ContainerUtils {
     /**
      * Add fields for the given Container to the specified field list,
      * recursively including any Fields contained in child containers. The list
-     * of returned fields will exclude any <tt>Button</tt> or <tt>Label</tt>
-     * fields.
+     * of returned fields will exclude any <tt>Button</tt>, <tt>FieldSet</tt>
+     * and <tt>Label</tt> fields.
      *
      * @param container the container to obtain the fields from
      * @param the list of contained fields
@@ -625,8 +628,9 @@ public class ContainerUtils {
     private static void addFields(final Container container, final List fields) {
         for (int i = 0; i < container.getControls().size(); i++) {
             Control control = (Control) container.getControls().get(i);
-            if (control instanceof Label || control instanceof Button) {
-                // Skip buttons and labels
+            if (control instanceof Label || control instanceof Button
+                || control instanceof FieldSet) {
+                // Skip buttons, fieldsets and labels
                 continue;
 
             } else if (control instanceof Container) {
@@ -644,8 +648,8 @@ public class ContainerUtils {
     /**
      * Add hidden fields for the given Container to the specified field list,
      * recursively including any Fields contained in child containers. The list
-     * of returned fields will exclude any <tt>Button</tt> or <tt>Label</tt>
-     * fields.
+     * of returned fields will exclude any <tt>Button</tt>, <tt>FieldSet</tt>
+     * and <tt>Label</tt> fields.
      *
      * @param container the container to obtain the hidden fields from
      * @param the list of contained fields
@@ -653,8 +657,11 @@ public class ContainerUtils {
     private static void addHiddenFields(final Container container, final List fields) {
         for (int i = 0; i < container.getControls().size(); i++) {
             Control control = (Control) container.getControls().get(i);
-
-            if (control instanceof Container) {
+            if (control instanceof Label || control instanceof Button
+                || control instanceof FieldSet) {
+                // Skip buttons, fieldsets and labels
+                continue;
+            } else if (control instanceof Container) {
                 if (control instanceof Field) {
                     Field field = (Field) control;
                     if (field.isHidden()) {
@@ -677,7 +684,8 @@ public class ContainerUtils {
     /**
      * Add fields for the container to the specified field list, recursively
      * including any Fields contained in child containers. The list
-     * of returned fields will exclude any <tt>Button</tt> fields.
+     * of returned fields will exclude any <tt>Button</tt> and <tt>FieldSet</tt>
+     * fields.
      *
      * @param container the container to obtain the fields from
      * @param the list of contained fields
@@ -685,7 +693,7 @@ public class ContainerUtils {
     private static void addFieldsAndLabels(final Container container, final List fields) {
         for (int i = 0; i < container.getControls().size(); i++) {
             Control control = (Control) container.getControls().get(i);
-            if (control instanceof Button) {
+            if (control instanceof Button || control instanceof FieldSet) {
                 // Skip buttons
                 continue;
 
@@ -753,6 +761,7 @@ public class ContainerUtils {
                 }
                 Container childContainer = (Container) control;
                 addErrorFields(childContainer, fields);
+
             } else if (control instanceof Field) {
                 Field field = (Field) control;
                 if (!field.isValid() && !field.isHidden()
