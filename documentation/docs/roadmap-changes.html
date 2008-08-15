@@ -172,6 +172,30 @@ and new Table paginator support.
         method to any on your custom control rendering.</li>
         <li>Replace any Control <tt>toString()</tt> methods with an equivalent <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a>
         method. For further details see the example below.</li>
+        <li>Form.add(Field), FieldSet.add(Field) and Table.addColumn(Column) now return
+        their argument instead of void, which enables you to chain calls for example<br>
+        <pre class="prettyprint">
+  table.add(new Column("name")).setSortable(true);
+  form.add(new TextField("firstname")).setValue("Bob"); </pre>
+        If you created a custom Form, FieldSet or Table and overrode the <em>add</em>
+        or <em>addColumn</em> method, you will be forced to return the methods argument.
+        For example if you had:
+        <pre class="prettyprint">
+public class MyTable {
+    public void addColumn(Column column) {
+      ...
+    }
+} </pre>
+       you will need to update as follows:
+       <pre class="prettyprint">
+public class MyTable {
+    public Column addColumn(Column column) {
+      ...
+      // You must return the column
+      return column;
+    }
+} </pre>
+        </li>
        </ol>
        Note that Click 1.5 is still compatible with Java JDK 1.4 or later.
       </li>
