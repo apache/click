@@ -219,14 +219,12 @@ public class FieldSet extends Field implements Container {
 
     /**
      * Add the field to the fieldset and specify the field's width in columns.
-     * <p/>
-     * Note HiddenFields types are not valid arguments for this method.
      *
      * @param field the field to add to the fieldset
      * @param width the width of the field in table columns
      * @return the field added to this fieldset
      * @throws IllegalArgumentException if the field is null, field's name is
-     * not defined, a HiddenField, the fieldset already contains a control with
+     * not defined, the fieldset already contains a control with
      * the same name, if the field's parent is a Page or the width &lt; 1
      */
     public Field add(Field field, int width) {
@@ -792,6 +790,19 @@ public class FieldSet extends Field implements Container {
                 buffer.append(getLegend());
                 buffer.elementEnd("legend");
                 buffer.append("\n");
+            }
+        }
+
+        // Render hidden fields
+        List controls = getControls();
+        for (int i = 0, size = controls.size(); i < size; i++) {
+            Control control = (Control) controls.get(i);
+            if (control instanceof Field) {
+                Field field = (Field) control;
+                if (field.isHidden()) {
+                    field.render(buffer);
+                    buffer.append("\n");
+                }
             }
         }
 
