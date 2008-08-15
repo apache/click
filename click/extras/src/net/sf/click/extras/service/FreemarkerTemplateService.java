@@ -53,6 +53,64 @@ import org.apache.commons.lang.Validate;
  *
  * &lt;/click-app&gt; </pre>
  *
+ * <b>Please note</b> that Click ships with a default <em>error.htm</em> that
+ * is tailored for Velocity.
+ * <p/>
+ * If you switch to Freemarker replace the default <em>error.htm</em> with the
+ * one shown below.
+ * <p/>
+ * To ensure Click uses your template instead of the default one, copy/paste
+ * the template below to the web application path <em>/click/error.htm</em>.
+ * Click won't override your custom template.
+ *
+ * <pre class="prettyprint">
+ * &lt;html&gt;
+ *   &lt;head&gt;
+ *     &lt;title&gt;Error Page&lt;/title&gt;
+ *     &lt;style  type='text/css'&gt;
+ *       body, table, td {
+ *       font-family: arial, sans-serif;
+ *       font-size: 12px;
+ *     }
+ *     td.header {
+ *       color: white;
+ *       background: navy;
+ *     }
+ *     .errorReport {
+ *       display: none;
+ *     }
+ *     a {
+ *       color: blue;
+ *     }
+ *     &lt;/style&gt;
+ *     &lt;script type='text/javascript'&gt;
+ *       function displayError() {
+ *         errorReport.style.display = 'block';
+ *       }
+ *     &lt;/script&gt;
+ *   &lt;/head&gt;
+ *
+ *   &lt;body&gt;
+ *     &lt;h1&gt;Error Page&lt;/h1&gt;
+ *
+ *     &lt;#if errorReport??&gt; 
+ *       The application encountered an unexpected error.
+ *       &lt;p/&gt;
+ *       To return to the application click &lt;a href="${context}"&gt;here&lt;/a&gt;.
+ *       &lt;p/&gt;
+ * 
+ *       &lt;#if mode != "production"&gt;
+ *         To view the error details click &lt;a href="#" onclick="displayError();"&gt;here&lt;/a&gt;.
+ *         &lt;p/&gt;
+ *         ${errorReport}
+ *         &lt;p/&gt;
+ *       &lt;/#if&gt;
+ *     &lt;/#if&gt;
+ *
+ *   &lt;/body&gt;
+ * &lt;/html&gt;
+ * </pre>
+ *
  * @author Malcolm Edgar
  */
 public class FreemarkerTemplateService implements TemplateService {
@@ -137,11 +195,6 @@ public class FreemarkerTemplateService implements TemplateService {
         if (configService.getLocale() != null) {
             configuration.setLocale(configService.getLocale());
         }
-
-        // Deploy Freemarker error.htm template
-        ClickUtils.deployFile(servletContext,
-                              "/net/sf/click/extras/service/error.htm",
-                              "click");
     }
 
     /**
