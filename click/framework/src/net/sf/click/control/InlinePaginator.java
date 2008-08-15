@@ -20,6 +20,14 @@ import net.sf.click.util.HtmlStringBuffer;
 /**
  * Provides an inline style table paging controls Paginator.
  *
+ * <table class='htmlHeader' cellspacing='10'>
+ * <tr>
+ * <td>
+ * <img align='middle' hspace='2'src='inline-paginator.png' title='Table'/>
+ * </td>
+ * </tr>
+ * </table>
+ *
  * @author Malcolm Edgar
  */
 public class InlinePaginator extends DefaultPaginator {

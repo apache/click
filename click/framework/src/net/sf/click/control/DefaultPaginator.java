@@ -20,6 +20,14 @@ import net.sf.click.util.HtmlStringBuffer;
 /**
  * Provides the default Table Paginator.
  *
+ * <table class='htmlHeader' cellspacing='10'>
+ * <tr>
+ * <td>
+ * <img align='middle' hspace='2'src='default-paginator.png' title='Table'/>
+ * </td>
+ * </tr>
+ * </table>
+ *
  * @author Malcolm Edgar
  */
 public class DefaultPaginator implements Paginator {
