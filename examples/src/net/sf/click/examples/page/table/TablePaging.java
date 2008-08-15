@@ -17,7 +17,7 @@ public class TablePaging extends BorderPage {
 
     public TablePaging() {
         // Setup customers table
-        table.setClass(Table.CLASS_ITS);
+        table.setClass(Table.CLASS_ISI);
         table.setPageSize(4);
         table.setShowBanner(true);
         table.setSortable(true);

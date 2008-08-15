@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.click.extras.control;
+package net.sf.click.control;
 
-import net.sf.click.control.ActionLink;
-import net.sf.click.control.DefaultPaginator;
-import net.sf.click.control.Table;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**

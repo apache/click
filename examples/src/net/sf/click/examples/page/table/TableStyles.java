@@ -5,11 +5,11 @@ import java.util.List;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.Column;
 import net.sf.click.control.Form;
+import net.sf.click.control.InlinePaginator;
 import net.sf.click.control.Label;
 import net.sf.click.control.Select;
 import net.sf.click.control.Table;
 import net.sf.click.examples.page.BorderPage;
-import net.sf.click.extras.control.InlinePaginator;
 
 /**
  * Provides an demonstration of Table control styles.
