@@ -793,19 +793,6 @@ public class FieldSet extends Field implements Container {
             }
         }
 
-        // Render hidden fields
-        List controls = getControls();
-        for (int i = 0, size = controls.size(); i < size; i++) {
-            Control control = (Control) controls.get(i);
-            if (control instanceof Field) {
-                Field field = (Field) control;
-                if (field.isHidden()) {
-                    field.render(buffer);
-                    buffer.append("\n");
-                }
-            }
-        }
-
         // Render Controls
         renderFields(buffer);
 
