@@ -94,7 +94,7 @@
 
     <suppress checks="MethodLength"
               files="FieldSet.java"
-              lines="856"/>
+              lines="854"/>
 
 	<!-- Static Variable Name -->              
 
