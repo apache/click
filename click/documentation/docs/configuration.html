@@ -708,13 +708,18 @@ You can modify these support files and Click will <b>not</b> overwrite them. The
 
 <p/>
 
-If Click cannot deploy these files because of restricted file system permissions,
+It is generally easier to work with unpacked WARs and most servlet containers
+do just that. However some contains such as WebLogic (at least version 10) does not.
+To enable WebLogic to unpack the WAR go to the <em>Admin Console > server node > Web Applications</em>
+tab and check the <em>Archived Real Path Enabled</em> parameter.
+<p/>
+If Click cannot deploy resources because of restricted file system permissions,
 warning messages will be logged. 
 <p/>
-If your application server has restricted permissions, you will need to package 
-up these auto deployed files in your web applications WAR file. To do this you
-should run you application on a development machine without these restricted 
-permissions and then package up the deployed files.
+If your application server does not unpack the WAR/EAR or has restricted permissions,
+you will need to package up these auto deployed files in your web applications WAR file.
+To do this you should run you application on a development machine without these restrictions
+and then package up the deployed files into the WAR/EAR before deployment.
 
 <a name="deploying-custom-resources" class="heading"></a><h3>3.1&nbsp; Deploying Custom Resources</h3>
 
