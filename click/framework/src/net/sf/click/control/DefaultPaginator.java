@@ -190,8 +190,7 @@ public class DefaultPaginator implements Paginator {
      * Returns the HTML representation of this paginator.
      * <p/>
      * This method delegates the rendering to the method
-     * {@link #render(net.sf.click.util.HtmlStringBuffer)}. The size of buffer
-     * is determined by {@link #getControlSizeEst()}.
+     * {@link #render(net.sf.click.util.HtmlStringBuffer)}.
      *
      * @see Object#toString()
      *

@@ -2212,7 +2212,7 @@ public class Form extends AbstractContainer {
      * Render the non hidden Form Fields to the string buffer.
      * <p/>
      * This method delegates the rendering of the form fields to
-     * {@link #renderControls(HtmlStringBuffer, AbstractContainer, List, Map, int)}.
+     * {@link #renderControls(HtmlStringBuffer, Container, List, Map, int)}.
      *
      * @param buffer the StringBuffer to render to
      */

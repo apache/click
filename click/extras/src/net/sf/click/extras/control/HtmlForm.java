@@ -211,11 +211,11 @@ public class HtmlForm extends Form {
     }
 
     /**
-     * Return the ordered list of {@link Button}s.
+     * Return the ordered list of {@link net.sf.click.control.Button}s.
      * <p/>
      * The order of the buttons is the same order they were added to the form.
      *
-     * @return the ordered list of {@link Button}s.
+     * @return the ordered list of {@link net.sf.click.control.Button}s.
      */
     public List getButtonList() {
         return ContainerUtils.getButtons(this);
@@ -269,7 +269,7 @@ public class HtmlForm extends Form {
      * Render the HTML representation of the form and all its child
      * controls to the specified buffer.
      *
-     * @see AbstractControl#render(net.sf.click.util.HtmlStringBuffer)
+     * @see net.sf.click.control.AbstractControl#render(net.sf.click.util.HtmlStringBuffer)
      *
      * @param buffer the specified buffer to render the control's output to
      */
@@ -295,7 +295,7 @@ public class HtmlForm extends Form {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * @see AbstractControl#renderTagBegin(java.lang.String, net.sf.click.util.HtmlStringBuffer)
+     * @see net.sf.click.control.AbstractControl#renderTagBegin(java.lang.String, net.sf.click.util.HtmlStringBuffer)
      *
      * @param tagName the name of the tag to render
      * @param buffer the buffer to append the output to
@@ -316,7 +316,7 @@ public class HtmlForm extends Form {
     }
 
     /**
-     * @see AbstractContainer#renderContent(net.sf.click.util.HtmlStringBuffer)
+     * @see net.sf.click.control.AbstractContainer#renderContent(net.sf.click.util.HtmlStringBuffer)
      *
      * @param buffer the buffer to append the output to
      */
@@ -334,7 +334,7 @@ public class HtmlForm extends Form {
     }
 
     /**
-     * @see AbstractContainer#renderChildren(net.sf.click.util.HtmlStringBuffer)
+     * @see net.sf.click.control.AbstractContainer#renderChildren(net.sf.click.util.HtmlStringBuffer)
      *
      * @param buffer the buffer to append the output to
      */
@@ -361,7 +361,7 @@ public class HtmlForm extends Form {
     }
 
     /**
-     * @see AbstractControl#getControlSizeEst()
+     * @see net.sf.click.control.AbstractControl#getControlSizeEst()
      *
      * @param formFields the list of form fields
      * @return the estimated rendered control size in characters

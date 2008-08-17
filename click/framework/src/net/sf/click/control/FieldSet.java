@@ -738,7 +738,7 @@ public class FieldSet extends Field implements Container {
      * This method is not supported and will throw a
      * <tt>UnsupportedOperationException</tt>.
      *
-     * @see net.sf.click.Control#setListener(ActionListener)
+     * @see net.sf.click.control.AbstractControl#setActionListener(ActionListener)
      *
      * @param actionListener the control's action listener
      */
@@ -748,9 +748,6 @@ public class FieldSet extends Field implements Container {
 
     /**
      * Render the HTML representation of the FieldSet.
-     * <p/>
-     * If FieldSet is contained within a {@link Form} instance, this method will
-     * delegate rendering to {@link Form#renderFieldSet(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.FieldSet)}.
      * <p/>
      * The size of buffer is determined by {@link #getControlSizeEst()}.
      *
