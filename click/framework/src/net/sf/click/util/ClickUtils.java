@@ -974,9 +974,6 @@ public class ClickUtils {
     public static void deployFile(ServletContext servletContext,
         String resource, String targetDir) {
 
-        // In the comments below is a step through example to help debugging:
-        // resource -> /net/sf/click/error.htm
-        // targetDir -> click
         if (servletContext == null) {
             throw new IllegalArgumentException("Null servletContext parameter");
         }
@@ -986,63 +983,17 @@ public class ClickUtils {
             throw new IllegalArgumentException(msg);
         }
 
-        // realTargetDir -> c:/apps/mycorp/web/
         String realTargetDir = servletContext.getRealPath("/") + File.separator;
 
         if (StringUtils.isNotBlank(targetDir)) {
-            // realTargetDir -> c:/apps/mycorp/web/click
             realTargetDir = realTargetDir + targetDir;
         }
 
-        ConfigService configService = getConfigService(servletContext);
-        LogService logger = configService.getLogService();
 
-        // targetFilename -> /net/sf/click/error.htm
-        String targetFilename = resource;
-        int index = resource.lastIndexOf('/');
-        if (index != -1) {
-            // targetFilename -> error.htm
-            targetFilename = resource.substring(index + 1);
-        }
-
-        // Determine whether resource exists
-        // webResource -> /click/error.htm
-        String webResource = "/" + targetDir + "/" + targetFilename;
-        webResource = webResource.replace('\\', '/');
-
-        // Load the resource data byte array
-        byte[] resourceBytes = null;
-        InputStream inputStream =
-            getResourceAsStream(resource, ClickUtils.class);
-
-        if (inputStream != null) {
-            try {
-                resourceBytes = IOUtils.toByteArray(inputStream);
-
-            } catch (IOException ioe) {
-                String msg = "error occured deploying resource "
-                    + resource + ", error " + ioe;
-                logger.warn(msg);
-
-            } finally {
-                close(inputStream);
-            }
-
-        } else {
-            String msg = "could not locate classpath resource: " + resource;
-            logger.warn(msg);
-        }
-
-        // Cache resources in resources deployed map
-        if (!configService.isResourcesDeployable()) {
-            if (!configService.getResourcesDeployed().containsKey(webResource)) {
-                configService.getResourcesDeployed().put(webResource, resourceBytes);
-            }
-            // Exit at this point as the resources cannot be deployed
-            return;
-        }
+        LogService logger = getConfigService(servletContext).getLogService();
 
         try {
+
             // Create files deployment directory
             File directory = new File(realTargetDir);
             if (!directory.exists()) {
@@ -1053,33 +1004,53 @@ public class ClickUtils {
                 }
             }
 
-            // destination -> c:/apps/mycorp/web/click/error.htm
-            String destination = realTargetDir + File.separator + targetFilename;
+            String destination = resource;
+            int index = resource.lastIndexOf('/');
+            if (index != -1) {
+                destination = resource.substring(index + 1);
+            }
+
+            destination = realTargetDir + File.separator + destination;
 
             File destinationFile = new File(destination);
 
             if (!destinationFile.exists()) {
+                InputStream inputStream =
+                    getResourceAsStream(resource, ClickUtils.class);
 
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(destinationFile);
-
-                    IOUtils.write(resourceBytes, fos);
-
-                    if (logger.isTraceEnabled()) {
-                        int lastIndex =
-                            destination.lastIndexOf(File.separatorChar);
-                        if (lastIndex != -1) {
-                            destination =
-                                destination.substring(lastIndex + 1);
+                if (inputStream != null) {
+                    FileOutputStream fos = null;
+                    try {
+                        fos = new FileOutputStream(destinationFile);
+                        byte[] buffer = new byte[1024];
+                        while (true) {
+                            int length = inputStream.read(buffer);
+                            if (length <  0) {
+                                break;
+                            }
+                            fos.write(buffer, 0, length);
                         }
-                        String msg =
-                            "deployed " + targetDir + "/" + destination;
-                        logger.trace(msg);
-                    }
 
-                } finally {
-                    close(fos);
+                        if (logger.isTraceEnabled()) {
+                            int lastIndex =
+                                destination.lastIndexOf(File.separatorChar);
+                            if (lastIndex != -1) {
+                                destination =
+                                    destination.substring(lastIndex + 1);
+                            }
+                            String msg =
+                                "deployed " + targetDir + "/" + destination;
+                            logger.trace(msg);
+                        }
+
+                    } finally {
+                        close(fos);
+                        close(inputStream);
+                    }
+                } else {
+                    String msg =
+                        "could not locate classpath resource: " + resource;
+                    throw new IOException(msg);
                 }
             }
 
