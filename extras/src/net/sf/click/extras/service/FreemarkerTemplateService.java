@@ -93,12 +93,12 @@ import org.apache.commons.lang.Validate;
  *   &lt;body&gt;
  *     &lt;h1&gt;Error Page&lt;/h1&gt;
  *
- *     &lt;#if errorReport??&gt; 
+ *     &lt;#if errorReport??&gt;
  *       The application encountered an unexpected error.
  *       &lt;p/&gt;
  *       To return to the application click &lt;a href="${context}"&gt;here&lt;/a&gt;.
  *       &lt;p/&gt;
- * 
+ *
  *       &lt;#if mode != "production"&gt;
  *         To view the error details click &lt;a href="#" onclick="displayError();"&gt;here&lt;/a&gt;.
  *         &lt;p/&gt;

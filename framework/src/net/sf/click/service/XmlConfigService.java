@@ -46,7 +46,6 @@ import net.sf.click.util.Format;
 import net.sf.click.util.HtmlStringBuffer;
 import ognl.Ognl;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.w3c.dom.Document;
