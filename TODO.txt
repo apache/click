@@ -1,4 +1,4 @@
-Click 1.5-M3 Release
+Click 1.5-RC1 Release
 --------------------
 BUGS
 * 
@@ -13,7 +13,6 @@ DOCUMENTATION
 * JSP forwarding
 * add page topic writing directly to response
 * document fileUpload behavior
-* update FAQ about new mock package
 
 BUILD
 
@@ -33,7 +32,7 @@ Release Procedures
 9. upload web site
 10. add sourceforge release notes
 11. email release announcement to click, velocity and cayenne
-12. update documentation/header.html, framework/src/click-control.properties, build/build.properties, examples/src/click-page.properties to the next version
+12. update TODO.txt, documentation/header.html, framework/src/click-control.properties, build/build.properties, examples/src/click-page.properties to the next version
 
 Maven Artifact Upload Procedures
 --------------------------------
