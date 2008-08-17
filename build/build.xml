@@ -530,13 +530,14 @@ Main targets:
 	build-framework       build click framework JAR file
 	build-maven-bundles   build Maven repository upload bundles
 	build-sources         build source ZIP files for use with IDEs
+  test-all              run all unit tests
 	checkstyle            run checkstyle report on Java source
 	deploy-examples       copy click-examples WAR file to app server
 	get-deps              download JAR dependencies
 	get-deps-proxy        download JAR dependencies via proxy
 	help                  display the Help message
 	javadoc               create Javadoc HTML files
-    project-quick-start   build application template
+  project-quick-start   build application template
 
 Environment:
 
@@ -636,7 +637,7 @@ Please ensure you have configured build.properties</echo>
             tofile="documentation/docs/servlet-api/stylesheet.css"/>
    </target>
 
-   
+
    <target name="test-framework">
       <copy todir="framework/classes">
          <fileset dir="framework/src">
@@ -674,9 +675,9 @@ Please ensure you have configured build.properties</echo>
    </target>
 
    
-   <target name="test-extras">
+   <target name="test-extras" depends="test-framework">
       <copy todir="extras/classes">
-         <fileset dir="framework/src">
+         <fileset dir="extras/src">
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
@@ -685,7 +686,7 @@ Please ensure you have configured build.properties</echo>
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
-      <javac srcdir="framework/src;extras/src;extras/test;mock/src" 
+      <javac srcdir="extras/src;extras/test" 
              destdir="extras/classes" 
              debug="true"
              encoding="ISO-8859-1"
@@ -711,7 +712,7 @@ Please ensure you have configured build.properties</echo>
    </target>
 
 
-   <target name="test-mock">
+   <target name="test-mock" depends="build-framework">
       <copy todir="mock/classes">
          <fileset dir="mock/src">
             <exclude name="**/package.html"/>
@@ -722,18 +723,18 @@ Please ensure you have configured build.properties</echo>
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
-      <javac srcdir="framework/src;mock/src;mock/test"
+      <javac srcdir="mock/src;mock/test"
              destdir="mock/classes"
              debug="true"
              encoding="ISO-8859-1"
              source="${javac.source}">
-         <classpath refid="classpath.framework"/>
          <classpath refid="classpath.mock"/>
+         <classpath refid="classpath.framework"/>
          <classpath refid="classpath.test"/>
       </javac>
       <junit haltonfailure="yes" showoutput="true">
-         <classpath refid="classpath.framework"/>
          <classpath refid="classpath.mock"/>
+         <classpath refid="classpath.framework"/>
          <classpath refid="classpath.test"/>
          <formatter type="plain"/>
          <batchtest fork="yes" todir="mock/test">
@@ -748,7 +749,8 @@ Please ensure you have configured build.properties</echo>
    </target>
 
 
-   <target name="test-all" depends="test-framework, test-extras, test-mock"/>
+   <target name="test-all" depends="test-framework, test-extras, test-mock"
+       description="Run all unit tests"/>
 
 
    <target name="project-quick-start" description="build application template">

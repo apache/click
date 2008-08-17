@@ -628,13 +628,13 @@ public class ContainerUtils {
     private static void addFields(final Container container, final List fields) {
         for (int i = 0; i < container.getControls().size(); i++) {
             Control control = (Control) container.getControls().get(i);
-            if (control instanceof Label || control instanceof Button
-                || control instanceof FieldSet) {
-                // Skip buttons, fieldsets and labels
+            if (control instanceof Label || control instanceof Button) {
+                // Skip buttons and labels
                 continue;
 
             } else if (control instanceof Container) {
-                if (control instanceof Field) {
+                // Include fields but skip fieldSets
+                if (control instanceof Field && !(control instanceof FieldSet)) {
                     fields.add(control);
                 }
                 Container childContainer = (Container) control;
@@ -657,12 +657,12 @@ public class ContainerUtils {
     private static void addHiddenFields(final Container container, final List fields) {
         for (int i = 0; i < container.getControls().size(); i++) {
             Control control = (Control) container.getControls().get(i);
-            if (control instanceof Label || control instanceof Button
-                || control instanceof FieldSet) {
-                // Skip buttons, fieldsets and labels
+            if (control instanceof Label || control instanceof Button) {
+                // Skip buttons and labels
                 continue;
             } else if (control instanceof Container) {
-                if (control instanceof Field) {
+                // Include fields but skip fieldSets
+                if (control instanceof Field && !(control instanceof FieldSet)) {
                     Field field = (Field) control;
                     if (field.isHidden()) {
                         fields.add(control);
@@ -693,12 +693,13 @@ public class ContainerUtils {
     private static void addFieldsAndLabels(final Container container, final List fields) {
         for (int i = 0; i < container.getControls().size(); i++) {
             Control control = (Control) container.getControls().get(i);
-            if (control instanceof Button || control instanceof FieldSet) {
+            if (control instanceof Button) {
                 // Skip buttons
                 continue;
 
             } else if (control instanceof Container) {
-                if (control instanceof Field) {
+                // Include fields but skip fieldSets
+                if (control instanceof Field && !(control instanceof FieldSet)) {
                     fields.add(control);
                 }
                 Container childContainer = (Container) control;
