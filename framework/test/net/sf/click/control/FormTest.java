@@ -114,4 +114,25 @@ public class FormTest extends TestCase {
         // Check that nameField value is now bound to request value
         Assert.assertEquals(requestValue, nameField.getValueObject());
     }
+
+    /**
+     * Test that form inserts controls before hidden fields
+     */
+    public void testInsertOrderWithHiddenFields() {
+
+        // Create form and fields
+        Form form = new Form("form");
+        TextField nameField = new TextField("name");
+        form.add(nameField);
+
+        form.add(new HiddenField("hidden", Boolean.class));
+
+        nameField = new TextField("name2");
+        form.add(nameField);
+
+        // If form correctly places hidden fields at the bottom, then field 3
+        // should be hidden
+        Field hiddenField = ((Field) form.getFieldList().get(3));
+        Assert.assertEquals("hidden", hiddenField.getName());
+    }
 }
