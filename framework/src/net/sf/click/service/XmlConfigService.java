@@ -187,15 +187,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /** The ServletContext instance. */
     private ServletContext servletContext;
 
-    /** The flag whether click resources can be deployed to the file system. */
-    private boolean resourcesDeployable;
-
-    /**
-     * The map of click resources deployed, containing a byte array of the
-     * resource file data and keyed on the resource path.
-     */
-    private Map resourcesDeployed = new HashMap();
-
     /** The application TemplateService. */
     private TemplateService templateService;
 
@@ -602,25 +593,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             return Collections.EMPTY_MAP;
         }
     }
-
-    /**
-     * @see ConfigService#isResourcesDeployable()
-     *
-     * @return true if click resources are deployable to the file system
-     */
-    public boolean isResourcesDeployable() {
-        return resourcesDeployable;
-    }
-
-    /**
-     * @see ConfigService#getResourcesDeployed()
-     *
-     * @return a Map of deployed resources
-     */
-    public Map getResourcesDeployed() {
-        return resourcesDeployed;
-    }
-
 
     /**
      * @see ConfigService#getServletContext()
@@ -1105,35 +1077,31 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
         // Deploy application files if they are not already present.
         // Only deploy if servletContext.getRealPath() returns a valid path.
-        resourcesDeployable = (servletContext.getRealPath("/") != null);
+        boolean resourcesDeployable = (servletContext.getRealPath("/") != null);
 
-        if (!resourcesDeployable) {
-            String msg = "Could not auto deploy files to 'click' web folder."
-                + " You may need to manually include click resources in your"
-                + " web application.";
-            getLogService().warn(msg);
-
-            // Load any 'click' resources into the resouces deployed map
-            Map clickResources = getClickResourcesMap();
-            getResourcesDeployed().putAll(clickResources);
-        }
-
-        String[] resources = {
+        if (resourcesDeployable) {
+            String[] resources = {
                 "/net/sf/click/control/control.css",
                 "/net/sf/click/control/control.js",
                 "/net/sf/click/util/error.htm",
                 "/net/sf/click/not-found.htm",
                 "/net/sf/click/control/VM_global_library.vm"
-        };
+            };
 
-        ClickUtils.deployFiles(servletContext, resources, "click");
+            ClickUtils.deployFiles(servletContext, resources, "click");
 
-        deployControls(getResourceRootElement("/click-controls.xml"));
-        deployControls(getResourceRootElement("/extras-controls.xml"));
-        deployControls(rootElm);
-        deployControlSets(rootElm);
+            deployControls(getResourceRootElement("/click-controls.xml"));
+            deployControls(getResourceRootElement("/extras-controls.xml"));
+            deployControls(rootElm);
+            deployControlSets(rootElm);
 
-        deployFilesInJars();
+            deployFilesInJars();
+        } else {
+            String msg = "Could not auto deploy files to 'click' web folder."
+                + " You may need to manually include click resources in your"
+                + " web application.";
+            getLogService().warn(msg);
+        }
     }
 
     /**
@@ -1532,68 +1500,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
                 } else if (resource.endsWith("/")) {
                     processDirectory(resource, fileList);
-                }
-            }
-        }
-    }
-
-    private Map getClickResourcesMap() {
-        Map clickMap = new HashMap();
-
-        List resources = getClickFiles();
-
-        for (int i = 0; i < resources.size(); i++) {
-            String resourcePath = (String) resources.get(i);
-
-            InputStream inputStream = null;
-            try {
-                inputStream = servletContext.getResourceAsStream(resourcePath);
-
-                byte[] resourceBytes = IOUtils.toByteArray(inputStream);
-
-                clickMap.put(resourcePath, resourceBytes);
-
-            } catch (IOException ioe) {
-                throw new RuntimeException(ioe);
-
-            } finally {
-                ClickUtils.close(inputStream);
-            }
-        }
-
-        return clickMap;
-    }
-
-    private List getClickFiles() {
-        List fileList = new ArrayList();
-
-        Set resources = servletContext.getResourcePaths("/");
-
-        for (Iterator i = resources.iterator(); i.hasNext();) {
-            String resource = (String) i.next();
-
-            if (resource.equalsIgnoreCase("/click/")) {
-                processClickDirectory(resource, fileList);
-            }
-        }
-
-        Collections.sort(fileList);
-
-        return fileList;
-    }
-
-    private void processClickDirectory(String dirPath, List fileList) {
-        Set resources = servletContext.getResourcePaths(dirPath);
-
-        if (resources != null) {
-            for (Iterator i = resources.iterator(); i.hasNext();) {
-                String resource = (String) i.next();
-
-                if (resource.endsWith("/")) {
-                    processClickDirectory(resource, fileList);
-
-                } else {
-                    fileList.add(resource);
                 }
             }
         }
