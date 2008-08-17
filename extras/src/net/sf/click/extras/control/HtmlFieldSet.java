@@ -45,9 +45,6 @@ public class HtmlFieldSet extends FieldSet {
     /**
      * Render the HTML representation of the FieldSet.
      * <p/>
-     * If FieldSet is contained within a {@link net.sf.click.control.Form} instance, this method will
-     * delegate rendering to {@link Form#renderFieldSet(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.FieldSet)}.
-     * <p/>
      * The size of buffer is determined by {@link #getControlSizeEst()}.
      *
      * @param buffer the specified buffer to render the control's output to
