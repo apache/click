@@ -29,6 +29,13 @@ import net.sf.click.util.HtmlStringBuffer;
 /**
  * Provides an abstract convenience class that implements Container and extend Field.
  * <p/>
+ * AbstractContainerField delegates Contain specific actions to an internal
+ * Container instance. You can access the Container instance through
+ * {@link #getContainer()}.
+ * <p/>
+ * If you need to bind a request parameter to this fields value, please see
+ * {@link #bindRequestValue()}.
+ * <p/>
  * Here is an example of a Border Control that can wrap a Button and render
  * a <tt>div</tt> border around it.
  * <pre class="prettyprint">
@@ -53,7 +60,7 @@ public abstract class AbstractContainerField extends Field implements Container 
     // ----------------------------------------------------- Instance Variables
 
     /** Internal container instance. */
-    private AbstractContainer container = new InnerContainerField();
+    protected AbstractContainer container = new InnerContainerField();
 
     // ---------------------------------------------------------- Constructorrs
 
@@ -103,6 +110,15 @@ public abstract class AbstractContainerField extends Field implements Container 
      */
     public boolean remove(Control control) {
         return container.remove(control);
+    }
+
+    /**
+     * Return the internal container instance.
+     *
+     * @return the internal container instance
+     */
+    public Container getContainer() {
+        return container;
     }
 
     /**
@@ -167,6 +183,43 @@ public abstract class AbstractContainerField extends Field implements Container 
         }
 
         return buffer.toString();
+    }
+
+    /**
+     * This method does nothing by default.
+     * <p/>
+     * Subclasses should override this method to binds the submitted request
+     * value to the Field's value. For example:
+     * <p/>
+     * <pre class="prettyprint">
+     * public CoolField extends AbstractContainerField {
+     *
+     *     public CoolField(String name) {
+     *         super(name);
+     *     }
+     *
+     *     public void bindRequestValue() {
+     *         setValue(getRequestValue());
+     *     }
+     *
+     *     // Below is the actual getRequestValue implementation as defined
+     *     // in Field. This is done solely to show how to retrieve the
+     *     // request parameter based on the fields name.
+     *     protected String getRequestValue() {
+     *         String value = getContext().getRequestParameter(getName());
+     *         if (value != null) {
+     *             return value.trim();
+     *         } else {
+     *             return "";
+     *         }
+     *     }
+     * }
+     * </pre>
+     *
+     * Note you can use method {@link #getRequestValue()} to retrieve the
+     * fields value if the request parameter is the fields name.
+     */
+    public void bindRequestValue() {
     }
 
     /**
