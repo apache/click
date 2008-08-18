@@ -85,78 +85,19 @@ The following Click Framework release 1.6 will include new features such as modu
     </ul>
   </dd>
   <p/>
-  <dt><a name="1.5-M3"></a><div class="release-header">Latest Development Release - Version 1.5 M3 - 17 August 2008</div></dt>
+  <dt><a name="1.5-RC1"></a><div class="release-header">Latest Development Release - Version 1.5 RC1 - ??? September 2008</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;"> 
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-        Major refactoring to improve backward compatibility and upgrade path.
-        This includes removing BasicForm which was included in 1.5-M1 and adding
-        new Controls <a href="extras-api/net/sf/click/extras/control/HtmlForm.html">HtmlForm</a>
-        and <a href="extras-api/net/sf/click/extras/control/HtmlFieldSet.html">HtmlFieldSet</a>.
-        You can find an example of HtmlForm in action <a target="_blank" href="http://www.avoka.com/click-examples/form/contact-details.htm">here</a>.
+        Fixed HtmlFieldSet to properly close the fieldset end tag.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-427">427</a>].
       </li>
       <li class="change">
-        Added support for multiple page package definitions in click.xml configuration.
-        See the configuration topic <a href="configuration.html#application-multi-packages">Multiple Pages Packages</a>
-        for more details.
-        This issue was raised by Ricardo R. Lecheta
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-328">328</a>].
-      </li>
-      <li class="change">
-        Added configurable table <a href="click-api/net/sf/click/control/Paginator.html">Paginator</a> support 
-        and an <a href="click-api/net/sf/click/control/InlinePaginator.html">InlinePaginator</a>.
-        A new <a target="_blank" href="http://www.avoka.com/click-examples/table/table-paginator.htm">example</a>
-        shows the different Paginator options available. This issue was raised by Gustav Weber
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-390">390</a>].
-      </li>
-      <li class="change">
-        Added readonly and disabled support to FieldSet. If enabled Fields contained
-        in FieldSet will be disabled or made readonly.
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-423">423</a>].
-      </li>
-      <li class="change">
-        Added Table footer rendering support, so that column totals can be rendered in a table
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-425">425</a>].
-      </li>
-      <li class="change">
-        Improved Table rendering performance in the order of 25-45%.
-      </li>
-      <li class="change">
-        Improved rendering performance by caching the ClickUtils 
-        <a href="click-api/net/sf/click/util/ClickUtils.html#getResourceVersionIndicator(net.sf.click.Context)">resource version indicator</a>
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-412">412</a>].
-      </li>
-      <li class="change">
-        Improved Page and PageImports to allow a Pages to optimize their HTML imports.
-        Please see Click Examples for a demonstration
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-363">363</a>].
-      </li>
-      <li class="change">
-        Fixed issue where Select validation can throw ClassCastException 
-        when option list contains an OptionGroup. This issue was identifier by Christophe Foiret
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-374">374</a>].
-      </li>
-      <li class="change">
-        Fixed issue where Container can be added to itself. This issue was identifier by Harry Wissiak
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-414">414</a>].
-      </li>
-      <li class="change">
-        Fixed Page serialization issues with non serializable Format and PageImport objects.
-        This issue was identifier by Alexei Sokolov
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-416">416</a>].
-      </li>
-      <li class="change">
-        Fixed issue where CayenneForm clearValues() was hidden data object classname.
-        This issue was identifier by Wisking Ju Yu Wu
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-417">417</a>].
-      </li>
-      <li class="change">
-        Fixed issue where TabbedPanel was invoking the activePanel's onInit() method twice.
-        This issue was identifier by Wisking Ju Yu Wu
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-420">420</a>].
+        Fixed AbstractContainerField not to bind its request parameter.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-428">428</a>].
       </li>
     </ul>
     <a name="1.5-M1-upgrade-path" href="#"></a>
@@ -305,6 +246,81 @@ public class HtmlTable extends AbstractControl {
   </dd>
 
   <dt><div class="release-header">Archives</div></dt>
+  <dt><a name="1.5-M3"></a>Development Release - Version 1.5 M3 - 17 August 2008</dt>
+  <dd>
+    <div style="margin-left:-2em;margin-bottom:1em;"> 
+     <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
+    </div>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+        Major refactoring to improve backward compatibility and upgrade path.
+        This includes removing BasicForm which was included in 1.5-M1 and adding
+        new Controls <a href="extras-api/net/sf/click/extras/control/HtmlForm.html">HtmlForm</a>
+        and <a href="extras-api/net/sf/click/extras/control/HtmlFieldSet.html">HtmlFieldSet</a>.
+        You can find an example of HtmlForm in action <a target="_blank" href="http://www.avoka.com/click-examples/form/contact-details.htm">here</a>.
+      </li>
+      <li class="change">
+        Added support for multiple page package definitions in click.xml configuration.
+        See the configuration topic <a href="configuration.html#application-multi-packages">Multiple Pages Packages</a>
+        for more details.
+        This issue was raised by Ricardo R. Lecheta
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-328">328</a>].
+      </li>
+      <li class="change">
+        Added configurable table <a href="click-api/net/sf/click/control/Paginator.html">Paginator</a> support 
+        and an <a href="click-api/net/sf/click/control/InlinePaginator.html">InlinePaginator</a>.
+        A new <a target="_blank" href="http://www.avoka.com/click-examples/table/table-paginator.htm">example</a>
+        shows the different Paginator options available. This issue was raised by Gustav Weber
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-390">390</a>].
+      </li>
+      <li class="change">
+        Added readonly and disabled support to FieldSet. If enabled Fields contained
+        in FieldSet will be disabled or made readonly.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-423">423</a>].
+      </li>
+      <li class="change">
+        Added Table footer rendering support, so that column totals can be rendered in a table
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-425">425</a>].
+      </li>
+      <li class="change">
+        Improved Table rendering performance in the order of 25-45%.
+      </li>
+      <li class="change">
+        Improved rendering performance by caching the ClickUtils 
+        <a href="click-api/net/sf/click/util/ClickUtils.html#getResourceVersionIndicator(net.sf.click.Context)">resource version indicator</a>
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-412">412</a>].
+      </li>
+      <li class="change">
+        Improved Page and PageImports to allow a Pages to optimize their HTML imports.
+        Please see Click Examples for a demonstration
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-363">363</a>].
+      </li>
+      <li class="change">
+        Fixed issue where Select validation can throw ClassCastException 
+        when option list contains an OptionGroup. This issue was identifier by Christophe Foiret
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-374">374</a>].
+      </li>
+      <li class="change">
+        Fixed issue where Container can be added to itself. This issue was identifier by Harry Wissiak
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-414">414</a>].
+      </li>
+      <li class="change">
+        Fixed Page serialization issues with non serializable Format and PageImport objects.
+        This issue was identifier by Alexei Sokolov
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-416">416</a>].
+      </li>
+      <li class="change">
+        Fixed issue where CayenneForm clearValues() was hidden data object classname.
+        This issue was identifier by Wisking Ju Yu Wu
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-417">417</a>].
+      </li>
+      <li class="change">
+        Fixed issue where TabbedPanel was invoking the activePanel's onInit() method twice.
+        This issue was identifier by Wisking Ju Yu Wu
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-420">420</a>].
+      </li>
+    </ul>
+  </dd>
   <dt><a name="1.5-M2"></a>Development Release - Version 1.5 M2 - 20 July 2008</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;"> 
