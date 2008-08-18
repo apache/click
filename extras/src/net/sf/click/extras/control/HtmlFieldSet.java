@@ -40,6 +40,35 @@ public class HtmlFieldSet extends FieldSet {
 
     private static final long serialVersionUID = 1L;
 
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a HtmlFieldSet with the given name.
+     *
+     * @param name the fieldset name element value
+     */
+    public HtmlFieldSet(String name) {
+        super(name);
+    }
+
+    /**
+     * Create a HtmlFieldSet with the given name and legend.
+     *
+     * @param name the fieldset name
+     * @param legend the fieldset legend element value
+     */
+    public HtmlFieldSet(String name, String legend) {
+        super(name, legend);
+    }
+
+    /**
+     * Create a HtmlFieldSet with no name defined.
+     * <p/>
+     * <b>Please note</b> the control's name must be defined before it is valid.
+     */
+    public HtmlFieldSet() {
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -102,6 +131,16 @@ public class HtmlFieldSet extends FieldSet {
         }
 
         appendAttributes(buffer);
+    }
+
+    /**
+     * @see AbstractControl#renderTagEnd(java.lang.String, net.sf.click.util.HtmlStringBuffer).
+     *
+     * @param tagName the name of the tag to close
+     * @param buffer the buffer to append the output to
+     */
+    protected void renderTagEnd(String tagName, HtmlStringBuffer buffer) {
+        buffer.elementEnd(tagName);
     }
 
     /**
