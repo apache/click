@@ -24,9 +24,9 @@ public class ClickFacetInstallDataModelProvider extends FacetInstallDataModelPro
 		if (propertyName.equals(FACET_ID)) {
 			return "click";
 		} else if(propertyName.equals(USE_SPRING)){
-			return "false";
+			return new Boolean(false);
 		} else if(propertyName.equals(USE_CAYENNE)){
-			return "false";
+			return new Boolean(false);
 		}
 		return super.getDefaultProperty(propertyName);
 	}
