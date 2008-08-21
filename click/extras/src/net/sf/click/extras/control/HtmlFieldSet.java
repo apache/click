@@ -134,7 +134,7 @@ public class HtmlFieldSet extends FieldSet {
     }
 
     /**
-     * @see AbstractControl#renderTagEnd(java.lang.String, net.sf.click.util.HtmlStringBuffer).
+     * @see net.sf.click.control.AbstractControl#renderTagEnd(java.lang.String, net.sf.click.util.HtmlStringBuffer).
      *
      * @param tagName the name of the tag to close
      * @param buffer the buffer to append the output to
