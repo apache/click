@@ -3,10 +3,7 @@ package net.sf.clickide.core.facet;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
@@ -159,7 +156,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				File file = new File(webInf, ClickFacetUtil.SPRING_LIBS[i]);
 				URL url = ClickPlugin.getDefault().getBundle().getEntry(
 						ClickFacetUtil.SPRING_DIR + ClickFacetUtil.SPRING_LIBS[i]);
-				copyStream(url.openStream(), new FileOutputStream(file));
+				ClickUtils.copyStream(url.openStream(), new FileOutputStream(file));
 			} catch(Exception ex){
 				ClickPlugin.log(ex);
 			}
@@ -195,7 +192,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				File file = new File(webInf, ClickFacetUtil.CAYENNE_LIBS[i]);
 				URL url = ClickPlugin.getDefault().getBundle().getEntry(
 						ClickFacetUtil.CAYENNE_DIR + ClickFacetUtil.CAYENNE_LIBS[i]);
-				copyStream(url.openStream(), new FileOutputStream(file));
+				ClickUtils.copyStream(url.openStream(), new FileOutputStream(file));
 			} catch(Exception ex){
 				ClickPlugin.log(ex);
 			}
@@ -218,29 +215,6 @@ public class ClickFacetInstallDelegate implements IDelegate {
 		}
 	}
 	
-	private static void copyStream(InputStream in, OutputStream out){
-		try {
-			byte[] buf = new byte[1024 * 8];
-			int length = 0;
-			while((length = in.read(buf))!=-1){
-				out.write(buf, 0, length);
-			}
-		} catch(IOException ex){
-			ClickPlugin.log(ex);
-		} finally {
-			if(in!=null){
-				try {
-					in.close();
-				} catch(Exception ex){}
-			}
-			if(out!=null){
-				try {
-					out.close();
-				} catch(Exception ex){}
-			}
-		}
-	}
-	
 	private void deployClickFiles(IProject project, IDataModel config, IProgressMonitor monitor) {
 		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
 		File webInf = destPath.append("WEB-INF").toFile();
@@ -255,7 +229,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				
 				URL url = ClickPlugin.getDefault().getBundle().getEntry(
 						ClickFacetUtil.CLICK_DIR + ClickFacetUtil.COPY_FILES[i]);
-				copyStream(url.openStream(), new FileOutputStream(file));
+				ClickUtils.copyStream(url.openStream(), new FileOutputStream(file));
 			} catch(Exception ex){
 				ClickPlugin.log(ex);
 			}
@@ -369,7 +343,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			InputStreamReader reader = new InputStreamReader(url.openStream(), "UTF-8");
 			Velocity.evaluate(context, writer, null, reader);
 			
-			copyStream(new ByteArrayInputStream(writer.toString().getBytes("UTF-8")), 
+			ClickUtils.copyStream(new ByteArrayInputStream(writer.toString().getBytes("UTF-8")), 
 					new FileOutputStream(file));
 		} catch(Exception ex){
 			ClickPlugin.log(ex);

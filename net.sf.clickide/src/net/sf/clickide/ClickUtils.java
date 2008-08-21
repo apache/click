@@ -1,5 +1,8 @@
 package net.sf.clickide;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -722,6 +725,29 @@ public class ClickUtils {
 			simpleName = simpleName.substring(0, simpleName.lastIndexOf('<'));
 		}
 		return simpleName;
+	}
+	
+	public static void copyStream(InputStream in, OutputStream out){
+		try {
+			byte[] buf = new byte[1024 * 8];
+			int length = 0;
+			while((length = in.read(buf))!=-1){
+				out.write(buf, 0, length);
+			}
+		} catch(IOException ex){
+			ClickPlugin.log(ex);
+		} finally {
+			if(in!=null){
+				try {
+					in.close();
+				} catch(Exception ex){}
+			}
+			if(out!=null){
+				try {
+					out.close();
+				} catch(Exception ex){}
+			}
+		}
 	}
 	
 
