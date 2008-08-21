@@ -184,7 +184,32 @@ public abstract class AutoCompleteTextField extends TextField {
 
     /**
      * Set the JavaScript 'script.aculo.us' Autocompleter initialization
-     * options, default value is: <tt>{}</tt>.
+     * options, default value is: <tt>{minChars:1}</tt>.
+     * <p/>
+     * Scriptaculous AutoCompleter supports sending arbitrary request parameters
+     * as part of its options. See the Ajax-AutoCompleter
+     * <a href="http://github.com/madrobby/scriptaculous/wikis/ajax-autocompleter" target="_blank">documentation</a>
+     * for some examples.
+     * <p/>
+     * Below is an example of how to send extra request parameters:
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *     AutoCompleteTextField cityField = new AutoCompleteTextField("cityField");
+        *     HtmlStringBuffer buffer = new HtmlStringBuffer();
+     *     buffer.append("{"); // Options opens with squiggly bracket
+           *     buffer.append(stateField.getName());
+           *     buffer.append("=");
+           *     buffer.append(stateField.getValue());
+           *     buffer.append("&");
+     *     buffer.append(idField.getName());
+     *     buffer.append("=");
+     *     buffer.append(idField.getValue());
+     *     buffer.append("}"); // Options closes with squiggly bracket
+     *     field.setAutoCompleteOptions(options.toString());
+     * } </pre>
+     *
+     * Note that you can add any of the options specified on the
+     * Ajax-AutoCompleter wiki.
      *
      * @param options the JavaScript Autocompleter initialization options
      */
