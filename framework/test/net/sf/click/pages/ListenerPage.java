@@ -8,10 +8,6 @@ import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 
-/**
- *
- * @author Bob Schellink
- */
 public class ListenerPage extends Page {
 
     public Form form = new Form("form");
@@ -19,8 +15,8 @@ public class ListenerPage extends Page {
     // Indicates if the submit Assertion succeeded or not
     public boolean success = false;
 
-    public void onInit() {        
-        
+    public void onInit() {
+
         // Create and add submit button *before* adding the textField
         Submit submit = new Submit("submit");
         form.add(submit);
