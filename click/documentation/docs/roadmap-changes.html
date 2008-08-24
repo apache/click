@@ -14,7 +14,7 @@
   dl {
     margin-left: 2em;
   }
-  dt { 
+  dt {
     font-weight: 700;
     margin-top: 1.5em; 
     margin-bottom: 0.5em; 
@@ -91,6 +91,12 @@ The following Click Framework release 1.6 will include new features such as modu
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
     <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+        Encapsulate conversion logic of template extensions inside
+        <a href="click-api/net/sf/click/Page.html#setRedirect(java.lang.String)">Page.setRedirect(java.lang.String)</a>
+        which allows one to override or overload the default behavior.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-429">429</a>].
+      </li>
       <li class="change">
         Fixed HtmlFieldSet to properly close the fieldset end tag.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-427">427</a>].

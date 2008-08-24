@@ -886,7 +886,7 @@ public class Page {
      * <p/>
      * If the redirect location begins with a <tt class="wr">"/"</tt>
      * character the redirect location will be prefixed with the web applications
-     * context path. Also if the location has a <tt>.jsp</tt> extension it will
+     * context path and if the location has a <tt>.jsp</tt> extension it will
      * be changed to <tt>.htm</tt>.
      * <p/>
      * For example if an application is deployed to the context
@@ -895,16 +895,58 @@ public class Page {
      * will redirect the request to:
      * <tt class="wr">"/mycorp/customer/details.htm"</tt>
      * <p/>
+     * If the redirect location does not begin with a <tt class="wr">"/"</tt>
+     * character the redirect location will be used as specified. Thus if the
+     * location is <tt class="wr">http://somehost.com/myapp/customer.jsp</tt>,
+     * Click will redirect to that location.
+     * <p/>
+     * If you need to redirect and don't want Click to alter the specified
+     * location you can create a custom redirect method in your BorderPage which
+     * provides this functionality. For example if you want to redirect to a
+     * <tt>jsp</tt> and don't want Click to convert the extension to
+     * <tt>htm</tt> you can do the following:
+     * <pre class="prettyprint">
+     * public class BorderPage extends Page {
+     *   public void setJSPRedirect(String location) {
+     *     String contextPath = getContext().getRequest().getContextPath();
+     *     location = contextPath + location;
+     *     this.redirect = location;
+     *   }
+     * } </pre>
+     * Invoking <tt>setJSPRedirect(<span class="navy">"/customer/details.jsp"</span>)</tt>
+     * will redirect to <tt class="wr">"mycorp/customer/details.jsp"</tt> and
+     * won't be processed by ClickServlet.
+     * <p/>
+     * <b>Please note</b> that Click will url encode the location by invoking
+     * <tt>response.encodeRedirectURL(location)</tt> before redirecting.
+     * <p/>
      * See also {@link #setForward(String)}, {@link #setPath(String)}
      *
      * @param location the path to redirect the request to
      */
     public void setRedirect(String location) {
+        if (location != null) {
+            if (location.charAt(0) == '/') {
+                Context context = getContext();
+                location = context.getRequest().getContextPath() + location;
+
+                // Check for two scenarios, one without parameters and one with:
+                // #1. /context/my-page.jsp
+                // #2. /context/my-page.jsp?param1=value&param2=other-page.jsp
+                if (location.endsWith(".jsp")) {
+                    location = StringUtils.replaceOnce(location, ".jsp", ".htm");
+                } else if (location.indexOf(".jsp?") >= 0) {
+                    location = StringUtils.replaceOnce(location, ".jsp?", ".htm?");
+                }
+            }
+        }
         redirect = location;
     }
 
     /**
      * Set the request to redirect to the give page class.
+     *
+     * @see #setRedirect(java.lang.String)
      *
      * @param pageClass the class of the Page to redirect the request to
      * @throws IllegalArgumentException if the Page Class is not configured
