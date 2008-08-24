@@ -613,19 +613,6 @@ public class ClickServlet extends HttpServlet {
         if (StringUtils.isNotBlank(page.getRedirect())) {
             String url = page.getRedirect();
 
-            if (url.charAt(0) == '/') {
-                url = request.getContextPath() + url;
-
-                // Check for two scenarios, one without parameters and one with:
-                // #1. /context/my-page.jsp
-                // #2. /context/my-page.jsp?param1=value&param2=other-page.jsp
-                if (url.endsWith(".jsp")) {
-                    url = StringUtils.replaceOnce(url, ".jsp", ".htm");
-                } else if (url.indexOf(".jsp?") >= 0) {
-                    url = StringUtils.replaceOnce(url, ".jsp?", ".htm?");
-                }
-            }
-
             url = response.encodeRedirectURL(url);
 
             if (logger.isTraceEnabled()) {
