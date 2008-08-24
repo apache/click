@@ -9,7 +9,7 @@ To forward to <b>NavigationB</b> click <a href="${forwardLink.href}">here</a>.
     setForward(<span class='st'>"/navigation-b.jsp"</span>);
 </pre>
 
-To forward to <b>NavigationB</b> passing the parameter $forwardParamLink.value click
+To forward to <b>NavigationB</b> passing the parameter ${forwardParamLink.value} click
 <a href="${forwardParamLink.href}">here</a>.
 
 <pre class="javaCode">
@@ -25,7 +25,7 @@ To redirect to <b>NavigationB</b> click <a href="${redirectLink.href}">here</a>.
     setRedirect(<span class='st'>"/navigation-b.jsp"</span>);
 </pre>
 
-To redirect to <b>NavigationB</b> passing the parameter $redirectParamLink.value click
+To redirect to <b>NavigationB</b> passing the parameter ${redirectParamLink.value} click
 <a href="${redirectParamLink.href}">here</a>.
 
 <pre class="javaCode">
