@@ -72,9 +72,26 @@ public class NavigationA extends BorderPage {
 
     // --------------------------------------------------------- Public Methods
 
+    /**
+     * Target template to forward to.
+     * <p/>
+     * In order to forward to a Page with a JSP template, we specify the target
+     * with an htm extension so that ClickServlet will process the Page.
+     * After the Page NavigationB.java is processed, Click will forward to the
+     * underlying template /jsp/navigation-b.jsp.
+     */
     public String getTarget() {
-        return "/jsp/navigation-b.jsp";
+        return "/jsp/navigation-b.htm";
     }
+
+    /**
+     * Note one can also forward and redirect using the Page class instead of
+     * the path as seen below.
+     */
+    /*
+    public Class getTargetPageClass() {
+        return NavigationB.class;
+    }*/
 
     /**
      * Returns the name of the border template: &nbsp; <tt>"/border-template.jsp"</tt>
