@@ -17,6 +17,7 @@ package net.sf.click.control;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -403,7 +404,7 @@ public class Column implements Serializable {
      */
     public Comparator getComparator() {
         if (comparator == null) {
-            comparator = new Column.Comparator(this);
+            comparator = new ColumnComparator(this);
         }
         return comparator;
     }
@@ -1446,7 +1447,7 @@ public class Column implements Serializable {
      *
      * @author Malcolm Edgar
      */
-    static class Comparator implements java.util.Comparator {
+    static class ColumnComparator implements Comparator {
 
         /** The sort ascending flag. */
         protected int ascendingSort;
@@ -1459,7 +1460,7 @@ public class Column implements Serializable {
          *
          * @param column the colum to sort on
          */
-        public Comparator(Column column) {
+        public ColumnComparator(Column column) {
             this.column = column;
         }
 
