@@ -15,7 +15,7 @@ public class ColumnCompareTest extends TestCase {
         Table table = new Table("table");
         table.addColumn(column);
 
-        Column.Comparator comparator = new Column.Comparator(column);
+        Column.ColumnComparator comparator = new Column.ColumnComparator(column);
         List rowList = createRowList1();
         Collections.sort(rowList, comparator);
         System.out.println(rowList);
@@ -31,7 +31,7 @@ public class ColumnCompareTest extends TestCase {
         Table table = new Table("table");
         table.addColumn(column);
 
-        Column.Comparator comparator = new Column.Comparator(column);
+        Column.ColumnComparator comparator = new Column.ColumnComparator(column);
         List rowList = createRowList2();
         Collections.sort(rowList, comparator);
         System.out.println(rowList);
