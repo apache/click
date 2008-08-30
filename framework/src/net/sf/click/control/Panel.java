@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.click.ActionListener;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.Page;
@@ -299,27 +300,6 @@ public class Panel extends AbstractContainer {
     }
 
     /**
-     * @see net.sf.click.control.Container#getControls()
-     *
-     * @return the sequential list of controls held by the container
-     */
-    public List getControls() {
-        if (controls == null) {
-            controls = new ArrayList();
-        }
-        return controls;
-    }
-
-    /**
-     * @see AbstractContainer#hasControls()
-     *
-     * @return true if the container has existing controls, false otherwise.
-     */
-    public boolean hasControls() {
-        return (controls == null) ? false : !controls.isEmpty();
-    }
-
-    /**
      * Return true if the panel is disabled.
      *
      * @return true if the panel is disabled
@@ -380,30 +360,6 @@ public class Panel extends AbstractContainer {
     }
 
     /**
-     * Return the HTML head import statements for contained controls.
-     *
-     * @see net.sf.click.Control#getHtmlImports()
-     *
-     * @return the HTML includes statements for the contained control stylesheet
-     * and JavaScript files
-     */
-    public String getHtmlImports() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
-
-        if (hasControls()) {
-            for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
-                String htmlImports = control.getHtmlImports();
-                if (htmlImports != null) {
-                    buffer.append(htmlImports);
-                }
-            }
-        }
-
-        return buffer.toString();
-    }
-
-    /**
      * Return the panel display label.
      * <p/>
      * If the label value is null, this method will attempt to find a
@@ -455,6 +411,17 @@ public class Panel extends AbstractContainer {
      * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method) {
+    }
+
+    /**
+     * This method does nothing, since Panel does not support ction listener
+     * callback.
+     *
+     * @see AbstractControl#setActionListener(net.sf.click.ActionListener)
+     *
+     * @param listener the control's action listener
+     */
+    public void setActionListener(ActionListener listener) {
     }
 
     /**
