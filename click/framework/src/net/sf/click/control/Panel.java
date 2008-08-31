@@ -32,8 +32,6 @@ import net.sf.click.util.Format;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.SessionMap;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * Provides a Panel control for creating customized layout sections within a page.
  *
@@ -229,21 +227,18 @@ public class Panel extends AbstractContainer {
      *
      * @param control the control to add to the container
      * @return the control that was added to the container
-     * @throws IllegalArgumentException if the control is null, if the name
-     *     of the control is not defined, the container already contains a
-     *     control with the same name, or if the control's parent is a Page
+     * @throws IllegalArgumentException if the control is null, the container
+     *     already contains a control with the same name, or if the control's
+     *     parent is a Page
      */
     public Control add(Control control) {
-        if (control == null) {
-            throw new IllegalArgumentException("Null control parameter");
-        }
-        if (StringUtils.isBlank(control.getName())) {
-            throw new IllegalArgumentException("Control name not defined");
-        }
-
         super.add(control);
 
-        addModel(control.getName(), control);
+        String controlName = control.getName();
+        if (controlName != null) {
+            // If controls name is set, add control to the model
+            addModel(controlName, control);
+        }
 
         if (control instanceof Panel) {
             getPanels().add(control);
@@ -277,20 +272,16 @@ public class Panel extends AbstractContainer {
      *
      * @param control the control to remove from the container
      * @return true if the control was removed from the container
-     * @throws IllegalArgumentException if the control is null or if the name of
-     *     the control is not defined
+     * @throws IllegalArgumentException if the control is null
      */
     public boolean remove(Control control) {
-        if (control == null) {
-            throw new IllegalArgumentException("Null control parameter");
-        }
-        if (StringUtils.isBlank(control.getName())) {
-            throw new IllegalArgumentException("Control name not defined");
-        }
-
         boolean contains = super.remove(control);
 
-        getModel().remove(control.getName());
+        String controlName = control.getName();
+        if (controlName != null) {
+            // If control has name, remove it from the model
+            getModel().remove(controlName);
+        }
 
         if (control instanceof Panel) {
             getPanels().remove(control);
