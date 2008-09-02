@@ -152,7 +152,7 @@ public class DefaultPaginator implements Paginator {
                     controlLink.setParameter(Table.PAGE, String.valueOf(i));
                     controlLink.setTitle(gotoTitle + " " + pageNumber);
                     controlLink.setId("control-" + pageNumber);
-                    pagesBuffer.append(controlLink.toString());
+                    controlLink.render(pagesBuffer);
                 }
 
                 if (i < upperBound - 1) {
