@@ -2230,7 +2230,8 @@ public class Form extends AbstractContainer {
         }
 
         buffer.append("<tr><td>\n");
-        renderControls(buffer, this, getFieldList(), getFieldWidths(), getColumns());
+
+        renderControls(buffer, this, getControls(), getFieldWidths(), getColumns());
         buffer.append("</td></tr>\n");
     }
 
