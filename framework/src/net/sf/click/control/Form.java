@@ -2264,6 +2264,11 @@ public class Form extends AbstractContainer {
 
             Control control = (Control) controls.get(i);
 
+            // Buttons are rendered separately
+            if (control instanceof Button) {
+                continue;
+            }
+
             if (!isHidden(control)) {
 
                 // Control width
