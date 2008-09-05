@@ -405,7 +405,7 @@ public class Panel extends AbstractContainer {
     }
 
     /**
-     * This method does nothing, since Panel does not support ction listener
+     * This method does nothing, since Panel does not support action listener
      * callback.
      *
      * @see AbstractControl#setActionListener(net.sf.click.ActionListener)
