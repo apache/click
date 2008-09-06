@@ -78,7 +78,7 @@ import org.apache.commons.lang.math.NumberUtils;
  *         column = <span class="kw">new</span> Column(<span class="st">"Action"</span>);
  *         column.setDecorator(<span class="kw">new</span> LinkDecorator(table, deleteLink, <span class="st">"id"</span>));
  *         column.setSortable(<span class="kw">false</span>);
- *         table.addColumn(column)
+ *         table.addColumn(column);
  *     }
  *
  *     public boolean onDeleteClick() {
@@ -188,6 +188,16 @@ import org.apache.commons.lang.math.NumberUtils;
  *          table.setRowList(rowList);
  *      }
  * } </pre>
+ *
+ * Table supports rendering different paginators through the method
+ * {@link #setPaginator(net.sf.click.control.Renderable)}. The default Table
+ * Paginator is {@link TablePaginator}.
+ *
+ * <a name="row-attributes"/>
+ * <h4>Row Attributes</h4>
+ *
+ * Sometimes it is useful to set attributes on individual rows. In such cases one
+ * can override the method {@link #setRowAttributes(java.util.Map, java.lang.Object, int)}.
  *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
@@ -353,7 +363,7 @@ public class Table extends AbstractControl {
     protected int pageSize;
 
     /** The paginator used to render the table pagination controls. */
-    protected Paginator paginator;
+    protected Renderable paginator;
 
     /**
      * The paginator attachment style:
@@ -1338,12 +1348,51 @@ public class Table extends AbstractControl {
         } else {
             final List tableRows = getRowList();
 
+            Map rowAttributes = new HashMap(3);
+
             for (int i = firstRow; i < lastRow; i++) {
+                Object row = getRowList().get(i);
+
+                buffer.append("<tr");
+
+                // Calculate if row is odd or even
                 boolean even = (i + 1) % 2 == 0;
+                String hoverClass = null;
                 if (even) {
-                    buffer.append("<tr class=\"even\"");
+                    hoverClass = "even";
                 } else {
-                    buffer.append("<tr class=\"odd\"");
+                    hoverClass = "odd";
+                }
+
+                // Empty the row attributes
+                rowAttributes.clear();
+
+                // Allow user to set row attributes
+                setRowAttributes(rowAttributes, row, i);
+
+                if (!rowAttributes.isEmpty()) {
+                    // Append id attribute if it was set
+                    buffer.appendAttribute("id", rowAttributes.get("id"));
+
+                    // Remove class attribute and append hoverClass to the value
+                    String cls = (String) rowAttributes.remove("class");
+
+                    // Open class attribute
+                    buffer.append(" class=\"");
+                    if (cls != null) {
+                        buffer.append(cls).append(" ");
+                    }
+                    buffer.append(hoverClass);
+
+                    // Close class attribute
+                    buffer.append("\"");
+
+                    // Render other attributes set by user.
+                    buffer.appendAttributes(rowAttributes);
+                } else {
+                    // If attributes was not set by user, render hoverClass
+                    // attribute
+                    buffer.append(" class=\"").append(hoverClass).append("\"");
                 }
 
                 if (getHoverRows()) {
@@ -1384,6 +1433,43 @@ public class Table extends AbstractControl {
         }
 
         buffer.append("</tbody>");
+    }
+
+    /**
+     * Override this method to set HTML attributes for each Table row.
+     * <p/>
+     * For example:
+     *
+     * <pre class="prettyprint">
+     * public CompanyPage extends BorderPage {
+     *
+     *     public void onInit() {
+     *         table = new Table() {
+     *             public void setRowAttributes(Map attributes, Object domain, int rowIndex) {
+     *                 Customer customer = (Customer) customer;
+     *                 if (customer.isDisabled()) {
+     *                     // Set the row class to disabled. CSS can then be used
+     *                     // to set disabled rows background to a different color.
+     *                     attributes.put("class", "disabled");
+     *                 }
+     *                 attributes.put("onclick", "alert('you clicked on row "
+     *                     + rowIndex + "')");
+     *             }
+     *         };
+     *     }
+     * } </pre>
+     *
+     * <b>Please note</b> that in order to enable alternate background colors
+     * for rows, Click will automatically add a CSS <tt>class</tt> attribute
+     * to each row with a value of either <tt>odd</tt> or <tt>even</tt>. You are
+     * free to add other CSS class attributes as illustrated in the example
+     * above.
+     *
+     * @param attributes the row attributes
+     * @param row the domain object currently being rendered
+     * @param rowIndex the rows index
+     */
+    protected void setRowAttributes(Map attributes, Object row, int rowIndex) {
     }
 
     /**
