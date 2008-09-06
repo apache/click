@@ -92,6 +92,15 @@ The following Click Framework release 1.6 will include new features such as modu
     </div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
+        Add Table Row attribute support through new method 
+        <a href="click-api/net/sf/click/control/Table.html#setRowAttributes(java.util.Map, java.lang.Object, int)">setRowAttributes(Map attributes, Object domainObject, int rowIndex)</a>.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-431">431</a>].
+      </li>
+      <li class="change">
+        Fixed TabbedPanel to trigger the registered tab listener
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-432">432</a>].
+      </li>
+      <li class="change">
         Encapsulate conversion logic of template extensions inside
         <a href="click-api/net/sf/click/Page.html#setRedirect(java.lang.String)">Page.setRedirect(java.lang.String)</a>
         which allows one to override or overload the default behavior.
@@ -106,7 +115,7 @@ The following Click Framework release 1.6 will include new features such as modu
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-428">428</a>].
       </li>
       <li class="change">
-        Fixed Column which wrongly exposed its internal Comparator as public API
+        Fixed Column which exposed its internal Comparator as public API
         through <a href="click-api/net/sf/click/control/Column.html#setComparator(java.util.Comparator)">Column.setComparator(Comparator)</a>,
         instead of java.util.Comparator.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-430">430</a>].
