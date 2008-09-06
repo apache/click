@@ -625,6 +625,7 @@ public class ClickServlet extends HttpServlet {
             response.sendRedirect(url);
 
         } else if (StringUtils.isNotBlank(page.getForward())) {
+            // Indicates the request is forwarded
             request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
 
             if (logger.isTraceEnabled()) {
@@ -635,10 +636,6 @@ public class ClickServlet extends HttpServlet {
             }
 
             if (page.getForward().endsWith(".jsp")) {
-                // CLK-141. If path is a jsp page, change forward value.
-                if (page.getPath().endsWith(".jsp")) {
-                    page.setForward(page.getPath());
-                }
                 renderJSP(page);
 
             } else {
@@ -649,9 +646,15 @@ public class ClickServlet extends HttpServlet {
             }
 
         } else if (page.getPath() != null) {
-            // CLK-141. If path is a jsp page, set forward value.
-            if (page.getPath().endsWith(".jsp")) {
-                page.setForward(page.getPath());
+            String pagePath = page.getPath();
+
+            // Check if request is a JSP page
+            if (configService.isJspPage(pagePath)) {
+                // CLK-141. Set pagePath as the forward value.
+                page.setForward(StringUtils.replace(pagePath, ".htm", ".jsp"));
+
+                // Indicates the request is forwarded
+                request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
                 renderJSP(page);
 
             } else {
@@ -734,12 +737,14 @@ public class ClickServlet extends HttpServlet {
 
         RequestDispatcher dispatcher = null;
 
-        // Since the "getTemplate" returns the page.getPath() by default, which is *.htm
+        String forward = page.getForward();
+
+        // As "getTemplate" returns the page.getPath() by default, which is *.htm
         // we need to change to *.jsp in order to compare to the page.getForward()
         String jspTemplate = StringUtils.replace(page.getTemplate(), ".htm", ".jsp");
- 
-        if (page.getForward().equals(jspTemplate)) {
-            dispatcher = request.getRequestDispatcher(page.getForward());
+
+        if (forward.equals(jspTemplate)) {
+            dispatcher = request.getRequestDispatcher(forward);
 
         } else {
             dispatcher = request.getRequestDispatcher(page.getTemplate());
@@ -975,10 +980,6 @@ public class ClickServlet extends HttpServlet {
             }
 
             newPage.setPath(path);
-
-            if (configService.isJspPage(path)) {
-                newPage.setForward(StringUtils.replace(path, ".htm", ".jsp"));
-            }
 
             // Bind to final variable to enable callback processing
             final Page page = newPage;

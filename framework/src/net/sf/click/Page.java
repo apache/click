@@ -461,7 +461,7 @@ public class Page {
      * <p/>
      * If the {@link #forward} property is not null it will be used to forward
      * the request to in preference to rendering the template defined by the
-     * {@link #path} property. The request is forwarded using the
+     * {@link #path} property. The request is forwarded using the Servlet
      * RequestDispatcher.
      * <p/>
      * If forward paths start with a <span class="wr">"/"</span>
@@ -498,7 +498,10 @@ public class Page {
 
     /**
      * The Page instance to forward the request to. The given Page object
-     * must have a valid path defined.
+     * must have a valid {@link #path} defined, as the {@link #path} specifies
+     * the location to forward to.
+     *
+     * @see #setForward(java.lang.String)
      *
      * @param page the Page object to forward the request to.
      */
@@ -514,7 +517,9 @@ public class Page {
     }
 
     /**
-     * Set the request to forward to the give page class.
+     * Set the request to forward to the given page class.
+     *
+     * @see #setForward(java.lang.String)
      *
      * @param pageClass the class of the Page to forward the request to
      * @throws IllegalArgumentException if the Page Class is not configured
@@ -522,6 +527,12 @@ public class Page {
      */
     public void setForward(Class pageClass) {
         String target = getContext().getPagePath(pageClass);
+
+        // If page class maps to a jsp, convert to htm which allows ClickServlet
+        // to process the redirect
+        if (target != null && target.endsWith(".jsp")) {
+            target = StringUtils.replaceOnce(target, ".jsp", ".htm");
+        }
         setForward(target);
     }
 
@@ -886,8 +897,7 @@ public class Page {
      * <p/>
      * If the redirect location begins with a <tt class="wr">"/"</tt>
      * character the redirect location will be prefixed with the web applications
-     * context path and if the location has a <tt>.jsp</tt> extension it will
-     * be changed to <tt>.htm</tt>.
+     * context path.
      * <p/>
      * For example if an application is deployed to the context
      * <tt class="wr">"mycorp"</tt> calling
@@ -900,22 +910,17 @@ public class Page {
      * location is <tt class="wr">http://somehost.com/myapp/customer.jsp</tt>,
      * Click will redirect to that location.
      * <p/>
-     * If you need to redirect and don't want Click to alter the specified
-     * location you can create a custom redirect method in your BorderPage which
-     * provides this functionality. For example if you want to redirect to a
-     * <tt>jsp</tt> and don't want Click to convert the extension to
-     * <tt>htm</tt> you can do the following:
-     * <pre class="prettyprint">
-     * public class BorderPage extends Page {
-     *   public void setJSPRedirect(String location) {
-     *     String contextPath = getContext().getRequest().getContextPath();
-     *     location = contextPath + location;
-     *     this.redirect = location;
-     *   }
-     * } </pre>
-     * Invoking <tt>setJSPRedirect(<span class="navy">"/customer/details.jsp"</span>)</tt>
-     * will redirect to <tt class="wr">"mycorp/customer/details.jsp"</tt> and
-     * won't be processed by ClickServlet.
+     * <b>JSP note:</b> when redirecting to a JSP template keep in mind that the
+     * JSP template won't be processed by Click, as ClickServlet is mapped to
+     * <em>*.htm</em>. Instead JSP templates are processed by the Servlet
+     * container JSP engine.
+     * <p/>
+     * So if you have a situation where a Page Class
+     * (<span class="navy">Customer.class</span>) is mapped to the JSP
+     * (<span class="navy">"/customer.jsp"</span>) and you want to redirect to
+     * Customer.class, you could either redirect to
+     * (<span class="navy">"/customer<span class="red">.htm</span>"</span>) or
+     * use the alternative redirect utility {@link #setRedirect(java.lang.Class)}.
      * <p/>
      * <b>Please note</b> that Click will url encode the location by invoking
      * <tt>response.encodeRedirectURL(location)</tt> before redirecting.
@@ -929,15 +934,6 @@ public class Page {
             if (location.charAt(0) == '/') {
                 Context context = getContext();
                 location = context.getRequest().getContextPath() + location;
-
-                // Check for two scenarios, one without parameters and one with:
-                // #1. /context/my-page.jsp
-                // #2. /context/my-page.jsp?param1=value&param2=other-page.jsp
-                if (location.endsWith(".jsp")) {
-                    location = StringUtils.replaceOnce(location, ".jsp", ".htm");
-                } else if (location.indexOf(".jsp?") >= 0) {
-                    location = StringUtils.replaceOnce(location, ".jsp?", ".htm?");
-                }
             }
         }
         redirect = location;
@@ -954,6 +950,12 @@ public class Page {
      */
     public void setRedirect(Class pageClass) {
         String target = getContext().getPagePath(pageClass);
+
+        // If page class maps to a jsp, convert to htm which allows ClickServlet
+        // to process the redirect
+        if (target != null && target.endsWith(".jsp")) {
+            target = StringUtils.replaceOnce(target, ".jsp", ".htm");
+        }
         setRedirect(target);
     }
 
