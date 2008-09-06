@@ -17,6 +17,7 @@ package net.sf.click.extras.panel;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.ActionListener;
 import net.sf.click.Control;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Panel;
@@ -31,7 +32,7 @@ import org.apache.commons.lang.math.NumberUtils;
  * This panel comes with a default template that will render the panels in CSS
  * customizable table tags.
  * <p/>
- * A listener {@link #setTabListener(Object, String)} may be attached
+ * A listener {@link #setTabListener(ActionListener)} may be attached
  * (similar to the control listeners) that will be called on tab switch.
  * This could be useful to load (or reload) model related information for which
  * ever panel is selected by the user.
@@ -121,8 +122,7 @@ public class TabbedPanel extends Panel {
     protected Panel activePanel;
 
     /** The tab switch action link. */
-    protected ActionLink tabLink =
-        new ActionLink("tabLink", this, "onTabSwitch");
+    protected ActionLink tabLink = new ActionLink("tabLink");
 
     // ----------------------------------------------------------- Constructors
 
@@ -262,13 +262,14 @@ public class TabbedPanel extends Panel {
     }
 
     /**
-     * @deprecated use setListener(java.lang.Object, java.lang.String) instead
+     * @see #setTabListener(ActionListener)
      *
      * @param listener the listener object with the named method to invoke
      * @param listenerMethod the name of the method to invoke
      */
     public void setTabListener(Object listener, String listenerMethod) {
-        setListener(listener, listenerMethod);
+        this.listener = listener;
+        this.listenerMethod = listenerMethod;
     }
 
     /**
@@ -290,12 +291,10 @@ public class TabbedPanel extends Panel {
      *     <span class="kw">return true</span>;
      * } </pre>
      *
-     * @param listener the listener object with the named method to invoke
-     * @param listenerMethod the name of the method to invoke
+     * @param actionListener the control's action listener
      */
-    public void setListener(Object listener, String listenerMethod) {
-        this.listener = listener;
-        this.listenerMethod = listenerMethod;
+    public void setTabListener(ActionListener actionListener) {
+        this.actionListener = actionListener;
     }
 
     /**
@@ -356,17 +355,7 @@ public class TabbedPanel extends Panel {
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
-        // Select panel specified by tabPanelIndex if defined
-        String tabPanelIndex = getContext().getRequestParameter("tabPanelIndex");
-        if (NumberUtils.isNumber(tabPanelIndex)) {
-            int tabIndex = Integer.parseInt(tabPanelIndex);
-            if (tabIndex >= 0 && tabIndex < getPanels().size()) {
-                Panel panel = (Panel) getPanels().get(tabIndex);
-                if (!panel.isDisabled()) {
-                    setActivePanel(panel);
-                }
-            }
-        }
+        initActivePanel();
 
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
@@ -404,7 +393,10 @@ public class TabbedPanel extends Panel {
                 }
             }
         }
-         return true;
+        if (tabLink.isClicked()) {
+            registerActionEvent();
+        }
+        return true;
     }
 
     /**
@@ -427,31 +419,51 @@ public class TabbedPanel extends Panel {
         }
     }
 
+    // ------------------------------------------------------ Protected Methods
+
     /**
-     * The tab switch event handler.  This method will invoke the
-     * listener.method() as set by {@link #setTabListener(Object, String)} if
-     * available, otherwise will just continue processing, therefore
-     * assume that all the information needed to "switch tabs" is already
-     * available to the model.
-     *
-     * @return true if processing should continue, false if it should halt
+     * Sets the active panel based on one of the following:
+     * <ul>
+     *   <li>
+     *     If <tt>tabPanelIndex</tt> request parameter is present, this value
+     *     will be used to specify the active panel. The panel index is a zero
+     *     based integer.
+     *   </li>
+     *   <li>
+     *     If a specific tab panel is selected by the user, that panel will
+     *     become active.
+     *   </li>
+     * </ul>
      */
-    public boolean onTabSwitch() {
-        for (int i = 0; i < getPanels().size(); i++) {
-            Panel panel = (Panel) getPanels().get(i);
+    protected void initActivePanel() {
+        // Select panel specified by tabPanelIndex if defined
+        String tabPanelIndex = getContext().getRequestParameter("tabPanelIndex");
+        if (NumberUtils.isNumber(tabPanelIndex)) {
+            int tabIndex = Integer.parseInt(tabPanelIndex);
+            if (tabIndex >= 0 && tabIndex < getPanels().size()) {
+                Panel panel = (Panel) getPanels().get(tabIndex);
+                if (!panel.isDisabled()) {
+                    setActivePanel(panel);
+                }
+            }
+        } else {
+            // Explicitly bind the tabLink to the request and check if the
+            // tabLink was clicked
+            tabLink.bindRequestValue();
+            if (tabLink.isClicked()) {
 
-            if (tabLink.getValue().equals(panel.getName())
-                && !panel.isDisabled()
-                && panel != getActivePanel()) {
+                // Check which panel user selected and set that Panel as active
+                for (int i = 0; i < getPanels().size(); i++) {
+                    Panel panel = (Panel) getPanels().get(i);
 
-                setActivePanel(panel);
-                panel.onInit();
+                    if (tabLink.getValue().equals(panel.getName())
+                        && !panel.isDisabled()) {
+
+                        setActivePanel(panel);
+                    }
+                }
             }
         }
-
-        registerActionEvent();
-
-        return true;
     }
 
 }
