@@ -204,7 +204,7 @@ public abstract class AbstractControl implements Control {
      * @param listener the control's action listener
      */
     public void setActionListener(ActionListener listener) {
-        actionListener = listener;
+        this.actionListener = listener;
     }
 
     /**
