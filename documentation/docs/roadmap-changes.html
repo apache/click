@@ -92,9 +92,25 @@ The following Click Framework release 1.6 will include new features such as modu
     </div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
+        Refactored Paginator into a more generic interface called
+        <a href="click-api/net/sf/click/control/Renderable.html">Renderable</a>
+        which is independent of any specific Control
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-434">434</a>].
+      </li>
+      <li class="change">
         Add Table Row attribute support through new method 
         <a href="click-api/net/sf/click/control/Table.html#setRowAttributes(java.util.Map, java.lang.Object, int)">setRowAttributes(Map attributes, Object domainObject, int rowIndex)</a>.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-431">431</a>].
+      </li>
+      <li class="change">
+        Encapsulate conversion logic of template extensions inside
+        <a href="click-api/net/sf/click/Page.html#setRedirect(java.lang.String)">Page.setRedirect(java.lang.String)</a>
+        which allows one to override or overload the default behavior.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-429">429</a>].
+      </li>
+      <li class="change">
+        Improved DateField to return a cached Date representation on subsequent retrievals
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-316">316</a>].
       </li>
       <li class="change">
         Fixed TabbedPanel to trigger the registered tab listener
@@ -103,12 +119,6 @@ The following Click Framework release 1.6 will include new features such as modu
       <li class="change">
         Improved redirect and forward to JSP templates.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-435">435</a>].
-      </li>
-      <li class="change">
-        Encapsulate conversion logic of template extensions inside
-        <a href="click-api/net/sf/click/Page.html#setRedirect(java.lang.String)">Page.setRedirect(java.lang.String)</a>
-        which allows one to override or overload the default behavior.
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-429">429</a>].
       </li>
       <li class="change">
         Fixed HtmlFieldSet to properly close the fieldset end tag.
