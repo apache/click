@@ -117,6 +117,9 @@ public class DateField extends TextField {
 
     // ----------------------------------------------------- Instance Variables
 
+    /** The DateField's date value. */
+    protected Date date;
+
     /** The JavaScript DHTML Calendar pattern. */
     protected String calendarPattern;
 
@@ -219,24 +222,12 @@ public class DateField extends TextField {
 
     /**
      * Return the field Date value, or null if value was empty or a parsing
-     * error occured.
+     * error occurred.
      *
      * @return the field Date value
      */
     public Date getDate() {
-        if (value != null && value.length() > 0) {
-            try {
-                Date date = getDateFormat().parse(value);
-
-                return new Date(date.getTime());
-
-            } catch (ParseException pe) {
-                return null;
-            }
-
-        } else {
-            return null;
-        }
+        return date;
     }
 
     /**
@@ -245,8 +236,11 @@ public class DateField extends TextField {
      * @param date the Date value to set
      */
     public void setDate(Date date) {
+        this.date = date;
         if (date != null) {
-            value = getDateFormat().format(date);
+            super.setValue(getDateFormat().format(date));
+        } else {
+            super.setValue(null);
         }
     }
 
@@ -487,6 +481,29 @@ public class DateField extends TextField {
             throw new IllegalArgumentException("Null style parameter");
         }
         this.style = style;
+    }
+
+    /**
+     * Set the DateField value.
+     *
+     * @param value the DateField value
+     */
+    public void setValue(String value) {
+        if (value != null && value.length() > 0) {
+            try {
+                Date parsedDate = getDateFormat().parse(value);
+
+                // Cache date for subsequent retrievals
+                date = new Date(parsedDate.getTime());
+
+            } catch (ParseException pe) {
+                date = null;
+            }
+
+        } else {
+            date = null;
+        }
+        super.setValue(value);
     }
 
     /**
