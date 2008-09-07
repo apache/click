@@ -262,6 +262,16 @@ public class TabbedPanel extends Panel {
     }
 
     /**
+     * This method will delegate to {@link #setTabListener(java.lang.Object, java.lang.String)}.
+     *
+     * @param listener the listener object with the named method to invoke
+     * @param listenerMethod the name of the method to invoke
+     */
+    public void setListener(Object listener, String listenerMethod) {
+        setTabListener(listener, listenerMethod);
+    }
+
+    /**
      * @see #setTabListener(ActionListener)
      *
      * @param listener the listener object with the named method to invoke
@@ -270,6 +280,15 @@ public class TabbedPanel extends Panel {
     public void setTabListener(Object listener, String listenerMethod) {
         this.listener = listener;
         this.listenerMethod = listenerMethod;
+    }
+
+    /**
+     * This method will delegate to {@link #setTabListener(net.sf.click.ActionListener)}.
+     *
+     * @param actionListener the control's action listener
+     */
+    public void setActionListener(ActionListener actionListener) {
+        setTabListener(actionListener);
     }
 
     /**
