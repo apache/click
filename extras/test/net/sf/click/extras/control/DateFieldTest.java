@@ -18,7 +18,6 @@ package net.sf.click.extras.control;
 import java.util.Date;
 
 import net.sf.click.MockContext;
-import net.sf.click.extras.control.DateField;
 import junit.framework.TestCase;
 import net.sf.click.servlet.MockRequest;
 
@@ -87,4 +86,37 @@ public class DateFieldTest extends TestCase {
         assertNull(date);
     }
 
+    /**
+     * DateField should cache Date value instead of reparsing the string
+     * value each time.
+     * 
+     * CLK-316
+     */
+    public void testIntegerCacheValue() {
+        MockContext mockContext = MockContext.initContext();
+        MockRequest request = mockContext.getMockRequest();
+        
+        DateField dateField = new DateField("dateField");
+        dateField.setFormatPattern("dd MMM yyyy H m s S");
+        String requestParam = "06 Oct 2008 2 30 59 999";
+        request.getParameterMap().put("dateField", requestParam);
+
+        assertTrue(dateField.onProcess());
+
+        // Check that the value equals the request parameter
+        assertEquals(requestParam, dateField.getValue());
+        
+        // Retrieve the date from field: this should cache the Date
+        Date date  = dateField.getDate();
+        // Check that upon second retrieval the cached value is returned
+        assertSame(date, dateField.getDate());
+
+        // Check that getValueObject also returns the cached value
+        assertSame(date, dateField.getValueObject());
+        
+        // Set date on the dateField and check that time value is not lost
+        dateField.setDate(date);
+        
+        assertEquals(requestParam, dateField.getValue());
+    }
 }
