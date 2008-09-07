@@ -20,31 +20,18 @@ import java.io.Serializable;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
- * Provides an interface for rendering the table pagination controls.
+ * Provides an interface for rendering output to an efficient string buffer.
+ * <p/>
+ * Implementations of this interface will normally render HTML markup.
  *
  * @author Malcolm Edgar
  */
-public interface Paginator extends Serializable {
+public interface Renderable extends Serializable {
 
     /**
-     * Return the paginator's parent table.
+     * Render output, normally HTML markup, to the given buffer.
      *
-     * @return the paginators parent table
-     */
-    public Table getTable();
-
-    /**
-     * Set the paginator's parent table. This method will be invoked when the
-     * paginator is set on the parent table.
-     *
-     * @param table the paginator's parent table
-     */
-    public void setTable(Table table);
-
-    /**
-     * Render the table pagination controls to the given buffer.
-     *
-     * @param buffer the string buffer to render the paginator to
+     * @param buffer the string buffer to render output to
      */
     public void render(HtmlStringBuffer buffer);
 

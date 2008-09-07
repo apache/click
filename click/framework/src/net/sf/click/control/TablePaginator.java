@@ -30,17 +30,28 @@ import net.sf.click.util.HtmlStringBuffer;
  *
  * @author Malcolm Edgar
  */
-public class DefaultPaginator implements Paginator {
+public class TablePaginator implements Renderable {
 
     private static final long serialVersionUID = 1L;
 
     /** The parent table to provide paginator for. */
     protected Table table;
 
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a Paginator for the given Table.
+     *
+     * @param table the paginator's table
+     */
+    public TablePaginator(Table table) {
+        setTable(table);
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
-     * @see Paginator#getTable()
+     * Return the parent Table for this Paginator.
      *
      * @return the paginators parent table
      */
@@ -49,7 +60,7 @@ public class DefaultPaginator implements Paginator {
     }
 
     /**
-     * @see Paginator#setTable(Table)
+     * Set the parent Table for this Paginator.
      *
      * @param table the paginator's parent table
      */
@@ -58,7 +69,7 @@ public class DefaultPaginator implements Paginator {
     }
 
     /**
-     * @see Paginator#render(HtmlStringBuffer)
+     * @see Renderable#render(HtmlStringBuffer)
      *
      * @param buffer the string buffer to render the paginator to
      */
@@ -66,7 +77,8 @@ public class DefaultPaginator implements Paginator {
         final Table table = getTable();
 
         if (table == null) {
-            throw new IllegalStateException("No parent table defined");
+            throw new IllegalStateException("No parent table defined."
+                + " Ensure a parent Table is set using #setTable(Table).");
         }
 
         if (table.getShowBanner()) {
