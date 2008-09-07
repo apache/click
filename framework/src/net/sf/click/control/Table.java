@@ -832,14 +832,13 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Return the paginator for rendering the table pagination controls.
+     * Return the paginator for rendering the table pagination.
      *
      * @return the table paginator
      */
-    public Paginator getPaginator() {
+    public Renderable getPaginator() {
         if (paginator == null) {
-            paginator = new DefaultPaginator();
-            paginator.setTable(this);
+            paginator = new TablePaginator(this);
         }
         return paginator;
     }
@@ -849,18 +848,12 @@ public class Table extends AbstractControl {
      *
      * @param value the table paginator to set
      */
-    public void setPaginator(Paginator value) {
-        if (paginator != null && paginator != value) {
-            paginator.setTable(null);
-        }
+    public void setPaginator(Renderable value) {
         paginator = value;
-        if (paginator != null) {
-            paginator.setTable(this);
-        }
     }
 
     /**
-     * Return the paginator attachment style. Paginator attachment style values:
+     * Return the paginator attachment style. Renderable attachment style values:
      * <tt>[ PAGINATOR_ATTACHED | PAGINATOR_DEATTACHED | PAGINATOR_INLINE ]</tt>.
      * The default paginator attachment type is <tt>PAGINATOR_ATTACHED</tt>.
      *
@@ -871,7 +864,7 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Set Table pagination attachment style. Paginator attachment style values:
+     * Set Table pagination attachment style. Renderable attachment style values:
      * <tt>[ PAGINATOR_ATTACHED | PAGINATOR_DEATTACHED | PAGINATOR_INLINE ]</tt>.
      *
      * @param value the table pagination attachment style
@@ -1064,14 +1057,6 @@ public class Table extends AbstractControl {
                 "/net/sf/click/control/column-ascending-light.gif",
                 "/net/sf/click/control/column-descending-dark.gif",
                 "/net/sf/click/control/column-descending-light.gif",
-                "/net/sf/click/control/paging-first.gif",
-                "/net/sf/click/control/paging-first-disabled.gif",
-                "/net/sf/click/control/paging-last.gif",
-                "/net/sf/click/control/paging-last-disabled.gif",
-                "/net/sf/click/control/paging-next.gif",
-                "/net/sf/click/control/paging-next-disabled.gif",
-                "/net/sf/click/control/paging-prev.gif",
-                "/net/sf/click/control/paging-prev-disabled.gif",
                 "/net/sf/click/control/table.css"
             };
 
