@@ -3,9 +3,9 @@ package net.sf.click.examples.page.table;
 import java.util.List;
 
 import net.sf.click.control.Column;
-import net.sf.click.control.DefaultPaginator;
-import net.sf.click.control.InlinePaginator;
+import net.sf.click.extras.control.TableInlinePaginator;
 import net.sf.click.control.Table;
+import net.sf.click.control.TablePaginator;
 import net.sf.click.examples.page.BorderPage;
 
 /**
@@ -13,26 +13,26 @@ import net.sf.click.examples.page.BorderPage;
  *
  * @author Malcolm Edgar
  */
-public class TablePaginator extends BorderPage {
+public class TablePaginatorPage extends BorderPage {
 
     public Table table1 = new Table();
     public Table table2 = new Table();
     public Table table3 = new Table();
 
-    public TablePaginator() {
+    public TablePaginatorPage() {
         // Table 1
         addColumns(table1);
-        table1.setPaginator(new DefaultPaginator());
+        table1.setPaginator(new TablePaginator(table1));
         table1.setPaginatorAttachment(Table.PAGINATOR_ATTACHED);
 
         // Table 2
         addColumns(table2);
-        table2.setPaginator(new DefaultPaginator());
+        table2.setPaginator(new TablePaginator(table2));
         table2.setPaginatorAttachment(Table.PAGINATOR_DETACHED);
 
         // Table 3
         addColumns(table3);
-        table3.setPaginator(new InlinePaginator());
+        table3.setPaginator(new TableInlinePaginator(table3));
         table3.setPaginatorAttachment(Table.PAGINATOR_INLINE);
     }
 

@@ -5,7 +5,7 @@ import java.util.List;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.Column;
 import net.sf.click.control.Form;
-import net.sf.click.control.InlinePaginator;
+import net.sf.click.extras.control.TableInlinePaginator;
 import net.sf.click.control.Label;
 import net.sf.click.control.Select;
 import net.sf.click.control.Table;
@@ -49,7 +49,7 @@ public class TableStyles extends BorderPage {
         table.setShowBanner(true);
         table.setSortable(true);
 
-        table.setPaginator(new InlinePaginator());
+        table.setPaginator(new TableInlinePaginator(table));
         table.setPaginatorAttachment(Table.PAGINATOR_INLINE);
 
         Column column = new Column("id");
