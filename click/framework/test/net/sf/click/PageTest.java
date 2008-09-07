@@ -2,7 +2,7 @@ package net.sf.click;
 
 import junit.framework.TestCase;
 import net.sf.click.pages.JspRedirectPage;
-import net.sf.click.pages.Redirect;
+import net.sf.click.pages.RedirectToHtm;
 import net.sf.click.pages.RedirectToJsp;
 
 /**
@@ -16,7 +16,7 @@ public class PageTest extends TestCase {
         String contextPath = container.getRequest().getContextPath();
         container.getRequest().setMethod("GET");
         
-        Redirect page = (Redirect) container.testPage(Redirect.class);
+        RedirectToHtm page = (RedirectToHtm) container.testPage(RedirectToHtm.class);
 
         // assert that the Page successfully redirected to test.htm
         String expected = contextPath + "/test.htm";
@@ -36,9 +36,9 @@ public class PageTest extends TestCase {
         
         RedirectToJsp page = (RedirectToJsp) container.testPage(RedirectToJsp.class);
 
-        // assert that the Page successfully redirected to test.htm, meaning
-        // Click converted the location from test.jsp to test.htm
-        String expected = contextPath + "/test.htm";
+        // assert that the Page successfully redirected to jsp-page.htm, meaning
+        // Click converted the location from jsp-page.jsp to jsp-page.htm
+        String expected = contextPath + "/jsp-page.htm";
         assertEquals(expected, container.getRedirect());
         container.stop();
     }
