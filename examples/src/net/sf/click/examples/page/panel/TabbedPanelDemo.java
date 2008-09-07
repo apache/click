@@ -28,6 +28,14 @@ public class TabbedPanelDemo extends BorderPage {
         Panel panel3 = new Panel("panel3", "panel/customersPanel3.htm");
         panel3.setLabel("The Third Panel");
         tabbedPanel.add(panel3);
+
+        // Register a listener that is notified when a different panel is selected.
+        tabbedPanel.setTabListener(this, "onTabClick");
+    }
+
+    public boolean onTabClick() {
+        System.out.println("Tab Clicked");
+        return true;
     }
 
     /**
