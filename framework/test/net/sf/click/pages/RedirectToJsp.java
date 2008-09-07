@@ -5,6 +5,6 @@ import net.sf.click.Page;
 public class RedirectToJsp extends Page {
 
     public void onInit() {
-        setRedirect("/test.jsp");
+        setRedirect(JspPage.class);
     }
 }
