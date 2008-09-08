@@ -89,8 +89,8 @@ import net.sf.click.util.HtmlStringBuffer;
  * <h3>Rendering</h3>
  *
  * Field subclasses must override the <tt>Object.toString()</tt> method to
- * enable themselves to be rendered as HTML. With the increasing use of AJAX
- * Field should render themselves as valid XHTML, so that they may be parsed
+ * enable themselves to be rendered as HTML. With the increasing use of AJAX,
+ * Fields should render themselves as valid XHTML, so that they may be parsed
  * correctly and used as the <tt>innerHtml</tt> in the DOM.
  * <p/>
  * When a Form object renders a Field using autolayout, it renders the
@@ -116,7 +116,8 @@ import net.sf.click.util.HtmlStringBuffer;
  * <li>{@link #setErrorMessage(String, Object)}</li>
  * </ul>
  *
- * The order in which localized messages are resolve is:
+ * <a name="message-resolve-order" href="#"></a>
+ * The order in which localized messages resolve are:
  * <dl>
  * <dt style="font-weight:bold">Page scope messages</dt>
  * <dd>Message lookups are first resolved to the Pages message bundle if it
@@ -125,7 +126,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * <pre class="codeConfig">
  * /com/mycorp/page/Login.properties </pre>
  *
- * If you want messages to be used across your entire application this is where
+ * If you want messages to be used only for a specific Page, this is where
  * to place them.
  * </dd>
  *
@@ -850,7 +851,7 @@ public abstract class Field extends AbstractControl {
      * processing POST request.
      * <p/>
      * This method will bind the Field request parameter value to the field,
-     * validate the sumission and invoke its callback listener if defined.
+     * validate the submission and invoke its callback listener if defined.
      * The code of this method is provided below:
      *
      * <pre class="codeJava">
@@ -909,17 +910,45 @@ public abstract class Field extends AbstractControl {
      * Set the error with the a label formatted message specified by the given
      * message bundle key. The message will be formatted with the field label
      * using {@link #getErrorLabel()}.
+     * <p/>
+     * setErrorMessage will attempt to find a localized error message as
+     * described <a href="#message-resolve-order">here</a>, using the following
+     * lookup strategy:
+     * <ul>
+     *   <li>
+     *     an error message is looked up for a specific Field instance by
+     *     prefixing the <tt>key</tt> with the Field's name:
+     *     <blockquote>
+     *       <tt>getMessage(getName() + "." + key);</tt>
+     *     </blockquote>
+     *   </li>
+     *   <li>
+     *     if no message is found for a specific Field instance, an error
+     *     message is looked up for the Field class based on the <tt>key</tt>:
+     *     <blockquote>
+     *       <tt>getMessage(key);</tt>
+     *     </blockquote>
+     *   </li>
+     * </ul>
      *
      * @param key the key of the localized message bundle string
      */
     protected void setErrorMessage(String key) {
-        setError(getMessage(key, getErrorLabel()));
+        String errorLabel = getErrorLabel();
+        String msg = getMessage(getName() + "." + key, errorLabel);
+        if (msg == null) {
+            msg = getMessage(key, errorLabel);
+        }
+        setError(msg);
     }
 
     /**
      * Set the error with the a label and value formatted message specified by
      * the given message bundle key. The message will be formatted with the
      * field label {0} using {@link #getErrorLabel()} and the given value {1}.
+     * <p/>
+     * <b>Also see</b> {@link #setErrorMessage(java.lang.String)} on how to
+     * specify error messages for specific Field instances.
      *
      * @param key the key of the localized message bundle string
      * @param value the value to format in the message
@@ -928,13 +957,20 @@ public abstract class Field extends AbstractControl {
         Object[] args = new Object[] {
             getErrorLabel(), value
         };
-        setError(getMessage(key, args));
+        String msg = getMessage(getName() + "." + key, args);
+        if (msg == null) {
+            msg = getMessage(key, args);
+        }
+        setError(msg);
     }
 
     /**
      * Set the error with the a label and value formatted message specified by
      * the given message bundle key. The message will be formatted with the
      * field label {0} using {@link #getErrorLabel()} and the given value {1}.
+     * <p/>
+     * <b>Also see</b> {@link #setErrorMessage(java.lang.String)} on how to
+     * specify error messages for specific Field instances.
      *
      * @param key the key of the localized message bundle string
      * @param value the value to format in the message
@@ -943,13 +979,20 @@ public abstract class Field extends AbstractControl {
         Object[] args = new Object[] {
             getErrorLabel(), new Integer(value)
         };
-        setError(getMessage(key, args));
+        String msg = getMessage(getName() + "." + key, args);
+        if (msg == null) {
+            msg = getMessage(key, args);
+        }
+        setError(msg);
     }
 
     /**
      * Set the error with the a label and value formatted message specified by
      * the given message bundle key. The message will be formatted with the
      * field label {0} using {@link #getErrorLabel()} and the given value {1}.
+     * <p/>
+     * <b>Also see</b> {@link #setErrorMessage(java.lang.String)} on how to
+     * specify error messages for specific Field instances.
      *
      * @param key the key of the localized message bundle string
      * @param value the value to format in the message
@@ -958,7 +1001,11 @@ public abstract class Field extends AbstractControl {
         Object[] args = new Object[] {
             getErrorLabel(), new Double(value)
         };
-        setError(getMessage(key, args));
+        String msg = getMessage(getName() + "." + key, args);
+        if (msg == null) {
+            msg = getMessage(key, args);
+        }
+        setError(msg);
     }
 
     /**
