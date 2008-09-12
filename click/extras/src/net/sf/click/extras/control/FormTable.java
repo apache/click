@@ -61,11 +61,14 @@ import org.apache.commons.lang.StringUtils;
  * invalid for the given field constraints, the field error will be highlited
  * in the table. Field error messages will be rendered as 'title' attribute
  * tooltip values.
+ *
+ * <h4>IMPORTANT NOTE</h4>
+ * Do not populate the FormTable rowList in the Page's <tt>onRender()</tt> method.
  * <p/>
- * When using the FormTable control its rowList property must be populated
- * before the control is processed so that any submitted data values can be
- * applied to the rowList objects. This generally means that the FormTable
- * rowList should be populated in the page <tt>onInit()</tt> method.
+ * When using the FormTable control its rowList property
+ * must be populated before the control is processed so that any submitted data
+ * values can be applied to the rowList objects. This generally means that the
+ * FormTable rowList should be populated in the page <tt>onInit()</tt> method.
  * Note this is different from the Table control where the rowlist is generally
  * populated in the page <tt>onRender()</tt> method.
  *
@@ -110,6 +113,7 @@ import org.apache.commons.lang.StringUtils;
  *     }
  *
  *     <span class="kw">public void</span> onInit() {
+ *         <span class="kw">// Populate table before it is processed</span>
  *         List customers = getCustomerService().getCustomersSortedByName(NUM_ROWS);
  *         table.setRowList(customers);
  *     }
