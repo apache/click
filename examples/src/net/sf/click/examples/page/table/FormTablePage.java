@@ -78,6 +78,9 @@ public class FormTablePage extends BorderPage {
     public void onInit() {
         super.onInit();
 
+        // Please note the FormTable rowList MUST be populated before the
+        // control is processed, i.e. do not populate the FormTable in the
+        // Pages onRender() method.
         List customers = getCustomerService().getCustomersSortedByName(NUM_ROWS);
         table.setRowList(customers);
     }
