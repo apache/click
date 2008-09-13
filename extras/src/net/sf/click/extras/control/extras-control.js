@@ -148,7 +148,7 @@ function validateRegexField(id, required, minLength, maxLength, regex, msgs){
 		return msg;
 	} else {
 		var field = document.getElementById(id);
-		if (field.value.match(new RegExp(regex))) {
+		if (field.value.length == 0 || field.value.match(new RegExp(regex))) {
 			setFieldValidColor(field);
 			return null;
 		} else {
