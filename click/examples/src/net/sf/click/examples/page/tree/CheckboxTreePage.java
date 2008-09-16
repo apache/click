@@ -164,17 +164,15 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
             super(name);
         }
 
-        // Add check if Tree node is expanded or collapsed so the Tree can
-        // be processed
+        // By default Form is only processed on user submission. In order for
+        // tree to be processed when expanding and collapsing nodes, we add
+        // process logic for the CheckboxTree.
+        // TODO find cleaner solution
         public boolean onProcess() {
-            boolean wasTreeExpanded = getContext().getRequestParameter(Tree.EXPAND_TREE_NODE_PARAM) != null;
-            // If tree was expanded or collapsed, the Tree should be processed
-            if (wasTreeExpanded) {
-                tree.onProcess();
-                return true;
-            } else {
-                // Perform normal Form processing
+            if (form.isFormSubmission()) {
                 return super.onProcess();
+            } else {
+                return tree.onProcess();
             }
         }
     }
