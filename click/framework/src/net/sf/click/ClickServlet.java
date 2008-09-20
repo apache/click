@@ -531,7 +531,7 @@ public class ClickServlet extends HttpServlet {
 
             ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
 
-            // Check if processing can continue
+            // Check if pre process hook vetoes processing to continue
             if (!onProcessCheck(page, context, controlRegistry)) {
                 return;
             }
