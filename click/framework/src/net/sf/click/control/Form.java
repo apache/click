@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.click.Context;
@@ -1109,7 +1108,8 @@ public class Form extends AbstractContainer {
     }
 
     /**
-     * Return the form method <tt>["post" | "get"]</tt>.
+     * Return the form method <tt>["post" | "get"]</tt>, default value is
+     * <tt>post</tt>.
      *
      * @return the form method
      */
@@ -1128,6 +1128,15 @@ public class Form extends AbstractContainer {
 
     /**
      * Return true if the page request is a submission from this form.
+     * <p/>
+     * A form submission requires the following criteria:
+     * <ul>
+     *   <li>the Form name must be present as a request parameter (Form
+     *   automatically adds a HiddenField which value is set to the Form name.
+     *   This ensures the Form name is present when submitting the form)</li>
+     *   <li>the request method must equal the Form {@link #method}, for example
+     *   both must be <tt>GET</tt> or <tt>POST</tt></li>
+     * </ul>
      *
      * @return true if the page request is a submission from this form
      */
@@ -1609,7 +1618,7 @@ public class Form extends AbstractContainer {
      * @throws IllegalArgumentException if the object parameter is null
      */
     public void copyFrom(Object object) {
-        ClickUtils.copyObjectToForm(object, this, false);
+        ContainerUtils.copyObjectToContainer(object, this);
     }
 
     /**
@@ -1627,7 +1636,7 @@ public class Form extends AbstractContainer {
      * @throws IllegalArgumentException if the object parameter is null
      */
     public void copyFrom(Object object, boolean debug) {
-        ClickUtils.copyObjectToForm(object, this, debug);
+        ContainerUtils.copyObjectToContainer(object, this);
     }
 
     /**
@@ -1678,7 +1687,7 @@ public class Form extends AbstractContainer {
      * @throws IllegalArgumentException if the object parameter is null
      */
     public void copyTo(Object object) {
-        ClickUtils.copyFormToObject(this, object, false);
+        ContainerUtils.copyContainerToObject(this, object);
     }
 
     /**
@@ -1696,12 +1705,15 @@ public class Form extends AbstractContainer {
      * @throws IllegalArgumentException if the object parameter is null
      */
     public void copyTo(Object object, boolean debug) {
-        ClickUtils.copyFormToObject(this, object, debug);
+        ContainerUtils.copyContainerToObject(this, object);
     }
 
     /**
-     * Process the Form when the request method is the same as the Form's
-     * method. The default Form method is "post".
+     * Process the Form and its child controls only if the Form was submitted
+     * by the user.
+     * <p/>
+     * This method invokes {@link #isFormSubmission()} to check whether the form
+     * was submitted or not.
      * <p/>
      * The Forms processing order is:
      * <ol>
@@ -2338,26 +2350,33 @@ public class Form extends AbstractContainer {
                         buffer.append(">");
                     }
 
-                    if (field.isRequired()) {
-                        buffer.append(getMessage("label-required-prefix"));
-                    } else {
-                        buffer.append(getMessage("label-not-required-prefix"));
-                    }
-                    buffer.elementStart("label");
-                    buffer.appendAttribute("for", field.getId());
-                    if (field.isDisabled()) {
-                        buffer.appendAttributeDisabled();
-                    }
-                    if (field.getError() != null) {
-                        buffer.appendAttribute("class", "error");
-                    }
-                    buffer.closeTag();
-                    buffer.append(field.getLabel());
-                    buffer.elementEnd("label");
-                    if (field.isRequired()) {
-                        buffer.append(getMessage("label-required-suffix"));
-                    } else {
-                        buffer.append(getMessage("label-not-required-suffix"));
+                    // Store the field id and label (the values could be null)
+                    String fieldId = field.getId();
+                    String fieldLabel = field.getLabel();
+
+                    // Only render a label if the fieldId and fieldLabel is set
+                    if (fieldId != null && fieldLabel != null) {
+                        if (field.isRequired()) {
+                            buffer.append(getMessage("label-required-prefix"));
+                        } else {
+                            buffer.append(getMessage("label-not-required-prefix"));
+                        }
+                        buffer.elementStart("label");
+                        buffer.appendAttribute("for", fieldId);
+                        if (field.isDisabled()) {
+                            buffer.appendAttributeDisabled();
+                        }
+                        if (field.getError() != null) {
+                            buffer.appendAttribute("class", "error");
+                        }
+                        buffer.closeTag();
+                        buffer.append(fieldLabel);
+                        buffer.elementEnd("label");
+                        if (field.isRequired()) {
+                            buffer.append(getMessage("label-required-suffix"));
+                        } else {
+                            buffer.append(getMessage("label-not-required-suffix"));
+                        }
                     }
 
                     if (POSITION_LEFT.equals(getLabelsPosition())) {
