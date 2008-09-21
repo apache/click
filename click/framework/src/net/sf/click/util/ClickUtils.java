@@ -1984,13 +1984,16 @@ public class ClickUtils {
      * Return a field label string from the given field name. For example:
      * <pre class="codeHtml">
      * <span class="blue">faxNumber</span> &nbsp; -&gt; &nbsp; <span class="red">Fax Number</span> </pre>
+     * <p/>
+     * <b>Note</b> toLabel will return an empty String ("") if a <tt>null</tt>
+     * String name is specified.
      *
      * @param name the field name
      * @return a field label string from the given field name
      */
     public static String toLabel(String name) {
         if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
+            return "";
         }
 
         HtmlStringBuffer buffer = new HtmlStringBuffer();
