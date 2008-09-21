@@ -202,19 +202,44 @@ public class ContainerUtils {
     }
 
     /**
-     * Populate the given object's attributes with the Containers field values.
+     * Populate the given object attributes from the Containers field values.
      * <p/>
+     * The fieldList specifies which fields to copy to the object. This allows
+     * one to include or exclude certain Container fields before populating the
+     * object.
+     * <p/>
+     * The following example shows how to exclude disabled fields from
+     * populating a customer object:
+     * <pre class="java">
+     * public void onInit() {
+     *     List formFields = new ArrayList();
+     *     for(Iterator it = form.getFieldList().iterator(); it.hasNext(); ) {
+     *         Field field = (Field) formFields.next();
+     *         // Exclude disabled fields
+     *         if (!field.isDisabled()) {
+     *             formFields.add(field);
+     *         }
+     *     }
+     *     Customer customer = new Customer();
+     *     ContainerUtils.copyContainerToObject(form, customer, formFields);
+     * }
+     * </pre>
+     *
      * The specified Object can either be a POJO (plain old java object) or
      * a {@link java.util.Map}. If a POJO is specified, its attributes are
      * populated from  matching container fields. If a map is specified, its
      * key/value pairs are populated from matching container fields.
      *
-     * @param container the Container to obtain field values from
+     * @param container the fieldList Container
      * @param object the object to populate with field values
+     * @param fieldList the list of fields to obtain values from
+     *
+     * @throws IllegalArgumentException if container, object or fieldList is
+     * null
      */
     public static void copyContainerToObject(Container container,
-        Object object) {
-
+        Object object, List fieldList) {
+        
         if (container == null) {
             throw new IllegalArgumentException("Null container parameter");
         }
@@ -223,7 +248,9 @@ public class ContainerUtils {
             throw new IllegalArgumentException("Null object parameter");
         }
 
-        final List fieldList = getFields(container);
+        if (fieldList == null) {
+            throw new IllegalArgumentException("Null fieldList parameter");
+        }
 
          if (fieldList.isEmpty()) {
             LogService logService = ClickUtils.getLogService();
@@ -288,7 +315,24 @@ public class ContainerUtils {
     }
 
     /**
-     * Populate the given Container field values with the object's attributes.
+     * Populate the given object attributes from the Containers field values.
+     *
+     * @see #copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)
+     *
+     * @param container the Container to obtain field values from
+     * @param object the object to populate with field values
+     */
+    public static void copyContainerToObject(Container container,
+        Object object) {
+        final List fieldList = getFields(container);
+        copyContainerToObject(container, object, fieldList);
+    }
+
+    /**
+     * Populate the given Container field values from the object attributes.
+     * <p/>
+     * The fieldList specifies which fields to populate from the object. This
+     * allows one to exclude or include specific fields.
      * <p/>
      * The specified Object can either be a POJO (plain old java object) or
      * a {@link java.util.Map}. If a POJO is specified, its attributes are
@@ -297,10 +341,11 @@ public class ContainerUtils {
      *
      * @param object the object to obtain attribute values from
      * @param container the Container to populate
+     * @param fieldList the list of fields to populate from the object
+     * attributes
      */
     public static void copyObjectToContainer(Object object,
-        Container container) {
-
+        Container container, List fieldList) {
         if (object == null) {
             throw new IllegalArgumentException("Null object parameter");
         }
@@ -309,7 +354,9 @@ public class ContainerUtils {
             throw new IllegalArgumentException("Null container parameter");
         }
 
-        final List fieldList = getFields(container);
+        if (container == null) {
+            throw new IllegalArgumentException("Null fieldList parameter");
+        }
 
         if (fieldList.isEmpty()) {
             LogService logService = ClickUtils.getLogService();
@@ -368,6 +415,21 @@ public class ContainerUtils {
                 logService.debug(msg);
             }
         }
+    }
+
+    /**
+     * Populate the given Container field values from the object attributes.
+     *
+     * @see #copyObjectToContainer(java.lang.Object, net.sf.click.control.Container, java.util.List)
+     *
+     * @param object the object to obtain attribute values from
+     * @param container the Container to populate
+     */
+    public static void copyObjectToContainer(Object object,
+        Container container) {
+
+        final List fieldList = getFields(container);
+        copyObjectToContainer(object, container, fieldList);
     }
 
     /**
