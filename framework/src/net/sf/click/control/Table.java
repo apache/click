@@ -327,7 +327,7 @@ public class Table extends AbstractControl {
     protected List columnList = new ArrayList();
 
     /** The table paging and sorting control action link. */
-    protected ActionLink controlLink = new ActionLink();
+    protected ActionLink controlLink;
 
     /** The list of table controls. */
     protected List controlList;
@@ -668,6 +668,9 @@ public class Table extends AbstractControl {
      * @return the table paging and sorting control action link
      */
     public ActionLink getControlLink() {
+    	if(controlLink == null) {
+    		controlLink = new ActionLink();
+    	}
         return controlLink;
     }
 
@@ -779,7 +782,7 @@ public class Table extends AbstractControl {
      */
     public void setName(String name) {
         super.setName(name);
-        controlLink.setName(getName() + "-controlLink");
+        getControlLink().setName(getName() + "-controlLink");
     }
 
     /**
@@ -1102,9 +1105,9 @@ public class Table extends AbstractControl {
      */
     public boolean onProcess() {
         Context context = getContext();
-        controlLink.onProcess();
+        getControlLink().onProcess();
 
-        if (controlLink.isClicked()) {
+        if (getControlLink().isClicked()) {
             String page = context.getRequestParameter(PAGE);
             if (NumberUtils.isNumber(page)) {
                 setPageNumber(Integer.parseInt(page));
@@ -1576,28 +1579,29 @@ public class Table extends AbstractControl {
             String lastTitle = getMessage("table-last-title");
             String gotoTitle = getMessage("table-goto-title");
 
+            AbstractLink link = getControlLink();
             if (getSortedColumn() != null) {
-                controlLink.setParameter(SORT, null);
-                controlLink.setParameter(COLUMN, getSortedColumn());
-                controlLink.setParameter(ASCENDING, String.valueOf(isSortedAscending()));
+                link.setParameter(SORT, null);
+                link.setParameter(COLUMN, getSortedColumn());
+                link.setParameter(ASCENDING, String.valueOf(isSortedAscending()));
             } else {
-                controlLink.setParameter(SORT, null);
-                controlLink.setParameter(COLUMN, null);
-                controlLink.setParameter(ASCENDING, null);
+                link.setParameter(SORT, null);
+                link.setParameter(COLUMN, null);
+                link.setParameter(ASCENDING, null);
             }
 
             if (getPageNumber() > 0) {
-                controlLink.setLabel(firstLabel);
-                controlLink.setParameter(PAGE, String.valueOf(0));
-                controlLink.setAttribute("title", firstTitle);
-                controlLink.setId("control-first");
-                firstLabel = controlLink.toString();
+                link.setLabel(firstLabel);
+                link.setParameter(PAGE, String.valueOf(0));
+                link.setAttribute("title", firstTitle);
+                link.setId("control-first");
+                firstLabel = link.toString();
 
-                controlLink.setLabel(previousLabel);
-                controlLink.setParameter(PAGE, String.valueOf(getPageNumber() - 1));
-                controlLink.setId("control-previous");
-                controlLink.setAttribute("title", previousTitle);
-                previousLabel = controlLink.toString();
+                link.setLabel(previousLabel);
+                link.setParameter(PAGE, String.valueOf(getPageNumber() - 1));
+                link.setId("control-previous");
+                link.setAttribute("title", previousTitle);
+                previousLabel = link.toString();
             }
 
             HtmlStringBuffer pagesBuffer =
@@ -1616,11 +1620,11 @@ public class Table extends AbstractControl {
                     pagesBuffer.append("<strong>" + pageNumber + "</strong>");
 
                 } else {
-                    controlLink.setLabel(pageNumber);
-                    controlLink.setParameter(PAGE, String.valueOf(i));
-                    controlLink.setAttribute("title", gotoTitle + " " + pageNumber);
-                    controlLink.setId("control-" + pageNumber);
-                    pagesBuffer.append(controlLink.toString());
+                    link.setLabel(pageNumber);
+                    link.setParameter(PAGE, String.valueOf(i));
+                    link.setAttribute("title", gotoTitle + " " + pageNumber);
+                    link.setId("control-" + pageNumber);
+                    pagesBuffer.append(link.toString());
                 }
 
                 if (i < upperBound - 1) {
@@ -1630,17 +1634,17 @@ public class Table extends AbstractControl {
             String pageLinks = pagesBuffer.toString();
 
             if (getPageNumber() < getNumberPages() - 1) {
-                controlLink.setLabel(nextLabel);
-                controlLink.setParameter(PAGE, String.valueOf(getPageNumber() + 1));
-                controlLink.setAttribute("title", nextTitle);
-                controlLink.setId("control-next");
-                nextLabel = controlLink.toString();
+                link.setLabel(nextLabel);
+                link.setParameter(PAGE, String.valueOf(getPageNumber() + 1));
+                link.setAttribute("title", nextTitle);
+                link.setId("control-next");
+                nextLabel = link.toString();
 
-                controlLink.setLabel(lastLabel);
-                controlLink.setParameter(PAGE, String.valueOf(getNumberPages() - 1));
-                controlLink.setAttribute("title", lastTitle);
-                controlLink.setId("control-last");
-                lastLabel = controlLink.toString();
+                link.setLabel(lastLabel);
+                link.setParameter(PAGE, String.valueOf(getNumberPages() - 1));
+                link.setAttribute("title", lastTitle);
+                link.setId("control-last");
+                lastLabel = link.toString();
             }
 
             String[] args =
