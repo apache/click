@@ -108,10 +108,21 @@ The following Click Framework release 1.6 will include new features such as modu
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-433">433</a>].
       </li>
       <li class="change">
+        Added new utility methods
+        <a href="click-api/net/sf/click/util/ContainerUtils.html#copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)">copyContainerToObject(Container, Object, List)</a>
+        and <a href="click-api/net/sf/click/util/ContainerUtils.html#copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)">copyObjectToContainer(Container, Object, List)</a>
+        to selectively exclude or include form fields when populating domain objects
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-440">440</a>].
+      </li>
+      <li class="change">
         Encapsulate conversion logic of template extensions inside
         <a href="click-api/net/sf/click/Page.html#setRedirect(java.lang.String)">Page.setRedirect(java.lang.String)</a>
         which allows one to override or overload the default behavior.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-429">429</a>].
+      </li>
+      <li class="change">
+        Improved <a href="click-api/net/sf/click/util/ClickUtils.html#toLabel(java.lang.String)">ClickUtils.toLabel</a> to return empty String ("") if argument is null
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-441">441</a>].
       </li>
       <li class="change">
         Improved DateField to return a cached Date representation on subsequent retrievals
