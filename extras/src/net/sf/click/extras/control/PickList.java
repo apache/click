@@ -261,10 +261,18 @@ public class PickList extends Field {
      * Add the given collection of objects to the PickList, creating new Option
      * instances based on the object properties specified by value and label.
      *
-     * <pre class="codeJava">
-     *   PickList list = <span class="kw">new</span> PickList(<span class="st">&quot;type&quot;</span>, <span class="st">&quot;Type:&quot;</span>);
-     *   list.addAll(getCustomerService().getCustomerTypes(), <span class"st">&quot;id&quot;</span>, <span class="st">&quot;name&quot;</span>);
+     * <pre class="java">
+     *   PickList list = new PickList("type", "Type:");
+     *   list.addAll(getCustomerService().getCustomerTypes(), "id", "name);
      *   form.add(list); </pre>
+     *
+     * For example given the Collection of CustomerType <tt>objects</tt>,
+     * <tt>value</tt> "id" and <tt>label</tt> "name", the <tt>id</tt> and
+     * <tt>name</tt> properties of each CustomerType will be retrieved. For each
+     * CustomerType in the Collection a new {@link net.sf.click.control.Option}
+     * instance is created and its <tt>value</tt> and <tt>label</tt> is set to
+     * the <tt>value</tt> and <tt>label</tt> retrieved from the CustomerType
+     * instance.
      *
      * @param objects the collection of objects to render as options
      * @param value the name of the object property to render as the Option value
@@ -369,10 +377,28 @@ public class PickList extends Field {
     }
 
     /**
-     * Set selected values.
+     * The PickList selected values will be derived from the given collection of
+     * objects, based on the object properties specified by value.
+     * <p/>
+     * Example usage:
+     * <pre class="java">
+     *   PickList list = new PickList("type", "Type:");
      *
-     * @param objects the collection of objects
-     * @param value the name of the object property that corresponds to the Option value
+     *   // Fill the PickList with product types
+     *   list.addAll(getCustomerService().getProductTypes(), "id", "name");
+     *
+     *   // Set the PickList selected values to the list of products of the
+     *   // current customer
+     *   list.setSelectedValues(getCustomer().getProductTypes(), "id");
+     *   form.add(list); </pre>
+     *
+     * For example given the Collection of ProductType <tt>objects</tt> and the
+     * <tt>value</tt> "id", the <tt>id</tt> property of each ProductType will
+     * be retrieved and added to the PickList {@link #selectedValues}.
+     *
+     * @param objects the collection of objects to render selected values
+     * @param value the name of the object property to render as the Option value
+     * @throws IllegalArgumentException if options or value parameter is null
      */
     public void setSelectedValues(Collection objects, String value) {
         if (objects == null) {
