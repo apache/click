@@ -876,6 +876,13 @@ public class Page {
     /**
      * Set whether the page is stateful and should be saved in the users
      * HttpSession between requests.
+     * <p/>
+     * Click will synchronize on the page instance. This ensures that if
+     * multiple requests arrive from the same user for the page, only one
+     * request can access the page at a time.
+     * <p/>
+     * Stateful pages are stored in the HttpSession using the key
+     * <tt>page.getClass().getName()</tt>.
      *
      * @param stateful the flag indicating whether the page should be saved
      *         between user requests
