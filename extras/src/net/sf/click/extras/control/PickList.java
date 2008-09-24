@@ -369,6 +369,44 @@ public class PickList extends Field {
     }
 
     /**
+     * Set selected values.
+     *
+     * @param objects the collection of objects
+     * @param value the name of the object property that corresponds to the Option value
+     */
+    public void setSelectedValues(Collection objects, String value) {
+        if (objects == null) {
+            String msg = "objects parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        if (value == null) {
+            String msg = "value parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+
+        if (objects.isEmpty()) {
+            return;
+        }
+
+        Map cache = new HashMap();
+
+        for (Iterator i = objects.iterator(); i.hasNext();) {
+            Object object = i.next();
+
+            try {
+                Object valueResult = PropertyUtils.getValue(object, value, cache);
+
+                if (valueResult != null) {
+                    addSelectedValue(valueResult.toString());
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
      * Add the selected value.
      *
      * @param value the selected value
