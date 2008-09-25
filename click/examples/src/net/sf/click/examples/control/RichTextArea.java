@@ -76,7 +76,7 @@ public class RichTextArea extends TextArea {
         Map model = new HashMap();
         model.put("theme", getTheme());
         model.put("id", getId());
-        buffer.append(renderTemplate(model));
+        renderTemplate(buffer, model);
 
         return buffer.toString();
     }
@@ -84,14 +84,13 @@ public class RichTextArea extends TextArea {
     // -------------------------------------------------------- Protected Methods
 
     /**
-     * Return a rendered Velocity template and model for the given
-     * class and model data.
+     * Render a Velocity template for the given data model.
      * 
+     * @param buffer the specified buffer to render the template output to
      * @param model the model data to merge with the template
-     * @return rendered Velocity template merged with the model data
      */
-    protected String renderTemplate(Map model) {
-        return getContext().renderTemplate(RichTextArea.class, model);
+    protected void renderTemplate(HtmlStringBuffer buffer, Map model) {
+        buffer.append(getContext().renderTemplate(RichTextArea.class, model));
     }
 
 }
