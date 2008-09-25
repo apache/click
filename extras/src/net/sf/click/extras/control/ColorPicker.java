@@ -341,7 +341,7 @@ public class ColorPicker extends Field {
         values.put("noColorMsg", getMessage("no-color"));
         values.put("closeMsg", getMessage("close"));
 
-        buffer.append(context.renderTemplate(ColorPicker.class, values));
+        buffer.append(renderTemplate(values));
     }
 
     /**
@@ -378,6 +378,19 @@ public class ColorPicker extends Field {
                 setErrorMessage("field-required-error");
             }
         }
+    }
+
+    // -------------------------------------------------------- Protected Methods
+
+    /**
+     * Return a rendered Velocity template and model for the given
+     * class and model data.
+     * 
+     * @param model the model data to merge with the template
+     * @return rendered Velocity template merged with the model data
+     */
+    protected String renderTemplate(Map model){
+        return getContext().renderTemplate(ColorPicker.class, model);
     }
 
     // -------------------------------------------------------- Private Methods
