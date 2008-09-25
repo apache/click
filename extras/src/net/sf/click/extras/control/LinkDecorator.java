@@ -26,6 +26,7 @@ import net.sf.click.control.AbstractLink;
 import net.sf.click.control.ActionButton;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Decorator;
+import net.sf.click.control.PageLink;
 import net.sf.click.control.Table;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PropertyUtils;
@@ -433,6 +434,12 @@ public class LinkDecorator implements Decorator, Serializable {
             if (value != null) {
                 link.setParameter(idProperty, value.toString());
             }
+        }
+
+        // PageLinks link to other pages; no need to add Table parameters
+        if (link instanceof PageLink) {
+            // Exit early
+            return;
         }
 
         link.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
