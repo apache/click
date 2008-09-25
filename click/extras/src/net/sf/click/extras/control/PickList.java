@@ -592,7 +592,7 @@ public class PickList extends Field {
         model.put("disabled", new Boolean(isDisabled()));
         model.put("readOnly", new Boolean(isReadonly()));
 
-        buffer.append(getContext().renderTemplate(getClass(), model));
+        buffer.append(renderTemplate(model));
     }
 
     /**
@@ -605,4 +605,18 @@ public class PickList extends Field {
         render(buffer);
         return buffer.toString();
     }
+
+    // -------------------------------------------------------- Protected Methods
+
+    /**
+     * Return a rendered Velocity template and model for the given
+     * class and model data.
+     * 
+     * @param model the model data to merge with the template
+     * @return rendered Velocity template merged with the model data
+     */
+    protected String renderTemplate(Map model) {
+        return getContext().renderTemplate(PickList.class, model);
+    }
+
 }
