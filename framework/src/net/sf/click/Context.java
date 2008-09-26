@@ -340,6 +340,9 @@ public class Context {
      * @return the value of the request parameter.
      */
     public String getRequestParameter(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("null name argument");
+        }
         return request.getParameter(name);
     }
 
@@ -352,6 +355,9 @@ public class Context {
      * @return an array of <tt>String</tt> objects containing the parameter's values
      */
     public String[] getRequestParameterValues(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("null name argument");
+        }
         return request.getParameterValues(name);
     }
 
