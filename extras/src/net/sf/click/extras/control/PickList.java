@@ -261,7 +261,7 @@ public class PickList extends Field {
      * Add the given collection of objects to the PickList, creating new Option
      * instances based on the object properties specified by value and label.
      *
-     * <pre class="java">
+     * <pre class="prettyprint">
      *   PickList list = new PickList("type", "Type:");
      *   list.addAll(getCustomerService().getCustomerTypes(), "id", "name);
      *   form.add(list); </pre>
@@ -381,7 +381,7 @@ public class PickList extends Field {
      * objects, based on the object properties specified by value.
      * <p/>
      * Example usage:
-     * <pre class="java">
+     * <pre class="prettyprint">
      *   PickList list = new PickList("type", "Type:");
      *
      *   // Fill the PickList with product types
