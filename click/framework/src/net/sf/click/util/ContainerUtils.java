@@ -210,7 +210,7 @@ public class ContainerUtils {
      * <p/>
      * The following example shows how to exclude disabled fields from
      * populating a customer object:
-     * <pre class="java">
+     * <pre class="prettyprint">
      * public void onInit() {
      *     List formFields = new ArrayList();
      *     for(Iterator it = form.getFieldList().iterator(); it.hasNext(); ) {
