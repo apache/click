@@ -239,7 +239,7 @@ public class ContainerUtils {
      */
     public static void copyContainerToObject(Container container,
         Object object, List fieldList) {
-        
+
         if (container == null) {
             throw new IllegalArgumentException("Null container parameter");
         }
