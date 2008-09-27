@@ -384,7 +384,7 @@ public class ColorPicker extends Field {
 
     /**
      * Render a Velocity template for the given data model.
-     * 
+     *
      * @param buffer the specified buffer to render the template output to
      * @param model the model data to merge with the template
      */
