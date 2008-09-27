@@ -79,7 +79,7 @@ public class TableTest extends TestCase {
         }
 
         Table table = new Table("table") {
-            protected void setRowAttributes(Map attributes, Object row, int rowIndex) {
+            protected void addRowAttributes(Map attributes, Object row, int rowIndex) {
                 Foo foo = (Foo) row;
                 attributes.put("id", foo.getName());
                 attributes.put("class", "foo bar");
