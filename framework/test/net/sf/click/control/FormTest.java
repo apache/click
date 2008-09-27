@@ -88,7 +88,7 @@ public class FormTest extends TestCase {
     /**
      * Test that form processing binds a request parameter to a field value.
      */
-    public void testFormOnProcess() {
+    public void testFormOnProcessRequestBinding() {
         // Create a mock context
         MockContext context = (MockContext) MockContext.initContext("test-form.htm");
         MockRequest request = (MockRequest) context.getMockRequest();
@@ -127,12 +127,20 @@ public class FormTest extends TestCase {
 
         form.add(new HiddenField("hidden", Boolean.class));
 
-        nameField = new TextField("name2");
-        form.add(nameField);
+        TextField scoreField = new TextField("score");
+        form.add(scoreField);
 
-        // If form correctly places hidden fields at the bottom, then field 3
-        // should be hidden
-        Field hiddenField = ((Field) form.getFieldList().get(3));
+        // Add table to form
+        Table table = new Table("table");
+        form.add(table);
+
+        TextField ageField = new TextField("age");
+        form.add(ageField);
+
+        // If form correctly places hidden fields at the bottom, then field 5
+        // should be named "hidden". field 5 is at index 4 since fieldList uses 
+        // a zero based index
+        Field hiddenField = ((Field) form.getFieldList().get(4));
         Assert.assertEquals("hidden", hiddenField.getName());
     }
 }
