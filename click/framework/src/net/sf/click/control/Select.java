@@ -157,14 +157,37 @@ import net.sf.click.util.PropertyUtils;
  * </td></tr>
  * </table>
  *
- * Note is this example the {@link #add(String)} method is used to an an Option
+ * Note in this example the {@link #add(String)} method is used to add an Option
  * item to the Select.
+ *
+ * <h3>Specify a default value</h3>
+ *
+ * It is often necessary to set a default selected value. This is best done in
+ * the {@link net.sf.click.Page#onRender()} method:
+ * <pre class="prettyprint">
+ * public MyPage extends Page {
+ *     private Select mySelect;
+ *
+ *     public MyPage() {
+ *         mySelect = new Select("mySelect");
+ *         mySelect.add("YES");
+ *         mySelect.add("NO");
+ *     }
+ *
+ *     public void onRender() {
+ *         // Only specify a default value if the current value is null
+ *         if (mySelect.getValue() == null) {
+ *             mySelect.setValue("YES");
+ *         }
+ *     }
+ * }
+ * </pre>
  *
  * <h3>Readonly Behaviour</h3>
  *
  * Note the &lt;select&gt; HTML element does not support the "readonly" attribute.
- * So to provide readonly style behaviour, the Select control it will render the
- * "disabled" attribute when it is readonly to give it the appearance of a
+ * To provide readonly style behaviour, the Select control will render the
+ * "disabled" attribute when it is readonly to give the appearance of a
  * readonly field, and will render a hidden field of the same name so that its
  * value will be submitted with the form.
  *
@@ -427,9 +450,9 @@ public class Select extends Field {
      * Add the given collection of objects to the Select, creating new Option
      * instances based on the object properties specified by value and label.
      *
-     * <pre class="codeJava">
-     * Select select = <span class="kw">new</span> Select(<span class="st">"type"</span>, <span class="st">"Type:"</span>);
-     * select.addAll(getCustomerService().getCustomerTypes(), <span class="st">"id"</span>, <span class="st">"name"</span>);
+     * <pre class="prettyprint">
+     * Select select = new Select("type", "Type:");
+     * select.addAll(getCustomerService().getCustomerTypes(), "id", "name");
      * form.add(select); </pre>
      *
      * @param objects the collection of objects to render as options
