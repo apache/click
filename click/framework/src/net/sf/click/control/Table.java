@@ -196,8 +196,8 @@ import org.apache.commons.lang.math.NumberUtils;
  * <a name="row-attributes"/>
  * <h4>Row Attributes</h4>
  *
- * Sometimes it is useful to set attributes on individual rows. In such cases one
- * can override the method {@link #setRowAttributes(java.util.Map, java.lang.Object, int)}.
+ * Sometimes it is useful to add HTML attributes on individual rows. For these
+ * cases one can override the method {@link #addRowAttributes(java.util.Map, java.lang.Object, int)}.
  *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
@@ -1355,8 +1355,8 @@ public class Table extends AbstractControl {
                 // Empty the row attributes
                 rowAttributes.clear();
 
-                // Allow user to set row attributes
-                setRowAttributes(rowAttributes, row, i);
+                // Allow user to add row attributes
+                addRowAttributes(rowAttributes, row, i);
 
                 if (!rowAttributes.isEmpty()) {
                     // Append id attribute if it was set
@@ -1433,7 +1433,7 @@ public class Table extends AbstractControl {
      *
      *     public void onInit() {
      *         table = new Table() {
-     *             public void setRowAttributes(Map attributes, Object domain, int rowIndex) {
+     *             public void addRowAttributes(Map attributes, Object domain, int rowIndex) {
      *                 Customer customer = (Customer) customer;
      *                 if (customer.isDisabled()) {
      *                     // Set the row class to disabled. CSS can then be used
@@ -1457,7 +1457,7 @@ public class Table extends AbstractControl {
      * @param row the domain object currently being rendered
      * @param rowIndex the rows index
      */
-    protected void setRowAttributes(Map attributes, Object row, int rowIndex) {
+    protected void addRowAttributes(Map attributes, Object row, int rowIndex) {
     }
 
     /**
