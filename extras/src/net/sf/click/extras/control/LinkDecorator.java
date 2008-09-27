@@ -34,7 +34,7 @@ import net.sf.click.util.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provides a table column AbstractLink Decorator.
+ * Provides a table column AbstractLink and ActionButton Decorator.
  *
  * <table cellspacing='10'>
  * <tr>
@@ -91,6 +91,58 @@ import org.apache.commons.lang.StringUtils;
  *
  * The LinkDecorator class automatically supports table paging.
  * <p/>
+ *
+ * <h3>Multiple parameters</h3>
+ * On rare occasions it is useful to add extra parameters or even replace the
+ * default parameter.
+ * <p/>
+ * In such cases you can override the methods
+ * {@link #renderActionLink(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractLink, net.sf.click.Context, java.lang.Object, java.lang.Object) renderActionLink}
+ * or {@link #renderActionButton(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.ActionButton, net.sf.click.Context, java.lang.Object, java.lang.Object) renderActionButton}.
+ * <p/>
+ * In the example below we want to send both the <tt>state</tt> and <tt>postCode</tt>
+ * parameters to the <tt>AddressPage</tt>:
+ * <pre class="prettyprint">
+ * public class SelectPostCode extends BorderPage {
+ *
+ *     private Table table = new Table("table");
+ *
+ *     public SelectPostCode() {
+ *         ...
+ *         PageLink selectPostCode = new PageLink("select", AddressPage.class);
+ *         Column action = new Column("action");
+ *         String idProperty = "postCode";
+ *         LinkDecorator decorator = new LinkDecorator(table, selectPostCode, idProperty) {
+ *             protected void renderActionLink(HtmlStringBuffer buffer, AbstractLink link, Context context, Object row, Object value) {
+ *                 // We want to add the PostCode "state" as an extra parameter
+ *                 // to the action link
+ *                 link.setParameter("state", ((PostCode) row).getState());
+ *
+ *                 // You can manipulate the link parameters as needed, and
+ *                 // even remove the default idProperty parameter.
+ *                 // Object currentValue = link.getParameters().remove(this.idProperty);
+ *
+ *                 // NB we invoke the super implementation here for default rendering to continue
+ *                 super.renderActionLink(buffer, link, context, row, value);
+ *             }
+ *         }
+ *         action.setDecorator(decorator);
+ *         table.addColumn(action);
+ *     };
+ *
+ *     public void onRender() {
+ *         table.setRowList(getPostCodeService().getPostCodes());
+ *     }
+ * } </pre>
+ * In the above example the LinkDecorator will extract the idProperty value ("state")
+ * for each object in the table.
+ *
+ * The PageLinks will render as follows:
+ * <pre class="prettyprint">
+ * &lt;a href="/mycorp/address-page.htm?postCode=6089&state=NSW&gt;Select&lt;/a&gt;
+ * </pre>
+ *
+ * <p/>
  * This class was inspired by Richardo Lecheta's <tt>ViewDecorator</tt> design
  * pattern.
  *
@@ -124,6 +176,39 @@ public class LinkDecorator implements Decorator, Serializable {
     /**
      * Create a new AbstractLink table column Decorator with the given actionLink
      * and row object identifier property name.
+     * <p/>
+     * Example usage of this constructor:
+     * <pre class="prettyprint">
+     * Table table = new Table("table");
+     *
+     * public void onInit() {
+     *     ... // setup other columns
+     *     ActionLink selectState = new ActionLink("select");
+     *     Column action = new Column("action");
+     *     String idProperty = "state";
+     *     LinkDecorator decorator = new LinkDecorator(table, selectState, idProperty);
+     *     action.setDecorator(decorator);
+     *     table.addColumn(action);
+     *     ...
+     * }
+     *
+     * public void onRender() {
+     *     // Populate the table rows with post code instances
+     *     table.setRowList(getPostCodeService().getPostCodes());
+     * } </pre>
+     *
+     * In the above example the LinkDecorator will extract the idProperty value
+     * ("state") from each PostCode instance in the table.
+     * <p/>
+     * The idProperty value will also be used as the <tt>name</tt> of the
+     * request parameter. In this example the idProperty value is "state" thus
+     * the request parameter name will also be "state".
+     * <p/>
+     * For the PostCode "NSW" the PageLink will render as follows:
+     *
+     * <pre class="prettyprint">
+     * &lt;a href="/mycorp/postcodes.htm?state=NSW&gt;Select&lt;/a&gt;
+     * </pre>
      *
      * @param table the table to render the links for
      * @param link the AbstractLink to render
@@ -151,6 +236,8 @@ public class LinkDecorator implements Decorator, Serializable {
      * Create a new AbstractLink table column Decorator with the given
      * AbstractLinks array and row object identifier property name.
      *
+     * @see LinkDecorator#LinkDecorator(net.sf.click.control.Table, net.sf.click.control.AbstractLink, java.lang.String)
+     *
      * @param table the table to render the links for
      * @param links the array of AbstractLinks to render
      * @param idProperty the row object identifier property name
@@ -176,6 +263,8 @@ public class LinkDecorator implements Decorator, Serializable {
      * Create a new AbstractLink table column Decorator with the given
      * ActionButton and row object identifier property name.
      * The default linkSeparator for buttons is <tt>" "</tt>.
+     *
+     * @see LinkDecorator#LinkDecorator(net.sf.click.control.Table, net.sf.click.control.AbstractLink, java.lang.String)
      *
      * @param table the table to render the links for
      * @param button the ActionButton to render
@@ -205,6 +294,8 @@ public class LinkDecorator implements Decorator, Serializable {
      * ActionButtons array and row object identifier property name.
      * The default linkSeparator for buttons is <tt>" "</tt>.
      *
+     * @see LinkDecorator#LinkDecorator(net.sf.click.control.Table, net.sf.click.control.AbstractLink, java.lang.String)
+     *
      * @param table the table to render the links for
      * @param buttons the array of ActionButtons to render
      * @param idProperty the row object identifier property name
@@ -230,10 +321,12 @@ public class LinkDecorator implements Decorator, Serializable {
     /**
      * Create a new table column Decorator with the given list of AbstractLinks
      * or ActionButtons and row object identifier property name.
-     * The default linkSeparator for buttons is <tt>" "</tt>.
+     * The default linkSeparator for buttons are <tt>" "</tt>.
      * <p/>
      * Please note you must provide either AbstractLink objects or ActionButton
      * objects in the controls array, but not a mixture of both.
+     *
+     * @see LinkDecorator#LinkDecorator(net.sf.click.control.Table, net.sf.click.control.AbstractLink, java.lang.String)
      *
      * @param table the table to render the links for
      * @param controls the list of AbstractLink or ActionButtons to render
@@ -337,6 +430,12 @@ public class LinkDecorator implements Decorator, Serializable {
 
     /**
      * Render the given row object using the actionLinks array.
+     * <p/>
+     * This method initializes each link in actionLinks array by invoking
+     * {@link #initLink(net.sf.click.control.AbstractLink, net.sf.click.Context, java.lang.Object)}.
+     * <p/>
+     * This method also renders each link in the array by
+     * invoking {@link #renderActionLink(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractLink, net.sf.click.Context, java.lang.Object, java.lang.Object)}.
      *
      * @param row the row object to render
      * @param context the request context
@@ -349,14 +448,14 @@ public class LinkDecorator implements Decorator, Serializable {
 
         Object value = PropertyUtils.getValue(row, idProperty, methodCache);
 
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+
         if (linksArray.length == 1) {
             AbstractLink link = linksArray[0];
             initLink(link, context, value);
-
-            return link.toString();
+            renderActionLink(buffer, link, context, row, value);
 
         } else {
-            HtmlStringBuffer buffer = new HtmlStringBuffer();
 
             for (int i = 0; i < linksArray.length; i++) {
                 AbstractLink link = linksArray[i];
@@ -370,15 +469,21 @@ public class LinkDecorator implements Decorator, Serializable {
                     }
                 }
 
-                link.render(buffer);
+                renderActionLink(buffer, link, context, row, value);
             }
 
-            return buffer.toString();
         }
+        return buffer.toString();
     }
 
     /**
      * Render the given row object using the actionButtons array.
+     * <p/>
+     * This method initializes each button in actionButtons array by invoking
+     * {@link #initButton(net.sf.click.control.ActionButton, net.sf.click.Context, java.lang.Object)}.
+     * <p/>
+     * This method also renders each button in the array by
+     * invoking {@link #renderActionButton(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.ActionButton, net.sf.click.Context, java.lang.Object, java.lang.Object)}.
      *
      * @param row the row object to render
      * @param context the request context
@@ -391,14 +496,14 @@ public class LinkDecorator implements Decorator, Serializable {
 
         Object value = PropertyUtils.getValue(row, idProperty, methodCache);
 
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+
         if (buttonsArray.length == 1) {
             ActionButton button = buttonsArray[0];
             initButton(button, context, value);
-
-            return button.toString();
+            renderActionButton(buffer, button, context, row, value);
 
         } else {
-            HtmlStringBuffer buffer = new HtmlStringBuffer();
 
             for (int i = 0; i < buttonsArray.length; i++) {
                 ActionButton button = buttonsArray[i];
@@ -408,14 +513,52 @@ public class LinkDecorator implements Decorator, Serializable {
                     buffer.append(getLinkSeparator());
                 }
 
-                button.render(buffer);
+                renderActionButton(buffer, button, context, row, value);
             }
 
-            return buffer.toString();
         }
+        return buffer.toString();
     }
 
     // --------------------------------------------------------- Protected methods
+
+    /**
+     * Render the link to the specified buffer.
+     * <p/>
+     * If this method is overridden to add extra parameters to the link,
+     * remember to invoke <tt>super.renderActionLink</tt> so default rendering
+     * can continue.
+     *
+     * @param buffer the specified buffer to render the link output to
+     * @param link the link to render
+     * @param context the request context
+     * @param row the table row being rendered
+     * @param value the value of the link
+     */
+    protected void renderActionLink(HtmlStringBuffer buffer, AbstractLink link,
+        Context context, Object row, Object value) {
+        link.render(buffer);
+    }
+
+    /**
+     * Render the button to the specified buffer.
+     * <p/>
+     * If this method is overridden to add extra parameters to the button,
+     * remember to invoke <tt>super.renderActionButton</tt> so default rendering
+     * can continue.
+     *
+     * @see #renderActionLink(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractLink, net.sf.click.Context, java.lang.Object, java.lang.Object)
+     *
+     * @param buffer the specified buffer to render the button output to
+     * @param button the button to render
+     * @param context the request context
+     * @param row the table row being rendered
+     * @param value the value of the button
+     */
+    protected void renderActionButton(HtmlStringBuffer buffer,
+        ActionButton button, Context context, Object row, Object value) {
+        button.render(buffer);
+    }
 
     /**
      * Initialize the link value and parameters.

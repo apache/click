@@ -98,6 +98,13 @@ The following Click Framework release 1.6 will include new features such as modu
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-434">434</a>].
       </li>
       <li class="change">
+        Add new LinkDecorator methods <a href="extras-api/net/sf/click/extras/control/LinkDecorator.html#renderActionLink(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractLink, net.sf.click.Context, java.lang.Object, java.lang.Object)">renderActionLink</a>
+        and <a href="extras-api/net/sf/click/extras/control/LinkDecorator.html#renderActionButton(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.ActionButton, net.sf.click.Context, java.lang.Object, java.lang.Object)">renderActionButton</a>.
+        This allows more fine grained control over the rendered links, for example
+        manipulating request parameters.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-446">446</a>].
+      </li>
+      <li class="change">
         Add Table Row attribute support through new method 
         <a href="click-api/net/sf/click/control/Table.html#addRowAttributes(java.util.Map, java.lang.Object, int)">addRowAttributes(Map attributes, Object domainObject, int rowIndex)</a>.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-431">431</a>].
