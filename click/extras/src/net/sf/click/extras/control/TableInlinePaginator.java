@@ -67,7 +67,7 @@ public class TableInlinePaginator extends TablePaginator {
     }
 
     /**
-     * @see net.sf.click.control.Paginator#render(HtmlStringBuffer)
+     * @see net.sf.click.control.Renderable#render(HtmlStringBuffer)
      *
      * @param buffer the string buffer to render the paginator to
      */
