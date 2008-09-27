@@ -341,7 +341,10 @@ public class Context {
      */
     public String getRequestParameter(String name) {
         if (name == null) {
-            throw new IllegalArgumentException("null name argument");
+            throw new IllegalArgumentException("getRequestParameter was called"
+                + " with null name argument. This is often caused when a"
+                + " Control binds to a request parameter, but its name was not"
+                + " set.");
         }
         return request.getParameter(name);
     }
@@ -356,7 +359,10 @@ public class Context {
      */
     public String[] getRequestParameterValues(String name) {
         if (name == null) {
-            throw new IllegalArgumentException("null name argument");
+            throw new IllegalArgumentException("getRequestParameter was called"
+                + " with null name argument. This is often caused when a"
+                + " Control binds to a request parameter, but its name was not"
+                + " set.");
         }
         return request.getParameterValues(name);
     }
