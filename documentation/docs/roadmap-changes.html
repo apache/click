@@ -104,31 +104,36 @@ only bug fixes and documentation updates.
       </li>
       <li class="change">
         Add Table Row attribute support through new method 
-        <a href="click-api/net/sf/click/control/Table.html#addRowAttributes(java.util.Map, java.lang.Object, int)">addRowAttributes(Map attributes, Object domainObject, int rowIndex)</a>.
+        <a href="click-api/net/sf/click/control/Table.html#addRowAttributes(java.util.Map, java.lang.Object, int)">addRowAttributes</a>.
+        This issue was raised by Hans Poo
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-431">431</a>].
       </li>
       <li class="change">
         Field error messages can now be specified per instance.
-        See the <a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String)">JavaDoc</a> for more details
+        See the <a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String)">JavaDoc</a> for more details.
+        This issue was raised and fixed by Ricardo Lecheta
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-433">433</a>].
       </li>
       <li class="change">
         Added new utility methods
-        <a href="click-api/net/sf/click/util/ContainerUtils.html#copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)">copyContainerToObject(Container, Object, List)</a>
-        and <a href="click-api/net/sf/click/util/ContainerUtils.html#copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)">copyObjectToContainer(Container, Object, List)</a>
-        to selectively exclude or include form fields when populating domain objects
+        <a href="click-api/net/sf/click/util/ContainerUtils.html#copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)">copyContainerToObject</a>
+        and <a href="click-api/net/sf/click/util/ContainerUtils.html#copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)">copyObjectToContainer</a>
+        to selectively exclude or include form fields when populating domain objects.
+        This issue was raised by Khalef Bessaih
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-440">440</a>].
       </li>
       <li class="change">
         Encapsulate conversion logic of template extensions inside
         <a href="click-api/net/sf/click/Page.html#setRedirect(java.lang.String)">Page.setRedirect(java.lang.String)</a>
         which allows one to override or overload the default behavior.
+        This issue was raised by David Ballard
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-429">429</a>].
       </li>
        <li class="change">
         Improved Table so that subclasses can specify a different
         <a href="click-api/net/sf/click/control/Table.html#controlLink">controlLink</a>
         implementation by overriding <a href="click-api/net/sf/click/control/Table.html#getControlLink()">getControlLink()</a>.
+        This issue was raised and fixed by Ricardo Lecheta
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-442">442</a>].
       </li>
       <li class="change">
@@ -136,15 +141,18 @@ only bug fixes and documentation updates.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-441">441</a>].
       </li>
       <li class="change">
-        Improved DateField to return a cached Date representation on subsequent retrievals
+        Improved DateField to return a cached Date representation on subsequent retrievals.
+        This issue was raised by Tore Halset
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-316">316</a>].
       </li>
       <li class="change">
-        Fixed RegexField validation to ignore empty values
+        Fixed RegexField validation to ignore empty values.
+        This issue was raised by Muzaffer Ozakca
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-436">436</a>].
       </li>
       <li class="change">
-        Fixed TabbedPanel to trigger the registered tab listener
+        Fixed TabbedPanel to trigger the registered tab listener.
+        This issue was raised by Marcelo Grassi Franco Melgaço.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-432">432</a>].
       </li>
       <li class="change">
@@ -153,10 +161,12 @@ only bug fixes and documentation updates.
       </li>
       <li class="change">
         Fixed HtmlFieldSet to properly close the fieldset end tag.
+        This issue was raised by Gilberto C. Andrade
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-427">427</a>].
       </li>
       <li class="change">
         Fixed AbstractContainerField not to bind its request parameter.
+        This issue was raised by Gilberto C. Andrade
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-428">428</a>].
       </li>
       <li class="change">
