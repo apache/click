@@ -41,7 +41,7 @@ Maven Artifact Upload Procedures
     <servers>
       <server>
         <id>sf.repo</id>
-        <username>SOURCEFORGE_USERNAME</username>
+        <username>SOURCEFORGE_USERNAME,click</username>
         <password>SOURCEFORGE_PASSWORD</password>
       </server>
     </servers>
