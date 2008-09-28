@@ -668,7 +668,7 @@ public class Table extends AbstractControl {
      * @return the table paging and sorting control action link
      */
     public ActionLink getControlLink() {
-        if(controlLink == null) {
+        if (controlLink == null) {
             controlLink = new ActionLink();
         }
         return controlLink;
