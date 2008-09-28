@@ -631,25 +631,25 @@ Yahoo published a list of <a target="_blank" class="external" href="http://devel
 for improving web application performance.
 <p/>
 Click Framework provides a <a href="extras-api/net/sf/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a>
-which caters for some of these rules. However not all rules can easily be automated.
+which caters for some of these rules. However not all rules can be easily automated.
 <p/>
 This section will outline ways to apply rules which are not covered by the PerformanceFilter namely, <a target="_blank" class="external" href="http://developer.yahoo.com/performance/rules.html#num_http">#1 - Minimize HTTP Requests (by combining files)</a>
 and <a target="_blank" class="external" href="http://developer.yahoo.com/performance/rules.html#minify">#10 - Minify Javascript and CSS</a>.
 <p/>
 Rule #1 also mentions <a target="_blank" class="external" href="http://alistapart.com/articles/sprites">CSS Sprites</a>, 
 a method for combining multiple images into a single master image. CSS Sprites
-won't be covered here.
+is not covered here.
 <p/>
-It is worth pointing out that its not needed to fine tune every page in your application.
-Instead look at optimizing popular pages, for example a sites <em>Home Page</em>
+It is worth pointing out that its not necessary to blindly optimize every page in your application.
+Instead concentrate on popular pages, for example a web site's <em>Home Page</em>
 would be a good candidate.
 <p/>
-There are a couple of tools that is useful in applying Rule #1 and #10:
+There are a couple of tools that are useful in applying Rule #1 and #10:
 <ul>
     <li>
         <a target="_blank" class="external" href="http://developer.yahoo.com/yui/compressor/">YUICompressor</a>
-        - minifies and compresses javascript and css files so less
-        bytes have to be transferred across the web.
+        - minifies and compresses JavaScript and CSS files so less
+        bytes have to be transferred across the wire.
     </li>
     <li>
         <a target="_blank" class="external" href="http://code.google.com/p/javaflight-code/">Ant Task for YUICompressor</a>
@@ -657,14 +657,14 @@ There are a couple of tools that is useful in applying Rule #1 and #10:
     </li>
     <li>
         <a target="_blank" class="external" href="http://www.crockford.com/javascript/jsmin.html">JSMin</a>
-        - similar to YUICompressor but only minifies javascript files and
-        does no compression at all. A nice advantage of JSMin over YUICompressor
-        is its ability to compress javascript at runtime, while YUICompressor
-        only works at build time.
+        - similar to YUICompressor but only minifies (remove whitespace and newlines) JavaScript files and
+        does no compression at all. An advantage of JSMin over YUICompressor
+        is that its faster and can be used at runtime to minify JavaScript, while YUICompressor
+        is most often used at build time.
     </li>
 </ul>
 
-The following articles outlines how to use YUICompressor and Ant to concatenate and
+Below are some articles outlining how to use YUICompressor and Ant to concatenate and
 compress JavaScript and CSS files:
 
 <ul>
@@ -679,21 +679,21 @@ compress JavaScript and CSS files:
 </ul>
 
 <p/>
-Using one of the methods mentioned above you can concatenate and compress all JavaScript and CSS
+Using one of the approaches above you can concatenate and compress all JavaScript and CSS
 for your Pages into two separate files, for example <tt>home-page.css</tt> and <tt>home-page.js</tt>.
-Note that the two files must include all JavaScript and CSS that is generated
-by the Page and all its Controls. Then you can instruct Click to <em>only</em>
+Note that the two files must include all the JavaScript and CSS that is generated
+by the Page and its Controls. Then you can instruct Click to <em>only</em>
 include the two compressed files, home-page.css and home-page.js.
 <p/>
 Click makes use of the utility class  <a href="click-api/net/sf/click/util/PageImports.html">PageImports</a>
 to include the CSS and JavaScript. PageImports exposes the method
 <a href="click-api/net/sf/click/util/PageImports.html#setInitialized(boolean)">setInitialized(boolean)</a>,
 which controls when PageImports are fully initialized. Once PageImports have been
-initialized, no further CSS and JavaScript will be included.
+initialized, no other CSS and JavaScript will be included.
 <p/>
 Knowing this one can override <a href="click-api/net/sf/click/Page.html#getPageImports()">Page.getPageImports()</a>,
 and import the necessary JavaScript and CSS files and then set PageImports to <tt>initialized</tt>,
-so that no other CSS and JavaScript files will be included.
+forcing PageImports to skip other CSS and JavaScript files.
 <p/>
 Here is an example:
 <pre class="prettyprint"> public class HomePage extends Page {
@@ -726,18 +726,18 @@ Using the following <tt>border-template.htm</tt>:
 &lt;html&gt;
   &lt;head&gt;
     &lt;title&gt;Click Examples&lt;/title&gt;
-    <span style="color:red">${cssImports}</span>
+    ${cssImports}
   &lt;/head&gt;
   &lt;body&gt;
 
   ...
 
-  <span color="red">${jsImports}</span>
+  ${jsImports}
   &lt;/body&gt;
 &lt;/html&gt;
 </pre>
 
-the output of HomePage will import one CSS and one JavaScript file:
+the rendered HTML will include one CSS and one JavaScript import:
 
 <pre class="prettyprint">
 &lt;html&gt;
