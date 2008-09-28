@@ -145,7 +145,7 @@ import org.apache.commons.lang.math.NumberUtils;
  * table-default-class=blue2
  * </pre>
  *
- * <a name="paging-and-sorting"/>
+ * <a name="paging-and-sorting"></a>
  * <h4>Paging and Sorting</h4>
  *
  * Table provides out-of-the-box paging and sorting.
@@ -193,11 +193,12 @@ import org.apache.commons.lang.math.NumberUtils;
  * {@link #setPaginator(net.sf.click.control.Renderable)}. The default Table
  * Paginator is {@link TablePaginator}.
  *
- * <a name="row-attributes"/>
+ * <a name="row-attributes"></a>
  * <h4>Row Attributes</h4>
  *
  * Sometimes it is useful to add HTML attributes on individual rows. For these
  * cases one can override the method {@link #addRowAttributes(java.util.Map, java.lang.Object, int)}.
+ * <p/>
  *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
@@ -1465,6 +1466,41 @@ public class Table extends AbstractControl {
      * overridden by Table subclasses which include a custom footer row.
      * <p/>
      * By default this method does not render a table footer.
+     * <p/>
+     * An example:
+     * <pre class="prettyprint">
+     * private Table table;
+     *
+     * public void onInit() {
+     *     table = new Table("table") {
+     *         public void renderFooterRow(HtmlStringBuffer buffer) {
+     *             double totalHoldings = getCustomerService().getTotalHoldings(customers);
+     *             renderTotalHoldingsFooter(buffer);
+     *         };
+     *     }
+     *     addControl(table);
+     *     ...
+     * }
+     *
+     * ...
+     *
+     * public void renderTotalHoldingsFooter(HtmlStringBuffer buffer,) {
+     *     double total = 0;
+     *     for (int i = 0; i < table.getRowList().size(); i++) {
+     *         Customer customer = (Customer) table.getRowList().get(i);
+     *         if (customer.getHoldings() != null) {
+     *             total += customer.getHoldings().doubleValue();
+     *         }
+     *     }
+     *
+     *     String format = "&lt;b&gt;Total Holdings&lt;/b&gt;: &nbsp; ${0,number,#,##0.00}";
+     *     String totalDisplay = MessageFormat.format(format, new Object[] { new Double(total) });
+     *
+     *     buffer.append("&lt;foot&gt;&lt;tr&gt;&lt;td colspan='4' style='text-align:right'&gt");
+     *     buffer.append(totalDisplay);
+     *     buffer.append("&lt/td&gt&lt/tr&gt&lt/tfoot&gt");
+     * }
+     * </pre>
      *
      * @param buffer the StringBuffer to render the footer row in
      */
