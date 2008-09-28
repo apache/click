@@ -51,7 +51,7 @@
       <!-- <id> must match the <id> specified in ~/.m2/settings.xml -->
       <id>sf.repo</id>
       <name>SourceForge Repository</name>
-      <url>scp://web.sourceforge.net/home/groups/c/cl/click/htdocs/maven2</url>
+      <url>sftp://web.sourceforge.net/home/groups/c/cl/click/htdocs/maven2</url>
     </repository>
 
     <snapshotRepository>
@@ -59,7 +59,7 @@
       <!-- <id> must match the <id> specified in ~/.m2/settings.xml -->
       <id>sf.repo</id>
       <name>SourceForge Snapshot Repository</name>
-      <url>scp://web.sourceforge.net/home/groups/c/cl/click/htdocs/snapshots</url>
+      <url>sftp://web.sourceforge.net/home/groups/c/cl/click/htdocs/snapshots</url>
       <uniqueVersion>false</uniqueVersion>
     </snapshotRepository>
   </distributionManagement>
