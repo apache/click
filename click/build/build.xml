@@ -558,7 +558,7 @@ Please ensure you have configured build.properties</echo>
                     windowtitle="Click Framework API"
                     doctitle="Click API"
                     classpath="classpath.framework"
-      	            overview=""/>
+      	            overview="documentation/docs/core-overview.html"/>
 
       <copy file="framework/src/net/sf/click/control/image-submit.gif"
             todir="documentation/docs/click-api/net/sf/click/control"/>
@@ -849,7 +849,7 @@ Please ensure you have configured build.properties</echo>
                verbose="false"
                windowtitle="@{windowtitle}"
       	       packagenames="net.*"
-         	   overview="@{overview}"
+         	     overview="@{overview}"
                doctitle="@{doctitle}">
             <classpath refid="@{classpath}"/>
             <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
