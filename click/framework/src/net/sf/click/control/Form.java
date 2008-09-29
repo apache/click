@@ -635,8 +635,8 @@ public class Form extends AbstractContainer {
      * @param control the control to add to the container and return
      * @return the control that was added to the container
      * @throws IllegalArgumentException if the control is null, the Control name
-     * is not defined, the container already contains a control with the same
-     * name or if the control's parent is a Page
+     * is not defined or the container already contains a control with the same
+     * name
      */
     public Control add(Control control) {
         if (control == null) {
@@ -674,9 +674,9 @@ public class Form extends AbstractContainer {
      * @param control the control to add to the container
      * @param index the index at which the control is to be inserted
      * @return the control that was added to the container
-     * @throws IllegalArgumentException if the control is null, the container
-     *     already contains a control with the same name, or if the control's parent
-     *     is a Page
+     * @throws IllegalArgumentException if the control is null or the container
+     *     already contains a control with the same name
+     *
      * @throws IndexOutOfBoundsException if index is out of range
      * <tt>(index &lt; 0 || index &gt; getControls().size())</tt>
      */
@@ -756,8 +756,7 @@ public class Form extends AbstractContainer {
      * @param field the field to add to the form
      * @return the field added to this form
      * @throws IllegalArgumentException if the field is null, the field name
-     * is not defined, the form already contains a control with the same name
-     * or if the field's parent is a Page
+     * is not defined or the form already contains a control with the same name
      */
     public Field add(Field field) {
         add((Control) field);
@@ -777,8 +776,7 @@ public class Form extends AbstractContainer {
      * @return the field added to this form
      * @throws IllegalArgumentException if the field is null, field's name is
      * not defined, field is a Button or HiddenField, the form already contains
-     * a control with the same name, if the field's parent is a Page or the
-     * width &lt; 1
+     * a control with the same name or the width &lt; 1
      */
     public Field add(Field field, int width) {
         if (field == null) {
@@ -804,8 +802,7 @@ public class Form extends AbstractContainer {
      * @param width the width of the control in table columns
      * @return the control added to this form
      * @throws IllegalArgumentException if the control is null, the form
-     * already contains a control with the same name, if the control's parent
-     * is a Page or the width &lt; 1
+     * already contains a control with the same name or the width &lt; 1
      */
     public Control add(Control control, int width) {
         if (control == null) {

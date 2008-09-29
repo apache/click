@@ -343,8 +343,7 @@ public class Page {
 
     /**
      * Add the control to the page. The control will be added to the pages model
-     * using the controls name as the key. The Controls context property will
-     * be set if the context is available. The Controls parent property will
+     * using the controls name as the key. The Controls parent property will
      * also be set to the page instance.
      *
      * @param control the control to add
@@ -363,6 +362,28 @@ public class Page {
         addModel(control.getName(), control);
 
         control.setParent(this);
+    }
+
+    /**
+     * Remove the control from the page. The control will be removed from the
+     * pages model and the control parent property will be set to null.
+     *
+     * @param control the control to remove
+     * @throws IllegalArgumentException if the control is null, or if the name
+     *      of the control is not defined
+     */
+    public void removeControl(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("Null control parameter");
+        }
+        if (StringUtils.isBlank(control.getName())) {
+            throw new IllegalArgumentException("Control name not defined");
+        }
+
+        getControls().remove(control);
+        getModel().remove(control.getName());
+
+        control.setParent(null);
     }
 
     /**
