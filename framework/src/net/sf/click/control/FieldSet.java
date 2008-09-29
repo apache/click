@@ -22,6 +22,7 @@ import java.util.Map;
 import net.sf.click.ActionListener;
 import net.sf.click.Context;
 import net.sf.click.Control;
+import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ContainerUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -181,8 +182,7 @@ public class FieldSet extends Field implements Container {
      * @return the control that was added to the FieldSet
      * @throws IllegalArgumentException if the control is null, the Field's name
      * is not defined, the container already contains a control with the same
-     * name, if the control's parent is a Page or if the control is neither a
-     * Field nor FieldSet
+     * name or if the control is neither a Field nor FieldSet
      */
     public Control insert(Control control, int index) {
         return container.insert(control, index);
@@ -209,8 +209,8 @@ public class FieldSet extends Field implements Container {
      * @param field the field to add to the form
      * @return the field added to this form
      * @throws IllegalArgumentException if the field is null, the field name
-     * is not defined, the fieldSet already contains a control with the same name
-     * or if the field's parent is a Page
+     * is not defined or the fieldSet already contains a control with the same
+     * name
      */
     public Field add(Field field) {
         add((Control) field);
@@ -225,7 +225,7 @@ public class FieldSet extends Field implements Container {
      * @return the field added to this fieldset
      * @throws IllegalArgumentException if the field is null, field's name is
      * not defined, the fieldset already contains a control with
-     * the same name, if the field's parent is a Page or the width &lt; 1
+     * the same name or the width &lt; 1
      */
     public Field add(Field field, int width) {
         if (width < 1) {
@@ -1125,8 +1125,7 @@ public class FieldSet extends Field implements Container {
          * @return the control that was added to the FieldSet
          * @throws IllegalArgumentException if the control is null, the Field's name
          * is not defined, the container already contains a control with the same
-         * name, if the control's parent is a Page or if the control is neither a
-         * Field nor FieldSet
+         * name or if the control is neither a Field nor FieldSet
          */
         public Control insert(Control control, int index) {
             if (control == null) {
@@ -1149,6 +1148,20 @@ public class FieldSet extends Field implements Container {
                     String msg = "FieldSet already contains field named: ";
                     throw new IllegalArgumentException(msg + field.getName());
                 }
+
+                // Check if control already has parent
+                // If parent references *this* container, there is no need to remove it
+                Object parentControl = control.getParent();
+                if (parentControl != null && parentControl != this) {
+
+                    // Remove control from parent Page or Container
+                    if (parentControl instanceof Page) {
+                        ((Page) parentControl).removeControl(control);
+                    } else if (parentControl instanceof Container) {
+                        ((Container) parentControl).remove(control);
+                    }
+                }
+
                 getControls().add(index, field);
 
                 getControlMap().put(field.getName(), field);
@@ -1177,6 +1190,13 @@ public class FieldSet extends Field implements Container {
             return control;
         }
 
+        /**
+         * @see net.sf.click.control.Container#remove(net.sf.click.Control).
+         *
+         * @param control the control to remove from the container
+         * @return true if the control was removed from the container
+         * @throws IllegalArgumentException if the control is null
+         */
         public boolean remove(Control control) {
             return super.remove(control);
         }

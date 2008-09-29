@@ -177,8 +177,8 @@ public class TabbedPanel extends Panel {
      * @param control the control to add to the container
      * @return the control that was added to the container
      * @throws IllegalArgumentException if the control is null, if the name
-     *     of the control is not defined, the container already contains a
-     *     control with the same name, or if the control's parent is a Page
+     *     of the control is not defined or the container already contains a
+     *     control with the same name
      */
     public Control addControl(Control control) {
         return add(control);
@@ -194,8 +194,8 @@ public class TabbedPanel extends Panel {
      * @param control the control to add to the container
      * @return the control that was added to the container
      * @throws IllegalArgumentException if the control is null, if the name
-     *     of the control is not defined, the container already contains a
-     *     control with the same name, or if the control's parent is a Page
+     *     of the control is not defined or the container already contains a
+     *     control with the same name
      */
     public Control add(Control control) {
         super.add(control);

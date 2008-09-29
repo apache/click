@@ -46,6 +46,9 @@ import org.apache.commons.lang.StringUtils;
  * The FormTable is a composite control which includes a {@link #form} object
  * and an array of {@link FieldColumn} objects.
  * <p/>
+ * <b>Please note</b> it is possible to associate FormTable with an external
+ * Form through this {@link FormTable#FormTable(java.lang.String, net.sf.click.control.Form) constructor}.
+ * <p/>
  * FieldColumn extends the {@link Column} class and includes a {@link Field}
  * object which is uses to render its column value. Each table data cell
  * <tt>&lg;td&gt;</tt> contains a uniquely named form field, which is rendered
@@ -58,7 +61,7 @@ import org.apache.commons.lang.StringUtils;
  * <p/>
  * After FormTable changes have been submitted their values will be applied to
  * the objects contained in the Tables rows list. If the posted values are
- * invalid for the given field constraints, the field error will be highlited
+ * invalid for the given field constraints, the field error will be highlighted
  * in the table. Field error messages will be rendered as 'title' attribute
  * tooltip values.
  *
@@ -137,7 +140,7 @@ import org.apache.commons.lang.StringUtils;
  *     }
  * } </pre>
  *
- * Note is this example the <tt>onCancelClick()</tt> button rolls back the
+ * Note in this example the <tt>onCancelClick()</tt> button rolls back the
  * changes made to the rowList objects, by reloading their values from the
  * database and having the FormTable not render the submitted values.
  *
@@ -150,7 +153,10 @@ public class FormTable extends Table {
     private static final long serialVersionUID = 1L;
 
     /** The table form. */
-    protected Form form = new Form();
+    protected Form form;
+
+    /** Indicates whether an internal Form should be created, true by default. */
+    protected boolean useInternalForm = true;
 
     /** The render the posted form values flag, default value is true. */
     protected boolean renderSubmittedValues = true;
@@ -158,7 +164,35 @@ public class FormTable extends Table {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create an FormTable for the given name.
+     * Create an FormTable for the given name and Form.
+     * <p/>
+     * If you want to add the FormTable to an externally defined Form, this is
+     * the constructor to use.
+     * <p/>
+     * For example:
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *     Form form = new Form("form");
+     *     FormTable formTable = new FormTable("formTable", form);
+     *     form.add(formTable);
+     * }
+     * </pre>
+     *
+     * @param name the table name
+     * @param form the table form
+     * @throws IllegalArgumentException if the name is null
+     */
+    public FormTable(String name, Form form) {
+        useInternalForm = false;
+        this.form = form;
+        setName(name);
+    }
+
+    /**
+     * Create a FormTable for the given name.
+     * <p/>
+     * <b>Note</b> that an internal Form control will automatically be created
+     * by FormTable.
      *
      * @param name the table name
      * @throws IllegalArgumentException if the name is null
@@ -169,6 +203,9 @@ public class FormTable extends Table {
 
     /**
      * Create a FormTable with no name defined.
+     * <p/>
+     * <b>Note</b> that an internal Form control will automatically be created
+     * by FormTable.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
@@ -216,11 +253,18 @@ public class FormTable extends Table {
     }
 
     /**
-     * Return the form object.
+     * Return the form object associated with this FormTable.
+     * <p/>
+     * The returned Form control will either be an internally created Form
+     * instance, or an external instance specified through
+     * this {@link FormTable#FormTable(java.lang.String, net.sf.click.control.Form) contructor}.
      *
      * @return the form object
      */
     public Form getForm() {
+        if (form == null) {
+            form = new Form();
+        }
         return form;
     }
 
@@ -236,7 +280,9 @@ public class FormTable extends Table {
         HtmlStringBuffer buffer = new HtmlStringBuffer(255);
 
         buffer.append(super.getHtmlImports());
-        buffer.append(getForm().getHtmlImports());
+        if (useInternalForm) {
+            buffer.append(getForm().getHtmlImports());
+        }
 
         int firstRow = getFirstRow();
         int lastRow = getLastRow();
@@ -261,6 +307,20 @@ public class FormTable extends Table {
     }
 
     /**
+     * Initialize the controls contained in the FormTable.
+     *
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
+        super.onInit();
+
+        // TODO: this wont work, as table control links have unique name
+        getForm().add(new HiddenField(PAGE, String.class));
+        getForm().add(new HiddenField(COLUMN, String.class));
+        getForm().add(new HiddenField(ASCENDING, String.class));
+    }
+
+    /**
      * @see net.sf.click.Control#setName(String)
      *
      * @param name of the control
@@ -269,13 +329,10 @@ public class FormTable extends Table {
     public void setName(String name) {
         super.setName(name);
 
-        addControl(getForm());
-        getForm().setName(getName() + "_form");
-
-        // TODO: this wont work, as table control links have unique name
-        getForm().add(new HiddenField(PAGE, String.class));
-        getForm().add(new HiddenField(COLUMN, String.class));
-        getForm().add(new HiddenField(ASCENDING, String.class));
+        if (useInternalForm) {
+            getForm().setName(getName() + "_form");
+            addControl(getForm());
+        }
     }
 
     /**
@@ -412,19 +469,26 @@ public class FormTable extends Table {
      * @param buffer the specified buffer to render the control's output to
      */
     public void render(HtmlStringBuffer buffer) {
-        buffer.append(getForm().startTag());
+        if (useInternalForm) {
+            buffer.append(getForm().startTag());
+        }
 
         super.render(buffer);
 
-        renderButtons(buffer);
+        if (useInternalForm) {
+            renderButtons(buffer);
 
-        buffer.append(getForm().endTag());
+            buffer.append(getForm().endTag());
+        }
     }
 
     // ------------------------------------------------------ Protected Methods
 
     /**
      * Render the Form Buttons to the string buffer.
+     * <p/>
+     * This method is only invoked if the Form is created by the FormTable,
+     * and not when the Form is defined externally.
      *
      * @param buffer the StringBuffer to render to
      */
