@@ -1122,6 +1122,11 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             URL url = (URL) en.nextElement();
             String path = url.getFile();
 
+            // Decode the url, esp on Windows where file paths can have their
+            // spaces encoded. decodeURL will convert C:\Program%20Files\project
+            // to C:\Program Files\project
+            path = ClickUtils.decodeURL(path);
+
             // Strip file prefix
             if (path.startsWith("file:")) {
                 path = path.substring(5);
@@ -1139,7 +1144,14 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
 
             File jar = new File(jarPath);
-            deployFilesInJar(jar);
+
+            if (!jar.exists()) {
+                deployFilesInJar(jar);
+            } else {
+                logService.error("Could not deploy the jar '" + jarPath
+                    + "'. Please ensure this file exists in the specified"
+                    + " location.");
+            }
         }
 
         if (logService.isTraceEnabled()) {

@@ -31,6 +31,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.MessageFormat;
@@ -1102,11 +1103,10 @@ public class ClickUtils {
      *
      * <b>Usage:</b><p/>
      * In your Control simply use the code below, and everything should work automatically.
-     * <pre class="codeJava">
+     * <pre class="prettyprint">
      * public void onDeploy(ServletContext servletContext) {
      *    ClickUtils.deployFileList(servletContext, HeavyControl.class, "click");
-     * }
-     * </pre>
+     * } </pre>
      *
      * @param servletContext the web applications servlet context
      * @param controlClass the class of the Control that has files for deployment
@@ -1160,7 +1160,7 @@ public class ClickUtils {
     }
 
     /**
-     * Return an encoded version of the <tt>Serializble</tt> object. The object
+     * Return an encoded version of the <tt>Serializable</tt> object. The object
      * will be serialized, compressed and Base 64 encoded.
      *
      * @param object the object to encode
@@ -1384,10 +1384,62 @@ public class ClickUtils {
     }
 
     /**
-     * Return an encoded URL value for the given object using the context
-     * request character encoding. This method uses
-     * {@link URLEncoder#encode(java.lang.String, java.lang.String)}
+     * URL encode the specified value using the "UTF-8" encoding scheme.
+     * <p/>
+     * For example <tt>(http://host?name=value with spaces)</tt> will become
+     * <tt>(http://host?name=value%20with%20spaces)</tt>.
+     * <p/>
+     * This method uses {@link URLEncoder#encode(java.lang.String, java.lang.String)}
      * internally.
+     *
+     * @param value the value to encode using "UTF-8"
+     * @return an encoded URL string
+     */
+    public static String encodeURL(Object value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Null object parameter");
+        }
+
+        try {
+            return URLEncoder.encode(value.toString(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * URL decode the specified value using the "UTF-8" encoding scheme.
+     * <p/>
+     * For example <tt>(http://host?name=value%20with%20spaces)</tt> will become
+     * <tt>(http://host?name=value with spaces)</tt>.
+     * <p/>
+     * This method uses {@link URLDecoder#decode(java.lang.String, java.lang.String)}
+     * internally.
+     *
+     * @param value the value to decode using "UTF-8"
+     * @return an encoded URL string
+     */
+    public static String decodeURL(Object value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Null object parameter");
+        }
+
+        try {
+            return URLDecoder.decode(value.toString(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Return an encoded URL value for the given object using the context
+     * request character encoding.
+     * <p/>
+     * For example <tt>(http://host?name=value with spaces)</tt> will become
+     * <tt>(http://host?name=value%20with%20spaces)</tt>.
+     * <p/>
+     * This method uses
+     * {@link URLEncoder#encode(java.lang.String, java.lang.String)} internally.
      *
      * @param object the object value to encode as a URL string
      * @param context the context providing the request character encoding
