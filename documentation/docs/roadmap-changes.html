@@ -83,102 +83,20 @@ only bug fixes and documentation updates.
     </ul>
   </dd>
   <p/>
-  <dt><a name="1.5-RC1"></a><div class="release-header">Latest Development Release - Version 1.5 RC1 - 28 September 2008</div></dt>
+  <dt><a name="1.5-RC2"></a><div class="release-header">Latest Development Release - Version 1.5 RC2 - 29 September 2008</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;"> 
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
-    <ul style="padding: 0em; margin-left:0em;">
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li class="change">
-        Refactored Paginator into a more generic interface called
-        <a href="click-api/net/sf/click/control/Renderable.html">Renderable</a>
-        which is independent of any specific Control
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-434">434</a>].
+      <span style="font-weight: bold; color: navy;">Emergency Fix</span>: Click throws FileNotFoundException when deploying click-extras.jar
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-448">448</a>].
       </li>
       <li class="change">
-        Add new LinkDecorator methods <a href="extras-api/net/sf/click/extras/control/LinkDecorator.html#renderActionLink(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractLink, net.sf.click.Context, java.lang.Object, java.lang.Object)">renderActionLink</a>
-        and <a href="extras-api/net/sf/click/extras/control/LinkDecorator.html#renderActionButton(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.ActionButton, net.sf.click.Context, java.lang.Object, java.lang.Object)">renderActionButton</a>.
-        This allows more fine grained control over the rendered links, for example
-        manipulating request parameters.
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-446">446</a>].
-      </li>
-      <li class="change">
-        Add Table Row attribute support through new method 
-        <a href="click-api/net/sf/click/control/Table.html#addRowAttributes(java.util.Map, java.lang.Object, int)">addRowAttributes</a>.
-        This issue was raised by Hans Poo
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-431">431</a>].
-      </li>
-      <li class="change">
-        Field error messages can now be specified per instance.
-        See the <a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String)">JavaDoc</a> for more details.
-        This issue was raised and fixed by Ricardo Lecheta
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-433">433</a>].
-      </li>
-      <li class="change">
-        Added new utility methods
-        <a href="click-api/net/sf/click/util/ContainerUtils.html#copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)">copyContainerToObject</a>
-        and <a href="click-api/net/sf/click/util/ContainerUtils.html#copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)">copyObjectToContainer</a>
-        to selectively exclude or include form fields when populating domain objects.
-        This issue was raised by Khalef Bessaih
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-440">440</a>].
-      </li>
-      <li class="change">
-        Encapsulate conversion logic of template extensions inside
-        <a href="click-api/net/sf/click/Page.html#setRedirect(java.lang.String)">Page.setRedirect(java.lang.String)</a>
-        which allows one to override or overload the default behavior.
-        This issue was raised by David Ballard
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-429">429</a>].
-      </li>
-       <li class="change">
-        Improved Table so that subclasses can specify a different
-        <a href="click-api/net/sf/click/control/Table.html#controlLink">controlLink</a>
-        implementation by overriding <a href="click-api/net/sf/click/control/Table.html#getControlLink()">getControlLink()</a>.
-        This issue was raised and fixed by Ricardo Lecheta
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-442">442</a>].
-      </li>
-      <li class="change">
-        Improved <a href="click-api/net/sf/click/util/ClickUtils.html#toLabel(java.lang.String)">ClickUtils.toLabel</a> to return empty String ("") if argument is null
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-441">441</a>].
-      </li>
-      <li class="change">
-        Improved DateField to return a cached Date representation on subsequent retrievals.
-        This issue was raised by Tore Halset
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-316">316</a>].
-      </li>
-      <li class="change">
-        Fixed RegexField validation to ignore empty values.
-        This issue was raised by Muzaffer Ozakca
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-436">436</a>].
-      </li>
-      <li class="change">
-        Fixed TabbedPanel to trigger the registered tab listener.
-        This issue was raised by Marcelo Grassi Franco Melgaço.
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-432">432</a>].
-      </li>
-      <li class="change">
-        Improved redirect and forward to JSP templates.
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-435">435</a>].
-      </li>
-      <li class="change">
-        Fixed HtmlFieldSet to properly close the fieldset end tag.
-        This issue was raised by Gilberto C. Andrade
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-427">427</a>].
-      </li>
-      <li class="change">
-        Fixed AbstractContainerField not to bind its request parameter.
-        This issue was raised by Gilberto C. Andrade
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-428">428</a>].
-      </li>
-      <li class="change">
-        Fixed Column which exposed its internal Comparator as public API
-        through <a href="click-api/net/sf/click/control/Column.html#setComparator(java.util.Comparator)">Column.setComparator(Comparator)</a>,
-        instead of java.util.Comparator.
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-430">430</a>].
-      </li>
-      <li class="change">
-        Fixed LinkDecorator not to add Table parameters to PageLink, as it is redundant.
-        This issue was raised by Joel Schmidt
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-270">270</a>].
+        Added utility methods <a href="click-api/net/sf/click/util/ClickUtils.html#encodeURL(java.lang.Object)">ClickUtils.encodeURL</a>
+        and <a href="click-api/net/sf/click/util/ClickUtils.html#decodeURL(java.lang.Object)">ClickUtils.decodeURL</a>
+        for encoding and decoding URL's using the "UTF-8" encoding scheme.
       </li>
     </ul>
     <a name="1.5-M1-upgrade-path" href="#"></a>
@@ -327,6 +245,105 @@ public class HtmlTable extends AbstractControl {
   </dd>
 
   <dt><div class="release-header">Archives</div></dt>
+  <dt><a name="1.5-RC1"></a>Development Release - Version 1.5 RC1 - 28 September 2008</dt>
+  <dd>
+    <div style="margin-left:-2em;margin-bottom:1em;"> 
+      <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
+    </div>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+        Refactored Paginator into a more generic interface called
+        <a href="click-api/net/sf/click/control/Renderable.html">Renderable</a>
+        which is independent of any specific Control
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-434">434</a>].
+      </li>
+      <li class="change">
+        Add new LinkDecorator methods <a href="extras-api/net/sf/click/extras/control/LinkDecorator.html#renderActionLink(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractLink, net.sf.click.Context, java.lang.Object, java.lang.Object)">renderActionLink</a>
+        and <a href="extras-api/net/sf/click/extras/control/LinkDecorator.html#renderActionButton(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.ActionButton, net.sf.click.Context, java.lang.Object, java.lang.Object)">renderActionButton</a>.
+        This allows more fine grained control over the rendered links, for example
+        manipulating request parameters.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-446">446</a>].
+      </li>
+      <li class="change">
+        Add Table Row attribute support through new method 
+        <a href="click-api/net/sf/click/control/Table.html#addRowAttributes(java.util.Map, java.lang.Object, int)">addRowAttributes</a>.
+        This issue was raised by Hans Poo
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-431">431</a>].
+      </li>
+      <li class="change">
+        Field error messages can now be specified per instance.
+        See the <a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String)">JavaDoc</a> for more details.
+        This issue was raised and fixed by Ricardo Lecheta
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-433">433</a>].
+      </li>
+      <li class="change">
+        Added new utility methods
+        <a href="click-api/net/sf/click/util/ContainerUtils.html#copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)">copyContainerToObject</a>
+        and <a href="click-api/net/sf/click/util/ContainerUtils.html#copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)">copyObjectToContainer</a>
+        to selectively exclude or include form fields when populating domain objects.
+        This issue was raised by Khalef Bessaih
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-440">440</a>].
+      </li>
+      <li class="change">
+        Encapsulate conversion logic of template extensions inside
+        <a href="click-api/net/sf/click/Page.html#setRedirect(java.lang.String)">Page.setRedirect(java.lang.String)</a>
+        which allows one to override or overload the default behavior.
+        This issue was raised by David Ballard
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-429">429</a>].
+      </li>
+       <li class="change">
+        Improved Table so that subclasses can specify a different
+        <a href="click-api/net/sf/click/control/Table.html#controlLink">controlLink</a>
+        implementation by overriding <a href="click-api/net/sf/click/control/Table.html#getControlLink()">getControlLink()</a>.
+        This issue was raised and fixed by Ricardo Lecheta
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-442">442</a>].
+      </li>
+      <li class="change">
+        Improved <a href="click-api/net/sf/click/util/ClickUtils.html#toLabel(java.lang.String)">ClickUtils.toLabel</a> to return empty String ("") if argument is null
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-441">441</a>].
+      </li>
+      <li class="change">
+        Improved DateField to return a cached Date representation on subsequent retrievals.
+        This issue was raised by Tore Halset
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-316">316</a>].
+      </li>
+      <li class="change">
+        Fixed RegexField validation to ignore empty values.
+        This issue was raised by Muzaffer Ozakca
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-436">436</a>].
+      </li>
+      <li class="change">
+        Fixed TabbedPanel to trigger the registered tab listener.
+        This issue was raised by Marcelo Grassi Franco Melgaço.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-432">432</a>].
+      </li>
+      <li class="change">
+        Improved redirect and forward to JSP templates.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-435">435</a>].
+      </li>
+      <li class="change">
+        Fixed HtmlFieldSet to properly close the fieldset end tag.
+        This issue was raised by Gilberto C. Andrade
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-427">427</a>].
+      </li>
+      <li class="change">
+        Fixed AbstractContainerField not to bind its request parameter.
+        This issue was raised by Gilberto C. Andrade
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-428">428</a>].
+      </li>
+      <li class="change">
+        Fixed Column which exposed its internal Comparator as public API
+        through <a href="click-api/net/sf/click/control/Column.html#setComparator(java.util.Comparator)">Column.setComparator(Comparator)</a>,
+        instead of java.util.Comparator.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-430">430</a>].
+      </li>
+      <li class="change">
+        Fixed LinkDecorator not to add Table parameters to PageLink, as it is redundant.
+        This issue was raised by Joel Schmidt
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-270">270</a>].
+      </li>
+    </ul>
+  </dd>
   <dt><a name="1.5-M3"></a>Development Release - Version 1.5 M3 - 17 August 2008</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;"> 
