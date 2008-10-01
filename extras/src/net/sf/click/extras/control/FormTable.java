@@ -280,9 +280,6 @@ public class FormTable extends Table {
         HtmlStringBuffer buffer = new HtmlStringBuffer(255);
 
         buffer.append(super.getHtmlImports());
-        if (useInternalForm) {
-            buffer.append(getForm().getHtmlImports());
-        }
 
         int firstRow = getFirstRow();
         int lastRow = getLastRow();
