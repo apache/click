@@ -649,7 +649,7 @@ Please ensure you have configured build.properties</echo>
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
-      <javac srcdir="framework/src;framework/test;extras/src;mock/src" 
+      <javac srcdir="framework/src;framework/test;mock/src" 
              destdir="framework/classes" 
              debug="true"
              encoding="ISO-8859-1"
@@ -675,7 +675,7 @@ Please ensure you have configured build.properties</echo>
    </target>
 
    
-   <target name="test-extras" depends="test-framework">
+   <target name="test-extras" >
       <copy todir="extras/classes">
          <fileset dir="extras/src">
             <exclude name="**/package.html"/>
@@ -686,7 +686,7 @@ Please ensure you have configured build.properties</echo>
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
-      <javac srcdir="extras/src;extras/test" 
+      <javac srcdir="extras/src;extras/test;mock/src;framework/test" 
              destdir="extras/classes" 
              debug="true"
              encoding="ISO-8859-1"
@@ -712,7 +712,7 @@ Please ensure you have configured build.properties</echo>
    </target>
 
 
-   <target name="test-mock" depends="build-framework">
+   <target name="test-mock">
       <copy todir="mock/classes">
          <fileset dir="mock/src">
             <exclude name="**/package.html"/>
