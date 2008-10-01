@@ -564,7 +564,7 @@ public class CayenneForm extends Form {
         // Ensure OID hidden field is set if available after a commit
         if (dataObject != null
             && isPersistent(dataObject)
-            && oidField.getValueObject() == null) {
+            && StringUtils.isEmpty(oidField.getValue())) {
 
             Object pk = DataObjectUtils.pkForObject(dataObject);
             oidField.setValueObject(pk.toString());
