@@ -3,6 +3,7 @@ package net.sf.click.extras.control;
 import junit.framework.TestCase;
 import net.sf.click.MockContext;
 import net.sf.click.control.Form;
+import org.apache.commons.lang.StringUtils;
 
 public class FormTableTest extends TestCase {
 
@@ -17,9 +18,9 @@ public class FormTableTest extends TestCase {
         FormTable table = new FormTable("table");
 
         String imports = table.getHtmlImports();
-        assertTrue(imports.indexOf("/table.css") > 0);
-        assertTrue(imports.indexOf("/control.js") > 0);
-        assertTrue(imports.indexOf("/control.css") > 0);
+        assertEquals(1, StringUtils.countMatches(imports, "/table.css"));
+        assertEquals(1, StringUtils.countMatches(imports, "/control.js"));
+        assertEquals(1, StringUtils.countMatches(imports, "/control.css"));
 
 
         // Check imports using an external Form Control
@@ -28,8 +29,8 @@ public class FormTableTest extends TestCase {
         form.add(table);
 
         imports = form.getHtmlImports();
-        assertTrue(imports.indexOf("/table.css") > 0);
-        assertTrue(imports.indexOf("/control.js") > 0);
-        assertTrue(imports.indexOf("/control.css") > 0);
+        assertEquals(1, StringUtils.countMatches(imports, "/table.css"));
+        assertEquals(1, StringUtils.countMatches(imports, "/control.js"));
+        assertEquals(1, StringUtils.countMatches(imports, "/control.css"));
     }
 }
