@@ -163,8 +163,10 @@ public class TabbedCayenneForm extends CayenneForm {
      * JavaScript files
      */
     public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(TabbedForm.HTML_IMPORTS,
-            getContext());
+        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
+        buffer.append(super.getHtmlImports());
+        buffer.append(ClickUtils.createHtmlImport(TabbedForm.HTML_IMPORTS, getContext()));
+        return buffer.toString();
     }
 
     /**
