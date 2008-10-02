@@ -820,28 +820,6 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Expand / collapse and select / deselect the tree nodes.
-     *
-     * @return true to continue Page event processing or false otherwise
-     */
-    boolean postProcess() {
-        if (isJavascriptEnabled()) {
-            // Populate the javascript handler with its state. This call will
-            // notify any tree listeners about new values.
-            javascriptHandler.init(getContext());
-        }
-
-        if (!ArrayUtils.isEmpty(expandOrCollapseNodeIds)) {
-            expandOrCollapse(expandOrCollapseNodeIds);
-        }
-
-        if (!ArrayUtils.isEmpty(selectOrDeselectNodeIds)) {
-            selectOrDeselect(selectOrDeselectNodeIds);
-        }
-        return true;
-    }
-
-    /**
      * This method does nothing.
      * <p/>
      * Please use the {@link #addListener(TreeListener)} method instead.
@@ -1553,6 +1531,30 @@ public class Tree extends AbstractControl {
         }
 
         return context.getResponse().encodeURL(buffer.toString());
+    }
+
+    // ------------------------------------------------ Package Private Methods
+
+    /**
+     * Expand / collapse and select / deselect the tree nodes.
+     *
+     * @return true to continue Page event processing or false otherwise
+     */
+    boolean postProcess() {
+        if (isJavascriptEnabled()) {
+            // Populate the javascript handler with its state. This call will
+            // notify any tree listeners about new values.
+            javascriptHandler.init(getContext());
+        }
+
+        if (!ArrayUtils.isEmpty(expandOrCollapseNodeIds)) {
+            expandOrCollapse(expandOrCollapseNodeIds);
+        }
+
+        if (!ArrayUtils.isEmpty(selectOrDeselectNodeIds)) {
+            selectOrDeselect(selectOrDeselectNodeIds);
+        }
+        return true;
     }
 
     //----------------------------------------------------------- Inner classes
