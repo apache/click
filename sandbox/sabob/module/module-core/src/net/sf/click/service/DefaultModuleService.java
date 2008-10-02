@@ -86,12 +86,6 @@ public class DefaultModuleService implements ModuleService {
                     String moduleClassName = properties.getProperty("class");
                     ClickModule module = createModule(moduleClassName);
                     modules.put(module.getModuleName(), module);
-
-                    // Deploy module resources.
-                    System.out.println("location: " + jarLocation);
-                    InputStream is = configService.getServletContext()
-                        .getResourceAsStream(jarLocation);
-                    deployModuleResources(configService, is, jarLocation, module);
                 }
             }
         } finally {
