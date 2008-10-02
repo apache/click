@@ -28,7 +28,9 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.Context;
 import net.sf.click.control.Decorator;
+import net.sf.click.control.Form;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.ContainerUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -245,20 +247,20 @@ public class CheckboxTree extends Tree {
         // To find the collection of selected nodes, the HttpServletRequest is
         // checked against the value of the field {@link #SELECT_TREE_NODE_PARAM}.
 
-        //find id's of all the new selected node's'
+        // find id's of all the new selected node's'
         String[] nodeIds = getRequestValues(SELECT_TREE_NODE_PARAM);
 
-        //find currently selected nodes
+        // find currently selected nodes
         boolean includeInvisibleNodes = isSelectChildNodes();
         Collection currentlySelected = getSelectedNodes(includeInvisibleNodes);
 
-        //is there any new selected node's
+        // is there any new selected node's
         if (nodeIds == null || nodeIds.length == 0) {
-            //deselect all the current selected nodes
+            // deselect all the current selected nodes
             setSelectState(currentlySelected, false);
             return;
         }
-        //build hashes of id's for fast lookup
+        // build hashes of id's for fast lookup
         Set hashes = new HashSet();
         List newSelectedNodes = new ArrayList();
         for (int i = 0; i < nodeIds.length; i++) {
@@ -266,7 +268,7 @@ public class CheckboxTree extends Tree {
         }
         nodeIds = null;
 
-        //build list of newSelectedNodes
+        // build list of newSelectedNodes
         for (Iterator it = iterator(getRootNode()); it.hasNext();) {
             TreeNode result = (TreeNode) it.next();
             if (hashes.contains(result.getId())) {
@@ -274,8 +276,8 @@ public class CheckboxTree extends Tree {
             }
         }
 
-        //calculate nodes for deselection by removing from currentlySelected nodes
-        //those that must be selected.
+        // calculate nodes for deselection by removing from currentlySelected nodes
+        // those that must be selected.
         currentlySelected.removeAll(newSelectedNodes);
 
         setSelectState(currentlySelected, false);
@@ -314,13 +316,6 @@ public class CheckboxTree extends Tree {
                     HtmlStringBuffer buffer = new HtmlStringBuffer();
 
                     renderIcon(buffer, treeNode);
-
-                    // TODO IE HACK. With an empty span <span></span> IE does
-                    // not render the icons. Putting a '&nbsp;' in the span
-                    // seemed to work. Perhaps there is a better workaround.
-                    buffer.append("&nbsp;");
-
-                    buffer.append("</span>");
 
                     buffer.append("<input ");
                     if (isJavascriptEnabled()) {

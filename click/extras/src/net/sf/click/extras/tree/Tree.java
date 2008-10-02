@@ -1108,12 +1108,6 @@ public class Tree extends AbstractControl {
 
         renderIcon(buffer, treeNode);
 
-        //TODO IE HACK. With a empty span <span></span> IE does not render the
-        //icons. Putting a '&nbsp;' in the span seemed to work. Perhaps there is a
-        //better workaround.
-        buffer.append("&nbsp;");
-        buffer.append("</span>");
-
         buffer.elementStart("span");
         if (treeNode.isSelected()) {
             buffer.appendAttribute("class", "selected");
@@ -1144,6 +1138,12 @@ public class Tree extends AbstractControl {
             javascriptHandler.getJavascriptRenderer().renderIcon(buffer);
         }
         buffer.append(">");
+
+        //TODO IE HACK. With a empty span <span></span> IE does not render the
+        //icons. Putting a '&nbsp;' in the span seemed to work. Perhaps there is a
+        //better workaround.
+        buffer.append("&nbsp;");
+        buffer.append("</span>");
     }
 
     /**
