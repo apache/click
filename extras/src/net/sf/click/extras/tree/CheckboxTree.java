@@ -28,9 +28,7 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.Context;
 import net.sf.click.control.Decorator;
-import net.sf.click.control.Form;
 import net.sf.click.util.ClickUtils;
-import net.sf.click.util.ContainerUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.ArrayUtils;
