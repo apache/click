@@ -1145,8 +1145,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             File jar = new File(jarPath);
 
-            if (!jar.exists()) {
+            if (jar.exists()) {
                 deployFilesInJar(jar);
+
             } else {
                 logService.error("Could not deploy the jar '" + jarPath
                     + "'. Please ensure this file exists in the specified"
