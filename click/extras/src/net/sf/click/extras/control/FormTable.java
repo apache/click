@@ -144,6 +144,44 @@ import org.apache.commons.lang.StringUtils;
  * changes made to the rowList objects, by reloading their values from the
  * database and having the FormTable not render the submitted values.
  *
+ * <a name="form-example" href="#"></a>
+ * <h3>Combining Form and FormTable</h3>
+ * By default FormTable will create an internal Form to submit its values.
+ * <p/>
+ * If you would like to integrate FormTable with an externally defined Form,
+ * use the {@link FormTable#FormTable(java.lang.String, net.sf.click.control.Form) constructor}
+ * which accepts a Form.
+ * <p/>
+ * Example usage:
+ * <pre class="prettyprint">
+ * private Form form;
+ * private FormTable formTable;
+ *
+ * public void onInit() {
+ *
+ *     // LIMITATION: Form only processes its children when the Form is submitted.
+ *     // Since FormTable sorting and paging is done via GET requests,
+ *     // the Form onProcess method won't process the FormTable.
+ *     // To fix this we override the default Form#onProcess behavior and check
+ *     // if Form was submitted. If it was not we explicitly process the FormTable.
+ *     form = new Form("form") {
+ *         public boolean onProcess() {
+ *             if (isFormSubmission()) {
+ *                 // Delegate to super implementation
+ *                 return super.onProcess();
+ *             } else {
+ *                 // If form is not submitted, explicitly process the table
+ *                 return formTable.onProcess();
+ *             }
+ *         }
+ *     };
+ *
+ *     formTable = new FormTable("formTable", form);
+ *     formTable.setPageSize(10);
+ *     form.add(formTable);
+ *     ...
+ * } </pre>
+ *
  * @see FieldColumn
  * @see Form
  * @see Table
@@ -169,14 +207,9 @@ public class FormTable extends Table {
      * If you want to add the FormTable to an externally defined Form, this is
      * the constructor to use.
      * <p/>
-     * For example:
-     * <pre class="prettyprint">
-     * public void onInit() {
-     *     Form form = new Form("form");
-     *     FormTable formTable = new FormTable("formTable", form);
-     *     form.add(formTable);
-     * }
-     * </pre>
+     * <b>Please note:</b> if you want to use FormTable with an external Form,
+     * see <a href="#form-example">this example</a> which demonstrates a
+     * workaround of the <tt>form submit limitation</tt>.
      *
      * @param name the table name
      * @param form the table form
@@ -185,6 +218,7 @@ public class FormTable extends Table {
     public FormTable(String name, Form form) {
         useInternalForm = false;
         this.form = form;
+        init();
         setName(name);
     }
 
@@ -198,6 +232,7 @@ public class FormTable extends Table {
      * @throws IllegalArgumentException if the name is null
      */
     public FormTable(String name) {
+        init();
         setName(name);
     }
 
@@ -211,6 +246,7 @@ public class FormTable extends Table {
      */
     public FormTable() {
         super();
+        init();
     }
 
     // ------------------------------------------------------ Public Attributes
@@ -304,20 +340,6 @@ public class FormTable extends Table {
     }
 
     /**
-     * Initialize the controls contained in the FormTable.
-     *
-     * @see net.sf.click.Control#onInit()
-     */
-    public void onInit() {
-        super.onInit();
-
-        // TODO: this wont work, as table control links have unique name
-        getForm().add(new HiddenField(PAGE, String.class));
-        getForm().add(new HiddenField(COLUMN, String.class));
-        getForm().add(new HiddenField(ASCENDING, String.class));
-    }
-
-    /**
      * @see net.sf.click.Control#setName(String)
      *
      * @param name of the control
@@ -328,7 +350,6 @@ public class FormTable extends Table {
 
         if (useInternalForm) {
             getForm().setName(getName() + "_form");
-            addControl(getForm());
         }
     }
 
@@ -421,7 +442,7 @@ public class FormTable extends Table {
                                 throw new RuntimeException(e);
                             }
                         } else {
-                            getForm().setError(field.getError());
+                            getForm().setError(getMessage("formtable-error"));
                         }
                     }
                 }
@@ -520,4 +541,22 @@ public class FormTable extends Table {
         }
     }
 
+    // -------------------------------------------------------- Private Methods
+
+    /**
+     * Initialize the FormTable.
+     */
+    private void init() {
+        Form form = getForm();
+
+        // TODO: this wont work, as table control links have unique name
+        form.add(new HiddenField(PAGE, String.class));
+        form.add(new HiddenField(COLUMN, String.class));
+        form.add(new HiddenField(ASCENDING, String.class));
+
+        // If Form is internal add it to table
+        if (useInternalForm) {
+            addControl(form);
+        }
+    }
 }
