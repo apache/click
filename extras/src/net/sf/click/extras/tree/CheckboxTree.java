@@ -294,22 +294,6 @@ public class CheckboxTree extends Tree {
         bindExpandOrCollapseValues();
     }
 
-    /**
-     * Expand / collapse the tree nodes.
-     *
-     * @return true to continue Page event processing or false otherwise
-     */
-    public boolean postProcess() {
-        if (isJavascriptEnabled()) {
-            javascriptHandler.init(getContext());
-        }
-
-        if (!ArrayUtils.isEmpty(expandOrCollapseNodeIds)) {
-            expandOrCollapse(expandOrCollapseNodeIds);
-        }
-        return true;
-    }
-
     //------------------------------------------------------------Inner classes
 
     /**
@@ -729,5 +713,23 @@ public class CheckboxTree extends Tree {
         } else {
             return new CheckboxCookieHandler(getContext());
         }
+    }
+
+    // ------------------------------------------------ Package Private Methods
+
+    /**
+     * Expand / collapse the tree nodes.
+     *
+     * @return true to continue Page event processing or false otherwise
+     */
+    boolean postProcess() {
+        if (isJavascriptEnabled()) {
+            javascriptHandler.init(getContext());
+        }
+
+        if (!ArrayUtils.isEmpty(expandOrCollapseNodeIds)) {
+            expandOrCollapse(expandOrCollapseNodeIds);
+        }
+        return true;
     }
 }
