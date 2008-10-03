@@ -578,11 +578,14 @@ public class VelocityTemplateService implements TemplateService {
 
     /**
      * Provides a Velocity <tt>LogChute</tt> adapter class around the application
-     * log service to enable to the Velocity Runtime to log to the application
+     * log service to enable the Velocity Runtime to log to the application
      * LogService.
      * <p/>
      * Please see the {@link VelocityTemplateService} class for more details on
      * Velocity logging.
+     * <p/>
+     * <b>PLEASE NOTE</b> this class is <b>not</b> for public use, and can
+     * be ignored.
      *
      *  @author Malcolm Edgar
      */
