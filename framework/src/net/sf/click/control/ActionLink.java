@@ -376,6 +376,8 @@ public class ActionLink extends AbstractLink {
      * processed and has a value, or null otherwise.
      *
      * @return the action link <tt>Double</tt> value if the action link was processed
+     *
+     * @throws NumberFormatException if the value cannot be parsed into a Double
      */
     public Double getValueDouble() {
         if (getValue() != null) {
@@ -390,6 +392,8 @@ public class ActionLink extends AbstractLink {
      * processed and has a value, or null otherwise.
      *
      * @return the ActionLink <tt>Integer</tt> value if the action link was processed
+     *
+     * @throws NumberFormatException if the value cannot be parsed into an Integer
      */
     public Integer getValueInteger() {
         if (getValue() != null) {
@@ -404,6 +408,8 @@ public class ActionLink extends AbstractLink {
      * processed and has a value, or null otherwise.
      *
      * @return the ActionLink <tt>Long</tt> value if the action link was processed
+     *
+     * @throws NumberFormatException if the value cannot be parsed into a Long
      */
     public Long getValueLong() {
         if (getValue() != null) {

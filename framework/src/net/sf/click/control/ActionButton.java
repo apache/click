@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.click.Context;
@@ -357,6 +358,8 @@ public class ActionButton extends Button {
      * processed and has a value, or null otherwise.
      *
      * @return the action button <tt>Double</tt> value if the action button was processed
+     *
+     * @throws NumberFormatException if the value cannot be parsed into a Double
      */
     public Double getValueDouble() {
         if (getValue() != null) {
@@ -371,6 +374,8 @@ public class ActionButton extends Button {
      * processed and has a value, or null otherwise.
      *
      * @return the ActionButton <tt>Integer</tt> value if the action button was processed
+     *
+     * @throws NumberFormatException if the value cannot be parsed into an Integer
      */
     public Integer getValueInteger() {
         if (getValue() != null) {
@@ -385,6 +390,8 @@ public class ActionButton extends Button {
      * processed and has a value, or null otherwise.
      *
      * @return the ActionButton <tt>Long</tt> value if the action button was processed
+     *
+     * @throws NumberFormatException if the value cannot be parsed into a Long
      */
     public Long getValueLong() {
         if (getValue() != null) {
