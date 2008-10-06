@@ -85,10 +85,37 @@ only bug fixes and documentation updates.
   <p/>
   <dt><a name="1.5"></a><div class="release-header">Latest Development Release - Version 1.5 - ??? September 2008</div></dt>
   <dd>
-    <div style="margin-left:-2em;margin-bottom:1em;"> 
+    <div style="margin-left:-2em;margin-bottom:1em;">
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
+    <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+      New examples:
+    </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li>
+        <a target="_blank" class="external" href="http://www.avoka.com/click-examples/control/populate-on-select.htm">
+          Populate on select</a> shows how items in one combo box is populated
+          based on the selected item in another using JavaScript.
+      </li>
+    </ul>
+    <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+      New documentation:
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li>
+        Added a full <a href="click-dtd-example.html">configuration example</a>
+        containing all <tt>click.xml</tt> <a href="click-dtd.html">DTD</a> elements and attributes.
+      </li>
+    </ul>
+    <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;"> 
+      The following issues was resolved:
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change">
+        Add FormTable.properties containing a new property <span style="color:navy;">formtable-error</span>.
+        When adding FormTable to an external From, the <span style="color:navy;">formtable-error</span>
+        will be displayed if one of the FormTable fields contains an error.
+      </li>
       <li class="change">
         Fix TabbedForm and TabbedCayenneForm to import JavaScript and CSS from their
         superclass. This issue was raised by Christophe Foiret
