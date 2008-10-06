@@ -49,7 +49,7 @@ import org.apache.commons.lang.Validate;
  *
  *     &lt;pages package="net.sf.click.examples.page"/&gt;
  *
- *     &lt;template-service classname="net.sf.click.extras.service.FreemarkerTemplateService"&gt;
+ *     &lt;template-service classname="net.sf.click.extras.service.FreemarkerTemplateService"/&gt;
  *
  * &lt;/click-app&gt; </pre>
  *
