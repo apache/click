@@ -29,7 +29,24 @@ import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.apache.commons.lang.Validate;
 
 /**
- * Provides a Apache Commons FileUploadService class.
+ * Provides an Apache Commons FileUploadService class.
+ * <p/>
+ * Example usage:
+ * <pre class="prettyprint">
+ * &lt;file-upload-service&gt;
+ *     &lt;!-- Set the total request maximum size to 10mb (10 x 1024 x 1024 = 10485760). --&gt;
+ *     &lt;property name="sizeMax" value="10485760"/&gt;
+ *
+ *     &lt;!-- Set the maximum individual file size to 2mb (2 x 1024 x 1024 = 2097152). --&gt;
+ *     &lt;property name="fileSizeMax" value="2097152"/&gt;
+ * &lt;/file-upload-service&gt; </pre>
+ *
+ * If you would like to specify a custom FileUploadService implementation
+ * use the <tt>classname</tt> attribute:
+ * <pre class="prettyprint">
+ * &lt;file-upload-service classname="com.mycorp.util.CustomFileUploadService"&gt;
+ *     &lt;property name="customProperty" value="customValue"/&gt;
+ * &lt;/file-upload-service&gt; </pre>
  *
  * @author Bob Schellink
  * @author Malcolm Edgar
@@ -38,10 +55,10 @@ public class CommonsFileUploadService implements FileUploadService {
 
     // -------------------------------------------------------------- Constants
 
-    /** The total request maximum size in bytes. */
+    /** The total request maximum size in bytes. By default there is no limit. */
     protected long sizeMax;
 
-    /** The maximum individual size in bytes. */
+    /** The maximum individual file size in bytes. By default there is no limit. */
     protected long fileSizeMax;
 
     // --------------------------------------------------------- Public Methods
@@ -91,7 +108,7 @@ public class CommonsFileUploadService implements FileUploadService {
     }
 
     /**
-     * Return maximum individual size in bytes.
+     * Return maximum individual size in bytes. By default there is no limit.
      *
      * @return the fileSizeMax
      */
@@ -100,7 +117,7 @@ public class CommonsFileUploadService implements FileUploadService {
     }
 
     /**
-     * Set the maximum individual size in bytes.
+     * Set the maximum individual size in bytes. By default there is no limit.
      *
      * @param value the fileSizeMax to set
      */
@@ -109,7 +126,7 @@ public class CommonsFileUploadService implements FileUploadService {
     }
 
     /**
-     * Return the total request maximum size in bytes.
+     * Return the total request maximum size in bytes. By default there is no limit.
      *
      * @return the setSizeMax
      */
@@ -118,7 +135,7 @@ public class CommonsFileUploadService implements FileUploadService {
     }
 
     /**
-     * Set the total request maximum size in bytes.
+     * Set the total request maximum size in bytes. By default there is no limit.
      *
      * @param value the setSizeMax to set
      */
