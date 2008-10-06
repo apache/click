@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.click.ActionListener;
 import net.sf.click.Context;
-import net.sf.click.Control;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
@@ -53,12 +51,8 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         form.add(tree);
 
         okSubmit = new Submit("select", "Select");
-        okSubmit.setActionListener(new ActionListener() {
-            public boolean onAction(Control source) {
-                return onSelectClick();
-            }
-        });
         resetBtn = new Reset("reset", "Reset");
+
         form.add(okSubmit);
         form.add(resetBtn);
 
@@ -69,25 +63,21 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         buildOptionsUI();
     }
 
-    /**
-     * Called when user clicks on submit
-     */
-    public boolean onSelectClick() {
-        tree.bindSelectOrDeselectValues();
-        return true;
-    }
-
     // --------------------------------------------------------- Public Methods
 
     /**
      * Creates and return a new tree instance.
+     *
+     * @return a new CheckboxTree instance
      */
     public CheckboxTree createTree() {
-        return new CheckboxTree("checkboxTree" );
+        return new CheckboxTree("checkboxTree");
     }
 
     /**
      * Build the tree model and stores it in the session.
+     *
+     * @return a new CheckboxTree instance
      */
     public CheckboxTree buildTree() {
         tree = createTree();
@@ -164,10 +154,15 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
             super(name);
         }
 
-        // By default Form is only processed on user submission. In order for
-        // tree to be processed when expanding and collapsing nodes, we add
-        // process logic for the CheckboxTree.
-        // TODO find cleaner solution
+        /**
+         * PLEASE NOTE: CheckboxTree will only be processed by form if the
+         * Form is submitted. Thus expanding and collapsing Tree nodes
+         * won't work by default because the Tree won't be processed.
+         *
+         * Here we override the default behavior and explicitly process
+         * CheckboxTree so that expanding and collapsing nodes will still work,
+         * even if the Form was not submitted.
+         */
         public boolean onProcess() {
             if (form.isFormSubmission()) {
                 return super.onProcess();
