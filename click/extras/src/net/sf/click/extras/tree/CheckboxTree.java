@@ -28,7 +28,9 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.Context;
 import net.sf.click.control.Decorator;
+import net.sf.click.control.Form;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.ContainerUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -52,51 +54,72 @@ import org.apache.commons.lang.ArrayUtils;
  *
  * An example tree usage is provided below (this code was used to produce the screenshot):
  *
- * <pre class="codeJava">
- * <span class="kw">public class</span> PlainTreePage <span class="kw">extends</span> BorderPage {
+ * <pre class="prettyprint">
+ * public class PlainTreePage extends BorderPage {
  *
- *     <span class="kw">protected</span> Submit okSubmit;
- *     <span class="kw">protected</span> Submit cancelSubmit;
- *     <span class="kw">protected</span> Form form;
+ *     protected Submit submit;
+ *     protected Submit cancel;
+ *     protected Form form;
  *
- *     <span class="kw">public</span> PlainTreePage() {
- *         Tree tree = buildTree();
- *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *     public PlainTreePage() {
+ *         Tree tree = createTree();
+ *         form = createForm();
  *         form.add(tree);
  *         addControl(form);
- *         okSubmit = <span class="kw">new</span> Submit(<span class="st">"okSubmit"</span>, <span class="st">"Select"</span>, <span class="kw">this</span>, <span class="st">"onSubmitClick"</span>);
- *         cancelSubmit = <span class="kw">new</span> Submit(<span class="st">"cancelSubmit"</span>, <span class="st">"Cancel"</span>,  <span class="kw">this</span>, <span class="st">"onCancelClick"</span>);
- *         form.add(okSubmit);
- *         form.add(cancelSubmit);
+ *         submit = new Submit("submit", this, "onSubmitClick");
+ *         cancel = new Submit("cancel", this, "onCancelClick");
+ *         form.add(submit);
+ *         form.add(cancel);
  *     }
  *
- *     <span class="kw">public Tree</span> buildTree() {
- *         Tree tree = <span class="kw">new</span> CheckboxTree(<span class="st">"tree"</span>);
+ *     public Tree createTree() {
+ *         Tree tree = new CheckboxTree("tree");
  *
- *         <span class="cm">// Build the tree model, by default the root node is not rendered.</span>
- *         <span class="cm">// This can be changed by calling setRootNodeDisplayed(true);</span>
+ *         // Build the tree model, by default the root node is not rendered.
+ *         // This can be changed by calling setRootNodeDisplayed(true);
  *         TreeNode root = new TreeNode("c:");
- *         TreeNode dev = <span class="kw">new</span> TreeNode(<span class="st">"dev"</span>,<span class="st">"1"</span>, root);
- *         <span class="kw">new</span> TreeNode(<span class="st">"java.pdf"</span>, <span class="st">"2"</span>, dev);
- *         <span class="kw">new</span> TreeNode(<span class="st">"ruby.pdf"</span>, <span class="st">"3"</span>, dev);
+ *         TreeNode dev = new TreeNode("dev", "1", root);
+ *         new TreeNode("java.pdf", "2", dev);
+ *         new TreeNode("ruby.pdf", "3", dev);
  *
- *         TreeNode programFiles = <span class="kw">new</span> TreeNode(<span class="st">"program files"</span>, <span class="st">"4"</span>, root);
- *         TreeNode adobe = <span class="kw">new</span> TreeNode(<span class="st">"Adobe"</span>, <span class="st">"5"</span>, programFiles);
- *         <span class="cm">// This node is a directory not a file, so setChildrenSupported to true.</span>
- *         adobe.setChildrenSupported(<span class="kw">true</span>);
+ *         TreeNode programFiles = new TreeNode("program files", "4", root);
+ *         TreeNode adobe = new TreeNode("Adobe", "5", programFiles);
+ *         // This node is a directory not a file, so setChildrenSupported to true.
+ *         adobe.setChildrenSupported(true);
  *
- *         TreeNode download = <span class="kw">new</span> TreeNode(<span class="st">"downloads"</span>,<span class="st">"6"</span>, root);
- *         TreeNode web = <span class="kw">new</span> TreeNode(<span class="st">"web"</span>, <span class="st">"7"</span>, download);
- *         <span class="kw">new</span> TreeNode(<span class="st">"html.pdf"</span>, <span class="st">"8"</span>, web);
- *         <span class="kw">new</span> TreeNode(<span class="st">"css.html"</span>, <span class="st">"9"</span>, web);
+ *         TreeNode download = new TreeNode("downloads", "6", root);
+ *         TreeNode web = new TreeNode("web", "7", download);
+ *         new TreeNode("html.pdf", "8", web);
+ *         new TreeNode("css.html", "9", web);
  *
- *         TreeNode databases = <span class="kw">new</span> TreeNode(<span class="st">"databases"</span>, <span class="st">"10"</span>, download);
- *         <span class="kw">new</span> TreeNode(<span class="st">"mysql.html"</span>,<span class="st">"11"</span>,databases);
- *         <span class="kw">new</span> TreeNode(<span class="st">"oracle.pdf"</span>,<span class="st">"12"</span>,databases);
- *         <span class="kw">new</span> TreeNode(<span class="st">"postgres"</span>,<span class="st">"13"</span>,databases);
+ *         TreeNode databases = new TreeNode("databases", "10", download);
+ *         new TreeNode("mysql.html", "11", databases);
+ *         new TreeNode("oracle.pdf", "12", databases);
+ *         new TreeNode("postgres", "13", databases);
  *
  *         tree.setRootNode(root);
- *         <span class="kw">return</span> tree;
+ *         return tree;
+ *     }
+ *
+ *     public Form createForm() {
+ *         Form form = new Form("form") {
+ *             // PLEASE NOTE: CheckboxTree will only be processed by form if the
+ *             // Form is submitted. Thus expanding and collapsing Tree nodes
+ *             // won't work by default because the Tree won't be processed.
+ *
+ *             // Here we override the default behavior and explicitly process
+ *             // CheckboxTree so that expanding and collapsing nodes will still work,
+ *             // even if the Form was not submitted.
+ *             public boolean onProcess() {
+ *                 if (form.isFormSubmission()) {
+ *                     return super.onProcess();
+ *                 } else {
+ *                     return tree.onProcess();
+ *                 }
+ *             }
+ *         };
+ *
+ *         return form;
  *     }
  * } </pre>
  *
@@ -213,25 +236,37 @@ public class CheckboxTree extends Tree {
     }
 
     /**
-     * This method binds the users request of selected nodes to the tree's nodes.
+     * Binds the users request of selected nodes to the tree's nodes.
      * <p/>
-     * This method must be manually invoked by the user when the Form is
-     * submitted. For example:
+     * This method is automatically invoked when the CheckboxTree's parent form
+     * is submitted.
+     * <p/>
+     * See {@link #onFormSubmission()} for more details.
+     * <p/>
+     * If you do not want CheckboxTree to automatically invoke this method,
+     * you can override {@link #onFormSubmission()} to do nothing by default.
+     * <p/>
+     * Then you must manually invoke this method when the form is submitted.
+     * For example:
      *
      * <pre class="prettyprint">
      * public void onInit() {
-     *   Tree tree = new Tree("tree");
-     *   Form form = new Form("form");
-     *   form.add(tree);
-     *   Submit submit = new Submit("submit");
-     *   form.add(submit);
-     *   submit.setActionListener(new ActionListener() {
-     *       public boolean onAction(Control source) {
-     *           tree.bindSelectOrDeselectValues();
-     *           return true;
-     *       }
-     *   });
-     *   addControl(form);
+     *     CheckboxTree tree = new CheckboxTree("tree") {
+     *         public void onFormSubmission() {
+     *             // Do nothing
+     *         }
+     *     }
+     *     Form form = createForm();
+     *     form.add(tree);
+     *     Submit submit = new Submit("submit");
+     *     form.add(submit);
+     *     submit.setActionListener(new ActionListener() {
+     *         public boolean onAction(Control source) {
+     *             tree.bindSelectOrDeselectValues();
+     *             return true;
+     *         }
+     *     });
+     *     addControl(form);
      * } </pre>
      */
     public void bindSelectOrDeselectValues() {
@@ -292,6 +327,16 @@ public class CheckboxTree extends Tree {
      */
     public void bindRequestValue() {
         bindExpandOrCollapseValues();
+    }
+
+    /**
+     * This method is invoked when the CheckboxTree parent Form is submitted.
+     * <p/>
+     * This method delegates to {@link #bindSelectOrDeselectValues()} in order
+     * to update the selected and deselected nodes.
+     */
+    protected void onFormSubmission() {
+        bindSelectOrDeselectValues();
     }
 
     //------------------------------------------------------------Inner classes
@@ -722,6 +767,15 @@ public class CheckboxTree extends Tree {
 
         if (!ArrayUtils.isEmpty(expandOrCollapseNodeIds)) {
             expandOrCollapse(expandOrCollapseNodeIds);
+        }
+
+        // Try and locate a parent form
+        Form form = ContainerUtils.findForm(this);
+        if (form != null) {
+            // If the form was submitted, invoke bindSelectOrDeselectValues()
+            if (form.isFormSubmission()) {
+                onFormSubmission();
+            }
         }
         return true;
     }
