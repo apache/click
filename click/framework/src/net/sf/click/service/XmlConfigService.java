@@ -1328,7 +1328,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         Element fileUploadServiceElm = ClickUtils.getChild(rootElm, "file-upload-service");
 
         if (fileUploadServiceElm != null) {
-            Class fileUploadServiceClass = FileUploadService.class;
+            Class fileUploadServiceClass = CommonsFileUploadService.class;
 
             String classname = fileUploadServiceElm.getAttribute("classname");
 
