@@ -66,7 +66,7 @@ import org.apache.velocity.util.SimplePool;
  * <tt>click.xml</tt> configuration file you would add the following XML element.
  *
  * <pre class="codeConfig">
- * &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.service.VelocityTemplateService</span>"&gt; </pre>
+ * &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.service.VelocityTemplateService</span>"/&gt; </pre>
  *
  * <h4>Velocity Properties</h4>
  *
