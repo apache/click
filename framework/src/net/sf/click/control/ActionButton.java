@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.click.Context;
