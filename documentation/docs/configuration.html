@@ -112,7 +112,11 @@ If this file is not found under the <tt>WEB-INF</tt> directory, then
 ClickServlet will attempt to load it from the classpath as <tt>/click.xml</tt>.
 
 <p/>
-See <a target='topic' href="click-dtd.html">Click DTD</a> for the click-app XML definition.  
+See <a target='topic' href="click-dtd.html">Click DTD</a> for the click-app XML definition.
+
+<p/>
+A complete Click configuration example is available <a target='topic' href="click-dtd-example.html">here</a>
+which can be used as a quick reference when configuring Click.
  
 <p/>
 A simple Click app config file is provided below:
@@ -474,7 +478,7 @@ pages by setting header values. For example to switch off
 caching in the login page, note the value for a Date type should be a long number value:
 
 <pre class="codeConfig">
-&lt;page path="<span class="blue">login.htm</span>" classname="<span class="blue">com.mycorp.page.Login</span>"/&gt;
+&lt;page path="<span class="blue">login.htm</span>" classname="<span class="blue">com.mycorp.page.Login</span>"&gt;
   &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
   &lt;header name="<span class="blue">Expires</span>" value="<span class="blue">1</span>" type="<span class="blue">Date</span>"/&gt;
 &lt;/page&gt; 
@@ -484,7 +488,7 @@ If you wanted to enable caching for a particular page you could set the followin
 as cachable for a period of 1 hour after which it should be reloaded.
 
 <pre class="codeConfig">
-&lt;page path="<span class="blue">home.htm</span>" classname="<span class="blue">com.mycorp.page.Home</span>"/&gt;
+&lt;page path="<span class="blue">home.htm</span>" classname="<span class="blue">com.mycorp.page.Home</span>"&gt;
   &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">max-age=3600, public, must-revalidate</span>"/&gt;
 &lt;/page&gt; 
 </pre>
