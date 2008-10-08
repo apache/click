@@ -1,0 +1,13 @@
+Demonstrates how a FormTable can be used together with an existing Form.
+<p/>
+
+#set ($error = $session.error) 
+#if ($error)
+  <b>Error:</b>
+  <p class="infoMsg">$error</p>
+  (<b>Note:</b> the error above indicates that you performed a duplicate post.)
+#end
+
+<p/>
+
+$form
