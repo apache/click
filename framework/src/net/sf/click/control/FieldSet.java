@@ -1114,9 +1114,6 @@ public class FieldSet extends Field implements Container {
 
         /**
          * Add a Field to the FieldSet and return the added instance.
-         * <p/>
-         * <b>Please note</b> if the FieldSet's parent is a {@link Form}, the
-         * Fields inside the FieldSet will be laid out by the Form.
          *
          * @see Container#add(net.sf.click.Control)
          *

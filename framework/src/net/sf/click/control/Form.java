@@ -1610,6 +1610,8 @@ public class Form extends AbstractContainer {
      *     form.copyFrom(map);
      *  }
      * </pre>
+     * For more information on how Fields and Objects are copied see
+     * {@link net.sf.click.util.ContainerUtils#copyObjectToContainer(java.lang.Object, net.sf.click.control.Container)}.
      *
      * @param object the object to obtain attribute values from
      * @throws IllegalArgumentException if the object parameter is null
@@ -1679,6 +1681,9 @@ public class Form extends AbstractContainer {
      * </pre>
      * Note that the map acts as a template to specify which fields to populate
      * from.
+     *
+     * For more information on how Fields and Objects are copied see
+     * {@link net.sf.click.util.ContainerUtils#copyContainerToObject(net.sf.click.control.Container, java.lang.Object)}.
      *
      * @param object the object to populate with field values
      * @throws IllegalArgumentException if the object parameter is null
