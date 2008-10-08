@@ -204,6 +204,14 @@ public class ContainerUtils {
     /**
      * Populate the given object attributes from the Containers field values.
      * <p/>
+     * If a Field and object attribute matches, the object attribute is set to
+     * the Object returned from the method
+     * {@link net.sf.click.control.Field#getValueObject()}. If an object
+     * attribute is a primitive, the Object returned from
+     * {@link net.sf.click.control.Field#getValueObject()} will be converted
+     * into the specific primitive e.g. Integer will become int and Boolean will
+     * become boolean.
+     * <p/>
      * The fieldList specifies which fields to copy to the object. This allows
      * one to include or exclude certain Container fields before populating the
      * object.
@@ -330,6 +338,13 @@ public class ContainerUtils {
 
     /**
      * Populate the given Container field values from the object attributes.
+     * <p/>
+     * If a Field and object attribute matches, the Field value is set to the
+     * object attribute using the method
+     * {@link net.sf.click.control.Field#setValueObject(java.lang.Object)}. If
+     * an object attribute is a primitive it is first converted to its proper
+     * wrapper class e.g. int will become Integer and boolean will become
+     * Boolean.
      * <p/>
      * The fieldList specifies which fields to populate from the object. This
      * allows one to exclude or include specific fields.
