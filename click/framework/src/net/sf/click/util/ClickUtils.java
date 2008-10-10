@@ -2181,6 +2181,26 @@ public class ClickUtils {
         return buffer.toString();
     }
 
+    /**
+     * Return the simple or short name for the given class.
+     *
+     * @param aClass the class to return the simple name for
+     * @return the simple or short name for the given class
+     */
+    public static String toSimpleName(Class aClass) {
+        if (aClass == null) {
+            return null;
+        }
+
+        String className = aClass.getName();
+        int index = className.lastIndexOf(".");
+        if (index != -1) {
+            return className.substring(index + 1);
+        } else {
+            return className;
+        }
+    }
+
     // -------------------------------------------------------- Package Methods
 
     /**
