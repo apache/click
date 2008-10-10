@@ -23,7 +23,6 @@ import java.util.Map;
 
 import net.sf.click.Control;
 import net.sf.click.Page;
-import net.sf.click.service.LogService;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -136,45 +135,58 @@ public abstract class AbstractContainer extends AbstractControl implements
         Object parentControl = control.getParent();
         if (parentControl != null && parentControl != this) {
 
-            // Create warning message to users that parent has been reset
-            LogService logService = ClickUtils.getLogService();
-            StringBuffer message = new StringBuffer();
-            message.append("Changed ");
-            message.append(control.getClass().getName());
-            if (control.getId() != null) {
-                message.append("[");
-                message.append(control.getId());
-                message.append("]");
-            }
-            message.append(" parent from ");
-
             // Remove control from parent Page or Container
             if (parentControl instanceof Page) {
                 ((Page) parentControl).removeControl(control);
 
-                message.append(parentControl.getClass().getName());
+            } else if (parentControl instanceof Container) {
+                ((Container) parentControl).remove(control);
+            }
+
+            // Create warning message to users that the parent has been reset
+            StringBuffer message = new StringBuffer();
+
+            message.append("Changed ");
+            message.append(ClickUtils.toSimpleName(control.getClass()));
+            if (control.getId() != null) {
+                message.append("[");
+                message.append(control.getId());
+                message.append("]");
+            } else {
+                message.append("#");
+                message.append(control.hashCode());
+            }
+            message.append(" parent from ");
+
+            if (parentControl instanceof Page) {
+                message.append(ClickUtils.toSimpleName(parentControl.getClass()));
 
             } else if (parentControl instanceof Container) {
                 Container parentContainer = (Container) parentControl;
-                parentContainer.remove(control);
 
-                message.append(parentContainer.getClass().getName());
+                message.append(ClickUtils.toSimpleName(parentContainer.getClass()));
                 if (parentContainer.getId() != null) {
                     message.append("[");
                     message.append(parentContainer.getId());
                     message.append("]");
+                } else {
+                    message.append("#");
+                    message.append(parentContainer.hashCode());
                 }
             }
 
             message.append(" to ");
-            message.append(this.getClass().getName());
+            message.append(ClickUtils.toSimpleName(this.getClass()));
             if (this.getId() != null) {
                 message.append("[");
                 message.append(this.getId());
                 message.append("]");
+            } else {
+                message.append("#");
+                message.append(this.hashCode());
             }
 
-            logService.warn(message);
+            ClickUtils.getLogService().warn(message);
         }
 
         getControls().add(index, control);
