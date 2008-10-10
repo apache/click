@@ -45,45 +45,17 @@
 <h1>Road Map and Changes</h1>
 
 <h2>Road Map</h2>
-The next scheduled Click Framework release (version 1.5 final) will include
-only bug fixes and documentation updates.
+The next scheduled Click release will be Apache Click based on the Click 
+SourceForge version 1.5 code base.
+<p/>
+The feature roadmap for the next major release of Click is being determined.
 
 <p>&nbsp;</p>
 
 <h2>Changes</h2>
 
 <dl>
-  <dt><a name="1.4.2"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release - Version 1.4.2 - 12 April 2008</div></dt>
-  <dd>
-    <ul style="padding: 0em; margin-left:0em;">
-      <li class="change">
-		Fixed ExcludePage should be a public class
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-346">346</a>].
-      </li>
-      <li class="change">
-		Fixed Maven artifacts packaging
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-348">348</a>].
-      </li>
-      <li class="change">
-		Fixed slight performance degradation
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-349">349</a>].
-      </li>
-      <li class="change">
-      	Fixed PageLink to change extension <tt>jsp</tt> to <tt>htm</tt>
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-352">352</a>].
-      </li>
-      <li class="change">
-      	Fix DateField and ChartFields to include the javascript <tt>control.js</tt>
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-354">354</a>].
-      </li>
-      <li class="change">
-      	Fix DateField which produced duplicate stylesheet links.
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-356">356</a>].
-      </li>
-    </ul>
-  </dd>
-  <p/>
-  <dt><a name="1.5"></a><div class="release-header">Latest Development Release - Version 1.5 - ??? October 2008</div></dt>
+  <dt><a name="1.5"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release - Version 1.5 - ??? October 2008</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
@@ -283,11 +255,12 @@ public class HtmlTable extends AbstractControl {
       </li>
     </ul>
   </dd>
+  
   <dt><div class="release-header">Archives</div></dt>
   <dt><a name="1.5-RC2"></a>Development Release - Version 1.5 RC2 - 29 September 2008</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;"> 
-      <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
+      IMPORTANT be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li class="change">
@@ -309,7 +282,7 @@ public class HtmlTable extends AbstractControl {
   <dt><a name="1.5-RC1"></a>Development Release - Version 1.5 RC1 - 28 September 2008</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;"> 
-      <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
+      IMPORTANT be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
@@ -408,7 +381,7 @@ public class HtmlTable extends AbstractControl {
   <dt><a name="1.5-M3"></a>Development Release - Version 1.5 M3 - 17 August 2008</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;"> 
-     <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
+     IMPORTANT be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
@@ -483,7 +456,7 @@ public class HtmlTable extends AbstractControl {
   <dt><a name="1.5-M2"></a>Development Release - Version 1.5 M2 - 20 July 2008</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;"> 
-    <b>IMPORTANT</b> be sure to read the <a href="#1.5-M1-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
+    IMPORTANT be sure to read the <a href="#1.5-M1-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
     <p/>
     Click 1.5 M2 introduced major enhancements to Control listener support.
     </div>
@@ -635,7 +608,7 @@ public class MyPage extends Page {
   <dt><a name="1.5-M1"></a>Development Release - Version 1.5 M1 - 18 May 2008</dt>
   <dd>
    <div style="margin-left:-2em;margin-bottom:1em;">
-    <b>IMPORTANT</b> be sure to read the <a href="#1.5-M1-upgrade-path">upgrade path</a> when upgrading from a previous version.
+    IMPORTANT be sure to read the <a href="#1.5-M1-upgrade-path">upgrade path</a> when upgrading from a previous version.
     <p/>
     Click 1.5 (currently in development) introduces important new features including:
     <p/>
@@ -774,7 +747,37 @@ public class MyPage extends Page {
   </dd>
   <p/>
 
-  <dt>Version 1.4.1 - 30 March 2008</dt>
+  <dt><a name="1.4.2"></a>Version 1.4.2 - 12 April 2008</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+		Fixed ExcludePage should be a public class
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-346">346</a>].
+      </li>
+      <li class="change">
+		Fixed Maven artifacts packaging
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-348">348</a>].
+      </li>
+      <li class="change">
+		Fixed slight performance degradation
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-349">349</a>].
+      </li>
+      <li class="change">
+      	Fixed PageLink to change extension <tt>jsp</tt> to <tt>htm</tt>
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-352">352</a>].
+      </li>
+      <li class="change">
+      	Fix DateField and ChartFields to include the javascript <tt>control.js</tt>
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-354">354</a>].
+      </li>
+      <li class="change">
+      	Fix DateField which produced duplicate stylesheet links.
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-356">356</a>].
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="1.4.1"></a>Version 1.4.1 - 30 March 2008</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;"> Developer
     <a target="blank" href="http://sourceforge.net/users/sabob/">Bob Schellink</a>
@@ -826,7 +829,8 @@ public class MyPage extends Page {
 	  </li>
   	</ul>
   </dd>
-  <dt>Version 1.4 - 2 March 2008</dt>
+  <p/>
+  <dt><a name="1.4"></a>Version 1.4 - 2 March 2008</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
 	  <li class="change">
@@ -1092,17 +1096,17 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-		<span style="font-weight:bold;color:navy;">Important Change</span> 
+		Important Change
 		the Page <a href="click-api/net/sf/click/Page.html#stateful">stateful</a> property
 		added to support persistence.
       </li>
       <li class="change">
-		<span style="font-weight:bold;color:navy;">Important Change</span> 
+		Important Change 
 		the <a href="click-api/net/sf/click/Context.html">Context</a> object
 		is now available in Page and Control constructors.
       </li>
       <li class="change">
-		<span style="font-weight:bold;color:navy;">Important Change</span> 
+		Important Change 
 		added Control <a href="click-api/net/sf/click/Control.html#onInit()">onInit()</a> 
 		initialization event handler.
 		As the <tt>setContext()</tt> method has been
@@ -1110,12 +1114,12 @@ public class MyPage extends Page {
 		migrated to the new control <tt>onInit()</tt> method.
       </li>
       <li class="change">
-		<span style="font-weight:bold;color:navy;">Important Change</span> 
+		Important Change 
 		the XML configured root Menu item is obtained via the static method 
         <a href="extras-api/net/sf/click/extras/control/Menu.html#getRootMenu()">getRootMenu()</a>.
       </li>
       <li class="change">
-		<span style="font-weight:bold;color:navy;">Important Change</span> 
+		Important Change 
 		multipart file upload requests are now processed using a globally configured Commons FileUpload
 		class. Please see the 
 		<a href="configuration.html#application-file-item-factory">File Item Factory</a> 
@@ -1123,7 +1127,7 @@ public class MyPage extends Page {
 		on multipart file upload requests.
       </li>
       <li class="change">
-		<span style="font-weight:bold;color:navy;">Important Change</span> 
+		Important Change 
 		Click Extras now supports Apache Cayenne 2.x rather than Objectstyle Cayenne 1.2.x 
 		by default. Note backward compatibility Cayenne 1.2.x JARS are provide in the dist directory.
       </li>
@@ -1242,7 +1246,7 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-		<span style="font-weight:bold;color:navy;">Important Change</span> 
+		Important Change 
 		the <a href="pages.html#activity-diagram">Pages</a> event execution order 
 		has changed with the <tt>onSecurityCheck()</tt> method now invoked before 
 		the <tt>onInit()</tt> method. The benefit of this is that the <tt>onInit()</tt> 
