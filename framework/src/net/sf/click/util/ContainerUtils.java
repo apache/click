@@ -58,21 +58,21 @@ public class ContainerUtils {
     }
 
     /**
-     * Return the list of Fields for the given Container, recursively including
-     * any Fields contained in child containers. The list of returned fields
-     * will exclude any <tt>Button</tt>, <tt>FieldSet</tt> and <tt>Label</tt>
-     * fields.
+     * Return the list of input Fields (Textfield, Select, Radio, Checkbox etc.)
+     * for the given Container, recursively including any Fields contained in
+     * child containers. The list of returned fields will exclude any
+     * <tt>Button</tt>, <tt>FieldSet</tt> and <tt>Label</tt> fields.
      *
      * @param container the container to obtain the fields from
      * @return the list of contained fields
      */
-    public static List getFields(final Container container) {
+    public static List getInputFields(final Container container) {
         if (container == null) {
             throw new IllegalArgumentException("Null container parameter");
         }
 
         final List fields = new ArrayList();
-        addFields(container, fields);
+        addInputFields(container, fields);
         return fields;
     }
 
@@ -332,7 +332,7 @@ public class ContainerUtils {
      */
     public static void copyContainerToObject(Container container,
         Object object) {
-        final List fieldList = getFields(container);
+        final List fieldList = getInputFields(container);
         copyContainerToObject(container, object, fieldList);
     }
 
@@ -443,7 +443,7 @@ public class ContainerUtils {
     public static void copyObjectToContainer(Object object,
         Container container) {
 
-        final List fieldList = getFields(container);
+        final List fieldList = getInputFields(container);
         copyObjectToContainer(object, container, fieldList);
     }
 
@@ -694,15 +694,15 @@ public class ContainerUtils {
     }
 
     /**
-     * Add fields for the given Container to the specified field list,
-     * recursively including any Fields contained in child containers. The list
-     * of returned fields will exclude any <tt>Button</tt>, <tt>FieldSet</tt>
-     * and <tt>Label</tt> fields.
+     * Add input fields (Textfield, Select, Radio, Checkbox etc.) for the given
+     * Container to the specified field list, recursively including any Fields
+     * contained in child containers. The list of returned fields will exclude
+     * any <tt>Button</tt>, <tt>FieldSet</tt> and <tt>Label</tt> fields.
      *
      * @param container the container to obtain the fields from
      * @param the list of contained fields
      */
-    private static void addFields(final Container container, final List fields) {
+    private static void addInputFields(final Container container, final List fields) {
         for (int i = 0; i < container.getControls().size(); i++) {
             Control control = (Control) container.getControls().get(i);
             if (control instanceof Label || control instanceof Button) {
@@ -715,7 +715,7 @@ public class ContainerUtils {
                     fields.add(control);
                 }
                 Container childContainer = (Container) control;
-                addFields(childContainer, fields);
+                addInputFields(childContainer, fields);
             } else if (control instanceof Field) {
                 fields.add(control);
             }
@@ -780,7 +780,7 @@ public class ContainerUtils {
                     fields.add(control);
                 }
                 Container childContainer = (Container) control;
-                addFields(childContainer, fields);
+                addFieldsAndLabels(childContainer, fields);
             } else if (control instanceof Field) {
                 fields.add(control);
             }

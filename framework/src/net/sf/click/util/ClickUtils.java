@@ -1651,7 +1651,7 @@ public class ClickUtils {
         if (form == null) {
             throw new IllegalArgumentException("Null form parameter");
         }
-        return ContainerUtils.getFields(form);
+        return ContainerUtils.getInputFields(form);
     }
 
     /**

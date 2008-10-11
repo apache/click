@@ -37,7 +37,7 @@ public class ContainerUtilsTest extends TestCase {
         Button button = new Button("button");
         form.add(button);
         
-        List fields = ContainerUtils.getFields(form);
+        List fields = ContainerUtils.getInputFields(form);
         
         // Total should be 3 consisting of the fields "hidden", "id" and the
         // Forms internal HiddenFields "form_name".

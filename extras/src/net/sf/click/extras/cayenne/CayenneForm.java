@@ -258,7 +258,7 @@ public class CayenneForm extends Form {
      * @see net.sf.click.control.Form#clearValues()
      */
     public void clearValues() {
-        List fields = ContainerUtils.getFields(this);
+        List fields = ContainerUtils.getInputFields(this);
         Field field = null;
         for (int i = 0, size = fields.size(); i < size; i++) {
             field = (Field) fields.get(i);
