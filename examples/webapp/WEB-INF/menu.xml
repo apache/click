@@ -86,7 +86,7 @@
     <menu label="Table Styles" path="table/table-styles.htm"/>
     <menu separator="true"/>
     <menu label="FormTable" path="table/form-table.htm"/>
-    <menu label="Integrated FormTable Demo" path="table/integrated-form-table.htm"/>
+    <menu label="Edit FormTable" path="table/edit-form-table.htm"/>
     <menu separator="true"/>
     <menu label="Edit Table Pattern" path="table/edit-table.htm"/>
     <menu label="Search Table Pattern" path="table/search-table.htm"/>
