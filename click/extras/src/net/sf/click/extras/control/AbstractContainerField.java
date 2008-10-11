@@ -65,18 +65,28 @@ public abstract class AbstractContainerField extends Field implements Container 
     // ---------------------------------------------------------- Constructorrs
 
     /**
-     * Create a ContainerField with no name defined.
+     * Create an AbstractContainerField with no name defined.
      */
     public AbstractContainerField() {
     }
 
     /**
-     * Create a ContainerField with the given name.
+     * Create an AbstractContainerField with the given name.
      *
      * @param name the ContainerField name
      */
     public AbstractContainerField(String name) {
         super(name);
+    }
+
+    /**
+     * Construct an AbstractContainerField with the given name and label.
+     *
+     * @param name the name of the Field
+     * @param label the label of the Field
+     */
+    public AbstractContainerField(String name, String label) {
+        super(name, label);
     }
 
     // ------------------------------------------------------ Public methods
