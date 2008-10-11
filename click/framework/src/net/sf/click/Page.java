@@ -969,7 +969,7 @@ public class Page {
                 String contextPath = context.getRequest().getContextPath();
 
                 // Guard against adding duplicate context path
-                if(!location.startsWith(contextPath)){
+                if (!location.startsWith(contextPath)) {
                     location = contextPath + location;
                 }
             }
