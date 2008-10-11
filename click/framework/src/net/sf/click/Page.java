@@ -966,7 +966,12 @@ public class Page {
         if (location != null) {
             if (location.charAt(0) == '/') {
                 Context context = getContext();
-                location = context.getRequest().getContextPath() + location;
+                String contextPath = context.getRequest().getContextPath();
+
+                // Guard against adding duplicate context path
+                if(!location.startsWith(contextPath)){
+                    location = contextPath + location;
+                }
             }
         }
         redirect = location;

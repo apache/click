@@ -61,4 +61,28 @@ public class PageTest extends TestCase {
         assertEquals(expected, container.getRedirect());
         container.stop();
     }
+
+    /**
+     * Test that invoking setRedirect with an existing contextPath won't add
+     * the contextPath twice.
+     * CLK-456
+     */
+    public void testRedirectDuplicateContextPath() {
+        MockContext context = MockContext.initContext();
+        String contextPath = context.getRequest().getContextPath();
+        RedirectToHtm page = new RedirectToHtm();
+        String redirect = "/test.htm";
+
+        // assert that the Page redirect to /contextPath/test.htm
+        String expected = contextPath + redirect;
+        page.setRedirect(redirect);
+        assertEquals(expected, page.getRedirect());
+        
+        // assert that setting redirect to a path already prefixed with contextPath
+        // won't add a second contextPath
+        page.setRedirect(contextPath + "/test.htm");
+        assertEquals(expected, page.getRedirect());
+
+    }
+
 }
