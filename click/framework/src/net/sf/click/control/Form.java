@@ -987,7 +987,7 @@ public class Form extends AbstractContainer {
      */
     public String getEnctype() {
         if (enctype == null) {
-            List fieldList = ContainerUtils.getFields(this);
+            List fieldList = ContainerUtils.getInputFields(this);
             for (int i = 0, size = fieldList.size(); i < size; i++) {
                 Field field = (Field) fieldList.get(i);
                 if (!field.isHidden() && (field instanceof FileField)) {
@@ -1199,7 +1199,7 @@ public class Form extends AbstractContainer {
             return false;
         }
 
-        List fields = ContainerUtils.getFields(this);
+        List fields = ContainerUtils.getInputFields(this);
         for (Iterator i = fields.iterator(); i.hasNext();) {
             Field field = (Field) i.next();
             if (!field.isValid()) {
@@ -1547,7 +1547,7 @@ public class Form extends AbstractContainer {
      */
     public void clearErrors() {
         setError(null);
-        List fields = ContainerUtils.getFields(this);
+        List fields = ContainerUtils.getInputFields(this);
         Field field = null;
         for (int i = 0, size = fields.size(); i < size; i++) {
             field = (Field) fields.get(i);
@@ -1559,7 +1559,7 @@ public class Form extends AbstractContainer {
      * Clear all the form field values setting them to null.
      */
     public void clearValues() {
-        List fields = ContainerUtils.getFields(this);
+        List fields = ContainerUtils.getInputFields(this);
         Field field = null;
         for (int i = 0, size = fields.size(); i < size; i++) {
             field = (Field) fields.get(i);
@@ -2235,7 +2235,7 @@ public class Form extends AbstractContainer {
         // If Form contains only HiddenField, exit early
         if (getControls().size() == 1) {
 
-            // getControlMap is cheaper than getFields, so check that first
+            // getControlMap is cheaper than getFieldMap, so check that first
             if (getControlMap().containsKey("form_name")) {
                 return;
             } else if (ContainerUtils.getFieldMap(this).containsKey("form_name")) {

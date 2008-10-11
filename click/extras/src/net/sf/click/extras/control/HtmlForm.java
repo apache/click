@@ -319,7 +319,7 @@ public class HtmlForm extends Form {
      */
     protected void renderContent(HtmlStringBuffer buffer) {
         // Render hidden fields
-        List fields = ContainerUtils.getFields(this);
+        List fields = ContainerUtils.getInputFields(this);
         for (Iterator it = fields.iterator(); it.hasNext();) {
             Field field = (Field) it.next();
             if (field.isHidden()) {
