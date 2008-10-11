@@ -92,6 +92,13 @@ public class CustomerService extends CayenneTemplate {
         return performQuery(query);
     }
 
+    public List getCustomersSortedByDateJoined(int rows) {
+        SelectQuery query = new SelectQuery(Customer.class);
+        query.addOrdering(Customer.DATE_JOINED_PROPERTY, true);
+        query.setFetchLimit(rows);
+        return performQuery(query);
+    }
+
     public void saveCustomer(Customer customer) {
         if (customer.getObjectContext() == null) {
             registerNewObject(customer);
