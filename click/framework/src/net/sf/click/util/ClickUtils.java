@@ -2264,49 +2264,6 @@ public class ClickUtils {
 
     // -------------------------------------------------------- Private Methods
 
-    private static Set getObjectPropertyNames(Object object) {
-        if (object instanceof Map) {
-            return ((Map) object).keySet();
-        }
-
-        HashSet hashSet = new HashSet();
-
-        Method[] methods = object.getClass().getMethods();
-
-        for (int i = 0; i < methods.length; i++) {
-            String methodName = methods[i].getName();
-
-            if (methodName.startsWith("get") && methodName.length() > 3) {
-                String propertyName =
-                    "" + Character.toLowerCase(methodName.charAt(3))
-                    + methodName.substring(4);
-                hashSet.add(propertyName);
-            }
-            if (methodName.startsWith("is") && methodName.length() > 2) {
-                String propertyName =
-                    "" + Character.toLowerCase(methodName.charAt(2))
-                    + methodName.substring(3);
-                hashSet.add(propertyName);
-            }
-            if (methodName.startsWith("set") && methodName.length() > 3) {
-                String propertyName =
-                    "" + Character.toLowerCase(methodName.charAt(3))
-                    + methodName.substring(4);
-                hashSet.add(propertyName);
-            }
-        }
-
-        return hashSet;
-    }
-
-    private static boolean hasMatchingProperty(Field field, Set properties) {
-        String fieldName = field.getName();
-        if (fieldName.indexOf(".") != -1) {
-            fieldName = fieldName.substring(0, fieldName.indexOf("."));
-        }
-        return properties.contains(fieldName);
-    }
-
     private static void ensureObjectPathNotNull(Object object, String path) {
 
         final int index = path.indexOf('.');
@@ -2362,14 +2319,6 @@ public class ClickUtils {
 
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private static void log(String msg, boolean debug) {
-        if (debug) {
-            System.out.println("[Click] [debug] " + msg);
-        } else {
-            getLogService().debug(msg);
         }
     }
 
