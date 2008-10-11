@@ -132,61 +132,19 @@ public abstract class AbstractContainer extends AbstractControl implements
 
         // Check if control already has parent
         // If parent references *this* container, there is no need to remove it
-        Object parentControl = control.getParent();
-        if (parentControl != null && parentControl != this) {
+        Object currentParent = control.getParent();
+        if (currentParent != null && currentParent != this) {
 
             // Remove control from parent Page or Container
-            if (parentControl instanceof Page) {
-                ((Page) parentControl).removeControl(control);
+            if (currentParent instanceof Page) {
+                ((Page) currentParent).removeControl(control);
 
-            } else if (parentControl instanceof Container) {
-                ((Container) parentControl).remove(control);
+            } else if (currentParent instanceof Container) {
+                ((Container) currentParent).remove(control);
             }
 
             // Create warning message to users that the parent has been reset
-            StringBuffer message = new StringBuffer();
-
-            message.append("Changed ");
-            message.append(ClickUtils.toSimpleName(control.getClass()));
-            if (control.getId() != null) {
-                message.append("[");
-                message.append(control.getId());
-                message.append("]");
-            } else {
-                message.append("#");
-                message.append(control.hashCode());
-            }
-            message.append(" parent from ");
-
-            if (parentControl instanceof Page) {
-                message.append(ClickUtils.toSimpleName(parentControl.getClass()));
-
-            } else if (parentControl instanceof Container) {
-                Container parentContainer = (Container) parentControl;
-
-                message.append(ClickUtils.toSimpleName(parentContainer.getClass()));
-                if (parentContainer.getId() != null) {
-                    message.append("[");
-                    message.append(parentContainer.getId());
-                    message.append("]");
-                } else {
-                    message.append("#");
-                    message.append(parentContainer.hashCode());
-                }
-            }
-
-            message.append(" to ");
-            message.append(ClickUtils.toSimpleName(this.getClass()));
-            if (this.getId() != null) {
-                message.append("[");
-                message.append(this.getId());
-                message.append("]");
-            } else {
-                message.append("#");
-                message.append(this.hashCode());
-            }
-
-            ClickUtils.getLogService().warn(message);
+            logParentReset(control, currentParent);
         }
 
         getControls().add(index, control);
@@ -482,4 +440,60 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     // -------------------------------------------------------- Private Methods
+
+    /**
+     * Log a warning that the parent of the specified control will be set to
+     * this container.
+     *
+     * @param control the control which parent is being reset
+     * @param currentParent the control current parent
+     */
+    private void logParentReset(Control control, Object currentParent) {
+        HtmlStringBuffer message = new HtmlStringBuffer();
+
+        message.append("Changed ");
+        message.append(ClickUtils.toSimpleName(control.getClass()));
+        String controlId = control.getId();
+        if (controlId != null) {
+            message.append("[");
+            message.append(controlId);
+            message.append("]");
+        } else {
+            message.append("#");
+            message.append(control.hashCode());
+        }
+        message.append(" parent from ");
+
+        if (currentParent instanceof Page) {
+            message.append(ClickUtils.toSimpleName(currentParent.getClass()));
+
+        } else if (currentParent instanceof Container) {
+            Container parentContainer = (Container) currentParent;
+
+            message.append(ClickUtils.toSimpleName(parentContainer.getClass()));
+            String parentId = parentContainer.getId();
+            if (parentId != null) {
+                message.append("[");
+                message.append(parentId);
+                message.append("]");
+            } else {
+                message.append("#");
+                message.append(parentContainer.hashCode());
+            }
+        }
+
+        message.append(" to ");
+        message.append(ClickUtils.toSimpleName(this.getClass()));
+        String id = this.getId();
+        if (id != null) {
+            message.append("[");
+            message.append(id);
+            message.append("]");
+        } else {
+            message.append("#");
+            message.append(this.hashCode());
+        }
+
+        ClickUtils.getLogService().warn(message);
+    }
 }
