@@ -105,12 +105,6 @@ public class FieldSet extends Field implements Container {
     /** The map of field width values. */
     protected Map fieldWidths;
 
-    /** The parent Form. */
-    protected Form form;
-
-    /** The FieldSet label. */
-    protected String label;
-
     /** The FieldSet legend. */
     protected String legend;
 
@@ -127,12 +121,6 @@ public class FieldSet extends Field implements Container {
      * Currently only {@link Form} acts upon this property.
      */
     protected Integer columns;
-
-    /** The Field disabled value. */
-    protected boolean disabled;
-
-    /** The Field is readonly flag. */
-    protected boolean readonly;
 
     /** Internal container instance. */
     private AbstractContainer container = new InnerContainerField();
@@ -358,14 +346,15 @@ public class FieldSet extends Field implements Container {
     /**
      * Set the FieldSet disabled flag which in turn will disable all its fields.
      * <p/>
-     * <b>Important Note</b>: disabled fields will not submit their values in
-     * a HTML form POST. This may cause validation issues in a form submission.
-     * Please note this is a HTML limitation and is not due to Click.
+     * <b>Important Note</b>: disabled fieldset also disables all its fields
+     * which will not submit their values in a HTML form POST. This may cause
+     * validation issues in a form submission. Please note this is a HTML
+     * limitation and is not due to Click.
      *
      * @param disabled the Field disabled flag
      */
     public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
+        super.setDisabled(disabled);
     }
 
     /**
@@ -390,7 +379,7 @@ public class FieldSet extends Field implements Container {
      * @param readonly the FieldSet readonly flag
      */
     public void setReadonly(boolean readonly) {
-        this.readonly = readonly;
+        super.setReadonly(readonly);
     }
 
     /**
@@ -486,22 +475,6 @@ public class FieldSet extends Field implements Container {
     }
 
     /**
-     * Return the parent Form containing the FieldSet or null if no form is
-     * present in the parent hierarchy.
-     *
-     * @return the parent Form containing the FieldSet
-     */
-    public Form getForm() {
-        if (form != null) {
-            return form;
-
-        } else {
-            // Find form in parent hierarchy
-            return ContainerUtils.findForm(this);
-        }
-    }
-
-    /**
      * Set the FieldSet's the parent <tt>Form</tt>.
      *
      * @param form FieldSet's parent <tt>Form</tt>
@@ -545,32 +518,6 @@ public class FieldSet extends Field implements Container {
         }
 
         return buffer.toString();
-    }
-
-    /**
-     * Return the fieldSet display label.
-     *
-     * @see Field#getLabel()
-     *
-     * @return the display label of the Field
-     */
-    public String getLabel() {
-        if (label == null) {
-            label = getMessage(getName() + ".label");
-        }
-        if (label == null) {
-            label = ClickUtils.toLabel(getName());
-        }
-        return label;
-    }
-
-    /**
-     * Set the Field display caption.
-     *
-     * @param label the display label of the Field
-     */
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     /**
