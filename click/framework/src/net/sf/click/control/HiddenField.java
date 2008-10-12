@@ -317,7 +317,6 @@ public class HiddenField extends Field {
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("id", getId());
 
-        String valueStr = null;
         Class valueCls = getValueClass();
 
         if (valueCls == String.class
@@ -328,14 +327,15 @@ public class HiddenField extends Field {
             || valueCls == Long.class
             || valueCls == Short.class) {
 
-            valueStr = String.valueOf(getValue());
+            buffer.appendAttributeEscaped("value", String.valueOf(getValue()));
 
         } else if (getValueObject() instanceof Date) {
-            valueStr = String.valueOf(((Date) getValueObject()).getTime());
+            String dateStr = String.valueOf(((Date) getValueObject()).getTime());
+            buffer.appendAttributeEscaped("value", dateStr);
 
         } else if (getValueObject() instanceof Serializable) {
             try {
-                valueStr = ClickUtils.encode(getValueObject());
+                buffer.appendAttribute("value", ClickUtils.encode(getValueObject()));
             } catch (IOException ioe) {
                 String msg =
                     "could not encode value for hidden field: "
@@ -343,10 +343,8 @@ public class HiddenField extends Field {
                 throw new RuntimeException(msg, ioe);
             }
         } else {
-            valueStr = getValue();
+            buffer.appendAttributeEscaped("value", getValue());
         }
-
-        buffer.appendAttribute("value", valueStr);
 
         buffer.elementEnd();
     }
