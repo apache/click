@@ -849,7 +849,7 @@ public class CheckList extends Field {
                 buffer.closeTag();
 
                 buffer.append("<input type=\"checkbox\" ");
-                buffer.appendAttribute("value", option.getValue());
+                buffer.appendAttributeEscaped("value", option.getValue());
                 buffer.appendAttribute("id", liId);
                 buffer.appendAttribute("name", getName());
 
@@ -886,7 +886,7 @@ public class CheckList extends Field {
                 if (sortable) {
                     buffer.append("<input type=\"hidden\"");
                     buffer.appendAttribute("name", getName() + "_order");
-                    buffer.appendAttribute("value", option.getValue());
+                    buffer.appendAttributeEscaped("value", option.getValue());
                     buffer.elementEnd();
                 }
 
