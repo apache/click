@@ -263,7 +263,7 @@ public class FileField extends Field {
         buffer.appendAttribute("type", getType());
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("id", getId());
-        buffer.appendAttribute("value", getValue());
+        buffer.appendAttributeEscaped("value", getValue());
         buffer.appendAttribute("size", getSize());
         buffer.appendAttribute("title", getTitle());
         if (isValid()) {
