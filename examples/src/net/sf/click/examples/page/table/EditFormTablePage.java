@@ -39,7 +39,7 @@ import net.sf.click.extras.control.NumberField;
  * @author Malcolm Edgar
  * @author Bob Schellink
  */
-public class EditFormTable extends BorderPage {
+public class EditFormTablePage extends BorderPage {
 
     private static final int NUM_ROWS = 20;
 
@@ -71,7 +71,7 @@ public class EditFormTable extends BorderPage {
 
     // ------------------------------------------------------------ Constructor
 
-    public EditFormTable() {
+    public EditFormTablePage() {
         // Setup customers form
         FieldSet fieldSet = new FieldSet("customer");
         fieldSet.add(new TextField("name")).setRequired(true);
