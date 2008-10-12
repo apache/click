@@ -197,7 +197,7 @@ public class Option implements Serializable {
             }
         }
 
-        buffer.appendAttribute("value", getValue());
+        buffer.appendAttributeEscaped("value", getValue());
         buffer.closeTag();
 
         buffer.appendEscaped(getLabel());

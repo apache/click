@@ -270,7 +270,7 @@ public class Checkbox extends Field {
             buffer.elementStart("input");
             buffer.appendAttribute("type", "hidden");
             buffer.appendAttribute("name", getName());
-            buffer.appendAttribute("value", getValue());
+            buffer.appendAttributeEscaped("value", getValue());
             buffer.elementEnd();
         }
     }
