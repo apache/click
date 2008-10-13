@@ -313,16 +313,18 @@ public class ContainerUtils {
                 continue;
             }
 
-            ensureObjectPathNotNull(object, field.getName());
+            String fieldName = field.getName();
+
+            ensureObjectPathNotNull(object, fieldName);
 
             try {
-                PropertyUtils.setValueOgnl(object, field.getName(), field.getValueObject(), ognlContext);
+                PropertyUtils.setValueOgnl(object, fieldName, field.getValueObject(), ognlContext);
 
                 if (logService.isDebugEnabled()) {
                     String containerClassName =
                         ClassUtils.getShortClassName(container.getClass());
                     String msg = "    " + containerClassName + " -> "
-                        + objectClassname + "." + field.getName() + " : "
+                        + objectClassname + "." + fieldName + " : "
                         + field.getValueObject();
 
                     logService.debug(msg);
@@ -331,7 +333,7 @@ public class ContainerUtils {
             } catch (Exception e) {
                 String msg =
                     "Error incurred invoking " + objectClassname + "."
-                    + field.getName() + " with " + field.getValueObject()
+                    + fieldName + " with " + field.getValueObject()
                     + " error: " + e.toString();
 
                 logService.debug(msg);
@@ -426,8 +428,9 @@ public class ContainerUtils {
                 continue;
             }
 
+            String fieldName = field.getName();
             try {
-                Object result = PropertyUtils.getValue(object, field.getName());
+                Object result = PropertyUtils.getValue(object, fieldName);
 
                 field.setValueObject(result);
 
@@ -435,14 +438,14 @@ public class ContainerUtils {
                     String containerClassName =
                         ClassUtils.getShortClassName(container.getClass());
                     String msg = "    " + containerClassName + " <- "
-                        + objectClassname + "." + field.getName() + " : "
+                        + objectClassname + "." + fieldName + " : "
                         + result;
                     logService.debug(msg);
                 }
 
             } catch (Exception e) {
                 String msg = "Error incurred invoking " + objectClassname + "."
-                    + field.getName() + " error: " + e.toString();
+                    + fieldName + " error: " + e.toString();
 
                 logService.debug(msg);
             }
@@ -550,7 +553,7 @@ public class ContainerUtils {
      * is instantiated.
      *
      * @param object the object which path must be navigatable without
-     * encoutering null values
+     * encountering null values
      * @param path the navigation path
      */
     private static void ensureObjectPathNotNull(Object object, String path) {
@@ -634,13 +637,14 @@ public class ContainerUtils {
 
             // Check if the map contains the fields name. The fields name can
             // also be a path for example 'foo.bar'
-            if (map.containsKey(field.getName())) {
+            String fieldName = field.getName();
+            if (map.containsKey(fieldName)) {
 
-                map.put(field.getName(), field.getValueObject());
+                map.put(fieldName, field.getValueObject());
 
                 if (logService.isDebugEnabled()) {
                     String msg = "   Form -> " + objectClassname + "."
-                         + field.getName() + " : " + field.getValueObject();
+                         + fieldName + " : " + field.getValueObject();
 
                     logService.debug(msg);
                 }
@@ -675,13 +679,13 @@ public class ContainerUtils {
             // 'user.address' is contained in the map.
             if (map.containsKey(fieldName)) {
 
-                Object result = map.get(field.getName());
+                Object result = map.get(fieldName);
 
                 field.setValueObject(result);
 
                 if (logService.isDebugEnabled()) {
                     String msg = "   Form <- " + objectClassname + "."
-                        + field.getName() + " : " + result;
+                        + fieldName + " : " + result;
                     logService.debug(msg);
                 }
             }
