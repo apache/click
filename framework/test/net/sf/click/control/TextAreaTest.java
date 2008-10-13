@@ -63,4 +63,15 @@ public class TextAreaTest extends TestCase {
         assertEquals("ratherlongtextvalue", textArea.getValueObject());   
     }
 
+    /**
+     * Check that textfield value is escaped. This protects against
+     * cross-site scripting attacks (XSS).
+     */
+    public void testEscapeValue() {
+        TextArea field = new TextArea("name");
+        String value = "<script>";
+        String expected = "&lt;script&gt;";
+        field.setValue(value);
+        assertTrue(field.toString().indexOf(expected) > 1);
+    }
 }
