@@ -25,6 +25,7 @@ import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.ClassUtils;
 
 /**
  * Provides a default implementation of the {@link Container} interface,
@@ -452,7 +453,7 @@ public abstract class AbstractContainer extends AbstractControl implements
         HtmlStringBuffer message = new HtmlStringBuffer();
 
         message.append("Changed ");
-        message.append(ClickUtils.toSimpleName(control.getClass()));
+        message.append(ClassUtils.getShortClassName(control.getClass()));
         String controlId = control.getId();
         if (controlId != null) {
             message.append("[");
@@ -465,12 +466,12 @@ public abstract class AbstractContainer extends AbstractControl implements
         message.append(" parent from ");
 
         if (currentParent instanceof Page) {
-            message.append(ClickUtils.toSimpleName(currentParent.getClass()));
+            message.append(ClassUtils.getShortClassName(currentParent.getClass()));
 
         } else if (currentParent instanceof Container) {
             Container parentContainer = (Container) currentParent;
 
-            message.append(ClickUtils.toSimpleName(parentContainer.getClass()));
+            message.append(ClassUtils.getShortClassName(parentContainer.getClass()));
             String parentId = parentContainer.getId();
             if (parentId != null) {
                 message.append("[");
@@ -483,7 +484,7 @@ public abstract class AbstractContainer extends AbstractControl implements
         }
 
         message.append(" to ");
-        message.append(ClickUtils.toSimpleName(this.getClass()));
+        message.append(ClassUtils.getShortClassName(this.getClass()));
         String id = this.getId();
         if (id != null) {
             message.append("[");

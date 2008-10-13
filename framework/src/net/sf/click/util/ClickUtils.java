@@ -38,14 +38,12 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -60,7 +58,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.Page;
-import net.sf.click.control.Field;
 import net.sf.click.control.Form;
 import net.sf.click.service.ConfigService;
 import net.sf.click.service.LogService;
@@ -2179,26 +2176,6 @@ public class ClickUtils {
         buffer.append(property.substring(1));
 
         return buffer.toString();
-    }
-
-    /**
-     * Return the simple or short name for the given class.
-     *
-     * @param aClass the class to return the simple name for
-     * @return the simple or short name for the given class
-     */
-    public static String toSimpleName(Class aClass) {
-        if (aClass == null) {
-            return null;
-        }
-
-        String className = aClass.getName();
-        int index = className.lastIndexOf(".");
-        if (index != -1) {
-            return className.substring(index + 1);
-        } else {
-            return className;
-        }
     }
 
     // -------------------------------------------------------- Package Methods
