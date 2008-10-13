@@ -433,7 +433,7 @@ public abstract class Field extends AbstractControl {
     public boolean isHidden() {
         return false;
     }
- 
+
     /**
      * Return the Form and Field id appended: &nbsp; "<tt>form-field</tt>"
      * <p/>
@@ -486,10 +486,10 @@ public abstract class Field extends AbstractControl {
      * </blockquote>
      * If not found then the message will be looked up in the
      * <tt>/click-control.properties</tt> file using the same key.
-     * If a value still cannot be found then the Field name will be converted
+     * If a value is still not found, the Field name will be converted
      * into a label using the method: {@link ClickUtils#toLabel(String)}
      * <p/>
-     * For examle given a <tt>CustomerPage</tt> with the properties file
+     * For example given a <tt>CustomerPage</tt> with the properties file
      * <tt>CustomerPage.properties</tt>:
      *
      * <pre class="codeConfig">
@@ -896,6 +896,8 @@ public abstract class Field extends AbstractControl {
 
     /**
      * Return a normalized label for display in error messages.
+     * <p/>
+     * The error label is a normalized version of {@link #getLabel()}.
      *
      * @return a normalized label for error message display
      */
@@ -1021,5 +1023,4 @@ public abstract class Field extends AbstractControl {
             return "";
         }
     }
-
 }
