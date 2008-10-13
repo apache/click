@@ -1,8 +1,5 @@
 package net.sf.click.control;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import junit.framework.TestCase;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -38,16 +35,11 @@ public class ColumnTest extends TestCase {
     }
     
     public void testOuterJoin() {
-    	// Test with null child object
+    	  // Test with null child object
         TestObject row = new TestObject("name", "label");
         row.setChild(new Child());
         
-        List rowList = new ArrayList();
-        rowList.add(row);
-        Table table = new Table();
-        table.setRowList(rowList);
-        
-    	Column column = new Column("child.name");
+    	  Column column = new Column("child.name");
     	
         HtmlStringBuffer buffer = new HtmlStringBuffer();        
         column.renderTableData(row, buffer, null, 0);
@@ -55,60 +47,92 @@ public class ColumnTest extends TestCase {
     }
     
     public void testNullOuterJoin() {
-    	// Test with null child object
+        // Test with null child object
         TestObject row = new TestObject("name", "label");
-        
-        List rowList = new ArrayList();
-        rowList.add(row);
-        Table table = new Table();
-        table.setRowList(rowList);
-        
-    	Column column = new Column("child.name");
+       
+      	Column column = new Column("child.name");
     	
         HtmlStringBuffer buffer = new HtmlStringBuffer();        
         column.renderTableData(row, buffer, null, 0);
+        System.out.println(buffer);
         assertTrue(buffer.length() > 0);        
     }
     
-    // ---------------------------------------------------------- Inner Classes
-    
-    public static class TestObject {
-        private String name;
-        private Object value;
-        private Child child; 
+    /**
+     * Check that textfield value is escaped. This protects against
+     * cross-site scripting attacks (XSS).
+     */
+    public void testEscapeValue() {
+        TestObject row = new TestObject("<script>", null);
         
+        // Test rendering valid property
+        Column column = new Column("name");
+        
+        HtmlStringBuffer buffer = new HtmlStringBuffer();        
+        column.renderTableData(row, buffer, null, 0);
+
+        String expected = "&lt;script&gt;";
+        assertTrue(buffer.toString().indexOf(expected) > 1);
+    }
+
+    // ---------------------------------------------------------- Inner Classes
+
+    public static class TestObject {
+
+        private String name;
+
+        private Object value;
+
+        private Child child;
+
         public TestObject(String name, Object value) {
             this.name = name;
             this.value = value;
         }
-        
+
         public String getName() {
             return name;
         }
-        
+
         public Object getValue() {
             return value;
         }
-        
+
         public Child getChild() {
-        	return child;
+            return child;
         }
-        
+
         public void setChild(Child child) {
-        	this.child = child;
+            this.child = child;
+        }
+
+        public String toString() {
+            return "TextObject [ " + getName() + ", " + getValue() + "]";
         }
     }
-    
+
     public static class Child {
-    	private String name;
-    	
-    	public String getName() {
-    		return name;
-    	}
-    	
-    	public void setName(String name) {
-    		this.name = name;
-    	}
+
+        private String name;
+
+        public Child() {
+        }
+
+        public Child(String name) {
+            setName(name);
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+        
+        public String toString() {
+            return "Child [ " + getName() + "]";
+        }
     }
 
 }
