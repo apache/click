@@ -7,6 +7,8 @@ import java.util.List;
 import net.sf.click.control.Option;
 
 import junit.framework.TestCase;
+import net.sf.click.MockContext;
+import net.sf.click.control.Form;
 
 public class CheckListTest extends TestCase {
 
@@ -74,4 +76,25 @@ public class CheckListTest extends TestCase {
         assertEquals(demanded,given);
     }
 
+    /**
+     * Check that FileField value is escaped. This protects against
+     * cross-site scripting attacks (XSS).
+     */
+    public void testEscapeValue() {
+        MockContext.initContext();
+
+        Form form = new Form("form");
+        CheckList checkList = new CheckList("check");
+        form.add(checkList);
+
+        String value = "<script>";
+        String expected = "&lt;script&gt;";
+
+        checkList.add(value);
+
+        assertTrue(checkList.toString().indexOf(expected) > 1);
+        
+        // Check that the value <script> is not rendered
+        assertTrue(checkList.toString().indexOf(value) < 0);
+    }
 }
