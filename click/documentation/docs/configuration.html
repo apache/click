@@ -744,8 +744,11 @@ As option #1 was already discussed above in section <a href="#application-contro
 lets look at option #2.
 <p/>
 
-When Click starts up, it scans each Jar in web lib (WEB-INF/lib) for specially
-marked entries starting with 'META-INF/web/'.
+When Click starts up, it scans each Jar in the classpath for specially marked
+entries starting with 'META-INF/web/'. (Please note that even though Click will
+scan the entire classpath it is strongly recommended to host your Jar files inside
+your WAR lib folder e.g. WEB-INF/lib. Sharing Jars on the classpath can lead to
+class loading issues.)
 <p/>
 Click will then copy all files found under 'META-INF/web/' to the web application
 folder.
