@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
@@ -134,15 +135,28 @@ public class Radio extends Field {
             return getAttribute("id");
 
         } else {
-            String formId = (getForm() != null) ? getForm().getId() + "_" : "";
+            String fieldName = getName();
 
-            String id = formId + getName() + "_" + getValue();
+            if (fieldName == null) {
+                // If fieldName is null, exit early
+                return null;
+            }
+
+            Form parentForm = getForm();
+            String formId = (parentForm != null) ? parentForm.getId() + "_" : "";
+            String id = formId + fieldName + "_" + ClickUtils.escapeHtml(getValue());
 
             if (id.indexOf('/') != -1) {
                 id = id.replace('/', '_');
             }
             if (id.indexOf(' ') != -1) {
                 id = id.replace(' ', '_');
+            }
+            if (id.indexOf('<') != -1) {
+                id = id.replace('<', '_');
+            }
+            if (id.indexOf('>') != -1) {
+                id = id.replace('>', '_');
             }
 
             return id;
@@ -207,7 +221,7 @@ public class Radio extends Field {
                 Object parent = getParent();
                 if (parent instanceof RadioGroup) {
                     RadioGroup radioGroup = (RadioGroup) parent;
-                   label = getMessage(
+                    label = getMessage(
                         radioGroup.getName() + "." + getValue() + ".label");
                 }
             }
