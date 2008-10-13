@@ -63,7 +63,8 @@ public class ColumnTest extends TestCase {
      * cross-site scripting attacks (XSS).
      */
     public void testEscapeValue() {
-        TestObject row = new TestObject("<script>", null);
+        String value = "<script>";
+        TestObject row = new TestObject(value, null);
         
         // Test rendering valid property
         Column column = new Column("name");
@@ -73,6 +74,9 @@ public class ColumnTest extends TestCase {
 
         String expected = "&lt;script&gt;";
         assertTrue(buffer.toString().indexOf(expected) > 1);
+        
+        // Check that the value <script> is not rendered
+        assertTrue(buffer.toString().indexOf(value) < 0);
     }
 
     // ---------------------------------------------------------- Inner Classes

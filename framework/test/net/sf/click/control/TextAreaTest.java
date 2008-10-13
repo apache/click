@@ -73,5 +73,8 @@ public class TextAreaTest extends TestCase {
         String expected = "&lt;script&gt;";
         field.setValue(value);
         assertTrue(field.toString().indexOf(expected) > 1);
+        
+        // Check that the value <script> is not rendered
+        assertTrue(field.toString().indexOf(value) < 0);
     }
 }
