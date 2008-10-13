@@ -873,7 +873,7 @@ public class CheckList extends Field {
                 }
                 buffer.elementEnd();
 
-                buffer.append(option.getLabel());
+                buffer.appendEscaped(option.getLabel());
 
                 if (sortable) {
                     buffer.append("</div>");
