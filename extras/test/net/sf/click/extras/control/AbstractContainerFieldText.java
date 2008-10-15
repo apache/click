@@ -2,7 +2,9 @@ package net.sf.click.extras.control;
 
 import junit.framework.TestCase;
 import net.sf.click.ClickServlet;
+import net.sf.click.Control;
 import net.sf.click.MockContext;
+import net.sf.click.control.TextField;
 import net.sf.click.servlet.MockRequest;
 import net.sf.click.servlet.MockResponse;
 import net.sf.click.servlet.MockServletConfig;
@@ -31,6 +33,20 @@ public class AbstractContainerFieldText extends TestCase {
         }
     }
     
+    /**
+     * Check that overriding AbstractContainerField#insert(Control, int) will
+     * still receive calls from AbstractContainerField#add(Control).
+     */
+    public void testInsertOverride() {
+        FeedbackBorder border = new FeedbackBorder();
+        border.add(new TextField("field1"));
+        try {
+            border.add(new TextField("field2"));
+            fail("FeedbackBorder only allows one control to be added.");
+        } catch (Exception expected) {
+        }
+    }
+
     private void initMockContext() {
         MockServletContext servletContext = new MockServletContext();
         String servletName = "click-servlet";
@@ -51,5 +67,20 @@ public class AbstractContainerFieldText extends TestCase {
             }
         };
         MockContext.initContext(servletConfig, request, response, servlet);
+    }
+    
+    class FeedbackBorder extends AbstractContainerField {
+
+        public Control insert(Control control, int index) {
+
+            // Enforce rule that only 1 control can be added
+            if (getControls().size() > 0) {
+                throw new IllegalStateException(
+                    "Only one control is allowed on FeedbackBorder.");
+            }
+
+            super.insert(control, 0);
+            return control;
+        }
     }
 }
