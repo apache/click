@@ -6,7 +6,7 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
- * This control associates a HTML <em>label</em> with a target field.
+ * This control associates an HTML <em>label</em> with a target field.
  *
  * @author Bob Schellink
  */
