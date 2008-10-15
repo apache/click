@@ -90,11 +90,11 @@
 
     <suppress checks="MethodLength"
               files="Form.java"
-              lines="2264, 2342"/>
+              lines="2211, 2342"/>
 
     <suppress checks="MethodLength"
               files="FieldSet.java"
-              lines="851"/>
+              lines="825"/>
 
 	<!-- Static Variable Name -->              
 
