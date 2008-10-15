@@ -1,8 +1,8 @@
 package net.sf.click.examples.control.html;
 
 import net.sf.click.Control;
+import net.sf.click.control.AbstractContainer;
 import net.sf.click.control.Field;
-import net.sf.click.extras.control.AbstractContainerField;
 
 /**
  * This control provides feedback for a Field.
@@ -13,7 +13,7 @@ import net.sf.click.extras.control.AbstractContainerField;
  *
  * @author Bob Schellink
  */
-public class FeedbackBorder extends AbstractContainerField {
+public class FeedbackBorder extends AbstractContainer {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,13 +46,14 @@ public class FeedbackBorder extends AbstractContainerField {
         // Add required css class
         if (field.isRequired()) {
             field.addStyleClass("required");
-            add(new Html("<span class=\"required\">&nbsp;</span>"));
+            super.insert(new Html("<span class=\"required\">&nbsp;</span>"),
+                getControls().size());
         }
 
         // If field is invalid, add error message
         if (!field.isValid()) {
-            add(new Html("<span class=\"error\">" + field.getError() +
-                "</span>"));
+            super.insert(new Html("<span class=\"error\">" + field.getError() +
+                "</span>"), getControls().size());
         }
     }
 }
