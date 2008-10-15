@@ -98,7 +98,7 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return the control that was added to the container
      */
     public Control add(Control control) {
-        return container.add(control);
+        return insert(control, getControls().size());
     }
 
     /**
