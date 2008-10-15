@@ -35,7 +35,7 @@ public class ContactDetailsForm extends HtmlForm {
     }
 
     public void buildForm() {
-        HtmlFieldSet fieldset = new HtmlFieldSet();
+        HtmlFieldSet fieldset = new HtmlFieldSet("contactDetails");
         fieldset.setLegend("Contact Details");
         htmlList = new HtmlList(HtmlList.ORDERED_LIST);
 
@@ -48,7 +48,7 @@ public class ContactDetailsForm extends HtmlForm {
         fieldset.add(htmlList);
         add(fieldset);
 
-        fieldset = new HtmlFieldSet();
+        fieldset = new HtmlFieldSet("deliveryAddress");
         fieldset.setLegend("Delivery Address");
         htmlList = new HtmlList(HtmlList.ORDERED_LIST);
 
@@ -65,7 +65,7 @@ public class ContactDetailsForm extends HtmlForm {
         fieldset.add(htmlList);
         add(fieldset);
 
-        fieldset = new HtmlFieldSet();
+        fieldset = new HtmlFieldSet("buttons");
         fieldset.setAttribute("class", "submit");
         Submit submit = new Submit("submit", "Begin download");
         fieldset.add(submit);
