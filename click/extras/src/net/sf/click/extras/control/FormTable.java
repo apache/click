@@ -513,7 +513,8 @@ public class FormTable extends Table {
     protected void renderButtons(HtmlStringBuffer buffer) {
         Form form = getForm();
 
-        if (!form.getButtonList().isEmpty()) {
+        List buttonList = form.getButtonList();
+        if (!buttonList.isEmpty()) {
             buffer.append("<table cellpadding=\"0\" cellspacing=\"0\"");
             if (getAttribute("width") != null) {
                 buffer.appendAttribute("width", getAttribute("width"));
@@ -525,12 +526,12 @@ public class FormTable extends Table {
             buffer.append(getId());
             buffer.append("-buttons\">\n");
             buffer.append("<tr class=\"buttons\">");
-            for (int i = 0, size = form.getButtonList().size(); i < size; i++) {
+            for (int i = 0, size = buttonList.size(); i < size; i++) {
                 buffer.append("<td class=\"buttons\"");
                 buffer.appendAttribute("style", form.getButtonStyle());
                 buffer.closeTag();
 
-                Button button = (Button) form.getButtonList().get(i);
+                Button button = (Button) buttonList.get(i);
                 button.render(buffer);
 
                 buffer.append("</td>");
