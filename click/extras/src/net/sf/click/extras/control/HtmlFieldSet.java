@@ -16,6 +16,7 @@
 package net.sf.click.extras.control;
 
 import net.sf.click.Control;
+import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -29,7 +30,10 @@ import net.sf.click.util.HtmlStringBuffer;
  * <p/>
  * This allows developers to provide a more flexible and CSS friendly layout.
  * <p/>
- * See this <a href="http://www.avoka.com/click-examples/form/contact-details.htm">example</a>
+ * You can read more about programmatic layout
+ * <a href="../../../../../../controls.html#programmatic-layout">here</a>.
+ * <p/>
+ * Also see this <a href="http://www.avoka.com/click-examples/form/contact-details.htm">example</a>
  * of how HtmlFieldSet is used to provide a custom layout.
  *
  * @author Bob Schellink
@@ -70,6 +74,32 @@ public class HtmlFieldSet extends FieldSet {
     }
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * This method is not supported and throws an UnsupportedOperationException
+     * if invoked.
+     *
+     * @param field the field to add to the fieldSet
+     * @param width the width of the field in table columns
+     * @return the field added to this fieldSet
+     * @throws UnsupportedOperationException if invoked
+     */
+    public Field add(Field field, int width) {
+        throw new UnsupportedOperationException("Not supported by HtmlFieldSet.");
+    }
+
+    /**
+     * This method is not supported and throws an UnsupportedOperationException
+     * if invoked.
+     *
+     * @param control the control to add to the fieldSet
+     * @param width the width of the control in table columns
+     * @return the control added to this fieldSet
+     * @throws UnsupportedOperationException if invoked
+     */
+    public Control add(Control control, int width) {
+        throw new UnsupportedOperationException("Not supported by HtmlFieldSet.");
+    }
 
     /**
      * Render the HTML representation of the FieldSet.

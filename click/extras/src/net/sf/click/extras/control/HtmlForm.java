@@ -18,8 +18,6 @@ package net.sf.click.extras.control;
 import java.util.Iterator;
 import java.util.List;
 import net.sf.click.Control;
-import net.sf.click.Page;
-import net.sf.click.control.Container;
 import net.sf.click.control.Field;
 import net.sf.click.control.Form;
 import net.sf.click.service.FileUploadService;
@@ -36,7 +34,10 @@ import net.sf.click.util.HtmlStringBuffer;
  * <p/>
  * This allows developers to provide a more flexible and CSS friendly layout.
  * <p/>
- * See this <a href="http://www.avoka.com/click-examples/form/contact-details.htm">example</a>
+ * You can read more about programmatic layout
+ * <a href="../../../../../../controls.html#programmatic-layout">here</a>.
+ * <p/>
+ * Also see this <a href="http://www.avoka.com/click-examples/form/contact-details.htm">example</a>
  * of how HtmlForm is used to provide a custom layout.
  * <p/>
  * <b>Please note</b>, for most cases {@link Form} is the better option as
@@ -68,78 +69,6 @@ public class HtmlForm extends Form {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * @see net.sf.click.control.Container#add(net.sf.click.Control).
-     *
-     * @param control the control to add to the container
-     * @return the control that was added to the container
-     *
-     * @throws IllegalArgumentException if the control is null or the container
-     * already contains a control with the same name
-     */
-    public Control add(Control control) {
-        return insert(control, getControls().size());
-    }
-
-    /**
-     * @see net.sf.click.control.Container#insert(net.sf.click.Control, int)
-     *
-     * @param control the control to add to the container
-     * @param index the index at which the control is to be inserted
-     * @return the control that was added to the container
-     * @throws IllegalArgumentException if the control is null or the container
-     * already contains a control with the same name
-     *
-     * @throws IndexOutOfBoundsException if index is out of range
-     * <tt>(index &lt; 0 || index &gt; getControls().size())</tt>
-     */
-    public Control insert(Control control, int index) {
-        if (control == null) {
-            throw new IllegalArgumentException("Null control parameter");
-        }
-        if (control == this) {
-            throw new IllegalArgumentException("Cannot add container to itself");
-        }
-        int size = getControls().size();
-        if (index > size || index < 0) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: "
-                + size);
-        }
-
-        // Check if container already contains the control
-        if (getControlMap().containsKey(control.getName())) {
-            throw new IllegalArgumentException(
-                "Container already contains control named: " + control.getName());
-        }
-
-        // Check if control already has parent
-        // If parent references *this* container, there is no need to remove it
-        Object parentControl = control.getParent();
-        if (parentControl != null && parentControl != this) {
-
-            // Remove control from parent Page or Container
-            if (parentControl instanceof Page) {
-                ((Page) parentControl).removeControl(control);
-            } else if (parentControl instanceof Container) {
-                ((Container) parentControl).remove(control);
-            }
-        }
-
-        getControls().add(index, control);
-        control.setParent(this);
-
-        String controlName = control.getName();
-        if (controlName != null) {
-            getControlMap().put(controlName, control);
-        }
-
-        if (control instanceof Field) {
-            ((Field) control).setForm(this);
-        }
-
-        return control;
-    }
-
-    /**
      * This method is not supported and throws an UnsupportedOperationException
      * if invoked.
      *
@@ -163,59 +92,6 @@ public class HtmlForm extends Form {
      */
     public Control add(Control control, int width) {
         throw new UnsupportedOperationException("Not supported by HtmlForm.");
-    }
-
-    /**
-     * @see net.sf.click.control.Container#remove(net.sf.click.Control).
-     *
-     * @param control the control to remove from the container
-     * @return true if the control was removed from the container
-     * @throws IllegalArgumentException if the control is null
-     */
-    public boolean remove(Control control) {
-        if (control == null) {
-            throw new IllegalArgumentException("Control cannot be null");
-        }
-
-        boolean contains = getControls().remove(control);
-
-        if (contains) {
-            control.setParent(null);
-        }
-
-        String controlName = control.getName();
-
-        if (controlName != null) {
-            getControlMap().remove(controlName);
-        }
-
-        if (control instanceof Field) {
-            ((Field) control).setForm(null);
-        }
-
-        return contains;
-    }
-
-    /**
-     * Return the ordered list of form fields, excluding buttons.
-     * <p/>
-     * The order of the fields is the same order they were added to the form.
-     *
-     * @return the ordered List of form fields, excluding buttons
-     */
-    public List getFieldList() {
-        return ContainerUtils.getFieldsAndLabels(this);
-    }
-
-    /**
-     * Return the ordered list of {@link net.sf.click.control.Button}s.
-     * <p/>
-     * The order of the buttons is the same order they were added to the form.
-     *
-     * @return the ordered list of {@link net.sf.click.control.Button}s.
-     */
-    public List getButtonList() {
-        return ContainerUtils.getButtons(this);
     }
 
     /**

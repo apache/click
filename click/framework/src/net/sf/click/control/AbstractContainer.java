@@ -26,6 +26,7 @@ import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a default implementation of the {@link Container} interface,
@@ -106,13 +107,17 @@ public abstract class AbstractContainer extends AbstractControl implements
      * @param control the control to add to the container
      * @param index the index at which the control is to be inserted
      * @return the control that was added to the container
-     * @throws IllegalArgumentException if the control is null or the container
-     * already contains a control with the same name
+     *
+     * @throws IllegalArgumentException if the control is null or if the control
+     * and container is the same instance or the container already contains
+     * a control with the same name or if a Field name is not defined
      *
      * @throws IndexOutOfBoundsException if index is out of range
      * <tt>(index &lt; 0 || index &gt; getControls().size())</tt>
      */
     public Control insert(Control control, int index) {
+
+        // Pre conditions start
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
@@ -124,12 +129,29 @@ public abstract class AbstractContainer extends AbstractControl implements
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: "
                 + size);
         }
-
-        // Check if container already contains the control
-        if (getControlMap().containsKey(control.getName())) {
-            throw new IllegalArgumentException(
-                "Container already contains control named: " + control.getName());
+        if (control instanceof Field) {
+            Field field = (Field) control;
+            // Guard against fields without names, as they would throw
+            // exceptions later when binding their request values.
+            if (StringUtils.isBlank(field.getName())) {
+                String msg = "Field name not defined: " + field.getClass().getName();
+                throw new IllegalArgumentException(msg);
+            }
+            // Check if container already contains the field. Labels can share
+            // names though.
+            if (getControlMap().containsKey(field.getName())
+                && !(field instanceof Label)) {
+                String msg = "Container already contains field named: " + field.getName();
+                throw new IllegalArgumentException(msg);
+            }
+        } else {
+            // Check if container already contains the control
+            if (getControlMap().containsKey(control.getName())) {
+                throw new IllegalArgumentException(
+                    "Container already contains control named: " + control.getName());
+            }
         }
+        // Pre conditions end
 
         // Check if control already has parent
         // If parent references *this* container, there is no need to remove it
@@ -173,13 +195,19 @@ public abstract class AbstractContainer extends AbstractControl implements
         boolean contains = getControls().remove(control);
 
         if (contains) {
-            control.setParent(null);
-        }
+            // Only nullify if this container is parent. This check is for the
+            // case where a Control has two parents e.g. Page and Form.
+            // NOTE the current #insert logic does not allow Controls to have
+            // two parents so this check might be redundant.
+            if (control.getParent() == this) {
+                control.setParent(null);
+            }
 
-        String controlName = control.getName();
+            String controlName = control.getName();
 
-        if (controlName != null) {
-            getControlMap().remove(controlName);
+            if (controlName != null) {
+                getControlMap().remove(controlName);
+            }
         }
 
         return contains;

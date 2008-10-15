@@ -328,7 +328,9 @@ import org.apache.commons.lang.StringUtils;
  * are a great way to encapsulate customized forms.
  * <p/>
  * To create a generic form layout you can use the Form {@link #getFieldList()} and
- * {@link #getButtonList()} properties within a Velocity macro.
+ * {@link #getButtonList()} properties within a Velocity macro. If you want to
+ * access <em>all</em> Form Controls from within a Velocity template or macro use
+ * {@link #getControls()}.
  * <p/>
  * The example below provides a generic <span class="green">writeForm()</span>
  * macro which you could use through out an application. This Velocity macro code
@@ -639,33 +641,7 @@ public class Form extends AbstractContainer {
      * name
      */
     public Control add(Control control) {
-        if (control == null) {
-            throw new IllegalArgumentException("Field parameter cannot be null");
-        }
-
-        int position = getControls().size();
-        if (control instanceof Button) {
-            position = getButtonList().size();
-
-        } else if (control instanceof Field) {
-            // Ensure hidden fields at end of list
-            Field field = (Field) control;
-            position = getFieldList().size();
-
-            if (!field.isHidden()) {
-                position = 0;
-                for (int i = 0, size = getFieldList().size(); i < size; i++) {
-                    Field peek = (Field) getFieldList().get(i);
-                    if (!peek.isHidden()) {
-                        position++;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-
-        return insert(control, position);
+        return super.add(control);
     }
 
     /**
@@ -674,51 +650,27 @@ public class Form extends AbstractContainer {
      * @param control the control to add to the container
      * @param index the index at which the control is to be inserted
      * @return the control that was added to the container
-     * @throws IllegalArgumentException if the control is null or the container
-     *     already contains a control with the same name
+     *
+     * @throws IllegalArgumentException if the control is null or if the control
+     * and container is the same instance or the container already contains
+     * a control with the same name or if the Field name is not defined
      *
      * @throws IndexOutOfBoundsException if index is out of range
      * <tt>(index &lt; 0 || index &gt; getControls().size())</tt>
      */
     public Control insert(Control control, int index) {
-        if (control == null) {
-            throw new IllegalArgumentException("Control parameter cannot be null");
-        }
-        if (control == this) {
-            throw new IllegalArgumentException("Cannot add container to itself");
-        }
 
-        int size = getControls().size();
-        if (control instanceof Button) {
-            size = getButtonList().size();
-
-        } else if (control instanceof Field) {
-            size = getFieldList().size();
-        }
-
-        if (index > size || index < 0) {
-            String msg = "Index: " + index + ", Size: " + size;
-            throw new IndexOutOfBoundsException(msg);
-        }
+        super.insert(control, index);
 
         if (control instanceof Field) {
             Field field = (Field) control;
-            if (StringUtils.isBlank(field.getName())) {
-                String msg = "Field name not defined: " + field.getClass().getName();
-                throw new IllegalArgumentException(msg);
-            }
 
-            if (getControlMap().containsKey(field.getName())
-                && !(field instanceof Label)) {
-                String msg = "Form already contains field named: " + field.getName();
-                throw new IllegalArgumentException(msg);
-            }
-
+            // Add field to either buttonList or fieldList for fast access
             if (field instanceof Button) {
-                getButtonList().add(index, field);
+                getButtonList().add(field);
 
             } else {
-                getFieldList().add(index, field);
+                getFieldList().add(field);
             }
 
             field.setForm(this);
@@ -734,10 +686,7 @@ public class Form extends AbstractContainer {
                     ((TextArea) field).setCols(getDefaultFieldSize());
                 }
             }
-
         }
-
-        super.insert(control, getControls().size());
 
         return control;
     }
@@ -774,39 +723,34 @@ public class Form extends AbstractContainer {
      * @param field the field to add to the form
      * @param width the width of the field in table columns
      * @return the field added to this form
-     * @throws IllegalArgumentException if the field is null, field's name is
+     * @throws IllegalArgumentException if the field is null, field name is
      * not defined, field is a Button or HiddenField, the form already contains
-     * a control with the same name or the width &lt; 1
+     * a field with the same name or the width &lt; 1
      */
     public Field add(Field field, int width) {
-        if (field == null) {
-            throw new IllegalArgumentException("Field parameter cannot be null");
-        }
-        if (field instanceof Button || field instanceof HiddenField) {
-            String msg = "Not valid a valid field type: " + field.getClass().getName();
-            throw new IllegalArgumentException(msg);
-        }
-        if (width < 1) {
-            throw new IllegalArgumentException("Invalid field width: " + width);
-        }
-
-        add(field);
-        getFieldWidths().put(field.getName(), new Integer(width));
+        add((Control) field, width);
         return field;
     }
 
     /**
      * Add the control to the form and specify the control's width in columns.
+     * <p/>
+     * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
+     * where the key is the Control name and value is the Control instance.
+     * <p/>
+     * Note Button and HiddenField types are not valid arguments for this method.
      *
      * @param control the control to add to the form
      * @param width the width of the control in table columns
      * @return the control added to this form
-     * @throws IllegalArgumentException if the control is null, the form
-     * already contains a control with the same name or the width &lt; 1
+     * @throws IllegalArgumentException if the control is null, control is a
+     * Button or HiddenField, the form already contains a control with the same
+     * name or the width &lt; 1
      */
     public Control add(Control control, int width) {
-        if (control == null) {
-            throw new IllegalArgumentException("Control parameter cannot be null");
+        if (control instanceof Button || control instanceof HiddenField) {
+            String msg = "Not valid a valid field type: " + control.getClass().getName();
+            throw new IllegalArgumentException(msg);
         }
         if (width < 1) {
             throw new IllegalArgumentException("Invalid field width: " + width);
@@ -828,39 +772,24 @@ public class Form extends AbstractContainer {
      * @throws IllegalArgumentException if the control is null
      */
     public boolean remove(Control control) {
-        if (control == null) {
-            throw new IllegalArgumentException("Control parameter cannot be null");
-        }
 
-        if (control instanceof Field) {
+        boolean removed = super.remove(control);
+
+        if (removed && control instanceof Field) {
             Field field = (Field) control;
 
-            boolean contains = false;
+            field.setForm(null);
 
-            if (getControlMap().containsKey(field.getName())) {
-                field.setForm(null);
-                if (field.getParent() == this) {
-                    field.setParent(null);
-                }
+            if (field instanceof Button) {
+                getButtonList().remove(field);
 
-                getControlMap().remove(field.getName());
-                getFieldWidths().remove(field.getName());
-
-                if (field instanceof Button) {
-                    contains = getButtonList().remove(field);
-
-                } else if (field instanceof Field) {
-                    contains = getFieldList().remove(field);
-                }
-
-                getControls().remove(field);
+            } else if (field instanceof Field) {
+                getFieldList().remove(field);
             }
-
-            return contains;
-
-        } else {
-            return super.remove(control);
         }
+        getFieldWidths().remove(control.getName());
+
+        return removed;
     }
 
     /**
@@ -1164,7 +1093,17 @@ public class Form extends AbstractContainer {
 
         HiddenField nameField = (HiddenField) getField(FORM_NAME);
         if (nameField == null) {
-            nameField = new HiddenField(FORM_NAME, String.class);
+
+            nameField = new HiddenField(FORM_NAME, String.class) {
+
+                // Override setName to ensure name cannot be changed once set
+                public void setName(String name) {
+                    if (this.name != null) {
+                        return;
+                    }
+                    super.setName(name);
+                }
+            };
             add(nameField);
         }
         nameField.setValue(name);
@@ -1214,6 +1153,8 @@ public class Form extends AbstractContainer {
      * Return the ordered list of form fields, excluding buttons.
      * <p/>
      * The order of the fields is the same order they were added to the form.
+     * <p/>
+     * The returned list includes only fields added directly to the Form.
      *
      * @return the ordered List of form fields, excluding buttons
      */
@@ -1224,26 +1165,20 @@ public class Form extends AbstractContainer {
     /**
      * Return the Map of form fields (including buttons), keyed
      * on field name.
+     * <p/>
+     * The returned map includes only fields added directly to the Form.
+     *
+     * @see #getControlMap()
      *
      * @return the Map of form fields (including buttons), keyed
      * on field name
      */
     public Map getFields() {
-        final Map fields = new HashMap();
-
-        for (int i = 0, size = getControls().size(); i < size; i++) {
-            Control control = (Control) getControls().get(i);
-
-            if (control instanceof Field) {
-                fields.put(control.getName(), control);
-            }
-        }
-
-        return fields;
+        return getControlMap();
     }
 
     /**
-     * Return true if the Form's fields should validate themselves when being
+     * Return true if the Form fields should validate themselves when being
      * processed.
      *
      * @return true if the form fields should perform validation when being
@@ -1254,10 +1189,10 @@ public class Form extends AbstractContainer {
     }
 
     /**
-     * Set the Form's field validation flag, telling the Fields to validate
+     * Set the Form field validation flag, telling the Fields to validate
      * themselves when their <tt>onProcess()</tt> method is invoked.
      *
-     * @param validate the Form's field validation flag
+     * @param validate the Form field validation flag
      */
     public void setValidate(boolean validate) {
         this.validate = validate;
@@ -1288,6 +1223,8 @@ public class Form extends AbstractContainer {
      * Return the ordered list of {@link Button}s.
      * <p/>
      * The order of the buttons is the same order they were added to the form.
+     * <p/>
+     * The returned list includes only buttons added directly to the Form.
      *
      * @return the ordered list of {@link Button}s.
      */
@@ -2159,7 +2096,17 @@ public class Form extends AbstractContainer {
         // CLK-267: check against adding a duplicate field
         HiddenField field = (HiddenField) getField(submitTokenName);
         if (field == null) {
-            field = new HiddenField(submitTokenName, Long.class);
+
+            field = new HiddenField(submitTokenName, Long.class) {
+
+                // Override setName to ensure name cannot be changed once set
+                public void setName(String name) {
+                    if (this.name != null) {
+                        return;
+                    }
+                    super.setName(name);
+                }
+            };
             add(field);
         }
 
@@ -2184,7 +2131,7 @@ public class Form extends AbstractContainer {
      * @return the estimated rendered form size in characters
      */
     protected int getFormSizeEst(List formFields) {
-        return 400 + (formFields.size() * 350) + (getButtonList().size() * 50);
+        return 500 + (formFields.size() * 350);
     }
 
     /**
@@ -2526,7 +2473,8 @@ public class Form extends AbstractContainer {
      */
     protected void renderButtons(HtmlStringBuffer buffer) {
 
-        if (!getButtonList().isEmpty()) {
+        List buttonList = getButtonList();
+        if (!buttonList.isEmpty()) {
             buffer.append("<tr><td");
             buffer.appendAttribute("align", getButtonAlign());
             buffer.append(">\n");
@@ -2536,12 +2484,12 @@ public class Form extends AbstractContainer {
             buffer.append("-buttons\">\n");
             buffer.append("<tr class=\"buttons\">");
 
-            for (int i = 0, size = getButtonList().size(); i < size; i++) {
+            for (int i = 0, size = buttonList.size(); i < size; i++) {
                 buffer.append("<td class=\"buttons\"");
                 buffer.appendAttribute("style", getButtonStyle());
                 buffer.closeTag();
 
-                Button button = (Button) getButtonList().get(i);
+                Button button = (Button) buttonList.get(i);
                 button.render(buffer);
 
                 buffer.append("</td>");
