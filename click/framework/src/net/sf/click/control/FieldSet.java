@@ -445,7 +445,8 @@ public class FieldSet extends Field implements Container {
     }
 
     /**
-     * Return the List of fields, ordered in addition order to the fieldset.
+     * Return the List of fields in the same order they were added to the
+     * fieldset.
      *
      * @return the ordered List of fieldset fields
      */
