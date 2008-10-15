@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,11 +23,9 @@ import java.util.Map;
 import net.sf.click.ActionListener;
 import net.sf.click.Context;
 import net.sf.click.Control;
-import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ContainerUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a FieldSet container control: &nbsp; &lt;fieldset&gt;.
@@ -123,7 +122,7 @@ public class FieldSet extends Field implements Container {
     protected Integer columns;
 
     /** Internal container instance. */
-    private AbstractContainer container = new InnerContainerField();
+    private InnerContainerField container = new InnerContainerField();
 
     // ----------------------------------------------------------- Constructors
 
@@ -183,7 +182,7 @@ public class FieldSet extends Field implements Container {
      * @return the control that was added to the container
      */
     public Control add(Control control) {
-        return container.add(control);
+        return insert(control, getControls().size());
     }
 
     /**
@@ -206,23 +205,55 @@ public class FieldSet extends Field implements Container {
     }
 
     /**
-     * Add the field to the fieldset and specify the field's width in columns.
+     * Add the field to the fieldset and specify the field width in columns.
+     * <p/>
+     * Fields can be retrieved from the Map {@link #getFields() fields} where
+     * the key is the Field name and value is the Field instance.
+     * <p/>
+     * Note Button and HiddenField types are not valid arguments for this method.
      *
      * @param field the field to add to the fieldset
      * @param width the width of the field in table columns
      * @return the field added to this fieldset
-     * @throws IllegalArgumentException if the field is null, field's name is
-     * not defined, the fieldset already contains a control with
-     * the same name or the width &lt; 1
+     * @throws IllegalArgumentException if the field is null, field name is
+     * not defined, field is a Button or HiddenField, the fieldset already
+     * contains a field with the same name or the width &lt; 1
      */
     public Field add(Field field, int width) {
+        add((Control) field, width);
+        return field;
+    }
+
+    /**
+     * Add the control to the fieldset and specify the control's width in columns.
+     * <p/>
+     * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
+     * where the key is the Control name and value is the Control instance.
+     * <p/>
+     * Note Button and HiddenField types are not valid arguments for this method.
+     *
+     * @param control the control to add to the fieldSet
+     * @param width the width of the control in table columns
+     * @return the control added to this fieldSet
+     * @throws IllegalArgumentException if the control is null, control is a
+     * Button or HiddenField, the fieldSet already contains a control with the
+     * same name or the width &lt; 1
+     */
+    public Control add(Control control, int width) {
+        if (control instanceof Button || control instanceof HiddenField) {
+            String msg = "Not valid a valid field type: " + control.getClass().getName();
+            throw new IllegalArgumentException(msg);
+        }
         if (width < 1) {
             throw new IllegalArgumentException("Invalid field width: " + width);
         }
 
-        add(field);
-        getFieldWidths().put(field.getName(), new Integer(width));
-        return field;
+        add(control);
+
+        if (control.getName() != null) {
+            getFieldWidths().put(control.getName(), new Integer(width));
+        }
+        return control;
     }
 
     /**
@@ -233,14 +264,7 @@ public class FieldSet extends Field implements Container {
      * @throws IllegalArgumentException if the control is null
      */
     public boolean remove(Control control) {
-        boolean removed = container.remove(control);
-
-        if (control instanceof Field) {
-            Field field = (Field) control;
-            getFieldWidths().remove(field.getName());
-            field.setForm(null);
-        }
-        return removed;
+        return container.remove(control);
     }
 
     /**
@@ -447,11 +471,13 @@ public class FieldSet extends Field implements Container {
     /**
      * Return the List of fields in the same order they were added to the
      * fieldset.
+     * <p/>
+     * The returned list only includes fields directly added to the FieldSet.
      *
      * @return the ordered List of fieldset fields
      */
     public List getFieldList() {
-        return ContainerUtils.getFieldsAndLabels(this);
+        return container.getFieldList();
     }
 
     /**
@@ -460,7 +486,7 @@ public class FieldSet extends Field implements Container {
      * @return the Map of fieldset fields, keyed on field name
      */
     public Map getFields() {
-        return ContainerUtils.getFieldMap(this);
+        return getControlMap();
     }
 
     /**
@@ -1023,42 +1049,14 @@ public class FieldSet extends Field implements Container {
      */
     private class InnerContainerField extends AbstractContainer {
 
+        // ---------------------------------------------------------- Variables
+
         private static final long serialVersionUID = 1L;
 
+        /** The ordered list of fields, excluding buttons. */
+        protected final List fieldList = new ArrayList();
+
         // ----------------------------------------------------- Public Methods
-
-        /**
-         * @see net.sf.click.control.Container#add(net.sf.click.Control).
-         *
-         * @param control the control to add to the container and return
-         * @return the control that was added to the container
-         */
-        public Control add(Control control) {
-            int position = getControls().size();
-
-            if (control instanceof Field) {
-                Field newField = (Field) control;
-
-                if (!newField.isHidden()) {
-                    for (int i = position - 1; i >= 0; i--) {
-                        // Ensure hidden fields at end of list
-                        Object peek = getControls().get(i);
-                        if (peek instanceof Field) {
-                            Field field = (Field) peek;
-                            if (field.isHidden()) {
-                                position--;
-                            } else {
-                                break;
-                            }
-                        } else {
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return insert(control, position);
-        }
 
         /**
          * Add a Field to the FieldSet and return the added instance.
@@ -1068,53 +1066,24 @@ public class FieldSet extends Field implements Container {
          * @param control the control to add to the FieldSet and return
          * @param index the index at which the control is to be inserted
          * @return the control that was added to the FieldSet
+         *
          * @throws IllegalArgumentException if the control is null, the Field's name
          * is not defined, the container already contains a control with the same
-         * name or if the control is neither a Field nor FieldSet
+         * name or if the Field name is not defined
          */
         public Control insert(Control control, int index) {
-            if (control == null) {
-                throw new IllegalArgumentException("Field parameter cannot be null");
-            }
-            if (control == this) {
-                throw new IllegalArgumentException("Cannot add container to itself");
-            }
+            super.insert(control, index);
 
             if (control instanceof Field) {
                 Field field = (Field) control;
-                if (StringUtils.isBlank(field.getName())) {
-                    String msg =
-                        "Field name not defined: " + field.getClass().getName();
-                    throw new IllegalArgumentException(msg);
+
+                // Add field to fieldList for fast access
+                if (!(field instanceof Button)) {
+                    getFieldList().add(field);
                 }
-                if (getControlMap().containsKey(field.getName())
-                    && !(field instanceof Label)) {
-
-                    String msg = "FieldSet already contains field named: ";
-                    throw new IllegalArgumentException(msg + field.getName());
-                }
-
-                // Check if control already has parent
-                // If parent references *this* container, there is no need to remove it
-                Object parentControl = control.getParent();
-                if (parentControl != null && parentControl != this) {
-
-                    // Remove control from parent Page or Container
-                    if (parentControl instanceof Page) {
-                        ((Page) parentControl).removeControl(control);
-                    } else if (parentControl instanceof Container) {
-                        ((Container) parentControl).remove(control);
-                    }
-                }
-
-                getControls().add(index, field);
-
-                getControlMap().put(field.getName(), field);
 
                 Form form = getForm();
                 field.setForm(form);
-
-                field.setParent(this);
 
                 if (form != null && form.getDefaultFieldSize() > 0) {
                     if (field instanceof TextField) {
@@ -1127,9 +1096,6 @@ public class FieldSet extends Field implements Container {
                         ((TextArea) field).setCols(form.getDefaultFieldSize());
                     }
                 }
-
-            } else {
-                super.insert(control, index);
             }
 
             return control;
@@ -1143,7 +1109,35 @@ public class FieldSet extends Field implements Container {
          * @throws IllegalArgumentException if the control is null
          */
         public boolean remove(Control control) {
-            return super.remove(control);
+
+            boolean removed = super.remove(control);
+
+            if (removed && control instanceof Field) {
+                Field field = (Field) control;
+
+                field.setForm(null);
+
+                if (!(field instanceof Button)) {
+                    getFieldList().remove(field);
+                }
+            }
+            getFieldWidths().remove(control.getName());
+
+            return removed;
+        }
+
+        /**
+         * Return the ordered list of FieldSet fields, excluding buttons.
+         * <p/>
+         * The order of the fields is the same order they were added to the
+         * FieldSet.
+         * <p/>
+         * The returned list only includes fields directly added to the FieldSet.
+         *
+         * @return the ordered List of fieldSet fields, excluding buttons
+         */
+        public List getFieldList() {
+            return fieldList;
         }
 
         /**
