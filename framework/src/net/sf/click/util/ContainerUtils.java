@@ -704,12 +704,15 @@ public class ContainerUtils {
     private static void addButtons(final Container container, final List buttons) {
         for (int i = 0; i < container.getControls().size(); i++) {
             Control control = (Control) container.getControls().get(i);
-            if (control instanceof Button) {
-                buttons.add(control);
-
-            } else if (control instanceof Container) {
+            if (control instanceof Container) {
+                // Include buttons that are containers
+                if (control instanceof Button) {
+                    buttons.add(control);
+                }
                 Container childContainer = (Container) control;
                 addButtons(childContainer, buttons);
+            } else if (control instanceof Button) {
+                buttons.add(control);
             }
         }
     }
