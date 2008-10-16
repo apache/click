@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.commons.lang.math.NumberUtils;
 
 /**
  * Provides a Customer Service.
@@ -146,7 +147,8 @@ public class CustomerService extends CayenneTemplate {
     }
 
     public List getCustomersForAge(String value) {
-        return performQuery(Customer.class, Customer.AGE_PROPERTY, Integer.valueOf(value));
+        int age = NumberUtils.toInt(value);
+        return performQuery(Customer.class, Customer.AGE_PROPERTY, new Integer(age));
     }
 
     public List getCustomersForPage(int offset, int pageSize) {
