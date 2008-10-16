@@ -110,7 +110,7 @@ public class FieldSet extends Field implements Container {
     /** The FieldSet legend attributes map. */
     protected Map legendAttributes;
 
-    /** The render the fieldset border flag, default value is true. */
+    /** The render fieldset border flag, default value is true. */
     protected boolean showBorder = true;
 
     /**
