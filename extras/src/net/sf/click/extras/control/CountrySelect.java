@@ -16,12 +16,11 @@
 package net.sf.click.extras.control;
 
 import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
 
+import java.util.Set;
+import java.util.TreeSet;
 import net.sf.click.control.Option;
 import net.sf.click.control.Select;
 import net.sf.click.util.HtmlStringBuffer;
@@ -195,7 +194,7 @@ public class CountrySelect extends Select {
         if (getOptionList().size() == 1) {
             Option option = (Option) getOptionList().get(0);
             if (option.getValue().equals(Option.EMPTY_OPTION.getValue())) {
-                // continue and load option list
+                // Continue and load option list
 
             } else {
                 // Don't load list
@@ -207,7 +206,7 @@ public class CountrySelect extends Select {
             return;
         }
 
-        List optionList = new ArrayList();
+        Set countryList = new TreeSet(new OptionLabelComparator(getLocale()));
 
         Locale[] availableLocales = Locale.getAvailableLocales();
 
@@ -216,17 +215,15 @@ public class CountrySelect extends Select {
             final String name = availableLocales[i].getDisplayCountry(getLocale());
 
             if (StringUtils.isNotEmpty(iso) && StringUtils.isNotEmpty(name)) {
-                optionList.add(new Option(iso, name));
+                countryList.add(new Option(iso, name));
             }
         }
-
-        Collections.sort(optionList, new OptionLabelComparator(getLocale()));
 
         if (isRequired() && getOptionList().isEmpty()) {
             add(Option.EMPTY_OPTION);
         }
 
-        addAll(optionList);
+        addAll(countryList);
     }
 
     // ---------------------------------------------------------- Inner Classes
