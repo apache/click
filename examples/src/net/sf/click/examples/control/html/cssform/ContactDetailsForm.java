@@ -66,6 +66,8 @@ public class ContactDetailsForm extends HtmlForm {
         add(fieldset);
 
         fieldset = new HtmlFieldSet("buttons");
+        // Setting legend to "", draws fieldset border but does not display label
+        fieldset.setLegend("");
         fieldset.setAttribute("class", "submit");
         Submit submit = new Submit("submit", "Begin download");
         fieldset.add(submit);
