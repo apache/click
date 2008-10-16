@@ -22,6 +22,8 @@ import org.springframework.util.ClassUtils;
  */
 public class PageLinkTreePage extends PlainTreePage {
 
+    public static final String TREE_NODES_SESSION_KEY = "pageLinkTreeNodes";
+
     // --------------------------------------------------------- Protected Methods
 
     /**
@@ -51,8 +53,8 @@ public class PageLinkTreePage extends PlainTreePage {
     }
 
     /**
-     * Build the tree model and stores it in the session. This model
-     * represents the directory of a Windows OS.
+     * Build the tree model and stores it in the session. This model represents
+     * nodes which link to other example Pages.
      */
     protected TreeNode createNodes() {
 
@@ -67,17 +69,28 @@ public class PageLinkTreePage extends PlainTreePage {
         //we do specify a id as the 2nd argument, so no id is generated.
         TreeNode general = new TreeNode("Intro", "1", root);
 
-        new TreeNode(HelloWorld.class, "1.1", general);
-        new TreeNode(ControlListenerPage.class, "1.2", general);
+        boolean supportsChildNodes = false;
+        
+        new TreeNode(HelloWorld.class, "1.1", general, supportsChildNodes);
+        new TreeNode(ControlListenerPage.class, "1.2", general, supportsChildNodes);
 
         TreeNode forms = new TreeNode("Forms", "2", root);
-        new TreeNode(SimpleForm.class, "2.1", forms);
-        new TreeNode(AdvancedForm.class, "2.2", forms);
+        new TreeNode(SimpleForm.class, "2.1", forms, supportsChildNodes);
+        new TreeNode(AdvancedForm.class, "2.2", forms, supportsChildNodes);
         
         TreeNode tables = new TreeNode("Tables", "3", root);
-        new TreeNode(SimpleTable.class, "3.1", tables);
-        new TreeNode(AdvancedTable.class, "3.2", tables);
+        new TreeNode(SimpleTable.class, "3.1", tables, supportsChildNodes);
+        new TreeNode(AdvancedTable.class, "3.2", tables, supportsChildNodes);
 
         return root;
+    }
+
+    /**
+     * Return the string under which the nodes are stored in the session.
+     * 
+     * @return the string under which the nodes are stored in the session
+     */
+    protected String getSessionKey() {
+        return TREE_NODES_SESSION_KEY;
     }
 }

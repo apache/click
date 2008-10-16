@@ -148,24 +148,31 @@ public class PlainTreePage extends BorderPage {
         return root;
     }
 
-    // --------------------------------------------------------- Private Methods
+    /**
+     * Return the string under which the nodes are stored in the session.
+     * 
+     * @return the string under which the nodes are stored in the session
+     */
+    protected String getSessionKey() {
+        return TREE_NODES_SESSION_KEY;
+    }
 
     /**
      * Store the tree nodes in the session
      */
-    private void storeNodesInSession(TreeNode rootNode) {
+    protected void storeNodesInSession(TreeNode rootNode) {
         if (tree.getRootNode() == null) {
             return;
         }
 
-        getContext().getSession().setAttribute(TREE_NODES_SESSION_KEY, rootNode);
+        getContext().getSession().setAttribute(getSessionKey(), rootNode);
     }
 
     /**
      * Retrieve the tree nodes from the session if available. Otherwise we return
      * null.
      */
-    private TreeNode loadNodesFromSession() {
-        return (TreeNode) getContext().getSession().getAttribute(TREE_NODES_SESSION_KEY);
+    protected TreeNode loadNodesFromSession() {
+        return (TreeNode) getContext().getSession().getAttribute(getSessionKey());
     }
 }
