@@ -1,0 +1,14 @@
+<!-- Print any messages -->
+#set ($message = $session.message)
+#if ($message)
+    <h3>$message</h3>
+#end
+
+<!-- Some markup -->
+<div id="wizard">
+    <div id="wizard-heading">
+        <h2>$step.label</h2>
+        $step.description
+    </div>
+    $step
+</div>

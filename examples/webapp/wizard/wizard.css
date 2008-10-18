@@ -1,0 +1,27 @@
+#wizard {
+    width:450px; 
+    border: outset 3px gray; 
+    padding: 2px; 
+    margin: 2px; 
+    margin-top: 20px;
+}
+#form {
+    margin: 0;
+    padding: 0;
+}
+#form-fields.fields, #wizard-heading { 
+    border: 1px solid gray;
+}
+#wizard-heading {
+    padding: 2px 15px 10px; 
+    margin: 2px;
+}
+h2 {
+    color: #334ECF;
+}
+.buttons input {
+    width: 75px;
+}
+table.form, table.fields { 
+    width: 100%; 
+}
