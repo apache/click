@@ -2183,9 +2183,9 @@ public class Form extends AbstractContainer {
         if (getControls().size() == 1) {
 
             // getControlMap is cheaper than getFieldMap, so check that first
-            if (getControlMap().containsKey("form_name")) {
+            if (getControlMap().containsKey(FORM_NAME)) {
                 return;
-            } else if (ContainerUtils.getFieldMap(this).containsKey("form_name")) {
+            } else if (ContainerUtils.getFieldMap(this).containsKey(FORM_NAME)) {
                 return;
             }
         }
