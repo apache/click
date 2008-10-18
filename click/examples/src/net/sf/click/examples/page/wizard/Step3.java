@@ -69,6 +69,9 @@ public class Step3 extends Step {
      * model for rendering.
      */
     public void onRender() {
+        // Invoke default onInit implementation
+        super.onRender();
+
         // Add client to model for displaying confirmation message
         if (!getModel().containsKey("client")) {
             addModel("client", getClient());
