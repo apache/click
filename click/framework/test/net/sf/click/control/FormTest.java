@@ -154,12 +154,14 @@ public class FormTest extends TestCase {
         // Add new field
         form.add(nameField);
 
-        // nameField index: #controls=1, #fieldList=1
+        // nameField index: #controls=1
         assertTrue(form.getControls().indexOf(nameField) == 1);
+        // nameField index: #fieldList=1
         assertTrue(form.getFieldList().indexOf(nameField) == 1);
         
-        // trackField index: #controls=0, #fieldList=0
+        // trackField index: #controls=1
         assertTrue(form.getControls().indexOf(trackField) == 0);
+        // trackField index: #fieldList=1
         assertTrue(form.getFieldList().indexOf(trackField) == 0);
     }
 
@@ -633,7 +635,44 @@ public class FormTest extends TestCase {
         } catch (Exception expected) {
         }
     }
-    
+
+    /**
+     * Tests the Form insert performance.
+     * 
+     * Creating 100 000 forms with 20 fields takes 1034 ms -> 1934 inserts per ms.
+     * 
+     * System used: Sun JDK 1.4, Dual core, 2.16GHz, 2.00GB RAM, Windows XP
+     */
+    public void testInsertPerf() {
+        // Specify the amount of text fields to create
+        int textFieldCount = 15;
+        
+        // Number of times to populate a form with fields
+        int loops = 100000;
+        
+        long time = 0;
+        for (int i = 0; i < loops; i++) {
+            Form form = new Form("form");
+
+            long start = System.currentTimeMillis();
+            populateForm(textFieldCount, form);
+            time += System.currentTimeMillis() - start;
+        }
+        System.out.println("Time :" + time);
+    }
+
+    public void populateForm(int count, Form form) {
+        // Add 5 hidden fields
+        form.add(new HiddenField("-1", Boolean.class));
+        form.add(new HiddenField("-2", Boolean.class));
+        form.add(new HiddenField("-3", Boolean.class));
+        form.add(new HiddenField("-4", Boolean.class));
+        form.add(new HiddenField("-5", Boolean.class));
+        for (int i = 0; i < count; i++) {
+            form.add(new TextField(String.valueOf(i)));
+        }
+    }
+
     /**
      * Div container used for testing.
      */
