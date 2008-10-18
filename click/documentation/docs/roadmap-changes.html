@@ -55,7 +55,37 @@ The feature roadmap for the next major release of Click is being determined.
 <h2>Changes</h2>
 
 <dl>
-  <dt><a name="1.5"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release - Version 1.5 - ??? October 2008</div></dt>
+  <dt><a name="1.4.2"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release - Version 1.4.2 - 12 April 2008</div></dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+		Fixed ExcludePage should be a public class
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-346">346</a>].
+      </li>
+      <li class="change">
+		Fixed Maven artifacts packaging
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-348">348</a>].
+      </li>
+      <li class="change">
+		Fixed slight performance degradation
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-349">349</a>].
+      </li>
+      <li class="change">
+      	Fixed PageLink to change extension <tt>jsp</tt> to <tt>htm</tt>
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-352">352</a>].
+      </li>
+      <li class="change">
+      	Fix DateField and ChartFields to include the javascript <tt>control.js</tt>
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-354">354</a>].
+      </li>
+      <li class="change">
+      	Fix DateField which produced duplicate stylesheet links.
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-356">356</a>].
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="1.5-RC3"></a><div class="release-header">Latest Development Release - Version 1.5 RC3 - 18 October 2008</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
@@ -85,7 +115,7 @@ The feature roadmap for the next major release of Click is being determined.
       </li>
     </ul>
     <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;"> 
-      The following issues was resolved:
+      The following issues were resolved:
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li class="change">
@@ -760,36 +790,6 @@ public class MyPage extends Page {
   	</ul>
   </dd>
   <p/>
-
-  <dt><a name="1.4.2"></a>Version 1.4.2 - 12 April 2008</dt>
-  <dd>
-    <ul style="padding: 0em; margin-left:0em;">
-      <li class="change">
-		Fixed ExcludePage should be a public class
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-346">346</a>].
-      </li>
-      <li class="change">
-		Fixed Maven artifacts packaging
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-348">348</a>].
-      </li>
-      <li class="change">
-		Fixed slight performance degradation
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-349">349</a>].
-      </li>
-      <li class="change">
-      	Fixed PageLink to change extension <tt>jsp</tt> to <tt>htm</tt>
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-352">352</a>].
-      </li>
-      <li class="change">
-      	Fix DateField and ChartFields to include the javascript <tt>control.js</tt>
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-354">354</a>].
-      </li>
-      <li class="change">
-      	Fix DateField which produced duplicate stylesheet links.
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-356">356</a>].
-      </li>
-    </ul>
-  </dd>
 
   <dt><a name="1.4.1"></a>Version 1.4.1 - 30 March 2008</dt>
   <dd>
