@@ -603,12 +603,27 @@ public class Page {
      * Override this method to specify JavaScript and CSS includes for the
      * page. For example:
      *
-     * <pre class="codeJava">
-     * <span class="kw">protected static final</span> String HTML_IMPORT =
-     *     <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;"</span>;
+     * <pre class="prettyprint">
+     * public MyPage extends Page {
      *
-     * <span class="kw">public</span> String getHtmlImports() {
-     *     <span class="kw">return</span> ClickUtils.createHtmlImport(HTML_IMPORTS, getResourceVersionIndicator(), getContext());
+     *     // Define a constant for the Page Javascript import.
+     *     protected static final String JAVASCRIPT_IMPORT =
+     *         "&lt;script type='text/javascript' src='{0}/click/my-page.js'&gt;&lt;/script&gt;\n";
+     *
+     *     // Define a constant for the Page CSS import
+     *     protected static final String CSS_IMPORT =
+     *         "&lt;link type='text/css' rel='stylesheet' href='text/css' src='{0}/click/my-page.css'/&gt;\n";
+     *
+     *     ...
+     *
+     *     // Override getHtmlImports and return the Javascript and CSS imports.
+     *     public String getHtmlImports() {
+     *         Context context = getContext();
+     *
+     *         // Concatenate Javascript and CSS imports
+     *         return ClickUtils.createHtmlImport(MyPage.JAVASCRIPT_IMPORT, ClickUtils.getResourceVersionIndicator(), context)
+     *         + ClickUtils.createHtmlImport(MyPage.CSS_IMPORT, ClickUtils.getResourceVersionIndicator(), context);
+     *     }
      * } </pre>
      *
      * <b>Note</b> multiple import lines should be separated by a
