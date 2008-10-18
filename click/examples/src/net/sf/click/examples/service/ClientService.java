@@ -26,4 +26,15 @@ public class ClientService extends CayenneTemplate {
         return (Client) getObjectForPK(Client.class, id);
     }
 
+    public void saveClient(Client client) {
+        if (client.getObjectContext() == null) {
+            registerNewObject(client);
+        }
+        commitChanges();
+    }
+
+    public Client createClientInNestedContext() {
+        return (Client) getDataContext().createChildDataContext().
+            createAndRegisterNewObject(Client.class);
+    }
 }

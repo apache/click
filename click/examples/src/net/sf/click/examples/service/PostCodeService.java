@@ -37,4 +37,11 @@ public class PostCodeService extends CayenneTemplate {
         return list;
     }
 
+    public List getPostCodes() {
+        SelectQuery query = new SelectQuery(PostCode.class);
+
+        query.setFetchLimit(10);
+
+        return performQuery(query);
+    }
 }
