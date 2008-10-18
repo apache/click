@@ -9,6 +9,7 @@ import net.sf.click.control.Submit;
 import net.sf.click.examples.control.cayenne.NestedCayenneForm;
 import net.sf.click.examples.domain.Client;
 import net.sf.click.extras.cayenne.CayenneForm;
+import org.apache.commons.lang.ClassUtils;
 
 /**
  * Provides common functionality for each step in the wizard.
@@ -20,7 +21,8 @@ public abstract class Step extends SimplePanel {
     // -------------------------------------------------------------- Variables
 
     /** Reference to the form. */
-    private CayenneForm form = new NestedCayenneForm("form", Client.class);
+    private CayenneForm form = new NestedCayenneForm("form"
+        + ClassUtils.getShortClassName(getClass()), Client.class);
 
     /** Reference to the wizard page. */
     private WizardPage wizardPage;
