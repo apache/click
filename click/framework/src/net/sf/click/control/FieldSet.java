@@ -157,10 +157,22 @@ public class FieldSet extends Field implements Container {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Add a Field to the FieldSet and return the added instance.
+     * Add a Field to the FieldSet at the specified index and return the added
+     * instance.
      * <p/>
-     * <b>Please note</b> if the FieldSet's parent is a {@link Form}, the
-     * Fields inside the FieldSet will be laid out by the Form.
+     * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
+     * where the key is the Control name and value is the Control instance.
+     * <p/>
+     * All controls are available on the {@link #getControls() controls} list
+     * at the index they were inserted. If you are only interested in Fields,
+     * note that fields are available on {@link #getFieldList() fieldList}.
+     * <p/>
+     * The specified index only applies to {@link #getControls() controls}, not
+     * {@link #getFieldList() fieldList}.
+     * <p/>
+     * <b>Please note</b> if the specified control already has a parent assigned,
+     * it will automatically be removed from that parent and inserted into the
+     * fieldSet.
      *
      * @see Container#add(net.sf.click.Control)
      *
@@ -176,25 +188,40 @@ public class FieldSet extends Field implements Container {
     }
 
     /**
+     * Add a Control to the fieldset and return the added instance.
+     * <p/>
+     * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
+     * where the key is the Control name and value is the Control instance.
+     * <p/>
+     * All controls are available on the {@link #getControls() controls} list
+     * in the order they were added. If you are only interested in Fields,
+     * note fields are available on {@link #getFieldList() fieldList}.
+     *
      * @see net.sf.click.control.Container#add(net.sf.click.Control).
      *
      * @param control the control to add to the container and return
      * @return the control that was added to the container
+     *
+     * @throws IllegalArgumentException if the control is null, the Field's name
+     * is not defined, the container already contains a control with the same
+     * name or if the control is neither a Field nor FieldSet
      */
     public Control add(Control control) {
         return insert(control, getControls().size());
     }
 
     /**
-     * Add the field to the fieldSet, and set the fields form property. The
-     * field will be added to {@link #getControlMap()} using its name.
+     * Add the field to the fieldSet, and set the fields form property.
      * <p/>
-     * Field instances will be add to {@link #getControls()}.
+     * Fields can be retrieved from the Map {@link #getFields() fields} where
+     * the key is the Field name and value is the Field instance.
+     * <p/>
+     * Fields are available on {@link #getFieldList() fieldList}.
      *
      * @see #add(net.sf.click.Control)
      *
-     * @param field the field to add to the form
-     * @return the field added to this form
+     * @param field the field to add to the fieldSet
+     * @return the field added to this fieldSet
      * @throws IllegalArgumentException if the field is null, the field name
      * is not defined or the fieldSet already contains a control with the same
      * name
@@ -209,6 +236,8 @@ public class FieldSet extends Field implements Container {
      * <p/>
      * Fields can be retrieved from the Map {@link #getFields() fields} where
      * the key is the Field name and value is the Field instance.
+     * <p/>
+     * Fields are available on {@link #getFieldList() fieldList}.
      * <p/>
      * Note Button and HiddenField types are not valid arguments for this method.
      *
@@ -229,6 +258,8 @@ public class FieldSet extends Field implements Container {
      * <p/>
      * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
      * where the key is the Control name and value is the Control instance.
+     * <p/>
+     * Controls are available on the {@link #getControls() controls} list.
      * <p/>
      * Note Button and HiddenField types are not valid arguments for this method.
      *

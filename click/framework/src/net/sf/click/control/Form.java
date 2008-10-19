@@ -632,11 +632,13 @@ public class Form extends AbstractContainer {
     /**
      * Add a Control to the form and return the added instance.
      * <p/>
-     * Fields can be retrieved from the Map {@link #getFields() fields} where
-     * the key is the Control name and value is the Control instance.
+     * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
+     * where the key is the Control name and value is the Control instance.
      * <p/>
-     * Buttons are available on the {@link #getButtonList() buttonList} while
-     * other fields are available from {@link #getFieldList() fieldList}.
+     * All controls are available on the {@link #getControls() controls} list
+     * in the order they were added. If you are only interested in Fields,
+     * note that Buttons are available on the {@link #getButtonList() buttonList}
+     * while other fields are available on {@link #getFieldList() fieldList}.
      *
      * @see Container#add(net.sf.click.Control)
      *
@@ -653,6 +655,17 @@ public class Form extends AbstractContainer {
     /**
      * Add the control to the form at the specified index, and return the
      * added instance.
+     * <p/>
+     * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
+     * where the key is the Control name and value is the Control instance.
+     * <p/>
+     * All controls are available on the {@link #getControls() controls} list
+     * at the index they were inserted. If you are only interested in Fields,
+     * note that Buttons are available on the {@link #getButtonList() buttonList}
+     * while other fields are available on {@link #getFieldList() fieldList}.
+     * <p/>
+     * The specified index only applies to {@link #getControls() controls}, not
+     * {@link #getButtonList() buttonList} or {@link #getFieldList() fieldList}.
      * <p/>
      * <b>Please note</b> if the specified control already has a parent assigned,
      * it will automatically be removed from that parent and inserted into the
@@ -716,7 +729,7 @@ public class Form extends AbstractContainer {
      * the key is the Field name and value is the Field instance.
      * <p/>
      * Buttons are available on the {@link #getButtonList() buttonList} while
-     * other fields are available from {@link #getFieldList() fieldList}.
+     * other fields are available on {@link #getFieldList() fieldList}.
      *
      * @see #add(net.sf.click.Control)
      *
@@ -736,7 +749,11 @@ public class Form extends AbstractContainer {
      * Fields can be retrieved from the Map {@link #getFields() fields} where
      * the key is the Field name and value is the Field instance.
      * <p/>
+     * Fields are available on {@link #getFieldList() fieldList}.
+     * <p/>
      * Note Button and HiddenField types are not valid arguments for this method.
+     *
+     * @see #add(net.sf.click.Control)
      *
      * @param field the field to add to the form
      * @param width the width of the field in table columns
@@ -756,7 +773,11 @@ public class Form extends AbstractContainer {
      * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
      * where the key is the Control name and value is the Control instance.
      * <p/>
+     * Controls are available on the {@link #getControls() controls} list.
+     * <p/>
      * Note Button and HiddenField types are not valid arguments for this method.
+     *
+     * @see #add(net.sf.click.Control)
      *
      * @param control the control to add to the form
      * @param width the width of the control in table columns
