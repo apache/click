@@ -64,7 +64,7 @@
               files="Form.java"/>
 
     <suppress checks="LineLength"
-              files="Tree.java"/>
+              files="Tree.java"/>#
 
     <suppress checks="LineLength"
               files="RegexField.java"
@@ -90,11 +90,11 @@
 
     <suppress checks="MethodLength"
               files="Form.java"
-              lines="2229, 2342"/>
+              lines="2250, 2342"/>
 
     <suppress checks="MethodLength"
               files="FieldSet.java"
-              lines="825"/>
+              lines="856"/>
 
 	<!-- Static Variable Name -->              
 
