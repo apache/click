@@ -52,6 +52,6 @@ public class Step1 extends Step {
             getWizardPage().next();
             getWizardPage().getCurrentStep().setClient(getClient());
         }
-        return false;
+        return true;
     }
 }
