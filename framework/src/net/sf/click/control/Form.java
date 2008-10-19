@@ -645,6 +645,18 @@ public class Form extends AbstractContainer {
     }
 
     /**
+     * Add the control to the form at the specified index, and return the
+     * added instance.
+     * <p/>
+     * <b>Please note</b> if the specified control already has a parent assigned,
+     * it will automatically be removed from that parent and inserted into the
+     * form.
+     * <p/>
+     * <b>Also note:</b> Form automatically adds hidden fields to preserve
+     * state across requests. Be aware of this when using <tt>insert</tt> as the
+     * hidden fields might influence the position of the Control you insert.
+     * <em>This restriction might be removed in a future version of Click.</em>
+     *
      * @see net.sf.click.control.Container#insert(net.sf.click.Control, int)
      *
      * @param control the control to add to the container
