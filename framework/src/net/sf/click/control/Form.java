@@ -118,7 +118,8 @@ import org.apache.commons.lang.StringUtils;
  * any of its Fields have validation errors they will be automatically
  * rendered, and the {@link #isValid()} method will return false.
  *
- * <a name="data-binding"><h3>Data Binding</h3></a>
+ * <a name="data-binding"></a>
+ * <h3>Data Binding</h3>
  *
  * To bind value objects to a forms fields use the copy methods:
  * <ul>
@@ -161,7 +162,8 @@ import org.apache.commons.lang.StringUtils;
  * <tt>java.util.Map</tt> as an argument. Examples of using
  * <tt>java.util.Map</tt> are shown in the respective method descriptions.
  *
- * <a name="form-validation"><h3>Form Validation</h3></a>
+ * <a name="form-validation"></a>
+ * <h3>Form Validation</h3>
  *
  * The Form control supports automatic field validation. By default when a POST
  * request is made the form will validate the field values. To disable
@@ -211,11 +213,13 @@ import org.apache.commons.lang.StringUtils;
  * &lt;/html&gt;
  * <span class="blue">$jsImports</span></pre>
  *
- * <a name="form-layout"><h3>Form Layout</h3></a>
+ * <a name="form-layout"></a>
+ * <h3>Form Layout</h3>
  * The Form control supports rendering using automatic and manual layout
  * techniques.
  *
- * <a name="auto-layout"><h4>Auto Layout</h4></a>
+ * <a name="auto-layout"></a>
+ * <h4>Auto Layout</h4>
  *
  * If you include a form variable in your template the form will be
  * automatically laid out and rendered. Auto layout, form and field rendering
@@ -249,7 +253,8 @@ import org.apache.commons.lang.StringUtils;
  * </tr>
  * </table>
  *
- * <a name="manual-layout"><h4>Manual Layout</h4></a>
+ * <a name="manual-layout"></a>
+ * <h4>Manual Layout</h4>
  *
  * You can also manually layout the Form in the page template specifying
  * the fields using the named field notation:
@@ -321,7 +326,8 @@ import org.apache.commons.lang.StringUtils;
  * As you can see in this example most of the code and markup is generic and
  * could be reused. This is where Velocity Macros come in.
  *
- * <a name="velocity-macros"><h4>Velocity Macros</h4></a>
+ * <a name="velocity-macros"></a>
+ * <h4>Velocity Macros</h4>
  *
  * Velocity Macros
  * (<a target="topic" href="../../../../../velocity/user-guide.html#Velocimacros">velocimacros</a>)
