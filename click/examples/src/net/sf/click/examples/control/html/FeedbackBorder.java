@@ -41,6 +41,8 @@ public class FeedbackBorder extends AbstractContainer {
     }
 
     public void onRender() {
+        super.onRender();
+
         Field field = (Field) getControls().get(0);
 
         // Add required css class
