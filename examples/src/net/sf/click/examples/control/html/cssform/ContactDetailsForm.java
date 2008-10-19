@@ -12,6 +12,7 @@ import net.sf.click.extras.control.HtmlFieldSet;
 import net.sf.click.extras.control.HtmlForm;
 import net.sf.click.extras.control.IntegerField;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * This page demonstrates how to manually layout a form using Java.
@@ -75,8 +76,15 @@ public class ContactDetailsForm extends HtmlForm {
     }
 
     public String getHtmlImports() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
+
+        // Include default imports
+        buffer.append(super.getHtmlImports());
+
+        // Include CSS for ContactDetailsForm
         String imports = "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/assets/css/cssform{1}.css\"/>\n";
-        return ClickUtils.createHtmlImport(imports, getContext());
+        buffer.append(ClickUtils.createHtmlImport(imports, getContext()));
+        return buffer.toString();
     }
 
     private Field addTextField(String nameStr, HtmlList htmlList) {
