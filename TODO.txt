@@ -1,4 +1,4 @@
-Click 1.5-RC3 Release
+Click 1.5 Release
 --------------------
 BUGS
 * 
