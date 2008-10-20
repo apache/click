@@ -43,4 +43,93 @@ public class ContainerUtilsTest extends TestCase {
         // Forms internal HiddenFields "form_name".
         assertEquals(3, fields.size());
     }
+
+    /**
+     * Check that domain class with duplicate getter methods resolves to the
+     * no-argument version.
+     *
+     * CLK-461
+     */
+    public void testCopyToErrorMessages() {
+        MockContext context = MockContext.initContext();
+        
+        // Setup request parameters
+        String price = "10.99";
+        context.getMockRequest().setParameter("part.price", price);
+        context.getMockRequest().setParameter("form_name", "form");
+
+        // Setup form
+        Form form = new Form("form");
+
+        // Setup price field
+        TextField priceField = new TextField("part.price");
+        form.add(priceField);
+
+        // Process form to bind request parameter to field
+        form.onProcess();
+
+        Car car = new Car();
+        form.copyTo(car);
+
+        assertEquals(price, priceField.getValue());
+    }
+
+    /**
+     * Test Car class.
+     */
+    public static class Car {
+
+        /** Part variable. */
+        private Part part;
+
+        /**
+         * Getter for part
+         * @return part
+         */
+        public Part getPart() {
+            return part;
+        }
+
+        /**
+         * Duplicate Getter for part with int argument
+         * @param arg
+         * @return part
+         */
+        public Part getPart(int arg) {
+            return part;
+        }
+
+        /**
+         * Setter for part
+         * @param part
+         */
+        public void setPart(Part part) {
+            this.part = part;
+        }
+    }
+
+    /**
+     * Test Part class.
+     */
+    public static class Part {
+
+        /** Price variable. */
+        private double price;
+
+        /**
+         * Getter for price.
+         * @return price
+         */
+        public double getPrice() {
+            return price;
+        }
+
+        /**
+         * Setter for price.
+         * @param price
+         */
+        public void setPrice(double price) {
+            this.price = price;
+        }
+    }
 }
