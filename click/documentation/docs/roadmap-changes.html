@@ -55,116 +55,20 @@ The feature roadmap for the next major release of Click is being determined.
 <h2>Changes</h2>
 
 <dl>
-  <dt><a name="1.4.2"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release - Version 1.4.2 - 12 April 2008</div></dt>
-  <dd>
-    <ul style="padding: 0em; margin-left:0em;">
-      <li class="change">
-		Fixed ExcludePage should be a public class
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-346">346</a>].
-      </li>
-      <li class="change">
-		Fixed Maven artifacts packaging
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-348">348</a>].
-      </li>
-      <li class="change">
-		Fixed slight performance degradation
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-349">349</a>].
-      </li>
-      <li class="change">
-      	Fixed PageLink to change extension <tt>jsp</tt> to <tt>htm</tt>
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-352">352</a>].
-      </li>
-      <li class="change">
-      	Fixed DateField and ChartFields to include the javascript <tt>control.js</tt>
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-354">354</a>].
-      </li>
-      <li class="change">
-      	Fixed DateField which produced duplicate stylesheet links.
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-356">356</a>].
-      </li>
-    </ul>
-  </dd>
-
-  <dt><a name="1.5-RC3"></a><div class="release-header">Latest Development Release - Version 1.5 RC3 - 19 October 2008</div></dt>
+  <dt><a name="1.5"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release - Version 1.5 - 2 November 2008</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
-    <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
-      New examples:
-    </div>
-    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
-      <li>
-        <a target="_blank" class="external" href="http://www.avoka.com/click-examples/wizard/wizard.htm">
-          Wizard demo</a> shows how to leverage a <a href="pages.html#page-stateful">stateful</a>
-          page and <a href="click-api/net/sf/click/control/Panel.html">Panels</a>
-          to create a process flow. Each Step in the process is represented by a
-          Panel which is managed by the stateful Page.
-      </li>
-      <li>
-        <a target="_blank" class="external" href="http://www.avoka.com/click-examples/control/populate-on-select.htm">
-          Populate on select</a> shows how items in one combo box is populated
-          based on the selected item in another using JavaScript.
-      </li>
-      <li>
-        <a target="_blank" class="external" href="http://www.avoka.com/click-examples/table/edit-form-table.htm">
-          FormTable demo</a> shows how a FormTable can be used together with an
-          existing Form.
-      </li>
-      <li>
-        <a target="_blank" class="external" href="http://www.avoka.com/click-examples/tree/page-link-tree-page.htm">
-          Page link tree</a> provides a demonstration of using the Tree component
-          to link to different pages.
-      </li>
-    </ul>
-    <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
-      New documentation:
-    </div>
-    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
-      <li>
-        Added a full <a href="click-dtd-example.html">configuration example</a>
-        containing all <tt>click.xml</tt> <a href="click-dtd.html">DTD</a> elements and attributes.
-      </li>
-    </ul>
     <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;"> 
       The following issues were resolved:
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li class="change">
-        Added FormTable.properties containing a new property <span style="color:navy;">formtable-error</span>.
-        When adding FormTable to an external From, the <span style="color:navy;">formtable-error</span>
-        will be displayed if one of the FormTable fields contains an error.
-      </li>
-      <li class="change">
-        Renamed ContainerUtils method getFields to getInputFields which better reflect its behavior
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-457">457</a>].
-      </li>
-      <li class="change">
-        Fixed TabbedForm and TabbedCayenneForm to import JavaScript and CSS from their
-        superclass. This issue was raised by Christophe Foiret
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-450">450</a>].
-      </li>
-      <li class="change">
-        Fixed CayenneForm performing multiple inserts
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-452">452</a>].
-      </li>
-      <li class="change">
-        Fixed FormTable duplicate HTML imports
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-453">453</a>].
-      </li>
-      <li class="change">
-        Fixed XmlConfigService not deploying JAR resources
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-454">454</a>].
-      </li>
-      <li class="change">
-        Fixed Page.setRedirect to guard against duplicate context paths. This issue
-        was raised and fixed by Ricardo Lecheta
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-456">456</a>].
-      </li>
-      <li class="change">
-        Fixed CountrySelect to exclude duplicate countries. This issue was raised
-        and fixed by Christopher Highway
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-458">458</a>].
+        Fixed ContainerUtils.copyTo where the wrong getter method could be used
+        when a domain object contains multiple overloaded getter methods. This
+        issue was raised by Alvin Townsend
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-461">461</a>].
       </li>
     </ul>
     <a name="1.5-M1-upgrade-path" href="#"></a>
@@ -307,6 +211,89 @@ public class HtmlTable extends AbstractControl {
        <p/>
        While it is generally not recommended to use the Click LogService in your application code, you can retrieve it using the ClickUtils method
        <a href="click-api/net/sf/click/util/ClickUtils.html#getLogService()">getLogService()</a>.
+      </li>
+    </ul>
+  </dd>
+  <dt><a name="1.5-RC3"></a>Version 1.5 RC3 - 19 October 2008</dt>
+  <dd>
+    <div style="margin-left:-2em;margin-bottom:1em;">
+      <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
+    </div>
+    <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+      New examples:
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li>
+        <a target="_blank" class="external" href="http://www.avoka.com/click-examples/wizard/wizard.htm">
+          Wizard demo</a> shows how to leverage a <a href="pages.html#page-stateful">stateful</a>
+          page and <a href="click-api/net/sf/click/control/Panel.html">Panels</a>
+          to create a process flow. Each Step in the process is represented by a
+          Panel which is managed by the stateful Page.
+      </li>
+      <li>
+        <a target="_blank" class="external" href="http://www.avoka.com/click-examples/control/populate-on-select.htm">
+          Populate on select</a> shows how items in one combo box is populated
+          based on the selected item in another using JavaScript.
+      </li>
+      <li>
+        <a target="_blank" class="external" href="http://www.avoka.com/click-examples/table/edit-form-table.htm">
+          FormTable demo</a> shows how a FormTable can be used together with an
+          existing Form.
+      </li>
+      <li>
+        <a target="_blank" class="external" href="http://www.avoka.com/click-examples/tree/page-link-tree-page.htm">
+          Page link tree</a> provides a demonstration of using the Tree component
+          to link to different pages.
+      </li>
+    </ul>
+    <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+      New documentation:
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li>
+        Added a full <a href="click-dtd-example.html">configuration example</a>
+        containing all <tt>click.xml</tt> <a href="click-dtd.html">DTD</a> elements and attributes.
+      </li>
+    </ul>
+    <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;"> 
+      The following issues were resolved:
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change">
+        Added FormTable.properties containing a new property <span style="color:navy;">formtable-error</span>.
+        When adding FormTable to an external From, the <span style="color:navy;">formtable-error</span>
+        will be displayed if one of the FormTable fields contains an error.
+      </li>
+      <li class="change">
+        Renamed ContainerUtils method getFields to getInputFields which better reflect its behavior
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-457">457</a>].
+      </li>
+      <li class="change">
+        Fixed TabbedForm and TabbedCayenneForm to import JavaScript and CSS from their
+        superclass. This issue was raised by Christophe Foiret
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-450">450</a>].
+      </li>
+      <li class="change">
+        Fixed CayenneForm performing multiple inserts
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-452">452</a>].
+      </li>
+      <li class="change">
+        Fixed FormTable duplicate HTML imports
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-453">453</a>].
+      </li>
+      <li class="change">
+        Fixed XmlConfigService not deploying JAR resources
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-454">454</a>].
+      </li>
+      <li class="change">
+        Fixed Page.setRedirect to guard against duplicate context paths. This issue
+        was raised and fixed by Ricardo Lecheta
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-456">456</a>].
+      </li>
+      <li class="change">
+        Fixed CountrySelect to exclude duplicate countries. This issue was raised
+        and fixed by Christopher Highway
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-458">458</a>].
       </li>
     </ul>
   </dd>
@@ -801,7 +788,35 @@ public class MyPage extends Page {
   	</ul>
   </dd>
   <p/>
-
+  <dt><a name="1.4.2"></a>Version 1.4.2 - 12 April 2008</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+		Fixed ExcludePage should be a public class
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-346">346</a>].
+      </li>
+      <li class="change">
+		Fixed Maven artifacts packaging
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-348">348</a>].
+      </li>
+      <li class="change">
+		Fixed slight performance degradation
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-349">349</a>].
+      </li>
+      <li class="change">
+      	Fixed PageLink to change extension <tt>jsp</tt> to <tt>htm</tt>
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-352">352</a>].
+      </li>
+      <li class="change">
+      	Fixed DateField and ChartFields to include the javascript <tt>control.js</tt>
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-354">354</a>].
+      </li>
+      <li class="change">
+      	Fixed DateField which produced duplicate stylesheet links.
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-356">356</a>].
+      </li>
+    </ul>
+  </dd>
   <dt><a name="1.4.1"></a>Version 1.4.1 - 30 March 2008</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;"> Developer
