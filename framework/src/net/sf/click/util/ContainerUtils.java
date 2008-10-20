@@ -508,19 +508,19 @@ public class ContainerUtils {
 
             if (methodName.startsWith("get") && methodName.length() > 3) {
                 String propertyName =
-                    "" + Character.toLowerCase(methodName.charAt(3))
+                    Character.toLowerCase(methodName.charAt(3))
                     + methodName.substring(4);
                 hashSet.add(propertyName);
             }
             if (methodName.startsWith("is") && methodName.length() > 2) {
                 String propertyName =
-                    "" + Character.toLowerCase(methodName.charAt(2))
+                    Character.toLowerCase(methodName.charAt(2))
                     + methodName.substring(3);
                 hashSet.add(propertyName);
             }
             if (methodName.startsWith("set") && methodName.length() > 3) {
                 String propertyName =
-                    "" + Character.toLowerCase(methodName.charAt(3))
+                    Character.toLowerCase(methodName.charAt(3))
                     + methodName.substring(4);
                 hashSet.add(propertyName);
             }
@@ -635,14 +635,14 @@ public class ContainerUtils {
         Class sourceClass = object.getClass();
 
         try {
-            method = sourceClass.getMethod(getterName, null);
+            method = sourceClass.getMethod(getterName, (Class[]) null);
         } catch (Exception e) {
         }
 
         if (method == null) {
             String isGetterName = ClickUtils.toIsGetterName(property);
             try {
-                method = sourceClass.getMethod(isGetterName, null);
+                method = sourceClass.getMethod(isGetterName, (Class[]) null);
             } catch (Exception e) {
                 HtmlStringBuffer buffer = new HtmlStringBuffer();
                 logBasicDescription(buffer, object, path, property);
