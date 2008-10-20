@@ -15,6 +15,7 @@
  */
 package net.sf.click.util;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -529,7 +530,7 @@ public class ContainerUtils {
     }
 
     /**
-     * Return true if the specified field's name is contained within the
+     * Return true if the specified field name is contained within the
      * specified set of properties.
      *
      * @param field the field which name should be checked
@@ -564,54 +565,205 @@ public class ContainerUtils {
             return;
         }
 
+        String property = path.substring(0, index);
+        Method getterMethod = findGetter(object, property, path);
+        Object result = invokeGetter(getterMethod, object, property, path);
+
+        if (result == null) {
+            // Find the target class of the object in the path to create
+            Class targetClass = getterMethod.getReturnType();
+
+            Constructor constructor = null;
+            try {
+                // Lookup default no-arg constructor
+                constructor = targetClass.getConstructor((Class[]) null);
+
+            } catch (NoSuchMethodException e) {
+                // Log detailed error message of looking up constructor failed
+                HtmlStringBuffer buffer = new HtmlStringBuffer();
+                logBasicDescription(buffer, object, path, property);
+                buffer.append("Attempt to construct instance of class '");
+                buffer.append(targetClass.getName()).append(" resulted in error: '");
+                buffer.append(targetClass.getName());
+                buffer.append("' does not seem to have a default no argument");
+                buffer.append(" constrcutor. Please note another common problem");
+                buffer.append(" is that the class is not static or public.");
+                throw new RuntimeException(buffer.toString(), e);
+            }
+
+            try {
+                // Create target object instance
+                result = constructor.newInstance(new Object[]{});
+
+            } catch (Exception e) {
+                // Log detailed error message of why creating target failed
+                HtmlStringBuffer buffer = new HtmlStringBuffer();
+                logBasicDescription(buffer, object, path, property);
+                buffer.append("Result: could not create");
+                buffer.append(" object with constructor '");
+                buffer.append(constructor.getName()).append("'.");
+                throw new RuntimeException(buffer.toString(), e);
+            }
+
+            Method setterMethod = findSetter(object, property, targetClass, path);
+            invokeSetter(setterMethod, object, result, property, path);
+        }
+
+        String remainingPath = path.substring(index + 1);
+
+        ensureObjectPathNotNull(result, remainingPath);
+    }
+
+    /**
+     * Find the object getter method for the given property.
+     * <p/>
+     * If this method cannot find a 'get' property it tries to lookup an 'is'
+     * property.
+     *
+     * @param object the object to find the getter method on
+     * @param property the getter property name specifying the getter to lookup
+     * @param path the full expression path (used for logging purposes)
+     * @return the getter method
+     */
+    private final static Method findGetter(Object object, String property,
+        String path) {
+
+        // Find the getter for property
+        String getterName = ClickUtils.toGetterName(property);
+
+        Method method = null;
+        Class sourceClass = object.getClass();
+
         try {
-            String value = path.substring(0, index);
-            String getterName = ClickUtils.toGetterName(value);
-            String isGetterName = ClickUtils.toIsGetterName(value);
+            method = sourceClass.getMethod(getterName, null);
+        } catch (Exception e) {
+        }
 
-            Method foundMethod = null;
-            Method[] methods = object.getClass().getMethods();
-            for (int i = 0; i < methods.length; i++) {
-                String name = methods[i].getName();
-                if (name.equals(getterName)) {
-                    foundMethod = methods[i];
-                    break;
-
-                } else if (name.equals(isGetterName)) {
-                    foundMethod = methods[i];
-                    break;
-                }
+        if (method == null) {
+            String isGetterName = ClickUtils.toIsGetterName(property);
+            try {
+                method = sourceClass.getMethod(isGetterName, null);
+            } catch (Exception e) {
+                HtmlStringBuffer buffer = new HtmlStringBuffer();
+                logBasicDescription(buffer, object, path, property);
+                buffer.append("Result: neither getter methods '");
+                buffer.append(getterName).append("()' nor '");
+                buffer.append(isGetterName).append("()' was found on class: '");
+                buffer.append(object.getClass().getName()).append("'.");
+                throw new RuntimeException(buffer.toString(), e);
             }
+        }
+        return method;
+    }
 
-            if (foundMethod == null) {
-                String msg =
-                    "Getter method not found for path value : " + value;
-                throw new RuntimeException(msg);
-            }
+    /**
+     * Invoke the getterMethod for the given source object.
+     *
+     * @param getterMethod the getter method to invoke
+     * @param source the source object to invoke the getter method on
+     * @param property the getter method property name (used for logging)
+     * @param path the full expression path (used for logging)
+     * @return the getter result
+     */
+    private final static Object invokeGetter(Method getterMethod, Object source,
+        String property, String path) {
 
-            Object result = foundMethod.invoke(object, null);
-
-            if (result == null) {
-                result = foundMethod.getReturnType().newInstance();
-
-                String setterName = ClickUtils.toSetterName(value);
-                Class[] classArgs = { foundMethod.getReturnType() };
-
-                Method setterMethod =
-                    object.getClass().getMethod(setterName, classArgs);
-
-                Object[] objectArgs = { result };
-
-                setterMethod.invoke(object, objectArgs);
-            }
-
-            String remainingPath = path.substring(index + 1);
-
-            ensureObjectPathNotNull(result, remainingPath);
+        try {
+            // Retrieve target object from getter
+            return getterMethod.invoke(source, new Object[0]);
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            // Log detailed error message of why getter failed
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            logBasicDescription(buffer, source, path, property);
+            buffer.append("Result: error occurred while trying to get");
+            buffer.append(" instance of '");
+            buffer.append(getterMethod.getReturnType().getName());
+            buffer.append("' using method: '");
+            buffer.append(getterMethod.getName()).append("()' of class '");
+            buffer.append(source.getClass().getName()).append("'.");
+            throw new RuntimeException(buffer.toString(), e);
         }
+    }
+
+    /**
+     * Find the source object setter method for the given property.
+     *
+     * @param source the source object to find the setter method on
+     * @param property the property which setter needs to be looked up
+     * @param targetClass the setter parameter type
+     * @param path the full expression path (used for logging purposes)
+     * @return the setter method
+     */
+    private final static Method findSetter(Object source,
+        String property, Class targetClass, String path) {
+        Method method = null;
+
+        // Find the setter for property
+        String setterName = ClickUtils.toSetterName(property);
+
+        Class sourceClass = source.getClass();
+        Class[] classArgs = { targetClass };
+        try {
+            method = sourceClass.getMethod(setterName, classArgs);
+        } catch (Exception e) {
+            // Log detailed error message of why setter lookup failed
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            logBasicDescription(buffer, source, path, property);
+            buffer.append("Result: setter method '");
+            buffer.append(setterName).append("(").append(targetClass.getName());
+            buffer.append(")' was not found on class '");
+            buffer.append(source.getClass().getName()).append("'.");
+            throw new RuntimeException(buffer.toString(), e);
+        }
+        return method;
+    }
+
+    /**
+     * Invoke the setter method for the given source and target object.
+     *
+     * @param setterMethod the setter method to invoke
+     * @param source the source object to invoke the setter method on
+     * @param target the target object to set
+     * @param property the setter method property name (used for logging)
+     * @param path the full expression path (used for logging)
+     */
+    private final static void invokeSetter(Method setterMethod, Object source,
+        Object target, String property, String path) {
+
+        try {
+            Object[] objectArgs = {target};
+            setterMethod.invoke(source, objectArgs);
+
+        } catch (Exception e) {
+            // Log detailed error message of why setter failed
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            logBasicDescription(buffer, source, path, property);
+            buffer.append("Result: error occurred while trying to set an");
+            buffer.append(" instance of '");
+            buffer.append(target.getClass().getName()).append("' using method '");
+            buffer.append(setterMethod.getName()).append("(");
+            buffer.append(target.getClass());
+            buffer.append(")' of class '").append(source.getClass()).append("'.");
+            throw new RuntimeException(buffer.toString(), e);
+        }
+    }
+
+    /**
+     * Log a generic error message to the specified buffer for the given object,
+     * path and property.
+     *
+     * @param buffer the buffer to append log message to
+     * @param object the active object when the exception occurred
+     * @param path the current expression path
+     * @param property the current property being processed
+     */
+    private static void logBasicDescription(HtmlStringBuffer buffer, Object object,
+        String path, String property) {
+        buffer.append("Invoked ensureObjectPathNotNull");
+        buffer.append(" for class: '").append(object.getClass().getName());
+        buffer.append("', path: '").append(path).append("' and property: '");
+        buffer.append(property).append("'. ");
     }
 
    /**
