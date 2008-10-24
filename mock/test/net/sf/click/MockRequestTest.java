@@ -5,14 +5,17 @@ import net.sf.click.servlet.MockRequest;
 import net.sf.click.control.TextArea;
 
 /**
- *
- * @author Bob Schellink
+ * Sanity tests for MockRequest.
  */
 public class MockRequestTest extends TestCase {
 
-    // Indicates that the textArea actionListener was invoked
+    /** Indicates that the textArea actionListener was invoked. */
     private boolean actionCalled = false;
-    
+
+    /**
+     * Check that MockRequest can dynamically add parameters and trigger
+     * a Controls action listener.
+     */
     public void testDynamicRequest() {
         MockContext context = MockContext.initContext();
         MockRequest request = (MockRequest) context.getMockRequest();

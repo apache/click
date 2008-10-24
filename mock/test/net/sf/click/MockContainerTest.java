@@ -13,16 +13,18 @@ import net.sf.click.pages.RedirectPage;
 import net.sf.click.pages.TestPage;
 
 /**
- *
- * @author Bob Schellink
+ * Sanity tests for MockContainer.
  */
 public class MockContainerTest extends TestCase {
 
+    /**
+     * Test TestPage.
+     */
     public void testPage() {
         try {
             MockContainer container = new MockContainer("web");
 
-            container.start();//TODO remove need for start
+            container.start();
 
             // Set a parameter
             container.setParameter("myparam", "Some parameter");
@@ -73,6 +75,9 @@ public class MockContainerTest extends TestCase {
         }
     }
 
+    /**
+     * Test BorderPage.
+     */
     public void testBroderPage() {
         try {
             MockContainer container = new MockContainer("web");
@@ -104,6 +109,9 @@ public class MockContainerTest extends TestCase {
         }
     }
 
+    /**
+     * Test ForwardPage.
+     */
     public void testForward() {
         try {
             MockContainer container = new MockContainer("web");
@@ -143,6 +151,9 @@ public class MockContainerTest extends TestCase {
         }
     }
 
+    /**
+     * Test RedirectPage.
+     */
     public void testRedirect() {
         try {
             MockContainer container = new MockContainer("web");
@@ -188,6 +199,9 @@ public class MockContainerTest extends TestCase {
         }
     }
 
+    /**
+     * Test FormPage.
+     */
     public void testFormBinding() {
         try {
             MockContainer container = new MockContainer("web");

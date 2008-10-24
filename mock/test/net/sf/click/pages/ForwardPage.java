@@ -2,29 +2,23 @@ package net.sf.click.pages;
 
 import net.sf.click.*;
 
+/**
+ * Forward test page.
+ */
 public class ForwardPage extends Page {
-    
-    public boolean onSecurityCheck() {
-        return true;
-    }
 
+    /**
+     * Initialize page.
+     */
     public void onInit() {
         getContext().setRequestAttribute("id", "200");
-        System.out.println("myparam value: " + getContext().getRequestParameter("myparam"));
-        System.out.println("myfile value " + getContext().getFileItem("myfile"));
         addModel("myparam", getContext().getRequestParameter("myparam"));
     }
 
-    public void onGet() {
-    }
-
+    /**
+     * onPost event handler.
+     */
     public void onPost() {
         setForward(TestPage.class);
-    }
-
-    public void onRender() {
-    }
-    
-    public void onDestroy() {
     }
 }
