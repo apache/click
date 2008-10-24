@@ -128,16 +128,16 @@ public class MockRequest implements HttpServletRequest {
     /** The request context path, defaults to {@link MockServletContext.DEFAULT_CONTEXT_PATH}. */
     private String contextPath = MockServletContext.DEFAULT_CONTEXT_PATH;
 
-    /** The request servlet path, defaults to an empty String "" */
+    /** The request servlet path, defaults to an empty String "". */
     private String servletPath = "";
 
-    /** The request path info, defaults to an empty String "" */
+    /** The request path info, defaults to an empty String "". */
     private String pathInfo = "";
 
     /** The host name to which the request was sent, defaults to "localhost". */
     private String serverName = "localhost";
 
-    /** The port number to which the request was sent, defaults to 8080 */
+    /** The port number to which the request was sent, defaults to 8080. */
     private int serverPort = 8080;
 
     /** A random number generator to create unique session id's. */

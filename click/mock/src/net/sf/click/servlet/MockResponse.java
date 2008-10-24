@@ -55,11 +55,11 @@ public class MockResponse implements HttpServletResponse {
     /* BEGIN: This code comes from Jetty 6.1.1 */
 
     /** Days of the week. */
-    private static String[] DAYS = {"Sat", "Sun", "Mon", "Tue", "Wed", "Thu",
+    private final static String[] DAYS = {"Sat", "Sun", "Mon", "Tue", "Wed", "Thu",
         "Fri", "Sat"};
 
     /** Months of the year. */
-    private static String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    private final static String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"
     };
 
