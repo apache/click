@@ -3,8 +3,14 @@ package net.sf.click.control;
 import junit.framework.TestCase;
 import net.sf.click.util.HtmlStringBuffer;
 
+/**
+ * Test Column behavior.
+ */
 public class ColumnTest extends TestCase {
-    
+
+    /**
+     * Sanity checks for Column.
+     */
     public void testRenderTableData() {
         TestObject row = new TestObject("name", null);
         
@@ -29,23 +35,29 @@ public class ColumnTest extends TestCase {
             column3.renderTableData(row, buffer3, null, 0);
             assertTrue(false);
             
-        } catch (RuntimeException re) {
+        } catch (RuntimeException expected) {
             assertTrue(true);
         }
     }
-    
+
+    /**
+     * Check that Column renders when binding object has not value.
+     */
     public void testOuterJoin() {
     	  // Test with null child object
         TestObject row = new TestObject("name", "label");
-        row.setChild(new Child());
-        
+        row.setChild(new Child("mina"));
+
     	  Column column = new Column("child.name");
-    	
-        HtmlStringBuffer buffer = new HtmlStringBuffer();        
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
         column.renderTableData(row, buffer, null, 0);
-        assertTrue(buffer.length() > 0);        
+        assertTrue(buffer.length() > 0);
     }
-    
+
+    /**
+     * Check that Column renders when binding object is null.
+     */
     public void testNullOuterJoin() {
         // Test with null child object
         TestObject row = new TestObject("name", "label");
@@ -54,7 +66,6 @@ public class ColumnTest extends TestCase {
     	
         HtmlStringBuffer buffer = new HtmlStringBuffer();        
         column.renderTableData(row, buffer, null, 0);
-        System.out.println(buffer);
         assertTrue(buffer.length() > 0);        
     }
     

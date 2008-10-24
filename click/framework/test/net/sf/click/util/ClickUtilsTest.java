@@ -17,8 +17,14 @@ import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
 import net.sf.click.control.TextField;
 
+/**
+ * Tests for ClickUtils.
+ */
 public class ClickUtilsTest extends TestCase {
 
+    /*
+     * Define some test data.
+     */
     private static final java.util.Date DATE_OF_BIRTH;
     private static final String NAME = "john smith";
     private static final Integer ID = new Integer(1234);
@@ -32,10 +38,16 @@ public class ClickUtilsTest extends TestCase {
         DATE_OF_BIRTH = calendar.getTime();
     }
 
+    /**
+     * Setup a MockContext for each test.
+     */
     protected void setUp() {
     	MockContext.initContext(Locale.ENGLISH);
     }
 
+    /**
+     * Sanity checks for ClickUtils.copyFormToObject.
+     */
     public void testCopyFormToObject() {
 
     	// set up the form
@@ -108,6 +120,9 @@ public class ClickUtilsTest extends TestCase {
         assertEquals("NSW", user.getAddress().getState().getCode());
     }
 
+    /**
+     * Sanity checks for ClickUtils.copyObjectToForm.
+     */
     public void testCopyObjectToForm() {
         // set up the form
         Form form = new Form("sample");
@@ -179,9 +194,9 @@ public class ClickUtilsTest extends TestCase {
     }
 
     /**
-     * CLK-278.
-     * 
      * Test that the map are populated from field values.
+     *
+     * CLK-278.
      */
     public void testCopyMapToForm() {
 
@@ -229,9 +244,9 @@ public class ClickUtilsTest extends TestCase {
     }
 
     /**
-     * CLK-239.
-     * 
      * Test that field value are copied to map.
+     *
+     * CLK-239.
      */
     public void testCopyFormToMap() {
         
@@ -285,6 +300,9 @@ public class ClickUtilsTest extends TestCase {
         assertEquals(stateCode, map.get("address.state.code"));
     }
 
+    /**
+     * Test that null objects on the path are properly resolved and instantiated.
+     */
     public void testCopyToNullNestedObject() {
         final String lineOne = "55 Dunkley Avenue";
         final String code = "NSW";
@@ -318,17 +336,26 @@ public class ClickUtilsTest extends TestCase {
         assertEquals(code, user.getAddress().getState().getCode());        
     }
 
+    /**
+     * Sanity checks for ClickUtils.toLabel.
+     */
     public void testToLabel() {
         assertEquals("Customer", ClickUtils.toLabel("customer"));
         assertEquals("Customer Number", ClickUtils.toLabel("customerNumber"));
         assertEquals("Card PIN", ClickUtils.toLabel("cardPIN"));
     }
     
+    /**
+     * Sanity checks for ClickUtils.toMD5Hash.
+     */
     public void testToMD5Hash() {
         assertEquals("5f4dcc3b5aa765d61d8327deb882cf99", 
                      ClickUtils.toMD5Hash("password"));
     }
     
+    /**
+     * Sanity checks for ClickUtils.getParentMessages.
+     */
     public void testGetParentMessages() {
         TextField textField = new TextField("test");
         
@@ -359,11 +386,17 @@ public class ClickUtilsTest extends TestCase {
         assertFalse(map3 == Collections.EMPTY_MAP);        
     }
 
+    /**
+     * Sanity check for ClickUtils.encodeUrl.
+     */
     public void testEncodeUrl() {
         String value = ClickUtils.encodeUrl("1000", Context.getThreadLocalContext());
         assertEquals("1000", value);
     }
 
+    /**
+     * Sanity checks for ClickUtils.escapeHtml.
+     */
     public void testEscapeHtml() {
         String value1 = "";
         String value2 = ClickUtils.escapeHtml(value1);
@@ -389,6 +422,9 @@ public class ClickUtilsTest extends TestCase {
         assertFalse(ClickUtils.requiresEscape((char) 999999));
     }
 
+    /**
+     * Sanity checks for ClickUtils.getMimeType.
+     */
     public void testGetMimeType() {
         assertEquals("application/vnd.ms-excel", ClickUtils.getMimeType("worksheet.xls"));
 
@@ -401,6 +437,9 @@ public class ClickUtilsTest extends TestCase {
         }
     }
     
+    /**
+     * Sanity checks for encoding and decoding a password in a cookie.
+     */
     public void testCookiePassword() {
         String username = "username";
         String password = "password";
@@ -417,5 +456,4 @@ public class ClickUtilsTest extends TestCase {
         assertFalse(username.equals(result[0]));
         assertFalse(password.equals(result[1]));        
     }
-    
 }

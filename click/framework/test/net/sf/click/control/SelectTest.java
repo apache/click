@@ -3,6 +3,9 @@ package net.sf.click.control;
 import junit.framework.TestCase;
 import net.sf.click.MockContext;
 
+/**
+ * Test Select behavior.
+ */
 public class SelectTest extends TestCase {
 
     /**

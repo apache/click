@@ -3,7 +3,7 @@ package net.sf.click.control;
 import junit.framework.TestCase;
 
 /**
- * Tests for AbstractContainer.
+ * Test AbstractContainer behavior.
  */
 public class AbstractContainerTest extends TestCase {
 

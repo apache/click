@@ -8,13 +8,20 @@ import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 
+/**
+ * Page which tests action listener functionality.
+ */
 public class ListenerPage extends Page {
 
+    /** Form holder. */
     public Form form = new Form("form");
     
-    // Indicates if the submit Assertion succeeded or not
+    /** Indicates if the submit Assertion succeeded or not. */
     public boolean success = false;
 
+    /**
+     * Initialize page.
+     */
     public void onInit() {
 
         // Create and add submit button *before* adding the textField

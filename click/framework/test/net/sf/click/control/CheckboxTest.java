@@ -4,6 +4,9 @@ import junit.framework.TestCase;
 import net.sf.click.MockContext;
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * Test Checkbox behavior.
+ */
 public class CheckboxTest extends TestCase {
 
     /**

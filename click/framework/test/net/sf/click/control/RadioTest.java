@@ -3,6 +3,9 @@ package net.sf.click.control;
 import junit.framework.TestCase;
 import net.sf.click.MockContext;
 
+/**
+ * Test Radio behavior.
+ */
 public class RadioTest extends TestCase {
 
     /**

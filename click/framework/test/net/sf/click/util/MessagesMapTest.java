@@ -10,11 +10,18 @@ import junit.framework.TestCase;
 import net.sf.click.Control;
 import net.sf.click.MockContext;
 
+/**
+ * Tests for MessagesMap.
+ */
 public class MessagesMapTest extends TestCase {
-    
+
+    /**
+     * Test MessagesMap for English Locale.
+     */
     public void testEnglishLocale() {
         MockContext.initContext(Locale.ENGLISH);
 
+        // Load click-control.properties into map
         MessagesMap map = new MessagesMap(getClass(), Control.CONTROL_MESSAGES);
 
         assertFalse(map.isEmpty());
@@ -32,9 +39,13 @@ public class MessagesMapTest extends TestCase {
         }
     }
 
+    /**
+     * Test MessagesMap works for alternative Locales.
+     */
     public void testCanadianLocale() {
         MockContext.initContext(Locale.CANADA);
 
+        // Load click-control.properties into map
         MessagesMap map = new MessagesMap(getClass(), Control.CONTROL_MESSAGES);
 
         assertFalse(map.isEmpty());
@@ -52,8 +63,13 @@ public class MessagesMapTest extends TestCase {
         }
     }
     
+    /**
+     * Tests MessagesMap behavior when properties are missing.
+     */
     public void testMissingResourceCaching() {
         MockContext.initContext(Locale.ENGLISH);
+        
+        // Load the non existing missingResource.properties into map
         MessagesMap map = new MessagesMap(Object.class, "missingResource");
         
         assertTrue(map.isEmpty());
@@ -82,7 +98,10 @@ public class MessagesMapTest extends TestCase {
             assertTrue(true);
         }
     }
-    
+
+    /**
+     * Check that a custom Page's properties are picked up properly.
+     */
     public void testPageResources() {
         MockContext.initContext(Locale.ENGLISH);
 
@@ -92,6 +111,9 @@ public class MessagesMapTest extends TestCase {
         assertEquals(2, map.size());
     }
 
+    /**
+     * Check that message inheritance works properly for custom controls.
+     */
     public void testMessageInheritance() {
         MockContext.initContext(Locale.ENGLISH);
 
@@ -106,8 +128,6 @@ public class MessagesMapTest extends TestCase {
     }
 
     /**
-     * CLK-274
-     * 
      * Create two MessagesMaps for the same class eg. Object.class
      * with different global resources eg. "missingResource" and 
      * "click-control". The first messagesMap is created specifying 
@@ -117,6 +137,8 @@ public class MessagesMapTest extends TestCase {
      * Test that the second messagesMap, specifying "click-control" as its 
      * global resource, should pick up the properties from the 
      * click-control.properties file.
+     *
+     * CLK-274
      */
     public void testGlobalResourceKey() {
         MockContext.initContext(Locale.ENGLISH);
@@ -129,13 +151,13 @@ public class MessagesMapTest extends TestCase {
     }
 
     /**
-     * CLK-269
-     * 
      * Test that the base properties will be picked up when the specified
      * locale and default locale are non-existent. 
      * 
      * Also test that the base properties are picked up when default locale is 
      * non-existent and specified locale is English.
+     *
+     * CLK-269
      */
     public void testBasePropertiesUsingNonExistentDefaultLocale() {
         Locale locale = new Locale("xx", "XX");//bogus locale
@@ -162,10 +184,10 @@ public class MessagesMapTest extends TestCase {
     }
 
     /**
-     * CLK-269
-     * 
      * Test that the English locale properties will be picked up when the 
      * default locale is French.
+     *
+     * CLK-269
      */
     public void testEnglishMessagesUsingFrenchDefaultLocale() {
         Locale locale = new Locale("fr", "FR");

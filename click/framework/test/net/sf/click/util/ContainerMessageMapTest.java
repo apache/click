@@ -16,8 +16,10 @@ import net.sf.click.control.TextField;
 public class ContainerMessageMapTest extends TestCase {
 
     /**
-     * CLK-373. Assert that Control properties are resolved correctly when
+     * Assert that Control properties are resolved correctly when
      * the Control is part of a hierarchy of Controls e.g. Page -> Form -> Field.
+     *
+     * CLK-373.
      */
     public void testContainerMessageInheritance() {
         MockContext.initContext(Locale.ENGLISH);
@@ -25,26 +27,37 @@ public class ContainerMessageMapTest extends TestCase {
         Page page = new Page();
         MyForm form = new MyForm("myform");
         page.addControl(form);
-        Field snfld = form.getField("snfld");
+        Field customField = form.getField("customField");
         Map map = form.getMessages();
         assertFalse(map.isEmpty());
         assertTrue(map.size() >= 2);
-        assertEquals("Special Name", snfld.getLabel());
-        assertEquals("Enter the special name!", snfld.getTitle());
-        assertEquals("Special Name", map.get("snfld.label"));
-        assertEquals("Enter the special name!", map.get("snfld.title"));
+        assertEquals("Custom Name", customField.getLabel());
+        assertEquals("Enter the custom name!", customField.getTitle());
+        assertEquals("Custom Name", map.get("customField.label"));
+        assertEquals("Enter the custom name!", map.get("customField.title"));
     }
 
+    /**
+     * Custom Form class.
+     */
     public class MyForm extends Form {
 
+        /**
+         * Construct a MyForm instance for the given name.
+         * 
+         * @param name the name of the form
+         */
         public MyForm(String name) {
             super(name);
             buildForm();
         }
 
+        /**
+         * Builds the form contents.
+         */
         private void buildForm() {
-            TextField snfld = new TextField("snfld");
-            this.add(snfld);
+            TextField customField = new TextField("customField");
+            this.add(customField);
         }
     }
 }

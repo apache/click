@@ -2,8 +2,14 @@ package net.sf.click.util;
 
 import junit.framework.TestCase;
 
+/**
+ * HtmlStringBuffer test.
+ */
 public class HtmlStringBufferTest extends TestCase {
 
+    /**
+     * Sanity checks for HtmlStringBuffer.
+     */
     public void test() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
         

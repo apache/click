@@ -7,13 +7,15 @@ import net.sf.click.Page;
 import net.sf.click.servlet.MockRequest;
 
 /**
- * Tests for Form.
+ * Test Form behavior.
  */
 public class FormTest extends TestCase {
 
     /**
-     * CLK-267. Test that it is not possible to add a duplicate SUBMIT_CHECK
+     * Test that it is not possible to add a duplicate SUBMIT_CHECK
      * HiddenField.
+     *
+     * CLK-267.
      */
     public void testDuplicateOnSubmitCheck() {
         MockContext context = MockContext.initContext("test-form.htm");
@@ -48,8 +50,10 @@ public class FormTest extends TestCase {
     }
 
     /**
-     * CLK-289. Test Form#onSubmitCheck when the SUBMIT_CHECK parameter is
+     * Test Form#onSubmitCheck when the SUBMIT_CHECK parameter is
      * missing.
+     *
+     * CLK-289.
      */
     public void testOnSubmitCheckMissingParam() {
         MockContext context = (MockContext) MockContext.initContext("test-form.htm");
@@ -661,6 +665,12 @@ public class FormTest extends TestCase {
         System.out.println("Time :" + time);
     }
 
+    /**
+     * Populate the given Form with hidden fields.
+     *
+     * @param count the number of hidden fields to add
+     * @param form the form to add hidden fields to
+     */
     public void populateForm(int count, Form form) {
         // Add 5 hidden fields
         form.add(new HiddenField("-1", Boolean.class));

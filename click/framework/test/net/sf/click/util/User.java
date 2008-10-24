@@ -1,7 +1,8 @@
 package net.sf.click.util;
 
-import net.sf.click.util.Address;
-
+/**
+ * User value object.
+ */
 public class User {
     private Integer id;
     private String name;

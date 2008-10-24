@@ -3,8 +3,14 @@ package net.sf.click.util;
 import java.util.Locale;
 import junit.framework.TestCase;
 
+/**
+ * Tests for RequestTypeConverter.
+ */
 public class RequestTypeConverterTest extends TestCase {
-    
+   
+    /**
+     * Sanity checks for RequestTypeConverter.
+     */
     public void test() {
         RequestTypeConverter rtc = new RequestTypeConverter();
         
@@ -74,9 +80,3 @@ public class RequestTypeConverterTest extends TestCase {
         assertEquals(date11, date12);
     }
 }
-
-/**
-sql: 2006-12-24, 1166878800000
-date2: Sun Dec 24 00:00:00 EST 2006, 1166878800000
-d/MM/yyyy
-*/
