@@ -1235,7 +1235,7 @@ public class MockRequest implements HttpServletRequest {
      * Helper method to create new attachment.
      *
      * @param out the output stream to add attachment to
-     * @throws java.io.IOException
+     * @throws java.io.IOException if an I/O error occurs
      */
     private void newAttachment(OutputStream out) throws IOException {
         out.write(BOUNDARY.getBytes());
@@ -1327,18 +1327,21 @@ public class MockRequest implements HttpServletRequest {
      */
     private class UploadedFile {
 
+        /** Name of the file field. */
         private String fieldName;
 
+        /** The uploaded file. */
         private File file;
 
+        /** The uploaded file content type. */
         private String contentType;
 
         /**
          * Construct.
          *
-         * @param fieldName
-         * @param file
-         * @param contentType
+         * @param fieldName name of the file field
+         * @param file the uploaded file
+         * @param contentType the uploaded file content type
          */
         public UploadedFile(String fieldName, File file, String contentType) {
             this.fieldName = fieldName;
@@ -1347,6 +1350,8 @@ public class MockRequest implements HttpServletRequest {
         }
 
         /**
+         * Return the uploaded file content type.
+         *
          * @return The content type of the file. Mime type.
          */
         public String getContentType() {
@@ -1354,6 +1359,8 @@ public class MockRequest implements HttpServletRequest {
         }
 
         /**
+         * Set the uploaded file content type.
+         *
          * @param contentType The content type.
          */
         public void setContentType(String contentType) {
@@ -1361,6 +1368,8 @@ public class MockRequest implements HttpServletRequest {
         }
 
         /**
+         * Return the file field name.
+         *
          * @return The field name.
          */
         public String getFieldName() {
@@ -1368,13 +1377,17 @@ public class MockRequest implements HttpServletRequest {
         }
 
         /**
-         * @param fieldName
+         * Set the file field name.
+         *
+         * @param fieldName the name of the file field
          */
         public void setFieldName(String fieldName) {
             this.fieldName = fieldName;
         }
 
         /**
+         * Return the uploaded file.
+         *
          * @return The uploaded file.
          */
         public File getFile() {
@@ -1382,7 +1395,9 @@ public class MockRequest implements HttpServletRequest {
         }
 
         /**
-         * @param file
+         * Set the uploaded file.
+         *
+         * @param file the uploaded file
          */
         public void setFile(File file) {
             this.file = file;
