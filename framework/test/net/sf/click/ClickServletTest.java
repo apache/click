@@ -12,8 +12,10 @@ import net.sf.click.pages.ListenerPage;
 public class ClickServletTest extends TestCase {
 
     /**
-     * CLK-365. Assert the ListenerPage that the Submit button listener is
-     * invoked *after* the TextField value was bound to the request value.
+     * Assert the ListenerPage that the Submit button listener is invoked *after*
+     * the TextField value was bound to the request value.
+     *
+     * CLK-365.
      */
     public void testRegisterListener() {
         MockContainer container = new MockContainer("web");

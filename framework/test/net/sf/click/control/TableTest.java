@@ -7,8 +7,14 @@ import java.util.Map;
 import junit.framework.TestCase;
 import net.sf.click.MockContext;
 
+/**
+ * Test Table behavior.
+ */
 public class TableTest extends TestCase {
 
+    /**
+     * Check that Table prints message when no records are set.
+     */
     public void testNoRows() {
         MockContext.initContext();
 
@@ -22,6 +28,9 @@ public class TableTest extends TestCase {
         assertEquals("<table>\n" + header + body + "</table>\n", table.toString());
     }
 
+    /**
+     * Check that Column id's are rendered properly.
+     */
     public void testTdId() {
         MockContext.initContext();
         
@@ -44,6 +53,9 @@ public class TableTest extends TestCase {
         assertEquals("<table id=\"Foos\">\n" + header + body + "</table>\n", table.toString());
     }
 
+    /**
+     * Check Table paging shows correct page.
+     */
     public void testPagingCurrentPage() {
         MockContext.initContext();
 
@@ -70,6 +82,9 @@ public class TableTest extends TestCase {
         assertTrue(table.toString().indexOf("<strong>100</strong>") > 0);
     }
 
+    /**
+     * Check that table row attributes are set.
+     */
     public void testSetRowAttributes() {
         MockContext.initContext();
 

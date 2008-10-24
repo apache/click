@@ -12,8 +12,10 @@ import junit.framework.TestCase;
 public class ContextTest extends TestCase {
 
     /**
-     * CLK-371. Assert that when a HttpSession is invalidated, a new HttpSession
+     * Assert that when a HttpSession is invalidated, a new HttpSession
      * is created, and that the session was not cached by the Context.
+     *
+     * CLK-371.
      */
     public void testInvalidateSession() {
         try {

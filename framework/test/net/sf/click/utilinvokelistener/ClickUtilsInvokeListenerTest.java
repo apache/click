@@ -4,14 +4,17 @@ import net.sf.click.util.ClickUtils;
 import junit.framework.TestCase;
 
 /**
- * Tests ClickUtils.invokeLister(). This is in a seperate package 
+ * Tests ClickUtils.invokeLister(). This is in a separate package
  * because otherwise the protected, package-private restrictions
- * would have no meaning. 
- * 
+ * would have no meaning.
+ *
  * @author Christian Essl
  */
 public class ClickUtilsInvokeListenerTest extends TestCase {
 
+    /**
+     * Test whether invoke listener functions correctly.
+     */
     public void testInvokeListener() {
         ListenerMock lm = new ListenerMock();
         
@@ -89,39 +92,79 @@ public class ClickUtilsInvokeListenerTest extends TestCase {
         
     }
     
+    /**
+     * Public mock class which listens to events.
+     */
     public static class ListenerMock {
+        /** Counts the amount of times listeners are fired. */
         int called = 0;
+
+        /**
+         * onClickTrue event handler.
+         *
+         * @return true if processing should continue
+         */
         public boolean onClickTrue(){
            called++;
            return true;
         }
         
+        /**
+         * onClickFalse event handler.
+         *
+         * @return true if processing should continue
+         */
         public boolean onClickFalse() {
             called++;
             return false;
         }
         
+        /**
+         * An event handler.
+         */
         public void noReturn() {
         }
         
+        /**
+         * An event handler.
+         *
+         * @return true if processing should continue
+         */
         private boolean privateMethod(){
             return true;
         }
         
+        /**
+         * An event handler.
+         *
+         * @return true if processing should continue
+         */
         protected boolean protectedMethod() {
             return true;
         }
-        
+
+        /**
+         * An event handler.
+         *
+         * @return true if processing should continue
+         */
         boolean packagePrivateMethod(){
             return true;
         }
     }
     
+    /**
+     * Private mock class which listens to events.
+     */
     private static class PrivListenerMock {
+
+        /**
+         * onClick event handler.
+         *
+         * @return true if processing should continue
+         */
         public boolean onClick(){
             return true;
         }
     }
-
-
 }

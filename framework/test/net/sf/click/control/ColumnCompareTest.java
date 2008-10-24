@@ -7,8 +7,14 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+/**
+ * Test Column Comparator behavior.
+ */
 public class ColumnCompareTest extends TestCase {
 
+    /**
+     * Check that Column sorting using the built in comparator works properly.
+     */
     public void test_1() {
         Column column = new Column("name");
 
@@ -17,14 +23,38 @@ public class ColumnCompareTest extends TestCase {
 
         Column.ColumnComparator comparator = new Column.ColumnComparator(column);
         List rowList = createRowList1();
+        
+        assertTrue(indexOf("-234", rowList) == 11);
+        assertTrue(indexOf(Boolean.TRUE, rowList) == 3);
+        assertTrue(indexOf("Data 213 Services", rowList) == 5);
+
         Collections.sort(rowList, comparator);
         System.out.println(rowList);
+
+        // Perform spot checks for ascending order
+        // "-234" should be first
+        assertTrue(indexOf("-234", rowList) == 0);
+        // true should be last
+        assertTrue(indexOf(Boolean.TRUE, rowList) == rowList.size() - 1);
+        assertTrue(indexOf("Data 213 Services", rowList) == 8);
 
         table.setSortedAscending(false);
         Collections.sort(rowList, comparator);
+        
+        // Perform spot checks for descending order
+        // "-234" should be last
+        assertTrue(indexOf("-234", rowList) == rowList.size() - 1);
+        // true should be first
+        assertTrue(indexOf(Boolean.TRUE, rowList) == 0);
+        assertTrue(indexOf("Data 213 Services", rowList) == 10);
+
         System.out.println(rowList);
     }
 
+    /**
+     * Another check that Column sorting using the built in comparator works
+     * properly.
+     */
     public void test_2() {
         Column column = new Column("name");
 
@@ -34,13 +64,32 @@ public class ColumnCompareTest extends TestCase {
         Column.ColumnComparator comparator = new Column.ColumnComparator(column);
         List rowList = createRowList2();
         Collections.sort(rowList, comparator);
-        System.out.println(rowList);
+
+        // Check sort order for ascending
+        // null should be first
+        assertTrue(indexOf(null, rowList) == 0);
+        // true should be last
+        assertTrue(indexOf(Boolean.TRUE, rowList) == rowList.size() - 1);
+        // false should be in the middle
+        assertTrue(indexOf(Boolean.FALSE, rowList) == 1);
 
         table.setSortedAscending(false);
         Collections.sort(rowList, comparator);
-        System.out.println(rowList);
+        
+        // Check sort order for descending
+        // null should be last
+        assertTrue(indexOf(null, rowList) == rowList.size() - 1);
+        // true should be first
+        assertTrue(indexOf(Boolean.TRUE, rowList) == 0);
+        // false should still be in the middle
+        assertTrue(indexOf(Boolean.FALSE, rowList) == 1);
     }
 
+    /**
+     * Create and return a test Table row list.
+     *
+     * @return a test Table row list
+     */
     private List createRowList1() {
         List rowList = new ArrayList();
 
@@ -67,6 +116,11 @@ public class ColumnCompareTest extends TestCase {
         return rowList;
     }
 
+    /**
+     * Create and return a test Table row list.
+     *
+     * @return a test Table row list
+     */
     private List createRowList2() {
         List rowList = new ArrayList();
 
@@ -77,7 +131,35 @@ public class ColumnCompareTest extends TestCase {
         return rowList;
     }
 
+    /**
+     * Create and return a map representing a Table row.
+     *
+     * @param value the of the row
+     * @return a map representing a Table row
+     */
     private Map createRow(Object value) {
         return Collections.singletonMap("name", value);
+    }
+
+    /**
+     * Return the index of the specified object in the rowList.
+     *
+     * @param value the object which index to find
+     * @param rowList the rowList to find the object in
+     * @return the index of the object in the rowList
+     */
+    private int indexOf(Object value, List rowList) {
+        for (int i = 0; i < rowList.size(); i++) {
+            Map row = (Map) rowList.get(i);
+            // Check for null value
+            if (value == null) {
+                if (row.get("name") == null) {
+                    return i;
+                }
+            } else if (value.equals(row.get("name"))) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

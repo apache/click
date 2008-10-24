@@ -4,8 +4,14 @@ import net.sf.click.MockContext;
 import junit.framework.TestCase;
 import net.sf.click.servlet.MockRequest;
 
+/**
+ * Test TextArea behavior.
+ */
 public class TextAreaTest extends TestCase {
 
+    /**
+     * Test TextArea onProcess behavior.
+     */
     public void testOnProcess() {
         MockContext context = MockContext.initContext();
         MockRequest request = context.getMockRequest();

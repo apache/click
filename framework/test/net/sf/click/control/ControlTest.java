@@ -6,8 +6,6 @@ import net.sf.click.MockContext;
 
 /**
  * Miscellaneous Control tests.
- * 
- * @author Bob Schellink
  */
 public class ControlTest extends TestCase {
 
@@ -77,7 +75,9 @@ public class ControlTest extends TestCase {
     }
 
     /**
-     * CLK-414. Checks that Click vetoes the addition of a Container to itself.
+     * Checks that Click vetoes the addition of a Container to itself.
+     *
+     * CLK-414.
      */
     public void testAddContainerToItself() {
         MockContext context = MockContext.initContext();

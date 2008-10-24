@@ -2,50 +2,75 @@ package net.sf.click.control;
 
 import junit.framework.TestCase;
 
+/**
+ * Test performance of accessing a ThreadLocal object vs accessing a normal
+ * object directly.
+ */
 public class ContextAccessTest extends TestCase {
+
+  /** Number of times to lookup ThreadLocal context. */
+	private static final int ITERATIONS = 10000000;
 	
-	private static final int ITERATIONS = 100000;
-	
+  /** Normal Object to lookup. */
 	private Object object;
 	
+  /** ThreadLocal holder of Object to lookup. */
 	private static ThreadLocal threadLocal = new ThreadLocal();
 	
-	public void testA() {
+  /**
+   * Test performance of looking up an Object directly.
+   */
+	public void testDirect() {
 		long start = System.currentTimeMillis();
 		
+    // Count is used to ensure JVM does not remove loop away entirely.
 		int count = 0;
 		for (int i = 0; i < ITERATIONS; i++) {
-			Object objectA = getObjectA();
+			Object objectA = getDirectObject();
 			if (objectA != null) {
 				count += 1;
 			}
 		}
 		
-		System.out.println("testA time:" + (System.currentTimeMillis() - start));
+		System.out.println("testDirect time:" + (System.currentTimeMillis() - start));
 	}
 	
-	public void testB() {
+  /**
+   * Test performance of looking up an Object using a ThreadLocal.
+   */
+	public void testThreadLocal() {
 		long start = System.currentTimeMillis();
 		
+    // Count is used to ensure JVM does not remove loop away entirely.
 		int count = 0;
 		for (int i = 0; i < ITERATIONS; i++) {
-			Object objectA = getObjectB();
+			Object objectA = getThreadLocalObject();
 			if (objectA != null) {
 				count += 1;
 			}
 		}
-		
-		System.out.println("testB time:" + (System.currentTimeMillis() - start) + " ms");
+
+		System.out.println("testThreadLocal time:" + (System.currentTimeMillis() - start) + " ms");
 	}
 
-	public Object getObjectA() {
+  /**
+   * Return the Object directly.
+   * 
+   * @return direct object
+   */
+	public Object getDirectObject() {
 		if (object == null) {
 			object = new Object();
 		}
 		return object;
 	}
 
-	public Object getObjectB() {
+  /**
+   * Return object looked up through ThreadLocal.
+   *
+   * @return object looked up through ThreadLocal
+   */
+	public Object getThreadLocalObject() {
 		Object bObject = threadLocal.get();
 		if (bObject == null) {
 			bObject = new Object();
@@ -53,5 +78,4 @@ public class ContextAccessTest extends TestCase {
 		}
 		return bObject;
 	}
-
 }

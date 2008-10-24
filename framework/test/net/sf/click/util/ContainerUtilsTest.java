@@ -10,9 +10,15 @@ import net.sf.click.control.HiddenField;
 import net.sf.click.control.Label;
 import net.sf.click.control.TextField;
 
+/**
+ * Tests for ContainerUtils.
+ */
 public class ContainerUtilsTest extends TestCase {
 
-    public void testGetFields() {
+    /**
+     * Check that all input fields are retrieved from container.
+     */
+    public void testGetInputFields() {
         MockContext.initContext();
         // set up the form
         Form form = new Form("sample");

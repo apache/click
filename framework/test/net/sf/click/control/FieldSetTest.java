@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import net.sf.click.MockContext;
 
 /**
- * Tests for FieldSet.
+ * Test FieldSet behavior.
  */
 public class FieldSetTest extends TestCase {
 
@@ -358,11 +358,25 @@ public class FieldSetTest extends TestCase {
         assertSame(form.getFields(), form.getControlMap());
     }
 
+    /**
+     * A custom Div container.
+     */
     static class Div extends AbstractContainer {
+
+        /**
+         * Construct a new Div with the given name.
+         *
+         * @param name the div name
+         */
         public Div(String name) {
             super(name);
         }
 
+        /**
+         * Return the Div tag.
+         * 
+         * @return the div tag
+         */
         public String getTag() {
             return "div";
         }

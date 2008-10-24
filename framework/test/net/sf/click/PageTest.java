@@ -6,10 +6,13 @@ import net.sf.click.pages.RedirectToHtm;
 import net.sf.click.pages.RedirectToJsp;
 
 /**
- * Test Page class.
+ * Tests for the Page class.
  */
 public class PageTest extends TestCase {
 
+    /**
+     * Test that redirecting to a htm works.
+     */
     public void testRedirect() {
         MockContainer container = new MockContainer("web");
         container.start();
@@ -25,26 +28,26 @@ public class PageTest extends TestCase {
     }
 
     /**
-     * Test that redirecting to a jsp is converted to htm before redirecting.
-     * CLK-338
+     * Test that redirecting to a Page using a JSP template is converted to htm
+     * before redirecting. CLK-338
      */
     public void testRedirectToJSP() {
         MockContainer container = new MockContainer("web");
         container.start();
         String contextPath = container.getRequest().getContextPath();
         container.getRequest().setMethod("GET");
-        
+
         RedirectToJsp page = (RedirectToJsp) container.testPage(RedirectToJsp.class);
 
         // assert that the Page successfully redirected to jsp-page.htm, meaning
-        // Click converted the location from jsp-page.jsp to jsp-page.htm
+        // Click converted the Page JSP template from jsp-page.jsp to jsp-page.htm
         String expected = contextPath + "/jsp-page.htm";
         assertEquals(expected, container.getRedirect());
         container.stop();
     }
 
     /**
-     * Test custom redirecting which does convert jsp extension to htm.
+     * Test custom redirecting which does *not* convert jsp extension to htm.
      * CLK-429
      */
     public void testCustomRedirectToJSP() {
@@ -82,7 +85,5 @@ public class PageTest extends TestCase {
         // won't add a second contextPath
         page.setRedirect(contextPath + "/test.htm");
         assertEquals(expected, page.getRedirect());
-
     }
-
 }
