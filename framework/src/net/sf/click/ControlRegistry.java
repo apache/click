@@ -222,18 +222,35 @@ public class ControlRegistry {
      */
     static class RegistryStack extends ArrayList {
 
+        /** Serialization version indicator. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Create a new RegistryStack with the given initial capacity.
+         *
+         * @param initialCapacity specify initial capacity of this stack
+         */
         private RegistryStack(int initialCapacity) {
             super(initialCapacity);
         }
 
+        /**
+         * Pushes the ControlRegistry onto the top of this stack.
+         *
+         * @param controlRegistry the ControlRegistry to push onto this stack
+         * @return the ControlRegistry pushed on this stack
+         */
         private ControlRegistry push(ControlRegistry controlRegistry) {
             add(controlRegistry);
 
             return controlRegistry;
         }
 
+        /**
+         * Removes and return the ControlRegistry at the top of this stack.
+         *
+         * @return the ControlRegistry at the top of this stack
+         */
         private ControlRegistry pop() {
             ControlRegistry controlRegistry = peek();
 
@@ -242,6 +259,12 @@ public class ControlRegistry {
             return controlRegistry;
         }
 
+        /**
+         * Looks at the ControlRegistry at the top of this stack without
+         * removing it.
+         *
+         * @return the ControlRegistry at the top of this stack
+         */
         private ControlRegistry peek() {
             int length = size();
 
