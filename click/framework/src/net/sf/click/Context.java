@@ -858,18 +858,35 @@ public class Context {
      */
     static class ContextStack extends ArrayList {
 
+        /** Serialization version indicator. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Create a new ContextStack with the given initial capacity.
+         *
+         * @param initialCapacity specify initial capacity of this stack
+         */
         private ContextStack(int initialCapacity) {
             super(initialCapacity);
         }
 
+        /**
+         * Pushes the Context onto the top of this stack.
+         *
+         * @param context the Context to push onto this stack
+         * @return the Context pushed on this stack
+         */
         private Context push(Context context) {
             add(context);
 
             return context;
         }
 
+        /**
+         * Removes and return the Context at the top of this stack.
+         *
+         * @return the Context at the top of this stack
+         */
         private Context pop() {
             Context context = peek();
 
@@ -878,6 +895,11 @@ public class Context {
             return context;
         }
 
+        /**
+         * Looks at the Context at the top of this stack without removing it.
+         *
+         * @return the Context at the top of this stack
+         */
         private Context peek() {
             int length = size();
 
