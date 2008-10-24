@@ -7,11 +7,13 @@ import net.sf.click.servlet.MockRequest;
 import net.sf.click.servlet.MockResponse;
 
 /**
- *
- * @author Bob Schellink
+ * MockContext tests.
  */
 public class MockContextTest extends TestCase {
 
+    /**
+     * Test MockContext.
+     */
     public void testContext() {
         MockServletContext servletContext = new MockServletContext();
         MockContext.initContext(new MockServletConfig(servletContext), 

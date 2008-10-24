@@ -14,15 +14,15 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 /**
+ * Sanity checks for Mock package.
  *
  * @author Bob Schellink
  */
 public class MockTests extends TestCase {
 
-    public MockTests(String testName) {
-        super(testName);
-    }
-
+    /**
+     * Sanity checks for MockContext.
+     */
     public void testMockContext() {
         Context context = MockContext.initContext();
         ServletConfig servletConfig = context.getServletConfig();
@@ -109,7 +109,7 @@ public class MockTests extends TestCase {
     }
 
     /**
-     * Check if two temporary directories can be deleted
+     * Check if two temporary directories can be deleted.
      */
     public void testTemporaryDirectorySetup() {
         try {
@@ -152,7 +152,7 @@ public class MockTests extends TestCase {
      * Sanity check for deleting a directory recursively.
      */
     public void testDeleteDirectoryOnShutdown() {
-        MockServletContext servletContext = new MockServletContext();
+
         try {
             final File tmpDir = new File(System.getProperty("java.io.tmpdir") + "/click-tests");
             tmpDir.mkdir();
