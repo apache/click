@@ -1490,7 +1490,8 @@ public class Column implements Serializable {
 
             } else if (value1 != null && value2 != null) {
 
-                return value1.toString().compareToIgnoreCase(value2.toString());
+                return value1.toString().compareToIgnoreCase(value2.toString())
+                    * ascendingSort;
 
             } else if (value1 != null && value2 == null) {
 
