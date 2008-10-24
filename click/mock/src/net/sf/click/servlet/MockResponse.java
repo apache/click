@@ -53,45 +53,70 @@ public class MockResponse implements HttpServletResponse {
     // -------------------------------------------------------- Constants
 
     /* BEGIN: This code comes from Jetty 6.1.1 */
+
+    /** Days of the week. */
     private static String[] DAYS = {"Sat", "Sun", "Mon", "Tue", "Wed", "Thu",
         "Fri", "Sat"};
 
+    /** Months of the year. */
     private static String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"
     };
 
+    /** Indicates that response is in binary mode. */
     private static final int MODE_BINARY = 1;
 
+    /** Indicates that response is in neither binary nor text mode. */
     private static final int MODE_NONE = 0;
 
+    /** Indicates that response is in text (character) mode. */
     private static final int MODE_TEXT = 2;
 
     // -------------------------------------------------------- Instance Variables
 
+    /** The response byte stream. */
     private ByteArrayOutputStream byteStream;
 
+    /** The response character encoding, defaults to UTF-8. */
     private String characterEncoding = "UTF-8";
 
+    /**
+     * The response code, defaults to
+     * {@link javax.servlet.http.HttpServletResponse#SC_OK}.
+     */
     private int code = HttpServletResponse.SC_OK;
 
+    /** The response list of cookies. */
     private final List cookies = new ArrayList();
 
+    /** The response error message. */
     private String errorMessage = null;
 
+    /** The response headers map. */
     private final Map headers = new HashMap();
 
+    /** The response locale. */
     private Locale locale = null;
 
+    /** Indicates the response mode, defaults to {@link #MODE_NONE}. */
     private int mode = MODE_NONE;
 
+    /** The response print writer. */
     private PrintWriter printWriter;
 
+    /** The location that was redirected to. */
     private String redirectUrl = null;
 
+    /** The response servlet stream. */
     private ServletOutputStream servletStream;
 
+    /**
+     * The response status, defaults to
+     * {@link javax.servlet.http.HttpServletResponse#SC_OK}.
+     */
     private int status = HttpServletResponse.SC_OK;
 
+    /** The response string writer. */
     private StringWriter stringWriter;
 
     /**
@@ -602,6 +627,8 @@ public class MockResponse implements HttpServletResponse {
     }
 
     /**
+     * Append two digits if specified int is less than 100.
+     *
      * @param buf the buffer to add 2 digits to
      * @param i the digits to add
      */
@@ -613,6 +640,7 @@ public class MockResponse implements HttpServletResponse {
     }
 
     /* END: This code comes from Jetty 6.1.1 */
+
     /**
      * Set the given header value.
      *

@@ -453,7 +453,11 @@ public class MockServletContext implements ServletContext {
     }
 
     /**
-     * @return Always 2
+     * Return the major version of the Servlet spec that this package supports,
+     * defaults to 2.
+     *
+     * @return the major version of the Servlet spec that this package supports,
+     * defaults to 2.
      */
     public int getMajorVersion() {
         return 2;
@@ -483,7 +487,11 @@ public class MockServletContext implements ServletContext {
     }
 
     /**
-     * @return Always 3
+     * Return the minor version of the Servlet spec that this package supports,
+     * defaults to 3.
+     *
+     * @return the minor version of the Servlet spec that this package supports,
+     * defaults to 3.
      */
     public int getMinorVersion() {
         return 3;
@@ -792,6 +800,11 @@ public class MockServletContext implements ServletContext {
         return true;
     }
 
+    /**
+     * Deletes the specified directory when the JVM is shutdown.
+     *
+     * @param directory the directory to delete
+     */
     private void deleteDirectoryOnShutdown(final File directory) {
         if (directory == null) {
             return;
@@ -805,6 +818,12 @@ public class MockServletContext implements ServletContext {
         });
     }
 
+    /**
+     * Remove the leading slash '/' from the specified name.
+     *
+     * @param name the name from which to remove the leading slash '/'
+     * @return the name with the leading slash removed
+     */
     private String removeLeadingSlash(String name) {
         if (name.startsWith("/")) {
             name = name.substring(1);

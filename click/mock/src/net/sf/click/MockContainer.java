@@ -726,23 +726,48 @@ public class MockContainer {
      */
     static class CleanRuntimeException extends RuntimeException {
 
+        /** Serialization version indicator. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Default constructor.
+         */
         public CleanRuntimeException() {
         }
 
+        /**
+         * Construct an exception with the given message.
+         *
+         * @param message exception message
+         */
         public CleanRuntimeException(String message) {
             super(message);
         }
 
-        public CleanRuntimeException(Throwable throwable) {
-            super(throwable);
+        /**
+         * Construct an exception for the given cause.
+         *
+         * @param cause the cause of this exception
+         */
+        public CleanRuntimeException(Throwable cause) {
+            super(cause);
         }
 
-        public CleanRuntimeException(String message, Throwable throwable) {
-            super(message, throwable);
+        /**
+         * Construct an exception for the given cause.
+         *
+         * @param message exception message
+         * @param cause the cause of this exception
+         */
+        public CleanRuntimeException(String message, Throwable cause) {
+            super(message, cause);
         }
 
+        /**
+         * @see java.lang.Throwable#getLocalizedMessage()
+         *
+         * @return localized description of this exception
+         */
         public String getLocalizedMessage() {
             if (getCause() == null) {
                 return super.getLocalizedMessage();
@@ -753,6 +778,11 @@ public class MockContainer {
             return super.getLocalizedMessage();
         }
 
+        /**
+         * @see java.lang.Throwable#getMessage()
+         *
+         * @return the exception error message
+         */
         public String getMessage() {
             if (getCause() == null) {
                 return super.getMessage();
@@ -763,26 +793,42 @@ public class MockContainer {
             return super.getMessage();
         }
 
-        public void printStackTrace(PrintStream s) {
-            synchronized (s) {
+        /**
+         * @see java.lang.Throwable#printStackTrace(java.io.PrintStream)
+         *
+         * @param printStream the PrintStream to print to
+         */
+        public void printStackTrace(PrintStream printStream) {
+            synchronized (printStream) {
                 if (getCause() == null) {
-                    super.printStackTrace(s);
+                    super.printStackTrace(printStream);
                 } else {
-                    getCause().printStackTrace(s);
+                    getCause().printStackTrace(printStream);
                 }
             }
         }
 
-        public void printStackTrace(PrintWriter s) {
-            synchronized (s) {
+        /**
+         * @see java.lang.Throwable#printStackTrace(java.io.PrintWriter)
+         *
+         * @param printWriter the PrintWriter to print to
+         */
+        public void printStackTrace(PrintWriter printWriter) {
+            synchronized (printWriter) {
                 if (getCause() == null) {
-                    super.printStackTrace(s);
+                    super.printStackTrace(printWriter);
                 } else {
-                    getCause().printStackTrace(s);
+                    getCause().printStackTrace(printWriter);
                 }
             }
         }
 
+        /**
+         * @see java.lang.Throwable#fillInStackTrace()
+         *
+         * @return a reference to either the underlying cause (if its defined)
+         * or this Throwable instance.
+         */
         public synchronized Throwable fillInStackTrace() {
             if (getCause() == null) {
                 return this;

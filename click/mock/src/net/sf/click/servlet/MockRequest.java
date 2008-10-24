@@ -65,55 +65,82 @@ public class MockRequest implements HttpServletRequest {
 
     // -------------------------------------------------------- Constants
 
+    /** Newline indicator. */
     private static final String CRLF = "\r\n";
 
+    /** File attachment boundary indicator. */
     private static final String BOUNDARY = "--abcdefgABCDEFG";
 
     // -------------------------------------------------------- Variables
 
+    /** The request default locale. */
     private Locale locale = Locale.getDefault();
 
+    /** The request attributes map. */
     private final Map attributes = new HashMap();
 
+    /** The request authentication type (BASIC, FORM, DIGEST, CLIENT_CERT). */
     private String authType;
 
+    /** The request character encoding. */
     private String characterEncoding;
 
+    /** The request servlet context. */
     private ServletContext servletContext;
 
+    /** The request list of cookies. */
     private final List cookies = new ArrayList();
 
+    /** The request headers map. */
     private final Map headers = new HashMap();
 
+    /** The name of the HTTP method with which this request was made. */
     private String method = "POST";
 
+    /** The request parameter map. */
     private final Map parameters = new HashMap();
 
+    /** The request HTTP session. */
     private HttpSession session;
 
-    private String url;
-
+    /**
+     * Map of uploaded files, where the fieldname is the key and uploaded file
+     * is the value.
+     */
     private Map /*<String, UploadedFile>*/ uploadedFiles =
         new HashMap /*<String, UploadedFile>*/();
 
+    /**
+     * Indicates if this request is multipart (contains binary attachment) or
+     * not, false by default.
+     */
     private boolean useMultiPartContentType;
 
+    /** The url that was forwarded to. */
     private String forward;
 
+    /** The list of server side included url's. */
     private List includes = new ArrayList();
 
+    /** The scheme used to make this request, defaults to "http". */
     private String scheme = "http";
 
+    /** The request context path, defaults to {@link MockServletContext.DEFAULT_CONTEXT_PATH}. */
     private String contextPath = MockServletContext.DEFAULT_CONTEXT_PATH;
 
+    /** The request servlet path, defaults to an empty String "" */
     private String servletPath = "";
 
+    /** The request path info, defaults to an empty String "" */
     private String pathInfo = "";
 
+    /** The host name to which the request was sent, defaults to "localhost". */
     private String serverName = "localhost";
 
+    /** The port number to which the request was sent, defaults to 8080 */
     private int serverPort = 8080;
 
+    /** A random number generator to create unique session id's. */
     private Random random = new Random();
 
     /**
@@ -283,6 +310,7 @@ public class MockRequest implements HttpServletRequest {
     }
 
     // -------------------------------------------------------- HttpServletRequest methods
+
     /**
      * Get the auth type.
      *
@@ -302,7 +330,7 @@ public class MockRequest implements HttpServletRequest {
     }
 
     /**
-     * true will force Request generate multiPart ContentType and ContentLength.
+     * True will force Request to generate multiPart ContentType and ContentLength.
      *
      * @param useMultiPartContentType true if the request is multi-part, false
      * otherwise
@@ -735,10 +763,7 @@ public class MockRequest implements HttpServletRequest {
      * @see javax.servlet.http.HttpServletRequest#getRequestURI()
      */
     public String getRequestURI() {
-        if (url == null) {
-            return getContextPath() + getServletPath();
-        }
-        return url;
+        return getContextPath() + getServletPath();
     }
 
     /**
@@ -963,7 +988,6 @@ public class MockRequest implements HttpServletRequest {
         cookies.clear();
         setDefaultHeaders();
         pathInfo = null;
-        url = null;
         characterEncoding = "UTF-8";
         parameters.clear();
         attributes.clear();
@@ -1207,6 +1231,12 @@ public class MockRequest implements HttpServletRequest {
             "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7) Gecko/20040707 Firefox/0.9.2");
     }
 
+    /**
+     * Helper method to create new attachment.
+     *
+     * @param out the output stream to add attachment to
+     * @throws java.io.IOException
+     */
     private void newAttachment(OutputStream out) throws IOException {
         out.write(BOUNDARY.getBytes());
         out.write(CRLF.getBytes());
@@ -1272,6 +1302,11 @@ public class MockRequest implements HttpServletRequest {
         }
     }
 
+    /**
+     * Create and return a new session id.
+     *
+     * @return new session id
+     */
     private String createSessionId() {
         String mockId = getRemoteAddr().replaceAll("\\.", "") + "_"
             + System.currentTimeMillis() + "_"
