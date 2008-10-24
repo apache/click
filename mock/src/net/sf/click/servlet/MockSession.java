@@ -48,7 +48,8 @@ public class MockSession implements HttpSession {
     /** The session creationTime in milliseconds. */
     private long creationTime = System.currentTimeMillis();
 
-    /** Specifies the amount of time the session will remain active between
+    /**
+     * Specifies the amount of time the session will remain active between
      * client requests.
      */
     private int maxInactiveInerval = -1;
