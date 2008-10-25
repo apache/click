@@ -191,7 +191,8 @@ import org.apache.commons.lang.StringUtils;
  *
  * Please note in that is this example the cancel submit button has
  * {@link Submit#setCancelJavaScriptValidation(boolean)} set to true. This
- * prevents JavaScript form validation being performed the cancel button is clicked.
+ * prevents JavaScript form validation being performed when the cancel button is
+ * clicked.
  *
  * <h3>CSS and JavaScript Imports</h3>
  *
