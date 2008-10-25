@@ -31,7 +31,11 @@ import org.apache.commons.lang.Validate;
 /**
  * Provides an Apache Commons FileUploadService class.
  * <p/>
- * Example usage:
+ * To prevent users from uploading exceedingly large files you can configure
+ * CommonsFileUploadService through the properties {@link #sizeMax} and
+ * {@link #fileSizeMax}.
+ * <p/>
+ * For example:
  * <pre class="prettyprint">
  * &lt;file-upload-service&gt;
  *     &lt;!-- Set the total request maximum size to 10mb (10 x 1024 x 1024 = 10485760). --&gt;
@@ -41,6 +45,9 @@ import org.apache.commons.lang.Validate;
  *     &lt;property name="fileSizeMax" value="2097152"/&gt;
  * &lt;/file-upload-service&gt; </pre>
  *
+ * Note that this is a global configuration and applies to the all file uploads
+ * of the application.
+ * <p/>
  * If you would like to specify a custom FileUploadService implementation
  * use the <tt>classname</tt> attribute:
  * <pre class="prettyprint">

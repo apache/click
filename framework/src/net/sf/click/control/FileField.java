@@ -36,6 +36,10 @@ import org.apache.commons.lang.StringUtils;
  * <a href="http://jakarta.apache.org/commons/fileupload/">FileUpload</a>
  * library to provide file processing functionality.
  * <p/>
+ * You can control the {@link net.sf.click.service.CommonsFileUploadService#sizeMax maximum request size}
+ * and {@link net.sf.click.service.CommonsFileUploadService#fileSizeMax maximum file size}
+ * by configuring {@link net.sf.click.service.CommonsFileUploadService}.
+ * <p/>
  * Note Browsers enforce the JavaScript <tt>value</tt> property as readonly
  * to prevent script based stealing of users files.
  * <p/>
