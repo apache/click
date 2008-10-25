@@ -174,6 +174,15 @@ public class PropertyUtils {
 
     // -------------------------------------------------------- Private Methods
 
+    /**
+     * Return the property value for the given object and property name. This
+     * method uses reflection internally to get the property value.
+     *
+     * @param source the source object
+     * @param name the name of the property
+     * @param cache the cache of reflected property Method objects
+     * @return the property value for the given source object and property name
+     */
     private static Object getObjectPropertyValue(Object source, String name, Map cache) {
         PropertyUtils.CacheKey methodNameKey = new PropertyUtils.CacheKey(source, name);
 
@@ -236,9 +245,18 @@ public class PropertyUtils {
      */
     private static class CacheKey {
 
+        /** Class to encapsulate in cache key. */
         private final Class sourceClass;
+
+        /** Property to encapsulate in cache key. */
         private final String property;
 
+        /**
+         * Constructs a new CacheKey for the given object and property.
+         *
+         * @param source the object to build the cache key for
+         * @param property the property to build the cache key for
+         */
         public CacheKey(Object source, String property) {
             if (source == null) {
                 throw new IllegalArgumentException("Null source parameter");
@@ -252,6 +270,9 @@ public class PropertyUtils {
 
         /**
          * @see Object#equals(Object)
+         *
+         * @param o the object with which to compare this instance with
+         * @return true if the specified object is the same as this object
          */
         public final boolean equals(Object o) {
             if (this == o) {
@@ -273,6 +294,8 @@ public class PropertyUtils {
 
         /**
          * @see Object#hashCode()
+         *
+         * @return a hash code value for this object.
          */
         public final int hashCode() {
             return sourceClass.hashCode() * 31 + property.hashCode();
