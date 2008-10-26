@@ -1740,8 +1740,8 @@ public class Form extends AbstractContainer {
 
             for (int i = 0, size = getControls().size(); i < size; i++) {
                 Control control = (Control) getControls().get(i);
-                if (control.getName() != null
-                    && !control.getName().startsWith(SUBMIT_CHECK)) {
+                String controlName = control.getName();
+                if (controlName == null || !controlName.startsWith(Form.SUBMIT_CHECK)) {
 
                     if (!control.onProcess()) {
                         continueProcessing = false;
