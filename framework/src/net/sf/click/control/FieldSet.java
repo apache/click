@@ -686,8 +686,8 @@ public class FieldSet extends Field implements Container {
      * Process the request invoking <tt>onProcess()</tt> on the contained
      * <tt>Control</tt> elements.
      *
-     * @return true if all Controls were processed, or false if one Control returned
-     * false
+     * @return true if all Controls were processed, or false if any Control
+     * returned false
      */
     public boolean onProcess() {
         if (hasControls()) {
