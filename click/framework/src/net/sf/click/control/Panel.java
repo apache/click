@@ -309,7 +309,8 @@ public class Panel extends AbstractContainer {
 
     /**
      * Return the panel id value. If no id attribute is defined then this method
-     * will return the panel name.
+     * will return the panel name. If no name is defined this method will return
+     * <tt>null</tt>.
      *
      * @see net.sf.click.Control#getId()
      *
@@ -321,6 +322,11 @@ public class Panel extends AbstractContainer {
 
         } else {
             String id = getName();
+
+            if (id == null) {
+                // If panel name is null, return null
+                return null;
+            }
 
             if (id.indexOf('/') != -1) {
                 id = id.replace('/', '_');
