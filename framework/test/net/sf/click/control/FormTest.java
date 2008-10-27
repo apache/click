@@ -119,6 +119,30 @@ public class FormTest extends TestCase {
         Assert.assertEquals(requestValue, nameField.getValueObject());
     }
 
+    /**
+     * Check that Form processes controls even if their names is not defined.
+     *
+     * CLK-463  
+     */
+    public void testProcessControlWhenNameIsNull() {
+        MockContext context = MockContext.initContext();
+        context.getMockRequest().setParameter("form_name", "form");
+        String fieldValue = "test";
+        context.getMockRequest().setParameter("field", fieldValue);
+        
+        Form form = new Form("form");
+        Panel panel = new Panel();
+        TextField textField = new TextField("field");
+        panel.add(textField);
+        form.add(panel);
+
+        assertEquals("", textField.getValue());
+        
+        form.onProcess();
+        
+        assertEquals(fieldValue, textField.getValue());
+    }
+
     /** Form which index position to test. */
     private Form form;
     
