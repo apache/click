@@ -1647,6 +1647,12 @@ public class ClickServlet extends HttpServlet {
      */
     static interface FieldCallback {
 
+        /**
+         * Callback method invoked for each field.
+         *
+         * @param fieldName the field name
+         * @param fieldValue the field value
+         */
         public void processField(String fieldName, Object fieldValue);
 
     }
