@@ -260,7 +260,9 @@ public class VelocityTemplateService implements TemplateService {
         if (configService.isProductionMode() || configService.isProfileMode()) {
             LogChuteAdapter logChuteAdapter = (LogChuteAdapter)
                 velocityEngine.getApplicationAttribute(LOG_INSTANCE);
-            logChuteAdapter.logLevel = LogChute.WARN_ID;
+            if (logChuteAdapter != null) {
+                logChuteAdapter.logLevel = LogChute.WARN_ID;
+            }
         }
     }
 
@@ -551,7 +553,7 @@ public class VelocityTemplateService implements TemplateService {
             LogService logService = configService.getLogService();
             if (pop != null && logService.isDebugEnabled()) {
                 String message = "user defined property '" + entry.getKey()
-                    + "=" + entry.getValue() + "' replaced default propery '"
+                    + "=" + entry.getValue() + "' replaced default property '"
                     + entry.getKey() + "=" + pop + "'";
                 logService.debug(message);
             }
