@@ -770,14 +770,26 @@ Please ensure you have configured build.properties</echo>
       </fail>
       <input 
       	message="Please enter the project name (e.g. quickstart):" 
+        defaultvalue="quickstart"
         addproperty="project-name"/>
       <input 
       	message="Please enter the root package name (e.g. com.${project-name}):" 
+        defaultvalue="com.${project-name}"
         addproperty="package-name"/>
       <input 
-    	message="Please enter the web app context path:" 
-    	defaultvalue="${project-name}"
+    	  message="Please enter the web app context path:" 
+    	  defaultvalue="${project-name}"
         addproperty="context-path"/>
+       <dirname property="project-path" file="../${project-name}"/>
+       <input
+         message="The directory '${project-path}/${project-name}' will be deleted. Continue (y/n)?"
+         validargs="y,n"
+         addproperty="do.delete"/>
+       <condition property="do.abort">
+          <equals arg1="n" arg2="${do.delete}"/>
+       </condition>
+       <fail if="do.abort">Quickstart aborted.</fail>
+
       <delete 
       	dir="../${project-name}" 
       	quiet="false"/>
