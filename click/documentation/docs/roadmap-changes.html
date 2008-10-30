@@ -65,6 +65,9 @@ The feature roadmap for the next major release of Click is being determined.
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li class="change">
+        Added Dutch language support, contributed by Christopher Highway.
+      </li>
+      <li class="change">
         Improved Form to process controls even if their names is not defined.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-463">463</a>].
       </li>
@@ -198,6 +201,58 @@ public class HtmlTable extends AbstractControl {
        method still outputs the same HTML representation, as toString() delegates to the
        <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render</a>
        method.
+       <p/>
+       <b>Please note</b> a common problem when overriding <em>render</em> in custom components, is
+       invoking <em>super.toString()</em> in order to render the Control's default
+       markup:
+       <pre class="prettyprint">
+public class CustomField extends Field {
+    ...
+
+    public void render(HtmlStringBuffer buffer) {
+        <span style="background:#F3FF0F">String field = super.toString();</span> // BEWARE this line will cause StackOverflowError
+        ...
+    }
+
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        render(buffer);
+        return buffer.toString();
+    }
+} </pre>
+      The highlighted line above will cause a StackOverflowError, meaning an infinite
+      loop was encountered. The reason for the error will become obvious when 
+      tracing the sequence of calls:
+      <ol style="margin-top: 2em;;margin-bottom: 2em">
+          <li>The first statement in the method <em>CustomField.render</em> invokes
+              <em>super.toString</em>. In this example the super class is Field, thus
+              the actual method invoked is <em>Field.toString</em></li>
+          <li><em>Field.toString</em> performs its own rendering by invoking <em>Field.render</em>.
+            However since CustomField overrides <em>Field.render</em>, <em>Field.toString</em>
+            will invoke <em>CustomField.render</em> instead.</li>
+          <li>This leads us back to step 1. where <em>CustomField.render</em> invokes
+              <em>super.toString</em>. This creates the infinite loop and leads to the StackOverflowError.</li>
+      </ol>
+      <p/>
+      The fix is straight forward. If you override a Control's <em>render</em>
+      method, but still want to render the Control's default markup, invoke
+      <em>super.render</em> instead of <em>super.toString</em>.
+      Here is the correct version:
+      <pre class="prettyprint">
+public class CustomField extends Field {
+    ...
+
+    public void render(HtmlStringBuffer buffer) {
+        <span style="background:#F3FF0F">super.render(buffer);</span> // NOTE StackOverflowError won't occur
+        ...
+    }
+
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        render(buffer);
+        return buffer.toString();
+    }
+} </pre>
       </li>
       <li class="upgrade">
        Certain controls were retrofitted as containers. These include 
@@ -1122,7 +1177,7 @@ public class MyPage extends Page {
       </li>
       <li class="change">
 		Fixed Context handling of multivalue parameters on multipart file upload requests.
-		This issue was raised by Bob Schellick
+		This issue was raised by Bob Schellink
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-252">252</a>].
       </li>
       <li class="change">
@@ -1132,7 +1187,7 @@ public class MyPage extends Page {
       </li>
       <li class="change">
 		Fixed missing language properties.
-		This issue was raised by Bob Schellick
+		This issue was raised by Bob Schellink
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-269">269</a>, 
 		 <a target='blank' href="http://www.avoka.com/jira/browse/CLK-271">271</a>].
       </li>
