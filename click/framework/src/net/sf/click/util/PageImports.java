@@ -367,6 +367,12 @@ public class PageImports {
      * This class enables lazy, on demand importing for {@link #getAllIncludes()}.
      */
     class Imports {
+
+        /**
+         * @see java.lang.Object#toString()
+         *
+         * @return a string representing all includes
+         */
         public String toString() {
             return PageImports.this.getAllIncludes();
         }
@@ -376,6 +382,12 @@ public class PageImports {
      * This class enables lazy, on demand importing for {@link #getJsImports()}.
      */
     class JsImports {
+
+        /**
+         * @see java.lang.Object#toString()
+         *
+         * @return a string representing all JavaScript imports
+         */
         public String toString() {
             return PageImports.this.getJsImports();
         }
@@ -385,6 +397,12 @@ public class PageImports {
      * This class enables lazy, on demand importing for {@link #getCssImports()}.
      */
     class CssImports {
+
+        /**
+         * @see java.lang.Object#toString()
+         *
+         * @return a string representing all CSS imports
+         */
         public String toString() {
             return PageImports.this.getCssImports();
         }
