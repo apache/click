@@ -848,7 +848,8 @@ public abstract class AbstractControl implements Control {
      * <pre class="prettyprint">
      * &lt;div name="mytext" id="mytext"
      * </pre>
-     * Note that the tag is not closed.
+     * <b>Note</b> that the tag is not closed, so subclasses can easily add more
+     * attributes.
      *
      * @param tagName the name of the tag to render
      * @param buffer the buffer to append the output to
