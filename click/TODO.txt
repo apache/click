@@ -1,4 +1,4 @@
-Click 1.5 Release
+Click 1.5.1 Release
 --------------------
 BUGS
 * 
