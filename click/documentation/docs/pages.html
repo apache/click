@@ -885,7 +885,8 @@ state between interactions.
 
 To make a page stateful you simply need to set the page
 <a target="topic" href="click-api/net/sf/click/Page.html#stateful">stateful</a> 
-property to true and have the page implement the <tt>Serializable</tt> interface. For example:
+property to true, have the page implement the <tt>Serializable</tt> interface
+and set the <tt>serialVersionUID</tt> indicator. For example:
 
 <pre class="codeJava">
 <span class="kw">package</span> com.mycorp.page;
@@ -895,6 +896,8 @@ property to true and have the page implement the <tt>Serializable</tt> interface
 <span class="kw">import</span> net.sf.click.Page;
  
 <span class="kw">public class</span> SearchPage <span class="kw">extends</span> Page <span class="kw">implements</span> Serializable {
+
+    <span class="kw">private static final long</span> serialVersionUID = 1L;
 
     <span class="kw">public</span> SearchPage() {
         setStateful(<span class="kw">true</span>);
