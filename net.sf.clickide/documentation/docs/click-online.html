@@ -8,6 +8,7 @@
  <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
  <title>Click Framework</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <link rel="stylesheet" type="text/css" href="click-online/gallery.css"/>
  <style type="text/css">
   dd {
     margin-top: 0.5em;
@@ -21,6 +22,16 @@
      border: 1px solid #c0c0c0;
      padding: 8px;
   }
+  .testimony {
+     margin-top: 2em;
+     margin-bottom: 1em;
+     font-weight: bold;
+     font-family: verdana;
+     font-size: 16px;
+  }
+  blockquote {
+      margin: 0 10 15;
+  }
  </style>
 </head>
 <body>
@@ -28,9 +39,17 @@
 <h1>Click Online</h1>
 <p/>
 
+<ul style="margin-top:0.5em;">
+   <li class="item"><a href="#resources">Online Resources</a></li>
+   <li class="item"><a href="#mailing-lists">Mailing Lists</a></li>
+   <li class="item"><a href="#blogs">Blogs</a></li>
+   <li class="item"><a href="#powered">Sites Using Click</a></li>
+   <li class="item"><a href="#testimonies">Testimonies</a></li>
+   <li class="item"><a href="#sponsors">Commercial Sponsors</a></li>
+  </ul>
 
-
-<h2>Online Resources</h2>
+<a name="resources" href="#"></a>
+<h2 style="margin-top:2em">Online Resources</h2>
 
 <table class="sponsors">
 <tr>
@@ -46,47 +65,282 @@
     <a class="external" target="blank" href="https://sourceforge.net/project/showfiles.php?group_id=82095">Downloads</a>
     <p>SourceForge Click file downloads</p>
   </td>
+</tr><tr>
+  <td>
+    <a class="external" target="blank" href="http://www.avoka.com/click-examples/">Click Examples</a>
+    <p>Click Examples application</p>
+  </td>
+  <td>
+    <a class="external" target="blank" href="http://www.avoka.com/jira/">Bugs and Issues</a>
+    <p>JIRA bug and issue tracking</p>
+  </td>
   <td>
     <a class="external" target="_blank" href="http://click-framework.blogspot.com/">Click Blog</a>
     <p>For the latest news and gossip</p>
   </td>
 </tr><tr>
   <td>
-    <a class="external" target="blank" href="http://www.avoka.com:8080/click-examples">Click Examples</a>
-    <p>Click Examples application</p>
-  </td>
-  <td>
-    <a class="external" target="blank" href="http://www.avoka.com:8080/jira">Bugs and Issues</a>
-    <p>JIRA bug and issue tracking</p>
-  </td>
-  <td>
-    <a target="blank" class="external" href="http://sourceforge.net/mail/?group_id=82095">Mail Lists</a>
-    <p>SourceForge Click Mail newsgroup mail lists</p>
-  </td>
-  <td>
-    <a class="external" target="blank" href="http://news.gmane.org/gmane.comp.web.click.user">User Newsgroup</a>
-    <p>User newsgroup GMANE web reader</p>
-  </td>
-</tr><tr>
-  <td>
-    <a class="external" target="blank" href="http://news.gmane.org/gmane.comp.web.click.devel">Developer Newsgroup</a>
-    <p>Developer newsgroup GMANE web reader</p>
-  </td>
-  <td>
-    <a class="external" target="blank" href="http://www.ibiblio.org/maven/net.sf.click/jars/">Ibiblio Maven Repository</a>
-    <p>Click JARs registered with Ibiblio Maven repository</p>
+    <a class="external" target="blank" href="http://repo1.maven.org/maven2/net/sf/click/">Maven Repository</a>
+    <p>Click JARs registered with Maven repository</p>
   </td>
   <td>
     <a class="external" target="blank" href="http://click.svn.sourceforge.net/viewcvs.cgi/click/trunk/click/">Browse SVN Repository</a>
     <p>Browse Subversion repository</p>
   </td>
   <td>
-    <a target="blank" href="http://fisheye3.cenqua.com/browse/click/">FishEye</a>
+    <a class="external" target="blank" href="http://fisheye3.cenqua.com/browse/click/">FishEye</a>
     <p>FishEye SVN repository project view</p>
   </td>
 </tr>
 </table>
 
+<a name="mailing-lists" href="#"></a>
+<h2 style="margin-top:2em;">Mailing Lists</h2>
+
+<a name="user-mailing-list" class="heading"></a>
+<p style="margin-top:20px"><b>User</b></p>
+
+<p>
+  Here you can ask questions on how to use Click, have discussions around
+  best practices and inquire about new features you would like to see.
+<p/>
+<ul>
+  <li>
+    To <b>subscribe</b> send an empty email to <tt>click-user-subscribe@incubator.apache.org</tt>
+  </li>
+  <li>
+    To <b>unsubscribe</b> send an empty email to <tt>click-user-unsubscribe@incubator.apache.org</tt>
+  </li>
+  <li>
+    To <b>post a message</b> use the address: <tt>click-user@incubator.apache.org</tt>
+  </li>
+  <li>
+    Message archive: <a target="_blank" class="external" href="http://mail-archives.apache.org/mod_mbox/incubator-click-user/">http://mail-archives.apache.org/mod_mbox/incubator-click-user/</a>
+  </li>
+  <li>
+    MarkMail archive: <a target="_blank" class="external" href="http://click.markmail.org/search/">http://click.markmail.org/search/</a>
+  </li>
+  <li>
+    Nabble2 forums: <a target="_blank" class="external" href="http://n2.nabble.com/click-development-f1134974.html">http://n2.nabble.com/click-development-f1134974.html</a>
+  </li>
+  <li>
+    Gmane user newsgroup: <a class="external" target="blank" href="http://news.gmane.org/gmane.comp.web.click.user">http://news.gmane.org/gmane.comp.web.click.user</a>
+  </li>
+</ul>
+
+
+<a name="development-mailing-list" class="heading"></a>
+<p style="margin-top:20px"><b>Development</b></p>
+
+<p>
+  This list focuses on development issues such as the future direction, prioritization
+  of issues, design issues and release schedules.
+<p/>
+<ul>
+  <li>
+    To <b>subscribe</b> send an empty email to <tt>click-dev-subscribe@incubator.apache.org</tt>
+  </li>
+  <li>
+    To <b>unsubscribe</b> send an empty email to <tt>click-dev-unsubscribe@incubator.apache.org</tt>
+  </li>
+  <li>
+    To <b>post a message</b> use the address: <tt>click-dev@incubator.apache.org</tt>
+  </li>
+  <li>
+    Message archive: <a target="_blank" class="external" href="http://mail-archives.apache.org/mod_mbox/incubator-click-dev/">http://mail-archives.apache.org/mod_mbox/incubator-click-dev/</a>
+  </li>
+  <li>
+    MarkMail archive: <a target="_blank" class="external" href="http://click.markmail.org/search/">http://click.markmail.org/search</a>
+  </li>
+  <li>
+    Nabble2 forums: <a target="_blank" class="external" href="http://n2.nabble.com/click-user-f1134973.html">http://n2.nabble.com/click-user-f1134973.html</a>
+  </li>
+  <li>
+    Gmane developer newsgroup: <a class="external" target="blank" href="http://news.gmane.org/gmane.comp.web.click.devel">http://news.gmane.org/gmane.comp.web.click.devel</a>
+  </li>
+</ul>
+
+
+<a name="blogs" href="#"></a>
+<h2 style="margin-top:2em;">Blogs</h2>
+
+<table>
+  <tr>
+    <td>
+      <ul>
+        <li><a target="_blank" href="http://click-framework.blogspot.com/">Click Framework Blog</a> - where Click developers post announcements and other related news.</li>
+        <li><a target="_blank" href="http://takezoe.blogspot.com/">Naoki Takezoe's blog</a> - regularly posts Click related material. Naoki is also the author of the excellent <a href="click-ide.html">ClickIDE</a>.</li>
+        <li><a target="_blank" href="http://sabob.blogspot.com/">Bob Schellink's blog</a></li>
+      </ul>
+      Let us know of any Click related blog entries on the web so we can add them here. Send us a mail to one of our
+      <a href="#mailing-lists">Mailing Lists</a>,
+      or directly to "sabob1 at gmail.com".
+    </td>
+  </tr>
+</table>
+
+<a name="powered" href="#"></a>
+<h2 style="margin-top:2em;">Sites Using Click</h2>
+
+<table class="sites" cellpadding="0" cellspacing="0" border="0">
+ <tr>
+  <td>
+   Below are some of the sites and organizations that use Click.
+   <p/>
+   If you would like to add your own site to this list, please send us a mail to one of our
+   <a href="#mailing-lists">Mailing Lists</a>,
+   or directly to "sabob1 at gmail.com".
+  </td>
+ </tr>
+
+ <tr>
+  <td>  
+   <div class="powered_by">Avoka FormCenter</div>
+   <p>
+   FormCenter is a powerful customer self service electronic forms delivery platform designed to fully leverage Adobe LiveCycle. 
+   It is a web based customer facing solution that manages the complete life cycle of electronic forms and their associated services and data, and delivery.
+   </p><p>
+   FormCenter provides the foundation of the whole of Australian Federal <a target="blank" class="external" href="http://www.business.gov.au/Business+Entry+Point/">Government</a> SmartForms solution.
+   </p>
+   <ul class="thumbnails">
+    <li>
+     <a class="thickbox" rel="group1" href="click-online/images/formcenter-home.png"><img src="click-online/images/thumb-formcenter-home.png" alt="thumb formcentral find forms"/></a>
+    </li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div class="powered_by">Val d'Oise - <a target="_blank" href="http://www.valdoise.fr/heading/heading626695.html">http://www.valdoise.fr/heading/heading626695.html</a></div>
+   <p/>
+   This site was created for Val d'Oise, a French department which has responsiblities
+   in the areas of welfare, culture, environment, roads, health and schools.
+   <ul class="thumbnails">
+    <li>
+     <a class="thickbox" rel="group1" href="click-online/images/valdoise.png"><img src="click-online/images/thumb-valdoise.png" alt="thumb valdoise"/></a>
+    </li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div class="powered_by">Piggydb - <a target="_blank" href="http://piggydb.devjavu.com/">http://piggydb.devjavu.com/</a></div>
+   <p/>
+   Piggydb is web application for building personal knowledge base systems.
+   It allows one to  write knowledge in the same manner as blogging, and classify
+   it by tagging. Piggydb also supports hierarchical tagging for creating highly
+   structural knowledge.
+   <ul class="thumbnails">
+    <li>
+     <a class="thickbox" rel="group1" href="click-online/images/piggydb.png"><img src="click-online/images/thumb-piggydb.png" alt="thumb piggydb"/></a>
+    </li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div class="powered_by">Delaney locks - <a target="_blank" href="http://www.delaneylocks.com">http://www.delaneylocks.com</a></div>
+   <p/>
+   This online store provides Delaney locks with product management, credit card processing,
+   UPS real time lookup, quartz based email processing and notification system, order
+   status tracking and more.
+   <ul class="thumbnails">
+    <li>
+     <a class="thickbox" rel="group1" href="click-online/images/delaneylocks.png"><img src="click-online/images/thumb-delaneylocks.png" alt="thumb delaney locks"/></a>
+    </li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div class="powered_by">Microshop - <a target="_blank" href="http://www.gaabor.com">http://www.gaabor.com</a></div>
+   <p/>
+   Microshop is a generic online shopping portal for purchasing products from
+   different vendors. Microshop supports localization, customization and branding
+   on a per vendor basis.
+   <p/>
+    The site has not yet officially launched and still under active development.
+   <ul class="thumbnails">
+    <li>
+     <a class="thickbox" rel="group1" href="click-online/images/microshop.png"><img src="click-online/images/thumb-microshop.png" alt="thumb microshop"/></a>
+    </li>
+   </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div class="powered_by">BetterProgrammer - <a target="_blank" href="http://www.betterprogrammer.com/">http://www.betterprogrammer.com/</a></div>
+   <p/>
+   BetterProgrammer.com is a site testing hands-on Java skills. The test is very
+   different from traditional multiple-choice question tests. The site asks to solve
+   several short programming tasks and then compiles and evaluates them online.
+   <p/>
+   Good programmers will enjoy taking this test; it really is a programming test,
+   not a language test.
+   <ul class="thumbnails">
+    <li>
+     <a class="thickbox" rel="group1" href="click-online/images/better-programmer.png"><img src="click-online/images/thumb-better-programmer.png" alt="thumb better programmer"/></a>
+    </li>
+   </ul>
+  </td>
+ </tr>
+ 
+ <tr>
+  <td>
+    <div class="powered_by">Telstra OOT</div>
+    <p>Telstra OOT provides a Business Broadband Online Ordering Tool (OOT) for <a target="_blank" class="external" href="http://www.telstra.com/business">Telstra</a>.</p>
+    <ul class="thumbnails">
+     <li>
+      <a class="thickbox" rel="group1" href="click-online/images/telstra-oot.png"><img src="click-online/images/thumb-telstra-oot.png" alt="thumb telstra home"/></a>
+     </li>
+    </ul>
+  </td>
+ </tr>
+</table>
+
+<a name="testimonies" href="#"></a>
+<h2>Testimonies</h2>
+
+    Below are some of the testimonies we have received from Click users.
+
+
+     <blockquote>
+      <div class="testimony">The combination of simplicity, flexibility and freedom from restrictions has made this the only framework we can currently consider.</div>
+      "At Sabinet we chose the Click framework because, simply put,
+      it is the framework that places the least amount of restrictions on your
+      application and it's development. While having features that really
+      boost productivity and make for really really simple code, those
+      features are never forced. They are available for use, but not
+      compulsory, and not the only way in which things can be done. You are
+      always able to fall back to a more basic, rudimentary approach if so
+      desired.
+     <p/>
+      It is also an easy framework to learn and to get productive in.
+      If a new developer should join the team, they won't have to go on a
+      month course or work through a 900 page manual before being productive.
+    <p/>
+      It is also a simple matter to create custom components for the framework and to
+      extend it in ways that are meaningful to you. It is one of a very few
+      frameworks (in our experience) in which we did *not* struggle to do any
+      kind of thing we wanted to (especially on the interface and client
+      side).
+     <p/>
+      The combination of simplicity, flexibility and freedom from restrictions has
+      made this the only framework we can currently consider. There are a few
+      who come close, but none resounds as much with our philosophy and way of
+      doing things as Click does."
+     <p/>
+     <cite>Willie Krause - lead developer and architect at <a target="_blank" href="http://www.sabinet.co.za">Sabinet Online</a></cite>
+    </blockquote>
+
+<br>
+
+<a name="sponsors" href="#"></a>
 <h2>Commercial Sponsors</h2>
 
 <table border="0" class="sponsors">

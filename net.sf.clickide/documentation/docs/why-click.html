@@ -23,15 +23,15 @@ another Java web application framework.
 <br/>
 
 
-Click is modern JEE web application framework, providing a natural rich client
+Click is a modern JEE web application framework, providing a natural rich client
 style programming model. &nbsp; Key features of Click include:
 
-<h2>Simple to Learn</h2>
-Click is designed to be simple learn so that new developers can get up and running in a day.  This is very important 
+<h2>1.&nbsp; Simple to Learn</h2>
+Click is designed to be simple to learn so that new developers can get up and running in a day.  This is very important 
 with commercial development teams where you have a wide range of skill levels and motivation.
 <p/>
 My experience introducing Tapestry (2.3) to development teams was that it is too complex and difficult to learn for the
-average developer. The two development teams I introduced to Tapestry eventually dropped it and revert to Struts.
+average developer. The two development teams I introduced to Tapestry eventually dropped it and reverted to Struts.
 <p/>
 Click is also significantly easier to learn than Struts. The Struts framework, while essentially a simple command 
 pattern design, has quite a convoluted and confusing design. 
@@ -40,34 +40,34 @@ To support ease of adoption Click has some of the best documentation available f
 includes many working examples.
 <p/>
 
-<h2>Component and Page Oriented Design</h2>
+<h2>2.&nbsp; Component and Page Oriented Design</h2>
 If you have done traditional GUI programming with Swing, VB or Delphi you will know that there is something very wrong
 with JEE web development. JEE web development is painfully slow, complex and error prone.
 <p/>
 One of the first generation JEE web frameworks was Struts, which provides a command pattern design and a set of JSP 
-tag libs. Unfortunately with Struts you are still down in the weeds, mapping URLs to Actions working with primitive 
+tag libs. Unfortunately with Struts you are still down in the weeds, mapping URLs to Actions and working with primitive 
 ActionForms.  Its not giving you much leverage at all.
 <p/>
-Tapestry was one of first the component base JEE web frameworks, introducing the component hierarchies, pages and an 
-event based programming model.  This is a much more productive way of working, and is what we have come to expect in 
+Tapestry was one of the first component based JEE web frameworks, introducing component hierarchies, pages and an 
+event based programming model.  This is a much more productive way of working, and is what we have come to expect 
 when developing desktop GUI applications.
 <p/>
 The idea with Click was to take this page and component design approach, and make it much easier to use and more 
 accessible.
 <p/>
-Click provides an Page oriented design, featuring Control components and an event based programming model. Click 
+Click provides a Page oriented design, featuring Control components and an event based programming model. Click 
 includes 40 Controls out of the box, which correspond to the major HTML elements. It's a great way of programming 
 more simply.
 <p/>
 Click Forms and Controls provide automatic validation and rendering, making form development very fast and robust.
 
-<h2>JSP &amp; MVC Free</h2>
+<h2>3.&nbsp; JSP &amp; MVC Free</h2>
 Click is JSP and MVC Free. This is a good thing! 
 <p/>
 JSP's combined with the miss application of the MVC pattern have been holding back JEE web development for many years. 
 It's a big statement I know, please let me explain.
 <p/>
-MVC is a desktop GUI design pattern, which supports a separation of  roles in UI design. Model is the data, the 
+MVC is a desktop GUI design pattern, which supports a separation of roles in UI design. Model is the data, the 
 View does the rendering and the Control is for modifying the data.  Now MVC is a fairly sophisticated UI pattern 
 which solves the problem of multiple views and controls sharing the same data.  
 <p/>
@@ -75,7 +75,7 @@ For most UI development however MVC is overkill. The control and the view are us
 a Select box is the view and the control and also holds the model. In Swing fortunately, most of the MVC design is 
 hidden away below the surface.  In VB and Delphi there is no MVC at all.
 <p/>
-In the early days of JEE web development design patterns were highly converted, and MVC was grabbed and early Servlet/JSP 
+In the early days of JEE web development design patterns were highly coveted, and MVC was grabbed and early Servlet/JSP 
 designs were branded as MVC. In their analysis the model was usually a DAO, the view was the JSP and control was a 
 Servlet.  
 <p/>
@@ -113,10 +113,10 @@ At runtime the control <span class="st">href</span> attribute renders as:
 &lt;a href="<span class="st">/mycorp/example-page.htm?actionLink=myLink</span>"&gt;Click Me&lt;/a&gt;
 </pre>
 
-If the user clicks the link, the ActionLink control then invokes the invokes the Page's <code>onClick()</code> method. 
+If the user clicks the link, the ActionLink control invokes the Page's <code>onClick()</code> method. 
 <p/>
 Conversely with the JSP MVC architecture a JSP can tell you something, but it can't understand what it has just 
-said. Think about this for a second. There is no single UI component is taking responsibility for its own actions. 
+said. Think about this for a second. There is no single UI component that is taking responsibility for its own actions. 
 Guess where the responsibility then falls to... 
 <p/>
 You become responsible for wiring up the numerous pieces to make it work. In Struts this can include:
@@ -132,7 +132,7 @@ You become responsible for wiring up the numerous pieces to make it work. In Str
    <li>specifying the &lt;htm:form&gt; and &lt;html&gt; field tag XML elements and attributes correctly in the JSP file</li>
 </ul>
 
-In development of large applications this becomes a volumous, tedious and error prone task. 
+In development of large applications this becomes a voluminous, tedious and error prone task. 
 <p/>
 Another aspect of these designs is the transfer of logic from Java code into XML configuration files. Tapestry and Spring MVC
 also make extensive use of XML. The problem with this is compile time errors now only become apparent at runtime.
@@ -144,9 +144,9 @@ or aggregation to build more sophisticated UI components. For example the Click 
 "<i>is a</i>" subclass of <tt>TextField</tt> and "<i>has a</i>" <tt>Select</tt> control for specifying the card type.
 
 
-<h2>Velocity</h2>
+<h2>4.&nbsp; Velocity</h2>
 
-For rendering HTML Click uses the Velocity templating engine. Velocity has a simple 
+For rendering HTML Click uses the Velocity template engine. Velocity has a simple 
 instruction set which is very easy to learn and use. 
 For example take a look at the template below.
 
@@ -174,9 +174,10 @@ documentation. Velocity's ease of use made it the ideal choice for Click.
 <p/>
 The one tricky part of Velocity, <i>configuration</i> is handled automatically by Click.
 <p/>
-Please note you can also use JSPs for rendering in Click. It should be said that 
-JSP 2.0 and the JSP Expression Language has improved the usability of JSP 
-in recent years.
+Please note that Click's template service is pluggable so you can also use 
+<a href="http://freemarker.sourceforge.net/">Freemarker</a> or JSPs for rendering
+in Click. It should be said that JSP 2.0 and the JSP Expression Language has
+improved the usability of JSP in recent years.
 
 </body>
 </html>

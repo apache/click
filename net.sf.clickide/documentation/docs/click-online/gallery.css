@@ -1,0 +1,93 @@
+/*
+ * This stylesheet was adapted from the book "The Art & Science Of CSS"
+ * http://www.sitepoint.com/books/cssdesign1/
+*/
+.sites {
+    border-collapse: collapse;
+}
+.sites td {
+    padding: 10px 2px;
+}
+.powered_by {
+    background: #EFEFF7;
+    padding: 4px;
+    padding-left: 8px;
+    border: 1px solid #99A4DF;
+    font-weight: bold;
+    color: blue;
+}
+.powered_by a:link, .powered_by a:visited {
+    color: blue;
+    text-decoration: none;
+    border-bottom: 1px solid blue;
+}
+.powered_by a:focus, .powered_by a:hover, .powered_by a:active {
+    color: blue;
+    border-bottom: 1px solid blue;
+}
+img {
+  display: block;
+  margin: 0 auto 5px auto;
+  border: 1px solid #ccc;
+  border-bottom-color: #eee;
+  border-left-color: #ddd;
+  border-top-color: #bbb;
+}
+#content {
+  margin: 0 auto 20px 20px;
+  padding: 1em 0 0 0;
+  width: 730px;
+  background-color:#fff;
+  font-size: 1.25em; 
+  line-height: 1.75em;
+}
+ul.navigation {
+  margin: 0 0 10px 0;
+  padding: 0;
+  float: left;
+  text-align: center;
+  background-color: #fff;
+  line-height: 1em;
+  list-style: none; 
+  position: absolute;
+  top: 58px;
+  left: 550px;
+}
+ul.thumbnails a {
+  display: block;
+  float: left;
+  margin: 0;
+  padding: 4px 4px 9px 4px;
+  border: 1px solid #ccc;
+  border-top-color: #eee;
+  border-right-color: #ddd;
+  border-bottom-color: #bbb;
+  background-color: #fff;
+  text-align: center;
+}
+ul.thumbnails a {
+  width: 80px;
+  margin-right: 10px;
+  margin-left: 2px;
+}
+ul.thumbnails a:hover {
+  border: 1px solid #ccc;
+  background-color: #eee;
+}
+ul.thumbnails a {
+  width: 80px;
+  margin-right: 10px;
+}
+ul.thumbnails {
+  margin: 0;
+  padding: 0;
+  float: left;
+  text-align: center;
+  background-color: #fff;
+  line-height: 1em;
+  list-style: none;
+}
+ul.thumbnails li, ul.navigation li {
+  display: inline;
+  margin: 0;
+}
