@@ -9,48 +9,48 @@
         id="net.sf.clickide.core.facet"
         name="Click"
         point="org.eclipse.wst.common.project.facet.core.facets">
-    
+
     <project-facet id="click">
       <label>Click</label>
       <description>Click Description</description>
     </project-facet>
 
-    <project-facet-version facet="click" version="1.4">
+    <project-facet-version facet="click" version="1.5">
        <constraint>
         <and>
           <requires facet="jst.web" version="[2.3"/>
         </and>
       </constraint>
-    </project-facet-version> 
+    </project-facet-version>
 
     <action
           facet="click"
           id="click.install"
           type="install"
-          version="1.4">
+          version="1.5">
       <delegate class="net.sf.clickide.core.facet.ClickFacetInstallDelegate"/>
       <config-factory class="net.sf.clickide.core.facet.ClickFacetInstallDataModelProvider"/>
       <!--
       <config-factory class="net.sf.clickide.core.facet.ClickFacetInstallConfig$Factory"/>
       -->
     </action>
-    
+
 	<action
        facet="click"
        id="click.uninstall"
        type="uninstall"
-       version="1.4">
+       version="1.5">
       <delegate class="net.sf.clickide.core.facet.ClickFacetUninstallDelegate"/>
  	</action>
   </extension>
-   
+
   <extension point="org.eclipse.wst.common.project.facet.core.runtimes">
     <supported>
       <runtime-component any="true"/>
-      <facet id="click" version="1.4"/>
+      <facet id="click" version="1.5"/>
     </supported>
   </extension>
-  
+
   <extension
         point="org.eclipse.wst.common.project.facet.ui.wizardPages">
      <wizard-pages action="click.install">
@@ -71,7 +71,7 @@
            id="net.sf.clickide.category"
            name="%wizard.category"/>
   </extension>
-   
+
   <!--===============================================-->
   <!-- Editors -->
   <!--===============================================-->
@@ -94,7 +94,7 @@
           id="net.sf.clickide.ui.editor.TemplateEditor"
           name="%editor.template">
     </editor>
-  </extension>    
+  </extension>
 
   <extension point="org.eclipse.core.runtime.contentTypes">
     <content-type
@@ -115,7 +115,7 @@
           priority="high"/>
     -->
   </extension>
-  
+
   <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
     <sourceViewerConfiguration
       class="net.sf.clickide.ui.editor.ClickXMLTextViewerConfiguration"
@@ -130,7 +130,7 @@
       class="net.sf.clickide.ui.editor.TemplateEditorConfiguration"
       target="net.sf.clickide.template"/>
     -->
-  </extension>  
+  </extension>
   <extension
       id="clickTemplateValidator"
       name="Click Template Validator"
@@ -198,7 +198,7 @@
         point="org.eclipse.core.runtime.preferences">
      <initializer class="net.sf.clickide.preferences.ClickPreferenceInitializer"/>
   </extension>
-  
+
   <!--===============================================-->
   <!-- Editor Actions -->
   <!--===============================================-->
@@ -269,7 +269,7 @@
      <category
            id="net.sf.clickide.category"
            name="Click"/>
-  </extension>  
+  </extension>
   <extension
         point="org.eclipse.ui.bindings">
      <key

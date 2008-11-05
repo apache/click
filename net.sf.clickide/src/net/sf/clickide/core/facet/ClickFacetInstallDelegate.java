@@ -1,10 +1,7 @@
 package net.sf.clickide.core.facet;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +10,6 @@ import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
 import net.sf.clickide.core.builder.ClickProjectNature;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -54,7 +49,7 @@ import org.eclipse.wst.validation.internal.ValidatorMetaData;
  * @author Naoki Takezoe
  */
 public class ClickFacetInstallDelegate implements IDelegate {
-	
+
 	public void execute(IProject project, IProjectFacetVersion fv,
 			Object cfg, IProgressMonitor monitor) throws CoreException {
 		try {
@@ -62,7 +57,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			if (cfg != null) {
 				config = (IDataModel) cfg;
 			}
-			
+
 			if (monitor != null) {
 				int totalTasks = 3;
 				if(config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_SPRING)){
@@ -78,24 +73,24 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			deployClickFiles(project, config, monitor);
 
 			// Update web model
-			createServletAndModifyWebXML(project, config, monitor, 
-					config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_SPRING), 
+			createServletAndModifyWebXML(project, config, monitor,
+					config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_SPRING),
 					config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_CAYENNE));
 
 			if (monitor != null) {
 				monitor.worked(1);
 			}
-			
+
 			// Add the nature
 			ClickProjectNature.addNatute(project);
-			
+
 			if (monitor != null) {
 				monitor.worked(1);
 			}
-			
+
 			// Disable HTML validator
 			try {
-				ProjectConfiguration projectConfig 
+				ProjectConfiguration projectConfig
 					= ConfigurationManager.getManager().getProjectConfiguration(project);
 				ValidatorMetaData[] meta = projectConfig.getValidators();
 				List enables = new ArrayList();
@@ -105,19 +100,19 @@ public class ClickFacetInstallDelegate implements IDelegate {
 					}
 				}
 				projectConfig.setDoesProjectOverride(true);
-				
+
 				projectConfig.setEnabledManualValidators(
 						(ValidatorMetaData[])enables.toArray(new ValidatorMetaData[enables.size()]));
 				projectConfig.setEnabledBuildValidators(
 						(ValidatorMetaData[])enables.toArray(new ValidatorMetaData[enables.size()]));
-				
+
 			} catch(Exception ex){
 				//ex.printStackTrace();
 			}
 			if (monitor != null) {
 				monitor.worked(1);
 			}
-			
+
 			// Install Spring
 			if(config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_SPRING)){
 				deploySpringFiles(project, config, monitor);
@@ -125,7 +120,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 					monitor.worked(1);
 				}
 			}
-			
+
 			// Install Cayenne
 			if(config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_CAYENNE)){
 				deployCayenneFiles(project, config, monitor);
@@ -133,24 +128,24 @@ public class ClickFacetInstallDelegate implements IDelegate {
 					monitor.worked(1);
 				}
 			}
-			
+
 			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
-			
+
 		} finally {
 			if (monitor != null) {
 				monitor.done();
 			}
 		}
 	}
-	
+
 	/**
 	 * Deploy Spring JARs into <tt>WEB-INF/lib</tt>.
 	 */
-	private void deploySpringFiles(IProject project, IDataModel config, 
+	private void deploySpringFiles(IProject project, IDataModel config,
 			IProgressMonitor monitor) throws JavaModelException {
 		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
 		File webInf = destPath.append("WEB-INF").toFile();
-		
+
 		for(int i=0;i<ClickFacetUtil.SPRING_LIBS.length;i++){
 			try {
 				File file = new File(webInf, ClickFacetUtil.SPRING_LIBS[i]);
@@ -161,7 +156,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				ClickPlugin.log(ex);
 			}
 		}
-		
+
 		IJavaProject javaProject = JavaCore.create(project);
 		IPackageFragmentRoot[] roots = javaProject.getPackageFragmentRoots();
 		for(int i=0;i<roots.length;i++){
@@ -169,7 +164,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				IFile file = ((IFolder) roots[i].getResource()).getFile("applicationContext.xml");
 				try {
 					file.create(ClickPlugin.getDefault().getBundle().getEntry(
-							ClickFacetUtil.SPRING_DIR + "/applicationContext.xml").openStream(), 
+							ClickFacetUtil.SPRING_DIR + "/applicationContext.xml").openStream(),
 							true, monitor);
 				} catch(Exception ex){
 					ClickPlugin.log(ex);
@@ -178,15 +173,15 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			}
 		}
 	}
-	
+
 	/**
 	 * Deploy Cayenne JARs into <tt>WEB-INF/lib</tt>.
 	 */
-	private void deployCayenneFiles(IProject project, IDataModel config, 
+	private void deployCayenneFiles(IProject project, IDataModel config,
 			IProgressMonitor monitor) throws JavaModelException {
 		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
 		File webInf = destPath.append("WEB-INF").toFile();
-		
+
 		for(int i=0;i<ClickFacetUtil.CAYENNE_LIBS.length;i++){
 			try {
 				File file = new File(webInf, ClickFacetUtil.CAYENNE_LIBS[i]);
@@ -197,7 +192,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				ClickPlugin.log(ex);
 			}
 		}
-		
+
 		IJavaProject javaProject = JavaCore.create(project);
 		IPackageFragmentRoot[] roots = javaProject.getPackageFragmentRoots();
 		for(int i=0;i<roots.length;i++){
@@ -205,7 +200,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				IFile file = ((IFolder) roots[i].getResource()).getFile("cayenne.xml");
 				try {
 					file.create(ClickPlugin.getDefault().getBundle().getEntry(
-							ClickFacetUtil.CAYENNE_DIR + "/cayenne.xml").openStream(), 
+							ClickFacetUtil.CAYENNE_DIR + "/cayenne.xml").openStream(),
 							true, monitor);
 				} catch(Exception ex){
 					ClickPlugin.log(ex);
@@ -214,7 +209,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			}
 		}
 	}
-	
+
 	private void deployClickFiles(IProject project, IDataModel config, IProgressMonitor monitor) {
 		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
 		File webInf = destPath.append("WEB-INF").toFile();
@@ -226,7 +221,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				} else {
 					continue;
 				}
-				
+
 				URL url = ClickPlugin.getDefault().getBundle().getEntry(
 						ClickFacetUtil.CLICK_DIR + ClickFacetUtil.COPY_FILES[i]);
 				ClickUtils.copyStream(url.openStream(), new FileOutputStream(file));
@@ -235,9 +230,9 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			}
 		}
 	}
-	
+
 	/**
-	 * Checkes whether the old version of the given file exists. 
+	 * Checkes whether the old version of the given file exists.
 	 */
 	private boolean checkOldFile(File file){
 		String name = file.getName();
@@ -258,9 +253,9 @@ public class ClickFacetInstallDelegate implements IDelegate {
 		return true;
 	}
 
-	private void createServletAndModifyWebXML(IProject project, final IDataModel config, 
+	private void createServletAndModifyWebXML(IProject project, final IDataModel config,
 			IProgressMonitor monitor, boolean useSpring, boolean useCayenne) {
-		
+
 		WebApp webApp = null;
 		WebArtifactEdit artifactEdit = null;
 		try {
@@ -273,22 +268,22 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				// remove old mappings
 				ClickUtils.removeURLMappings(webApp, servlet);
 			}
-			
+
 			servlet = ClickUtils.createOrUpdateServletRef(webApp, config, servlet, useSpring);
 
 			// init mappings
 			String[] listOfMappings = {"*.htm"};
 			ClickUtils.setUpURLMappings(webApp, listOfMappings, servlet);
-			
+
 			// welcome-file-list
 			ClickUtils.createOrUpdateFilelist(webApp);
-			
+
 			// Add Cayenne Support
 			if(useCayenne){
 				Filter filter = WebapplicationFactory.eINSTANCE.createFilter();
 				filter.setFilterClassName(ClickUtils.CAYENNE_FILTER_CLASS);
 				filter.setName("DataContextFilter");
-				
+
 				if (webApp.getJ2EEVersionID() >= J2EEVersionConstants.J2EE_1_4_ID) {
 					// J2EE 1.4
 					ParamValue initParam = CommonFactory.eINSTANCE.createParamValue();
@@ -302,51 +297,23 @@ public class ClickFacetInstallDelegate implements IDelegate {
 					initParam.setParamValue("false");
 					filter.getInitParams().add(initParam);
 				}
-				
+
 				webApp.getFilters().add(filter);
-				
+
 				FilterMapping mapping = WebapplicationFactory.eINSTANCE.createFilterMapping();
 				mapping.setServletName(servlet.getServletName());
 				mapping.setFilter(filter);
 				webApp.getFilterMappings().add(mapping);
 			}
 		} catch(Exception ex){
-			ex.printStackTrace();
-			deployWebXMLFor25(project, useSpring, useCayenne);
+			ClickPlugin.log(ex);
 		} finally {
 			if (artifactEdit != null) {
 				// save and dispose
 				artifactEdit.saveIfNecessary(monitor);
 				artifactEdit.dispose();
 			}
-			
-		}
-	}
-	
-	private void deployWebXMLFor25(IProject project, boolean useSpring, boolean useCayenne){
-		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
-		File webInf = destPath.append("WEB-INF").toFile();
-		try {
-			File file = new File(webInf, "web.xml");
-			if(!file.exists()){
-				file.createNewFile();
-			}
-			
-			URL url = ClickPlugin.getDefault().getBundle().getEntry(
-					ClickFacetUtil.CLICK_DIR + "/web.xml");
-			
-			VelocityContext context = new VelocityContext();
-			context.put("useSpring", new Boolean(useSpring));
-			context.put("useCayenne", new Boolean(useCayenne));
-			StringWriter writer = new StringWriter();
-			
-			InputStreamReader reader = new InputStreamReader(url.openStream(), "UTF-8");
-			Velocity.evaluate(context, writer, null, reader);
-			
-			ClickUtils.copyStream(new ByteArrayInputStream(writer.toString().getBytes("UTF-8")), 
-					new FileOutputStream(file));
-		} catch(Exception ex){
-			ClickPlugin.log(ex);
+
 		}
 	}
 
