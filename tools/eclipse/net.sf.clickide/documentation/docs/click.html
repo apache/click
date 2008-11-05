@@ -12,6 +12,23 @@
   .item {
     margin-bottom: 0.75em;
   }
+  .news {
+    margin-top:20px;
+    padding-top:8px;
+    padding-left:8px;
+    border : 1px solid #99A4DF;
+    background-color: #EFEFF7;
+  }
+  .news-header {
+    font-weight: bold;
+    font-size: 110%;
+    color: navy;
+  }
+  .news-item {
+    margin-left: 10px;
+    padding: 10px;
+    font-weight: normal;
+  }
  </style>
 </head>
 <body>
@@ -27,10 +44,11 @@ Click is designed to be very easy to learn and use, with developers getting up a
  <li class="item">Very easy to learn</li>
  <li class="item">Component and Page Oriented design</li>
  <li class="item">Event base programming model</li>
+ <li class="item">Very high performance</li>
  <li class="item">Automatic form rendering and client/server side validation</li>
- <li class="item">Page templating</li>
- <li class="item">Velocity and JSP page rendering</li>
- <li class="item">High performance</li>
+ <li class="item">Supports Velocity, JSP or FreeMarker page rendering</li>
+ <li class="item">Free Open Source with commercial friendly Apache License</li>
+ <li class="item">Supports JDK 1.4 and later</li>
 </ul>
 <p/>
 The design philosophy behind Click is best summarized in the Swedish word 
@@ -38,18 +56,86 @@ The design philosophy behind Click is best summarized in the Swedish word
 <p/>
 If you want to dive straight into some code examples see <a href="introduction.html">Introduction</a>.
 <p/>
-Otherwise if you what to know why anyone would want to build <i>another</i> web 
-application framework read
-<a href="why-click.html">Why Click</a>?
+For those interested in the design philosophy and background of the framework,
+can read <a href="why-click.html">Why Click</a>.
 <p/>
-The Click project has been lead by <a href="mailto:malcolm.edgar@gmail.com">Malcolm Edgar</a>,
+The Click project has been lead by <a href="mailto:malcolm.edgar@gmail.com">Malcolm Edgar</a> 
+and <a href="mailto:sabob1@gmail.com">Bob Schellink</a>,
 and has included contributing developers Phil Barnes, Ahmed Mohombe, Naoki Takezoe, Christian Essl,
-Stephen Haberman and Bob Schellink.
-<p/>
-For the latest Click news and gossip please see the 
-<a target="_blank" class="external" href="http://click-framework.blogspot.com/">Click Blog</a>.
-<p/>
-Click is hosted by <a target="_blank" href="http://sourceforge.net/projects/click">SourceForge.net</a>.
+Stephen Haberman and Ricardo Lecheta.
+
+<h3 style="margin-top:25px">Latest News</h3>
+
+<div class="news">
+    <div class="news-header">2 November 2008 - Click 1.5 released</div>
+    <div class="news-item">
+        Click 1.5 is production ready and available for
+        <a href="https://sourceforge.net/project/showfiles.php?group_id=82095&package_id=84113">download</a>.
+        <p/>
+        1.5 is a major release and contains many new features and improvements.
+        <p/>
+        Please see the <a href="http://click-framework.blogspot.com/2008/11/click-15-final-is-released.html">official announcement</a>
+        and <a href="roadmap-changes.html#1.5">changelog</a> for more details.
+        <p/>
+        If you are upgrading from 1.4 or earlier, please refer to the
+        <a href="roadmap-changes.html#1.5-upgrade-path">upgrade path</a>.
+    </div>
+</div>
+
+<div class="news">
+    <div class="news-header">19 October 2008 - Click 1.5 Release Candidate 3 (RC3) available</div>
+    <div class="news-item">
+        Release Candidate 3 is available for
+        <a href="https://sourceforge.net/project/showfiles.php?group_id=82095&package_id=84113">download</a>.
+        (Please note that 1.5 is not yet production ready. For live deployments
+        use the latest stable release, 1.4.2.)
+        <p/>
+        Click is rapidly progressing towards the 1.5 final release. This release
+        includes the usual bug fixes and new examples.
+        <p/>
+        See the <a href="roadmap-changes.html#1.5-RC3">changelog</a> for more details.
+        <p/>
+        If you are upgrading from 1.4 or earlier, please refer to the
+        <a href="roadmap-changes.html#1.5-upgrade-path">upgrade path</a>.
+    </div>
+</div>
+
+<div class="news">
+    <div class="news-header">29 September 2008 - Click 1.5 Release Candidate 2 (RC2) available</div>
+    <div class="news-item">
+        RC1 introduced a severe bug which hampered Click from deploying properly.
+        To resolve this issue we are making RC2 immediately available.
+        <p/>
+        We apologize for the inconvenience.
+        <p/>
+        See the <a href="roadmap-changes.html#1.5-RC2">changelog</a> for more details.
+        <p/>
+        If you are upgrading from 1.4 or earlier, please refer to the
+        <a href="roadmap-changes.html#1.5-upgrade-path">upgrade path</a>.
+    </div>
+</div>
+
+<div class="news">
+    <div class="news-header">28 September 2008 - Click accepted to undergo incubation at Apache Incubator</div>
+    <div class="news-item">
+        We are exited to announce that Click has been accepted to undergo incubation
+        at <a target="_blank" class="external" href="http://incubator.apache.org/">Apache Incubator</a>.
+        <p/>
+        What this means to the Click community is that upon graduation Click will
+        become a Top Level Project at <a target="_blank" class="external" href="http://www.apache.org/">Apache Software Foundation</a>.
+        <p/>
+        This effort also helps to expand and diversify the Click community and build
+        stronger relationships with other Apache projects.
+    </div>
+</div>
+
+<div class="news">
+    <div class="news-header">6 March 2008 - ClickIDE 2.0.0. released</div>
+    <div class="news-item">
+        ClickIDE 2.0.0 provides support for Click 1.4 as well as Spring and Cayenne. See the
+        <a href="click-ide-roadmap-changes.html">changelog</a> for details.
+    </div>
+</div>
 
 <table width="100%" cellpadding="0" cellspacing="10" style="vertical-align:bottom;">
 <tr>

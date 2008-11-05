@@ -8,14 +8,17 @@
  <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
  <title>Click Framework</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <link rel="stylesheet" type="text/css" href="../syntax-highlighter.css"/>
+ <script type="text/javascript" src="../syntax-highlighter.js"></script>
 </head>
-<body>
+<!--Activate syntax highlighting-->
+<body onload="prettyPrint();">
   
 <h1>Best Practices</h1>
 
 This section discusses Best Practices for designing and building Click application.
 The following topics are covered:
-<ul>
+<ol>
   <li><a href="#security">Security</a> - use JEE role based security
   </li>
   <li><a href="#packages-classes">Packages and Classes</a> - project package structures and page classes
@@ -32,11 +35,13 @@ The following topics are covered:
   </li>
   <li><a href="#error-handling">Error Handling</a> - use custom error page
   </li>
-</ul>
+  <li><a href="#performance">Performance</a> - enhancing page performance
+  </li>
+</ol>
 
 <p>&nbsp;</p>
 
-<a name="security" class="heading"><h2>Security</h2></a>
+<a name="security" class="heading"></a><h2>1.&nbsp; Security</h2>
 
 For application security it is highly recommended that you use the declarative 
 JEE Servlet path role based security model. While Click pages provide an 
@@ -256,7 +261,7 @@ For more information on using security see the resources below:
 </ul>
 
 
-<a name="packages-classes" class="heading"><h2>Packages and Classes</h2></a>
+<a name="packages-classes" class="heading"></a><h2>2.&nbsp; Packages and Classes</h2>
 
 An excellent way to design your project package structure is the classify packages 
 initially by technology. So in a Click application all of our pages would be contained
@@ -376,7 +381,7 @@ their class name. For example the <tt>BorderPage</tt> class above will not be
 auto mapped to <span class="st">border-template.htm</span>.
 
 
-<a name="automapping" class="heading"><h2>Page Auto Mapping</h2></a>
+<a name="automapping" class="heading"></a><h2>3.&nbsp; Page Auto Mapping</h2>
 
 You should use the Click page automapping configuration feature. See
 the <a href="configuration.html#application-automapping">Page Automapping</a> 
@@ -410,7 +415,7 @@ provided below:
 [Click] [debug] /user-list.htm -&gt; com.mycorp.dashboard.page.UserList  </pre>
 
 
-<a name="navigation" class="heading"><h2>Navigation</h2></a>
+<a name="navigation" class="heading"></a><h2>4.&nbsp; Navigation</h2>
 
 When navigating between Pages using forwards and redirects, you should refer 
 to the target page using the Page class rather than using path. 
@@ -475,7 +480,7 @@ them to the applications home page.
     }
 </pre>
 
-<a name="templating" class="heading"><h2>Templating</h2></a>
+<a name="templating" class="heading"></a><h2>5.&nbsp; Templating</h2>
 
 Use Page templating it is highly recommended. Page templates provide numerous 
 advantages including:
@@ -489,7 +494,7 @@ To see how to use templates see the <a href="pages.html#page-templating">Page Te
 Also see the Click <a href="examples.html">Examples</a> use of page templating.
 
 
-<a name="menus" class="heading"><h2>Menus</h2></a>
+<a name="menus" class="heading"></a><h2>6.&nbsp; Menus</h2>
 
 For many applications using the <a href="extras-api/net/sf/click/extras/control/Menu.html">Menu</a>
 control to centralize application navigation is very useful. 
@@ -497,7 +502,7 @@ Menus are defined in a <tt>WEB-INF/menu.xml</tt> file which is very easy to chan
 <p/>
 An menu is typically defined in the a page border template so they are available 
 through out the application. The Menu control does not support HTML rendering, 
-so you need to define a Velocity macro to programattically render the menu. 
+so you need to define a Velocity macro to programmatically render the menu. 
 You would call the macro in your border template with code like this:
 
 <pre class="codeHtml">
@@ -521,7 +526,7 @@ You can also use JavaScript to add dynamic behaviour such as drop down menus,
 for example see the Menu page in Click <a href="examples.html">Examples</a>.
 
 
-<a name="logging" class="heading"><h2>Logging</h2></a>
+<a name="logging" class="heading"></a><h2>7.&nbsp; Logging</h2>
 
 For page logging you should use <a href="http://logging.apache.org/log4j/docs/">Log4j</a>
 library. An alternative library is the 
@@ -585,7 +590,7 @@ Please note the Click logging facility is not designed for application use, and 
 for Click internal use only. When Click is running in <tt>production</tt> mode
 it will not produce any logging output.
 
-<a name="error-handling" class="heading"><h2>Error Handling</h2></a>
+<a name="error-handling" class="heading"></a><h2>8.&nbsp; Error Handling</h2>
 
 In Click unhandled errors are directed to the <a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a>
 for display. If applications require additional error handling they can create and
@@ -620,6 +625,137 @@ below:
 } </pre>
 
 
+<a name="performance" class="heading"></a><h2>9.&nbsp; Performance</h2>
+
+Yahoo published a list of <a target="_blank" class="external" href="http://developer.yahoo.com/performance/rules.html">best practices</a>
+for improving web application performance.
+<p/>
+Click Framework provides a <a href="extras-api/net/sf/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a>
+which caters for some of these rules. However not all rules can be easily automated.
+<p/>
+This section will outline ways to apply rules which are not covered by the PerformanceFilter namely, <a target="_blank" class="external" href="http://developer.yahoo.com/performance/rules.html#num_http">#1 - Minimize HTTP Requests (by combining files)</a>
+and <a target="_blank" class="external" href="http://developer.yahoo.com/performance/rules.html#minify">#10 - Minify Javascript and CSS</a>.
+<p/>
+Rule #1 also mentions <a target="_blank" class="external" href="http://alistapart.com/articles/sprites">CSS Sprites</a>, 
+a method for combining multiple images into a single master image. CSS Sprites
+is not covered here.
+<p/>
+It is worth pointing out that its not necessary to blindly optimize every page in your application.
+Instead concentrate on popular pages, for example a web site's <em>Home Page</em>
+would be a good candidate.
+<p/>
+There are a couple of tools that are useful in applying Rule #1 and #10:
+<ul>
+    <li>
+        <a target="_blank" class="external" href="http://developer.yahoo.com/yui/compressor/">YUICompressor</a>
+        - minifies and compresses JavaScript and CSS files so less
+        bytes have to be transferred across the wire.
+    </li>
+    <li>
+        <a target="_blank" class="external" href="http://code.google.com/p/javaflight-code/">Ant Task for YUICompressor</a>
+        - an Ant task that uses YUICompressor to compress JavaScript and CSS files.
+    </li>
+    <li>
+        <a target="_blank" class="external" href="http://www.crockford.com/javascript/jsmin.html">JSMin</a>
+        - similar to YUICompressor but only minifies (remove whitespace and newlines) JavaScript files and
+        does no compression at all. An advantage of JSMin over YUICompressor
+        is that its faster and can be used at runtime to minify JavaScript, while YUICompressor
+        is most often used at build time.
+    </li>
+</ul>
+
+Below are some articles outlining how to use YUICompressor and Ant to concatenate and
+compress JavaScript and CSS files:
+
+<ul>
+    <li>
+        <a target="_blank" class="external" href="http://www.julienlecomte.net/blog/2007/09/16/">Article</a> explaining
+        how to use Ant and YUICompressor for compression.
+    </li>
+    <li>
+        <a target="_blank" class="external" href="http://javaflight.blogspot.com/2008/01/introducing-yui-compressor-ant-task.html">Article</a>
+        outlining how to use a special YUICompressor Ant Task for compression.
+    </li>
+</ul>
+
+<p/>
+Using one of the approaches above you can concatenate and compress all JavaScript and CSS
+for your Pages into two separate files, for example <tt>home-page.css</tt> and <tt>home-page.js</tt>.
+Note that the two files must include all the JavaScript and CSS that is generated
+by the Page and its Controls. Then you can instruct Click to <em>only</em>
+include the two compressed files, home-page.css and home-page.js.
+<p/>
+Click makes use of the utility class  <a href="click-api/net/sf/click/util/PageImports.html">PageImports</a>
+to include the CSS and JavaScript. PageImports exposes the method
+<a href="click-api/net/sf/click/util/PageImports.html#setInitialized(boolean)">setInitialized(boolean)</a>,
+which controls when PageImports are fully initialized. Once PageImports have been
+initialized, no other CSS and JavaScript will be included.
+<p/>
+Knowing this one can override <a href="click-api/net/sf/click/Page.html#getPageImports()">Page.getPageImports()</a>,
+and import the necessary JavaScript and CSS files and then set PageImports to <tt>initialized</tt>,
+forcing PageImports to skip other CSS and JavaScript files.
+<p/>
+Here is an example:
+<pre class="prettyprint"> public class HomePage extends Page {
+
+    private Form form = new Form("form");
+
+    public void onInit() {
+        form.add(new DateField("date");
+        addControl(form);
+    }
+
+    public void getPageImports () {
+        PageImports pageImports = super.getPageImports();
+        String contextPath = getContext().getRequest().getContextPath();
+
+        String cssInclude = contextPath + "/assets/css/home-page.css";
+        pageImports.addImport("&lt;link type=\"text/javascript\" href=\"" + cssInclude + "\"/&gt;");
+
+        String jsInclude = contextPath + "/assets/js/home-page.js";
+        pageImports.addImport("&lt;script type=\"text/javascript\" src=\"" + jsInclude + "\"&gt;&lt;/script&gt;");
+
+        // Set pageImports to initialized so that no other CSS and JavaScript files will be included.
+        pageImports.setInitialized(true);
+    }
+} </pre>
+
+Using the following <tt>border-template.htm</tt>:
+
+<pre class="prettyprint">
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Click Examples&lt;/title&gt;
+    ${cssImports}
+  &lt;/head&gt;
+  &lt;body&gt;
+
+  ...
+
+  ${jsImports}
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+the rendered HTML will include one CSS and one JavaScript import:
+
+<pre class="prettyprint">
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Click Examples&lt;/title&gt;
+    &lt;link type="text/css" rel="stylesheet" href="/click-examples/assets/css/home-page.css" title="Style"/&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+
+  ...
+
+  &lt;script type="text/javascript" src="/click-examples/assets/js/home-page.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p/>
+A live demo is available <a  target="_blank" class="external" href="http://www.avoka.com/click-examples/general/page-imports-example.htm">here</a>
+<p/>
 
 </body>
 </html>

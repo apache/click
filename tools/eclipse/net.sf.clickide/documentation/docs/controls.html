@@ -2,12 +2,14 @@
  "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+ <!-- saved from url=(0014)about:internet -->
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
  <meta name="description" lang="en" content="Click Java web application framework"/>
  <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
  <title>Click Framework</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <link rel="stylesheet" type="text/css" href="../syntax-highlighter.css"/>
 </head>
 <style type="text/css">
 dt {
@@ -16,13 +18,15 @@ dt {
 	margin-top: 0.5em;
 }
 </style>
-<body>
+<script type="text/javascript" src="../syntax-highlighter.js"></script>
+<!--Activate syntax highlighting-->
+ <body onload="prettyPrint();">
   
 <h1>Controls</h1>
 <p/>
 Click provides a rich set of Controls which support client side rendering and
 server side processing. This section covers the following topics:
-<ul>
+<ol>
   <li><a href="#control-interface">Control Interface</a> - describes the Control interface
   </li> 
   <li><a href="#control-callback">Control Callback</a> - control event callback pattern
@@ -30,24 +34,29 @@ server side processing. This section covers the following topics:
   <li><a href="#control-class">Control Classes</a> - control Java classes
   </li>
   <li><a href="#message-properties">Message Properties</a> - control message properties
-  </li> 
-</ul>
+  </li>
+  <li><a href="#container">Container</a> - a Container is a Control that can
+  contain other Controls.
+  </li>
+  <li><a href="#layout">Layouts</a> - describes layout options and how to create
+  custom layouts.
+  </li>
+</ol>
 <p>&nbsp;</p>
 
 
 While this section provides an overview how Controls work please see the 
-<a target="topic" href="click-api/net/sf/click/control/package-summary.html">Javadoc</a>. 
+<a target="topic" href="click-api/net/sf/click/control/package-summary.html">Javadoc</a>,
 which provides extensive information and examples.
-Javadoc 
 
-<a name="control-interface" class="heading"><h2>Control Interface</h2></a>
-In Click Controls provide the server side components that process user input, and render their
+<a name="control-interface" class="heading"></a><h2>1.&nbsp; Control Interface</h2>
+Controls provide the server side components that process user input, and render their
 display to the user. Controls are equivalent to Visual Basic Controls or Delphi Components.
 <p/>
-Controls handle the processing of user input with the 
+Controls handle the processing of user input in the 
 <a target="topic" href="click-api/net/sf/click/Control.html#onProcess()">onProcess</a>
-method and rendering their HTML display using the toString() method. The execution
-sequence for Control being processed and rendered is illustrated below in Figure 1.
+method and render their HTML display using the toString() method. The execution
+sequence for a Control being processed and rendered is illustrated below in Figure 1.
 <p/>
 
 <img src="../images/control-post-sequence-diagram.png"/>
@@ -69,20 +78,8 @@ The Control interface is depicted below in Figure 2.
 Methods on the Control interface include:
 <ul>
   <li>
-   <a href="click-api/net/sf/click/Control.html#getContext()">getContext()</a> 
-   &nbsp; - &nbsp; provides access to the request <a href="click-api/net/sf/click/Context.html">Context</a>.
-  </li>
-  <li>
    <a href="click-api/net/sf/click/Control.html#getHtmlImports()">getHtmlImports()</a>
    &nbsp; - &nbsp; defines the controls HTML header imports.
-  </li>
-  <li>
-   <a href="click-api/net/sf/click/Control.html#getId()">getId()</a>
-   &nbsp; - &nbsp; defines the controls HTML id attribute.
-  </li>
-  <li>
-   <a href="click-api/net/sf/click/Control.html#setListener(java.lang.Object, java.lang.String)">setListener()</a>
-   &nbsp; - &nbsp; set the control action callback listener.
   </li>
   <li>
    <a href="click-api/net/sf/click/Control.html#getMessages()">getMessages()</a>
@@ -114,43 +111,71 @@ Methods on the Control interface include:
    <a href="click-api/net/sf/click/Control.html#onDestroy()">onDestroy()</a>
    &nbsp; - &nbsp; on destroy event handler.
   </li>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a>
+   &nbsp; - &nbsp; generate the control's HTML representation.
+  </li>
 </ul>
 
-<a name="control-callback" class="heading"><h2>Control Callback</h2></a>
+<a name="control-callback" class="heading"></a><h2>2.&nbsp; Control Callback</h2>
 
-Click Controls provide an event callback mechanism similar the java.awt.ActionListener callback.
+Click Controls provide an event callback mechanism similar to a java.awt.ActionListener callback.
 <p/>
-To define a control listener, simply set the listener object instance and the name of the
-listener method to be invoked. For example:
+Click supports two styles of action listeners, the first is using the ActionListener 
+interface which provides compile time safety. The second is to register the action 
+listener via the setListener(Object, String) method where you specify the call back 
+method via its name. This second style uses less lines of code, but has no compile time safety. 
+<p/>
+Examples of these two action listener styles are provided below: 
 
-<pre class="codeJava">
-<span class="kw">public class</span> SimpleCallback <span class="kw">extends</span> Page {
+<pre class="prettyprint">
+public class ActionDemo extends BorderPage {
 
-    <span class="kw">public</span> SimpleCallback() {
-        ActionLink clickLink = <span class="kw">new</span> ActionLink(<span class="st">"clickLink"</span>);
-        clickLink.setListener(<span class="kw">this</span>, <span class="st">"onClick"</span>);
-        addControl(clickLink);    
+    // Uses listener style 1
+    public ActionLink link = new ActionLink();
+
+    // Uses listener style 2
+    public ActionButton button = new ActionButton();
+
+    public ActionDemo() {
+
+        // Verbose but provides compile time safety
+        link.setActionListener(new ActionListener() {
+            public boolean onAction(Control source) {
+                return onLinkClick(source);
+            }
+        });
+
+        // Succinct but typos will cause runtime errors
+        button.setListener(this, "onButtonClick");
     }
-    
-    <span class="kw">public boolean</span> onClick() {
-        System.out.println(<span class="st">"onClick invoked"</span>);
-        <span class="kw">return true</span>;
+
+    // Event Handlers --------------------------------------------------------- 
+
+    public boolean onLinkClick(Control source) {
+        ..
+        return true;
+    }
+
+    public boolean onButtonClick() {
+        ..
+        return true;
     }
 } </pre>
 
-The listener method can have any name but it must have take no parameters and must return a boolean or 
-java.lang.Boolean value. 
-<p/>
-When a callback method returns true the processing of other Controls will continue and the Pages onGet() 
-or onPost() event handler will be called. If a controls returns false not further Control processing
-will be performed and neither of the Page onGet() or onPost() methods will be invoked. This execution
-logic is illustrated in the <a href="pages.html#activity-diagram">Page Execution Activity Diagram</a>.
+All call back listener methods must return a boolean value. If they return true 
+the further processing of other controls and page methods should continue. 
+Otherwise if they return false, then any further processing should be aborted. 
+By returning false you can effectively exit at this point and redirect or forward 
+to another page.  This execution logic is illustrated in the 
+<a href="pages.html#activity-diagram">Page Execution Activity Diagram</a>.
 <p/>
 Being able to stop further processing and do something else can be very handy. For example your 
-Pages onGet() or onPost() method may perform an expensive database operation. By using 
-returning false in a event handler you can skip this step and forward to the next page.
+Pages onRender() method may perform an expensive database operation. By returning
+false in an event handler you can skip this step and render the template or forward to the
+next page.
 
-<a name="control-class" class="heading"><h2>Control Classes</h2></a>
+<a name="control-class" class="heading"></a><h2>3.&nbsp; Control Classes</h2>
 
 Core control classes are defined in the package 
 <a target="topic" href="click-api/net/sf/click/control/package-summary.html">net.sf.click.control</a>.
@@ -173,7 +198,7 @@ A subset of these control classes are depicted below in Figure 3.
 The key control classes include:
 <ul>
 <li><a href="click-api/net/sf/click/control/ActionLink.html">ActionLink</a>
-- provides a anchor link which can invoke callback listeners. 
+- provides an anchor link which can invoke callback listeners. 
 <p></li>
 <li><a href="click-api/net/sf/click/control/Field.html">Field</a>
 - provides the abstract form field control.
@@ -182,10 +207,10 @@ The key control classes include:
 - provides a form control for processing, validation and rendering.   
 <p></li>
 <li><a href="click-api/net/sf/click/control/Submit.html">Submit</a>
-- provides a input type submit control which can invoke callback listeners.  
+- provides an input type submit control which can invoke callback listeners.  
 <p></li>
 <li><a href="click-api/net/sf/click/control/TextField.html">TextField</a>
-- provides a input type text control which can invoke callback listeners.  
+- provides an input type text control which can invoke callback listeners.  
 <p></li>
 </ul> 
 
@@ -198,19 +223,19 @@ You can also aggregate controls to build more complex controls. For example the
 uses a <a href="click-api/net/sf/click/control/Select.html">Select</a>
 control to render the different credit card types. 
 
-<a name="message-properties" class="heading"><h2>Message Properties</h2></a>
+<a name="message-properties" class="heading"></a><h2>4.&nbsp; Message Properties</h2>
 
 Control strings for field validation messages and HTML formatting strings are
 externalized in the properties file. By using these properties files you can
 localize a Click application for your particular language and dialect.
 
-<h3>Message Resolution</h3>
+<h3>4.1&nbsp; Message Resolution</h3>
 
 Messages are looked up in a particular order enabling taylor specific messages,
 for your controls, individual pages or across your entire application.
-The order in which localized messages are resolve is:
+The order in which localized messages are resolved is:
 <dl>
- <dt style="font-weight:bold">Page scope messages</dt>
+ <dt style="font-weight:bold">4.1.1&nbsp; Page scope messages</dt>
  <dd>Message lookups are first resolved to the Page classes message bundle if it
  exists. For example a <tt>Login</tt> page may define the message properties:
  
@@ -221,7 +246,7 @@ The order in which localized messages are resolve is:
  them.
  </dd>
  
- <dt style="font-weight:bold;margin-top:1em;">Global page scope messages</dt>
+ <dt style="font-weight:bold;margin-top:1em;">4.1.2&nbsp; Global page scope messages</dt>
  <dd>Next message lookups are resolved to the global pages message bundle if it
  exists.
  
@@ -232,7 +257,7 @@ The order in which localized messages are resolve is:
  to place them.
  </dd>
  
- <dt style="font-weight:bold;margin-top:1em;">Control scope messages</dt>
+ <dt style="font-weight:bold;margin-top:1em;">4.1.3&nbsp; Control scope messages</dt>
  <dd>Next message lookups are resolved to the Control classes message bundle if 
  it exists. For example a <tt>CustomTextField</tt> control may define the 
  message properties:
@@ -241,9 +266,9 @@ The order in which localized messages are resolve is:
  /com/mycorp/control/CustomTextField.properties </pre>
  </dd>
  
- <dt style="font-weight:bold;margin-top:1em;">Global control scope messages</dt>
+ <dt style="font-weight:bold;margin-top:1em;">4.1.4&nbsp; Global control scope messages</dt>
  <dd>Finally message lookups are resolved to the global application control 
- message bundle if the message has not already found. The global control
+ message bundle if the message has not already been found. The global control
  properties file is:
  
  <pre class="codeConfig">
@@ -251,7 +276,7 @@ The order in which localized messages are resolve is:
  </dd>
  </dl>
 
-<h3>Control Properties</h3>
+<h3>4.2&nbsp; Control Properties</h3>
 
 To customize the <tt>click-control.properties</tt> simply add this file to your 
 classpath and tailor the specific values.
@@ -293,6 +318,17 @@ table-page-banner-nolinks=
   &lt;span class="pagebanner-nolinks"&gt;{0} items found, displaying {1} to {2}.&lt;/span&gt;
 table-page-links=&lt;span class="pagelinks"&gt;[{0}/{1}] {2} [{3}/{4}]&lt;/span&gt;
 table-page-links-nobanner=&lt;span class="pagelinks-nobanner"&gt;[{0}/{1}] {2} [{3}/{4}]&lt;/span&gt;
+table-no-rows-found=No records found.
+
+table-inline-first-image=/click/paging-first.gif
+table-inline-first-disabled-image=/click/paging-first-disabled.gif
+table-inline-previous-image=/click/paging-prev.gif
+table-inline-previous-disabled-image=/click/paging-prev-disabled.gif
+table-inline-next-image=/click/paging-next.gif
+table-inline-next-disabled-image=/click/paging-next-disabled.gif
+table-inline-last-image=/click/paging-last.gif
+table-inline-last-disabled-image=/click/paging-last-disabled.gif
+table-inline-page-links=Page &nbsp; {0} {1} {2} {3} {4}
 
 # Message displayed when a error occurs when the application is in "production" mode
 production-error-message=
@@ -300,23 +336,475 @@ production-error-message=
   &lt;/div&gt; </pre>
 
 
-<h3>Accessing Messages</h3>
+<h3>4.3&nbsp; Accessing Messages</h3>
 
 Field classes support a hierarchy of resource bundles for displaying 
 validation error messages and display messages. These localized messages can be 
 accessed through the Field methods:
 
 <ul>
- <li><a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a></li>
- <li><a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String, java.lang.Object)">getMessage(String, Object)</a></li>
- <li><a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String, java.lang.Object[])">getMessage(String, Object[])</a></li>
- <li><a href="click-api/net/sf/click/control/Field.html#getMessages()">getMessages()</a></li>
+ <li><a href="click-api/net/sf/click/control/AbstractControl.html#getMessage(java.lang.String)">getMessage(String)</a></li>
+ <li><a href="click-api/net/sf/click/control/AbstractControl.html#getMessage(java.lang.String, java.lang.Object)">getMessage(String, Object)</a></li>
+ <li><a href="click-api/net/sf/click/control/AbstractControl.html#getMessage(java.lang.String, java.lang.Object[])">getMessage(String, Object[])</a></li>
+ <li><a href="click-api/net/sf/click/control/AbstractControl.html#getMessages()">getMessages()</a></li>
  <li><a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String)">setErrorMessage(String)</a></li>
  <li><a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String, java.lang.Object)">setErrorMessage(String, Object)</a></li>
 </ul>
 
-These methods use the <tt>Locale</tt> of the request to lookup the string resource 
+These methods use the <tt>Locale</tt> of the request to lookup the string resource
 bundle, and use <tt>MessageFormat</tt> for any string formatting.
+
+
+<a name="container" class="heading"></a><h2>5.&nbsp; Container</h2>
+<a href="click-api/net/sf/click/control/Container.html">Container</a> is a
+Control that can contain other Controls, thus forming a hierarchy of components.
+<p/>
+Container enables components to add, remove and retrieve other controls.
+<p/>
+Listed below are example Containers:
+<ul style="margin-top:0.5em;">
+   <li class="item"><a href="click-api/net/sf/click/control/Form.html">Form</a>
+   - an HTML form which provides default layout of fields and error feedback.</li>
+   <li class="item"><a href="click-api/net/sf/click/control/Panel.html">Panel</a> - similar to
+   <a href="click-api/net/sf/click/Page.html">Page</a>, this Container provides
+   its own template and model.</li>
+   <li class="item"><a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a> - draws
+   a legend (border) around its child Controls.</li>
+</ul>
+<br/>
+These Containers are depicted below in Figure 4.
+
+<p/>
+
+<img src="../images/container-package-class-diagram.png"/>
+<p class="diagram">
+<b>Figure 4. &nbsp; Containers Class Diagram</b>
+
+</p>
+
+The following classes provides convenient extension points for creating custom Containers:
+<ul style="margin-top:0.5em;">
+  <li class="item"><a href="click-api/net/sf/click/control/AbstractContainer.html">AbstractContainer</a></li>
+  <li class="item"><a href="click-api/net/sf/click/extras/control/AbstractContainerField.html">AbstractContainerField</a></li>
+</ul>
+
+Lets cover each of them here.
+
+<h3>5.1&nbsp; AbstractContainer</h3>
+
+Enables easy creation of custom Containers, for example an html <em>div</em> or <em>span</em> element:
+
+<pre class="prettyprint">
+public class Div extends AbstractContainer {
+    
+    public Div(String name) {
+        super(name);
+    }
+
+    public String getTag() {
+        // Return the control's HTML tag.
+        return "div";
+    }
+} </pre>
+
+Lets try out the newly created Container above: (note the MockContext used in this test is described in the
+<a href="mock-api/overview-summary.html">Mock Test Support</a> documentation)
+   
+<pre class="prettyprint">
+public class Test {
+    public static void main (String args[]) {
+        // Create mock context in which to test the container.
+        MockContext.initContext();
+
+        // Create a div instance called "mydiv"
+        String containerName = "mydiv";
+        Div mydiv = new Div(containerName);
+        
+        // Add a control to the container
+        mydiv.add(new TextField("myfield"));
+
+        System.out.println(mydiv);
+    }
+} </pre>
+
+<p/>
+Executing the above example results in the following output:
+
+<pre class="prettyprint">
+&lt;div name="mydiv" id="mydiv"&gt;
+    &lt;input type="text" name="myfield" id="myfield" value="" size="20" /&gt;
+&lt;/div&gt; </pre>
+
+<h3>5.2&nbsp; AbstractContainerField</h3>
+
+AbstractContainerField extends Field and implements the Container interface. This provides
+a convenient base class in case you run into a situation where you need both a Field and Container.
+<p/>
+Below is an example of how AbstractContainerField might be used:
+
+<pre class="prettyprint">
+public class FieldAndContainer extends AbstractContainerField {
+
+    public FieldAndContainer(String name) {
+        super(name);
+    }
+
+    // Return the html tag to render
+    public String getTag() {
+        return "div";
+    }
+} </pre>
+
+<p/>
+To test the new class we use the following snippet:
+
+<pre class="prettyprint">
+public class Test {
+    public static void main (String args[]) {
+        // Create mock context in which to test the container.
+        MockContext.initContext();
+
+        // Create a FieldContainer instance called "field_container"
+        String containerName = "field_container";
+        FieldAndContainer fieldAndContainer = new FieldAndContainer(containerName);
+        
+        // Add a couple of fields to the container
+        fieldAndContainer.add(new TextField("myfield"));
+        fieldAndContainer.add(new TextArea("myarea"));
+
+        System.out.println(fieldAndContainer);
+    }
+} </pre>
+
+Executing the snippet produces the output:
+
+<pre class="prettyprint">
+&lt;div name="field_container" id="field_container"&gt;
+    &lt;input type="text" name="myfield" id="myfield" value="" size="20"/&gt;
+    &lt;textarea name="myarea" id="myarea" rows="3" cols="20"&gt;&lt;/textarea&gt;
+&lt;/div&gt; </pre>
+
+
+<a name="layout" class="heading"></a><h2>6.&nbsp; Layouts</h2>
+
+Controls such as <a href="click-api/net/sf/click/control/Form.html">Form</a>
+takes care of layout and error reporting automatically, and for many use cases
+auto-layout is good enough.
+
+<p/>
+However for custom or complex layouts, Form is not always the best choice.
+
+<p/>There are two approaches for creating custom layouts.
+<ul style="margin-top:0.5em;">
+  <li class="item">
+    Template approach - use a template engine such as Velocity, Freemarker or JSP to
+    declare the layout as HTML markup.
+  </li>
+  <li class="item">
+    Programmatic approach - build custom layout components using Java. This option
+    is very similar to building components using Swing.
+  </li>
+</ul>
+
+<a name="template-layout" class="heading"></a><h3>6.1&nbsp; Template layout</h3>
+
+Taking the <a href="click-api/net/sf/click/control/Form.html#manual-layout">Template</a>
+approach works well and it separates the Page and layout logic. For example:
+<pre class="prettyprint">
+// EmployeePage.java
+public EmployeePage extends Page {
+
+    private Form form;
+    
+    public void onInit() {
+        // Create form
+        Form form = new Form("form");
+        
+        // Add a couple of fields to the form
+        form.add(new TextField("firstname"));
+        form.add(new TextField("lastname"));
+        form.add(new IntegerField("age"));
+        form.add(new DoubleField("salary"));
+
+        // Add a submit button to form
+        form.add(new Submit("submit", "Add Employee"));
+
+        // Add form the page
+        addControl(form);
+    }
+} </pre>
+
+Lets imagine we want to create a layout using Div &lt;div&gt; and HTML List &lt;ol&gt; tags.
+
+<p/>
+We could provide the markup for the <span class="st">employee.htm</span> template as shown below,
+using a template engine such as Velocity:
+
+<pre class="prettyprint">
+&lt;!-- employee.htm --&gt;
+${form.startTag()}
+    &lt;div style="margin: 1em;"&gt;
+        &lt;ol&gt;
+            &lt;li&gt;
+                &lt;label for="firstname"&gt;Firstname:&lt;/label>
+                ${form.fields.firstname}
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="lastname"&gt;Lastname:&lt;/label>
+                ${form.fields.lastname}
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="age"&gt;Age:&lt;/label&gt;
+                ${form.fields.age}
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="salary"&gt;Salary:&lt;/label&gt;
+                ${form.fields.salary}
+            &lt;/li&gt;
+        &lt;/ol&gt;
+    &lt;/div&gt;
+    ${form.fields.submit}
+${form.endTag()} </pre>
+
+Using a CSS stylesheet, the markup above can be transformed into a great looking form as shown 
+in this <a target="_blank" href="http://www.sitepoint.com/print/fancy-form-design-css">article</a>.
+
+<p/>
+There are pros and cons to using the template approach.
+
+<p/>
+One of the advantages of the Template approach, is that the layout is explicit and one can easily
+tweak it if needed. For example instead of using divs and ordered lists, one can
+change the template to leverage a table layout.
+
+<p/>
+A disadvantage of the Template approach, is added redundancy.
+
+<p/>
+In the example above we created the fields in Java, and laid them out using markup
+in the template.
+
+<p/>
+If the requirements should change to add a new field for example, one will have to add the
+field in the Page as well as the template.
+
+<p>
+It is also possible to "generify" the layout using template engines.
+<a href="click-api/net/sf/click/control/Form.html#velocity-macros">Macro.vm</a>
+is an example of a generic form layout using Velocity.
+</p>
+
+<a name="programmatic-layout" class="heading"></a><h3>6.2&nbsp; Programmatic layout</h3>
+
+To combat the redundancy introduced by the Template approach, you can take a
+programmatic approach and use normal Java and some Click classes to build custom
+layouts.
+<p/>
+Click extras provides two useful classes in this situation namely,
+<a href="click-api/net/sf/click/extras/control/HtmlForm.html">HtmlForm</a>
+and <a href="click-api/net/sf/click/extras/control/HtmlFieldSet.html">HtmlFieldSet</a>.
+<p/>
+Unlike Form and FieldSet which renders its controls using a Table layout, HtmlForm
+and HtmlFieldSet renders its controls in the order they were added and does not add
+any extra markup. HtmlForm will be shown in the example below.
+<p/>
+When creating custom layouts, the HTML construct List &lt;ul&gt; is pretty useful.
+Since Click does not provide this component, lets create it as shown here:
+
+<pre class="prettyprint">
+// HtmlList.java
+// Create a list &lt;ol&gt; html element, that accepts &lt;li&gt; elements as children
+public class HtmlList extends AbstractContainer {
+
+    public String getTag() {
+        return "ol";
+    }
+
+    // Can only add ListItems: &lt;li&gt; tags
+    public Control add(Control control) {
+        if (!(control instanceof ListItem)) {
+            throw new IllegalArgumentException("Only list items can be added.");
+        }
+        return super.add(control);
+    }
+} </pre>
+
+<pre class="prettyprint">
+// ListItem.java
+// Create a listItem &lt;li&gt; element
+public class ListItem extends AbstractContainer {
+
+    public String getTag() {
+        return "li";
+    }
+} </pre>
+
+Another component that will be used in the example below is a FieldLabel which renders
+an HTML label element for a specified Field.
+
+<pre class="prettyprint">
+// FieldLabel.java
+// Create an html &lt;label&gt; element for a specified Field
+public class FieldLabel extends AbstractControl {
+
+    private Field target;
+
+    private String label;
+
+    public FieldLabel(Field target, String label) {
+        this.target = target;
+        this.label = label;
+    }
+
+    public String getTag() {
+        return "label";
+    }
+
+    // Override render to produce an html label which produces:
+    // <label for="firstname">Firstname:</label>
+    public void render(HtmlStringBuffer buffer) {
+        // Open tag: &lt;label
+        buffer.elementStart(getTag());
+
+        // Set attribute to target field's id
+        setAttribute("for", target.getId());
+
+        // Render the labels attributes
+        appendAttributes(buffer);
+
+        // Close tag: &lt;label for="firstname"&gt;
+        buffer.closeTag();
+
+        // Add label text: &lt;label for="firstname">Firstname:
+        buffer.append(label);
+
+        // Close tag: &lt;label for="firstname"&gt;Firstname:&lt;/label&gt;
+        buffer.elementEnd(getTag());
+    }
+
+} </pre>
+
+Now the form can be assembled.
+
+<p/>
+Continuing with the employee example from the <a href="#template-layout">template approach</a>,
+we again create an EmployeePage, but this time an HtmlForm and HtmlList is used to create
+a custom layout:
+
+<pre class="prettyprint">
+// EmployeePage.java
+public class EmployeePage extends Page {
+    // A form instance variable
+    private HtmlForm form;
+
+    // Build the form when the page is initialized
+    public void onInit() {
+        // Create an HtmlForm which is ideal for composing manual layouts
+        form = new HtmlForm("form");
+        
+        // Create a list and add it to the form. 
+        HtmlList list = new HtmlList();
+        form.add(list);
+        
+        // Add firstname field and pass in its name, label and the list to add the field to
+        addTextField("firstname", "Firstname:", list);
+        addTextField("lastname", "Lastname:", list);
+        addTextField("age", "Age:", list);
+        addTextField("salary", "Salary:", list);
+        
+        // Add a submit button to form
+        form.add(new Submit("submit", "Add Employee"));
+
+        // Add the form to the page
+        addControl(form);
+    }
+    
+    // Provide a helper method to add fields to the form
+    private void addTextField(String nameStr, String labelStr, List list) {
+        // Create a new ListItem &lt;li&gt; and add it to the List
+        ListItem item = new ListItem();
+        list.add(item);
+
+        // Create a textfield with the specified name
+        Field field = new TextField(nameStr);
+        
+        // Create a field label, which associates the label with the field id.
+        // label.toString would output: &lt;label for="firstname"&gt;Firstname:&lt;/name&gt;
+        FieldLabel label = new FieldLabel(field, labelStr);
+
+        // Next add the label and field to the list item.
+        // item.toString would then produce:
+        // &lt;li&gt;
+        //   &lt;label for="firstname"&gt;Firstname:&lt;/name&gt;
+        //   &lt;input type="text" name="firstname" id="form_firstname" value="" size="20"/&gt;
+        // &lt;/li&gt;
+        //
+        item.add(label);
+        item.add(field);
+    }
+} </pre>
+    
+Now the <span class="st">employee.htm</span> template would only need to specify the name of the 
+top level component, in this case <em>form</em>.
+
+<pre class="prettyprint">
+&lt;!--employee.htm--&gt;
+${form}
+</pre>
+    
+which produces the following markup:
+    
+<pre class="prettyprint">
+&lt;!-- employee.htm --&gt;
+&lt;form method="post" id="form" action="/myapp/employee.htm"&gt;
+&lt;input type="hidden" name="form_name" id="form_form_name" value="form"/&gt;
+    &lt;ol&gt;
+        &lt;li&gt;
+            &lt;label for="firstname"&gt;Firstname:&lt;/label>
+            &lt;input type="text" name="firstname" id="form_firstname" value="" size="20"/&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;label for="lastname"&gt;Lastname:&lt;/label>
+            &lt;input type="text" name="lastname" id="form_lastname" value="" size="20"/&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;label for="age"&gt;Age:&lt;/label&gt;
+            &lt;input type="text" name="age" id="form_age" value="" size="20"/&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;label for="salary"&gt;Salary:&lt;/label&gt;
+            &lt;input type="text" name="salary" id="form_salary" value="" size="20"/&gt;
+        &lt;/li&gt;
+    &lt;/ol&gt;
+    &lt;input type="submit" name="submit" id="form_submit" value="Add Employee"/&gt;
+&lt;/form&gt; </pre>
+
+Again using a CSS stylesheet, the markup above can be transformed into a great looking form as shown 
+in this <a target="_blank" href="http://www.sitepoint.com/print/fancy-form-design-css">article</a>.
+
+<p/>
+You can see a <a target="_blank" href="http://www.avoka.com/click-examples/form/contact-details.htm">live demo</a>
+of the above example. Note that the demo adds a couple of features, including error reporting,
+not covered here.
+
+<p/>
+The advantage of the programmatic approach is that there is no redundancy. Each Field is
+created and added using normal Java. There is no need to specify where the Field
+must reside in the markup.
+
+<p/>
+If new requirements arrive and more fields added, only the Page has to be updated.
+No need to change the template as the layout is taken care of by markup produced
+by the components.
+
+<p/>
+A disadvantage is that it is harder to <em>visualize</em> what output would be rendered by the containers.
+
+<p/>
+Whether you use the <a href="#template-layout">template</a> or <a href="#programmatic-layout">programmatic</a>
+layout approach, is up to you. Both work well and have advantages and disadvantages
+over the other.
+
 
 </body>
 </html>
