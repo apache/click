@@ -24,23 +24,23 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The main plugin class to be used in the desktop.
- * 
+ *
  * @author Naoki Takezoe
  */
 public class ClickPlugin extends AbstractUIPlugin {
-	
+
 	public static final String PLUGIN_ID = "net.sf.clickide";
-	
+
 	//The shared instance.
 	private static ClickPlugin plugin;
 	private ResourceBundle resource;
 	private ColorManager colorManager;
-	
+
 	private List configProviders = new ArrayList();
-	
+
 	public static final String CLICK_PAGE_CLASS = "net.sf.click.Page";
 	public static final String CLICK_CONTROL_IF = "net.sf.click.Control";
-	
+
 	public static final String TAG_CLICK_APP = "click-app";
 	public static final String TAG_HEADERS = "headers";
 	public static final String TAG_HEADER = "header";
@@ -53,6 +53,8 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String TAG_EXCLUDES = "excludes";
 	public static final String TAG_FILE_ITEM_FACTORY = "file-item-factory";
 	public static final String TAG_PROPERTY = "property";
+	public static final String TAG_LOG_SERVICE = "log-service";
+	public static final String TAG_TEMPLATE_SERVICE = "template-service";
 	public static final String ATTR_CHARSET = "charset";
 	public static final String ATTR_LOCALE = "locale";
 	public static final String ATTR_CLASSNAME = "classname";
@@ -64,30 +66,30 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String ATTR_AUTO_BINDING = "autobinding";
 	public static final String ATTR_PACKAGE = "package";
 	public static final String ATTR_PATTERN = "pattern";
-	
+
 	public static final String[] BOOLEAN_VALUES = {"true", "false"};
 	public static final String[] LOGTO_VALUES = {"console", "servlet"};
 	public static final String[] MODE_VALUES = {"production", "profile", "development", "debug", "trace"};
 	public static final String[] HEADER_TYPE_VALUES = {"String", "Integer", "Date"};
-	
+
 	public static final String PREF_TEMPLATES = "click.templates";
 	public static final String PREF_COLOR_VAR = "click.color.variable";
 	public static final String PREF_COLOR_DIR = "click.color.directive";
 	public static final String PREF_COLOR_CMT = "click.color.comment";
 	public static final String PREF_VELOCITY_VARS = "click.velocity.variables";
-	
+
 	/**
 	 * The constructor.
 	 */
 	public ClickPlugin() {
 		plugin = this;
 		resource = ResourceBundle.getBundle("net.sf.clickide.ClickPlugin");
-		
+
 		configProviders.addAll(loadContributedClasses(
 				"configurationProvider", "configurationProvider"));
 		configProviders.add(new DefaultClickConfigurationProvider());
 	}
-	
+
 	private static List loadContributedClasses(String extPointId, String elementName){
 		List result = new ArrayList();
 		try {
@@ -106,29 +108,29 @@ public class ClickPlugin extends AbstractUIPlugin {
 			log(ex);
 		}
 		return result;
-	}	
-	
+	}
+
 	public ColorManager getColorManager(){
 		if(this.colorManager==null){
 			this.colorManager = new ColorManager();
 		}
 		return this.colorManager;
 	}
-	
+
 	/**
 	 * Returns the localized message from <tt>ClickPlugin.properties</tt>.
-	 * 
+	 *
 	 * @param key the message key
 	 * @return the localized message
 	 */
 	public static String getString(String key){
 		return getDefault().resource.getString(key);
 	}
-	
+
 	/**
 	 * Returns the localized message from <tt>ClickPlugin.properties</tt>.
 	 * The message would be formatted with given substitutions.
-	 * 
+	 *
 	 * @param key the message key
 	 * @param substitutions the substitutions
 	 * @return the localized and formatted message
@@ -136,7 +138,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static String getString(String key, Object [] substitutions){
 		return MessageFormat.format(getString(key), substitutions);
 	}
-	
+
 	/**
 	 * This method is called upon plug-in activation
 	 */
@@ -170,19 +172,19 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return AbstractUIPlugin.imageDescriptorFromPlugin("net.sf.clickide", path);
 	}
-	
+
 	/**
 	 * Logs the given <code>Throwable</code>.
-	 * 
+	 *
 	 * @param t the <code>Throwable</code> instance which would be logged
 	 */
 	public static void log(Throwable t){
 		IStatus status = new Status(
 				IStatus.ERROR, getDefault().getBundle().getSymbolicName(),
 				IStatus.ERROR, t.toString(), t);
-		
+
 		getDefault().getLog().log(status);
-		
+
 		try {
 			IWorkbenchPage page = ClickUtils.getActivePage();
 			MessageDialog.openError(page.getWorkbenchWindow().getShell(),
@@ -191,10 +193,10 @@ public class ClickPlugin extends AbstractUIPlugin {
 			// ignore
 		}
 	}
-	
+
 	public IClickConfigurationProvider getConfigurationProvider(IProject project){
 		for(int i=0;i<configProviders.size();i++){
-			IClickConfigurationProvider configProvider 
+			IClickConfigurationProvider configProvider
 				= (IClickConfigurationProvider) configProviders.get(i);
 			if(configProvider.isSupportedProject(project)){
 				return configProvider;

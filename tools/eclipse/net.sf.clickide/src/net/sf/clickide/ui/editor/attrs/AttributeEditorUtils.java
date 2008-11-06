@@ -44,22 +44,22 @@ import org.w3c.dom.Element;
 
 /**
  * Provides utility methods for attribute editors.
- * 
+ *
  * @author Naoki Takezoe
  */
 public class AttributeEditorUtils {
-	
-	public static Control[] createLinkText(FormToolkit toolkit, Composite parent, 
+
+	public static Control[] createLinkText(FormToolkit toolkit, Composite parent,
 			final IDOMElement element, String label, final String attrName){
-		
+
 		Hyperlink link = toolkit.createHyperlink(parent, label, SWT.NULL);
-		
+
 		Composite composite = FieldAssistUtils.createNullDecoratedPanel(parent, true);
 		final Text text = toolkit.createText(composite, "", SWT.BORDER);
-		
+
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		if(element!=null){
 			String initialValue = element.getAttribute(attrName);
 			if(initialValue!=null){
@@ -67,29 +67,29 @@ public class AttributeEditorUtils {
 			}
 		}
 		return new Control[]{link, text};
-		
+
 	}
-	
+
 	/**
 	 * Creates the {@link Text} field editor.
-	 * 
+	 *
 	 * @param toolkit the <code>FormToolkit</code> instance
 	 * @param parent the parent composite
 	 * @param element the target element
 	 * @param label the field label
 	 * @param attrName the target attribute name
 	 */
-	public static Text createText(FormToolkit toolkit, Composite parent, 
+	public static Text createText(FormToolkit toolkit, Composite parent,
 			final IDOMElement element, String label, final String attrName){
-		
+
 		toolkit.createLabel(parent, label);
-		
+
 		Composite composite = FieldAssistUtils.createNullDecoratedPanel(parent, true);
 		final Text text = toolkit.createText(composite, "", SWT.BORDER);
-		
+
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		if(element!=null){
 			String initialValue = element.getAttribute(attrName);
 			if(initialValue!=null){
@@ -98,10 +98,10 @@ public class AttributeEditorUtils {
 		}
 		return text;
 	}
-	
+
 	/**
 	 * Creates the {@Combo} field editor.
-	 * 
+	 *
 	 * @param toolkit the <code>FormToolkit</code>
 	 * @param parent the parent composite
 	 * @param element the target element
@@ -111,12 +111,12 @@ public class AttributeEditorUtils {
 	 */
 	public static Combo createCombo(FormToolkit toolkit, Composite parent,
 			final IDOMElement element, String label, final String attrName, String[] values){
-		
+
 		toolkit.createLabel(parent, label);
-		
+
 		Composite composite = FieldAssistUtils.createNullDecoratedPanel(parent, true);
 		final Combo combo = new Combo(composite, SWT.READ_ONLY);
-		
+
 		for(int i=0;i<values.length;i++){
 			combo.add(values[i]);
 		}
@@ -126,13 +126,13 @@ public class AttributeEditorUtils {
 				combo.setText(initialValue);
 			}
 		}
-		
+
 		return combo;
 	}
-	
+
 	/**
 	 * Creates the classname field editor.
-	 * 
+	 *
 	 * @param project the <code>IJavaProject</code> instance
 	 * @param toolkit the <code>FormToolkit</code> instance
 	 * @param parent the parent composite
@@ -141,11 +141,11 @@ public class AttributeEditorUtils {
 	 * @param superClass the super class
 	 * @param textFileName null or the text control for the HTML filename
 	 */
-	public static Text createClassText(final IJavaProject project, 
+	public static Text createClassText(final IJavaProject project,
 			FormToolkit toolkit, final Composite parent,
 			final IDOMElement element, String label, final String attrName,
 			final String superClass, final Text textFileName){
-		
+
 		final Hyperlink link = toolkit.createHyperlink(parent, label, SWT.NULL);
 		link.addHyperlinkListener(new HyperlinkAdapter(){
 			public void linkActivated(HyperlinkEvent e){
@@ -187,7 +187,7 @@ public class AttributeEditorUtils {
 								NewClassWizard wizard = new NewClassWizard();
 								wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
 								if(superClass!=null){
-									if(superClass==ClickPlugin.CLICK_CONTROL_IF){
+									if(superClass == ClickPlugin.CLICK_CONTROL_IF || superClass.endsWith("Service")){
 										wizard.addInterface(superClass);
 									} else {
 										wizard.setSuperClass(superClass);
@@ -204,29 +204,29 @@ public class AttributeEditorUtils {
 				}
 			}
 		});
-		
-		
+
+
 		Composite composite = toolkit.createComposite(parent);
 		composite.setLayout(FieldAssistUtils.createGridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		ContentAssistField field = new ContentAssistField(composite, SWT.BORDER,
-				new TextControlCreator(), new TextContentAdapter(), 
+				new TextControlCreator(), new TextContentAdapter(),
 				new TypeNameContentProposalProvider(project),
 				ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS,
 				new char[0]);
-		
+
 		final Text text = (Text)field.getControl();
 		field.getLayoutControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		field.getLayoutControl().setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
+
 		if(element!=null){
 			String initialValue = element.getAttribute(attrName);
 			if(initialValue!=null){
 				text.setText(initialValue);
 			}
 		}
-		
+
 		Button button = toolkit.createButton(composite, ClickPlugin.getString("action.browse"), SWT.PUSH);
 		button.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent evt){
@@ -236,7 +236,7 @@ public class AttributeEditorUtils {
 							shell,new ProgressMonitorDialog(shell),
 							SearchEngine.createJavaSearchScope(new IJavaElement[]{project}),
 							IJavaElementSearchConstants.CONSIDER_CLASSES,false);
-					
+
 					if(dialog.open()==SelectionDialog.OK){
 						Object[] result = dialog.getResult();
 						text.setText(((IType)result[0]).getFullyQualifiedName());
@@ -246,7 +246,7 @@ public class AttributeEditorUtils {
 				}
 			}
 		});
-		
+
 		return text;
 	}
 

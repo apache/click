@@ -6,6 +6,7 @@ import net.sf.clickide.ui.editor.forms.ClickFileItemFactoryEditor;
 import net.sf.clickide.ui.editor.forms.ClickGeneralEditor;
 import net.sf.clickide.ui.editor.forms.ClickHeadersEditor;
 import net.sf.clickide.ui.editor.forms.ClickPagesEditor;
+import net.sf.clickide.ui.editor.forms.ClickServiceEditor;
 
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -29,27 +30,28 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
 /**
  * The editor for click.xml.
  * <p>
- * This editor provides the tree editor and the source editor 
+ * This editor provides the tree editor and the source editor
  * as the multi-page editor. They can be toggled using tabs.
  * </p>
- * 
+ *
  * @author Naoki Takezoe
  */
 public class ClickEditor extends MultiPageEditorPart implements IResourceChangeListener {
-	
+
 	private StructuredTextEditor sourceEditor;
 	private ClickGeneralEditor generalEditor;
 	private ClickHeadersEditor headerEditor;
 	private ClickPagesEditor pageEditor;
 	private ClickControlsEditor controlEditor;
 	private ClickFileItemFactoryEditor fileItemFactoryEditior;
-	
+	private ClickServiceEditor serviceEditor;
+
 //	private int generalEditorIndex;
 //	private int headerEditorIndex;
 //	private int pageEditorIndex;
 //	private int controlEditorIndex;
 	private int sourceEditorIndex = 0;
-	
+
 	private IModelStateListener listener = new IModelStateListener(){
 		public void modelAboutToBeChanged(IStructuredModel model) {
 			modelUpdated(model);
@@ -71,9 +73,9 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 		public void modelResourceMoved(IStructuredModel oldModel, IStructuredModel newModel) {
 			modelUpdated(newModel);
-		}		
+		}
 	};
-	
+
 	public ClickEditor() {
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
@@ -87,9 +89,18 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 		} catch(Exception ex){
 			ClickPlugin.log(ex);
 		}
-		
+
 		IStructuredModel model = (IStructuredModel)sourceEditor.getAdapter(IStructuredModel.class);
-		
+
+		try {
+			serviceEditor = new ClickServiceEditor();
+			addPage(0, serviceEditor, getEditorInput());
+			serviceEditor.initModel(model);
+			setPageText(0, ClickPlugin.getString("editor.clickXML.service"));
+			sourceEditorIndex++;
+		} catch(Exception ex){
+			removePage(0);
+		}
 		try {
 			fileItemFactoryEditior = new ClickFileItemFactoryEditor();
 			addPage(0, fileItemFactoryEditior, getEditorInput());
@@ -134,11 +145,11 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 			sourceEditorIndex++;
 		} catch(Exception ex){
 			removePage(0);
-		}		
-		
+		}
+
 		model.addModelStateListener(listener);
-		
-//		IContentOutlinePage outline 
+
+//		IContentOutlinePage outline
 //			= (IContentOutlinePage)sourceEditor.getAdapter(IContentOutlinePage.class);
 //		outline.addSelectionChangedListener(new ISelectionChangedListener(){
 //			public void selectionChanged(SelectionChangedEvent event){
@@ -147,7 +158,7 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 //		});
 //		ConfigurableContentOutlinePage page = (ConfigurableContentOutlinePage)outline;
 //		System.out.println(page.getControl());
-		
+
 		setActivePage(0);
 	}
 
@@ -165,7 +176,7 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void doSave(IProgressMonitor progressMonitor) {
 		sourceEditor.doSave(progressMonitor);
 	}
-	
+
 
 	public void doSaveAs() {
 		sourceEditor.doSaveAs();
@@ -186,14 +197,14 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void setFocus() {
 		getControl(getActivePage()).setFocus();
 	}
-	
+
 	public void dispose() {
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 		IStructuredModel model = (IStructuredModel)sourceEditor.getAdapter(IStructuredModel.class);
 		model.removeModelStateListener(listener);
 		super.dispose();
 	}
-	
+
 	public void resourceChanged(final IResourceChangeEvent event){
 		Display.getDefault().asyncExec(new Runnable(){
 			public void run(){
@@ -204,7 +215,7 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 			}
 		});
 	}
-	
+
 	private void modelUpdated(IStructuredModel model){
 		if(getActivePage()==4){
 			generalEditor.modelUpdated(model);
@@ -213,7 +224,7 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 			pageEditor.modelUpdated(model);
 		}
 	}
-	
+
 //	protected IEditorSite createSite(IEditorPart editor) {
 //		if(editor instanceof StructuredTextEditor){
 //			return new SourceEditorSite(this, editor, getEditorSite());
@@ -221,16 +232,16 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 //			return super.createSite(editor);
 //		}
 //	}
-//	
+//
 //	private class SourceEditorSite extends MultiPageEditorSite {
-//		
+//
 //		private IEditorSite site;
-//		
+//
 //		public SourceEditorSite(MultiPageEditorPart multiPageEditor,IEditorPart editor,IEditorSite site) {
 //			super(multiPageEditor, editor);
 //			this.site = site;
 //		}
-//		
+//
 //		public IEditorActionBarContributor getActionBarContributor() {
 //			return site.getActionBarContributor();
 //		}
