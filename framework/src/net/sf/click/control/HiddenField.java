@@ -191,7 +191,7 @@ public class HiddenField extends Field {
     }
 
     /**
-     * Return the registed Class for the Hidden Field value Object.
+     * Return the registered Class for the Hidden Field value Object.
      *
      * @return the registered Class for the Hidden Field value Object
      */
@@ -200,7 +200,7 @@ public class HiddenField extends Field {
     }
 
     /**
-     * Set the registed Class for the Hidden Field value Object.
+     * Set the registered Class for the Hidden Field value Object.
      *
      * @param valueClass the registered Class for the Hidden Field value Object
      */
@@ -255,6 +255,12 @@ public class HiddenField extends Field {
 
         String aValue = getRequestValue();
         Class valueClass = getValueClass();
+
+        if (valueClass == null) {
+            throw new IllegalStateException("The value class is not defined."
+                + " Please use setValueClass(Class valueClass) to specify"
+                + " the HiddenField value type.");
+        }
 
         if (valueClass == String.class) {
             setValue(aValue);
