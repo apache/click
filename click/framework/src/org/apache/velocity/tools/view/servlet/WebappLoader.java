@@ -1,17 +1,20 @@
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.apache.velocity.tools.view.servlet;
@@ -46,10 +49,10 @@ import org.apache.velocity.runtime.resource.loader.ResourceLoader;
  * requires the webapp.resource.loader.cache property to be set to 'false'.
  *
  * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
- * @author <a href="mailto:nathan@esha.com">Nathan Bubna</a>
+ * @author Nathan Bubna
  * @author <a href="mailto:claude@savoirweb.com">Claude Brisson</a>
- * @version $Id$  */
-
+ * @version $Id$  
+ */
 public class WebappLoader extends ResourceLoader
 {
 
@@ -139,9 +142,10 @@ public class WebappLoader extends ResourceLoader
         Exception exception = null;
         for (int i = 0; i < paths.length; i++)
         {
+            String path = paths[i] + name;
             try
             {
-                result = servletContext.getResourceAsStream(paths[i] + name);
+                result = servletContext.getResourceAsStream(path);
 
                 /* save the path and exit the loop if we found the template */
                 if (result != null)
@@ -150,11 +154,20 @@ public class WebappLoader extends ResourceLoader
                     break;
                 }
             }
+            catch (NullPointerException npe)
+            {
+                /* no servletContext was set, whine about it! */
+                throw npe;
+            }
             catch (Exception e)
             {
                 /* only save the first one for later throwing */
                 if (exception == null)
                 {
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug("WebappResourceLoader: Could not load "+path, e);
+                    }
                     exception = e;
                 }
             }
@@ -163,17 +176,18 @@ public class WebappLoader extends ResourceLoader
         /* if we never found the template */
         if (result == null)
         {
-            String msg;
+            String msg = "WebappLoader : Resource '" + name + "' not found.";
+
+            /* convert to a general Velocity ResourceNotFoundException */
             if (exception == null)
             {
-                msg = "WebappLoader : Resource '" + name + "' not found.";
+                throw new ResourceNotFoundException(msg);
             }
             else
             {
-                msg = exception.getMessage();
+                msg += "  Due to: " + exception;
+                throw new ResourceNotFoundException(msg, exception);
             }
-            /* convert to a general Velocity ResourceNotFoundException */
-            throw new ResourceNotFoundException(msg);
         }
 
         return result;
@@ -188,19 +202,16 @@ public class WebappLoader extends ResourceLoader
     public boolean isSourceModified(Resource resource)
     {
         String rootPath = servletContext.getRealPath("/");
-        if(rootPath == null) {
-           /*
-            * rootPath is null if the servlet container cannot translate the
-            * virtual path to a real path for any reason (such as when the
-            * content is being made available from a .war archive)
-            */
+        if (rootPath == null) {
+            // rootPath is null if the servlet container cannot translate the
+            // virtual path to a real path for any reason (such as when the
+            // content is being made available from a .war archive)
             return false;
         }
 
-        /* first, try getting the previously found file */
+        // first, try getting the previously found file
         String fileName = resource.getName();
-        String savedPath = (String)templatePaths.get(fileName);
-        File cachedFile = new File(rootPath + savedPath, fileName);
+        File cachedFile = getCachedFile(rootPath, fileName);
         if (!cachedFile.exists())
         {
             /* then the source has been moved and/or deleted */
@@ -244,24 +255,34 @@ public class WebappLoader extends ResourceLoader
     public long getLastModified(Resource resource)
     {
         String rootPath = servletContext.getRealPath("/");
-        if(rootPath == null) {
-           /*
-            * rootPath is null if the servlet container cannot translate the
-            * virtual path to a real path for any reason (such as when the
-            * content is being made available from a .war archive)
-            */
+        if (rootPath == null) {
+            // rootPath is null if the servlet container cannot translate the
+            // virtual path to a real path for any reason (such as when the
+            // content is being made available from a .war archive)
             return 0;
         }
 
-        String path = (String)templatePaths.get(resource.getName());
-        File file = new File(rootPath + path, resource.getName());
-        if (file.canRead())
+        File cachedFile = getCachedFile(rootPath, resource.getName());
+        if (cachedFile.canRead())
         {
-            return file.lastModified();
+            return cachedFile.lastModified();
         }
         else
         {
             return 0;
         }
+    }
+
+    private File getCachedFile(String rootPath, String fileName)
+    {
+        // we do this when we cache a resource,
+        // so do it again to ensure a match
+        while (fileName.startsWith("/"))
+        {
+            fileName = fileName.substring(1);
+        }
+
+        String savedPath = (String)templatePaths.get(fileName);
+        return new File(rootPath + savedPath, fileName);
     }
 }
