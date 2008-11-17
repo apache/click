@@ -802,7 +802,7 @@ public class Form extends AbstractContainer {
      */
     public Control add(Control control, int width) {
         if (control instanceof Button || control instanceof HiddenField) {
-            String msg = "Not valid a valid field type: " + control.getClass().getName();
+            String msg = "Not a valid field type: " + control.getClass().getName();
             throw new IllegalArgumentException(msg);
         }
         if (width < 1) {
