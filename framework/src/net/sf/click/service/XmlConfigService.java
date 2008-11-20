@@ -453,7 +453,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @see ConfigService#getPagePath(Class)
      *
      * @param pageClass the page class
-     * @return path the page path
+     * @return path the page path or null if no path is found
      * @throws IllegalArgumentException if the Page Class is not configured
      * with a unique path
      */
