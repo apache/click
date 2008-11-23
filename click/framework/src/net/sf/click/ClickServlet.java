@@ -649,7 +649,7 @@ public class ClickServlet extends HttpServlet {
             String pagePath = page.getPath();
 
             // Check if request is a JSP page
-            if (configService.isJspPage(pagePath)) {
+            if (pagePath.endsWith(".jsp") || configService.isJspPage(pagePath)) {
                 // CLK-141. Set pagePath as the forward value.
                 page.setForward(StringUtils.replace(pagePath, ".htm", ".jsp"));
 

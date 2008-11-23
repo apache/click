@@ -4,6 +4,8 @@ import junit.framework.TestCase;
 import net.sf.click.pages.JspRedirectPage;
 import net.sf.click.pages.RedirectToHtm;
 import net.sf.click.pages.RedirectToJsp;
+import net.sf.click.pages.RedirectToSelfPage;
+import net.sf.click.pages.SetPathToJspPage;
 
 /**
  * Tests for the Page class.
@@ -18,7 +20,7 @@ public class PageTest extends TestCase {
         container.start();
         String contextPath = container.getRequest().getContextPath();
         container.getRequest().setMethod("GET");
-        
+
         RedirectToHtm page = (RedirectToHtm) container.testPage(RedirectToHtm.class);
 
         // assert that the Page successfully redirected to test.htm
@@ -55,7 +57,7 @@ public class PageTest extends TestCase {
         container.start();
         String contextPath = container.getRequest().getContextPath();
         container.getRequest().setMethod("GET");
-        
+
         JspRedirectPage page = (JspRedirectPage) container.testPage(JspRedirectPage.class);
 
         // assert that the Page successfully redirected to test.jsp, meaning
@@ -80,10 +82,43 @@ public class PageTest extends TestCase {
         String expected = contextPath + redirect;
         page.setRedirect(redirect);
         assertEquals(expected, page.getRedirect());
-        
+
         // assert that setting redirect to a path already prefixed with contextPath
         // won't add a second contextPath
         page.setRedirect(contextPath + "/test.htm");
         assertEquals(expected, page.getRedirect());
+    }
+
+    /**
+     * Test that Page.setRedirect properly adds context path even if the page
+     * path and context path have the same prefix.
+     * CLK-468
+     */
+    public void testRedirectWherePageAndContextPathAreTheSame() {
+        MockContainer container = new MockContainer("web");
+        container.start();
+        container.getRequest().setMethod("GET");
+
+        RedirectToSelfPage page = (RedirectToSelfPage) container.testPage(RedirectToSelfPage.class);
+
+        assertEquals(RedirectToSelfPage.class.getName(), container.getRedirectPageClass().getName());
+
+        container.stop();
+    }
+
+    /**
+     * Test that Page.setPath(path), where path is a JSP, works properly. Click
+     * should set the request to forward to the JSP page.
+     * CLK-141
+     */
+    public void testSetPathToJSP() {
+        MockContainer container = new MockContainer("web");
+        container.start();
+        container.getRequest().setMethod("GET");
+
+        SetPathToJspPage page = (SetPathToJspPage) container.testPage(SetPathToJspPage.class);
+        assertEquals(SetPathToJspPage.PATH, container.getForward());
+
+        container.stop();
     }
 }
