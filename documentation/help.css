@@ -24,9 +24,16 @@
 	text-decoration: none;
 	position: absolute;
 	top: 26px;
-	right: 15px;
+	right: 215px;
 }
-
+#apache-incubator-logo img {
+    border: 1px solid white;
+}
+#apache-incubator-logo a {
+  top: 2px;
+  right: 15px;
+	position: absolute;
+}
 #header {
 	background: #4A70BC url(images/banner.gif) top left no-repeat;
 	height: 50px;
@@ -269,6 +276,7 @@ table.buttons {
 	vertical-align: baseline;
 	margin-top: 1em;
 }
-
-
-
+.tag {
+    color: #000099;
+    font-weight: bold;
+}
