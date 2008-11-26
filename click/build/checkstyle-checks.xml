@@ -89,7 +89,10 @@
             <property name="max" value="80"/>
              <property name="ignorePattern" value="^ *\*"/>
         </module>  -->
-        <module name="MethodLength"/>
+        <module name="MethodLength">
+            <property name="tokens" value="METHOD_DEF"/>
+            <property name="max" value="200"/>
+        </module>
         <module name="ParameterNumber"/>
         
         <!-- Checks for whitespace                               -->
