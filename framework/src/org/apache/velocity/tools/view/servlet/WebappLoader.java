@@ -51,7 +51,7 @@ import org.apache.velocity.runtime.resource.loader.ResourceLoader;
  * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
  * @author Nathan Bubna
  * @author <a href="mailto:claude@savoirweb.com">Claude Brisson</a>
- * @version $Id$  
+ * @version $Id$
  */
 public class WebappLoader extends ResourceLoader
 {
