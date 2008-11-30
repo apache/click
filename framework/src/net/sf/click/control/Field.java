@@ -241,6 +241,29 @@ public abstract class Field extends AbstractControl {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * Set the parent of the Field.
+     *
+     * @see net.sf.click.Control#setParent(Object)
+     *
+     * @param parent the parent of the Control
+     * @throws IllegalStateException if {@link #name} is not defined
+     * @throws IllegalArgumentException if the given parent instance is
+     * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
+     */
+    public void setParent(Object parent) {
+        if (parent == this) {
+            throw new IllegalArgumentException("Cannot set parent to itself");
+        }
+        // Guard against fields without names, as fields would throw
+        // exceptions when binding to request value.
+        if (StringUtils.isBlank(getName())) {
+            String msg = "Field name not defined: " + getClass().getName();
+            throw new IllegalArgumentException(msg);
+        }
+        this.parent = parent;
+    }
+
+    /**
      * Return true if the Field is disabled. The Field will also be disabled
      * if the parent FieldSet or Form is disabled.
      * <p/>
@@ -586,7 +609,7 @@ public abstract class Field extends AbstractControl {
         }
         return readonly;
     }
- 
+
     /**
      * Set the Field readonly flag.
      *

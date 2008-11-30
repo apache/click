@@ -358,6 +358,27 @@ public class ActionLink extends AbstractLink {
     }
 
     /**
+     * Set the parent of the ActionLink.
+     *
+     * @see net.sf.click.Control#setParent(Object)
+     *
+     * @param parent the parent of the Control
+     * @throws IllegalStateException if {@link #name} is not defined
+     * @throws IllegalArgumentException if the given parent instance is
+     * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
+     */
+    public void setParent(Object parent) {
+        if (parent == this) {
+            throw new IllegalArgumentException("Cannot set parent to itself");
+        }
+        if (getName() == null) {
+            String msg = "ActionLink name not defined.";
+            throw new IllegalArgumentException(msg);
+        }
+        this.parent = parent;
+    }
+
+    /**
      * Returns the ActionLink value if the action link was processed and has
      * a value, or null otherwise.
      *

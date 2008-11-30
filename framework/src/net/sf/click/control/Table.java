@@ -444,6 +444,26 @@ public class Table extends AbstractControl {
      }
 
     /**
+     * Set the parent of the Table.
+     *
+     * @see net.sf.click.Control#setParent(Object)
+     *
+     * @param parent the parent of the Table
+     * @throws IllegalStateException if {@link #name} is not defined
+     * @throws IllegalArgumentException if the given parent instance is
+     * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
+     */
+    public void setParent(Object parent) {
+        if (parent == this) {
+            throw new IllegalArgumentException("Cannot set parent to itself");
+        }
+        if (getName() == null) {
+            throw new IllegalArgumentException("Table name is not defined");
+        }
+        this.parent = parent;
+    }
+
+    /**
      * Return the Table pagination banner position. Banner position values:
      * <tt>[ POSITION_TOP | POSITION_BOTTOM | POSITION_BOTH ]</tt>.
      * The default banner position is <tt>POSITION_BOTTOM</tt>.
@@ -629,9 +649,10 @@ public class Table extends AbstractControl {
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
-        getControls().add(control);
-
+        // Note: set parent first since setParent might veto further processing
         control.setParent(this);
+
+        getControls().add(control);
 
         return control;
     }

@@ -172,6 +172,22 @@ public abstract class AbstractContainerField extends Field implements Container 
     }
 
     /**
+     * Set the parent of the Field.
+     *
+     * @see net.sf.click.Control#setParent(Object)
+     *
+     * @param parent the parent of the Control
+     * @throws IllegalArgumentException if the given parent instance is
+     * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
+     */
+    public void setParent(Object parent) {
+        if (parent == this) {
+            throw new IllegalArgumentException("Cannot set parent to itself");
+        }
+        this.parent = parent;
+    }
+
+    /**
      * Return the HTML head import statements for contained controls.
      *
      * @see net.sf.click.Control#getHtmlImports()
