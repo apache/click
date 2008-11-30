@@ -131,12 +131,6 @@ public abstract class AbstractContainer extends AbstractControl implements
         }
         if (control instanceof Field) {
             Field field = (Field) control;
-            // Guard against fields without names, as they would throw
-            // exceptions later when binding their request values.
-            if (StringUtils.isBlank(field.getName())) {
-                String msg = "Field name not defined: " + field.getClass().getName();
-                throw new IllegalArgumentException(msg);
-            }
             // Check if container already contains the field. Labels can share
             // names though.
             if (getControlMap().containsKey(field.getName())
@@ -170,8 +164,9 @@ public abstract class AbstractContainer extends AbstractControl implements
             logParentReset(control, currentParent);
         }
 
-        getControls().add(index, control);
+        // Note: set parent first since setParent might veto further processing
         control.setParent(this);
+        getControls().add(index, control);
 
         String controlName = control.getName();
         if (controlName != null) {

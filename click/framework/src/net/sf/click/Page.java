@@ -355,13 +355,15 @@ public class Page {
             throw new IllegalArgumentException("Null control parameter");
         }
         if (StringUtils.isBlank(control.getName())) {
-            throw new IllegalArgumentException("Control name not defined");
+            throw new IllegalArgumentException("Control name not defined: "
+                + control.getClass());
         }
+
+        // Note: set parent first as setParent might veto further processing
+        control.setParent(this);
 
         getControls().add(control);
         addModel(control.getName(), control);
-
-        control.setParent(this);
     }
 
     /**

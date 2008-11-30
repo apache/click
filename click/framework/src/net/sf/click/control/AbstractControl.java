@@ -450,6 +450,8 @@ public abstract class AbstractControl implements Control {
      * @see net.sf.click.Control#setParent(Object)
      *
      * @param parent the parent of the Control
+     * @throws IllegalArgumentException if the given parent instance is
+     * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
      */
     public void setParent(Object parent) {
         if (parent == this) {
