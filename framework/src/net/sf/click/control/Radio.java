@@ -87,8 +87,6 @@ public class Radio extends Field {
 
     /**
      * Create an Radio field with no name defined.
-     * <p/>
-     * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public Radio() {
     }
@@ -161,6 +159,22 @@ public class Radio extends Field {
 
             return id;
         }
+    }
+
+    /**
+     * Set the parent of the Field.
+     *
+     * @see net.sf.click.Control#setParent(Object)
+     *
+     * @param parent the parent of the Control
+     * @throws IllegalArgumentException if the given parent instance is
+     * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
+     */
+    public void setParent(Object parent) {
+        if (parent == this) {
+            throw new IllegalArgumentException("Cannot set parent to itself");
+        }
+        this.parent = parent;
     }
 
     /**
