@@ -152,6 +152,19 @@ public class RegexField extends TextField {
     }
 
     /**
+     * Construct the RegexField with the given name, label, size and
+     * required status.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param size the size of the field
+     * @param required the field required status
+     */
+    public RegexField(String name, String label, int size, boolean required) {
+        super(name, label, size, required);
+    }
+
+    /**
      * Construct the RegexField with the given name and label.
      *
      * @param name the name of the field
