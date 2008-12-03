@@ -126,6 +126,32 @@ public class EmailField extends TextField {
     }
 
     /**
+     * Construct the Email Field with the given name, label and size.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param size the size of the field
+     */
+    public EmailField(String name, String label, int size) {
+        super(name, label);
+        setSize(size);
+    }
+
+    /**
+     * Construct the Email Field with the given name, label, size and
+     * required status.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param size the size of the field
+     * @param required the field required status
+     */
+    public EmailField(String name, String label, int size, boolean required) {
+        super(name, label, required);
+        setSize(size);
+    }
+
+    /**
      * Create an Email Field with no name defined.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.

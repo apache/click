@@ -183,7 +183,6 @@ public class DateField extends TextField {
         setRequired(required);
     }
 
-
     /**
      * Construct the Date Field with the given name, label and required status.
      * <p/>
@@ -200,7 +199,33 @@ public class DateField extends TextField {
     }
 
     /**
-     * Create a date field with no name defined.
+     * Construct the Date Field with the given name, label and size.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param size the size of the field
+     */
+    public DateField(String name, String label, int size) {
+        this(name, label);
+        setSize(size);
+    }
+
+    /**
+     * Construct the Date Field with the given name, label, size and
+     * required status.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param size the size of the field
+     * @param required the field required status
+     */
+    public DateField(String name, String label, int size, boolean required) {
+        this(name, label, required);
+        setSize(size);
+    }
+
+    /**
+     * Create a Date Field with no name defined.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
      */

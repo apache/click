@@ -126,6 +126,20 @@ public class TelephoneField extends TextField {
     }
 
     /**
+     * Construct the TelephoneField with the given name, label, size and
+     * required status.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param size the size of the field
+     * @param required the field required status
+     */
+    public TelephoneField(String name, String label, int size, boolean required) {
+        this(name, label, required);
+        setSize(size);
+    }
+
+    /**
      * Create a TelephoneField with no name defined. The default the minium
      * valid length is 10 characters.
      * <p/>
