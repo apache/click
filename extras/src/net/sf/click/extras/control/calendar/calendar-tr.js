@@ -14,9 +14,9 @@
 Calendar._DN = new Array
 ("Pazar",
  "Pazartesi",
- "Salı",
- "Çarşamba",
- "Perşembe",
+ "SalÃ½",
+ "Ã‡arÃ¾amba",
+ "PerÃ¾embe",
  "Cuma",
  "Cumartesi",
  "Pazar");
@@ -38,8 +38,8 @@ Calendar._SDN = new Array
 ("Pzr",
  "Pzt",
  "Sal",
- "Çrş",
- "Prş",
+ "Ã‡rÃ¾",
+ "PrÃ¾",
  "Cum",
  "Cmt",
  "Pzr");
@@ -51,28 +51,28 @@ Calendar._FD = 1;
 // full month names
 Calendar._MN = new Array
 ("Ocak",
- "Şubat",
+ "Ãubat",
  "Mart",
  "Nisan",
- "Mayıs",
+ "MayÃ½s",
  "Haziran",
  "Temmuz",
- "Ağustos",
- "Eylül",
+ "AÃ°ustos",
+ "EylÃ¼l",
  "Ekim",
- "Kasım",
- "Aralık");
+ "KasÃ½m",
+ "AralÃ½k");
 
 // short month names
 Calendar._SMN = new Array
 ("Oca",
- "Şub",
+ "Ãub",
  "Mar",
  "Nis",
  "May",
  "Haz",
  "Tem",
- "Ağu",
+ "AÃ°u",
  "Eyl",
  "Eki",
  "Kas",
@@ -80,36 +80,36 @@ Calendar._SMN = new Array
 
 // tooltips
 Calendar._TT = {};
-Calendar._TT["INFO"] = "Takvim hakkında";
+Calendar._TT["INFO"] = "Takvim hakkÃ½nda";
 
 Calendar._TT["ABOUT"] =
 "DHTML Date/Time Selector\n" +
 "(c) dynarch.com 2002-2005 / Yazar: Mihai Bazon\n" + // don't translate this this ;-)
-"En son sürüm için: http://www.dynarch.com/projects/calendar/\n" +
-"GNU LGPL altında dağıtılmaktadır. Detaylar için http://gnu.org/licenses/lgpl.html sayfasına bakınız." +
+"En son sÃ¼rÃ¼m iÃ§in: http://www.dynarch.com/projects/calendar/\n" +
+"GNU LGPL altÃ½nda daÃ°Ã½tÃ½lmaktadÃ½r. Detaylar iÃ§in http://gnu.org/licenses/lgpl.html sayfasÃ½na bakÃ½nÃ½z." +
 "\n\n" +
-"Tarih seçimi:\n" +
-"- \xab ve \xbb tuşları ile yıl seçebilirsiniz.\n" +
-"- " + String.fromCharCode(0x2039) + " ve " + String.fromCharCode(0x203a) + " tuşları ile ayları seçebilirsiniz.\n" +
-"- Daha hızlı seçim yapmak için fare düğmelerini bu butonların üzerinde basılı tutun.";
+"Tarih seÃ§imi:\n" +
+"- \xab ve \xbb tuÃ¾larÃ½ ile yÃ½l seÃ§ebilirsiniz.\n" +
+"- " + String.fromCharCode(0x2039) + " ve " + String.fromCharCode(0x203a) + " tuÃ¾larÃ½ ile aylarÃ½ seÃ§ebilirsiniz.\n" +
+"- Daha hÃ½zlÃ½ seÃ§im yapmak iÃ§in fare dÃ¼Ã°melerini bu butonlarÃ½n Ã¼zerinde basÃ½lÃ½ tutun.";
 Calendar._TT["ABOUT_TIME"] = "\n\n" +
-"Saat seçimi:\n" +
-"- Zaman parçalarını tıklayarak artırın\n" +
-"- veya Shift tuşuna basılı tutarak tıklayın ve azaltın\n" +
-"- veya daha hızlı seçim için sürükleyip bırakın.";
+"Saat seÃ§imi:\n" +
+"- Zaman parÃ§alarÃ½nÃ½ tÃ½klayarak artÃ½rÃ½n\n" +
+"- veya Shift tuÃ¾una basÃ½lÃ½ tutarak tÃ½klayÃ½n ve azaltÃ½n\n" +
+"- veya daha hÃ½zlÃ½ seÃ§im iÃ§in sÃ¼rÃ¼kleyip bÃ½rakÃ½n.";
 
-Calendar._TT["PREV_YEAR"] = "Önceki Yıl (Menü için basılı tutunuz)";
-Calendar._TT["PREV_MONTH"] = "Önceki Ay (Menü için basılı tutunuz)";
-Calendar._TT["GO_TODAY"] = "Bugün'e git";
-Calendar._TT["NEXT_MONTH"] = "Sonraki Ay (Menü için basılı tutunuz)";
-Calendar._TT["NEXT_YEAR"] = "Sonraki Yıl (Menü için basılı tutunuz)";
-Calendar._TT["SEL_DATE"] = "Tarih seçiniz";
-Calendar._TT["DRAG_TO_MOVE"] = "Taşımak için sürükleyiniz";
-Calendar._TT["PART_TODAY"] = " (bugün)";
+Calendar._TT["PREV_YEAR"] = "Ã–nceki YÃ½l (MenÃ¼ iÃ§in basÃ½lÃ½ tutunuz)";
+Calendar._TT["PREV_MONTH"] = "Ã–nceki Ay (MenÃ¼ iÃ§in basÃ½lÃ½ tutunuz)";
+Calendar._TT["GO_TODAY"] = "BugÃ¼n'e git";
+Calendar._TT["NEXT_MONTH"] = "Sonraki Ay (MenÃ¼ iÃ§in basÃ½lÃ½ tutunuz)";
+Calendar._TT["NEXT_YEAR"] = "Sonraki YÃ½l (MenÃ¼ iÃ§in basÃ½lÃ½ tutunuz)";
+Calendar._TT["SEL_DATE"] = "Tarih seÃ§iniz";
+Calendar._TT["DRAG_TO_MOVE"] = "TaÃ¾Ã½mak iÃ§in sÃ¼rÃ¼kleyiniz";
+Calendar._TT["PART_TODAY"] = " (bugÃ¼n)";
 
 // the following is to inform that "%s" is to be the first day of week
 // %s will be replaced with the day name.
-Calendar._TT["DAY_FIRST"] = "%s önce gösterilsin";
+Calendar._TT["DAY_FIRST"] = "%s Ã¶nce gÃ¶sterilsin";
 
 // This may be locale-dependent.  It specifies the week-end days, as an array
 // of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
@@ -117,8 +117,8 @@ Calendar._TT["DAY_FIRST"] = "%s önce gösterilsin";
 Calendar._TT["WEEKEND"] = "1,7";
 
 Calendar._TT["CLOSE"] = "Kapat";
-Calendar._TT["TODAY"] = "Bugün";
-Calendar._TT["TIME_PART"] = "Değeri değiştirmek için (Shift ile) tıklayın veya sürükleyin";
+Calendar._TT["TODAY"] = "BugÃ¼n";
+Calendar._TT["TIME_PART"] = "DeÃ°eri deÃ°iÃ¾tirmek iÃ§in (Shift ile) tÃ½klayÃ½n veya sÃ¼rÃ¼kleyin";
 
 // date formats
 Calendar._TT["DEF_DATE_FORMAT"] = "%d-%m-%Y";
