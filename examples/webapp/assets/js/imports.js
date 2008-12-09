@@ -1,18 +1,94 @@
-/*
- * (c)2006 Jesse Skinner/Dean Edwards/Matthias Miller/John Resig
- * Special thanks to Dan Webb's domready.js Prototype extension
- * and Simon Willison's addLoadEvent
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// Ensure Click namespace exists
+if ( typeof Click == 'undefined' )
+    Click = {};
+
+/**
+ * DomReady state variables.
+ */
+Click.domready = {
+    events: [],
+    ready: false,
+    run : function() {
+        Click.domready.ready=true;
+        var e;
+        while(e = Click.domready.events.shift()) {
+            e();
+        }
+    }
+};
+
+/**
+ * This function is based on work done by Dean Edwards, Diego Perini,
+ * Matthias Miller, John Resig and Jesse Skinner.
  *
- * For more info, see:
- * http://www.thefutureoftheweb.com/blog/adddomloadevent
  * http://dean.edwards.name/weblog/2006/06/again/
  * http://www.vivabit.com/bollocks/2006/06/21/a-dom-ready-extension-for-prototype
  * http://simon.incutio.com/archive/2004/05/26/addLoadEvent
- *
- * This script also replaced the IE solution with the one from this article:
  * http://javascript.nwbox.com/IEContentLoaded/
- *
- * To use call addLoadEvent one or more times with functions, ie:
+ * http://www.thefutureoftheweb.com/blog/adddomloadevent
+ */
+(function() {
+    /* Handle IE (32/64 bit) */
+    /*@cc_on
+			@if (@_win32 || @_win64)
+      // Guard against iframe
+      if (window == top) {
+	  		var d = window.document;
+  	    (function () {
+  		    try {
+  			    d.documentElement.doScroll('left');
+  		    } catch (e) {
+  			    setTimeout(arguments.callee, 50);
+  			    return;
+ 		      }
+		      // Dom is ready, run events
+		      Click.domready.run();
+	      })();
+      }
+			@end
+		@*/
+
+    // Handle DOMContentLoaded compliant browsers.
+    if(document.addEventListener) {
+        document.addEventListener("DOMContentLoaded", Click.domready.run, false);
+
+    // Handle old KHTML/WebKit
+    } else if(/KHTML|WebKit/i.test(navigator.userAgent)) {
+        if(/loaded|complete/.test(document.readyState)) {
+            Click.domready.run();
+        } else {
+            setTimeout(arguments.callee, 0);
+        }
+    }
+
+    // Fallback to window.onload
+    var prevOnload = window.onload;
+    window.onload = function() {
+        Click.domready.run();
+        if (typeof prevOnload === 'function') prevOnload();
+    };
+})();
+
+/**
+ * Usage: Call addLoadEvent passing in a function to invoke when the DOM is
+ * ready:
  *
  *    Example 1:
  *    function something() {
@@ -26,78 +102,13 @@
  *    });
  *
  */
-addLoadEvent = (function(){
-    // create event function stack
-    var load_events = [],
-        load_timer,
-        done,
-        exec,
-        old_onload,
-        init = function () {
-            done = true;
-
-            // kill the timer
-            clearInterval(load_timer);
-
-            // execute each function in the stack in the order they were added
-            while (exec = load_events.shift()) {
-                exec();
-            }
-        };
-
-    return function (func) {
-        // if the init function was already ran, just run this function now and stop
-        if (done) {return func()};
-
-        if (!load_events[0]) {
-
-            // for Internet Explorer
-            /*@cc_on @*/
-            /*@if (@_win32)
-			      // polling for no errors
-			      var d = window.document;
-	          (function () {
-		            try {
-			              // throws errors until after ondocumentready
-			              d.documentElement.doScroll('left');
-		            } catch (e) {
-			              setTimeout(arguments.callee, 50);
-			              return;
- 		            }
-		            // no errors, fire
-		            init();
-	          })();
-            d.onreadystatechange = function() {
-            if (this.readyState == "complete")
-                init(); // call the onload handler
-            };
-            /*@end @*/
-
-            // for Mozilla/Opera9
-            if (document.addEventListener) {
-                document.addEventListener("DOMContentLoaded", init, false);
-            }
-
-            // for Safari
-            if (/WebKit/i.test(navigator.userAgent)) { // sniff
-                load_timer = setInterval(function() {
-                    if (/loaded|complete/.test(document.readyState)) {
-                        init(); // call the onload handler
-                    }
-                }, 10);
-            }
-
-            // for other browsers set the window.onload, but also execute the old window.onload
-            old_onload = window.onload;
-            window.onload = function() {
-                init();
-                if (old_onload) {old_onload()};
-            };
-        }
-
-        load_events.push(func);
+addLoadEvent = function(func) {
+    // If dom is ready, fire event and return
+    if (Click.domready.ready) {
+        return func();
     }
-})();
+    Click.domready.events.push(func);
+};
 
 function doubleFilter(event) {
     var keyCode;
