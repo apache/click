@@ -9,11 +9,10 @@ import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides a HTML Rich TextArea editor control using the
- * <a href="http://sourceforge.net/projects/tinymce/">TinyMCE</a>
- * JavaScript library.
+ * <a href="http://developer.yahoo.com/yui/editor/">YUI editor</a>.
  * <p/>
- * To utilize this control in your application include <tt>tiny_mce</tt>
- * JavaScript library in the web apps root directory.
+ * To utilize this control in your application include <tt>YUI editor</tt>
+ * JavaScript libraries in the web apps root directory.
  *
  * @see TextArea
  *
@@ -23,20 +22,32 @@ public class RichTextArea extends TextArea {
 
     private static final long serialVersionUID = 1L;
 
-    /** The TinyMCE JavaScript import. */
+    /** The YUI editor JavaScript import. */
     protected static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/tiny_mce/tiny_mce.js\"></script>\n";
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/yui/fonts/fonts-min.css\"/>\n"
+        + "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/yui/editor/skins/sam/simpleeditor.css\"/>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/yui/yahoo-dom-event/yahoo-dom-event.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/yui/element/element-beta-min.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/yui/container/container_core-min.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/yui/editor/simpleeditor-min.js\"></script>\n";
 
     /**
-     * The textarea TinyMCE theme [<tt>simple</tt> | <tt>advanced</tt>],
-     * default value: &nbsp; <tt>"simple"</tt>
+     * The textarea YUI editor theme [<tt>yui-skin-sam</tt>].
      */
-    protected String theme = "simple";
+    protected String theme = "yui-skin-sam";
+
+    /**
+     * The textarea YUI editor configuration. Default values are:
+     * <tt>height: '300px', width: '530px', dompath: true, focusAtStart: true,
+     * handleSubmit: true, titlebar:'Rich Editor'</tt>.
+     */
+    private String config = "height: '200px', width: '600px',"
+        + "dompath: true, focusAtStart: true, handleSubmit: true, titlebar:'Rich Editor'";
 
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a TinyMCE rich TextArea control with the given name.
+     * Create a rich TextArea control with the given name.
      *
      * @param name the name of the control
      */
@@ -53,17 +64,35 @@ public class RichTextArea extends TextArea {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Return the textarea TinyMCE theme.
+     * Return the textarea YUI editor configuration.
      *
-     * @return the textarea TinyMCE theme
+     * @return the textarea YUI editor configuration
+     */
+    public String getConfig() {
+        return config;
+    }
+
+    /**
+     * Set the textarea YUI editor configuration.
+     *
+     * @param the textarea YUI editor configuration
+     */
+    public void setConfig(String config) {
+        this.config = config;
+    }
+
+    /**
+     * Return the textarea YUI editor theme.
+     *
+     * @return the textarea YUI editor theme
      */
     public String getTheme() {
         return theme;
     }
 
     /**
-     * Return the JavaScript include: &nbsp; <tt>"tiny_mce/tiny_mce.js"</tt>,
-     * and TinyMCE JavaScript initialization code.
+     * Return the JavaScript include: &nbsp; {@link #HTML_IMPORTS}, and YUI
+     * editor JavaScript initialization code.
      *
      * @see net.sf.click.control.Field#getHtmlImports()
      */
@@ -74,11 +103,30 @@ public class RichTextArea extends TextArea {
         buffer.append(MessageFormat.format(HTML_IMPORTS, args));
 
         Map model = new HashMap();
-        model.put("theme", getTheme());
         model.put("id", getId());
+        model.put("config", getConfig());
         renderTemplate(buffer, model);
 
         return buffer.toString();
+    }
+
+    /**
+     * Render the HTML representation of the RichTextArea.
+     * <p/>
+     * This method wraps the <tt>textarea</tt> in a <tt>&lt;span&gt;</tt> element
+     * which is used to specify the {@link #getTheme()} of the textarea.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
+        buffer.elementStart("span");
+        buffer.appendAttribute("class", getTheme());
+        buffer.closeTag();
+        buffer.append("\n");
+        super.render(buffer);
+        buffer.elementEnd("span");
     }
 
     // -------------------------------------------------------- Protected Methods
