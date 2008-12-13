@@ -5,7 +5,6 @@
     <control classname="net.sf.click.extras.control.CheckList"/>
     <control classname="net.sf.click.extras.control.ColorPicker"/>
     <control classname="net.sf.click.extras.control.CreditCardField"/>
-    <control classname="net.sf.click.extras.control.DateField"/>
     <control classname="net.sf.click.extras.control.EmailField"/>
     <control classname="net.sf.click.extras.control.IntegerField"/>
     <control classname="net.sf.click.extras.control.PickList"/>

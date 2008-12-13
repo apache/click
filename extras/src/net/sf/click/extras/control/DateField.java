@@ -16,70 +16,45 @@
 package net.sf.click.extras.control;
 
 import java.sql.Timestamp;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.servlet.ServletContext;
-
-import net.sf.click.Context;
 import net.sf.click.control.TextField;
-import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
- * Provides a Date Field control: &nbsp; &lt;input type='text'&gt;&lt;img&gt;.
+ * Provides a Date Field control: &nbsp; &lt;input type='text'&gt;.
  *
  * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td style="vertical-align:baseline">Date Field</td>
- * <td style="vertical-align:baseline"><input type='text' size='20' title='DateField Control' value='15 Mar 2006'/><input type='hidden'/><img align='middle' hspace='2' style='cursor:hand' src='calendar.gif' title='Calendar'/></td>
+ * <td style="vertical-align:baseline"><input type='text' size='20' title='DateField Control' value='15 Mar 2006'/></td>
  * </tr>
  * </table>
  *
- * The DateField control provides a Date entry field and a popup DHTML Calendar
- * &lt;div&gt;. Users can either key in a Date value or select a Date using the
- * Calendar.
+ * The DateField control provides a Date entry field where users can key in a
+ * Date value.
  * <p/>
- * The Calendar popup is provided by the JSCalendar library by
- * <a href="http://www.dynarch.com/">Dynarch.com</a>. The Calendar popup is
- * created as a &lt;div&gt; element using JavaScript. To enable the Calenar
- * popup, reference <span class="blue">$cssImports</span> and <span class="blue">$jsImports</span>
- * in the page template. For example:
+ * Example:
+ * <pre class="prettyprint">
+ * public MyPage extends Page {
  *
- * <pre class="codeHtml">
- * &lt;html&gt;
- * &lt;head&gt;
- * <span class="blue">$cssImports</span>
- * &lt;/head&gt;
- * &lt;body&gt;
- * <span class="red">$form</span>
- * &lt;/body&gt;
- * &lt;/html&gt;
- * <span class="blue">$jsImports</span> </pre>
+ *     public void onInit() {
+ *         Form form = new Form("form");
  *
- * The default Calendar style is 'system' which has a similar appearance
- * to the Windows Calendar control. The JSCalendar styles include:
- * <ul style="margin-top: 0.5em;">
- * <li>blue</li>
- * <li>blue2</li>
- * <li>brown</li>
- * <li>green</li>
- * <li>system</li>
- * <li>tas</li>
- * <li>win2k-1</li>
- * <li>win2k-2</li>
- * <li>win2k-cold-1</li>
- * <li>win2k-cold-2</li>
- * </ul>
+ *         // Create new DateField with default date format: 'dd MMM yyyy'
+ *         DateField dateField = new DateField("dateField");
  *
- * The DateField JavaScript, CSS and image resources are automatically deployed
- * to the <tt>click/calendar</tt> web directory on application startup.
- * <p/>
+ *         // You can change the format to: 'yyyy-MM-dd'
+ *         dateField.setFormatPattern("yyyy-MM-dd");
+ *
+ *         // Finally add dateField to form
+ *         form.add(dateField);
+ *     }
+ * } </pre>
+ *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
@@ -88,58 +63,16 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class DateField extends TextField {
 
-    // -------------------------------------------------------------- Constants
-
-    private static final long serialVersionUID = 1L;
-
-    /** The HTML import statements. */
-    public static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/calendar/calendar-{1}{7}.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/control{7}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar{7}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}{7}.js\" charset=\"UTF-8\"></script>\n"
-        + "<script type=\"text/javascript\">addLoadEvent( function() '{'Calendar.setup('{' inputField : ''{3}'', ifFormat : ''{4}'', showsTime : {5}, button : ''{3}-button'', align : ''cr'', singleClick : true, firstDay : {6} '}');'}');</script>\n";
-
-    /** The Calendar resource file names. */
-    static final String[] CALENDAR_RESOURCES =
-        { ".gif", ".js", "-al.js", "-bg.js", "-cs.js", "-da.js", "-de.js",
-          "-el.js", "-en.js", "-es.js", "-fi.js", "-fr.js", "-he.js", "-it.js",
-          "-ja.js", "-ko.js", "-lt.js", "-lv.js", "-nl.js", "-no.js", "-pl.js",
-          "-pt.js", "-ro.js", "-ru.js", "-sk.js", "-sv.js", "-tr.js", "-zh.js",
-          "-blue.css", "-blue2.css", "-brown.css", "-green.css", "-system.css",
-          "-tas.css", "-win2k-1.css", "-win2k-2.css", "-win2k-cold-1.css",
-          "-win2k-cold-2.css", "-menuarrow.gif", "-menuarrow2.gif" };
-
-    /** Supported locales. */
-    static final String[] SUPPORTTED_LANGUAGES =
-        {"al", "bg", "cs", "da", "de", "el", "en", "es", "fi", "fr", "he", "it",
-         "ja", "ko", "lt", "lv", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sv",
-         "tr", "zh"};
-
     // ----------------------------------------------------- Instance Variables
 
     /** The DateField's date value. */
     protected Date date;
-
-    /** The JavaScript DHTML Calendar pattern. */
-    protected String calendarPattern;
 
     /** The date format. */
     protected SimpleDateFormat dateFormat;
 
     /** The date format pattern value. */
     protected String formatPattern;
-
-    /** The Calendar popup show time display bar flag. */
-    protected boolean showTime;
-
-    /**
-     * The JSCalendar CSS style, default value: <tt>system</tt>. &nbsp;
-     * Available styles include:
-     * <tt>[blue, blue2, brown, green, system, tas, win2k-1, win2k-2,
-     * win2k-cold-1, win2k-cold-2]</tt>
-     */
-    protected String style = "system";
 
     // ----------------------------------------------------------- Constructors
 
@@ -235,16 +168,6 @@ public class DateField extends TextField {
     }
 
     // ------------------------------------------------------ Public Attributes
-
-    /**
-     * Return the JavaScript DHTML Calendar pattern. The DHTML Calendar pattern
-     * is defined when you set the format pattern.
-     *
-     * @return the JavaScript DHTML Calendar pattern
-     */
-    public String getCalendarPattern() {
-        return calendarPattern;
-    }
 
     /**
      * Return the field Date value, or null if value was empty or a parsing
@@ -407,37 +330,6 @@ public class DateField extends TextField {
             throw new IllegalArgumentException("Null pattern parameter");
         }
         formatPattern = pattern;
-        calendarPattern = parseDateFormatPattern(pattern);
-    }
-
-    /**
-     * Return the DateField <tt>calendar.js</tt> and <tt>calendar-{lang}.js</tt>
-     * includes.
-     *
-     * @return the HTML head import statements for the control stylesheet and
-     * JavaScript files
-     */
-    public String getHtmlImports() {
-
-        // CLK-309. Skip imports if dateField is disabled or readonly.
-        if (isReadonly() || isDisabled()) {
-            return null;
-        }
-
-        Context context = getContext();
-
-        Object args[] = {
-                context.getRequest().getContextPath(),
-                getStyle(),
-                getLocale().getLanguage(),
-                getId(),
-                getCalendarPattern(),
-                new Boolean(getShowTime()),
-                new Integer(getFirstDayOfWeek() - 1),
-                ClickUtils.getResourceVersionIndicator(context)
-        };
-
-        return MessageFormat.format(HTML_IMPORTS, args);
     }
 
     /**
@@ -465,48 +357,6 @@ public class DateField extends TextField {
         } else {
             return null;
         }
-    }
-
-    /**
-     * Return true if the DHTML Calendar popup will show the time display bar.
-     *
-     * @return true if the DHTML Calendar popup will show the time display bar
-     */
-    public boolean getShowTime() {
-        return showTime;
-    }
-
-    /**
-     * Set the DHTML Calendar popup show the time display bar flag.
-     *
-     * @param showTime the flag to show the Calendar time display bar
-     */
-    public void setShowTime(boolean showTime) {
-        this.showTime = showTime;
-    }
-
-    /**
-     * Return the JSCalendar CSS style.
-     * <p/>
-     * Available styles include: <tt>[blue, blue2, brown, green, system, tas,
-     * win2k-1, win2k-2, win2k-cold-1, win2k-cold-2]</tt>
-     *
-     * @return the JSCalendar CSS style
-     */
-    public String getStyle() {
-        return style;
-    }
-
-    /**
-     * Set the JSCalendar CSS style.
-     *
-     * @param style the JSCalendar CSS style
-     */
-    public void setStyle(String style) {
-        if (style == null) {
-            throw new IllegalArgumentException("Null style parameter");
-        }
-        this.style = style;
     }
 
     /**
@@ -563,57 +413,6 @@ public class DateField extends TextField {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Deploy the Calendar Javascript and CSS resources to the web app
-     * directory <tt>click/calendar</tt>.
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        // Deploy DateField resources files
-        for (int i = 0; i < CALENDAR_RESOURCES.length; i++) {
-            String calendarFilename = "calendar" + CALENDAR_RESOURCES[i];
-            String calendarResource =
-                "/net/sf/click/extras/control/calendar/" + calendarFilename;
-
-            ClickUtils.deployFile(servletContext,
-                                  calendarResource,
-                                  "click/calendar");
-        }
-    }
-
-    /**
-     * Render the HTML representation of the DateField.
-     *
-     * @see #toString()
-     *
-     * @param buffer the specified buffer to render the control's output to
-     */
-    public void render(HtmlStringBuffer buffer) {
-        super.render(buffer);
-
-        if (!isReadonly() && !isDisabled()) {
-            Context context = getContext();
-            buffer.append("<img align=\"top\" ");
-            buffer.append("style=\"cursor:hand\" src=\"");
-            buffer.append(context.getRequest().getContextPath());
-            buffer.append("/click/calendar/calendar");
-            buffer.append(ClickUtils.getResourceVersionIndicator(context));
-            buffer.append(".gif\"");
-            String id = getId();
-            if (id != null) {
-                buffer.append(" id=\"");
-                buffer.append(getId());
-                buffer.append("-button\" ");
-            }
-
-            String calendarTitle = getMessage("calendar-image-title");
-            buffer.appendAttribute("alt", calendarTitle);
-            buffer.appendAttribute("title", calendarTitle);
-            buffer.elementEnd();
-        }
-    }
-
-    /**
      * Validate the DateField request submission.
      * <p/>
      * A field error message is displayed if a validation error occurs.
@@ -659,27 +458,23 @@ public class DateField extends TextField {
         }
     }
 
-    // ------------------------------------------------------ Protected Methods
-
     /**
-     * Return the first day of the week. For example e.g., Sunday in US,
-     * Monday in France and Australia.
+     * Render the HTML representation of the DateField. Note the button label is
+     * rendered as the HTML "value" attribute.
      *
-     * @return the first day of the week
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
      */
-    protected int getFirstDayOfWeek() {
-        Locale locale = getLocale();
-
-        Calendar calendar = Calendar.getInstance(getLocale());
-
-        int dayOfWeek = calendar.getFirstDayOfWeek();
-
-        if ("AU".equals(locale.getCountry())) {
-            dayOfWeek += 1;
+    public void render(HtmlStringBuffer buffer) {
+        // Set default title
+        if (getTitle() == null) {
+            setTitle(getMessage("date-title", formatPattern));
         }
-
-        return dayOfWeek;
+        super.render(buffer);
     }
+
+    // ------------------------------------------------------ Protected Methods
 
     /**
      * Returns the <tt>Locale</tt> that should be used in this control.
@@ -687,146 +482,6 @@ public class DateField extends TextField {
      * @return the locale that should be used in this control
      */
     protected Locale getLocale() {
-        Locale locale = null;
-
-        locale = getContext().getLocale();
-        String lang = locale.getLanguage();
-        if (Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0) {
-            return locale;
-        }
-
-        locale = Locale.getDefault();
-        lang = locale.getLanguage();
-        if (Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0) {
-            return locale;
-        }
-
-        return Locale.ENGLISH;
+        return getContext().getLocale();
     }
-
-    /**
-     * Return the JavaScript Calendar pattern for the given Java DateFormat
-     * pattern.
-     *
-     * @param pattern the Java DateFormat pattern
-     * @return JavaScript Calendar pattern
-     */
-    protected String parseDateFormatPattern(String pattern) {
-        HtmlStringBuffer jsPattern = new HtmlStringBuffer(20);
-        int tokenStart = -1;
-        int tokenEnd = -1;
-        boolean debug = false;
-
-        for (int i = 0; i < pattern.length(); i++) {
-            char aChar = pattern.charAt(i);
-            if (debug) {
-                System.err.print("[" + i + "," + tokenStart + "," + tokenEnd
-                                 + "]=" + aChar);
-            }
-
-            // If character is in SimpleDateFormat pattern character set
-            if ("GyMwWDdFEaHkKhmsSzZ".indexOf(aChar) == - 1) {
-                if (debug) {
-                    System.err.println(" N");
-                }
-                if (tokenStart > - 1) {
-                    tokenEnd = i;
-                }
-            } else {
-                if (debug) {
-                    System.err.println(" Y");
-                }
-                if (tokenStart == - 1) {
-                    tokenStart = i;
-                }
-            }
-
-            if (tokenStart > -1) {
-
-                if (tokenEnd == -1 && i == pattern.length() - 1) {
-                    tokenEnd = pattern.length();
-                }
-
-                if (tokenEnd > -1) {
-                    String token = pattern.substring(tokenStart, tokenEnd);
-
-                    if ("yyyy".equals(token)) {
-                        jsPattern.append("%Y");
-                    } else if ("yy".equals(token)) {
-                        jsPattern.append("%y");
-                    } else if ("MMMM".equals(token)) {
-                        jsPattern.append("%B");
-                    } else if ("MMM".equals(token)) {
-                        jsPattern.append("%b");
-                    } else if ("MM".equals(token)) {
-                        jsPattern.append("%m");
-                    } else if ("M".equals(token)) {
-                        jsPattern.append("%m");
-                    } else if ("dd".equals(token)) {
-                        jsPattern.append("%d");
-                    } else if ("d".equals(token)) {
-                        jsPattern.append("%e");
-                    } else if ("EEEE".equals(token)) {
-                        jsPattern.append("%A");
-                    } else if ("EEE".equals(token)) {
-                        jsPattern.append("%a");
-                    } else if ("EE".equals(token)) {
-                        jsPattern.append("%a");
-                    } else if ("E".equals(token)) {
-                        jsPattern.append("%a");
-                    } else if ("aaa".equals(token)) {
-                        jsPattern.append("%p");
-                    } else if ("aa".equals(token)) {
-                        jsPattern.append("%p");
-                    } else if ("a".equals(token)) {
-                        jsPattern.append("%p");
-                    } else if ("HH".equals(token)) {
-                        jsPattern.append("%H");
-                        setShowTime(true);
-                    } else if ("H".equals(token)) {
-                        jsPattern.append("%H");
-                        setShowTime(true);
-                    } else if ("hh".equals(token)) {
-                        jsPattern.append("%l");
-                        setShowTime(true);
-                    } else if ("h".equals(token)) {
-                        jsPattern.append("%l");
-                        setShowTime(true);
-                    } else if ("mm".equals(token)) {
-                        jsPattern.append("%M");
-                        setShowTime(true);
-                    } else if ("m".equals(token)) {
-                        jsPattern.append("%M");
-                        setShowTime(true);
-                    } else if ("ss".equals(token)) {
-                        jsPattern.append("%S");
-                        setShowTime(true);
-                    } else if ("s".equals(token)) {
-                        jsPattern.append("%S");
-                        setShowTime(true);
-                    } else {
-                        if (debug) {
-                            System.err.println("Not mapped:" + token);
-                        }
-                    }
-
-                    if (debug) {
-                        System.err.println("token[" + tokenStart + ","
-                                           + tokenEnd + "]='" + token + "'");
-                    }
-                    tokenStart = -1;
-                    tokenEnd = -1;
-                }
-            }
-
-            if (tokenStart == -1 && tokenEnd == -1) {
-                if ("GyMwWDdFEaHkKhmsSzZ".indexOf(aChar) == -1) {
-                    jsPattern.append(aChar);
-                }
-            }
-        }
-
-        return jsPattern.toString();
-    }
-
 }
