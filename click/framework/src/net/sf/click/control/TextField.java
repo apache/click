@@ -290,8 +290,7 @@ public class TextField extends Field {
     }
 
     /**
-     * Render the HTML representation of the Button. Note the button label is
-     * rendered as the HTML "value" attribute.
+     * Render the HTML representation of the TextField.
      *
      * @see #toString()
      *
