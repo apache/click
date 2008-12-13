@@ -73,7 +73,7 @@ public class ColorPicker extends Field {
 
     private static final long serialVersionUID = 1L;
 
-    /** The Calendar resource file names. */
+    /** The ColorPicker resource file names. */
     static final String[] COLOR_PICKER_RESOURCES = {
         "/net/sf/click/extras/control/colorpicker/colorpicker.js",
         "/net/sf/click/extras/control/colorpicker/colorscale.png",
