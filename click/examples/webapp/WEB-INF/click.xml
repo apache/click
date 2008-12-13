@@ -21,7 +21,6 @@
 <click-app charset="UTF-8">
 
   <pages package="net.sf.click.examples.page">
-    <excludes pattern="/tiny_mce/"/>
   </pages>
 
   <mode value="profile"/>
