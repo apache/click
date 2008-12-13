@@ -28,37 +28,6 @@ import net.sf.click.servlet.MockRequest;
  */
 public class DateFieldTest extends TestCase {
 
-    public void testFormatPattern() throws Exception {
-        DateField dateField = new DateField("Delivery date");
-        assertEquals("dd MMM yyyy", dateField.getFormatPattern());
-        assertEquals("%d %b %Y", dateField.getCalendarPattern());
-        
-        dateField = new DateField("Delivery date");
-        dateField.setFormatPattern(" dd MMM yyyy ");
-        assertEquals(" dd MMM yyyy ", dateField.getFormatPattern());
-        assertEquals(" %d %b %Y ", dateField.getCalendarPattern());        
-
-        dateField = new DateField("Delivery date");
-        dateField.setFormatPattern("dd/MMM/yyyy");
-        assertEquals("dd/MMM/yyyy", dateField.getFormatPattern());
-        assertEquals("%d/%b/%Y", dateField.getCalendarPattern()); 
-        
-        dateField = new DateField("Delivery date");
-        dateField.setFormatPattern("dd.MMM.yyyy");
-        assertEquals("dd.MMM.yyyy", dateField.getFormatPattern());
-        assertEquals("%d.%b.%Y", dateField.getCalendarPattern());
-        
-        dateField = new DateField("Delivery date");
-        dateField.setFormatPattern("dd.MM.yy");
-        assertEquals("dd.MM.yy", dateField.getFormatPattern());
-        assertEquals("%d.%m.%y", dateField.getCalendarPattern());
-        
-        dateField = new DateField("Delivery date");
-        dateField.setFormatPattern("d/M/yy");
-        assertEquals("d/M/yy", dateField.getFormatPattern());
-        assertEquals("%e/%m/%y", dateField.getCalendarPattern());
-    }
-    
     public void testNullParameter() {
         MockContext mockContext = MockContext.initContext();
         MockRequest request = mockContext.getMockRequest();
