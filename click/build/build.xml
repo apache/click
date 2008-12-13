@@ -614,8 +614,6 @@ Please ensure you have configured build.properties</echo>
             todir="documentation/docs/click-api/net/sf/click/service/"/>
       <copy file="documentation/images/service-package.png"
             todir="documentation/docs/extras-api/net/sf/click/extras/service/"/>
-      <copy file="extras/src/net/sf/click/extras/control/calendar/calendar.gif"
-            todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
       <copy file="documentation/images/form-table.png"
             todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
       <copy file="documentation/images/menu.png"
