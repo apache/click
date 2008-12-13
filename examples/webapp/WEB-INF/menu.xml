@@ -127,12 +127,6 @@
     <menu label="Column Panel" path="panel/panel-column-demo.htm"/>
   </menu>
 
-  <menu label=" Charts" path="#" imageSrc="/assets/images/icons-16px/column-chart.png">
-    <menu label="Bar Chart" path="graph/bar-chart.htm"/>
-    <menu label="Line Chart" path="graph/line-chart.htm"/>
-    <menu label="Pie Chart" path="graph/pie-chart.htm"/>
-  </menu>
-
   <menu label=" Cayenne" path="#" imageSrc="/assets/images/cayenne.png">
     <menu label="CayenneForm" path="cayenne/cayenne-form-page.htm"/>
     <menu label="TabbedCayenneForm" path="cayenne/tabbed-cayenne-form-page.htm"/>
