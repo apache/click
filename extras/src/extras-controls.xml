@@ -12,9 +12,6 @@
     <control classname="net.sf.click.extras.control.RegexField"/>
     <control classname="net.sf.click.extras.control.TabbedForm"/>
     <control classname="net.sf.click.extras.control.VirtualKeyboard"/>
-    <control classname="net.sf.click.extras.graph.JSBarChart"/>
-    <control classname="net.sf.click.extras.graph.JSLineChart"/>
-    <control classname="net.sf.click.extras.graph.JSPieChart"/>
     <control classname="net.sf.click.extras.panel.ListPanel"/>
     <control classname="net.sf.click.extras.panel.TabbedPanel"/>
     <control classname="net.sf.click.extras.tree.CheckboxTree"/>
