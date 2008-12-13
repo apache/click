@@ -34,8 +34,8 @@
   }
   dt {
     font-weight: 700;
-    margin-top: 1.5em; 
-    margin-bottom: 0.5em; 
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
   }
   .change {
     margin-bottom: 0.75em;
@@ -64,7 +64,7 @@
 
 <h2>Road Map</h2>
 The next scheduled Click release will be Apache Click based on the Click 
-SourceForge version 1.5 code base.
+SourceForge version 1.5.1 code base.
 <p/>
 The feature roadmap for the next major release of Click is being determined.
 
@@ -77,6 +77,10 @@ The feature roadmap for the next major release of Click is being determined.
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
+    </div>
+    <div style="margin-left:-2em;margin-bottom:1em;">
+      Please note that this release is provided outside of the ASF and is not
+      endorsed or approved by the Apache Software Foundation.
     </div>
     <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;"> 
       The following issues were resolved since 1.5:
@@ -110,6 +114,68 @@ The feature roadmap for the next major release of Click is being determined.
       <li class="change">
         Fixed a regression when manually setting the Page path to a JSP.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-141">141</a>].
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="2.0.1"></a><a name="stable-release" href="#"></a><div class="release-header">Version 2.0.1 RC 1 (released from Apache Incubator) - ??? December 2008</div></dt>
+  <dd>
+    <div style="margin-left:-2em;margin-bottom:1em;">
+      <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
+    </div>
+    <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;">
+      This is our first Apache release and is based on Click 1.5.1. This is
+      a release candidate and will be declared stable if no issues arrise.
+      <p/>
+      Please note however that because of licensing issues, certain third-party
+      libraries were removed and are hosted externally.
+      <p/>
+      Note the following changes when upgrading from 1.5 to 2.0.1:
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change">
+        All <tt>net.sf.click.*</tt> packages have been renamed to <tt>org.apache.click.*</tt>.
+        When upgrading you can refactor existing applications using your favorite
+        IDE or alternatively use Ant's <a target="blank" class="external" href="http://ant.apache.org/manual/CoreTasks/replace.html">replace task</a>.
+      </li>
+      <li class="change">
+          JSCalendar which is licensed under LGPL is incompatible with Apache license
+          and had to be removed. DateField was refactored accordingly and does
+          not contain any Calendar specific code.
+          <p/>
+          Because no calendar popup is available to help users pick dates,
+          Click 2.0.1 introduces a new resource key, <tt>date-title</tt>,
+          which is set as the title of DateField. The new property provides
+          users with visual feedback of the <tt>date format</tt> specified on
+          the DateField.
+          <p/>
+          For those building i18n applications remember to add this property
+          to <span style="color:navy;">DateField_&lt;lang&gt;.properties.</span>
+          You can also send us patches for your languages and we will
+          include it in the distribution.
+          <p/>
+          A new project called <a target="blank" class="external" href="http://code.google.com/p/click-calendar/">Click Calendar</a>
+          was created as a port of the old DateField functionality. This project
+          contains a CalendarField which can be used as a replacement for the
+          old DateField. See the project for more details.
+      </li>
+      <li class="change">
+          The Chart controls which is licensed under LGPL is incompatible with
+          Apache license and had to be moved.
+          <p/>
+          A new project called <a target="blank" class="external" href="http://code.google.com/p/click-charts/">Click Charts</a>
+          was created as a port of the Chart controls. This project consists of
+          the BarChart, LineChart and PieChart controls and can be used as drop
+          in replacements. See the project for more details.
+      </li>
+      <li class="change">
+          The RichTextArea, found in Click examples, was based upon the
+          <a target="blank" class="external" href="http://tinymce.moxiecode.com/">TinyMCE</a>
+          project (LGPL) and was replaced by the <a target="blank" class="external" href="">YUI editor</a>
+          (BSD license), which is compatible with the Apache license.
+          <p/>
+          The TinyMCE example was moved to the <a target="blank" class="external" href="http://code.google.com/p/clickclick/">ClickClick extensions</a>
+          project.
       </li>
     </ul>
   </dd>
