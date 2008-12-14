@@ -22,6 +22,9 @@ Click runtime library.
 This product includes the prototype JavaScript library,
 developed by Sam Stephenson (http://prototype.conio.net).
 
+This product includes the script.aculo.us JavaScript library,
+developed by Thomas Fuchs (http://script.aculo.us/).
+
 This product includes the Virtual Keyboard JavaScript library
 (http://www.greywyvern.com/code/js/keyboard.html).
 
