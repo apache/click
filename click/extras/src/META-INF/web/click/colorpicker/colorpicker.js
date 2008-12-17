@@ -67,11 +67,14 @@ function validateColorPicker(id, required, msgs){
         SAT_VAL_SQUARE_LOCATION: '/click/colorpicker/images/sv.png',
         BUTTON_CLOSE_LOCATION: '/click/colorpicker/images/close.png',
         BUTTON_CLEAR_LOCATION: '/click/colorpicker/images/clear.png',
-        colorPickerInputObjId: null,
+        inputObjId: null,
         colorPickerId: null,
-        colorPickerCloseMsg: 'Close',
-        colorPickerClearMsg: 'Clear color',
-        colorPickerResourcePath: '.'
+        closeMsg: 'Close',
+        clearMsg: 'Clear color',
+        resourcePath: '.',
+        previewId:null,
+        imageId:null,
+        isRequired:false
     }
 
     // Here are some boring utility functions. The real code comes later.
@@ -170,8 +173,16 @@ function validateColorPicker(id, required, msgs){
     function trackDrag(node, handler) {
         function fixCoords(x, y) {
             var nodePageCoords = pageCoords(node);
-            x = (x - nodePageCoords.x) + document.documentElement.scrollLeft;
-            y = (y - nodePageCoords.y) + document.documentElement.scrollTop;
+            var de = document.documentElement;
+
+            // Get Y offset independent of browser or compatibility mode
+            var offsetY = self.pageYOffset || ( de && de.scrollTop ) || document.body.scrollTop;
+
+            // Get X offset independent of browser or compatibility mode
+            var offsetX = self.pageXOffset || ( de && de.scrollLeft ) || document.body.scrollLeft;
+
+            x = (x - nodePageCoords.x) + offsetX;
+            y = (y - nodePageCoords.y) + offsetY;
             if (x < 0) x = 0;
             if (y < 0) y = 0;
             if (x > node.offsetWidth - 1) x = node.offsetWidth - 1;
@@ -189,8 +200,7 @@ function validateColorPicker(id, required, msgs){
 
             function moveHandler(ev) {
                 var coords = fixCoords(ev.clientX, ev.clientY);
-                if (coords.x != lastX || coords.y != lastY)
-                {
+                if (coords.x != lastX || coords.y != lastY) {
                     lastX = coords.x;
                     lastY = coords.y;
                     handler(coords.x, coords.y);
@@ -385,59 +395,10 @@ function validateColorPicker(id, required, msgs){
         };
     }
 
-    function makeColorSelector(inputBox) {
-        var path = options.colorPickerResourcePath;
+    function makeColorSelector(inputBox, preview) {
+        var path = options.resourcePath;
 
         // The real code begins here.
-        var huePositionImg = document.createElement('img');
-        huePositionImg.galleryImg = false;
-        huePositionImg.width = 35;
-        huePositionImg.height = 11;
-        huePositionImg.src = path + options.HUE_SLIDER_ARROWS_LOCATION;
-        huePositionImg.style.position = 'absolute';
-
-        var hueSelectorImg = document.createElement('img');
-        hueSelectorImg.galleryImg = false;
-        hueSelectorImg.width = 35;
-        hueSelectorImg.height = 200;
-        hueSelectorImg.src = path + options.HUE_SLIDER_LOCATION;
-        hueSelectorImg.style.display = 'block';
-
-        var satValImg = document.createElement('img');
-        satValImg.galleryImg = false;
-        satValImg.width = 200;
-        satValImg.height = 200;
-        satValImg.src = path + options.SAT_VAL_SQUARE_LOCATION;
-        satValImg.style.display = 'block';
-
-        var crossHairsImg = document.createElement('img');
-        crossHairsImg.galleryImg = false;
-        crossHairsImg.width = 21;
-        crossHairsImg.height = 21;
-        crossHairsImg.src = path + options.CROSSHAIRS_LOCATION;
-        crossHairsImg.style.position = 'absolute';
-
-        var buttonCloseImg = document.createElement('img');
-        buttonCloseImg.galleryImg = false;
-        buttonCloseImg.width = 17;
-        buttonCloseImg.height = 17;
-        buttonCloseImg.src = path + options.BUTTON_CLOSE_LOCATION;
-        buttonCloseImg.title = options.colorPickerCloseMsg;
-        buttonCloseImg.style.position = 'absolute';
-        buttonCloseImg.style.cursor='pointer';
-        buttonCloseImg.className='colorPickerCloseImg';
-        buttonCloseImg.onclick=hideColorPicker;
-
-        var buttonClearImg = document.createElement('img');
-        buttonClearImg.galleryImg = false;
-        buttonClearImg.width = 17;
-        buttonClearImg.height = 17;
-        buttonClearImg.src = path + options.BUTTON_CLEAR_LOCATION;
-        buttonClearImg.title = options.colorPickerClearMsg;
-        buttonClearImg.style.position = 'absolute';
-        buttonClearImg.style.cursor='pointer';
-        buttonClearImg.className='colorPickerClearImg';
-        buttonClearImg.onclick=clearColorAndHideColorPicker;
 
         var rgb, hsv;
 
@@ -448,13 +409,16 @@ function validateColorPicker(id, required, msgs){
             var hueRgb = hsvToRgb(hsv.h, 1, 1);
             var hueHex = rgbToHex(hueRgb.r, hueRgb.g, hueRgb.b);
             inputBox.value=hex;
-            /*
-        // popox idea
-        inputBox.style.background = hex;
-        if(((rgb.r*100+rgb.g*100+rgb.b*100)/3)<65) //change text color to white if the background color is to dark
-            inputBox.style.color="#fff";
-        else inputBox.style.color="#000";
-        */
+            if(preview) {
+                preview.style.background = hex;
+                 /*
+                // popox idea
+                inputBox.style.background = hex;
+                if(((rgb.r*100+rgb.g*100+rgb.b*100)/3)<65) //change text color to white if the background color is to dark
+                    inputBox.style.color="#fff";
+                else inputBox.style.color="#000";
+                */
+            }
 
             satValDiv.style.background = hueHex;
             crossHairs.style.left = ((hsv.v*199)-10).toString() + 'px';
@@ -480,17 +444,40 @@ function validateColorPicker(id, required, msgs){
         colorSelectorDiv.style.height = '227px';
         colorSelectorDiv.style.width = '210px';
 
-        var clearButton = document.createElement('div');
-        clearButton.style.position = 'absolute';
-        clearButton.style.diplay="inline";
-        clearButton.style.height = '17px';
-        clearButton.style.width = '17px';
-        clearButton.style.top="2px";
-        clearButton.style.left="6px";
+        if(!options.isRequired) {
+            var buttonClearImg = document.createElement('img');
+            buttonClearImg.galleryImg = false;
+            buttonClearImg.width = 17;
+            buttonClearImg.height = 17;
+            buttonClearImg.src = path + options.BUTTON_CLEAR_LOCATION;
+            buttonClearImg.title = options.clearMsg;
+            buttonClearImg.style.position = 'absolute';
+            buttonClearImg.style.cursor='pointer';
+            buttonClearImg.className='colorPickerClearImg';
+            buttonClearImg.onclick=clearColorAndHideColorPicker;
 
-        clearButton.appendChild(buttonClearImg);
+            var clearButton = document.createElement('div');
+            clearButton.style.position = 'absolute';
+            clearButton.style.diplay="inline";
+            clearButton.style.height = '17px';
+            clearButton.style.width = '17px';
+            clearButton.style.top="2px";
+            clearButton.style.left="6px";
 
-        colorSelectorDiv.appendChild(clearButton);
+            clearButton.appendChild(buttonClearImg);
+            colorSelectorDiv.appendChild(clearButton);
+        }
+
+        var buttonCloseImg = document.createElement('img');
+        buttonCloseImg.galleryImg = false;
+        buttonCloseImg.width = 17;
+        buttonCloseImg.height = 17;
+        buttonCloseImg.src = path + options.BUTTON_CLOSE_LOCATION;
+        buttonCloseImg.title = options.closeMsg;
+        buttonCloseImg.style.position = 'absolute';
+        buttonCloseImg.style.cursor='pointer';
+        buttonCloseImg.className='colorPickerCloseImg';
+        buttonCloseImg.onclick=hideColorPicker;
 
         var buttonclose = document.createElement('div');
         buttonclose.style.position = 'absolute';
@@ -501,8 +488,14 @@ function validateColorPicker(id, required, msgs){
         buttonclose.style.left="224px";
 
         buttonclose.appendChild(buttonCloseImg);
-
         colorSelectorDiv.appendChild(buttonclose);
+
+        var satValImg = document.createElement('img');
+        satValImg.galleryImg = false;
+        satValImg.width = 200;
+        satValImg.height = 200;
+        satValImg.src = path + options.SAT_VAL_SQUARE_LOCATION;
+        satValImg.style.display = 'block';
 
         var satValDiv = document.createElement('div');
         satValDiv.style.position = 'absolute';
@@ -510,10 +503,20 @@ function validateColorPicker(id, required, msgs){
         satValDiv.style.top = '28px';
         satValDiv.style.width = '200px';
         satValDiv.style.height = '200px';
+
         var newSatValImg = fixPNG(satValImg);
         satValDiv.appendChild(newSatValImg);
+
+        var crossHairsImg = document.createElement('img');
+        crossHairsImg.galleryImg = false;
+        crossHairsImg.width = 21;
+        crossHairsImg.height = 21;
+        crossHairsImg.src = path + options.CROSSHAIRS_LOCATION;
+        crossHairsImg.style.position = 'absolute';
+
         var crossHairs = crossHairsImg.cloneNode(false);
         satValDiv.appendChild(crossHairs);
+
         function satValDragged(x, y) {
             hsv.s = 1-(y/199);
             hsv.v = (x/199);
@@ -523,6 +526,20 @@ function validateColorPicker(id, required, msgs){
 
         colorSelectorDiv.appendChild(satValDiv);
 
+        var hueSelectorImg = document.createElement('img');
+        hueSelectorImg.galleryImg = false;
+        hueSelectorImg.width = 35;
+        hueSelectorImg.height = 200;
+        hueSelectorImg.src = path + options.HUE_SLIDER_LOCATION;
+        hueSelectorImg.style.display = 'block';
+
+        var huePositionImg = document.createElement('img');
+        huePositionImg.galleryImg = false;
+        huePositionImg.width = 35;
+        huePositionImg.height = 11;
+        huePositionImg.src = path + options.HUE_SLIDER_ARROWS_LOCATION;
+        huePositionImg.style.position = 'absolute';
+
         var hueDiv = document.createElement('div');
         hueDiv.style.position = 'absolute';
         hueDiv.style.diplay="inline";
@@ -530,6 +547,7 @@ function validateColorPicker(id, required, msgs){
         hueDiv.style.top = '28px';
         hueDiv.style.width = '35px';
         hueDiv.style.height = '200px';
+
         var huePos = fixPNG(huePositionImg);
         hueDiv.appendChild(hueSelectorImg.cloneNode(false));
         hueDiv.appendChild(huePos);
@@ -556,17 +574,17 @@ function validateColorPicker(id, required, msgs){
         return colorSelectorDiv;
     }
 
-    function colorPickerGetTopPos(inputObj) {
-        var returnValue = inputObj.offsetTop-inputObj.offsetHeight;
-        while((inputObj = inputObj.offsetParent) != null) {
-            returnValue += inputObj.offsetTop;
+    function getTopPos(elem) {
+        var returnValue = elem.offsetTop-elem.offsetHeight;
+        while((elem = elem.offsetParent) != null) {
+            returnValue += elem.offsetTop;
         }
         return returnValue;
     }
 
-    function colorPickerGetLeftPos(inputObj) {
-        var returnValue = inputObj.offsetLeft+inputObj.offsetWidth;
-        while((inputObj = inputObj.offsetParent) != null)returnValue += inputObj.offsetLeft;
+    function getLeftPos(elem) {
+        var returnValue = elem.offsetLeft;
+        while((elem = elem.offsetParent) != null)returnValue += elem.offsetLeft;
         return returnValue;
     }
 
@@ -589,20 +607,22 @@ function validateColorPicker(id, required, msgs){
      * Public API.
      */
     Click.colorPicker.showColorPicker = function(opts) {
-        var inputObj = document.getElementById(opts.colorPickerInputObjId);
+        var inputObj = document.getElementById(opts.inputObjId);
         if (inputObj) {
             hideColorPicker();
             options = overrideDefaults(Click.colorPicker.defaults, opts);
-            options.colorPickerId=options.colorPickerInputObjId+'_cp';
+            options.colorPickerId=options.inputObjId+'_cp';
             var color_picker_div = document.createElement('DIV');
-            color_picker_div.style.left = colorPickerGetLeftPos(inputObj) + 'px';
+            var img = document.getElementById(options.imageId);
+            var preview = document.getElementById(options.previewId);
+            color_picker_div.style.left = getLeftPos(img) + 'px';
             color_picker_div.style.width='250px';
             color_picker_div.style.heigth='190px';
-            color_picker_div.style.top = colorPickerGetTopPos(inputObj) + inputObj.offsetHeight + 2 + 'px';
+            color_picker_div.style.top = getTopPos(img) + img.offsetHeight + 1 + 'px';
             color_picker_div.id = options.colorPickerId;
             color_picker_div.className = 'colorPicker';
             color_picker_div.style.display='block';
-            color_picker_div.appendChild(makeColorSelector(inputObj));
+            color_picker_div.appendChild(makeColorSelector(inputObj, preview));
             document.body.appendChild(color_picker_div);
             is_div_init=true;
         } else {
@@ -611,9 +631,13 @@ function validateColorPicker(id, required, msgs){
     }
     function clearColorAndHideColorPicker() {
         if (options.colorPickerId && is_div_init) {
-            var colorInputObj = document.getElementById(options.colorPickerInputObjId);
+            var colorInputObj = document.getElementById(options.inputObjId);
+            var preview = document.getElementById(options.previewId);
             if(colorInputObj) {
                 colorInputObj.value='';
+                if (preview) {
+                    preview.style.backgroundColor = '';
+                }
             }
             hideColorPicker();
         }

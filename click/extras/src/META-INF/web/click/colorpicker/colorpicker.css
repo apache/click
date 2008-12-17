@@ -29,3 +29,10 @@
 .colorPickerClearImg:hover, .colorPickerCloseImg:hover {
     border: 1px solid #CCCCCC;
 }
+.colorPickerPreview {
+    border: 1px solid #CCCCCC;
+    width: 18px;
+    height: 18px;
+    float: left;
+    clear:left;
+}
