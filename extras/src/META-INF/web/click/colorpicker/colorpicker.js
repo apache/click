@@ -20,7 +20,21 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /**
- * Click specific extensions.
+ * This script provides a ColorPicker popup which allows users to pick
+ * colors from a color palette.
+ *
+ * Usage:
+ *      Click.colorPicker.showColorPicker(
+ *         { inputObjId:'myField', imageId: 'myField_img', resourcePath:'/myapp' }
+ *      )
+ *
+ * @option String inputObjId Specifies the HTML id of the ColorPicker input
+ *   textfield where the color value will be stored.
+ * @option String imageId Specifies the HTML id of the ColorPicker img tag.
+ * @option String resourcePath Specifies the URL path to the ColorPicker image
+ *   resources.
+ *
+ * More options are available below. See Click.colorPicker.defaults.
  */
 
 // Make sure that the Click namespace exists
