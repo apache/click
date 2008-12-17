@@ -35,26 +35,25 @@ import net.sf.click.util.HtmlStringBuffer;
  * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Color Field</td>
- * <td><input type='text' size='7' title='ColorPicker Control' value='#ee0000'/>
- * <div style="background-color:'#ee0000">
- * <img align='middle' style='cursor:pointer' src='colorpicker/arrowdown.gif' title='choose color'/>
- * </div>
+ * <td><input type='text' size='7' title='ColorPicker Control' value='#EE0000'/>
+ * <img align='top' style='cursor:pointer' src='colorpicker/color-picker.png' title='choose color'/>
  * </td>
  * </tr>
  * </table>
  *
- * The ColorPicker control provides a popup DHTML color picker
- * &lt;div&gt; and a text input where users can enter the color in hex format. The text input
- * field can be turned off by setting {@link #setShowTextField(boolean)} to false (default is true).
+ * The ColorPicker control provides a popup DHTML color picker and a text input
+ * where users can enter the color in hex format. The text input field can be
+ * turned off by setting {@link #setShowTextField(boolean)} to false
+ * (default is true).
  * <p/>
  * The ColorPicker control will validate wheter the entered color is present (if required) and that it
- * is a valid hex color either in 3-digit presentation (ie #eee) or 6-digit presentation (ie #eeeee).
+ * is a valid hex color either in 3-digit presentation (ie #EEE) or 6-digit presentation (ie #EEEEEE).
  * If the color is not required the color-picker popup will show a button for 'no-color' on the top-left.
  * <p/>
- * The color picker popup is based on JS script code from liferay.com which in turn is based on code
- * from http://typetester.maratz.com/. To enable the color
- * popup, reference the <span class="blue">$cssImports</span> and <span class="blue">$jsImports</span>
- * in the page template. For example:
+ * The color picker popup is based on JS script code from
+ * <a target="_blank" href="http://www.dhtmlgoodies.com/index.html?whichScript=submitted-color-picker">www.dhtmlgoodies.com</a>.
+ * To enable the color popup, reference the <span class="blue">$cssImports</span>
+ * and <span class="blue">$jsImports</span> in the page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
@@ -281,11 +280,10 @@ public class ColorPicker extends Field {
 
         if (isColor(getValue())) {
             values.put("back_color", getValue());
-            values.put("value", getValue());
         } else {
-            values.put("back_color", "#ffffff");
-            values.put("value", "");
+            values.put("back_color", "#FFFFFF");
         }
+        values.put("value", getValue());
 
         HtmlStringBuffer textFieldAttributes = new HtmlStringBuffer(96);
         if (getShowTextField()) {
