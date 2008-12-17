@@ -9,19 +9,19 @@
   </licenses>
 
   <organization>
-    <name>Click Framework Project</name>
-    <url>http://click.sourceforge.net</url>
+    <name>Apache Click</name>
+    <url>http://incubator.apache.org/click</url>
   </organization>
 
   <scm>
-    <connection>scm:svn:https://click.svn.sourceforge.net/svnroot</connection>
-    <developerConnection>scm:svn:https://username@click.svn.sourceforge.net/svnroot</developerConnection>
-    <url>http://click.svn.sourceforge.net/viewvc/click</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/click/trunk/click/</connection>
+    <developerConnection>scm:svn:https://username@svn.apache.org/repos/asf/incubator/click/trunk/click/</developerConnection>
+    <url>http://svn.apache.org/viewvc/incubator/click/trunk/click/</url>
   </scm>
 
   <inceptionYear>2003</inceptionYear>
-  <url>http://sourceforge.net/projects/click</url>
-  <description>Click is a J2EE web application framework designed for commercial developers.</description>
+  <url>http://incubator.apache.org/click</url>
+  <description>Apache Click is a J2EE web application framework designed for commercial developers.</description>
 
   <issueManagement>
     <system>jira</system>
