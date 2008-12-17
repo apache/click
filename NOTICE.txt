@@ -28,6 +28,9 @@ developed by Thomas Fuchs (http://script.aculo.us/).
 This product includes the Virtual Keyboard JavaScript library
 (http://www.greywyvern.com/code/js/keyboard.html).
 
+This product includes the ColorPicker library developer by Sebo Zoltan
+(http://www.dhtmlgoodies.com/index.html?whichScript=submitted-color-picker).
+
 This product includes the rico JavaScript library,
 developed by Sabre Airline Solutions (http://openrico.org).
 Please note this library is NOT included in the
