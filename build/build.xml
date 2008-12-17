@@ -630,6 +630,8 @@ Please ensure you have configured build.properties</echo>
             todir="documentation/docs/click-api/net/sf/click/control"/>
       <copy file="documentation/images/inline-paginator.png"
             todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+      <copy file="extras/src/META-INF/web/click/colorpicker/images/color-picker.png"
+            todir="documentation/docs/extras-api/net/sf/click/extras/control/colorpicker"/>
       <copy file="documentation/images/tree.png"
             todir="documentation/docs/extras-api/net/sf/click/extras/tree"/>
       <copy file="documentation/images/checkbox-tree.png"
