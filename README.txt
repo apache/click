@@ -8,7 +8,7 @@ licensed using the Apache license.
 
 Comprehensive HTML documentation is available online at:
 
-    http://click.sourceforge.net
+    http://incubator.apache.org/click
 
 This documentation is also available in the directory:
 
@@ -20,7 +20,9 @@ Distributed Click JAR files include:
 
    dist/click-nodeps-xx.jar - Click runtime JAR with no dependencies
 
-   dist/click-extras-xx.jar - Click Extras JAR	
+   dist/click-extras-xx.jar - Click Extras JAR
+
+   dist/click-mock-xx.jar   - Click Mock Utilities JAR
 
 Example pre-built web appliation include:
 

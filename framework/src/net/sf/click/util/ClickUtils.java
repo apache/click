@@ -636,7 +636,7 @@ public class ClickUtils {
      * Invalidate the specified cookie and delete it from the response object.
      * <p/>
      * This method was derived from Atlassian <tt>CookieUtils</tt> method of
-     * the same name, release under the Apache License.
+     * the same name, release under the BSD License.
      *
      * @param request the servlet request
      * @param response the servlet response
@@ -665,7 +665,7 @@ public class ClickUtils {
      * {@link #invalidateCookie(HttpServletRequest, HttpServletResponse, String, String)}
      * <p/>
      * This method was derived from Atlassian <tt>CookieUtils</tt> method of
-     * the same name, release under the Apache License.
+     * the same name, release under the BSD License.
      *
      * @see #invalidateCookie(HttpServletRequest, HttpServletResponse, String, String)
      *
@@ -802,7 +802,7 @@ public class ClickUtils {
      * Returns the specified Cookie object, or null if the cookie does not exist.
      * <p/>
      * This method was derived from Atlassian <tt>CookieUtils</tt> method of
-     * the same name, release under the Apache License.
+     * the same name, release under the BSD License.
      *
      * @param request the servlet request
      * @param name the name of the cookie
@@ -835,7 +835,7 @@ public class ClickUtils {
      * The cookie secure flag is set if the request is secure.
      * <p/>
      * This method was derived from Atlassian <tt>CookieUtils</tt> method of
-     * the same name, release under the Apache License.
+     * the same name, release under the BSD License.
      *
      * @param request the servlet request
      * @param response the servlet response
@@ -864,7 +864,7 @@ public class ClickUtils {
      * does not exist, the method returns null.
      * <p/>
      * This method was derived from Atlassian <tt>CookieUtils</tt> method of
-     * the same name, release under the Apache License.
+     * the same name, release under the BSD License.
      *
      * @param request the servlet request
      * @param name the name of the cookie
@@ -1257,7 +1257,7 @@ public class ClickUtils {
      * character offsets, you can easily tweak results.
      * <p/>
      * This method was derived from Atlassian <tt>CookieUtils</tt> method of
-     * the same name, release under the Apache License.
+     * the same name, release under the BSD License.
      *
      * @param username the username
      * @param password the password
@@ -1281,7 +1281,7 @@ public class ClickUtils {
      * character offsets, you can easily tweak results.
      * <p/>
      * This method was derived from Atlassian <tt>CookieUtils</tt> method of
-     * the same name, release under the Apache License.
+     * the same name, release under the BSD License.
      *
      * @param username the username
      * @param password the password
@@ -1319,7 +1319,7 @@ public class ClickUtils {
      * Decodes a cookie string containing a username and password.
      * <p/>
      * This method was derived from Atlassian <tt>CookieUtils</tt> method of
-     * the same name, release under the Apache License.
+     * the same name, release under the BSD License.
      *
      * @param cookieVal the encoded cookie username and password value
      * @param xorMask the XOR mask to decrypt the value with, must be same as
@@ -1338,7 +1338,7 @@ public class ClickUtils {
      * Decodes a cookie string containing a username and password.
      * <p/>
      * This method was derived from Atlassian <tt>CookieUtils</tt> method of
-     * the same name, release under the Apache License.
+     * the same name, release under the BSD License.
      *
      * @param cookieVal the encoded cookie username and password value
      * @param encoding  a String used to customize cookie encoding (only the first 3 characters are used)
