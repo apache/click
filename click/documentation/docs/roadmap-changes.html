@@ -143,11 +143,31 @@ The feature roadmap for the next major release of Click is being determined.
           and had to be removed. DateField was refactored accordingly and does
           not contain any Calendar specific code.
           <p/>
-          Because no calendar popup is available to help users pick dates,
-          Click 2.0.1 introduces a new resource key, <tt>date-title</tt>,
-          which is set as the title of DateField. The new property provides
-          users with visual feedback of the <tt>date format</tt> specified on
-          the DateField.
+          The following methods were removed:
+          <ul>
+              <li>
+                  <tt>public String getCalendarPattern()</tt>
+              </li>
+              <li>
+                  <tt>public boolean getShowTime()</tt> and <tt>public void setShowTime(boolean showTime)</tt>
+              </li>
+              <li>
+                  <tt>public String getStyle()</tt> and <tt>public void setStyle(String style)</tt>
+              </li>
+              <li>
+                  <tt>protected int getFirstDayOfWeek()</tt>
+              </li>
+              <li>
+                  <tt>protected String parseDateFormatPattern(String pattern)</tt>
+              </li>
+          </ul>
+          <p/>
+          Since the calendar popup is not available to help users pick dates, it
+          becomes difficult for users to know the format of the Date.
+          To remedy this situation, Click 2.0.1 introduces a new resource key,
+          <tt>date-title</tt>, which is set as the title of DateField. The new
+          property provides users with visual feedback of the <tt>date format</tt>
+          specified on the DateField.
           <p/>
           For those building i18n applications remember to add this property
           to <span style="color:navy;">DateField_&lt;lang&gt;.properties.</span>
