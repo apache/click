@@ -40,17 +40,17 @@ public class NestedCayenneForm extends CayenneForm {
 
     /**
      * Construct a form for the specified name and DataObject class.
-     * 
+     *
      * @param name the form name
      * @param dataObjectClass the DataObject class
      */
     public NestedCayenneForm(String name, Class dataObjectClass) {
         super(name, dataObjectClass);
     }
-    
+
     /**
      * Construct a form for the specified DataObject class.
-     * 
+     *
      * @param dataObjectClass the DataObject class
      */
     public NestedCayenneForm(Class dataObjectClass) {
@@ -65,11 +65,11 @@ public class NestedCayenneForm extends CayenneForm {
 
     /**
      * Return the DataContext for this Form using the following heuristics:
-     * 
+     *
      * #1. return the dataObject DataContext if set
      * #2. return the {@link #nestedDataContext} instance if set
      * #3. return a nested DataContext of the thread local DataContext
-     * 
+     *
      * @return a DataContext based on heuristics
      */
     public DataContext getDataContext() {

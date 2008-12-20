@@ -53,7 +53,7 @@ import net.sf.click.extras.control.NumberField;
  * it is possible to use the FormTable constructor which accepts a Form so that
  * FormTable can be added to this "external" Form.
  *
- * 
+ *
  * @author Malcolm Edgar
  * @author Bob Schellink
  */
@@ -64,7 +64,7 @@ public class EditFormTablePage extends BorderPage {
     private FormTable table;
 
     private ActionLink deleteCustomer = new ActionLink("delete", "Delete", this, "onDeleteClick");
-    
+
     private Form customerForm = new Form("customerForm");
 
     private Form form = new Form("form") {
@@ -246,7 +246,7 @@ public class EditFormTablePage extends BorderPage {
         }
         return true;
     }
-    
+
     private void refreshTableCustomers() {
         List allCustomers = getCustomerService().getCustomersSortedBy(Customer.DATE_JOINED_PROPERTY, false);
         List customers = allCustomers.subList(0, NUM_ROWS);

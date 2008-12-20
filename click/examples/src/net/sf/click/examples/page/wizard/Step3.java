@@ -33,7 +33,7 @@ public class Step3 extends Step {
 
     /**
      * Construct Step3 with the specified name, label, description and page.
-     * 
+     *
      * @param name the step name
      * @param label the step label
      * @param description the step description
@@ -47,7 +47,7 @@ public class Step3 extends Step {
      * The onFinish action of Step3 checks if the form is valid, saves the
      * client and address in the database, sets up a success message, and
      * sets the page back to stateless.
-     * 
+     *
      * @return true if page processing should continue or not
      */
     public boolean onFinish() {
@@ -63,7 +63,7 @@ public class Step3 extends Step {
             // Set page state to stateless which removes the page from
             // the session
             getWizardPage().setStateful(false);
-            
+
             // Redirect to wizard page to start another process
             getWizardPage().setRedirect(WizardPage.class);
         }
@@ -73,7 +73,7 @@ public class Step3 extends Step {
     /**
      * The onPrevious action of Step3 moves to the previous step in the process
      * and clears and form errors.
-     * 
+     *
      * @return true if page processing should continue or not
      */
     public boolean onPrevious() {
@@ -81,7 +81,7 @@ public class Step3 extends Step {
         getForm().clearValues();
         return false;
     }
-    
+
     /**
      * Override onRender phase to add the client instance to the Template
      * model for rendering.

@@ -35,7 +35,7 @@ public class WizardPage extends BorderPage {
 
     /** List of all steps. */
     private List steps = new ArrayList();
-    
+
     /**
      * Default constructor.
      */
@@ -46,7 +46,7 @@ public class WizardPage extends BorderPage {
 
         // Set first step as current
         setCurrentStep((Step) steps.get(0));
-        
+
         // Initialize all the steps
         Iterator it = steps.iterator();
         while(it.hasNext()) {
@@ -57,7 +57,7 @@ public class WizardPage extends BorderPage {
 
     /**
      * Return the current step.
-     * 
+     *
      * @return the current step
      */
     public Step getCurrentStep() {
@@ -66,7 +66,7 @@ public class WizardPage extends BorderPage {
 
     /**
      * Sets the current Step to the specified Step.
-     * 
+     *
      * @param step the new step to set
      */
     public void setCurrentStep(Step step) {
@@ -81,7 +81,7 @@ public class WizardPage extends BorderPage {
 
     /**
      * Return true if there is another step before the specified step.
-     * 
+     *
      * @param step the step to check against
      * @return true if there is another step before the specified step
      */
@@ -101,7 +101,7 @@ public class WizardPage extends BorderPage {
 
     /**
      * Return true if the specified step is the last step in the process.
-     * 
+     *
      * @param step the step to check against
      * @return true if the specified step is the last step in the process
      */
@@ -136,7 +136,7 @@ public class WizardPage extends BorderPage {
 
     /**
      * Return the page stylesheet: wizard.css.
-     * 
+     *
      * @return the page stylesheet
      */
     public String getHtmlImports() {

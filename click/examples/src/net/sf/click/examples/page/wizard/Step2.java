@@ -42,7 +42,7 @@ public class Step2 extends Step {
 
     /**
      * Construct Step2 with the specified name, label, description and page.
-     * 
+     *
      * @param name the step name
      * @param label the step label
      * @param description the step description
@@ -53,7 +53,7 @@ public class Step2 extends Step {
 
         // PageLink to page where post codes can be looked up
         final PageLink postCodeLookup = new PageLink("postCodePage", "Lookup Post Code", SelectPostCode.class);
-        
+
         // We want to right align the postCodeLookup link, however fields must
         // be left aligned. In order to do this we wrap postCodeLookupPage inside
         // a div (block level element) and set its contents to be right aligned.
@@ -66,7 +66,7 @@ public class Step2 extends Step {
         getForm().add(new TextField("address.line1", "Line One"));
         getForm().add(new TextField("address.line2", "Line Two"));
         getForm().add(new TextField("address.suburb", "Suburb"));
-        
+
         stateSelect = new QuerySelect("address.state", "State", true);
 
         stateSelect.setQueryValueLabel("states", "value", "label");
@@ -79,7 +79,7 @@ public class Step2 extends Step {
 
     /**
      * Step2 links to a lookup table for populating the post code and state values.
-     * 
+     *
      * The onInit phase is overridden to check if the post code and state values
      * are passed in from the lookup table.
      */
@@ -102,7 +102,7 @@ public class Step2 extends Step {
     /**
      * The onNext action of Step2 checks if the form is valid, moves to the
      * next step in the process and passes the client to the next step.
-     * 
+     *
      * @return true if page processing should continue or not
      */
     public boolean onNext() {
@@ -117,7 +117,7 @@ public class Step2 extends Step {
     /**
      * The onPrevious action of Step2 moves to the previous step in the process
      * and clears and form errors.
-     * 
+     *
      * @return true if page processing should continue or not
      */
     public boolean onPrevious() {
