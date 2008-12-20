@@ -93,7 +93,7 @@ public class RichTextArea extends TextArea {
     /**
      * Set the textarea YUI editor configuration.
      *
-     * @param the textarea YUI editor configuration
+     * @param config the textarea YUI editor configuration
      */
     public void setConfig(String config) {
         this.config = config;
