@@ -82,7 +82,7 @@
               files="Form.java"/>
 
     <suppress checks="LineLength"
-              files="Tree.java"/>#
+              files="Tree.java"/>
 
     <suppress checks="LineLength"
               files="RegexField.java"
