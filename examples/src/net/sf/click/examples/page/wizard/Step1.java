@@ -34,7 +34,7 @@ public class Step1 extends Step {
 
     /**
      * Construct Step1 with the specified name, label, description and page.
-     * 
+     *
      * @param name the step name
      * @param label the step label
      * @param description the step description
@@ -57,7 +57,7 @@ public class Step1 extends Step {
      * The onNext action of Step1 sets the Page to stateful, checks if the form
      * is valid, moves to the next step in the process and passes the client to
      * the next step.
-     * 
+     *
      * @return true if page processing should continue or not
      */
     public boolean onNext() {

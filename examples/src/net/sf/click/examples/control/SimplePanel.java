@@ -88,7 +88,7 @@ public class SimplePanel extends Panel {
             }
         }
     }
-    
+
     /**
      * Return true if the panel template is available, false otherwise.
      *
@@ -96,7 +96,7 @@ public class SimplePanel extends Panel {
      */
     protected boolean hasTemplate() {
         boolean hasTemplate = false;
-        
+
         if (getTemplate() != null) {
             hasTemplate = true;
 
@@ -106,7 +106,7 @@ public class SimplePanel extends Panel {
 
             try {
                 Context context = getContext();
-                
+
                 // First check on the servlet context path
                 hasTemplate = context.getServletContext().getResource(templatePath) != null;
                 if (!hasTemplate) {
@@ -124,7 +124,7 @@ public class SimplePanel extends Panel {
 
     /**
      * Render the panel as a normal Container.
-     * 
+     *
      * @param buffer to buffer to render output to
      */
     protected void renderContainer(HtmlStringBuffer buffer) {

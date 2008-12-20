@@ -31,7 +31,7 @@ import org.apache.commons.lang.ClassUtils;
 
 /**
  * Provides common functionality for each step in the wizard.
- * 
+ *
  * @author Bob Schellink
  */
 public abstract class Step extends SimplePanel {
@@ -56,7 +56,7 @@ public abstract class Step extends SimplePanel {
 
     /** Reference to the finish button. */
     private Button finish;
-    
+
     /** Reference to the cancel button. */
     private Button cancel;
 
@@ -81,7 +81,7 @@ public abstract class Step extends SimplePanel {
 
     /**
      * Return the Step form instance.
-     * 
+     *
      * @return the Step form instance
      */
     public CayenneForm getForm() {
@@ -90,7 +90,7 @@ public abstract class Step extends SimplePanel {
 
     /**
      * Set the form instance.
-     * 
+     *
      * @param form the form for this Step
      */
     public void setForm(CayenneForm form) {
@@ -99,7 +99,7 @@ public abstract class Step extends SimplePanel {
 
     /**
      * Return the Step WizardPage instance.
-     * 
+     *
      * @return the WizardPage instance
      */
     public WizardPage getWizardPage() {
@@ -108,7 +108,7 @@ public abstract class Step extends SimplePanel {
 
     /**
      * Set the WizardPage instance.
-     * 
+     *
      * @param wizardPage the WizardPage instance for this Step
      */
     public void setWizardPage(WizardPage wizardPage) {
@@ -117,7 +117,7 @@ public abstract class Step extends SimplePanel {
 
     /**
      * Return the Step description.
-     * 
+     *
      * @return the Step description
      */
     public String getDescription() {
@@ -126,7 +126,7 @@ public abstract class Step extends SimplePanel {
 
     /**
      * Set the Step visual description.
-     * 
+     *
      * @param description the visual description
      */
     public void setDescription(String description) {
@@ -135,7 +135,7 @@ public abstract class Step extends SimplePanel {
 
     /**
      * Return the Client instance.
-     * 
+     *
      * @return the Client instance
      */
     public Client getClient() {
@@ -146,7 +146,7 @@ public abstract class Step extends SimplePanel {
 
     /**
      * Set the Client instance.
-     * 
+     *
      * @param client the client for this Step
      */
     public void setClient(Client client) {
@@ -155,7 +155,7 @@ public abstract class Step extends SimplePanel {
 
     /**
      * Return the button representing the next action.
-     * 
+     *
      * @return the button representing the next action
      */
     public Button getNextButton() {
@@ -164,7 +164,7 @@ public abstract class Step extends SimplePanel {
 
     /**
      * Return the button representing the previous action.
-     * 
+     *
      * @return the button representing the previous action
      */
     public Button getPreviousButton() {
@@ -173,7 +173,7 @@ public abstract class Step extends SimplePanel {
 
     /**
      * Return the button representing the next action.
-     * 
+     *
      * @return the button representing the next action
      */
     public Button getFinishButton() {
@@ -182,7 +182,7 @@ public abstract class Step extends SimplePanel {
 
     /**
      * Return the button representing the cancel action.
-     * 
+     *
      * @return the button representing the cancel action
      */
     public Button getCancelButton() {
@@ -194,7 +194,7 @@ public abstract class Step extends SimplePanel {
     /**
      * The onNext action. Subclasses can override this method to implement
      * custom logic.
-     * 
+     *
      * @return true if Page processing should continue, false otherwise
      */
     public boolean onNext() {
@@ -204,7 +204,7 @@ public abstract class Step extends SimplePanel {
     /**
      * The onPrevious action. Subclasses can override this method to implement
      * custom logic.
-     * 
+     *
      * @return true if Page processing should continue, false otherwise
      */
     public boolean onPrevious() {
@@ -214,7 +214,7 @@ public abstract class Step extends SimplePanel {
     /**
      * The onFinish action. Subclasses can override this method to implement
      * custom logic.
-     * 
+     *
      * @return true if Page processing should continue, false otherwise
      */
     public boolean onFinish() {
@@ -224,7 +224,7 @@ public abstract class Step extends SimplePanel {
     /**
      * The onCancel action. Subclasses can override this method to implement
      * custom logic.
-     * 
+     *
      * @return true if Page processing should continue, false otherwise
      */
     public boolean onCancel() {

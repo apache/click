@@ -62,7 +62,7 @@ public class SelectPostCode extends BorderPage {
                 AbstractLink link, Context context, Object row, Object value) {
                 // Remove the default parameter name set for the value
                 String idPropertyValue = (String) link.getParameters().remove(idProperty);
-                
+
                 // Add extra parameters for each row to the rendered action link
                 link.setParameter("address.postCode", idPropertyValue);
                 link.setParameter("address.state", ((PostCode) row).getState());

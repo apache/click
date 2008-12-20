@@ -88,14 +88,14 @@ public class PageLinkTreePage extends PlainTreePage {
         TreeNode general = new TreeNode("Intro", "1", root);
 
         boolean supportsChildNodes = false;
-        
+
         new TreeNode(HelloWorld.class, "1.1", general, supportsChildNodes);
         new TreeNode(ControlListenerPage.class, "1.2", general, supportsChildNodes);
 
         TreeNode forms = new TreeNode("Forms", "2", root);
         new TreeNode(SimpleForm.class, "2.1", forms, supportsChildNodes);
         new TreeNode(AdvancedForm.class, "2.2", forms, supportsChildNodes);
-        
+
         TreeNode tables = new TreeNode("Tables", "3", root);
         new TreeNode(SimpleTable.class, "3.1", tables, supportsChildNodes);
         new TreeNode(AdvancedTable.class, "3.2", tables, supportsChildNodes);
@@ -105,7 +105,7 @@ public class PageLinkTreePage extends PlainTreePage {
 
     /**
      * Return the string under which the nodes are stored in the session.
-     * 
+     *
      * @return the string under which the nodes are stored in the session
      */
     protected String getSessionKey() {
