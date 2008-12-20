@@ -29,7 +29,6 @@ import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.ClassUtils;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a default implementation of the {@link Container} interface,
