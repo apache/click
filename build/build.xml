@@ -53,16 +53,16 @@
     -->
 	
    <taskdef name="linetrim"
-   	        classname="dev.LineTrimTask" 
-   	        classpath="lib/dev.jar"/>
+   	        classname="org.apache.click.tools.devtasks.LineTrimTask"
+   	        classpath="lib/click-dev-tasks-1.0.jar"/>
 							
    <taskdef name="replacetabs" 
-   	        classname="dev.ReplaceTabsTask" 
-   	        classpath="lib/dev.jar"/>
+   	        classname="org.apache.click.tools.devtasks.ReplaceTabsTask"
+   	        classpath="lib/click-dev-tasks-1.0.jar"/>
             
    <taskdef name="package" 
-   	        classname="dev.PackageTask" 
-   	        classpath="lib/dev.jar"/>
+   	        classname="org.apache.click.tools.devtasks.PackageTask"
+   	        classpath="lib/click-dev-tasks-1.0.jar"/>
             
    <taskdef resource="checkstyletask.properties"
             classpath="lib/${jar.checkstyle}"/>
@@ -268,8 +268,8 @@
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
- 	  <copy file="LICENSE.txt" todir="extras/classes/META-INF"/>
- 	  <copy file="NOTICE.txt" todir="extras/classes/META-INF"/>
+ 	    <copy file="LICENSE.txt" todir="extras/classes/META-INF"/>
+ 	    <copy file="NOTICE.txt" todir="extras/classes/META-INF"/>
       <javac srcdir="extras/src"
              destdir="extras/classes"
              debug="true"
@@ -451,6 +451,12 @@
 
 
    <target name="checkstyle" description="run checkstyle report on Java soruce">
+      <available file="lib/${jar.checkstyle}" property="isJarAvail"/>
+      <fail message="The Checkstyle JAR is not on the classpath. To resolve this download the JAR dependencies with 'ant get-deps'.">
+         <condition>
+  	        <or><isfalse value="${isJarAvail}"/></or>
+  	     </condition>
+      </fail>
       <checkstyle config="build/checkstyle-checks.xml">
          <fileset dir="framework/src/net" includes="**/*.java"/>
          <fileset dir="extras/src" includes="**/*.java"/>
@@ -520,6 +526,10 @@
  	       usetimestamp="true"/>
       <get src="${repository}/maven2/org/freemarker/freemarker/2.3.12/${jar.freemarker}" 
  	       dest="lib/${jar.freemarker}"
+ 	       verbose="true"
+ 	       usetimestamp="true"/>
+      <get src="http://clickclick.googlecode.com/svn/trunk/checkstyle/${jar.checkstyle}"
+ 	       dest="lib/${jar.checkstyle}"
  	       verbose="true"
  	       usetimestamp="true"/> 
       <ant antfile="build.xml" 
