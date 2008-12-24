@@ -19,7 +19,6 @@
 package net.sf.click.examples.control;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.click.control.TextArea;
@@ -120,11 +119,12 @@ public class RichTextArea extends TextArea {
         String[] args = { getContext().getRequest().getContextPath() };
         buffer.append(MessageFormat.format(HTML_IMPORTS, args));
 
-        Map model = new HashMap();
-        model.put("id", getId());
-        model.put("config", getConfig());
-        renderTemplate(buffer, model);
-
+        args = new String[] { getId(), getConfig() };
+        String javascript = "<script type=\"text/javascript\">(function() '{' " +
+            "var myConfig = '{' {1} '}'; var myEditor = new YAHOO.widget.SimpleEditor(''{0}'', myConfig);" +
+            "if(myConfig.titlebar) '{' myEditor._defaultToolbar.titlebar=myConfig.titlebar; '}'" +
+            "myEditor.render(); '}')();</script>\n";
+        buffer.append(MessageFormat.format(javascript, args));
         return buffer.toString();
     }
 
