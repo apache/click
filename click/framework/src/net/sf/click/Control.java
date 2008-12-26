@@ -67,7 +67,8 @@ import net.sf.click.util.HtmlStringBuffer;
  * as the {@link net.sf.click.util.PageImports} will parse multiple import lines
  * on the <tt>'\n'</tt> char and ensure that imports are not included twice.
  *
- * <a name="on-deploy"><h4>Deploying Resources</h4></a>
+ * <a name="on-deploy"></a>
+ * <h4>Deploying Resources</h4>
  *
  * The Click framework uses the Velocity Tools <tt>WebappLoader</tt> for loading templates.
  * This avoids issues associate with using the Velocity <tt>ClasspathResourceLoader</tt> and
