@@ -131,6 +131,10 @@ a:visited { color: blue; }
 
 /*  form.css */
 
+a.external {
+  background: url(../../images/external.png) center right no-repeat;
+  padding-right: 14px;
+}
 a.error {
 	color: red;
 }
