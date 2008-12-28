@@ -156,12 +156,12 @@ public class ClickUtils {
         HTML_ENTITIES[166] = "&brvbar;"; // broken bar = broken vertical bar
         HTML_ENTITIES[167] = "&sect;"; // section sign
         HTML_ENTITIES[168] = "&uml;"; // diaeresis = spacing diaeresis
-        HTML_ENTITIES[169] = "&copy;"; // � - copyright sign
+        HTML_ENTITIES[169] = "&copy;"; // © - copyright sign
         HTML_ENTITIES[170] = "&ordf;"; // feminine ordinal indicator
         HTML_ENTITIES[171] = "&laquo;"; // left-pointing double angle quotation mark = left pointing guillemet
         HTML_ENTITIES[172] = "&not;";   //not sign
         HTML_ENTITIES[173] = "&shy;";   //soft hyphen = discretionary hyphen
-        HTML_ENTITIES[174] = "&reg;";   // � - registered trademark sign
+        HTML_ENTITIES[174] = "&reg;";   // ® - registered trademark sign
         HTML_ENTITIES[175] = "&macr;";   //macron = spacing macron = overline = APL overbar
         HTML_ENTITIES[176] = "&deg;";   //degree sign
         HTML_ENTITIES[177] = "&plusmn;";   //plus-minus sign = plus-or-minus sign
@@ -179,70 +179,70 @@ public class ClickUtils {
         HTML_ENTITIES[189] = "&frac12;";   //vulgar fraction one half = fraction one half
         HTML_ENTITIES[190] = "&frac34;";   //vulgar fraction three quarters = fraction three quarters
         HTML_ENTITIES[191] = "&iquest;";   //inverted question mark = turned question mark
-        HTML_ENTITIES[192] = "&Agrave;";   // � - uppercase A, grave accent
-        HTML_ENTITIES[193] = "&Aacute;";   // � - uppercase A, acute accent
-        HTML_ENTITIES[194] = "&Acirc;";   // � - uppercase A, circumflex accent
-        HTML_ENTITIES[195] = "&Atilde;";   // � - uppercase A, tilde
-        HTML_ENTITIES[196] = "&Auml;";   // � - uppercase A, umlaut
-        HTML_ENTITIES[197] = "&Aring;";   // � - uppercase A, ring
-        HTML_ENTITIES[198] = "&AElig;";   // � - uppercase AE
-        HTML_ENTITIES[199] = "&Ccedil;";   // � - uppercase C, cedilla
-        HTML_ENTITIES[200] = "&Egrave;";   // � - uppercase E, grave accent
-        HTML_ENTITIES[201] = "&Eacute;";   // � - uppercase E, acute accent
-        HTML_ENTITIES[202] = "&Ecirc;";   // � - uppercase E, circumflex accent
-        HTML_ENTITIES[203] = "&Euml;";   // � - uppercase E, umlaut
-        HTML_ENTITIES[204] = "&Igrave;";   // � - uppercase I, grave accent
-        HTML_ENTITIES[205] = "&Iacute;";   // � - uppercase I, acute accent
-        HTML_ENTITIES[206] = "&Icirc;";   // � - uppercase I, circumflex accent
-        HTML_ENTITIES[207] = "&Iuml;";   // � - uppercase I, umlaut
-        HTML_ENTITIES[208] = "&ETH;";   // � - uppercase Eth, Icelandic
-        HTML_ENTITIES[209] = "&Ntilde;";   // � - uppercase N, tilde
-        HTML_ENTITIES[210] = "&Ograve;";   // � - uppercase O, grave accent
-        HTML_ENTITIES[211] = "&Oacute;";   // � - uppercase O, acute accent
-        HTML_ENTITIES[212] = "&Ocirc;";   // � - uppercase O, circumflex accent
-        HTML_ENTITIES[213] = "&Otilde;";   // � - uppercase O, tilde
-        HTML_ENTITIES[214] = "&Ouml;";   // � - uppercase O, umlaut
+        HTML_ENTITIES[192] = "&Agrave;";   // À - uppercase A, grave accent
+        HTML_ENTITIES[193] = "&Aacute;";   // Á - uppercase A, acute accent
+        HTML_ENTITIES[194] = "&Acirc;";   // Â - uppercase A, circumflex accent
+        HTML_ENTITIES[195] = "&Atilde;";   // Ã - uppercase A, tilde
+        HTML_ENTITIES[196] = "&Auml;";   // Ä - uppercase A, umlaut
+        HTML_ENTITIES[197] = "&Aring;";   // Å - uppercase A, ring
+        HTML_ENTITIES[198] = "&AElig;";   // Æ - uppercase AE
+        HTML_ENTITIES[199] = "&Ccedil;";   // Ç - uppercase C, cedilla
+        HTML_ENTITIES[200] = "&Egrave;";   // È - uppercase E, grave accent
+        HTML_ENTITIES[201] = "&Eacute;";   // É - uppercase E, acute accent
+        HTML_ENTITIES[202] = "&Ecirc;";   // Ê - uppercase E, circumflex accent
+        HTML_ENTITIES[203] = "&Euml;";   // Ë - uppercase E, umlaut
+        HTML_ENTITIES[204] = "&Igrave;";   // Ì - uppercase I, grave accent
+        HTML_ENTITIES[205] = "&Iacute;";   // Í - uppercase I, acute accent
+        HTML_ENTITIES[206] = "&Icirc;";   // Î - uppercase I, circumflex accent
+        HTML_ENTITIES[207] = "&Iuml;";   // Ï - uppercase I, umlaut
+        HTML_ENTITIES[208] = "&ETH;";   // Ð - uppercase Eth, Icelandic
+        HTML_ENTITIES[209] = "&Ntilde;";   // Ñ - uppercase N, tilde
+        HTML_ENTITIES[210] = "&Ograve;";   // Ò - uppercase O, grave accent
+        HTML_ENTITIES[211] = "&Oacute;";   // Ó - uppercase O, acute accent
+        HTML_ENTITIES[212] = "&Ocirc;";   // Ô - uppercase O, circumflex accent
+        HTML_ENTITIES[213] = "&Otilde;";   // Õ - uppercase O, tilde
+        HTML_ENTITIES[214] = "&Ouml;";   // Ö - uppercase O, umlaut
         HTML_ENTITIES[215] = "&times;";   //multiplication sign
-        HTML_ENTITIES[216] = "&Oslash;";   // � - uppercase O, slash
-        HTML_ENTITIES[217] = "&Ugrave;";   // � - uppercase U, grave accent
-        HTML_ENTITIES[218] = "&Uacute;";   // � - uppercase U, acute accent
-        HTML_ENTITIES[219] = "&Ucirc;";   // � - uppercase U, circumflex accent
-        HTML_ENTITIES[220] = "&Uuml;";   // � - uppercase U, umlaut
-        HTML_ENTITIES[221] = "&Yacute;";   // � - uppercase Y, acute accent
-        HTML_ENTITIES[222] = "&THORN;";   // � - uppercase THORN, Icelandic
-        HTML_ENTITIES[223] = "&szlig;";   // � - lowercase sharps, German
-        HTML_ENTITIES[224] = "&agrave;";   // � - lowercase a, grave accent
-        HTML_ENTITIES[225] = "&aacute;";   // � - lowercase a, acute accent
-        HTML_ENTITIES[226] = "&acirc;";   // � - lowercase a, circumflex accent
-        HTML_ENTITIES[227] = "&atilde;";   // � - lowercase a, tilde
-        HTML_ENTITIES[228] = "&auml;";   // � - lowercase a, umlaut
-        HTML_ENTITIES[229] = "&aring;";   // � - lowercase a, ring
-        HTML_ENTITIES[230] = "&aelig;";   // � - lowercase ae
-        HTML_ENTITIES[231] = "&ccedil;";   // � - lowercase c, cedilla
-        HTML_ENTITIES[232] = "&egrave;";   // � - lowercase e, grave accent
-        HTML_ENTITIES[233] = "&eacute;";   // � - lowercase e, acute accent
-        HTML_ENTITIES[234] = "&ecirc;";   // � - lowercase e, circumflex accent
-        HTML_ENTITIES[235] = "&euml;";   // � - lowercase e, umlaut
-        HTML_ENTITIES[236] = "&igrave;";   // � - lowercase i, grave accent
-        HTML_ENTITIES[237] = "&iacute;";   // � - lowercase i, acute accent
-        HTML_ENTITIES[238] = "&icirc;";   // � - lowercase i, circumflex accent
-        HTML_ENTITIES[239] = "&iuml;";   // � - lowercase i, umlaut
-        HTML_ENTITIES[240] = "&eth;";   // � - lowercase eth, Icelandic
-        HTML_ENTITIES[241] = "&ntilde;";   // � - lowercase n, tilde
-        HTML_ENTITIES[242] = "&ograve;";   // � - lowercase o, grave accent
-        HTML_ENTITIES[243] = "&oacute;";   // � - lowercase o, acute accent
-        HTML_ENTITIES[244] = "&ocirc;";   // � - lowercase o, circumflex accent
-        HTML_ENTITIES[245] = "&otilde;";   // � - lowercase o, tilde
-        HTML_ENTITIES[246] = "&ouml;";   // � - lowercase o, umlaut
+        HTML_ENTITIES[216] = "&Oslash;";   // Ø - uppercase O, slash
+        HTML_ENTITIES[217] = "&Ugrave;";   // Ù - uppercase U, grave accent
+        HTML_ENTITIES[218] = "&Uacute;";   // Ú - uppercase U, acute accent
+        HTML_ENTITIES[219] = "&Ucirc;";   // Û - uppercase U, circumflex accent
+        HTML_ENTITIES[220] = "&Uuml;";   // Ü - uppercase U, umlaut
+        HTML_ENTITIES[221] = "&Yacute;";   // Ý - uppercase Y, acute accent
+        HTML_ENTITIES[222] = "&THORN;";   // Þ - uppercase THORN, Icelandic
+        HTML_ENTITIES[223] = "&szlig;";   // ß - lowercase sharps, German
+        HTML_ENTITIES[224] = "&agrave;";   // à - lowercase a, grave accent
+        HTML_ENTITIES[225] = "&aacute;";   // á - lowercase a, acute accent
+        HTML_ENTITIES[226] = "&acirc;";   // â - lowercase a, circumflex accent
+        HTML_ENTITIES[227] = "&atilde;";   // ã - lowercase a, tilde
+        HTML_ENTITIES[228] = "&auml;";   // ä - lowercase a, umlaut
+        HTML_ENTITIES[229] = "&aring;";   // å - lowercase a, ring
+        HTML_ENTITIES[230] = "&aelig;";   // æ - lowercase ae
+        HTML_ENTITIES[231] = "&ccedil;";   // ç - lowercase c, cedilla
+        HTML_ENTITIES[232] = "&egrave;";   // è - lowercase e, grave accent
+        HTML_ENTITIES[233] = "&eacute;";   // é - lowercase e, acute accent
+        HTML_ENTITIES[234] = "&ecirc;";   // ê - lowercase e, circumflex accent
+        HTML_ENTITIES[235] = "&euml;";   // ë - lowercase e, umlaut
+        HTML_ENTITIES[236] = "&igrave;";   // ì - lowercase i, grave accent
+        HTML_ENTITIES[237] = "&iacute;";   // í - lowercase i, acute accent
+        HTML_ENTITIES[238] = "&icirc;";   // î - lowercase i, circumflex accent
+        HTML_ENTITIES[239] = "&iuml;";   // ï - lowercase i, umlaut
+        HTML_ENTITIES[240] = "&eth;";   // ð - lowercase eth, Icelandic
+        HTML_ENTITIES[241] = "&ntilde;";   // ñ - lowercase n, tilde
+        HTML_ENTITIES[242] = "&ograve;";   // ò - lowercase o, grave accent
+        HTML_ENTITIES[243] = "&oacute;";   // ó - lowercase o, acute accent
+        HTML_ENTITIES[244] = "&ocirc;";   // ô - lowercase o, circumflex accent
+        HTML_ENTITIES[245] = "&otilde;";   // õ - lowercase o, tilde
+        HTML_ENTITIES[246] = "&ouml;";   // ö - lowercase o, umlaut
         HTML_ENTITIES[247] = "&divide;";   // division sign
-        HTML_ENTITIES[248] = "&oslash;";   // � - lowercase o, slash
-        HTML_ENTITIES[249] = "&ugrave;";   // � - lowercase u, grave accent
-        HTML_ENTITIES[250] = "&uacute;";   // � - lowercase u, acute accent
-        HTML_ENTITIES[251] = "&ucirc;";   // � - lowercase u, circumflex accent
-        HTML_ENTITIES[252] = "&uuml;";   // � - lowercase u, umlaut
-        HTML_ENTITIES[253] = "&yacute;";   // � - lowercase y, acute accent
-        HTML_ENTITIES[254] = "&thorn;";   // � - lowercase thorn, Icelandic
-        HTML_ENTITIES[255] = "&yuml;";   // � - lowercase y, umlaut
+        HTML_ENTITIES[248] = "&oslash;";   // ø - lowercase o, slash
+        HTML_ENTITIES[249] = "&ugrave;";   // ù - lowercase u, grave accent
+        HTML_ENTITIES[250] = "&uacute;";   // ú - lowercase u, acute accent
+        HTML_ENTITIES[251] = "&ucirc;";   // û - lowercase u, circumflex accent
+        HTML_ENTITIES[252] = "&uuml;";   // ü - lowercase u, umlaut
+        HTML_ENTITIES[253] = "&yacute;";   // ý - lowercase y, acute accent
+        HTML_ENTITIES[254] = "&thorn;";   // þ - lowercase thorn, Icelandic
+        HTML_ENTITIES[255] = "&yuml;";   // ÿ - lowercase y, umlaut
         // http://www.w3.org/TR/REC-html40/sgml/entities.html
         // <!-- Latin Extended-B -->
         HTML_ENTITIES[402] = "&fnof;";   //latin small f with hook = function= florin, U+0192 ISOtech -->
