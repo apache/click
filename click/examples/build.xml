@@ -28,8 +28,8 @@
    <property name="name" value="click-examples"/>
    <property name="jar.ashwood" value="ashwood-1.1.jar"/>
    <property name="jar.cayenne" value="cayenne-nodeps-2.0.4.jar"/>
-   <property name="jar.click" value="click-${version}.jar"/>
-   <property name="jar.click-extras" value="click-extras-${version}.jar"/>
+   <property name="jar.click" value="click-${version}-incubating.jar"/>
+   <property name="jar.click-extras" value="click-extras-${version}-incubating.jar"/>
    <property name="jar.hsqldb" value="hsqldb-1.8.0.1.jar"/>
    <property name="jar.jstl" value="jstl-1.1.2.jar"/>
    <property name="jar.log4j" value="log4j-1.2.14.jar"/>
@@ -119,7 +119,7 @@
    
    
    <target name="compile" description="compile Java source">
-      <available file="../dist/click-extras-${version}.jar" property="isExtrasAvail"/>
+      <available file="../dist/${jar.click-extras}" property="isExtrasAvail"/>
       <fail message="Build extras first with 'build-extras'">
          <condition>
   	        <or><isfalse value="${isExtrasAvail}"/></or>

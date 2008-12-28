@@ -25,6 +25,11 @@
     
    <property file="./build/build.properties"/>
    <xmlproperty file="./build/javascript-syntax-highlighter.xml"/>
+   <property name="click" value="click-${version}-incubating"/>
+   <property name="click-extras" value="click-extras-${version}-incubating"/>
+   <property name="click-nodeps" value="click-nodeps-${version}-incubating"/>
+   <property name="click-mock" value="click-mock-${version}-incubating"/>
+
    <property name="jar.cayenne" value="cayenne-nodeps-2.0.4.jar"/>
    <property name="jar.checkstyle" value="checkstyle-all-4.4.jar"/>
    <property name="jar.codec" value="commons-codec-1.3.jar"/>
@@ -90,7 +95,7 @@
             <copy file="build/@{name}.pom" tofile="${maven-bundle}/@{name}/pom.xml"/> 
             <replace file="${maven-bundle}/@{name}/pom.xml" 
                      token="VERSION" 
-                     value="${version}"/>
+                     value="${version}-incubating"/>
 
             <!--
                 Replace the TEMPLATE token with the value of the template pom
@@ -100,7 +105,8 @@
                      value="${pom-template}">
               <replacetoken>&lt;!--TEMPLATE--&gt;</replacetoken>
             </replace>
-            <copy file="dist/@{name}-${version}.jar" todir="${maven-bundle}/@{name}/"/>
+            <copy file="dist/@{name}-${version}-incubating.jar" todir="${maven-bundle}/@{name}/"/>
+            <digestMacro file="${maven-bundle}/@{name}/@{name}-${version}-incubating.jar"/>
         </sequential>
     </macrodef>
 
@@ -110,10 +116,8 @@
             <!--
             Calculating checksum currently not very useful
             -->
-            <!--
             <checksum file="@{file}" forceOverwrite="true" />
             <checksum file="@{file}" forceOverwrite="true" algorithm="SHA1" />
-            -->
         </sequential>
     </macrodef>
 
@@ -145,7 +149,7 @@
       <pathelement location="lib/${jar.spring-core}"/>
       <pathelement location="lib/${jar.spring-web}"/>
       <pathelement location="lib/${jar.freemarker}"/>
-      <pathelement location="dist/click-${version}.jar"/>
+      <pathelement location="dist/${click}.jar"/>
    </path>
 
    <path id="classpath.mock">
@@ -158,7 +162,7 @@
       <pathelement location="lib/${jar.servlet}"/>
       <pathelement location="lib/${jar.upload}"/>
       <pathelement location="lib/${jar.velocity}"/>
-      <pathelement location="dist/click-${version}.jar"/>
+      <pathelement location="dist/${click}.jar"/>
    </path>
 
    <path id="classpath.extras.cayenne.1x">
@@ -170,7 +174,7 @@
 	  <pathelement location="lib/${jar.spring-context}"/>
 	  <pathelement location="lib/${jar.spring-core}"/>
 	  <pathelement location="lib/${jar.spring-web}"/>
-	  <pathelement location="dist/click-${version}.jar"/>
+	  <pathelement location="dist/${click}.jar"/>
    </path>
 
    <path id="classpath.examples"> 
@@ -179,8 +183,8 @@
       <pathelement location="lib/${jar.spring-context}"/>
       <pathelement location="lib/${jar.spring-core}"/>
       <pathelement location="lib/${jar.spring-web}"/>
-      <pathelement location="dist/click-${version}.jar"/>
-      <pathelement location="dist/click-extras-${version}.jar"/>
+      <pathelement location="dist/${click}.jar"/>
+      <pathelement location="dist/${click-extras}.jar"/>
    </path>
 
    <path id="classpath.test"> 
@@ -237,12 +241,13 @@
             <exclude name="examples/webapp/javadoc/**"/>
          </fileset>
       </copy>
-      <delete file="../click-${version}.zip"/>
+      <delete file="../${click}.zip"/>
       <zip basedir="."
-           destfile="../click-${version}.zip"
+           destfile="../${click}.zip"
            includes="click-${version}/**"/>
       <delete dir="click-${version}" quiet="false"/>
-   </target>  
+      <digestMacro file="../${click}.zip"/>
+   </target>
 
 
    <target name="build-examples" description="build click-examples WAR file">
@@ -254,13 +259,13 @@
 
 
    <target name="build-extras" description="build extras JAR file">
-      <available file="dist/click-${version}.jar" property="isClickAvail"/>
+      <available file="dist/${click}.jar" property="isClickAvail"/>
       <fail message="Build framework first with 'build-framework'">
          <condition>
   	        <or><isfalse value="${isClickAvail}"/></or>
   	     </condition>
       </fail>
-      <delete file="dist/click-extras-${version}.jar" quiet="false"/>
+      <delete file="dist/${click-extras}.jar" quiet="false"/>
       <delete dir="extras/classes" quiet="false"/>
       <mkdir dir="extras/classes"/>
       <copy todir="extras/classes">
@@ -278,7 +283,7 @@
              source="${javac.source}">
          <classpath refid="classpath.extras"/>
       </javac>  
-      <jar destfile="dist/click-extras-${version}.jar">
+      <jar destfile="dist/${click-extras}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
            <attribute name="Package" value="net.sf.click.extras"/>
@@ -286,7 +291,6 @@
          </manifest>
          <fileset dir="extras/classes"/>
       </jar>  
-      <digestMacro file="dist/click-extras-${version}.jar"/>
 	  <delete dir="temp" quiet="false"/>
    </target>
 
@@ -299,8 +303,8 @@
   	        <or><isfalse value="${isJarAvail}"/></or>
   	     </condition>
       </fail>
-      <delete file="dist/click-${version}.jar" quiet="false"/>
-      <delete file="dist/click-nodeps-${version}.jar" quiet="false"/>
+      <delete file="dist/${click}.jar" quiet="false"/>
+      <delete file="dist/${click-nodeps}.jar" quiet="false"/>
       <property name="dir.source" value="framework/src"/>
       <property name="dir.classes" value="framework/classes"/>
       <delete dir="${dir.classes}" quiet="false"/>
@@ -320,7 +324,7 @@
              source="${javac.source}">
          <classpath refid="classpath.framework"/>
       </javac>  
-   	  <jar destfile="dist/click-nodeps-${version}.jar">
+   	  <jar destfile="dist/${click-nodeps}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
            <attribute name="Package" value="net.sf.click"/>
@@ -328,7 +332,6 @@
          </manifest>
          <fileset dir="${dir.classes}"/>
       </jar>
-      <digestMacro file="dist/click-nodeps-${version}.jar"/> 
 	    <!-- With Dependencies -->
       <unzip src="lib/${jar.codec}" dest="${dir.classes}">
         <!-- Exclude .html pages -->
@@ -350,7 +353,7 @@
          </fileset>
       </copy>
 	  <delete dir="temp" quiet="false"/>
-      <jar destfile="dist/click-${version}.jar">
+      <jar destfile="dist/${click}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
            <attribute name="Package" value="net.sf.click"/>
@@ -362,18 +365,17 @@
             <exclude name="org/apache/velocity/texen/**"/>
          </fileset>
       </jar>
-      <digestMacro file="dist/click-${version}.jar"/> 
    </target>
 
 
    <target name="build-mock" description="build mock JAR file">
-      <available file="dist/click-${version}.jar" property="isClickAvail"/>
+      <available file="dist/${click}.jar" property="isClickAvail"/>
       <fail message="Build framework first with 'build-framework'">
          <condition>
   	        <or><isfalse value="${isClickAvail}"/></or>
   	     </condition>
       </fail>
-      <delete file="dist/click-mock-${version}.jar" quiet="false"/>
+      <delete file="dist/${click-mock}.jar" quiet="false"/>
       <delete dir="mock/classes" quiet="false"/>
       <mkdir dir="mock/classes"/>
       <copy todir="mock/classes">
@@ -391,7 +393,7 @@
              source="${javac.source}">
          <classpath refid="classpath.mock"/>
       </javac>
-      <jar destfile="dist/click-mock-${version}.jar">
+      <jar destfile="dist/${click-mock}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
            <attribute name="Package" value="net.sf.click"/>
@@ -399,7 +401,6 @@
          </manifest>
          <fileset dir="mock/classes"/>
       </jar>  
-      <digestMacro file="dist/click-mock-${version}.jar"/>
    </target>
 
 
@@ -415,12 +416,12 @@
       <buildBundleMacro name="click-mock"/>
    </target>
 
-   
+
    <target name="build-sources"
            description="build source ZIP files for use with IDEs">
       <property name="dir.source" value="framework/src"/>
       <!-- zip the framework without dependencies-->
-      <zip destfile="dist/click-nodeps-${version}-src.zip">
+      <zip destfile="dist/${click-nodeps}-src.zip">
          <fileset dir="${dir.source}">
             <exclude name="**/.html"/>
             <exclude name="**/.css"/>
@@ -430,19 +431,19 @@
       </zip>
       <!-- zip the framework with dependencies:-->
       <!-- this is not ready since the sources for the used jars are not available -->
-      <zip destfile="dist/click-${version}-src.zip">
+      <zip destfile="dist/${click}-src.zip">
          <fileset dir="${dir.source}">
             <exclude name="**/package.html"/>
          </fileset>
       </zip>
       <!-- zip extras -->
-      <zip destfile="dist/click-extras-${version}-src.zip" >
+      <zip destfile="dist/${click-extras}-src.zip" >
          <fileset dir="extras/src">
             <exclude name="**/*.html"/>
          </fileset>
       </zip>
       <!-- zip mock -->
-      <zip destfile="dist/click-mock-${version}-src.zip" >
+      <zip destfile="dist/${click-mock}-src.zip" >
          <fileset dir="mock/src">
             <exclude name="**/*.html"/>
          </fileset>
@@ -824,10 +825,10 @@ Please ensure you have configured build.properties</echo>
       </copy>
       <copy 
       	todir="../${project-name}/WebContent/WEB-INF/lib"
-      	file="dist/click-${version}.jar"/>
+      	file="dist/${click}.jar"/>
       <copy 
       	todir="../${project-name}/WebContent/WEB-INF/lib"
-      	file="dist/click-extras-${version}.jar"/>
+      	file="dist/${click-extras}.jar"/>
       <copy 
       	todir="../${project-name}/WebContent/WEB-INF/lib"
       	file="lib/${jar.log4j}"/>
