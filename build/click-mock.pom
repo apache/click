@@ -21,7 +21,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>net.sf.click</groupId>
+  <groupId>org.apache.click</groupId>
   <artifactId>click-mock</artifactId>
   <packaging>jar</packaging>  
   <version>VERSION</version>
@@ -31,7 +31,7 @@
   <dependencies>
 
     <dependency>
-      <groupId>net.sf.click</groupId>
+      <groupId>org.apache.click</groupId>
       <artifactId>click-nodeps</artifactId>
       <version>VERSION</version>
     </dependency>
