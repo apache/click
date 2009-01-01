@@ -90,6 +90,10 @@ public class ClickPlugin extends AbstractUIPlugin {
 		configProviders.add(new DefaultClickConfigurationProvider());
 	}
 
+	public ResourceBundle getResourceBundle(){
+		return this.resource;
+	}
+
 	private static List loadContributedClasses(String extPointId, String elementName){
 		List result = new ArrayList();
 		try {

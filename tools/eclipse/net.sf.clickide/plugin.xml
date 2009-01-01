@@ -87,7 +87,7 @@
     </editor>
     <editor
           class="net.sf.clickide.ui.editor.TemplateEditor"
-          contributorClass="org.eclipse.wst.html.ui.internal.edit.ui.ActionContributorHTML"
+          contributorClass="net.sf.clickide.ui.editor.TemplateEditorActionContributor"
           default="true"
           extensions="htm"
           icon="icons/velocity.gif"

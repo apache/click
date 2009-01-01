@@ -1,0 +1,5 @@
+ClickIDE Development Memo
+--
+2.1.1
+
+ * Toggle Comment action (CTRL + /) in the Template Editor.
