@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+        <meta name="Author" content="Malcolm Edgar"/>
+        <meta name="description" lang="en" content="Apache Click Java web application framework"/>
+        <meta name="keywords" lang="en" content="Apache Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
+        <title>Apache Click</title>
+        <link rel="stylesheet" type="text/css" href="../../help.css"/>
+        <style type="text/css">
+            th { text-align: left; }
+            td { vertical-align: top; white-space: nowrap; }
+        </style>
+    </head>
+    <body>
+
+        <h1>Creating a Release</h1>
+
+        This page documents the steps to create a release.
+
+        <p/>
+        <b>Please note</b> this section is for committers only.
+
+        <h3>Prerequisites</h3>
+
+        Before creating a release ensure you have setup your own public OpenGPG key signature
+        for signing and encrypting the distribution.
+        <p/>
+        A OpenGPG key can be generated using <a class="external" target="_blank" href="http://www.gnupg.org/">GnuPG</a>.
+        There is also a <a class="external" target="_blank" href="http://www.gpg4win.org/">Windows</a> port available.
+
+        <p/>
+        Before starting the release ensure that you have your <tt>public key</tt>
+        appended to the <a class="external" target="_blank" href="http://svn.apache.org/repos/asf/incubator/click/trunk/click/KEYS">KEYS</a>
+        file and that the key is published to a public key server
+        such as <a class="external" target="_blank" href="http://pgp.mit.edu/">MIT</a>.
+        More info can be found here: <a class="external" target="_blank" href="http://www.apache.org/dev/release-signing.html">http://www.apache.org/dev/release-signing.html</a>.
+
+        <h3>Building Distribution</h3>
+
+        <ol>
+            <li>
+                Update to the latest SVN revision:
+                <pre class="codeConfig">svn update</pre>
+                Alternatively do a clean checkout as described on the page <a href="source-code.html">Source Code</a>.
+            </li>
+            <li>
+                Upgrade Click to the next version which consists of the following steps:
+                <p/>
+                <ul>
+                    <li>
+                        Ensure these files have the correct version:
+                        TODO.txt, documentation/header.html,
+                        framework/src/click-control.properties, build/build.properties
+                        and examples/src/click-page.properties.
+                    </li>
+                    <li>
+                        Ensure third-party library versions are correct. Check the following
+                        files: build/build.xml, examples/build.xml, documentation/docs/building.html.
+                    </li>
+                    <li>
+                        Add upgraded libraries to documentation/docs/roadmap-changes.html
+                    </li>
+                </ul>
+            </li>
+            <li>
+                Finalize Roadmap and Changes.
+            </li>
+            <li>
+                Test the release and ensure there are no failures:
+                <pre class="codeConfig">ant test-all</pre>
+            </li>
+            <li>
+                Build the Click distribution:
+                <pre class="codeConfig">ant build-distribution</pre>
+                This step also creates MD5 and SHA1 hashes of the .zip file
+                which must be published together with the distribution.
+            </li>
+            <li>
+                Deploy the examples to a Servlet container (e.g. Tomcat)
+                and test click-examples.
+            </li>
+            <li>
+                Digitally sign the distribution click-X.X.X-incubating.zip.
+                If you have more than 1 GPG Key, use the -u argument to specify
+                the KEY name.
+                <pre class="codeConfig">gpg --armor --output click-X.X.X-incubating.zip.asc --detach-sig click-X.X.X-incubating.zip</pre>
+            </li>
+            <li>
+                Upload the distribution to your account at <tt>people.apache.org</tt>
+                under the folder <tt>~/public_html/release/X.X.X</tt>, where X.X.X
+                is the version number of Click.
+
+                <p/>
+                The following files must be uploaded:
+
+                <p/>
+                <ul>
+                    <li><tt>click-X.X.X-incubating.zip</tt></li>
+                    <li><tt>click-X.X.X-incubating.zip.MD5</tt></li>
+                    <li><tt>click-X.X.X-incubating.zip.SHA1</tt></li>
+                    <li><tt>click-X.X.X-incubating.zip.asc</tt></li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>Voting</h3>
+
+        Each release must be voted by the Incubator PMC on the <tt>click-dev</tt>
+        mailing list and again on the <tt>general</tt> incubator list.
+
+        <p/>
+        Vote threads are indicated by starting the subject line with <tt>[VOTE]</tt>.
+
+        <p/>
+        For a vote to pass at least three +1 votes are needed.
+
+        <p/>
+        Votes are normally run for 72 hours. When starting the vote, indicate the
+        date and time the vote period ends.
+
+        <p/>
+        When the vote period ends, tally up the votes and report the final result to the mailing list.
+
+        <h3>Publishing the Release</h3>
+
+        <ol>
+            <li>
+                Tag the new release, e.g. click-2.0.1 (the command below is a single line with no breaks)
+                <pre class="codeConfig">svn copy https://svn.apache.org/repos/asf/incubator/click/trunk/click https://svn.apache.org/repos/asf/incubator/click/tags/click-X.X.X -m "tag X.X.X"
+</pre>
+            </li>
+            <li>
+                Incubating releases are published at <tt>people.apache.org</tt> under
+                the folder:
+                <p/>
+                <tt>/www/www.apache.org/dist/incubator/click/click/X.X.X</tt>
+
+                <p/>
+                An easy way to do this is to copy the files in your <tt>public_html</tt>
+                folder for example:
+                <pre class="codeConfig">ssh people.apache.org
+cp ~/public_html/release/X.X.X/* /www/www.apache.org/dist/incubator/click/click/X.X.X
+</pre>
+            </li>
+            <li>
+                Upload the web site at <tt>people.apache.org</tt> under the folder
+                <p/>
+                <tt>/www/incubator.apache.org/click/</tt>
+            </li>
+        </ol>
+
+        <h3>Publishing Maven Bundles</h3>
+
+        Before publishing the artifacts, ensure the following settings
+        are present in your Maven settings file <tt>"~/.m2/settings.xml"</tt>:
+        <pre class="codeConfig">
+&lt;settings&gt;
+    &lt;servers&gt;
+      &lt;server&gt;
+        &lt;id&gt;apache.releases&lt;/id&gt;
+        &lt;username&gt;APACHE_USERNAME&lt;/username&gt;
+        &lt;directoryPermissions&gt;775&lt;/directoryPermissions&gt;
+        &lt;filePermissions&gt;644&lt;/filePermissions&gt;
+    &lt;/server&gt;
+  &lt;/servers&gt;
+&lt;/settings&gt;
+</pre>
+
+        <ol>
+            <li>
+                Ensure the version and dependencies of the following files are up to date:
+                build/click.pom, build/click-extras.pom, build/click-mock.pom, build-nodeps.pom.
+            </li>
+            <li>
+                Build the Maven artifacts:
+                <pre class="codeConfig">ant build-maven-bundles</pre>
+            </li>
+            <li>
+                Maven <tt>snapshots</tt> must be uploaded to: <tt>/www/people.apache.org/repo/m2-snapshot-repository</tt>,
+                while <tt>releases</tt> must be uploaded to: <tt>/www/people.apache.org/repo/m2-ibiblio-rsync-repository</tt>.
+                <p/>
+                <ul>
+                    <li>
+                        For <tt>snapshots</tt> execute the following commands from the <tt>maven-upload</tt> folder:
+                        (If you have more than 1 GPG Key, use the <tt>keyname</tt> attribute
+                        to specify the KEY name.)
+                        <p/>
+                        <pre class="codeConfig">
+mvn gpg:sign-and-deploy-file -DpomFile=click/click-1.5.1-incubating.pom -Dfile=click/click-1.5.1-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-1.5.1-incubating.pom -Dfile=click-extras/click-extras-1.5.1-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-1.5.1-incubating.pom -Dfile=click-nodeps/click-nodeps-1.5.1-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-1.5.1-incubating.pom -Dfile=click-mock/click-mock-1.5.1-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
+</pre>
+                    </li>
+                    <li>
+                        For <tt>releases</tt> execute the following commands from the <tt>maven-upload</tt> folder:
+                        (If you have more than 1 GPG Key, use the <tt>keyname</tt> attribute
+                        to specify the KEY name.)
+                        <p/>
+                        <pre class="codeConfig">
+mvn gpg:sign-and-deploy-file -DpomFile=click/click-1.5.1-incubating.pom -Dfile=click/click-1.5.1-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-1.5.1-incubating.pom -Dfile=click-extras/click-extras-1.5.1-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-1.5.1-incubating.pom -Dfile=click-nodeps/click-nodeps-1.5.1-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-1.5.1-incubating.pom -Dfile=click-mock/click-mock-1.5.1-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
+</pre>
+                    </li>
+                </ul>
+                The <tt>sign-and-deploy-file</tt> command will both sign and upload
+                the maven artifacts to the server. You will be prompted for your
+                GPG passphrase.
+            </li>
+        </ol>
+
+        <h3>Post release</h3>
+
+        The following tasks should be completed once the release is out:
+        <ul>
+            <li>
+                Email release announcement to <tt>click-user</tt> and <tt>click-dev</tt>
+                mailing lists.
+            </li>
+            <li>
+                Upgrade Click to the next version. The following files must be updated:
+                TODO.txt, documentation/header.html, framework/src/click-control.properties,
+                build/build.properties, examples/src/click-page.properties.
+            </li>
+        </ul>
+
+    </body>
+</html>
