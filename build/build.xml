@@ -92,8 +92,8 @@
         <attribute name="name"/>
         <sequential>
             <mkdir dir="${maven-bundle}/@{name}"/>
-            <copy file="build/@{name}.pom" tofile="${maven-bundle}/@{name}/pom.xml"/> 
-            <replace file="${maven-bundle}/@{name}/pom.xml" 
+            <copy file="build/@{name}.pom" tofile="${maven-bundle}/@{name}/@{name}-${version}-incubating.pom"/>
+            <replace file="${maven-bundle}/@{name}/@{name}-${version}-incubating.pom"
                      token="VERSION" 
                      value="${version}-incubating"/>
 
@@ -101,12 +101,11 @@
                 Replace the TEMPLATE token with the value of the template pom
             -->
             <loadfile property="pom-template" srcFile="build/template.pom"/>
-            <replace file="${maven-bundle}/@{name}/pom.xml"
+            <replace file="${maven-bundle}/@{name}/@{name}-${version}-incubating.pom"
                      value="${pom-template}">
               <replacetoken>&lt;!--TEMPLATE--&gt;</replacetoken>
             </replace>
             <copy file="dist/@{name}-${version}-incubating.jar" todir="${maven-bundle}/@{name}/"/>
-            <digestMacro file="${maven-bundle}/@{name}/@{name}-${version}-incubating.jar"/>
         </sequential>
     </macrodef>
 
