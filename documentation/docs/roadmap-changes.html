@@ -73,7 +73,7 @@ The feature roadmap for the next major release of Click is being determined.
 <h2>Changes</h2>
 
 <dl>
-  <dt><a name="1.5.1"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release - Version 1.5.1 - ??? December 2008</div></dt>
+  <dt><a name="1.5.1"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release - Version 1.5.1 - ??? January 2009</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
@@ -100,6 +100,18 @@ The feature roadmap for the next major release of Click is being determined.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-475">475</a>].
       </li>
       <li class="change">
+        Added MessageFormat support to Format. New methods include
+        <a href="click-api/net/sf/click/util/Format.html#message(java.lang.String, java.lang.Object)">message(String, Object)</a>
+        and <a href="click-api/net/sf/click/util/Format.html#message(java.lang.String, java.util.List)">message(String, List)</a>.
+        This issue was raised by Yu Kobayashi
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-474">474</a>].
+      </li>
+      <li class="change">
+        Added new methods to CheckboxTree to improve customization. The new methods
+        include <a href="extras-api/net/sf/click/extras/tree/CheckboxTree.html#renderCheckbox(net.sf.click.util.HtmlStringBuffer, net.sf.click.extras.tree.TreeNode)">renderCheckbox</a>
+        and <a href="extras-api/net/sf/click/extras/tree/CheckboxTree.html#getInputType()">getInputType</a>.
+      </li>
+      <li class="change">
         Added csv mime type. This issue was raised by Alvin Townsend.
       </li>
       <li class="change">
@@ -118,7 +130,7 @@ The feature roadmap for the next major release of Click is being determined.
     </ul>
   </dd>
 
-  <dt><a name="2.0.1"></a><a name="stable-release" href="#"></a><div class="release-header">Version 2.0.1 RC 1 (released from Apache Incubator) - ??? December 2008</div></dt>
+  <dt><a name="2.0.1"></a><a name="stable-release" href="#"></a><div class="release-header">Version 2.0.1 RC 1 (released from Apache Incubator) - ??? January 2009</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
@@ -2938,7 +2950,7 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">Form control encodes the form <tt>"action"</tt> URL attribute using
-         <a href="servlet-api/javax/servlet/http/HttpServletResponse.html#encodeURL(java.lang.String)">encodeURL(String)</a>
+         <a class="external" target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html#encodeURL(java.lang.String)">encodeURL(String)</a>
          to ensure session ID is set.
       </li> 
       <li class="change">Added optional Form validation. A 
