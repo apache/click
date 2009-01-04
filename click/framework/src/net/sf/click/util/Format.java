@@ -21,9 +21,11 @@ package net.sf.click.util;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import net.sf.click.Context;
@@ -679,6 +681,46 @@ public class Format implements Serializable {
         }
 
         return getEmptyString();
+    }
+
+    /**
+     * Return a formatted string using the given message pattern and argument.
+     * See {@link java.text.MessageFormat} for information on the message
+     * pattern string.
+     *
+     * @param pattern the message pattern
+     * @param argument the message argument
+     * @return the formatted string
+     */
+    public String message(String pattern, Object argument) {
+        return message(pattern, new Object[] { argument });
+    }
+
+    /**
+     * Return a formatted string using the given message pattern and arguments.
+     * See {@link java.text.MessageFormat} for information on the message
+     * pattern string.
+     *
+     * @param pattern the message pattern
+     * @param arguments the message arguments
+     * @return the formatted string
+     */
+    public String message(String pattern, Object[] arguments) {
+        MessageFormat format = new MessageFormat(pattern, getLocale());
+        return format.format(arguments, new StringBuffer(), null).toString();
+    }
+
+    /**
+     * Return a formatted string using the given message pattern and arguments.
+     * See {@link java.text.MessageFormat} for information on the message
+     * pattern string.
+     *
+     * @param pattern the message pattern
+     * @param arguments list of message arguments
+     * @return the formatted string
+     */
+    public String message(String pattern, List arguments) {
+        return message(pattern, arguments.toArray());
     }
 
     /**
