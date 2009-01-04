@@ -164,7 +164,6 @@ public class CheckboxTree extends Tree {
      */
     public CheckboxTree(String name) {
         super(name);
-        setDecorator(new DecoratorFactory().createDecorator());
     }
 
     /**
@@ -173,10 +172,20 @@ public class CheckboxTree extends Tree {
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public CheckboxTree() {
-        setDecorator(new DecoratorFactory().createDecorator());
     }
 
     // --------------------------------------------------------- Public getters and setters
+
+    /**
+     * Create and set the Tree's decorator that will render a Checkbox for
+     * each tree node.
+     *
+     * @see #createDecorator()
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
+        setDecorator(createDecorator());
+    }
 
     /**
      * Returns true if child nodes will also be selected/deselected.
@@ -345,88 +354,117 @@ public class CheckboxTree extends Tree {
     //------------------------------------------------------------Inner classes
 
     /**
-     * Demonstrates the usage of a decorator to provide custom tree node
-     * rendering.
+     * Creates and returns a custom {@link Decorator} that will render a Checkbox
+     * for each tree node.
+     *
+     * @return a decorator that renders a Checkbox for each tree node
      */
-    protected class DecoratorFactory {
+    protected Decorator createDecorator() {
+        return new Decorator() {
 
-        /**
-         * Creates and returns a custom created {@link Decorator}.
-         *
-         * @return custom defined rendering of the tree node
-         */
-        protected Decorator createDecorator() {
-            return new Decorator() {
-                public String render(Object object, Context context) {
-                    TreeNode treeNode = (TreeNode) object;
-                    HtmlStringBuffer buffer = new HtmlStringBuffer();
+            public String render(Object object, Context context) {
+                TreeNode treeNode = (TreeNode) object;
+                HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-                    renderIcon(buffer, treeNode);
+                renderIcon(buffer, treeNode);
 
-                    buffer.append("<input ");
-                    if (isJavascriptEnabled()) {
-                        ((CheckboxJavascriptRenderer) javascriptHandler.getJavascriptRenderer()).renderCheckbox(buffer);
-                    }
-                    buffer.append(" style=\"margin:0\" type=\"checkbox\"");
-                    buffer.appendAttribute("name", SELECT_TREE_NODE_PARAM);
-                    buffer.appendAttribute("value", treeNode.getId());
+                renderCheckbox(buffer, treeNode);
 
-                    if (treeNode.isSelected()) {
-                        buffer.appendAttribute("checked", "checked");
-                    }
+                buffer.elementStart("span");
+                if (treeNode.isSelected()) {
+                    buffer.appendAttribute("class", "selected");
+                } else {
+                    buffer.appendAttribute("class", "unselected");
+                }
+                if (isJavascriptEnabled()) {
+                    ((CheckboxJavascriptRenderer) javascriptHandler.getJavascriptRenderer()).renderSelect(
+                        buffer);
+                }
+                buffer.closeTag();
 
-                    buffer.elementEnd();
+                renderValue(buffer, treeNode);
+                buffer.elementEnd("span");
 
-                    buffer.elementStart("span");
-                    if (treeNode.isSelected()) {
-                        buffer.appendAttribute("class", "selected");
-                    } else {
-                        buffer.appendAttribute("class", "unselected");
-                    }
-                    if (isJavascriptEnabled()) {
-                        ((CheckboxJavascriptRenderer) javascriptHandler.getJavascriptRenderer()).renderSelect(buffer);
-                    }
+                return buffer.toString();
+            }
+
+            /**
+             * Render the node's value.
+             *
+             * @param buffer string buffer containing the markup
+             * @param treeNode treeNode to render
+             */
+            protected void renderValue(HtmlStringBuffer buffer,
+                TreeNode treeNode) {
+
+                if (isJavascriptEnabled()) {
+                    //create a href to interact with the checkbox on browser
+                    buffer.elementStart("a");
+                    Map hrefParameters =
+                        Collections.singletonMap(SELECT_TREE_NODE_PARAM,
+                                                 treeNode.getId());
+                    buffer.appendAttribute("href", getHref(hrefParameters));
+
+                    ((CheckboxJavascriptRenderer) javascriptHandler.getJavascriptRenderer()).renderValue(
+                        buffer);
                     buffer.closeTag();
-
-                    renderValue(buffer, treeNode);
-                    buffer.elementEnd("span");
-
-                    return buffer.toString();
-                }
-
-                /**
-                 * Render the node's value.
-                 *
-                 * @param buffer string buffer containing the markup
-                 * @param treeNode treeNode to render
-                 */
-                protected void renderValue(HtmlStringBuffer buffer, TreeNode treeNode) {
-
-                    if (isJavascriptEnabled()) {
-                        //create a href to interact with the checkbox on browser
-                        buffer.elementStart("a");
-                        Map hrefParameters =
-                            Collections.singletonMap(SELECT_TREE_NODE_PARAM, treeNode.getId());
-                        buffer.appendAttribute("href", getHref(hrefParameters));
-
-                        ((CheckboxJavascriptRenderer) javascriptHandler.getJavascriptRenderer()).renderValue(buffer);
-                        buffer.closeTag();
-                        if (treeNode.getValue() != null) {
-                            buffer.append(treeNode.getValue());
-                        }
-                        buffer.elementEnd("a");
-                        buffer.append("\n");
-
-                    } else {
-                        //just print normal value
-                        if (treeNode.getValue() != null) {
-                            buffer.append(treeNode.getValue());
-                        }
-                        buffer.append("\n");
+                    if (treeNode.getValue() != null) {
+                        buffer.append(treeNode.getValue());
                     }
+                    buffer.elementEnd("a");
+                    buffer.append("\n");
+
+                } else {
+                    //just print normal value
+                    if (treeNode.getValue() != null) {
+                        buffer.append(treeNode.getValue());
+                    }
+                    buffer.append("\n");
                 }
-            };
+            }
+        };
+    }
+
+    /**
+     * Renders a Checkbox for the specified treeNode to the buffer.
+     * <p/>
+     * This method invokes {@link #getInputType()} which returns <tt>"checkbox"</tt>
+     * by default, but allows subclasses to change the input type if necessary.
+     *
+     * @param buffer string buffer containing the markup
+     * @param treeNode treeNode to render
+     */
+    protected void renderCheckbox(HtmlStringBuffer buffer, TreeNode treeNode) {
+        buffer.append("<input ");
+        if (isJavascriptEnabled()) {
+            ((CheckboxJavascriptRenderer) javascriptHandler.getJavascriptRenderer()).renderCheckbox(
+                buffer);
         }
+        buffer.append(" style=\"margin:0\" type=\"");
+        buffer.append(getInputType());
+        buffer.append("\"");
+        buffer.appendAttribute("name", SELECT_TREE_NODE_PARAM);
+        buffer.appendAttribute("value", treeNode.getId());
+
+        if (treeNode.isSelected()) {
+            buffer.appendAttribute("checked", "checked");
+        }
+
+        buffer.elementEnd();
+    }
+
+    /**
+     * Return the input type of the CheckboxTree, default value is
+     * <tt>"checkbox"</tt>.
+     * <p/>
+     * This method allows subclasses to change the input type if necessary.
+     * For example in order to render Radio buttons instead of Checkboxes,
+     * override this method and return the input type <tt>"radio"</tt>.
+     *
+     * @return the input type of the CheckboxTree
+     */
+    protected String getInputType() {
+        return "checkbox";
     }
 
     /**
@@ -436,7 +474,7 @@ public class CheckboxTree extends Tree {
      * Provides the contract for pluggable javascript renderers, for
      * the CheckboxTree.
      */
-    interface CheckboxJavascriptRenderer {
+    protected interface CheckboxJavascriptRenderer {
 
         /**
          * Called when a tree node's value is rendered. Enables the renderer
