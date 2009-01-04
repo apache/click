@@ -40,8 +40,8 @@ import org.apache.commons.lang.StringUtils;
  * your application.
  *
  * See also the W3C HTML reference:
- * <a title="W3C HTML 4.01 Specification"
- *    href="../../../../../html/struct/links.html#h-12.2">A Links</a>
+ * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
+ *    href="http://www.w3.org/TR/html401/struct/links.html#h-12.2">A Links</a>
  *
  * @see net.sf.click.control.AbstractLink
  * @see net.sf.click.control.ActionLink

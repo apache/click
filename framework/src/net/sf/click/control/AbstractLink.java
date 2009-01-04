@@ -30,8 +30,8 @@ import org.apache.commons.lang.StringUtils;
  * Provides a Abstract Link control: &nbsp; &lt;a href=""&gt;&lt;/a&gt;.
  * <p/>
  * See also the W3C HTML reference:
- * <a title="W3C HTML 4.01 Specification"
- *    href="../../../../../html/struct/links.html#h-12.2">A Links</a>
+ * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
+ *    href="http://www.w3.org/TR/html401/struct/links.html#h-12.2">A Links</a>
  *
  * @see ActionLink
  * @see Submit

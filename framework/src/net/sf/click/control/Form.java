@@ -459,8 +459,8 @@ import org.apache.commons.lang.StringUtils;
  *
  * <p>&nbsp;<p/>
  * See also the W3C HTML reference:
- * <a title="W3C HTML 4.01 Specification"
- *    href="../../../../../html/interact/forms.html#h-17.3">FORM</a>
+ * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
+ *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.3">FORM</a>
  *
  * @see Field
  * @see Submit

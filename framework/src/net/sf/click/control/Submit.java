@@ -36,8 +36,8 @@ import org.apache.commons.lang.StringUtils;
  * Javadoc example.
  * <p/>
  * See also the W3C HTML reference
- * <a title="W3C HTML 4.01 Specification"
- *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
+ * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
+ *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.4">INPUT</a>
  *
  * @author Malcolm Edgar
  */

@@ -34,8 +34,8 @@ import net.sf.click.util.HtmlStringBuffer;
  * For an OptionGroup code example see the {@link Option} Javadoc example.
  * <p/>
  * See also the W3C HTML reference:
- * <a title="W3C HTML 4.01 Specification"
- *    href="../../../../../html/interact/forms.html#h-17.6">OPTGROUP</a>
+ * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
+ *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.6">OPTGROUP</a>
  *
  * @see Select
  * @see Option
