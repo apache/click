@@ -38,8 +38,8 @@ import net.sf.click.util.HtmlStringBuffer;
  * and resources.
  *
  * See also the W3C HTML reference:
- * <a title="W3C HTML 4.01 Specification"
- *    href="../../../../../html/interact/links.html#h-12.2">A Links</a>
+ * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
+ *    href="http://www.w3.org/TR/html401/struct/links.html#h-12.2">A Links</a>
  *
  * @author Malcolm Edgar
  */

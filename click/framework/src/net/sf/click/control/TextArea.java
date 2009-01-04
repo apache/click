@@ -47,8 +47,8 @@ import net.sf.click.util.HtmlStringBuffer;
  * &lt;textarea name="comments" rows="6" cols="40"/&gt;&lt;/textarea&gt; </pre>
  *
  * See also the W3C HTML reference:
- * <a title="W3C HTML 4.01 Specification"
- *    href="../../../../../html/interact/forms.html#h-17.7">TEXTAREA</a>
+ * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
+ *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.7">TEXTAREA</a>
  *
  * @author Malcolm Edgar
  */
