@@ -121,6 +121,28 @@
                     <li><tt>click-X.X.X-incubating.zip.asc</tt></li>
                 </ul>
             </li>
+            <li>
+                Verify the digital signatures at <tt>people.apache.org</tt> to
+                ensure nothing went wrong with the upload.
+                <p/>
+                Please note if this is the first time you verify your key
+                at <tt>people.apache.org</tt>, you'll need to import your public
+                key first.
+                <p/>
+                Assuming your public key ID is '709F7561' and your key is available
+                from the public key server 'pgp.mit.edu', the following command
+                will import the key on <tt>people.apache.org</tt>:
+                <pre class="codeConfig">
+ssh people.apache.org
+gpg --keyserver pgp.mit.edu --recv-keys 709F7561
+</pre>
+                Next verify the signature with the following command:
+                <pre class="codeConfig">
+ssh people.apache.org
+cd ~/public_html/release/X.X.X
+gpg --verify click-X.X.X-incubating.zip.asc click-X.X.X-incubating.zip
+</pre>
+            </li>
         </ol>
 
         <h3>Voting</h3>
@@ -145,7 +167,7 @@
 
         <ol>
             <li>
-                Tag the new release, e.g. click-2.0.1 (the command below is a single line with no breaks)
+                Tag the new release, e.g. click-2.0.1
                 <pre class="codeConfig">svn copy https://svn.apache.org/repos/asf/incubator/click/trunk/click https://svn.apache.org/repos/asf/incubator/click/tags/click-X.X.X -m "tag X.X.X"
 </pre>
             </li>
@@ -199,6 +221,9 @@ cp ~/public_html/release/X.X.X/* /www/www.apache.org/dist/incubator/click/click/
                 Maven <tt>snapshots</tt> must be uploaded to: <tt>/www/people.apache.org/repo/m2-snapshot-repository</tt>,
                 while <tt>releases</tt> must be uploaded to: <tt>/www/people.apache.org/repo/m2-ibiblio-rsync-repository</tt>.
                 <p/>
+                Please note the <tt>mvn gpg:sign-and-deploy-file</tt> command will both sign and upload
+                the maven artifacts to the server. You will be prompted for your
+                GPG passphrase.
                 <ul>
                     <li>
                         For <tt>snapshots</tt> execute the following commands from the <tt>maven-upload</tt> folder:
@@ -218,16 +243,22 @@ mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X-incubating.po
                         to specify the KEY name.)
                         <p/>
                         <pre class="codeConfig">
-mvn gpg:sign-and-deploy-file -DpomFile=click/click-X.X.X-incubating.pom -Dfile=click/click-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
-mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-X.X.X-incubating.pom -Dfile=click-extras/click-extras-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
-mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-X.X.X-incubating.pom -Dfile=click-nodeps/click-nodeps-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
-mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X-incubating.pom -Dfile=click-mock/click-mock-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click/click-X.X.X-incubating.pom -Dfile=click/click-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-X.X.X-incubating.pom -Dfile=click-extras/click-extras-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-X.X.X-incubating.pom -Dfile=click-nodeps/click-nodeps-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X-incubating.pom -Dfile=click-mock/click-mock-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+</pre>
+                    Once the <tt>release</tt> artifacts are uploaded you need to verify the signatures:
+                <pre class="codeConfig">
+ssh people.apache.org
+cd /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/
+gpg --verify click/X.X.X-incubating/click-X.X.X-incubating.jar.asc click/X.X.X-incubating/click-X.X.X-incubating.jar
+gpg --verify click-extras/X.X.X-incubating/click-extras-X.X.X-incubating.jar.asc click-extras/X.X.X-incubating/click-extras-X.X.X-incubating.jar
+gpg --verify click-nodeps/X.X.X-incubating/click-nodeps-X.X.X-incubating.jar.asc click-nodeps/X.X.X-incubating/click-nodeps-X.X.X-incubating.jar
+gpg --verify click-mock/X.X.X-incubating/click-mock-X.X.X-incubating.jar.asc click-mock/X.X.X-incubating/click-mock-X.X.X-incubating.jar
 </pre>
                     </li>
                 </ul>
-                The <tt>sign-and-deploy-file</tt> command will both sign and upload
-                the maven artifacts to the server. You will be prompted for your
-                GPG passphrase.
             </li>
         </ol>
 
