@@ -188,16 +188,16 @@ objects to the model:
     of the page template to render
   </li>
   <li>request &nbsp; - &nbsp; 
-    the pages <a href="servlet-api/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</a>
+    the pages <a class="external" target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</a>
     object
   </li>
   <li>response &nbsp; - &nbsp; 
-    the pages <a href="servlet-api/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</a>
+    the pages <a class="external" target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</a>
     object
   </li>
   <li>session &nbsp; - &nbsp; 
    the <a href="click-api/net/sf/click/util/SessionMap.html">SessionMap</a> adaptor
-   for the users <a href="servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>
+   for the users <a class="external" target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</a>
   </li>
 </ul>
 
@@ -398,7 +398,7 @@ you could use a Secure page of:
      */</span>
     <span class="kw">public boolean</span> onSecurityCheck() {
     
-        <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#getRemoteUser()">getRemoteUser</a>() != <span class="kw">null</span>) {
+        <span class="kw">if</span> (getContext().getRequest().<a target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html#getRemoteUser()">getRemoteUser</a>() != <span class="kw">null</span>) {
             <span class="kw">return true</span>;
             
         } <span class="kw">else</span> {
@@ -423,7 +423,7 @@ Application Admin pages would extend this secure page to provide their functiona
      */</span>
     <span class="kw">public boolean</span> onSecurityCheck() {
     
-        <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)">isUserInRole</a>(<span class="st">"admin"</span>)) {
+        <span class="kw">if</span> (getContext().getRequest().<a target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)">isUserInRole</a>(<span class="st">"admin"</span>)) {
             <span class="kw">return true</span>;
 
         } <span class="kw">else</span> {
@@ -445,7 +445,7 @@ invalidate the session.
      * @see Page#onInit()
      */</span>
     <span class="kw">public void</span> onInit() {
-        getContext().getSession().<a target="topic" href="servlet-api/javax/servlet/http/HttpSession.html#invalidate()">invalidate</a>();
+        getContext().getSession().<a target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html#invalidate()">invalidate</a>();
     }
 } 
 </pre>
@@ -459,7 +459,7 @@ page template path.
 <a name="page-foward" class="heading"></a><h3>5.1&nbsp; Forward</h3>
 
 To forward to another page using the servlet 
-<a target="topic" href="servlet-api/javax/servlet/RequestDispatcher.html">RequestDispatcher</a>,
+<a class="external" target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/RequestDispatcher.html">RequestDispatcher</a>,
 set the Page's forward property. For example to forward to a page with a path 
 <span class="html">index.htm</span>:
 
@@ -605,7 +605,7 @@ before the second Page object is created and any model values would be lost.
 <a name="page-redirect" class="heading"></a><h3>5.3&nbsp; Redirect</h3>
 
 Redirects are another very useful way to navigate between pages. See 
-HttpServletResponse.<a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html#sendRedirect(java.lang.String)">sendRedirect</a>(location)
+HttpServletResponse.<a target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html#sendRedirect(java.lang.String)">sendRedirect</a>(location)
 for details.
 <p/>
 The great thing about redirects are that they provide a clean URL in the users browser 
@@ -660,7 +660,7 @@ the redirect method. For example:
 
 You can pass information between redirected pages using URL request parameters. 
 The ClickServlet will encode the URL for you using
-HttpServletResponse.<a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html#encodeRedirectURL(java.lang.String)">encodeRedirectURL</a>(url). 
+HttpServletResponse.<a target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html#encodeRedirectURL(java.lang.String)">encodeRedirectURL</a>(url).
 <p/>
 In the example below a user will click on an OK button to confirm a payment. The 
 <tt>onOkClick()</tt> button handler processes the payment, gets the payment transaction id, and then 
@@ -925,7 +925,7 @@ and set the <tt>serialVersionUID</tt> indicator. For example:
 </pre>
 
 Stateful page instances are stored in the user's  
-<a target="topic" href="servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>
+<a class="external" target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</a>
 using the pages class name as the key. In the example above the page would be stored in 
 the users session using the class name: <tt>com.mycorp.page.SearchPage</tt>
 

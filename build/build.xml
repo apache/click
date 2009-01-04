@@ -655,9 +655,6 @@ Please ensure you have configured build.properties</echo>
       <copy file="documentation/docs/javadoc-stylesheet.css"  
       	    overwrite="true"
 	        tofile="documentation/docs/mock-api/stylesheet.css"/>
-      <copy file="documentation/docs/javadoc-stylesheet.css"  
-      	    overwrite="true"
-            tofile="documentation/docs/servlet-api/stylesheet.css"/>
    </target>
 
 
