@@ -207,8 +207,8 @@ import org.apache.commons.lang.math.NumberUtils;
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../../html/struct/tables.html">Tables</a>
  * and the W3C CSS reference
- * <a title="W3C CSS 2.1 Specification"
- *    href="../../../../../../css2/tables.html">Tables</a>.
+ * <a class="external" target="_blank" title="W3C CSS 2.1 Specification"
+ *    href="http://www.w3.org/TR/CSS21/tables.html">Tables</a>.
  *
  * @see Column
  * @see Decorator
