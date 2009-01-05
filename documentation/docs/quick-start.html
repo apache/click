@@ -106,7 +106,7 @@ Your <tt>web.xml</tt> file should contain:
 
   &lt;servlet&gt;
     &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;net.sf.click.ClickServlet&lt;/servlet-class&gt;
+    &lt;servlet-class&gt;org.apache.click.ClickServlet&lt;/servlet-class&gt;
     &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
   &lt;/servlet&gt;
   
@@ -165,7 +165,7 @@ to our web applications <tt>WEB-INF/classes</tt> directory:
 <pre class="codeJava">
 <span class="kw">package</span> com.quickstart.page;
 
-<span class="kw">import</span> net.sf.click.Page;
+<span class="kw">import</span> org.apache.click.Page;
 
 <span class="kw">public class</span> HomePage <span class="kw">extends</span> Page {
 
@@ -295,7 +295,7 @@ new <tt>border-template.htm</tt> file:
 <pre class="codeJava">
 <span class="kw">package</span> com.quickstart.page;
 
-<span class="kw">import</span> net.sf.click.Page;
+<span class="kw">import</span> org.apache.click.Page;
 
 <span class="kw">public class</span> BorderPage <span class="kw">extends</span> Page {
 

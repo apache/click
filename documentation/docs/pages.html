@@ -82,7 +82,7 @@ Alternatively you can also configure Click to use JSP pages for rendering.
 <a name="page-class" class="heading"></a><h2>1.&nbsp; Classes</h2>
 
 All custom Click pages must subclass the
-<a target="topic" href="click-api/net/sf/click/Page.html">Page</a> base class.
+<a target="topic" href="click-api/org/apache/click/Page.html">Page</a> base class.
 The Page class and its associated companion classes, Context and Control, are depicted 
 below in Figure 1.
 
@@ -93,14 +93,14 @@ below in Figure 1.
 - <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
 </p>
 
-The Page class provides a <a href="click-api/net/sf/click/Page.html#model">model</a>
+The Page class provides a <a href="click-api/org/apache/click/Page.html#model">model</a>
 attribute which is used to hold all the objects that are rendered in the page's 
 Velocity template. The model may also contain
-<a target="topic" href="click-api/net/sf/click/Control.html">Control</a> objects, which
+<a target="topic" href="click-api/org/apache/click/Control.html">Control</a> objects, which
 provide user interface controls on the Page.
 <p/>
 Pages also have an associated  
-<a target="topic" href="click-api/net/sf/click/Context.html">Context</a> object
+<a target="topic" href="click-api/org/apache/click/Context.html">Context</a> object
 which references all the javax.servlet objects associated with the request. When 
 programming in Click you use the Context object to access HttpServletRequest attributes, 
 parameters and the HttpSession object.
@@ -108,12 +108,12 @@ parameters and the HttpSession object.
 The Page class provide a number of empty handler methods which subclasses can override to
 provide functionality:
 <ul>
-  <li><a href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck()</a></li>
-  <li><a href="click-api/net/sf/click/Page.html#onInit()">onInit()</a></li>
-  <li><a href="click-api/net/sf/click/Page.html#onGet()">onGet()</a></li>
-  <li><a href="click-api/net/sf/click/Page.html#onPost()">onPost()</a></li>
-  <li><a href="click-api/net/sf/click/Page.html#onRender()">onRender()</a></li>
-  <li><a href="click-api/net/sf/click/Page.html#onDestroy()">onDestroy()</a></li>
+  <li><a href="click-api/org/apache/click/Page.html#onSecurityCheck()">onSecurityCheck()</a></li>
+  <li><a href="click-api/org/apache/click/Page.html#onInit()">onInit()</a></li>
+  <li><a href="click-api/org/apache/click/Page.html#onGet()">onGet()</a></li>
+  <li><a href="click-api/org/apache/click/Page.html#onPost()">onPost()</a></li>
+  <li><a href="click-api/org/apache/click/Page.html#onRender()">onRender()</a></li>
+  <li><a href="click-api/org/apache/click/Page.html#onDestroy()">onDestroy()</a></li>
 </ul>
 The ClickServlet relies on instantiating Pages using a public no arguments constructor, 
 so when you create Page subclasses you must ensure you don't add an incompatible
@@ -142,7 +142,7 @@ create controls such as Forms, Fields and Tables. As illustrated by the diagram,
 after a Page's <tt>onInit()</tt> is called, each Control, available at that stage,
 will have their <tt>onInit()</tt> method called.
 <p/>
-The next step is the processing of the Page's <a href="click-api/net/sf/click/Page.html#controls">controls</a>.
+The next step is the processing of the Page's <a href="click-api/org/apache/click/Page.html#controls">controls</a>.
 The ClickSerlvet gets the list of 
 Controls from the page and then iterates through the list calling <tt>onProcess()</tt>. 
 If any of the Control's <tt>onProcess()</tt> methods return false, processing of 
@@ -162,29 +162,29 @@ objects to the model:
   </li>  
   <li>cssImports &nbsp; - &nbsp; 
     the CSS imports and style blocks to include in the pages header. 
-    Please see <a href="../click-api/net/sf/click/util/PageImports.html">PageImports</a> 
+    Please see <a href="../click-api/org/apache/click/util/PageImports.html">PageImports</a> 
     for more details.
   </li>
   <li>format &nbsp; - &nbsp; 
-    the <a href="../click-api/net/sf/click/util/Format.html">Format</a> 
+    the <a href="../click-api/org/apache/click/util/Format.html">Format</a> 
     object for formatting the display of objects.
   </li>
   <li>imports &nbsp; - &nbsp; 
     the CSS and JavaScript imports to include in the pages header.
-    Please see <a href="../click-api/net/sf/click/util/PageImports.html">PageImports</a> 
+    Please see <a href="../click-api/org/apache/click/util/PageImports.html">PageImports</a> 
     for more details.
   </li>
   <li>jsImports &nbsp; - &nbsp; 
     the JavaScript imports and script blocks to include in the pages footer. 
-    Please see <a href="../click-api/net/sf/click/util/PageImports.html">PageImports</a> 
+    Please see <a href="../click-api/org/apache/click/util/PageImports.html">PageImports</a> 
     for more details.
   </li>
   <li>messages &nbsp; - &nbsp; 
-   the <a target="topic" href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a> adaptor
-   for the Page <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
+   the <a target="topic" href="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</a> adaptor
+   for the Page <a href="click-api/org/apache/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
    method
   </li>
-  <li>path &nbsp; - &nbsp; the <a href="click-api/net/sf/click/Page.html#path">path</a> 
+  <li>path &nbsp; - &nbsp; the <a href="click-api/org/apache/click/Page.html#path">path</a> 
     of the page template to render
   </li>
   <li>request &nbsp; - &nbsp; 
@@ -196,7 +196,7 @@ objects to the model:
     object
   </li>
   <li>session &nbsp; - &nbsp; 
-   the <a href="click-api/net/sf/click/util/SessionMap.html">SessionMap</a> adaptor
+   the <a href="click-api/org/apache/click/util/SessionMap.html">SessionMap</a> adaptor
    for the users <a class="external" target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</a>
   </li>
 </ul>
@@ -285,9 +285,9 @@ classes: Integer, Double, Boolean, Byte, Character, Short, Long, Float, BigInteg
 BigDecimal, String and the various Date classes. 
 <p/>
 By default type conversion is performed by the 
-<a target="topic" href="click-api/net/sf/click/util/RequestTypeConverter.html">RequestTypeConverter</a> class
+<a target="topic" href="click-api/org/apache/click/util/RequestTypeConverter.html">RequestTypeConverter</a> class
 which is used by the ClickServlet method
-<a target="topic" href="click-api/net/sf/click/ClickServlet.html#getTypeConverter()">getTypeConverter()</a>.
+<a target="topic" href="click-api/org/apache/click/ClickServlet.html#getTypeConverter()">getTypeConverter()</a>.
 <p/>
 If you need to add support for additional types, you would write your own type
 converter class and subclass the ClickSerlvet to use your custom converter.
@@ -351,7 +351,7 @@ To make your custom type converter available you will need to subclass ClickServ
 <a name="page-security" class="heading"></a><h2>4.&nbsp; Security</h2>
 
 Pages provide an 
-<a target="topic" href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck</a> 
+<a target="topic" href="click-api/org/apache/click/Page.html#onSecurityCheck()">onSecurityCheck</a> 
 event handler which application pages can override to implement a programmatic security 
 model. 
 <p/>
@@ -527,7 +527,7 @@ available in the page template.
 
 Page forwarding is another way of passing information between pages. In this case
 you create the page to be forwarded to using the Context
-<a href="click-api/net/sf/click/Context.html#createPage(java.lang.String)">createPage()</a> 
+<a href="click-api/org/apache/click/Context.html#createPage(java.lang.String)">createPage()</a> 
 method and then set properties directly on the Page.
 Finally set this page as the page to forward the request to. For example:
 
@@ -599,7 +599,7 @@ example would be:
 Note how the <font color="red">customer</font> object is passed through to the template in the Page model. This
 approach of using the Page model is not available when you forward to another Page, as
 the first Page object is 
-"<a target="topic" href="click-api/net/sf/click/Page.html#onDestroy()">destroyed</a>"
+"<a target="topic" href="click-api/org/apache/click/Page.html#onDestroy()">destroyed</a>"
 before the second Page object is created and any model values would be lost.
 
 <a name="page-redirect" class="heading"></a><h3>5.3&nbsp; Redirect</h3>
@@ -728,7 +728,7 @@ the amount of HTML you need to maintain.
 <p/>
 To implement templating define a border template base Page 
 which content Pages should extend. The template base Page class overrides the
-Page <a href="click-api/net/sf/click/Page.html#getTemplate()">getTemplate()</a>
+Page <a href="click-api/org/apache/click/Page.html#getTemplate()">getTemplate()</a>
 method, returning the path of the border template to render. For example:
 
 <pre class="codeJava"><span class="kw">public class</span> BorderedPage <span class="kw">extends</span> Page {
@@ -761,7 +761,7 @@ The BorderedPage template <span class="blue">border.htm</span>:
  
 Other pages insert their content into this template using the Velocity 
 <a href="velocity/vtl-reference-guide.html#parse">#parse</a> directive,
-passing it their contents pages <a href="click-api/net/sf/click/Page.html#path">path</a>.
+passing it their contents pages <a href="click-api/org/apache/click/Page.html#path">path</a>.
 The <span class="blue">$path</span> value is automatically added to 
 the VelocityContext by the ClickServlet.
 <p/>
@@ -902,7 +902,7 @@ state between interactions.
 </ul>
 
 To make a page stateful you simply need to set the page
-<a target="topic" href="click-api/net/sf/click/Page.html#stateful">stateful</a> 
+<a target="topic" href="click-api/org/apache/click/Page.html#stateful">stateful</a> 
 property to true, have the page implement the <tt>Serializable</tt> interface
 and set the <tt>serialVersionUID</tt> indicator. For example:
 
@@ -911,7 +911,7 @@ and set the <tt>serialVersionUID</tt> indicator. For example:
 
 <span class="kw">import</span> java.io.Serializable;
 
-<span class="kw">import</span> net.sf.click.Page;
+<span class="kw">import</span> org.apache.click.Page;
  
 <span class="kw">public class</span> SearchPage <span class="kw">extends</span> Page <span class="kw">implements</span> Serializable {
 
@@ -960,18 +960,18 @@ When pages have completed their execution, all the Page's controls <tt>onDestroy
 methods are invoked, and then the Page's <tt>onDestroy()</tt> method is invoked. This
 is your opportunity to de-reference any large sets or graphs. For example the Table 
 control by default de-references its rowList in its
-<a target="topic" href="click-api/net/sf/click/control/Table.html#onDestroy()">onDestory()</a>
+<a target="topic" href="click-api/org/apache/click/control/Table.html#onDestroy()">onDestory()</a>
 method.
 
 <a name="page-error-handling" class="heading"></a><h2>9.&nbsp; Error Handling</h2>
 
 If an Exception occurs processing a Page object or rendering a template the error
 is delegated to the registered handler. The default Click error handler is the
-<a target="topic" href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a>,
+<a target="topic" href="click-api/org/apache/click/util/ErrorPage.html">ErrorPage</a>,
 which is automatically configured as:
 
 <pre class="codeConfig">
-&lt;page path="<span class="blue">click/error.htm</span>" classname="<span class="red">net.sf.click.util.ErrorPage</span>"/&gt; 
+&lt;page path="<span class="blue">click/error.htm</span>" classname="<span class="red">org.apache.click.util.ErrorPage</span>"/&gt; 
 </pre>
 
 To register an alternative error handler you must subclass ErrorPage and define
@@ -1007,7 +1007,7 @@ it will use the registered <a href="not-found.html">not-found.htm</a> page.
 The Click not found page is automatically configured as:
 
 <pre class="codeConfig">
-&lt;page path="<span class="blue">click/not-found.htm</span>" classname="<span class="red">net.sf.click.Page</span>"/&gt; 
+&lt;page path="<span class="blue">click/not-found.htm</span>" classname="<span class="red">org.apache.click.Page</span>"/&gt; 
 </pre>
 
 You can override the default configuration and specify your own class, but you cannot change the path.
@@ -1021,8 +1021,8 @@ has access to the usual Click objects.
 <a name="page-messages" class="heading"></a><h2>11.&nbsp; Message Properties</h2>
 
 The Page class provides a 
-<a href="click-api/net/sf/click/Page.html#messages">messages</a> property which
-is a <a href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a>
+<a href="click-api/org/apache/click/Page.html#messages">messages</a> property which
+is a <a href="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</a>
 of localized messages for the page. These messages are made available
 in the VelocityContext when the page is rendered under the key <tt>messages</tt>.
 So for example if you had a page title message you would access it in your page template as:

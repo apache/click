@@ -514,7 +514,7 @@ Also see the Click <a href="examples.html">Examples</a> use of page templating.
 
 <a name="menus" class="heading"></a><h2>6.&nbsp; Menus</h2>
 
-For many applications using the <a href="extras-api/net/sf/click/extras/control/Menu.html">Menu</a>
+For many applications using the <a href="extras-api/org/apache/click/extras/control/Menu.html">Menu</a>
 control to centralize application navigation is very useful. 
 Menus are defined in a <tt>WEB-INF/menu.xml</tt> file which is very easy to change.
 <p/>
@@ -533,7 +533,7 @@ A good place to define your macros is in the webroot <tt>/macro.vm</tt> file
 as it is automatically included by Click. 
 <p/>
 Using macros you can create dynamic menu behaviour such as only rendering menu items 
-a user is authorized to access with <a href="extras-api/net/sf/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>.
+a user is authorized to access with <a href="extras-api/org/apache/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>.
 
 <pre class="codeHtml">
 <span class="kw">#if</span> (<span class="red">$</span>menu.isUserInRoles())
@@ -610,7 +610,7 @@ it will not produce any logging output.
 
 <a name="error-handling" class="heading"></a><h2>8.&nbsp; Error Handling</h2>
 
-In Click unhandled errors are directed to the <a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a>
+In Click unhandled errors are directed to the <a href="click-api/org/apache/click/util/ErrorPage.html">ErrorPage</a>
 for display. If applications require additional error handling they can create and
 register a custom error page in <tt>WEB-INF/click.xml</tt>. For example:
 
@@ -627,7 +627,7 @@ Potential uses for a custom error page include custom logging.
 <p/>
 For example if an application requires unhandled errors to be logged to an 
 application log (rather than System.out) then a custom 
-<a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a> could be
+<a href="click-api/org/apache/click/util/ErrorPage.html">ErrorPage</a> could be
 configured. An example <tt>ErrorPage</tt> error logging page is provided 
 below:
 
@@ -635,7 +635,7 @@ below:
 <span class="kw">package</span> com.mycorp.page.ErrorPage;
 ..
 
-<span class="kw">public class</span> ErrorPage <span class="kw">extends</span> net.sf.click.util.ErrorPage {
+<span class="kw">public class</span> ErrorPage <span class="kw">extends</span> org.apache.click.util.ErrorPage {
 	
     <span class="kw">public void</span> onDestory() {
     	Logger.getLogger(getClass()).error(getError());
@@ -648,7 +648,7 @@ below:
 Yahoo published a list of <a target="_blank" class="external" href="http://developer.yahoo.com/performance/rules.html">best practices</a>
 for improving web application performance.
 <p/>
-Click Framework provides a <a href="extras-api/net/sf/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a>
+Click Framework provides a <a href="extras-api/org/apache/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a>
 which caters for some of these rules. However not all rules can be easily automated.
 <p/>
 This section will outline ways to apply rules which are not covered by the PerformanceFilter namely, <a target="_blank" class="external" href="http://developer.yahoo.com/performance/rules.html#num_http">#1 - Minimize HTTP Requests (by combining files)</a>
@@ -703,13 +703,13 @@ Note that the two files must include all the JavaScript and CSS that is generate
 by the Page and its Controls. Then you can instruct Click to <em>only</em>
 include the two compressed files, home-page.css and home-page.js.
 <p/>
-Click makes use of the utility class  <a href="click-api/net/sf/click/util/PageImports.html">PageImports</a>
+Click makes use of the utility class  <a href="click-api/org/apache/click/util/PageImports.html">PageImports</a>
 to include the CSS and JavaScript. PageImports exposes the method
-<a href="click-api/net/sf/click/util/PageImports.html#setInitialized(boolean)">setInitialized(boolean)</a>,
+<a href="click-api/org/apache/click/util/PageImports.html#setInitialized(boolean)">setInitialized(boolean)</a>,
 which controls when PageImports are fully initialized. Once PageImports have been
 initialized, no other CSS and JavaScript will be included.
 <p/>
-Knowing this one can override <a href="click-api/net/sf/click/Page.html#getPageImports()">Page.getPageImports()</a>,
+Knowing this one can override <a href="click-api/org/apache/click/Page.html#getPageImports()">Page.getPageImports()</a>,
 and import the necessary JavaScript and CSS files and then set PageImports to <tt>initialized</tt>,
 forcing PageImports to skip other CSS and JavaScript files.
 <p/>
