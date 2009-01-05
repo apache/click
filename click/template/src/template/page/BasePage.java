@@ -2,7 +2,7 @@ package template.page;
 
 import org.apache.log4j.Logger;
 
-import net.sf.click.Page;
+import org.apache.click.Page;
 
 /**
  *  Provides the base page with include business services, which

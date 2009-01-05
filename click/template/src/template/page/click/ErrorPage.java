@@ -1,8 +1,8 @@
 package template.page.click;
 
-import net.sf.click.extras.control.Menu;
+import org.apache.click.extras.control.Menu;
 
-public class ErrorPage extends net.sf.click.util.ErrorPage {
+public class ErrorPage extends org.apache.click.util.ErrorPage {
 
     public String title = "Error Page";
 
