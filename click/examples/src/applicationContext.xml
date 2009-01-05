@@ -22,14 +22,14 @@
     
 <beans>
     
-    <bean id="bookingService" class="net.sf.click.examples.service.BookingService"/>
+    <bean id="bookingService" class="org.apache.click.examples.service.BookingService"/>
     
-    <bean id="clientService" class="net.sf.click.examples.service.ClientService"/>
+    <bean id="clientService" class="org.apache.click.examples.service.ClientService"/>
     
-    <bean id="customerService" class="net.sf.click.examples.service.CustomerService"/>
+    <bean id="customerService" class="org.apache.click.examples.service.CustomerService"/>
     
-    <bean id="postCodeService" class="net.sf.click.examples.service.PostCodeService"/>
+    <bean id="postCodeService" class="org.apache.click.examples.service.PostCodeService"/>
         
-    <bean id="userService" class="net.sf.click.examples.service.UserService"/>
+    <bean id="userService" class="org.apache.click.examples.service.UserService"/>
 
 </beans>

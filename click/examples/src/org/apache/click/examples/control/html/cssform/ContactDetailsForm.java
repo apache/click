@@ -1,0 +1,150 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package org.apache.click.examples.control.html.cssform;
+
+import org.apache.click.examples.control.html.FeedbackBorder;
+import org.apache.click.control.Field;
+import org.apache.click.control.Submit;
+import org.apache.click.control.TextField;
+import org.apache.click.examples.control.html.FieldLabel;
+import org.apache.click.examples.control.html.list.HtmlList;
+import org.apache.click.examples.control.html.list.ListItem;
+import org.apache.click.extras.control.DoubleField;
+import org.apache.click.extras.control.HtmlFieldSet;
+import org.apache.click.extras.control.HtmlForm;
+import org.apache.click.extras.control.IntegerField;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.HtmlStringBuffer;
+
+/**
+ * This page demonstrates how to manually layout a form using Java.
+ *
+ * The form is laid out as specified by the article:
+ * http://www.sitepoint.com/print/fancy-form-design-css
+ *
+ * @author Bob Schellink
+ */
+public class ContactDetailsForm extends HtmlForm {
+
+    private HtmlList htmlList;
+
+    public ContactDetailsForm(String name) {
+        super(name);
+    }
+
+    public void onInit() {
+        super.onInit();
+        buildForm();
+    }
+
+    public void buildForm() {
+        HtmlFieldSet fieldset = new HtmlFieldSet("contactDetails");
+        fieldset.setLegend("Contact Details");
+        htmlList = new HtmlList(HtmlList.ORDERED_LIST);
+
+        addTextField("name", htmlList).setRequired(true);
+
+        addTextField("email", "Email Address", htmlList);
+
+        addTextField("phone", "Telephone", htmlList).setRequired(true);
+
+        fieldset.add(htmlList);
+        add(fieldset);
+
+        fieldset = new HtmlFieldSet("deliveryAddress");
+        fieldset.setLegend("Delivery Address");
+        htmlList = new HtmlList(HtmlList.ORDERED_LIST);
+
+        addTextField("address1", htmlList);
+
+        addTextField("address2", htmlList);
+
+        addTextField("suburb", "Suburb/Town", htmlList);
+
+        addTextField("postcode", htmlList, Integer.class).setRequired(true);
+
+        addTextField("country", htmlList);
+
+        fieldset.add(htmlList);
+        add(fieldset);
+
+        fieldset = new HtmlFieldSet("buttons");
+        // Setting legend to "", draws fieldset border but does not display label
+        fieldset.setLegend("");
+        fieldset.setAttribute("class", "submit");
+        Submit submit = new Submit("submit", "Begin download");
+        fieldset.add(submit);
+        add(fieldset);
+    }
+
+    public String getHtmlImports() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
+
+        // Include default imports
+        buffer.append(super.getHtmlImports());
+
+        // Include CSS for ContactDetailsForm
+        String imports = "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/assets/css/cssform{1}.css\"/>\n";
+        buffer.append(ClickUtils.createHtmlImport(imports, getContext()));
+        return buffer.toString();
+    }
+
+    private Field addTextField(String nameStr, HtmlList htmlList) {
+        return addTextField(nameStr, null, htmlList);
+    }
+
+    private Field addTextField(String nameStr, HtmlList htmlList, Class fieldType) {
+        return addTextField(nameStr, null, htmlList, fieldType);
+    }
+
+    private Field addTextField(String nameStr, String labelStr, HtmlList htmlList) {
+        return addTextField(nameStr, labelStr, htmlList, String.class);
+    }
+
+    private Field addTextField(String nameStr, String labelStr, HtmlList htmlList, Class fieldType) {
+        ListItem item = new ListItem();
+        htmlList.add(item);
+
+        Field field = createField(fieldType);
+        field.setName(nameStr);
+        field.setAttribute("class", "text");
+        FieldLabel label = null;
+        if (labelStr != null) {
+            label = new FieldLabel(field, labelStr);
+        } else {
+            label = new FieldLabel(field);
+        }
+        item.add(label);
+
+        FeedbackBorder border = new FeedbackBorder();
+        border.add(field);
+        item.add(border);
+        return field;
+    }
+
+    private Field createField(Class fieldType) {
+        if (fieldType == Integer.class) {
+            return new IntegerField();
+        } else if (fieldType == Double.class) {
+            return new DoubleField();
+        } else {
+            return new TextField();
+        }
+    }
+}

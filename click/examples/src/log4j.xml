@@ -28,7 +28,7 @@
       </layout>
    </appender>
 
-   <category name="net.sf.click">
+   <category name="org.apache.click">
       <priority value="INFO"/>
    </category>
    
