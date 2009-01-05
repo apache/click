@@ -1,0 +1,73 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+
+<!-- Print report if client is set -->
+#if ($client)
+  <!-- Print client -->
+  <h3>Client</h3>
+  <table border="0" cellspacing="2" cellpadding="2">
+    <tr>
+        <td><b>Title</b></td>
+        <td>$!client.title</td>
+    </tr>
+    <tr>
+        <td><b>Firstname</b></td>
+        <td>$!client.firstName</td>
+    </tr>
+    <tr>
+        <td><b>Lastname</b></td>
+        <td>$!client.lastName</td>
+    </tr>
+    <tr>
+        <td><b>Date Joined</b></td>
+        <td>$format.date($client.dateJoined, "dd MMM yyyy")</td>
+    </tr>
+    <tr>
+        <td><b>Email</b></td>
+        <td>$format.email($client.email, "style='{text-decoration:none;}'")</td>
+    </tr>
+  </table>
+
+  <!-- Print address -->
+  <h3>Address</h3>
+  <table border="0" cellspacing="2" cellpadding="2">
+    <tr>
+        <td><b>Line one</b></td>
+        <td>$!client.address.line1</td>
+    </tr>
+    <tr>
+        <td><b>Line two</b></td>
+        <td>$!client.address.line2</td>
+    </tr>
+    <tr>
+        <td><b>Suburb</b></td>
+        <td>$!client.address.suburb</td>
+    </tr>
+    <tr>
+        <td><b>State</b></td>
+        <td>$!client.address.state</td>
+    </tr>
+    <tr>
+        <td><b>Postal code</b></td>
+        <td>$!client.address.postCode</td>
+    </tr>
+  </table>
+#end
+
+$formStep3

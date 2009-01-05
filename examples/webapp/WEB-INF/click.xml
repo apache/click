@@ -20,13 +20,13 @@
 
 <click-app charset="UTF-8">
 
-  <pages package="net.sf.click.examples.page">
+  <pages package="org.apache.click.examples.page">
   </pages>
 
   <mode value="profile"/>
 
   <controls>
-    <control classname="net.sf.click.examples.control.FilterPanel"/>
+    <control classname="org.apache.click.examples.control.FilterPanel"/>
   </controls>
 
 </click-app>

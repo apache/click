@@ -32,7 +32,7 @@
 	-->
 	<filter>
 		<filter-name>DatabaseInitFilter</filter-name>
-		<filter-class>net.sf.click.examples.util.DatabaseInitFilter</filter-class>
+		<filter-class>org.apache.click.examples.util.DatabaseInitFilter</filter-class>
 	</filter>
  
 	<!--
@@ -40,7 +40,7 @@
 	-->
 	<filter>
 		<filter-name>DataContextFilter</filter-name>
-		<filter-class>net.sf.click.extras.cayenne.DataContextFilter</filter-class>
+		<filter-class>org.apache.click.extras.cayenne.DataContextFilter</filter-class>
 		<init-param>
 			<param-name>session-scope</param-name>
  			<param-value>false</param-value>
@@ -55,7 +55,7 @@
 	-->
 	<filter>
 		<filter-name>PerformanceFilter</filter-name>
-		<filter-class>net.sf.click.extras.filter.PerformanceFilter</filter-class>
+		<filter-class>org.apache.click.extras.filter.PerformanceFilter</filter-class>
 		<init-param>
 			<param-name>cachable-paths</param-name>
  			<param-value>/assets/*</param-value>
@@ -104,7 +104,7 @@
 	-->
 	<servlet>
 		<servlet-name>ClickServlet</servlet-name>
-		<servlet-class>net.sf.click.extras.spring.SpringClickServlet</servlet-class>
+		<servlet-class>org.apache.click.extras.spring.SpringClickServlet</servlet-class>
 		<init-param>
 			<param-name>spring-path</param-name>
 			<param-value>/applicationContext.xml</param-value>

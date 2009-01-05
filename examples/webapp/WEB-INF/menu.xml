@@ -20,7 +20,7 @@
 
 <menu>
   <menu label=" Home" path="home.htm" imageSrc="/assets/images/icons-16px/home.png">
-    <menu label="BorderPage Class" path="source-viewer.htm?filename=WEB-INF/classes/net/sf/click/examples/page/BorderPage.java" title="BorderPage Java source" target="_blank"/>
+    <menu label="BorderPage Class" path="source-viewer.htm?filename=WEB-INF/classes/org/apache/click/examples/page/BorderPage.java" title="BorderPage Java source" target="_blank"/>
     <menu label="Border Template HTML" path="source-viewer.htm?filename=border-template.htm" title="Page border HTML template" target="_blank" />
     <menu separator="true"/>
     <menu label="Javadoc API" path="javadoc/index.html" title="Examples HTML Javadoc API" target="_blank" />
