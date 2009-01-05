@@ -18,6 +18,6 @@
  under the License.
 -->
 <click-app charset="UTF-8">
-    <pages package="net.sf.click.pages"/>
+    <pages package="org.apache.click.pages"/>
     <mode value="trace"/>
 </click-app>
