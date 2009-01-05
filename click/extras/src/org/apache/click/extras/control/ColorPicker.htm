@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
    Licensed to the Apache Software Foundation (ASF) under one
    or more contributor license agreements.  See the NOTICE file
@@ -17,7 +16,18 @@
    specific language governing permissions and limitations
    under the License.
 -->
-<click-app charset="UTF-8">
-    <pages package="org.apache.click.extras.pages"/>
-    <mode value="trace"/>
-</click-app>
+
+#if(${field.showTextField})
+  <input id="${id}" type="text" name="${field.name}" value="${value}" ${attributes}/>
+#else
+  <input id="${id}" type="hidden" name="${field.name}" value="${value}" ${attributes}/>
+  <span id="${id}_p" style="background-color:${value}" class="colorPickerPreview"></span>
+#end
+
+<img align="top" class="colorPickerImg" id="${id}_i"
+    onclick="Click.colorPicker.showColorPicker({
+        inputObjId:'${id}', imageId: '${id}_i', closeMsg:'${closeMsg}',
+        clearMsg: '${noColorMsg}', resourcePath:'${path}', isRequired:${field.required}
+        #if(!${field.showTextField}),previewId:'${id}_p' #end
+    })"
+    title="${chooseColorMsg}" src="${path}/click/colorpicker/images/color-picker.png"/>
