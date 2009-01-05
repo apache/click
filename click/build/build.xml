@@ -287,6 +287,15 @@
            <attribute name="Click-Version" value="${version}"/>
            <attribute name="Package" value="org.apache.click.extras"/>
            <attribute name="Built-By" value="${user.name}"/>
+           <attribute name="Created-By" value="Apache Ant"/>
+           <attribute name="Build-Jdk" value="${java.version}"/>
+           <attribute name="Extension-Name" value="org.apache.click.extras"/>
+           <attribute name="Specification-Title" value="Click is a Java-based web application framework" />
+           <attribute name="Specification-Vendor" value="Apache Software Foundation"/>
+           <attribute name="Implementation-Title" value="org.apache.click.extras"/>
+           <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+           <attribute name="Implementation-Vendor" value="Apache Software Foundation"/>
+           <attribute name="Implementation-Version" value="${version}"/>
          </manifest>
          <fileset dir="extras/classes"/>
       </jar>  
@@ -328,6 +337,15 @@
            <attribute name="Click-Version" value="${version}"/>
            <attribute name="Package" value="org.apache.click"/>
            <attribute name="Built-By" value="${user.name}"/>
+           <attribute name="Created-By" value="Apache Ant"/>
+           <attribute name="Build-Jdk" value="${java.version}"/>
+           <attribute name="Extension-Name" value="org.apache.click"/>
+           <attribute name="Specification-Title" value="Click is a Java-based web application framework" />
+           <attribute name="Specification-Vendor" value="Apache Software Foundation"/>
+           <attribute name="Implementation-Title" value="org.apache.click"/>
+           <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+           <attribute name="Implementation-Vendor" value="Apache Software Foundation"/>
+           <attribute name="Implementation-Version" value="${version}"/>
          </manifest>
          <fileset dir="${dir.classes}"/>
       </jar>
@@ -357,6 +375,15 @@
            <attribute name="Click-Version" value="${version}"/>
            <attribute name="Package" value="org.apache.click"/>
            <attribute name="Built-By" value="${user.name}"/>
+           <attribute name="Created-By" value="Apache Ant"/>
+           <attribute name="Build-Jdk" value="${java.version}"/>
+           <attribute name="Extension-Name" value="org.apache.click"/>
+           <attribute name="Specification-Title" value="Click is a Java-based web application framework" />
+           <attribute name="Specification-Vendor" value="Apache Software Foundation"/>
+           <attribute name="Implementation-Title" value="org.apache.click"/>
+           <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+           <attribute name="Implementation-Vendor" value="Apache Software Foundation"/>
+           <attribute name="Implementation-Version" value="${version}"/>
          </manifest>
          <fileset dir="${dir.classes}">
             <exclude name="org/apache/velocity/anakia/**"/>
@@ -395,8 +422,17 @@
       <jar destfile="dist/${click-mock}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Package" value="org.apache.click"/>
+           <attribute name="Package" value="org.apache.click.mock"/>
            <attribute name="Built-By" value="${user.name}"/>
+           <attribute name="Created-By" value="Apache Ant"/>
+           <attribute name="Build-Jdk" value="${java.version}"/>
+           <attribute name="Extension-Name" value="org.apache.click.mock"/>
+           <attribute name="Specification-Title" value="Click is a Java-based web application framework" />
+           <attribute name="Specification-Vendor" value="Apache Software Foundation"/>
+           <attribute name="Implementation-Title" value="org.apache.click.mock"/>
+           <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+           <attribute name="Implementation-Vendor" value="Apache Software Foundation"/>
+           <attribute name="Implementation-Version" value="${version}"/>
          </manifest>
          <fileset dir="mock/classes"/>
       </jar>  
