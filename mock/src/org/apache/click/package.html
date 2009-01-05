@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-
 <!--
    Licensed to the Apache Software Foundation (ASF) under one
    or more contributor license agreements.  See the NOTICE file
@@ -19,7 +17,17 @@
    under the License.
 -->
 
-<click-app charset="UTF-8">
-    <pages package="org.apache.click.pages"/>
-    <mode value="production"/>
-</click-app>
+<body>
+Provides a mock package for Click, enabling unit testing of Pages and Controls.
+<p/>
+This package defines the main mock classes but developers only have to be concerned
+with two classes namely {@link org.apache.click.MockContainer} and
+{@link org.apache.click.MockContext}.
+<p/>
+The main class developers will use is {@link org.apache.click.MockContainer} which
+provides mocking mocking of application pages and controls.
+<p/>
+The class {@link org.apache.click.MockContext} provides mocking of 
+{@link org.apache.click.Control}s and is easier to setup and use than
+{@link org.apache.click.MockContainer}.
+</body>
