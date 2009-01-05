@@ -20,7 +20,7 @@
 <click-app>
 
   <controls>
-    <control classname="net.sf.click.control.Table"/>
+    <control classname="org.apache.click.control.Table"/>
   </controls>
 
 </click-app>
