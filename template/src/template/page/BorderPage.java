@@ -1,6 +1,6 @@
 package template.page;
 
-import net.sf.click.extras.control.Menu;
+import org.apache.click.extras.control.Menu;
 
 public class BorderPage extends BasePage {
 

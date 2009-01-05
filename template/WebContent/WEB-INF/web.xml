@@ -12,7 +12,7 @@
 	-->
 	<filter>
 		<filter-name>PerformanceFilter</filter-name>
-		<filter-class>net.sf.click.extras.filter.PerformanceFilter</filter-class>
+		<filter-class>org.apache.click.extras.filter.PerformanceFilter</filter-class>
 		<init-param>
 			<param-name>cachable-paths</param-name>
  			<param-value>/assets/*</param-value>
@@ -46,7 +46,7 @@
 
 	<servlet>
 		<servlet-name>ClickServlet</servlet-name>
-		<servlet-class>net.sf.click.ClickServlet</servlet-class>
+		<servlet-class>org.apache.click.ClickServlet</servlet-class>
   		<load-on-startup>0</load-on-startup>
 	</servlet>
 
