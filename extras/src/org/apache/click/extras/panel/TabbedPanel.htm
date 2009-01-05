@@ -1,0 +1,51 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+
+<div id='$this.id'>
+    <table class="tp_tab">
+        <tr class="tp_tab">
+        #foreach ($panel in $this.panels)
+          #if ($panel.id == $this.activePanel.id)
+            <td class="tp_tab_on">
+                $panel.label
+            </td>
+            <td class="tp_tab_space"></td>
+          #else
+            #if ($panel.isDisabled())
+            <td class="tp_tab_off_disabled">
+                $panel.label
+            </td>
+            #else 
+            <td class="tp_tab_off">
+                <a href="$this.tabLink.getHref($panel.name)" id="$panel.id" class="tp_tab_link">$panel.label</a>
+            </td>
+            #end
+            <td class="tp_tab_space"></td>
+          #end
+        #end
+        </tr>
+    </table>
+    <table class="tp_content" #if(${width})width="${width}"#end>
+        <tr class="tp_content">
+            <td class="tp_content" #if(${width})width="${width}"#end>
+                $this.activePanel
+            </td>
+        </tr>
+    </table>
+</div>
