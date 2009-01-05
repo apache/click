@@ -76,7 +76,7 @@ The Click configuration files include:
 <a name="servlet-configuration" class="heading"></a><h2>1.&nbsp; Servlet Configuration</h2>
 
 For a Click web application to function the 
-<a target="topic" href="click-api/net/sf/click/ClickServlet.html">ClickServlet</a>
+<a target="topic" href="click-api/org/apache/click/ClickServlet.html">ClickServlet</a>
 must be configured in the web application's <tt>/WEB-INF/web.xml</tt> file. 
 A simple web application which maps all <tt>*.htm</tt> requests to a ClickServlet 
 is provided below.
@@ -86,7 +86,7 @@ is provided below.
 
   &lt;servlet&gt;
     &lt;servlet-name&gt;<span class="blue">ClickServlet</span>&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;<span class="red">net.sf.click.ClickServlet</span>&lt;/servlet-class&gt;
+    &lt;servlet-class&gt;<span class="red">org.apache.click.ClickServlet</span>&lt;/servlet-class&gt;
     &lt;load-on-startup&gt;<span class="red">0</span>&lt;/load-on-startup&gt;
   &lt;/servlet&gt;
   
@@ -165,7 +165,7 @@ An example of an advanced config file is:
   
   &lt;mode value="profile"/&gt;
   
-  &lt;log-service classname="net.sf.click.extras.service.Log4JLogService"/&gt;
+  &lt;log-service classname="org.apache.click.extras.service.Log4JLogService"/&gt;
   
 &lt;/click-app&gt; 
 </pre>
@@ -189,14 +189,14 @@ set for:
     <li class="items">Velocity templates</li>
     <li class="items">HttpServletRequest character encoding</li>
     <li class="items">Page Content-Type charset, see Page
-        <a href="click-api/net/sf/click/Page.html#getContentType()">getContentType()</a>
+        <a href="click-api/org/apache/click/Page.html#getContentType()">getContentType()</a>
     </li>
 </ul>
 
 The <span class="blue">locale</span> attribute defines the default application
 Locale. If this value is defined it will override Locale returned by the request. 
 Please see the Context  
-<a href="click-api/net/sf/click/Context.html#getLocale()">getLocale()</a>
+<a href="click-api/org/apache/click/Context.html#getLocale()">getLocale()</a>
 for details.
 <p/>
 
@@ -264,7 +264,7 @@ Each page <span class="blue">path</span> must be unique, as the Click applicatio
 <p/>
 The Click application will create a new Page instance for the given request using
 the configured page <span class="blue">classname</span>. All pages must subclass 
-<a target="topic" href="click-api/net/sf/click/Page.html">Page</a>  
+<a target="topic" href="click-api/org/apache/click/Page.html">Page</a>  
 and provide a public no arguments constructor, so they can be instantiated.
 <p/>
 Pages can also define <span class="blue">header</span> values which are discussed
@@ -391,7 +391,7 @@ ClickServlet will automatically:
 <li class="items">add any public controls to the page, after the page constructor has been invoked</li>
 <li class="items">if the public control's name is not defined, its name will be set to the the value its field name</li>
 <li class="items">bind any request parameters to public page fields, after page constructor has been invoked.
-See <a href="click-api/net/sf/click/ClickServlet.html#processPageRequestParams(net.sf.click.Page)">ClickServlet.processPageRequestParams(Page)</a>
+See <a href="click-api/org/apache/click/ClickServlet.html#processPageRequestParams(org.apache.click.Page)">ClickServlet.processPageRequestParams(Page)</a>
 for more details
 </li>
 <li class="items">add any public page fields to the page model, before rendering</li>
@@ -467,8 +467,8 @@ pairs which are applied to the
 
 Page headers are set after the Page has been constructed and before <tt>onInit()</tt> is called.
 Pages can then modify their 
-<a target="topic" href="click-api/net/sf/click/Page.html#headers">headers</a> property using
-the <a href="click-api/net/sf/click/Page.html#setHeader(java.lang.String, java.lang.Object)">setHeader()</a>
+<a target="topic" href="click-api/org/apache/click/Page.html#headers">headers</a> property using
+the <a href="click-api/org/apache/click/Page.html#setHeader(java.lang.String, java.lang.Object)">setHeader()</a>
 method.
 
 <h4>2.4.1&nbsp; Browser Caching</h4>
@@ -535,11 +535,11 @@ is applied to all pages.
 
 <pre class="codeDtd">
 &lt;!ELEMENT <span class="blue">format</span> (#PCDATA)&gt;
-    &lt;ATTLIST format classname CDATA #FIXED "net.sf.click.util.Format"&gt; 
+    &lt;ATTLIST format classname CDATA #FIXED "org.apache.click.util.Format"&gt; 
 </pre>
 
 By default all Click pages are configured with a 
-<a target="topic" href="click-api/net/sf/click/util/Format.html">net.sf.click.util.Format</a>
+<a target="topic" href="click-api/org/apache/click/util/Format.html">org.apache.click.util.Format</a>
 object. The format object is made available in the Velocity page templates using the name 
 <tt>$<span class="blue">format</span></tt>.
 <p/>
@@ -648,9 +648,9 @@ as you do not have to restart you application server to pick up new pages.
 <a name="click-logging" class="heading"></a><h4>2.6.2&nbsp; Click and Velocity Logging</h4>
 
 The Click and Velocity runtimes use 
-<a target="topic" href="click-api/net/sf/click/service/LogService.html">LogService</a>
+<a target="topic" href="click-api/org/apache/click/service/LogService.html">LogService</a>
 for logging messages. The default LogService implementation is 
-<a target="topic" href="click-api/net/sf/click/service/ConsoleLogService.html">ConsoleLogService</a>
+<a target="topic" href="click-api/org/apache/click/service/ConsoleLogService.html">ConsoleLogService</a>
 which will send messages to the console [System.out]. 
 For example the following logging output is for a HomePage request when the application
 mode is <tt>trace</tt>: 
@@ -668,8 +668,8 @@ mode is <tt>trace</tt>:
 
 Any unhandled <tt>Throwable</tt> errors are logged by the ClickServlet.
 <p/>
-Note that Click Extras also provide log adaptors for <a target="topic" href="extras-api/net/sf/click/extras/service/Log4JLogService.html">Log4J</a>
-and the <a target="topic" href="extras-api/net/sf/click/extras/service/JdkLogService.html">JDK Logging API</a>.
+Note that Click Extras also provide log adaptors for <a target="topic" href="extras-api/org/apache/click/extras/service/Log4JLogService.html">Log4J</a>
+and the <a target="topic" href="extras-api/org/apache/click/extras/service/JdkLogService.html">JDK Logging API</a>.
 <p/>
 When an application is not in <tt>production</tt> mode the error page displays
 detailed debugging information. When the application mode is <tt>production</tt>
@@ -688,9 +688,9 @@ which will be deployed on application startup.
 </pre>
 
 The <tt><span class="red">control</span></tt> registers 
-<a href="click-api/net/sf/click/Control.html">Control</a>
+<a href="click-api/org/apache/click/Control.html">Control</a>
 classes which
-will have their <a href="click-api/net/sf/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>
+will have their <a href="click-api/org/apache/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>
 method invoked when the click application starts.
 
 <pre class="codeDtd">
@@ -750,7 +750,7 @@ Click supports two ways of deploying pre-configured resources (templates,
 stylesheets, JavaScript etc.) from a Jar to a web applications.
 <ol>
     <li>
-        Through a Control's <a href="click-api/net/sf/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>
+        Through a Control's <a href="click-api/org/apache/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>
         event handler. See the <a href="#application-controls">Controls</a> section above.
     </li>
     <li>

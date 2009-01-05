@@ -285,7 +285,7 @@
       <jar destfile="dist/${click-extras}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Package" value="net.sf.click.extras"/>
+           <attribute name="Package" value="org.apache.click.extras"/>
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
          <fileset dir="extras/classes"/>
@@ -326,7 +326,7 @@
    	  <jar destfile="dist/${click-nodeps}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Package" value="net.sf.click"/>
+           <attribute name="Package" value="org.apache.click"/>
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
          <fileset dir="${dir.classes}"/>
@@ -355,7 +355,7 @@
       <jar destfile="dist/${click}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Package" value="net.sf.click"/>
+           <attribute name="Package" value="org.apache.click"/>
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
          <fileset dir="${dir.classes}">
@@ -395,7 +395,7 @@
       <jar destfile="dist/${click-mock}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Package" value="net.sf.click"/>
+           <attribute name="Package" value="org.apache.click"/>
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
          <fileset dir="mock/classes"/>
@@ -589,8 +589,8 @@ Please ensure you have configured build.properties</echo>
                     classpath="classpath.framework"
       	            overview="documentation/docs/core-overview.html"/>
 
-      <copy file="framework/src/net/sf/click/control/image-submit.gif"
-            todir="documentation/docs/click-api/net/sf/click/control"/>
+      <copy file="framework/src/org/apache/click/control/image-submit.gif"
+            todir="documentation/docs/click-api/org/apache/click/control"/>
    	
       <!-- Extras -->
       <delete quiet="false" failonerror="false">
@@ -617,35 +617,35 @@ Please ensure you have configured build.properties</echo>
     				overview="documentation/docs/mock-overview.html"/>
 
       <copy file="documentation/images/post-sequence-diagram.png"
-            todir="documentation/docs/click-api/net/sf/click/"/>
+            todir="documentation/docs/click-api/org/apache/click/"/>
       <copy file="documentation/images/control-post-sequence-diagram.png"
-            todir="documentation/docs/click-api/net/sf/click/"/>
+            todir="documentation/docs/click-api/org/apache/click/"/>
       <copy file="documentation/images/service-package.png"
-            todir="documentation/docs/click-api/net/sf/click/service/"/>
+            todir="documentation/docs/click-api/org/apache/click/service/"/>
       <copy file="documentation/images/service-package.png"
-            todir="documentation/docs/extras-api/net/sf/click/extras/service/"/>
+            todir="documentation/docs/extras-api/org/apache/click/extras/service/"/>
       <copy file="documentation/images/form-table.png"
-            todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+            todir="documentation/docs/extras-api/org/apache/click/extras/control"/>
       <copy file="documentation/images/menu.png"
-            todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+            todir="documentation/docs/extras-api/org/apache/click/extras/control"/>
       <copy file="documentation/images/link-decorator.png"
-          todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+          todir="documentation/docs/extras-api/org/apache/click/extras/control"/>
       <copy file="documentation/images/tabbed-form.png"
-            todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+            todir="documentation/docs/extras-api/org/apache/click/extras/control"/>
       <copy file="documentation/images/virtual-keyboard.gif"
-            todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+            todir="documentation/docs/extras-api/org/apache/click/extras/control"/>
       <copy file="documentation/images/table.png"
-            todir="documentation/docs/click-api/net/sf/click/control"/>
+            todir="documentation/docs/click-api/org/apache/click/control"/>
       <copy file="documentation/images/default-paginator.png"
-            todir="documentation/docs/click-api/net/sf/click/control"/>
+            todir="documentation/docs/click-api/org/apache/click/control"/>
       <copy file="documentation/images/inline-paginator.png"
-            todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+            todir="documentation/docs/extras-api/org/apache/click/extras/control"/>
       <copy file="extras/src/META-INF/web/click/colorpicker/images/color-picker.png"
-            todir="documentation/docs/extras-api/net/sf/click/extras/control/colorpicker"/>
+            todir="documentation/docs/extras-api/org/apache/click/extras/control/colorpicker"/>
       <copy file="documentation/images/tree.png"
-            todir="documentation/docs/extras-api/net/sf/click/extras/tree"/>
+            todir="documentation/docs/extras-api/org/apache/click/extras/tree"/>
       <copy file="documentation/images/checkbox-tree.png"
-            todir="documentation/docs/extras-api/net/sf/click/extras/tree"/>
+            todir="documentation/docs/extras-api/org/apache/click/extras/tree"/>
       <copy file="documentation/docs/javadoc-stylesheet.css"  
       	    overwrite="true"
       	    tofile="documentation/docs/click-api/stylesheet.css"/>
@@ -880,7 +880,7 @@ Please ensure you have configured build.properties</echo>
                version="true"
                verbose="false"
                windowtitle="@{windowtitle}"
-      	       packagenames="net.*"
+      	       packagenames="org.*"
          	     overview="@{overview}"
                doctitle="@{doctitle}">
             <classpath refid="@{classpath}"/>

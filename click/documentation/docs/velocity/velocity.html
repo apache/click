@@ -53,30 +53,30 @@ following objects to page templates:
   </li>  
   <li><span class="st">cssImports</span> &nbsp; - &nbsp; 
     the CSS imports and style blocks to include in the pages header. 
-    Please see <a href="../click-api/net/sf/click/util/PageImports.html">PageImports</a> 
+    Please see <a href="../click-api/org/apache/click/util/PageImports.html">PageImports</a> 
     for more details.
   </li>
   <li><span class="st">format</span> &nbsp; - &nbsp; 
-    the <a href="../click-api/net/sf/click/util/Format.html">Format</a> 
+    the <a href="../click-api/org/apache/click/util/Format.html">Format</a> 
     object for formatting the display of objects.
   </li>
   <li><span class="st">imports</span> &nbsp; - &nbsp; 
     the CSS and JavaScript imports to include in the pages header.
-    Please see <a href="../click-api/net/sf/click/util/PageImports.html">PageImports</a> 
+    Please see <a href="../click-api/org/apache/click/util/PageImports.html">PageImports</a> 
     for more details.
   </li>
   <li><span class="st">jsImports</span> &nbsp; - &nbsp; 
     the JavaScript imports and script blocks to include in the pages footer. 
-    Please see <a href="../click-api/net/sf/click/util/PageImports.html">PageImports</a> 
+    Please see <a href="../click-api/org/apache/click/util/PageImports.html">PageImports</a> 
     for more details.
   </li>
   <li><span class="st">messages</span> &nbsp; - &nbsp; 
-   the <a target="topic" href="../click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a> adaptor
-   for the Page <a href="../click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
+   the <a target="topic" href="../click-api/org/apache/click/util/MessagesMap.html">MessagesMap</a> adaptor
+   for the Page <a href="../click-api/org/apache/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
    method.
   </li>
   <li><span class="st">path</span> &nbsp; - &nbsp; 
-    the <a href="../click-api/net/sf/click/Page.html#path">path</a> 
+    the <a href="../click-api/org/apache/click/Page.html#path">path</a> 
     of the page template to render.
   </li>
   <li><span class="st">request</span> &nbsp; - &nbsp; 
@@ -88,7 +88,7 @@ following objects to page templates:
     object.
   </li>
   <li><span class="st">session</span> &nbsp; - &nbsp; 
-   the <a target="topic" href="../click-api/net/sf/click/util/SessionMap.html">SessionMap</a> adaptor
+   the <a target="topic" href="../click-api/org/apache/click/util/SessionMap.html">SessionMap</a> adaptor
    for the users <a class="external" target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</a>.
   </li>
 </ul>
@@ -96,13 +96,13 @@ following objects to page templates:
 In your page templates you can access object references using a dot path notation. For example:
 
 <pre class="codeHtml">
-Welcome: <span class="red">$</span><a target="topic" href="../click-api/net/sf/click/util/SessionMap.html">session</a>.user.fullName
+Welcome: <span class="red">$</span><a target="topic" href="../click-api/org/apache/click/util/SessionMap.html">session</a>.user.fullName
 </pre>
 
 Or by using a more explicit Java notation:
 
 <pre class="codeHtml">
-Welcome: <span class="red">$</span><a target="topic" href="../click-api/net/sf/click/util/SessionMap.html">session</a>.get("user").getFullName()
+Welcome: <span class="red">$</span><a target="topic" href="../click-api/org/apache/click/util/SessionMap.html">session</a>.get("user").getFullName()
 </pre>
 
 <h2>Directives</h2>

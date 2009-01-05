@@ -101,15 +101,15 @@ The feature roadmap for the next major release of Click is being determined.
       </li>
       <li class="change">
         Added MessageFormat support to Format. New methods include
-        <a href="click-api/net/sf/click/util/Format.html#message(java.lang.String, java.lang.Object)">message(String, Object)</a>
-        and <a href="click-api/net/sf/click/util/Format.html#message(java.lang.String, java.util.List)">message(String, List)</a>.
+        <a href="click-api/org/apache/click/util/Format.html#message(java.lang.String, java.lang.Object)">message(String, Object)</a>
+        and <a href="click-api/org/apache/click/util/Format.html#message(java.lang.String, java.util.List)">message(String, List)</a>.
         This issue was raised by Yu Kobayashi
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-474">474</a>].
       </li>
       <li class="change">
         Added new methods to CheckboxTree to improve customization. The new methods
-        include <a href="extras-api/net/sf/click/extras/tree/CheckboxTree.html#renderCheckbox(net.sf.click.util.HtmlStringBuffer, net.sf.click.extras.tree.TreeNode)">renderCheckbox</a>
-        and <a href="extras-api/net/sf/click/extras/tree/CheckboxTree.html#getInputType()">getInputType</a>.
+        include <a href="extras-api/org/apache/click/extras/tree/CheckboxTree.html#renderCheckbox(org.apache.click.util.HtmlStringBuffer, org.apache.click.extras.tree.TreeNode)">renderCheckbox</a>
+        and <a href="extras-api/org/apache/click/extras/tree/CheckboxTree.html#getInputType()">getInputType</a>.
       </li>
       <li class="change">
         Added csv mime type. This issue was raised by Alvin Townsend.
@@ -146,7 +146,7 @@ The feature roadmap for the next major release of Click is being determined.
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li class="change">
-        All <tt>net.sf.click.*</tt> packages have been renamed to <tt>org.apache.click.*</tt>.
+        All <tt>org.apache.click.*</tt> packages have been renamed to <tt>org.apache.click.*</tt>.
         When upgrading you can refactor existing applications using your favorite
         IDE or alternatively use Ant's <a target="blank" class="external" href="http://ant.apache.org/manual/CoreTasks/replace.html">replace task</a>.
       </li>
@@ -268,9 +268,9 @@ The feature roadmap for the next major release of Click is being determined.
        <ol style="margin-top:1em;">
         <li>Recompile your application with the 1.5 Click libraries.</li>
         <li>Retrofit the new Control 
-        <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a>
+        <a href="click-api/org/apache/click/Control.html#render(org.apache.click.util.HtmlStringBuffer)">render()</a>
         method to any on your custom control rendering.</li>
-        <li>Replace any Control <tt>toString()</tt> methods with an equivalent <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a>
+        <li>Replace any Control <tt>toString()</tt> methods with an equivalent <a href="click-api/org/apache/click/Control.html#render(org.apache.click.util.HtmlStringBuffer)">render()</a>
         method. For further details see the example below.</li>
         <li>Form.add(Field), FieldSet.add(Field) and Table.addColumn(Column) now return
         their argument instead of void, which enables you to chain calls for example<br>
@@ -300,18 +300,18 @@ public class MyTable {
        Note that Click 1.5 is still compatible with Java JDK 1.4 or later.
       </li>
       <li class="upgrade">
-       Deprecated methods: <a href="click-api/net/sf/click/Control.html#setListener(java.lang.Object, java.lang.String)">Control.setListener(Object, String)</a> and
-       <a href="click-api/net/sf/click/Control.html#getContext()">Control.getContext()</a>.
+       Deprecated methods: <a href="click-api/org/apache/click/Control.html#setListener(java.lang.Object, java.lang.String)">Control.setListener(Object, String)</a> and
+       <a href="click-api/org/apache/click/Control.html#getContext()">Control.getContext()</a>.
        These methods have been deprecated on the Control interface as they are not required for ClickServlet -> Control API. 
        This refactoring is part of making the Control interface as small as possible, 
        which  allows more flexibility in future releases.
        <p/>
-       Note these methods are still available on <a href="click-api/net/sf/click/control/AbstractControl.html">AbstractControl</a>,
+       Note these methods are still available on <a href="click-api/org/apache/click/control/AbstractControl.html">AbstractControl</a>,
        so this change should have minimal impact on existing code bases.
       </li>
       <li class="upgrade">
        Upgrade custom Control rendering code to use new 
-       <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render</a>
+       <a href="click-api/org/apache/click/Control.html#render(org.apache.click.util.HtmlStringBuffer)">render</a>
        method. This method allows improved rendering performance, because all controls can be
        rendered from a single buffer that is created when rendering starts.
        <p/>
@@ -363,9 +363,9 @@ public class HtmlTable extends AbstractControl {
 } </pre>
        Note, the code between the commented section, was moved from <em>toString</em> to the <em>render</em> method.
        <p/>
-       Also note that invoking a Control's <a href="click-api/net/sf/click/control/AbstractControl.html#toString()">toString()</a>
+       Also note that invoking a Control's <a href="click-api/org/apache/click/control/AbstractControl.html#toString()">toString()</a>
        method still outputs the same HTML representation, as toString() delegates to the
-       <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render</a>
+       <a href="click-api/org/apache/click/Control.html#render(org.apache.click.util.HtmlStringBuffer)">render</a>
        method.
        <p/>
        <b>Please note</b> a common problem when overriding <em>render</em> in custom components, is
@@ -422,9 +422,9 @@ public class CustomField extends Field {
       </li>
       <li class="upgrade">
        Certain controls were retrofitted as containers. These include 
-       <a href="click-api/net/sf/click/control/Form.html">Form</a>,
-       <a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a>
-       and <a href="click-api/net/sf/click/control/Panel.html">Panel</a>.
+       <a href="click-api/org/apache/click/control/Form.html">Form</a>,
+       <a href="click-api/org/apache/click/control/FieldSet.html">FieldSet</a>
+       and <a href="click-api/org/apache/click/control/Panel.html">Panel</a>.
       </li>
       <li class="upgrade">
        Click 1.5 introduces two new properties: <span style="color:navy;">file-size-limit-exceeded-error</span>
@@ -434,22 +434,22 @@ public class CustomField extends Field {
        <br>If you send us patches for your preferred language we will include them in the distribution.
       </li>
       <li class="upgrade">
-       ClickLogger has been replaced with <a href="click-api/net/sf/click/service/LogService.html">LogService</a>.
-       LogService is an interface with a default implementation <a href="click-api/net/sf/click/service/ConsoleLogService.html">ConsoleLogService</a>.
-       There are also alternative implementations <a href="extras-api/net/sf/click/extras/service/Log4JLogService.html">Log4JLogService</a>
-       and <a href="extras-api/net/sf/click/extras/service/JdkLogService.html">JdkLogService</a>.
+       ClickLogger has been replaced with <a href="click-api/org/apache/click/service/LogService.html">LogService</a>.
+       LogService is an interface with a default implementation <a href="click-api/org/apache/click/service/ConsoleLogService.html">ConsoleLogService</a>.
+       There are also alternative implementations <a href="extras-api/org/apache/click/extras/service/Log4JLogService.html">Log4JLogService</a>
+       and <a href="extras-api/org/apache/click/extras/service/JdkLogService.html">JdkLogService</a>.
        <p/>
        It is possible to write your own LogService instance or extend from
        an existing implementation. To setup Click to use an alternative instance you have to
        specify the LogService implementation in <em>click.xml</em>:
        <pre class="prettyprint">
 &lt;click-app charset="UTF-8"&gt;
-    &lt;pages package="net.sf.click.examples.page"/&gt;
-    &lt;log-service classname="net.sf.click.extras.service.JdkLogService"/&gt;
+    &lt;pages package="org.apache.click.examples.page"/&gt;
+    &lt;log-service classname="org.apache.click.extras.service.JdkLogService"/&gt;
 &lt;/click-app&gt; </pre>
        <p/>
        While it is generally not recommended to use the Click LogService in your application code, you can retrieve it using the ClickUtils method
-       <a href="click-api/net/sf/click/util/ClickUtils.html#getLogService()">getLogService()</a>.
+       <a href="click-api/org/apache/click/util/ClickUtils.html#getLogService()">getLogService()</a>.
       </li>
     </ul>
   </dd>
@@ -466,7 +466,7 @@ public class CustomField extends Field {
       <li>
         <a target="_blank" class="external" href="http://www.avoka.com/click-examples/wizard/wizard.htm">
           Wizard demo</a> shows how to leverage a <a href="pages.html#page-stateful">stateful</a>
-          page and <a href="click-api/net/sf/click/control/Panel.html">Panels</a>
+          page and <a href="click-api/org/apache/click/control/Panel.html">Panels</a>
           to create a process flow. Each Step in the process is represented by a
           Panel which is managed by the stateful Page.
       </li>
@@ -553,8 +553,8 @@ public class CustomField extends Field {
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-449">449</a>].
       </li>
       <li class="change">
-        Added utility methods <a href="click-api/net/sf/click/util/ClickUtils.html#encodeURL(java.lang.Object)">ClickUtils.encodeURL</a>
-        and <a href="click-api/net/sf/click/util/ClickUtils.html#decodeURL(java.lang.Object)">ClickUtils.decodeURL</a>
+        Added utility methods <a href="click-api/org/apache/click/util/ClickUtils.html#encodeURL(java.lang.Object)">ClickUtils.encodeURL</a>
+        and <a href="click-api/org/apache/click/util/ClickUtils.html#decodeURL(java.lang.Object)">ClickUtils.decodeURL</a>
         for encoding and decoding URL's using the "UTF-8" encoding scheme.
       </li>
     </ul>
@@ -567,53 +567,53 @@ public class CustomField extends Field {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
         Refactored Paginator into a more generic interface called
-        <a href="click-api/net/sf/click/control/Renderable.html">Renderable</a>
+        <a href="click-api/org/apache/click/control/Renderable.html">Renderable</a>
         which is independent of any specific Control
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-434">434</a>].
       </li>
       <li class="change">
-        Add new LinkDecorator methods <a href="extras-api/net/sf/click/extras/control/LinkDecorator.html#renderActionLink(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractLink, net.sf.click.Context, java.lang.Object, java.lang.Object)">renderActionLink</a>
-        and <a href="extras-api/net/sf/click/extras/control/LinkDecorator.html#renderActionButton(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.ActionButton, net.sf.click.Context, java.lang.Object, java.lang.Object)">renderActionButton</a>.
+        Add new LinkDecorator methods <a href="extras-api/org/apache/click/extras/control/LinkDecorator.html#renderActionLink(org.apache.click.util.HtmlStringBuffer, org.apache.click.control.AbstractLink, org.apache.click.Context, java.lang.Object, java.lang.Object)">renderActionLink</a>
+        and <a href="extras-api/org/apache/click/extras/control/LinkDecorator.html#renderActionButton(org.apache.click.util.HtmlStringBuffer, org.apache.click.control.ActionButton, org.apache.click.Context, java.lang.Object, java.lang.Object)">renderActionButton</a>.
         This allows more fine grained control over the rendered links, for example
         manipulating request parameters.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-446">446</a>].
       </li>
       <li class="change">
         Add Table Row attribute support through new method 
-        <a href="click-api/net/sf/click/control/Table.html#addRowAttributes(java.util.Map, java.lang.Object, int)">addRowAttributes</a>.
+        <a href="click-api/org/apache/click/control/Table.html#addRowAttributes(java.util.Map, java.lang.Object, int)">addRowAttributes</a>.
         This issue was raised by Hans Poo
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-431">431</a>].
       </li>
       <li class="change">
         Field error messages can now be specified per instance.
-        See the <a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String)">JavaDoc</a> for more details.
+        See the <a href="click-api/org/apache/click/control/Field.html#setErrorMessage(java.lang.String)">JavaDoc</a> for more details.
         This issue was raised and fixed by Ricardo Lecheta
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-433">433</a>].
       </li>
       <li class="change">
         Added new utility methods
-        <a href="click-api/net/sf/click/util/ContainerUtils.html#copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)">copyContainerToObject</a>
-        and <a href="click-api/net/sf/click/util/ContainerUtils.html#copyContainerToObject(net.sf.click.control.Container, java.lang.Object, java.util.List)">copyObjectToContainer</a>
+        <a href="click-api/org/apache/click/util/ContainerUtils.html#copyContainerToObject(org.apache.click.control.Container, java.lang.Object, java.util.List)">copyContainerToObject</a>
+        and <a href="click-api/org/apache/click/util/ContainerUtils.html#copyContainerToObject(org.apache.click.control.Container, java.lang.Object, java.util.List)">copyObjectToContainer</a>
         to selectively exclude or include form fields when populating domain objects.
         This issue was raised by Khalef Bessaih
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-440">440</a>].
       </li>
       <li class="change">
         Encapsulate conversion logic of template extensions inside
-        <a href="click-api/net/sf/click/Page.html#setRedirect(java.lang.String)">Page.setRedirect(java.lang.String)</a>
+        <a href="click-api/org/apache/click/Page.html#setRedirect(java.lang.String)">Page.setRedirect(java.lang.String)</a>
         which allows one to override or overload the default behavior.
         This issue was raised by David Ballard
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-429">429</a>].
       </li>
        <li class="change">
         Improved Table so that subclasses can specify a different
-        <a href="click-api/net/sf/click/control/Table.html#controlLink">controlLink</a>
-        implementation by overriding <a href="click-api/net/sf/click/control/Table.html#getControlLink()">getControlLink()</a>.
+        <a href="click-api/org/apache/click/control/Table.html#controlLink">controlLink</a>
+        implementation by overriding <a href="click-api/org/apache/click/control/Table.html#getControlLink()">getControlLink()</a>.
         This issue was raised and fixed by Ricardo Lecheta
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-442">442</a>].
       </li>
       <li class="change">
-        Improved <a href="click-api/net/sf/click/util/ClickUtils.html#toLabel(java.lang.String)">ClickUtils.toLabel</a> to return empty String ("") if argument is null
+        Improved <a href="click-api/org/apache/click/util/ClickUtils.html#toLabel(java.lang.String)">ClickUtils.toLabel</a> to return empty String ("") if argument is null
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-441">441</a>].
       </li>
       <li class="change">
@@ -647,7 +647,7 @@ public class CustomField extends Field {
       </li>
       <li class="change">
         Fixed Column which exposed its internal Comparator as public API
-        through <a href="click-api/net/sf/click/control/Column.html#setComparator(java.util.Comparator)">Column.setComparator(Comparator)</a>,
+        through <a href="click-api/org/apache/click/control/Column.html#setComparator(java.util.Comparator)">Column.setComparator(Comparator)</a>,
         instead of java.util.Comparator.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-430">430</a>].
       </li>
@@ -667,8 +667,8 @@ public class CustomField extends Field {
       <li class="change">
         Major refactoring to improve backward compatibility and upgrade path.
         This includes removing BasicForm which was included in 1.5-M1 and adding
-        new Controls <a href="extras-api/net/sf/click/extras/control/HtmlForm.html">HtmlForm</a>
-        and <a href="extras-api/net/sf/click/extras/control/HtmlFieldSet.html">HtmlFieldSet</a>.
+        new Controls <a href="extras-api/org/apache/click/extras/control/HtmlForm.html">HtmlForm</a>
+        and <a href="extras-api/org/apache/click/extras/control/HtmlFieldSet.html">HtmlFieldSet</a>.
         You can find an example of HtmlForm in action <a target="_blank" href="http://www.avoka.com/click-examples/form/contact-details.htm">here</a>.
       </li>
       <li class="change">
@@ -679,8 +679,8 @@ public class CustomField extends Field {
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-328">328</a>].
       </li>
       <li class="change">
-        Added configurable table <a href="click-api/net/sf/click/control/Paginator.html">Paginator</a> support 
-        and an <a href="click-api/net/sf/click/control/InlinePaginator.html">InlinePaginator</a>.
+        Added configurable table <a href="click-api/org/apache/click/control/Paginator.html">Paginator</a> support 
+        and an <a href="click-api/org/apache/click/control/InlinePaginator.html">InlinePaginator</a>.
         A new <a target="_blank" href="http://www.avoka.com/click-examples/table/table-paginator.htm">example</a>
         shows the different Paginator options available. This issue was raised by Gustav Weber
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-390">390</a>].
@@ -699,7 +699,7 @@ public class CustomField extends Field {
       </li>
       <li class="change">
         Improved rendering performance by caching the ClickUtils 
-        <a href="click-api/net/sf/click/util/ClickUtils.html#getResourceVersionIndicator(net.sf.click.Context)">resource version indicator</a>
+        <a href="click-api/org/apache/click/util/ClickUtils.html#getResourceVersionIndicator(org.apache.click.Context)">resource version indicator</a>
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-412">412</a>].
       </li>
       <li class="change">
@@ -742,7 +742,7 @@ public class CustomField extends Field {
     </div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-        New Control listener support through the <a href="click-api/net/sf/click/ActionListener.html">ActionListener</a> interface.
+        New Control listener support through the <a href="click-api/org/apache/click/ActionListener.html">ActionListener</a> interface.
         This control listener style provides compile time safety and supports code refactoring tools.
         
       <pre class="prettyprint">
@@ -765,7 +765,7 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Introduce a two phase listener dispatch mechanism. During the onProcess event,
-        Control listeners will be registered on the <a href="click-api/net/sf/click/ControlRegistry.html">ControlRegistry</a>
+        Control listeners will be registered on the <a href="click-api/org/apache/click/ControlRegistry.html">ControlRegistry</a>
         and triggered after the onProcess event finish. The net effect of this change
         is that when Control listeners are triggered, all request values have been bound to Controls,
         and can safely be referred to from the listener [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-365">365</a>].
@@ -782,7 +782,7 @@ public class MyPage extends Page {
     </div>
 	<ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-        Added a new <a href="extras-api/net/sf/click/extras/control/PageButton.html">PageButton</a> control
+        Added a new <a href="extras-api/org/apache/click/extras/control/PageButton.html">PageButton</a> control
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-392">392</a>].
       </li>
       <li class="change">
@@ -797,9 +797,9 @@ public class MyPage extends Page {
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-393">393</a>].
       </li>
       <li class="change">
-        Add new method <a href="extras-api/net/sf/click/extras/tree/CheckboxTree.html#setSelectChildNodes(boolean)">CheckboxTree.setSelectChildNodes</a>
+        Add new method <a href="extras-api/org/apache/click/extras/tree/CheckboxTree.html#setSelectChildNodes(boolean)">CheckboxTree.setSelectChildNodes</a>
         that enables selecting child nodes when parent is selected. This feature
-        only works if the Tree's <a href="extras-api/net/sf/click/extras/tree/Tree.html#setJavascriptEnabled(boolean)">Javascript</a>
+        only works if the Tree's <a href="extras-api/org/apache/click/extras/tree/Tree.html#setJavascriptEnabled(boolean)">Javascript</a>
         support is enabled.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-209">209</a>].
       </li>
@@ -894,9 +894,9 @@ public class MyPage extends Page {
     <p/>
     <ul style="margin-top:0.5em;">
      <li class="item"><a href="controls.html#container">Container</a> - new interface for building arbitrary complex, hierarchical Controls.</li>
-     <li class="item"><a href="click-api/net/sf/click/service/package-summary.html#services">Services</a> - Click core has been refactored into pluggable services.</li>
+     <li class="item"><a href="click-api/org/apache/click/service/package-summary.html#services">Services</a> - Click core has been refactored into pluggable services.</li>
      <li class="item"><a href="mock-api/overview-summary.html">Mock Test Support</a> - Unit and Functional Testing.</li>
-     <li class="item"><a href="click-api/net/sf/click/control/AbstractControl.html">AbstractControl</a>
+     <li class="item"><a href="click-api/org/apache/click/control/AbstractControl.html">AbstractControl</a>
      - AbstractControl was extended to implement all Control methods, making it easier to create custom controls.</li>
     </ul>
     <div style="margin-top:1.5em;margin-bottom:1em;">
@@ -937,7 +937,7 @@ public class MyPage extends Page {
              <a href="controls.html#layout">Template vs Container layout</a>
          </li>
          <li class="change">
-             <a href="click-api/net/sf/click/service/package-summary.html">Click Runtime Services</a>
+             <a href="click-api/org/apache/click/service/package-summary.html">Click Runtime Services</a>
          </li>
          <li class="change">
              <a href="mock-api/overview-summary.html">Mock Test Support</a>
@@ -958,19 +958,19 @@ public class MyPage extends Page {
       <li class="change">
 	    Added <a class="external" target="_blank" href="http://www.freemarker.org">Freemarker</a> support as an 
 	    alternative templating engine to Velocity, with new 
-	    <a href="extras-api/net/sf/click/extras/service/FreemarkerTemplateService.html">FreemarkerTemplateService</a>.
+	    <a href="extras-api/org/apache/click/extras/service/FreemarkerTemplateService.html">FreemarkerTemplateService</a>.
       </li>
       <li class="change">
-	    Added a <a href="extras-api/net/sf/click/extras/control/CountrySelect.html">Country Select</a>
+	    Added a <a href="extras-api/org/apache/click/extras/control/CountrySelect.html">Country Select</a>
 	    control based on the JDK's own built in Country/Locale support.
       </li>
       <li class="change">
-	    Added a <a href="extras-api/net/sf/click/extras/control/VirtualKeyboard.html">Virtual Keyboard</a> 
+	    Added a <a href="extras-api/org/apache/click/extras/control/VirtualKeyboard.html">Virtual Keyboard</a> 
 	    control using <a href="http://www.greywyvern.com/code/js/keyboard.html">GreyWyvern</a> JavaScript library.
       </li>
 	  <li class="change">
 	    Added support for setting Form  
-	    <a href="click-api/net/sf/click/control/Form.html#getActionURL()">action</a> 
+	    <a href="click-api/org/apache/click/control/Form.html#getActionURL()">action</a> 
 	    URL attribute. This issue was raised by Erdem Gunay
 	    [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-319">319</a>].
 	  </li>
@@ -982,13 +982,13 @@ public class MyPage extends Page {
 	    [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-329">329</a>].
 	  </li>
       <li class="change">
-        Add Page <a href="click-api/net/sf/click/Page.html#setTemplate(java.lang.String)">setTemplate(String)</a>
+        Add Page <a href="click-api/org/apache/click/Page.html#setTemplate(java.lang.String)">setTemplate(String)</a>
         method to enable dynamic changing of a page border template. This issue
         was raised by Huy Do 
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-353">353</a>].
 	  </li>
       <li class="change">
-        Updated <a href="click-api/net/sf/click/Page.html#setPath(java.lang.String)">Page.setPath</a> to handle JSP resources. This issue was raised and fixed by Huy Do.
+        Updated <a href="click-api/org/apache/click/Page.html#setPath(java.lang.String)">Page.setPath</a> to handle JSP resources. This issue was raised and fixed by Huy Do.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-141">141</a>].
 	  </li>
       <li class="change">
@@ -1000,7 +1000,7 @@ public class MyPage extends Page {
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-326">326</a>].
       </li>
 	  <li class="change">
-		Improve File Upload support with new <a href="click-api/net/sf/click/service/FileUploadService.html">FileUploadService</a> class.
+		Improve File Upload support with new <a href="click-api/org/apache/click/service/FileUploadService.html">FileUploadService</a> class.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-326">326</a>].
 	  </li>
       <li class="change">
@@ -1009,7 +1009,7 @@ public class MyPage extends Page {
 	  </li>
       <li class="change">
         Fixed Cayenne 3.0M3 DataObjectUtils issue in CayenneForm when using JDK 1.5. 
-        Added <a href="extras-api/net/sf/click/extras/cayenne/CayenneUtils.html">CayenneUtils</a> helper class
+        Added <a href="extras-api/org/apache/click/extras/cayenne/CayenneUtils.html">CayenneUtils</a> helper class
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-342">342</a>].
 	  </li>
     <li class="change">
@@ -1064,7 +1064,7 @@ public class MyPage extends Page {
     </div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-        Added new method <a href="click-api/net/sf/click/Context.html#isAjaxRequest()">Context.isAjaxRequest()</a>
+        Added new method <a href="click-api/org/apache/click/Context.html#isAjaxRequest()">Context.isAjaxRequest()</a>
         which enables conditional checking for Ajax requests.
       </li>
       <li class="change">
@@ -1088,7 +1088,7 @@ public class MyPage extends Page {
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-334">334</a>].
 	  </li>
       <li class="change">
-        Fixed <a href="click-api/net/sf/click/control/Form.html#onSubmitCheck(net.sf.click.Page, java.lang.String)">Form.onSubmitCheck()</a>
+        Fixed <a href="click-api/org/apache/click/control/Form.html#onSubmitCheck(org.apache.click.Page, java.lang.String)">Form.onSubmitCheck()</a>
         to ignore Ajax calls. This issue was raised by Ivan Furdi.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-333">333</a>].
 	  </li>
@@ -1167,7 +1167,7 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
 	  <li class="change">
-		Added <a href="extras-api/net/sf/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a> 
+		Added <a href="extras-api/org/apache/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a> 
 		to significantly improve the performance of Click applications
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-284">284</a>, <a target='blank' href="http://www.avoka.com/jira/browse/CLK-290">290</a>].
 		<p/>
@@ -1182,7 +1182,7 @@ public class MyPage extends Page {
 		completed framework support for serializing stateful Pages and their controls.
       </li>
       <li class="change">
-		Added new AJAX <a href="extras-api/net/sf/click/extras/control/AutoCompleteTextField.html">AutoCompleteTextField</a> which provides Google suggest style lookups.
+		Added new AJAX <a href="extras-api/org/apache/click/extras/control/AutoCompleteTextField.html">AutoCompleteTextField</a> which provides Google suggest style lookups.
       </li>
       <li class="change">
         Added new Table CSS class styles: <tt>blue1, blue2, orange1, orange2</tt>
@@ -1204,8 +1204,8 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Updated <tt>Controls</tt> to use the new API 
-        <a href="click-api/net/sf/click/control/AbstractControl.html#addStyleClass(java.lang.String)">addStyleClass(String)</a> and
-        <a href="click-api/net/sf/click/control/AbstractControl.html#setStyle(java.lang.String, java.lang.String)">setStyle(String, String)</a>
+        <a href="click-api/org/apache/click/control/AbstractControl.html#addStyleClass(java.lang.String)">addStyleClass(String)</a> and
+        <a href="click-api/org/apache/click/control/AbstractControl.html#setStyle(java.lang.String, java.lang.String)">setStyle(String, String)</a>
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-286">286</a>].
       </li>
       <li class="change">
@@ -1375,17 +1375,17 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
 		Important Change
-		the Page <a href="click-api/net/sf/click/Page.html#stateful">stateful</a> property
+		the Page <a href="click-api/org/apache/click/Page.html#stateful">stateful</a> property
 		added to support persistence.
       </li>
       <li class="change">
 		Important Change 
-		the <a href="click-api/net/sf/click/Context.html">Context</a> object
+		the <a href="click-api/org/apache/click/Context.html">Context</a> object
 		is now available in Page and Control constructors.
       </li>
       <li class="change">
 		Important Change 
-		added Control <a href="click-api/net/sf/click/Control.html#onInit()">onInit()</a> 
+		added Control <a href="click-api/org/apache/click/Control.html#onInit()">onInit()</a> 
 		initialization event handler.
 		As the <tt>setContext()</tt> method has been
 		removed any control initialization code contained in this method should be
@@ -1394,7 +1394,7 @@ public class MyPage extends Page {
       <li class="change">
 		Important Change 
 		the XML configured root Menu item is obtained via the static method 
-        <a href="extras-api/net/sf/click/extras/control/Menu.html#getRootMenu()">getRootMenu()</a>.
+        <a href="extras-api/org/apache/click/extras/control/Menu.html#getRootMenu()">getRootMenu()</a>.
       </li>
       <li class="change">
 		Important Change 
@@ -1410,37 +1410,37 @@ public class MyPage extends Page {
 		by default. Note backward compatibility Cayenne 1.2.x JARS are provide in the dist directory.
       </li>
       <li class="change">
-		Added Control <a href="click-api/net/sf/click/Control.html#onRender()">onRender()</a> 
+		Added Control <a href="click-api/org/apache/click/Control.html#onRender()">onRender()</a> 
 		render event handler. This method is useful for Panel controls populating tables.
       </li>
       <li class="change">
-		Added Control <a href="click-api/net/sf/click/Control.html#onDestroy()">onDestroy()</a> 
+		Added Control <a href="click-api/org/apache/click/Control.html#onDestroy()">onDestroy()</a> 
 		destroy event handler. This method is useful for controls to free resources, when the controls
 		are contained in stateful pages.
       </li>
       <li class="change">
-      	Added <a href="extras-api/net/sf/click/extras/control/ExternalLink.html">ExternalLink</a> control. 
+      	Added <a href="extras-api/org/apache/click/extras/control/ExternalLink.html">ExternalLink</a> control. 
       </li>
       <li class="change">
-      	Added AbstractControl <a href="click-api/net/sf/click/control/AbstractControl.html#getPage()">getPage()</a> method. 
+      	Added AbstractControl <a href="click-api/org/apache/click/control/AbstractControl.html#getPage()">getPage()</a> method. 
       </li>
       <li class="change">
-      	Added Context <a href="click-api/net/sf/click/Context.html#getRequestParameterValues()">getRequestParameterValues()</a> method. 
+      	Added Context <a href="click-api/org/apache/click/Context.html#getRequestParameterValues()">getRequestParameterValues()</a> method. 
       </li>
       <li class="change">
-      	Added Context <a href="click-api/net/sf/click/Context.html#isGet()">isGet()</a> method. 
+      	Added Context <a href="click-api/org/apache/click/Context.html#isGet()">isGet()</a> method. 
       </li>
       <li class="change">
-      	Added Field <a href="click-api/net/sf/click/control/Field.html#help">help</a> property 
+      	Added Field <a href="click-api/org/apache/click/control/Field.html#help">help</a> property 
       	to render help text to the right hand side of fields.
       </li>
       <li class="change">
-      	Added Menu <a href="extras-api/net/sf/click/extras/control/Menu.html#imageSrc">imageSrc</a> property 
+      	Added Menu <a href="extras-api/org/apache/click/extras/control/Menu.html#imageSrc">imageSrc</a> property 
       	to support for rendering img icons in menus.
       </li>
       <li class="change">
         Renamed Context method <tt>getRequestParameters</tt> to
-        <a href="click-api/net/sf/click/Control.html#getRequestParameterMap()">getRequestParameterMap</a>.
+        <a href="click-api/org/apache/click/Control.html#getRequestParameterMap()">getRequestParameterMap</a>.
       </li>
       <li class="change">
       	Update localization click-control_pt_BR.properties provided by Ricardo Lecheta
@@ -1491,7 +1491,7 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-        Updated <a href="extras-api/net/sf/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
+        Updated <a href="extras-api/org/apache/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
         to handle non integer primary key values. This issue was raised by Tore Halset
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-211">211</a>].
       </li>
@@ -1532,12 +1532,12 @@ public class MyPage extends Page {
       </li>
       <li class="change">
       	Added 
-      	<a href="extras-api/net/sf/click/extras/control/PickList.html">PickList</a> control.
+      	<a href="extras-api/org/apache/click/extras/control/PickList.html">PickList</a> control.
       	This control was created by Naoki Takezoe 
       	[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-194">194</a>].
       </li>
       <li class="change">
-		Added <a href="extras-api/net/sf/click/extras/tree/Tree.html">Tree</a> control client side javascript functionality. 
+		Added <a href="extras-api/org/apache/click/extras/tree/Tree.html">Tree</a> control client side javascript functionality. 
 		This was provided by Bob Schellink 
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-186">186</a>].
       </li>
@@ -1548,46 +1548,46 @@ public class MyPage extends Page {
       </li>
       <li class="change">
 		Added <tt>tabindex</tt> support to 
-		<a href="click-api/net/sf/click/control/AbstractLink.html">AbstractLink</a> and 
-		<a href="click-api/net/sf/click/control/Field.html">Field</a> controls.
+		<a href="click-api/org/apache/click/control/AbstractLink.html">AbstractLink</a> and 
+		<a href="click-api/org/apache/click/control/Field.html">Field</a> controls.
       </li>
       <li class="change">
 		Added Form  
-		<a href="click-api/net/sf/click/control/Form.html#defaultFieldSize">defaultFieldSize</a> property.
+		<a href="click-api/org/apache/click/control/Form.html#defaultFieldSize">defaultFieldSize</a> property.
       </li>
       <li class="change">
-		Improved <tt>trace</tt> level logging to detail <a href="click-api/net/sf/click/Page.html">Page</a> event execution order. 
+		Improved <tt>trace</tt> level logging to detail <a href="click-api/org/apache/click/Page.html">Page</a> event execution order. 
       </li>
       <li class="change">
-		Improved <a href="extras-api/net/sf/click/extras/control/EmailField.html">EmailField</a> validation. 
+		Improved <a href="extras-api/org/apache/click/extras/control/EmailField.html">EmailField</a> validation. 
       </li>
       <li class="change">
-		Changed default <a href="click-api/net/sf/click/control/Form.html">Form</a> errorPostion from <tt>"middle"</tt> to <tt>"top"</tt>. 
+		Changed default <a href="click-api/org/apache/click/control/Form.html">Form</a> errorPostion from <tt>"middle"</tt> to <tt>"top"</tt>. 
       </li>
       <li class="change">
-		Fixed <a href="extras-api/net/sf/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
+		Fixed <a href="extras-api/org/apache/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
 		handling of new objects bug. This issue was raised by Andrus Adamchik 
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-73">73</a>].
       </li>
       <li class="change">
-		Fixed <a href="click-api/net/sf/click/control/FileField.html">FileField</a> 
+		Fixed <a href="click-api/org/apache/click/control/FileField.html">FileField</a> 
 		configurations not be applied in certain scenarios.
 		This issue was raised and fixed by Sadanori Ito 
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-179">179</a>].
       </li>
       <li class="change">
-		Fixed Page with two <a href="click-api/net/sf/click/control/Table.html">Table</a>
+		Fixed Page with two <a href="click-api/org/apache/click/control/Table.html">Table</a>
 	    controls produces unneeded css style text bug. 
 		This issue was raised by J.F. Zarama  
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-197">197</a>].
       </li>
       <li class="change">
-		Fixed <a href="extras-api/net/sf/click/extras/control/LinkDecorator.html">LinkDecorator</a> table sorting support. 
+		Fixed <a href="extras-api/org/apache/click/extras/control/LinkDecorator.html">LinkDecorator</a> table sorting support. 
 		This issue was raised by Louis Martin and fixed by Bob Schellink 
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-207">207</a>].
       </li>
       <li class="change">
-		Fixed <a href="click-api/net/sf/click/control/Table.html">Table</a> column sorting bug. 
+		Fixed <a href="click-api/org/apache/click/control/Table.html">Table</a> column sorting bug. 
 		This issue was raised by Louis Martin and fixed by Naoki Takezoe  
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-208">208</a>].
       </li>
@@ -1603,16 +1603,16 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
       	Added controls 
-      	<a href="extras-api/net/sf/click/extras/tree/Tree.html">Tree</a> and
-      	<a href="extras-api/net/sf/click/extras/tree/CheckboxTree.html">CheckboxTree</a>.
+      	<a href="extras-api/org/apache/click/extras/tree/Tree.html">Tree</a> and
+      	<a href="extras-api/org/apache/click/extras/tree/CheckboxTree.html">CheckboxTree</a>.
       	These controls were created by Bob Schellink
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-160">160</a>].
       </li>
       <li class="change">
       	Added controls 
-      	<a href="extras-api/net/sf/click/extras/graph/JSBarChart.html">JSBarChart</a>,
-      	<a href="extras-api/net/sf/click/extras/graph/JSLineChart.html">JSLineChart</a> and 
-      	<a href="extras-api/net/sf/click/extras/graph/JSPieChart.html">JSPieChart</a>.
+      	<a href="extras-api/org/apache/click/extras/graph/JSBarChart.html">JSBarChart</a>,
+      	<a href="extras-api/org/apache/click/extras/graph/JSLineChart.html">JSLineChart</a> and 
+      	<a href="extras-api/org/apache/click/extras/graph/JSPieChart.html">JSPieChart</a>.
       	These controls were created by Ahmed Mohombe.
       </li>
       <li class="change">
@@ -1620,43 +1620,43 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Added support for multiple ActionButton parameters, see 
-        <a href="click-api/net/sf/click/control/ActionButton.html#setParameter(java.lang.String, java.lang.String)">setParameter()</a>
+        <a href="click-api/org/apache/click/control/ActionButton.html#setParameter(java.lang.String, java.lang.String)">setParameter()</a>
         for details.
       </li>
       <li class="change">
         Added AbstractLink
-        <a href="click-api/net/sf/click/control/AbstractLink.html#imageSrc">imageSrc</a>
+        <a href="click-api/org/apache/click/control/AbstractLink.html#imageSrc">imageSrc</a>
         property for rendering img icons inside links.
       </li>
       <li class="change">
-      	Added class hierarchy messages inheritance to <a href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a>.
+      	Added class hierarchy messages inheritance to <a href="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</a>.
       	This issue was raised by Andrus Adamchik
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-74">74</a>].
       </li>
       <li class="change">
-        Added ActionButton support to <a href="extras-api/net/sf/click/extras/control/LinkDecorator.html">LinkDecorator</a>.
+        Added ActionButton support to <a href="extras-api/org/apache/click/extras/control/LinkDecorator.html">LinkDecorator</a>.
         This issue was raised by Ricardo Lecheta
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-135">135</a>].
       </li>
       <li class="change">
-        Added ordering support to <a href="extras-api/net/sf/click/extras/cayenne/PropertySelect.html">PropertySelect</a>.
+        Added ordering support to <a href="extras-api/org/apache/click/extras/cayenne/PropertySelect.html">PropertySelect</a>.
         This issue was raised by David Frizelle
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-154">154</a>].
       </li>
       <li class="change">
-        Added FieldSet <a href="click-api/net/sf/click/control/FieldSet.html#columns">columns</a> property.
+        Added FieldSet <a href="click-api/org/apache/click/control/FieldSet.html#columns">columns</a> property.
       	This issue was raised by Lorenzo Orselli
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-158">158</a>].
       </li>
       <li class="change">
-        Added optional property to <a href="extras-api/net/sf/click/extras/cayenne/QuerySelect.html#optional">QuerySelect</a> and
-        <a href="extras-api/net/sf/click/extras/cayenne/PropertySelect.html#optional">PropertySelect</a> controls.
+        Added optional property to <a href="extras-api/org/apache/click/extras/cayenne/QuerySelect.html#optional">QuerySelect</a> and
+        <a href="extras-api/org/apache/click/extras/cayenne/PropertySelect.html#optional">PropertySelect</a> controls.
       	This issue was raised by Lorenzo Orselli
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-156">156</a>].
       </li>
       <li class="change">
       	Added support for NamedQuery objects in
-      	<a href="extras-api/net/sf/click/extras/cayenne/PropertySelect.html#namedQuery">PropertySelect</a>.
+      	<a href="extras-api/org/apache/click/extras/cayenne/PropertySelect.html#namedQuery">PropertySelect</a>.
         This issue was raised by David Frizelle
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-166">166</a>].
       </li>
@@ -1669,36 +1669,36 @@ public class MyPage extends Page {
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-177">177</a>].
       </li>
       <li class="change">
-        Added <a href="click-api/net/sf/click/util/ClickUtils.html">ClickUtils</a> 
+        Added <a href="click-api/org/apache/click/util/ClickUtils.html">ClickUtils</a> 
         cookie handling methods, and convenience methods in the Context class.
       	These methods were derrived from the Atlassian 
       	<a target="blank" class="external" href="http://opensource.atlassian.com/seraph/apidocs/com/atlassian/seraph/util/CookieUtils.html">CookieUtils</a>
       	class.
       </li>
       <li class="change">
-        Added <a href="extras-api/net/sf/click/extras/control/Menu.html">Menu</a> properties
+        Added <a href="extras-api/org/apache/click/extras/control/Menu.html">Menu</a> properties
         external and target, and changed <tt>toString()</tt> method to render an HTML anchor tag. 
         These changes simplify menu Velocity macros.
         Please note the <tt>isUserInRoles()</tt> method now returns false if there are no roles
         defined for the menu item.
       </li>
       <li class="change">
-      	Added <a href="extras-api/net/sf/click/extras/cayenne/DataContextFilter.html">DataContextFilter</a> support for 
+      	Added <a href="extras-api/org/apache/click/extras/cayenne/DataContextFilter.html">DataContextFilter</a> support for 
       	session or request scope DataContext objects, and controling the use of the Cayenne shared cache.
       </li>
       <li class="change">
-      	Added Cayenne DAO/Service base class <a href="extras-api/net/sf/click/extras/cayenne/CayenneTemplate.html">CayenneTemplate</a>
+      	Added Cayenne DAO/Service base class <a href="extras-api/org/apache/click/extras/cayenne/CayenneTemplate.html">CayenneTemplate</a>
       	to Click Extras.
       </li>
       <li class="change">
       	Added automapping support for /click/error.htm pages.
       </li>
       <li class="change">
-        Added ClickServlet <a href="click-api/net/sf/click/ClickServlet.html#createClickLogger()">createClickLogger()</a> 
+        Added ClickServlet <a href="click-api/org/apache/click/ClickServlet.html#createClickLogger()">createClickLogger()</a> 
         method to support customizing Click runtime engine logging. This issue was raised by Bob Schellink.
       </li>
       <li class="change">
-        Added Column <a href="click-api/net/sf/click/control/Column.html#titleProperty">titleProperty</a> 
+        Added Column <a href="click-api/org/apache/click/control/Column.html#titleProperty">titleProperty</a> 
         attribute to support rendering &lt;td&gt; title attributes. This issue was raised by David Frizelle.
       </li>
       <li class="change">
@@ -1716,19 +1716,19 @@ public class MyPage extends Page {
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-159">159</a>].
       </li>
       <li class="change">
-      	Improved <a href="click-api/net/sf/click/control/ImageSubmit.html#src">ImageSubmit</a> 
+      	Improved <a href="click-api/org/apache/click/control/ImageSubmit.html#src">ImageSubmit</a> 
       	src rendering by prefixing context path
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-165">165</a>].
       </li>
       <li class="change">
-      	Improved <a href="click-api/net/sf/click/control/Column.html#getHeaderTitle()">Column</a> 
+      	Improved <a href="click-api/org/apache/click/control/Column.html#getHeaderTitle()">Column</a> 
       	i18n support for header titles. This issue was raised by Ricardo Lecheta
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-176">176</a>].
       
       </li>
       <li class="change">
       	Improved Form 
-      	<a href="click-api/net/sf/click/control/Form.html#endTag()">endTag()</a> 
+      	<a href="click-api/org/apache/click/control/Form.html#endTag()">endTag()</a> 
       	rendering to include JavaScript focus and validation code.
       </li> 
       <li class="change">
@@ -1742,7 +1742,7 @@ public class MyPage extends Page {
       </li> 
       <li class="change">
       	Refactored DoubleField, IntegerField and LongField to subclass 
-      	<a href="extras-api/net/sf/click/extras/control/NumberField.html">NumberField</a>. 
+      	<a href="extras-api/org/apache/click/extras/control/NumberField.html">NumberField</a>. 
       	This issue was raised by Ahmed Mohombe
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-120">120</a>].
       </li>
@@ -1759,15 +1759,15 @@ public class MyPage extends Page {
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-152">152</a>].
       </li>
       <li class="change">
-      	Fixed readonly support in <a href="click-api/net/sf/click/control/Checkbox.html">Checkbox</a>,
-      	<a href="click-api/net/sf/click/control/Radio.html">Radio</a> and
-      	<a href="click-api/net/sf/click/control/Select.html">Select</a> controls. 
+      	Fixed readonly support in <a href="click-api/org/apache/click/control/Checkbox.html">Checkbox</a>,
+      	<a href="click-api/org/apache/click/control/Radio.html">Radio</a> and
+      	<a href="click-api/org/apache/click/control/Select.html">Select</a> controls. 
       	These issues were raised by Lorenzo Orselli and David Frizelle
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-155">155</a>, 
          <a target='blank' href="http://www.avoka.com/jira/browse/CLK-164">164</a>].
       </li>
       <li class="change">
-      	Fixed error position support in <a href="extras-api/net/sf/click/extras/control/TabbedForm.html">TabbedForm</a> control. 
+      	Fixed error position support in <a href="extras-api/org/apache/click/extras/control/TabbedForm.html">TabbedForm</a> control. 
       	This issue was raised by Lorenzo Orselli
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-157">157</a>].
       </li>
@@ -1777,13 +1777,13 @@ public class MyPage extends Page {
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-161">161</a>].
       </li>
       <li class="change">
-      	Fixed first day of week bug in <a href="extras-api/net/sf/click/extras/control/DateField.html">DateField</a> control. 
+      	Fixed first day of week bug in <a href="extras-api/org/apache/click/extras/control/DateField.html">DateField</a> control. 
       	This issue was raised and fixed by Sadanori Ito
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-170">170</a>].
       </li>
       <li class="change">
       	Fixed Form
-      	<a href="click-api/net/sf/click/control/Form.html#copyTo(java.lang.Object)">copyTo</a> 
+      	<a href="click-api/org/apache/click/control/Form.html#copyTo(java.lang.Object)">copyTo</a> 
       	Map support. This issue was raised by Louis Martin
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-172">172</a>].
       </li>
@@ -1819,11 +1819,11 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
       	Added Form field width grid layout rendering option. See the Form 
-      	<a href="click-api/net/sf/click/control/Form.html#add(net.sf.click.control.Field, int)">add(field, width)</a> method.
+      	<a href="click-api/org/apache/click/control/Form.html#add(org.apache.click.control.Field, int)">add(field, width)</a> method.
       </li>
       <li class="change">
       	Added Table Column sorting support. See the Column 
-      	<a href="click-api/net/sf/click/control/Column.html#sortable">sortable</a> property.
+      	<a href="click-api/org/apache/click/control/Column.html#sortable">sortable</a> property.
       </li>
       <li class="change">
       	Added Column convenience methods for setting width, text-align, 
@@ -1831,17 +1831,17 @@ public class MyPage extends Page {
       </li>
       <li class="change">
       	Added auto binding of request values to public Page fields. See the ClickServlet method 
-        <a href="click-api/net/sf/click/ClickServlet.html#processPageRequestParams(net.sf.click.Page, javax.servlet.http.HttpServletRequest)">processPageRequestParams()</a>
+        <a href="click-api/org/apache/click/ClickServlet.html#processPageRequestParams(org.apache.click.Page, javax.servlet.http.HttpServletRequest)">processPageRequestParams()</a>
         for details. This addition was raised by Stephen Haberman. 
       </li>
       <li class="change">
         Added Form
-        <a href="click-api/net/sf/click/control/Form.html#clearValues()">clearValues()</a> 
+        <a href="click-api/org/apache/click/control/Form.html#clearValues()">clearValues()</a> 
         method.
       </li>
       <li class="change">
         Added ClickUtils 
-        <a href="click-api/net/sf/click/util/ClickUtils.html#getMimeType(java.lang.String)">getMimeType()</a> 
+        <a href="click-api/org/apache/click/util/ClickUtils.html#getMimeType(java.lang.String)">getMimeType()</a> 
         method.
       </li>
       <li class="change">
@@ -1924,7 +1924,7 @@ public class MyPage extends Page {
       	This feature was raised by Ahmed Mohombe and Ricardo Lecheta.
       </li>
       <li class="change">
-      	Added Column <a href="click-api/net/sf/click/control/Column.html#maxLength">maxLength</a> property
+      	Added Column <a href="click-api/org/apache/click/control/Column.html#maxLength">maxLength</a> property
       	to limit the number characters displayed.
       </li>
       <li class="change">
@@ -1968,27 +1968,27 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-        Added <a href="click-api/net/sf/click/util/FlashAttribute.html">FlashAttribute</a>
+        Added <a href="click-api/org/apache/click/util/FlashAttribute.html">FlashAttribute</a>
         class providing flash scope session attributes. Once a flash attribute 
         has been accessed from the session it is removed. 
       </li>
       <li class="change">
-        Added <a href="extras-api/net/sf/click/extras/control/LinkDecorator.html">LinkDecorator</a>
+        Added <a href="extras-api/org/apache/click/extras/control/LinkDecorator.html">LinkDecorator</a>
         class for rendering action links in column tables. This class was inspired 
         by Richardo Lecheta's <tt>ViewDecorator</tt> pattern.
       </li>
       <li class="change">
         Added paging support to 
-        <a href="extras-api/net/sf/click/extras/control/FormTable.html">FormTable</a> 
+        <a href="extras-api/org/apache/click/extras/control/FormTable.html">FormTable</a> 
         control.
       </li>
       <li class="change">
-        Added <a href="click-api/net/sf/click/control/Form.html">Form</a>
+        Added <a href="click-api/org/apache/click/control/Form.html">Form</a>
         startTag() and endTag() methods to support laying out forms manually.
       </li>
       <li class="change">
         Added Form
-        <a href="click-api/net/sf/click/control/Form.html#clearErrors()">clearErrors()</a> 
+        <a href="click-api/org/apache/click/control/Form.html#clearErrors()">clearErrors()</a> 
         method.
       </li>
       <li class="change">
@@ -2005,14 +2005,14 @@ public class MyPage extends Page {
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-115">115</a>].
       </li>
       <li class="change">
-      	Updated <a href="click-api/net/sf/click/control/Column.html">Column</a>
+      	Updated <a href="click-api/org/apache/click/control/Column.html">Column</a>
         class to escape HTML characters by default. This issue was raised by 
         Glen Stampoultzis 
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-118">118</a>].
       </li> 
       <li class="change">
         Updated 
-        <a href="click-api/net/sf/click/util/HtmlStringBuffer.html">HtmlStringBuffer</a>
+        <a href="click-api/org/apache/click/util/HtmlStringBuffer.html">HtmlStringBuffer</a>
         to improve HTML character escaping performance, removing Apache Commons Lang's use.
       </li>
       <li class="change">
@@ -2026,7 +2026,7 @@ public class MyPage extends Page {
         Updated Hibernate library to version 3.1.3.
       </li>
       <li class="change">
-      	Fixed <a href="extras-api/net/sf/click/extras/filter/CompressionFilter.html">CompressionFilter</a>
+      	Fixed <a href="extras-api/org/apache/click/extras/filter/CompressionFilter.html">CompressionFilter</a>
         to compress response by default and to automatically set any configured Click charset. 
         These issues were raised by Ricardo Lecheta and Naoki Takezoe
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-119">119</a>].
@@ -2044,19 +2044,19 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
         Added
-        <a href="extras-api/net/sf/click/extras/control/FormTable.html">FormTable</a>
+        <a href="extras-api/org/apache/click/extras/control/FormTable.html">FormTable</a>
         data grid control and associated 
-        <a href="extras-api/net/sf/click/extras/control/FieldColumn.html">FieldColumn</a>
+        <a href="extras-api/org/apache/click/extras/control/FieldColumn.html">FieldColumn</a>
         class.
       </li>
       <li class="change">
         Added
-        <a href="extras-api/net/sf/click/extras/control/PageSubmit.html">PageSubmit</a>
+        <a href="extras-api/org/apache/click/extras/control/PageSubmit.html">PageSubmit</a>
         control for redirecting to target pages.
       </li>
       <li class="change">
        Added Page
-       <a href="click-api/net/sf/click/Page.html#setForward(java.lang.Class)">setForward(Class)</a> method.
+       <a href="click-api/org/apache/click/Page.html#setForward(java.lang.Class)">setForward(Class)</a> method.
       </li> 
       <li class="change">
        Added 
@@ -2064,7 +2064,7 @@ public class MyPage extends Page {
       </li> 
       <li class="change">
         Modified Form
-        <a href="click-api/net/sf/click/control/Form.html#isFormSubmission()">isFormSubmission()</a>
+        <a href="click-api/org/apache/click/control/Form.html#isFormSubmission()">isFormSubmission()</a>
         method to only return true if the submission is from this form.
       </li>
       <li class="change">Updated documentation and examples.</li> 
@@ -2078,28 +2078,28 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
        Added Page 
-       <a href="click-api/net/sf/click/Page.html#onRender()">onRender()</a>
+       <a href="click-api/org/apache/click/Page.html#onRender()">onRender()</a>
        method. This addition was raised by Stephen Haberman
        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-105">105</a>].
       </li>        
       <li class="change">
        Auto add public Page fields to the model. 
        See the ClickServlet methods
-       <a href="click-api/net/sf/click/ClickServlet.html#initPage(java.lang.String, java.lang.Class, javax.servlet.http.HttpServletRequest)">initPage()</a>
+       <a href="click-api/org/apache/click/ClickServlet.html#initPage(java.lang.String, java.lang.Class, javax.servlet.http.HttpServletRequest)">initPage()</a>
        and 
-       <a href="click-api/net/sf/click/ClickServlet.html#createVelocityContext(net.sf.click.Page)">createVelocityContext()</a>
+       <a href="click-api/org/apache/click/ClickServlet.html#createVelocityContext(org.apache.click.Page)">createVelocityContext()</a>
        for details. This addition was raised by Stephen Haberman
        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-109">109</a>,
        <a target='blank' href="http://www.avoka.com/jira/browse/CLK-112">112</a>].
       </li>        
       <li class="change">
        Refactored panel package with BasicPanel renamed 
-       <a href="click-api/net/sf/click/control/Panel.html">Panel</a> and moved
+       <a href="click-api/org/apache/click/control/Panel.html">Panel</a> and moved
        into the core control package, and removing the Panel interface.
        The 
-       <a href="extras-api/net/sf/click/extras/panel/ListPanel.html">ListPanel</a>
+       <a href="extras-api/org/apache/click/extras/panel/ListPanel.html">ListPanel</a>
        and  
-       <a href="extras-api/net/sf/click/extras/panel/TabbedPanel.html">TabbedPanel</a>
+       <a href="extras-api/org/apache/click/extras/panel/TabbedPanel.html">TabbedPanel</a>
        classes have been revised to take advantage of the new Panel capabilities.
        <p/>
        Panels are now rendered as <tt>$panel</tt> rather than <tt>#parse($panel)</tt> 
@@ -2108,22 +2108,22 @@ public class MyPage extends Page {
       </li>        
       <li class="change">
        Added 
-       <a href="click-api/net/sf/click/control/PageLink.html">PageLink</a>
+       <a href="click-api/org/apache/click/control/PageLink.html">PageLink</a>
        control. This addition was raised by Stephen Haberman
        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-106">106</a>].
       </li>        
       <li class="change">
-       Added OGNL support for rendering <a href="click-api/net/sf/click/control/Column.html">Column</a>
+       Added OGNL support for rendering <a href="click-api/org/apache/click/control/Column.html">Column</a>
        values.
       </li>        
       <li class="change">
        Added support for multiple ActionLink parameters, see 
-       <a href="click-api/net/sf/click/control/AbstractLink.html#setParameter(java.lang.String, java.lang.String)">setParameter()</a>
+       <a href="click-api/org/apache/click/control/AbstractLink.html#setParameter(java.lang.String, java.lang.String)">setParameter()</a>
        for details.
       </li>        
       <li class="change">
        Added Menu 
-       <a href="extras-api/net/sf/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>
+       <a href="extras-api/org/apache/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>
        method.
       </li>        
       <li class="change">
@@ -2173,23 +2173,23 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
        Added client side JavaScript
-       <a href="click-api/net/sf/click/control/Form.html#form-validation">Form Validation</a>
+       <a href="click-api/org/apache/click/control/Form.html#form-validation">Form Validation</a>
        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-16">16</a>].
       </li>        
       <li class="change">
        Added new Click extras controls
-       <a href="extras-api/net/sf/click/extras/control/CheckList.html">CheckList</a> and
-       <a href="extras-api/net/sf/click/extras/control/ColorPicker.html">ColorPicker</a>.
+       <a href="extras-api/org/apache/click/extras/control/CheckList.html">CheckList</a> and
+       <a href="extras-api/org/apache/click/extras/control/ColorPicker.html">ColorPicker</a>.
        These controls were added by Christian Essel
        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-81">81</a>].
       </li>
       <li clas="change">
        Added support for a global page message bundle, see Page 
-       <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
+       <a href="click-api/org/apache/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
        for details. This issue raised by Claudio Rossetto 
        [<a href="http://www.avoka.com/jira/browse/CLK-72">72</a>].
       <li class="change">
-       Added <a href="click-api/net/sf/click/Control.html">Control</a>
+       Added <a href="click-api/org/apache/click/Control.html">Control</a>
        <tt>parent</tt> property 
        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-88">88</a>].
       </li>
@@ -2201,7 +2201,7 @@ public class MyPage extends Page {
       <li class="change">
        Added option to place Table banner on top. 
        See Table
-       <a href="click-api/net/sf/click/control/Table.html#bannerPosition">bannerPosition</a>
+       <a href="click-api/org/apache/click/control/Table.html#bannerPosition">bannerPosition</a>
        Javadoc for details. This issue raised by J.F. Zarama  
        [<a href="http://www.avoka.com/jira/browse/CLK-92">92</a>].
       </li>
@@ -2216,16 +2216,16 @@ public class MyPage extends Page {
        topic for details. This issue raised by Stephen Haberman.
       </li>
       <li class="change">
-       Added Page <a href="click-api/net/sf/click/Page.html#setRedirect(java.lang.Class)">setRedirect(pageClass)</a>
+       Added Page <a href="click-api/org/apache/click/Page.html#setRedirect(java.lang.Class)">setRedirect(pageClass)</a>
        method.
       </li>
       <li class="change">
-       Added Format <a href="click-api/net/sf/click/util/Format.html#currentDate()">currentDate()</a>
+       Added Format <a href="click-api/org/apache/click/util/Format.html#currentDate()">currentDate()</a>
        methods.
       </li>
       <li class="change">
        Added request parameter to ClickServlet   
-       <a href="click-api/net/sf/click/ClickServlet.html#newPageInstance(java.lang.String, java.lang.Class, javax.servlet.http.HttpServletRequest)">newPageInstance()</a>
+       <a href="click-api/org/apache/click/ClickServlet.html#newPageInstance(java.lang.String, java.lang.Class, javax.servlet.http.HttpServletRequest)">newPageInstance()</a>
        method.
       </li>
       <li class="change">
@@ -2239,7 +2239,7 @@ public class MyPage extends Page {
       <li class="change">
        Added <a target="blank" class="external" href="www.springframework.org">Spring</a> 
        integration example to Examples and improved 
-       <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
+       <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
        documentation.
       </li>
       <li class="change">
@@ -2249,7 +2249,7 @@ public class MyPage extends Page {
       </li>
       <li class="change">
        Improved    
-       <a href="click-api/net/sf/click/util/HtmlStringBuffer.html">HtmlStringBuffer</a>
+       <a href="click-api/org/apache/click/util/HtmlStringBuffer.html">HtmlStringBuffer</a>
        performance with unsynchronized append methods.
       </li>
       <li class="change">
@@ -2299,40 +2299,40 @@ public class MyPage extends Page {
       </li>
       <li class="change">
        Added new Click Extras controls 
-       <a href="extras-api/net/sf/click/extras/control/ActionButton.html">ActionButton</a>,
-       <a href="extras-api/net/sf/click/extras/control/LongField.html">LongField</a>,
-       <a href="extras-api/net/sf/click/extras/control/NumberField.html">NumberField</a>,
-       <a href="extras-api/net/sf/click/extras/control/TabbedForm.html">TabbedForm</a> and
-       <a href="extras-api/net/sf/click/extras/control/TelephoneField.html">TelephoneField</a>.
+       <a href="extras-api/org/apache/click/extras/control/ActionButton.html">ActionButton</a>,
+       <a href="extras-api/org/apache/click/extras/control/LongField.html">LongField</a>,
+       <a href="extras-api/org/apache/click/extras/control/NumberField.html">NumberField</a>,
+       <a href="extras-api/org/apache/click/extras/control/TabbedForm.html">TabbedForm</a> and
+       <a href="extras-api/org/apache/click/extras/control/TelephoneField.html">TelephoneField</a>.
       </li>
       <li class="change">
        Added new Click Extras Cayenne controls 
-       <a href="extras-api/net/sf/click/extras/cayenne/PropertySelect.html">PropertySelect</a>,
-       <a href="extras-api/net/sf/click/extras/cayenne/QuerySelect.html">QuerySelect</a> and
-       <a href="extras-api/net/sf/click/extras/cayenne/TabbedCayenneForm.html">TabbedCayenneForm</a>.
+       <a href="extras-api/org/apache/click/extras/cayenne/PropertySelect.html">PropertySelect</a>,
+       <a href="extras-api/org/apache/click/extras/cayenne/QuerySelect.html">QuerySelect</a> and
+       <a href="extras-api/org/apache/click/extras/cayenne/TabbedCayenneForm.html">TabbedCayenneForm</a>.
        Also added web 
-       <a href="extras-api/net/sf/click/extras/cayenne/DataContextFilter.html">DataContextFilter</a>.
+       <a href="extras-api/org/apache/click/extras/cayenne/DataContextFilter.html">DataContextFilter</a>.
       </li>
       <li class="change">
         Added Context page path lookup method 
-        <a href="click-api/net/sf/click/Context.html#getPagePath(java.lang.Class)">getPagePath()</a>.
+        <a href="click-api/org/apache/click/Context.html#getPagePath(java.lang.Class)">getPagePath()</a>.
         This feature was suggested by Christian Essl
         [<a href="http://www.avoka.com/jira/browse/CLK-68">68</a>].
       </li>
       <li class="change">
         Added support for 
-        <a href="click-api/net/sf/click/control/Form.html#data-binding">data binding</a>
+        <a href="click-api/org/apache/click/control/Form.html#data-binding">data binding</a>
         of nested objects in form fields using 
         <a target="blank" href="http://www.ognl.org">OGNL</a> library.
       </li>
       <li class="change">
         Added Form buttonStyle, fieldStyle and labelStyle attributes to support
         customised form
-        <a href="click-api/net/sf/click/control/Form.html#auto-layout">auto layouts</a>.
+        <a href="click-api/org/apache/click/control/Form.html#auto-layout">auto layouts</a>.
       </li>
       <li class="change">
         Added support for Control Velocity templates using new Context
-        <a href="click-api/net/sf/click/Context.html#renderTemplate(java.lang.Class, java.util.Map)">renderTemplate()</a>
+        <a href="click-api/org/apache/click/Context.html#renderTemplate(java.lang.Class, java.util.Map)">renderTemplate()</a>
         methods. See Click Examples 'Rich Text Area' and 'Tabbed Form' for 
         demonstrations.
       </li>
@@ -2354,11 +2354,11 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Improved 
-        <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
+        <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
         configuration options and documentation.
       </li>
       <li class="change">
-        Improved <a href="click-api/net/sf/click/util/Format.html">Format</a> 
+        Improved <a href="click-api/org/apache/click/util/Format.html">Format</a> 
         class now uses request context Locale. 
         Please note this change requires modification to Format subclass
         constructors.        
@@ -2372,7 +2372,7 @@ public class MyPage extends Page {
         Updated Cayenne library to version 1.2B1.
        </li>
       <li class="change">
-        Fixed <a href="extras-api/net/sf/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
+        Fixed <a href="extras-api/org/apache/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
         duplicate insert bug. This issue was identified by
         Bob Schellink [<a href="http://www.avoka.com/jira/browse/CLK-63">63</a>].
       </li>
@@ -2408,25 +2408,25 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
         Created new package 
-        <a href="extras-api/net/sf/click/extras/control/package-summary.html">net.sf.click.extras.control</a>
+        <a href="extras-api/org/apache/click/extras/control/package-summary.html">org.apache.click.extras.control</a>
         for extended HTML controls. The following controls have been moved
         into this package: CreditCardField, DateField, DoubleField, EmailField,
         IntegerField and Menu.
         <p/>
-        Table control promoted to core <a href="click-api/net/sf/click/control/package-summary.html">net.sf.click.control</a>.
+        Table control promoted to core <a href="click-api/org/apache/click/control/package-summary.html">org.apache.click.control</a>.
         <p/>
         Added Control methods 
-        <a href="click-api/net/sf/click/Control.html#getHtmlImports()">getHtmlImports()</a> and
-        <a href="click-api/net/sf/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>.
+        <a href="click-api/org/apache/click/Control.html#getHtmlImports()">getHtmlImports()</a> and
+        <a href="click-api/org/apache/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>.
       </li>
       <li class="change">
         Added 
-        <a href="click-api/net/sf/click/util/PageImports.html">PageImports</a>
+        <a href="click-api/org/apache/click/util/PageImports.html">PageImports</a>
         object to automatically render control HTML header imports.
       </li>
       <li class="change">
         Added form back button support. See Form 
-        <a href="click-api/net/sf/click/control/Form.html#onSubmitCheck(net.sf.click.Page, java.lang.String)">onSubmitCheck()</a>
+        <a href="click-api/org/apache/click/control/Form.html#onSubmitCheck(org.apache.click.Page, java.lang.String)">onSubmitCheck()</a>
         API for details.
       </li>
       <li class="change">
@@ -2435,13 +2435,13 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Added 
-        <a href="extras-api/net/sf/click/extras/control/RegexField.html">RegexField</a> 
+        <a href="extras-api/org/apache/click/extras/control/RegexField.html">RegexField</a> 
         provided by Naoki Takezoe
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-46">46</a>].
       </li>
       <li class="change">
         Added 
-        <a href="extras-api/net/sf/click/extras/cayenne/RelationshipSelect.html">RelationshipSelect</a> 
+        <a href="extras-api/org/apache/click/extras/cayenne/RelationshipSelect.html">RelationshipSelect</a> 
         provided by Ahmed Mohombe. Please see Click Cayenne web application for
         a demonstration.
       </li>
@@ -2512,12 +2512,12 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-        Modified <a href="click-api/net/sf/click/ClickServlet.html">ClickServlet</a> 
+        Modified <a href="click-api/org/apache/click/ClickServlet.html">ClickServlet</a> 
         to enable direct ServletResponse handling by 
         Pages. See Click Examples Direct Page for a demonstration.
       </li>
       <li class="change">
-        Modified <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
+        Modified <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
         to set Spring ApplicationContext in pages implementing 
         <tt>ApplicationContextAware</tt> interface.
       </li>
@@ -2537,7 +2537,7 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
         Improved control localization support, please see 
-        <a href="click-api/net/sf/click/control/Field.html#getLabel()">Field</a>
+        <a href="click-api/org/apache/click/control/Field.html#getLabel()">Field</a>
         Javadoc and <a href="faq.html#localization">FAQ</a> for details.
         <p/>
         This feature based on a concept developed by Ahmed Mohombe,
@@ -2546,37 +2546,37 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Added Hibernate data aware Form control
-        <a href="extras-api/net/sf/click/extras/hibernate/HibernateForm.html">HibernateForm</a>,
+        <a href="extras-api/org/apache/click/extras/hibernate/HibernateForm.html">HibernateForm</a>,
         and supporting
-        <a href="extras-api/net/sf/click/extras/hibernate/SessionContext.html">SessionContext</a> and
-        <a href="extras-api/net/sf/click/extras/hibernate/SessionFilter.html">SessionFilter</a> classes.
+        <a href="extras-api/org/apache/click/extras/hibernate/SessionContext.html">SessionContext</a> and
+        <a href="extras-api/org/apache/click/extras/hibernate/SessionFilter.html">SessionFilter</a> classes.
       </li> 
       <li class="change">
         Added Menu 
-        <a href="extras-api/net/sf/click/extras/menu/Menu.html#pages">pages</a>
+        <a href="extras-api/org/apache/click/extras/menu/Menu.html#pages">pages</a>
         property for selecting menu items. This feature was provided by 
         Geoff Hopson
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-39">39</a>].
         <p/>
-        Refactored <a href="extras-api/net/sf/click/extras/menu/Menu.html">Menu</a> 
+        Refactored <a href="extras-api/org/apache/click/extras/menu/Menu.html">Menu</a> 
         to implement Control interface to improve Page subclassing.
       </li>
       <li class="change">
         Improved Form rendering flexibility with new properties
-        <a href="click-api/net/sf/click/control/Form.html#getLabelRequiredPrefix()">labelRequiredPrefix</a>
+        <a href="click-api/org/apache/click/control/Form.html#getLabelRequiredPrefix()">labelRequiredPrefix</a>
         and
-        <a href="click-api/net/sf/click/control/Form.html#getLabelRequiredSuffix()">labelRequiredSuffix</a>.        
+        <a href="click-api/org/apache/click/control/Form.html#getLabelRequiredSuffix()">labelRequiredSuffix</a>.        
       </li>
       <li class="change">
         Added 
-        <a href="click-api/net/sf/click/control/Select.html#setMultipleValues(java.util.List)">Select</a>
+        <a href="click-api/org/apache/click/control/Select.html#setMultipleValues(java.util.List)">Select</a>
         <tt>setMultipleValues()</tt> method. This issue was idendified by
         Geoff Hopson
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-34">34</a>].
       </li>
       <li class="change">
         Added Context
-        <a href="click-api/net/sf/click/Context.html#createPage(java.lang.Class)">createPage()</a>
+        <a href="click-api/org/apache/click/Context.html#createPage(java.lang.Class)">createPage()</a>
         method enabling you to specify the target page by class.
       </li>
       <li class="change">Added custom rich text area control demonstration 
@@ -2600,7 +2600,7 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Modified Format 
-        <a href="click-api/net/sf/click/util/Format.html#getEmptyString()">getEmptyString()</a>
+        <a href="click-api/org/apache/click/util/Format.html#getEmptyString()">getEmptyString()</a>
         to return "" strings to better support AJAX rendering. 
         This issue was idendified by Andrus Adamchik.
       </li>
@@ -2616,7 +2616,7 @@ public class MyPage extends Page {
         Mike Organek
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-31">31</a>].<br/>
         Added new 
-        <a href="click-api/net/sf/click/util/HtmlStringBuffer.html">HtmlStringBuffer</a>
+        <a href="click-api/org/apache/click/util/HtmlStringBuffer.html">HtmlStringBuffer</a>
         class for control rendering.
       </li>
       <li class="change">
@@ -2624,7 +2624,7 @@ public class MyPage extends Page {
         This application was contributed by Andrus Adamchik.
       </li> 
       <li class="change">
-        Refactored <a href="click-api/net/sf/click/control/Form.html">Form</a> 
+        Refactored <a href="click-api/org/apache/click/control/Form.html">Form</a> 
         align and position constants to remove ambiguity.
       </li> 
       <li class="change">
@@ -2667,11 +2667,11 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
         Added Spring integration servlet
-        <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>.
+        <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>.
       </li> 
       <li class="change">
         Added Cayenne data aware Form control
-        <a href="extras-api/net/sf/click/extras/cayenne/CayenneForm.html">CayenneForm</a>.
+        <a href="extras-api/org/apache/click/extras/cayenne/CayenneForm.html">CayenneForm</a>.
       </li> 
       <li class="change">
         Improved JSP support. See 
@@ -2680,7 +2680,7 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Improved 
-	<a href="click-api/net/sf/click/control/Field.html#setLabel(java.lang.String)">Field</a>
+	<a href="click-api/org/apache/click/control/Field.html#setLabel(java.lang.String)">Field</a>
 	localization support, see <a href="faq.html#localization">FAQ</a> for details.
 	Based on a concept by Iain Shigeoka.
       </li>
@@ -2718,7 +2718,7 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-      	Added <a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a> 
+      	Added <a href="click-api/org/apache/click/control/FieldSet.html">FieldSet</a> 
         control. See Javadoc for details and Click Examples for a demonstration 
       	[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-4">CLK-4</a>].
       </li> 
@@ -2748,7 +2748,7 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-      	Added <a href="extras-api/net/sf/click/extras/menu/Menu.html">Menu</a> component.
+      	Added <a href="extras-api/org/apache/click/extras/menu/Menu.html">Menu</a> component.
       	See Javadoc for details and Click Examples for a demonstration 
       	[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-12">CLK-12</a>].
       </li> 
@@ -2760,30 +2760,30 @@ public class MyPage extends Page {
       </li> 
       <li class="change">
       	Added Form &lt;-&gt; DAO auto-loading feature.
-        See <a href="click-api/net/sf/click/control/Form.html#copyFrom(java.lang.Object)">Form</a>
+        See <a href="click-api/org/apache/click/control/Form.html#copyFrom(java.lang.Object)">Form</a>
         Javadoc for details [<a target="blank" href="http://www.avoka.com/jira/browse/CLK-2">CLK-2</a>].
       </li>
       <li class="change">
         Fixed blank page gzip compression bug. The Click embedded gzip compression 
         functionality has been replaced with a
-        <a href="extras-api/net/sf/click/extras/filter/CompressionFilter.html">CompressionFilter</a>
+        <a href="extras-api/org/apache/click/extras/filter/CompressionFilter.html">CompressionFilter</a>
         derived from Jarkata Tomcat
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-5">CLK-5</a>].
       </li> 
       <li class="change">
         Added <tt>email()</tt> and <tt>link()</tt> formatter methods and
         <tt>getEmptyString()</tt> method to
-        <a href="click-api/net/sf/click/util/Format.html#email(java.lang.String)">Format</a> class
+        <a href="click-api/org/apache/click/util/Format.html#email(java.lang.String)">Format</a> class
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-15">CLK-15</a>].
       </li> 
       <li class="change">
-        Modified <a href="click-api/net/sf/click/control/Form.html">Form</a>
+        Modified <a href="click-api/org/apache/click/control/Form.html">Form</a>
         control to render a class error attribute &lt;label class="error"&gt; 
         in the labels of invalid fields. You can now override the <tt>control.css</tt>
         style <tt>label.error</tt> to modify the display of field error labels.
       </li> 
       <li class="change">
-        Modified <a href="click-api/net/sf/click/control/Form.html#Form(java.lang.String)">Form</a>
+        Modified <a href="click-api/org/apache/click/control/Form.html#Form(java.lang.String)">Form</a>
         constructor to only require form name parameter. The context can be
         set later. Note this will require modifications to exiting code.
       </li> 
@@ -2798,16 +2798,16 @@ public class MyPage extends Page {
     joins the Click project.</div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-      	Added <a href="extras-api/net/sf/click/extras/panel/package-summary.html">Panel</a> 
+      	Added <a href="extras-api/org/apache/click/extras/panel/package-summary.html">Panel</a> 
         components by Phil Barnes. See Javadoc for details and Click Examples for a demonstration.
       </li> 
       <li class="change">
-      	Added <a href="extras-api/net/sf/click/extras/table/Table.html">Table</a> control.
+      	Added <a href="extras-api/org/apache/click/extras/table/Table.html">Table</a> control.
       	See Javadoc for details and Click Examples for a demonstration 
       	[<a target='blank' href="http://sourceforge.net/tracker/index.php?func=detail&aid=1243243&group_id=82095&atid=565027">1243243</a>].
       </li> 
       <li class="change">
-      	Added <a href="click-api/net/sf/click/control/ImageSubmit.html">ImageSubmit</a> 
+      	Added <a href="click-api/org/apache/click/control/ImageSubmit.html">ImageSubmit</a> 
         control by Phil Barnes. See Javadoc for details and Click Examples for a demonstration.
       </li> 
       <li class="change">
@@ -2815,11 +2815,11 @@ public class MyPage extends Page {
         <div style="margin-top:0.5em;">
         Added Chinese localization properties (zh_CN) provided by Xi Ping Wang. </div>
         <div style="margin-top:0.5em;">
-        Added Page <a href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a>
+        Added Page <a href="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</a>
         adaptor to Velocity Context.
         <div style="margin-top:0.5em;">
-      	Added new <a href="click-api/net/sf/click/Context.html#getLocale()">getLocale()</a>
-        and <a href="click-api/net/sf/click/Context.html#setLocale(java.util.Locale)">setLocale()</a>
+      	Added new <a href="click-api/org/apache/click/Context.html#getLocale()">getLocale()</a>
+        and <a href="click-api/org/apache/click/Context.html#setLocale(java.util.Locale)">setLocale()</a>
         methods to Context class to enable overriding the default request Locale. </div>
       </li>  
       <li class="change">
@@ -2845,7 +2845,7 @@ public class MyPage extends Page {
       	Added application reloading feature to reload "click.xml" without
       	restarting the web application.
       	See 
-      	<a href="click-api/net/sf/click/ClickServlet.html#app-reloading">ClickServlet</a>
+      	<a href="click-api/org/apache/click/ClickServlet.html#app-reloading">ClickServlet</a>
       	Javadoc for details and the Click Examples for a demonstration 
       	[<a target='blank' href="http://sourceforge.net/tracker/index.php?func=detail&aid=1250978&group_id=82095&atid=565027">1237942</a>].
         <div style="margin-top:0.5em;">
@@ -2859,7 +2859,7 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-      	Added <a href="click-api/net/sf/click/util/ClickLogger.html">ClickLogger</a>
+      	Added <a href="click-api/org/apache/click/util/ClickLogger.html">ClickLogger</a>
       	which logs to the console by default. 
       	See the Click and  Velocity <a href="configuration.html#click-logging">Logging</a>
       	topic.
@@ -2872,7 +2872,7 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">Added 
-         <a href="click-api/net/sf/click/control/FileField.html">FileField</a>
+         <a href="click-api/org/apache/click/control/FileField.html">FileField</a>
          control for uploading files and modified Form control to support 
          "multipart/form-data" requests. See the Click Examples 
          File Upload page for a demonstration [<a href="http://sourceforge.net/tracker/index.php?func=detail&aid=1237942&group_id=82095&atid=565027">1237942</a>].
@@ -2896,7 +2896,7 @@ public class MyPage extends Page {
       </li>
       <li class="changes">
         Added 
-        ClickServlet <a href="click-api/net/sf/click/ClickServlet.html#newPageInstance(java.lang.Class, javax.servlet.http.HttpServletRequest)">newPageInstance()</a>
+        ClickServlet <a href="click-api/org/apache/click/ClickServlet.html#newPageInstance(java.lang.Class, javax.servlet.http.HttpServletRequest)">newPageInstance()</a>
         method to support IoC applications. See the 
         <a href="faq.html#spring-integration">Spring Integration</a> FAQ topic for more details.
         <div style="margin-top:0.5em;">
@@ -2913,7 +2913,7 @@ public class MyPage extends Page {
       </li> 
       <li class="change">
         Added 
-        <a href="click-api/net/sf/click/util/Format.html#limitLength(java.lang.String, int)">limitLength()</a>
+        <a href="click-api/org/apache/click/util/Format.html#limitLength(java.lang.String, int)">limitLength()</a>
         methods to the Format class.
       </li>
       <li class="change">
@@ -2930,13 +2930,13 @@ public class MyPage extends Page {
          the using Rico Ajax library. See the Click Examples AJAX page for a demonstration.
       </li> 
       <li class="change">
-         <a href="click-api/net/sf/click/control/Option.html">Option</a> and 
-         <a href="click-api/net/sf/click/control/OptionGroup.html">OptionGroup</a> 
+         <a href="click-api/org/apache/click/control/Option.html">Option</a> and 
+         <a href="click-api/org/apache/click/control/OptionGroup.html">OptionGroup</a> 
           refactored into standalone classes.
       </li> 
       <li class="change">
          Added Page 
-         <a href="click-api/net/sf/click/Page.html#setHeader(java.lang.String, java.lang.Object)">setHeader()</a>
+         <a href="click-api/org/apache/click/Page.html#setHeader(java.lang.String, java.lang.Object)">setHeader()</a>
          method.
       </li>
       <li class="change">Fixed NPE when Fields, with no parent Form, are processed
@@ -2954,16 +2954,16 @@ public class MyPage extends Page {
          to ensure session ID is set.
       </li> 
       <li class="change">Added optional Form validation. A 
-         <a href="click-api/net/sf/click/control/Form.html#validate">validate</a>
-         property has beed added to Form and a <a href="click-api/net/sf/click/control/Field.html#validate()">validate()</a>
+         <a href="click-api/org/apache/click/control/Form.html#validate">validate</a>
+         property has beed added to Form and a <a href="click-api/org/apache/click/control/Field.html#validate()">validate()</a>
          method to Field. Field subclasses have been modified to support optional
          validation.  See the Click Examples Form Properties page for a demonstration.
       </li> 
       <li class="change">Added Session Object utility methods to Context, see 
-         <a href="click-api/net/sf/click/Context.html#getSessionObject(java.lang.Class)">getSessionObject</a>.
+         <a href="click-api/org/apache/click/Context.html#getSessionObject(java.lang.Class)">getSessionObject</a>.
       </li> 
       <li class="change">Added error message block horizontal alignment proeprty
-         <a href="click-api/net/sf/click/control/Form.html#errorsAlign">errorsAlign</a>
+         <a href="click-api/org/apache/click/control/Form.html#errorsAlign">errorsAlign</a>
          to Form.
       </li>  
       <li class="change">Updated documentation and examples.</li>   
@@ -2982,19 +2982,19 @@ public class MyPage extends Page {
          <a href="error-npe.html">NullPointerException</a>.    
       </li>
       <li class="change">Integrated the DHTML Calendar widget by <a href="http://www.dynarch.com/">Dyna.com</a>
-         into <a href="click-api/net/sf/click/control/DateField.html">DateField</a> control.
+         into <a href="click-api/org/apache/click/control/DateField.html">DateField</a> control.
       </li>
-      <li class="change">Added Form and Field <a href="click-api/net/sf/click/control/Field.html#readonly">readonly</a> 
+      <li class="change">Added Form and Field <a href="click-api/org/apache/click/control/Field.html#readonly">readonly</a> 
          property. Modified Field subclasses to render their HTML readonly attribute. If the Form is set to
          readonly all its fields will also be readonly.
       </li>
-      <li class="change">Added Control <a href="click-api/net/sf/click/Control.html#getId()">getId()</a> 
+      <li class="change">Added Control <a href="click-api/org/apache/click/Control.html#getId()">getId()</a> 
          method. Modified control classes to render their HTML id attribute.
       </li>
-      <li class="change">Added Form <a href="click-api/net/sf/click/control/Form.html#columns">columns</a> 
+      <li class="change">Added Form <a href="click-api/org/apache/click/control/Form.html#columns">columns</a> 
          property to render forms in multi column table layout.    
       </li>
-      <li class="change">Added page <a href="click-api/net/sf/click/Page.html#path">path</a> 
+      <li class="change">Added page <a href="click-api/org/apache/click/Page.html#path">path</a> 
          property to Velocity context.
       </li>
       <li class="change">Fixed SourceViewer missing resource bug which occured on Orion server.</li>

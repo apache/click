@@ -180,7 +180,7 @@
   not meet all your UI style requirements. 
   <p/>
   Please note the Forms control provides many 
-  <a href="click-api/net/sf/click/control/Form.html#auto-layout">auto layout</a> 
+  <a href="click-api/org/apache/click/control/Form.html#auto-layout">auto layout</a> 
   options, see the <a href="examples.html">click-examples</a> 'Form Properties' 
   for a demonstration. 
   <p/>
@@ -207,7 +207,7 @@
   <u>Use Panel to class to create reusable HTML blocks.</u> 
   <p/>
   The 
-  <a href="click-api/net/sf/click/control/Panel.html">Panel</a> 
+  <a href="click-api/org/apache/click/control/Panel.html">Panel</a> 
   control support custom Velocity templates, which is an ideal way
   to create reusable HTML sections which you can include in many pages.
   Panels also support nested controls, enabling your sections to support 
@@ -218,7 +218,7 @@
   This is easy to do and gives you good reuse across your web application.
   <p/>
   Please see the Form 
-  <a href="click-api/net/sf/click/control/Form.html#velocity-macros">velocity macros</a> 
+  <a href="click-api/org/apache/click/control/Form.html#velocity-macros">velocity macros</a> 
   example, and also see the <a href="examples.html">click-examples</a> 'Velocity Macro' 
   demonstration. 
   </li><li>
@@ -228,7 +228,7 @@
   across your web application. 
   <p/>
   Please see the Form
-  <a href="click-api/net/sf/click/control/Form.html#manual-layout">manual layout</a>
+  <a href="click-api/org/apache/click/control/Form.html#manual-layout">manual layout</a>
   example.
   </li>
   </ol>
@@ -284,7 +284,7 @@
   <dt><b>7.&nbsp; Can you exclude some fields from a Form?</b></dt>
   <dd>
    To exclude some fields from being displayed in a shared Form class use the
-   <a href="click-api/net/sf/click/control/Form.html#removeFields(java.util.List)">Form.removeFields()</a>
+   <a href="click-api/org/apache/click/control/Form.html#removeFields(java.util.List)">Form.removeFields()</a>
    method. 
    <p/>
    You can even do this in your page template. Just make sure you call you call 
@@ -308,7 +308,7 @@
 
    The Page class supports page specific string localisation bundles using the 
    method 
-   <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage(String)</a>.
+   <a href="click-api/org/apache/click/Page.html#getMessage(java.lang.String)">getMessage(String)</a>.
    For example a Login class with three locale string property files on the classpath:
 <pre class="codeConfig">
 /com/mycorp/pages/Login.properties
@@ -324,7 +324,7 @@
 } </pre>
 
    In your HTML page template you can also access the localize message using
-   the <a href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a>
+   the <a href="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</a>
    object which is added to the template using the name "messages". For example:
 
     <pre class="codeHtml">
@@ -335,19 +335,19 @@
    the Javadoc:
    <ul style="margin-top:1em;">
     <li>
-     <a href="click-api/net/sf/click/control/ActionLink.html#getLabel()">ActionLink.getLabel()</a>
+     <a href="click-api/org/apache/click/control/ActionLink.html#getLabel()">ActionLink.getLabel()</a>
     </li>
     <li>
-     <a href="click-api/net/sf/click/control/ActionLink.html#getTitle()">ActionLink.getTitle()</a>
+     <a href="click-api/org/apache/click/control/ActionLink.html#getTitle()">ActionLink.getTitle()</a>
     </li>
     <li>
-     <a href="click-api/net/sf/click/control/Field.html#getLabel()">Field.getLabel()</a>
+     <a href="click-api/org/apache/click/control/Field.html#getLabel()">Field.getLabel()</a>
     </li>
     <li>
-     <a href="click-api/net/sf/click/control/Field.html#getTitle()">Field.getTitle()</a>
+     <a href="click-api/org/apache/click/control/Field.html#getTitle()">Field.getTitle()</a>
     </li>
     <li>
-     <a href="click-api/net/sf/click/control/FieldSet.html#getLegend()">FieldSet.getLegend()</a>
+     <a href="click-api/org/apache/click/control/FieldSet.html#getLegend()">FieldSet.getLegend()</a>
     </li>
    </ul>
 
@@ -358,7 +358,7 @@
 /click-control.properties </pre>  
 
    The field class provides a number of 
-   <a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a>
+   <a href="click-api/org/apache/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a>
    methods which support localized strings and message formatting.
    Please also see the Control topic <a href="controls.html#message-properties">Message Properties</a>.   
   </dd>
@@ -386,7 +386,7 @@
 &lt;/click&gt; </pre>
   This will set the pages <tt>HttpServletResponse</tt> "Content-Type" header to be 
   "text/html;charset=UTF-8". Alternatively you can override the Page 
-  <a href="click-api/net/sf/click/Page.html#getContentType()">getContentType()</a> method
+  <a href="click-api/org/apache/click/Page.html#getContentType()">getContentType()</a> method
   to this content type.
   </dd>
 
@@ -426,7 +426,7 @@
   <p/>
   To prevent users resubmitting a form with the browser back button use the
   Form 
-  <a href="click-api/net/sf/click/control/Form.html#onSubmitCheck(net.sf.click.Page, java.lang.String)">onSubmitCheck()</a>
+  <a href="click-api/org/apache/click/control/Form.html#onSubmitCheck(org.apache.click.Page, java.lang.String)">onSubmitCheck()</a>
   method:
   
 <pre class="codeJava">
@@ -495,7 +495,7 @@
   <dt><b>15.&nbsp; How can you integrate Click into Spring?</b></dt>
   <dd>
    To integrate Spring with Click configure the
-   <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
+   <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
    instead of the normal ClickServlet. The SpringClickServlet is contained in the 
    <a href="extras.html">Extras</a> library.
    <p/>
@@ -539,18 +539,18 @@ public interface Controller {
    the Servlet context path, e.g. <span class="">/mycorp</span>
   </li>  
   <li>format &nbsp; - &nbsp; 
-   the <a href="click-api/net/sf/click/util/Format.html">Format</a> 
+   the <a href="click-api/org/apache/click/util/Format.html">Format</a> 
     object for formatting the display of objects
   </li>
   <li>forward &nbsp; - &nbsp; 
    the page JSP resource (.jsp file)
   </li>
   <li>messages &nbsp; - &nbsp; 
-   the <a target="topic" href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a> adaptor
-   for the Page <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
+   the <a target="topic" href="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</a> adaptor
+   for the Page <a href="click-api/org/apache/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
    method
   </li>
-  <li>path &nbsp; - &nbsp; the mapped request <a href="click-api/net/sf/click/Page.html#path">path</a> 
+  <li>path &nbsp; - &nbsp; the mapped request <a href="click-api/org/apache/click/Page.html#path">path</a> 
     of the page. Note this will have a .htm not a .jsp extension
   </li>
    </ul>
@@ -612,8 +612,8 @@ public interface Controller {
   <p/>
   If you still need to write unit tests for your Click pages, please read the 
   <a href="mock-api/overview-summary.html">documentation</a> on the
-  <a href="mock-api/net/sf/click/MockContainer.html">MockContainer</a> and
-  <a href="mock-api/net/sf/click/MockContext.html">MockContext</a> classes.
+  <a href="mock-api/org/apache/click/MockContainer.html">MockContainer</a> and
+  <a href="mock-api/org/apache/click/MockContext.html">MockContext</a> classes.
   </dd>
 
 
