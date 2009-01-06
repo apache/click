@@ -61,8 +61,12 @@
             </li>
             <li>
                 Upload the distribution to your account at <tt>people.apache.org</tt>
-                under the folder <tt>~/public_html/release/X.X.X</tt>, where X.X.X
-                is the version number of the project.
+                under the folder <tt>~/public_html/click/SUBPROJECT/X.X.X</tt>, where
+                <tt>SUBPROJECT</tt> is the name of the subproject and X.X.X
+                is the version.
+                <p/>
+                For example version <tt>2.2.0</tt> of subproject <tt>ClickIDE</tt> could be published to:
+                <pre class="codeConfig"><tt>~/public_html/click/clickide/2.2.0</tt></pre>
             </li>
             <li>
                 Verify the digital signatures at <tt>people.apache.org</tt> to
@@ -79,11 +83,11 @@
 ssh people.apache.org
 gpg --keyserver pgp.mit.edu --recv-keys 709F7561
 </pre>
-                Next verify the signature with the following command:
+                Next verify the signature with the following command: (Replace SUBPROJECT with the name of the actual project.)
                 <pre class="codeConfig">
 ssh people.apache.org
-cd ~/public_html/release/X.X.X
-gpg --verify ClickIDE-X.X.X-incubating.zip.asc ClickIDE-X.X.X-incubating.zip
+cd ~/public_html/click/SUBPROJECT/X.X.X
+gpg --verify SUBPROJECT-X.X.X-incubating.zip.asc SUBPROJECT-X.X.X-incubating.zip
 </pre>
             </li>
             <li>
@@ -98,7 +102,6 @@ gpg --verify ClickIDE-X.X.X-incubating.zip.asc ClickIDE-X.X.X-incubating.zip
                 <tt>/www/www.apache.org/dist/incubator/click/<tt>SUBPROJECT</tt>/X.X.X</tt>
 
                 <p/>
-                <tt>SUBPROJECT</tt> should be replaced with the name of the subproject.
                 For example <tt>ClickIDE</tt> will be published to the folder:
 
                 <p/>
@@ -108,7 +111,7 @@ gpg --verify ClickIDE-X.X.X-incubating.zip.asc ClickIDE-X.X.X-incubating.zip
                 An easy way to do this is to copy the files in your <tt>public_html</tt>
                 folder for example:
                 <pre class="codeConfig">ssh people.apache.org
-cp ~/public_html/release/X.X.X/* /www/www.apache.org/dist/incubator/click/clickide/X.X.X
+cp ~/public_html/click/clickide/X.X.X/* /www/www.apache.org/dist/incubator/click/clickide/X.X.X
 </pre>
             </li>
              <li>
