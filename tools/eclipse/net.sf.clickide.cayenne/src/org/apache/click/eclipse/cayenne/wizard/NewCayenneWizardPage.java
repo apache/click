@@ -1,4 +1,4 @@
-package net.sf.clickide.cayenne.wizard;
+package org.apache.click.eclipse.cayenne.wizard;
 
 import java.io.InputStream;
 

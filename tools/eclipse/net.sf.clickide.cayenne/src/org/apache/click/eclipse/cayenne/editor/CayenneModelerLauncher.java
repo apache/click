@@ -1,9 +1,9 @@
-package net.sf.clickide.cayenne.editor;
+package org.apache.click.eclipse.cayenne.editor;
 
 import java.io.File;
 
-import net.sf.clickide.cayenne.CayennePlugin;
 
+import org.apache.click.eclipse.cayenne.CayennePlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.Launch;

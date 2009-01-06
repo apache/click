@@ -1,4 +1,4 @@
-package net.sf.clickide.cayenne;
+package org.apache.click.eclipse.cayenne;
 
 import java.io.File;
 import java.io.FileOutputStream;

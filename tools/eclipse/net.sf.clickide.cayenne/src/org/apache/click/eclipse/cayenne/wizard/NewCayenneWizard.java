@@ -1,7 +1,7 @@
-package net.sf.clickide.cayenne.wizard;
+package org.apache.click.eclipse.cayenne.wizard;
 
-import net.sf.clickide.cayenne.editor.CayenneModelerLauncher;
 
+import org.apache.click.eclipse.cayenne.editor.CayenneModelerLauncher;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
