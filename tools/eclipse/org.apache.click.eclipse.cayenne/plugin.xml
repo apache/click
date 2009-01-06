@@ -6,30 +6,30 @@
       <editor
             filenames="cayenne.xml"
             icon="icons/cayenne.png"
-            id="net.sf.clickide.cayenne.editor.CayenneModelerLauncher"
-            launcher="net.sf.clickide.cayenne.editor.CayenneModelerLauncher"
+            id="org.apache.click.eclipse.cayenne.editor.CayenneModelerLauncher"
+            launcher="org.apache.click.eclipse.cayenne.editor.CayenneModelerLauncher"
             name="Cayenne Modeler">
       </editor>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
       <category
-            id="net.sf.clickide.cayenne"
+            id="org.apache.click.eclipse.cayenne"
             name="Cayenne">
       </category>
       <wizard
-            category="net.sf.clickide.cayenne"
-            class="net.sf.clickide.cayenne.wizard.NewCayenneWizard"
+            category="org.apache.click.eclipse.cayenne"
+            class="org.apache.click.eclipse.cayenne.wizard.NewCayenneWizard"
             icon="icons/cayenne.png"
-            id="net.sf.clickide.cayenne.wizard"
+            id="org.apache.click.eclipse.cayenne.wizard"
             name="Cayenne Mapping Project">
       </wizard>
    </extension>
    <extension
          point="org.eclipse.jdt.core.classpathVariableInitializer">
       <classpathVariableInitializer
-            class="net.sf.clickide.cayenne.CayenneClasspathVariableInitializer"
-            variable="net.sf.clickide.cayenne.classpathVariableInitializer">
+            class="org.apache.click.eclipse.cayenne.CayenneClasspathVariableInitializer"
+            variable="org.apache.click.eclipse.cayenne.classpathVariableInitializer">
       </classpathVariableInitializer>
    </extension>
 
