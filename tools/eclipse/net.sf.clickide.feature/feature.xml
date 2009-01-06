@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="net.sf.clickide.feature"
+      id="org.apache.click.eclipse.feature"
       label="%feature.name"
       version="2.1.0"
       provider-name="%feature.provider">
@@ -221,14 +221,14 @@
    </requires>
 
    <plugin
-         id="net.sf.clickide"
+         id="org.apache.click.eclipse"
          download-size="0"
          install-size="0"
          version="2.1.0"
          unpack="false"/>
 
    <plugin
-         id="net.sf.clickide.cayenne"
+         id="org.apache.click.eclipse.cayenne"
          download-size="0"
          install-size="0"
          version="2.1.0"
