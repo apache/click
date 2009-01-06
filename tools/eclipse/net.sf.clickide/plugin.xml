@@ -28,8 +28,8 @@
           id="click.install"
           type="install"
           version="1.5">
-      <delegate class="net.sf.clickide.core.facet.ClickFacetInstallDelegate"/>
-      <config-factory class="net.sf.clickide.core.facet.ClickFacetInstallDataModelProvider"/>
+      <delegate class="org.apache.click.eclipse.core.facet.ClickFacetInstallDelegate"/>
+      <config-factory class="org.apache.click.eclipse.core.facet.ClickFacetInstallDataModelProvider"/>
       <!--
       <config-factory class="net.sf.clickide.core.facet.ClickFacetInstallConfig$Factory"/>
       -->
@@ -40,7 +40,7 @@
        id="click.uninstall"
        type="uninstall"
        version="1.5">
-      <delegate class="net.sf.clickide.core.facet.ClickFacetUninstallDelegate"/>
+      <delegate class="org.apache.click.eclipse.core.facet.ClickFacetUninstallDelegate"/>
  	</action>
   </extension>
 
@@ -54,7 +54,7 @@
   <extension
         point="org.eclipse.wst.common.project.facet.ui.wizardPages">
      <wizard-pages action="click.install">
-        <page class="net.sf.clickide.ui.wizard.ClickFacetWizardPage"/>
+        <page class="org.apache.click.eclipse.ui.wizard.ClickFacetWizardPage"/>
      </wizard-pages>
   </extension>
   <!--===============================================-->

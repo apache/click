@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %plugin.name
-Bundle-SymbolicName: net.sf.clickide; singleton:=true
+Bundle-SymbolicName: org.apache.click.eclipse;singleton:=true
 Bundle-Version: 2.1.0
-Bundle-Activator: net.sf.clickide.ClickPlugin
+Bundle-Activator: org.apache.click.eclipse.ClickPlugin
 Bundle-Vendor: %plugin.provider
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
@@ -38,24 +38,24 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.html.ui,
  org.eclipse.wst.html.core,
  org.eclipse.wst.common.project.facet.ui,
- net.sf.clickide.cayenne
+ org.apache.click.eclipse.cayenne
 Eclipse-LazyStart: true
 Bundle-ClassPath: lib/velocity-1.5-dev.jar,
  lib/commons-collections-3.1.jar,
  .
-Export-Package: net.sf.clickide,
- net.sf.clickide.core.builder,
- net.sf.clickide.core.config,
- net.sf.clickide.core.facet,
- net.sf.clickide.core.validator,
- net.sf.clickide.preferences,
- net.sf.clickide.ui.actions,
- net.sf.clickide.ui.editor,
- net.sf.clickide.ui.editor.actions,
- net.sf.clickide.ui.editor.attrs,
- net.sf.clickide.ui.editor.forms,
- net.sf.clickide.ui.fieldassist,
- net.sf.clickide.ui.wizard,
+Export-Package: org.apache.click.eclipse,
+ org.apache.click.eclipse.core.builder,
+ org.apache.click.eclipse.core.config,
+ org.apache.click.eclipse.core.facet,
+ org.apache.click.eclipse.core.validator,
+ org.apache.click.eclipse.preferences,
+ org.apache.click.eclipse.ui.actions,
+ org.apache.click.eclipse.ui.editor,
+ org.apache.click.eclipse.ui.editor.actions,
+ org.apache.click.eclipse.ui.editor.attrs,
+ org.apache.click.eclipse.ui.editor.forms,
+ org.apache.click.eclipse.ui.fieldassist,
+ org.apache.click.eclipse.ui.wizard,
  org.apache.commons.collections,
  org.apache.commons.collections.bag,
  org.apache.commons.collections.bidimap,
