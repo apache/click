@@ -149,9 +149,16 @@ The feature roadmap for the next major release of Click is being determined.
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li class="change">
-        All <tt>org.apache.click.*</tt> packages have been renamed to <tt>org.apache.click.*</tt>.
-        When upgrading you can refactor existing applications using your favorite
-        IDE or alternatively use Ant's <a target="blank" class="external" href="http://ant.apache.org/manual/CoreTasks/replace.html">replace task</a>.
+        All <tt>net.sf.click.*</tt> packages have been renamed to <tt>org.apache.click.*</tt>.
+        When upgrading you must replace all references to <tt>net.sf.click.*</tt> with
+        <tt>org.apache.click.*</tt>.
+
+        <p/>
+        You can use your favorite IDE and do a global search/replace or
+        alternatively use Ant's <a target="blank" class="external" href="http://ant.apache.org/manual/CoreTasks/replace.html">replace task</a>.
+
+        <p/>
+        Make sure you update the files <tt>web.xml</tt> and <tt>click.xml</tt> as well.
       </li>
       <li class="change">
           JSCalendar which is licensed under LGPL is incompatible with Apache license
@@ -182,17 +189,38 @@ The feature roadmap for the next major release of Click is being determined.
           To remedy this situation, Click 2.0.1 introduces a new resource key,
           <tt>date-title</tt>, which is set as the title of DateField. The new
           property provides users with visual feedback of the <tt>date format</tt>
-          specified on the DateField.
-          <p/>
-          For those building i18n applications remember to add this property
+          specified on the DateField. For those building i18n applications remember to add this property
           to <span style="color:navy;">DateField_&lt;lang&gt;.properties.</span>
           You can also send us patches for your languages and we will
           include it in the distribution.
-          <p/>
+      </li>
+      <li>
           A new project called <a target="blank" class="external" href="http://code.google.com/p/click-calendar/">Click Calendar</a>
           was created as a port of the old DateField functionality. This project
           contains a CalendarField which can be used as a replacement for the
-          old DateField. See the project for more details.
+          old DateField.
+          <p/>
+          For example to have the popup Calendar functionality replace this:
+          <pre class="prettyprint">
+import org.apache.click.extras.control.DateField;
+
+...
+
+DateField dateField = new DateField("date");
+</pre>
+
+          with this:
+          <pre class="prettyprint">
+import net.sf.click.extras.control.CalendarField;
+
+...
+
+DateField dateField = new CalendarField("date");
+</pre>
+          CalendarField subclasses DateField so the above snippet is valid.
+          <p/>
+          See the <a target="blank" class="external" href="http://code.google.com/p/click-calendar/">Click Calendar</a>
+          project for more details.
       </li>
       <li class="change">
           The Chart controls which is licensed under LGPL is incompatible with
