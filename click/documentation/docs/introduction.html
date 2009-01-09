@@ -74,6 +74,9 @@ examples:
   </li>
 </ol>
 
+These examples are available online at <a class="external" target="_blank" href="http://www.avoka.com/click-examples/">http://www.avoka.com/click-examples/</a>
+under the menu "Intro Examples".
+
 <p>&nbsp;</p>
 
 <a name="hello-world" class="heading"></a><h2>1.&nbsp; Hello World Example</h2>
@@ -94,7 +97,7 @@ First we create a <tt>HelloWorld</tt> page class:
 } 
 </pre>
 
-Next we would have a page template <span class="blue">hello-world.htm</span>:
+Next we have a page template <span class="blue">hello-world.htm</span>:
 
 <pre class="codeHtml">
 &lt;html&gt;
@@ -108,9 +111,16 @@ Next we would have a page template <span class="blue">hello-world.htm</span>:
 &lt;/html&gt; 
 </pre>
 
-And finally we have a <tt>click.xml</tt> configuration file which tells our Click 
-application to map <span class="blue">hello-world.htm</span>
-requests to our <tt>HelloWorld</tt> page class.
+<p/>
+Click is smart enough to figure out that the <tt>HelloWorld</tt> page class maps
+to the template <span class="blue">hello-world.htm</span>. We only have to inform
+Click of the <tt>package</tt> of the HelloWorld class, in this case <tt>examples.page</tt>.
+
+<p/>
+We do that through the
+<a target='topic' href="configuration.html#application-configuration">click.xml</a>
+configuration file which tells Click to map <span class="blue">hello-world.htm</span>
+requests to our <tt>examples.page.HelloWorld</tt> page class.
 
 <pre class="codeConfig">
 &lt;click-app&gt;  
