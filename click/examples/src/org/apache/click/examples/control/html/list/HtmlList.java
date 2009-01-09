@@ -18,6 +18,7 @@
  */
 package org.apache.click.examples.control.html.list;
 
+import java.util.List;
 import org.apache.click.Control;
 import org.apache.click.control.AbstractContainer;
 
@@ -75,5 +76,14 @@ public class HtmlList extends AbstractContainer {
 
     public boolean isUnorderedList() {
         return listMode == UNORDERED_LIST;
+    }
+
+    public ListItem getLast() {
+        List items = getControls();
+        if (items.size() == 0) {
+            throw new IllegalStateException("HtmlList is empty and contains no ListItems.");
+        }
+
+        return (ListItem) items.get(items.size() - 1);
     }
 }

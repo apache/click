@@ -1,61 +1,74 @@
 /*
- * This css was adapted from the article: http://www.sitepoint.com/print/fancy-form-design-css
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-.error {
-    color: red;
-}
 span.required {
     padding-right: 10px;
     background: url(../images/star.gif) no-repeat right top;
 }
-input.required {
-    border-color: #CC0000;
-    background-color: #FFEEFF;
-}
-td.content{
-    padding-right:40px;
-}
-table {
-    font-size: 90%;
-}
-fieldset li {  
-    float: left;  
-    clear: left;  
-    width: 100%;  
-    padding-bottom: 1em;
-}
-fieldset {  
-    float: left;  
-    clear: both;  
-    width: 100%;  
-    margin: 0 0 1.5em 0;  
-    padding: 0;  
-    border: 1px solid #BFBAB0;  
-    background-color: #F2EFE9;  
-}
-legend {  
-    margin-left: 1em;  
-    padding: 0;  
-    color: #000;  
+
+legend {
     font-weight: bold;
+    color: #000;
 }
-fieldset ol {
+
+fieldset {
+    border: 1px solid #999;
+    background-color: #ddd;
+    margin-bottom: 1em;
+}
+
+fieldset li {
+    padding-bottom: 12px;
+}
+
+fieldset ul {
     margin: 0;
-    padding: 1em 1em 0 1em;
+    padding: 1em 0 0 1em;
     list-style: none;
 }
-fieldset.submit {  
-    float: none;  
-    width: auto;  
-    border-style: none;  
-    padding-left: 12em;  
-    background-color: transparent;
+
+fieldset.submit {
+    padding-left: 10px;
+    border-style: none;
 }
-label {  
-    float: left;  
-    width: 10em;  
+
+label {
+    float: left;
+    width: 100px;
     margin-right: 1em;
 }
-input.text {
-    width: 10.5em;
+
+.radio label {
+    float: none;
+}
+
+input.text, select#form_title {
+    width: 180px;
+}
+
+/* IE only. Fix legend position */
+* html fieldset legend {
+    position: absolute;
+    top: -.6em;
+    left: .2em;
+}
+
+/* IE only. Fix fieldset background bug */
+* html fieldset {
+    position: relative;
 }

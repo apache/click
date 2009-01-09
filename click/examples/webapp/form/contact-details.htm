@@ -17,29 +17,27 @@
    under the License.*#
 -->
 
-This page demonstrates a Java centric approach to manually layout Fields inside a Form.
+This page demonstrates a Java centric approach to programmatically layout Fields inside a Form.
 <p/>
-The form below is laid out as specified by the article: <a href="http://www.sitepoint.com/print/fancy-form-design-css">http://www.sitepoint.com/print/fancy-form-design-css</a>
+In short the form fields are laid out using a combination of FieldSet and Html List tags; &lt;ul&gt; &lt;li&gt;.
 <p/>
-In short the form fields are laid out using a combination of FieldSet and Html List tags; &lt;ol&gt; &lt;li&gt;.
-<p/>
-This demo consists of the following classes: (Note these classes are not part of Click, they were created specifically for this demo).
+This demo consists of the following components: (Note, although some of these components
+are quite generic, they are not part of Click and were created
+specifically for this demo).
 <ul>
     <li style="padding:0.25em;">
-        <a href="$context/source-viewer.htm?filename=WEB-INF/classes/org/apache/click/examples/control/html/cssform/ContactDetailsForm.java" target="_blank">ContactDetailsForm.java</a>
-        - encapsulates the contact details in a component.
+        <a href="$context/source-viewer.htm?filename=WEB-INF/classes/org/apache/click/examples/control/html/cssform/CssForm.java" target="_blank">CssForm.java</a>
+        - adds the stylesheet <a href="$context/source-viewer.htm?filename=assets/css/cssform.css" target="_blank">cssform.css</a>
+        to the list of Html imports. This CSS is used to style the form and fields.
     </li>
     <li style="padding:0.25em;">
-        <a href="$context/source-viewer.htm?filename=assets/css/cssform.css" target="_blank">cssform.css</a>
-        - the stylesheet used to layout the fields.
+        <a href="$context/source-viewer.htm?filename=WEB-INF/classes/org/apache/click/examples/control/html/cssform/VerticalFieldSet.java" target="_blank">VerticalFieldSet.java</a>
+        - a custom FieldSet that renders its fields vertically using an HTML List: &lt;ul&gt;.
     </li>
     <li style="padding:0.25em;">
         <a href="$context/source-viewer.htm?filename=WEB-INF/classes/org/apache/click/examples/control/html/list/HtmlList.java" target="_blank">HtmlList.java</a>
-        - a component that mimics an HTML list: &lt;ol&gt;
-    </li>
-    <li style="padding:0.25em;">
-        <a href="$context/source-viewer.htm?filename=WEB-INF/classes/org/apache/click/examples/control/html/list/ListItem.java" target="_blank">ListItem.java</a>
-        - a component that mimics an HTML list item: &lt;li&gt;
+        and <a href="$context/source-viewer.htm?filename=WEB-INF/classes/org/apache/click/examples/control/html/list/ListItem.java" target="_blank">ListItem.java</a>
+        - these components renders an HTML list, &lt;ul&gt;, and list item, &lt;li&gt;, respectively.
     </li>
     <li style="padding:0.25em;">
         <a href="$context/source-viewer.htm?filename=WEB-INF/classes/org/apache/click/examples/control/html/FeedbackBorder.java" target="_blank">FeedbackBorder.java</a>
