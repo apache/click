@@ -398,7 +398,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ======================================================================
 
-ATLASSIAN
+The following files were contributed by Ahmed Mohombe:
+
+extras/src/org/apache/click/extras/control/CountrySelect
+extras/src/org/apache/click/extras/control/PageButton
+extras/src/org/apache/click/extras/control/VirtualKeyboard
+documentation/images/click-icon-43.png
+documentation/images/click-icon-blue-48.png
+examples/webapp/assets/images/click-icon-blue-32.png
+
+Distributed under the terms of the Apache Software License 2.0.
+
+======================================================================
+
+The following files were contributed by Christian Essl:
+
+extras/src/org/apache/click/extras/control/CheckList
+extras/src/org/apache/click/extras/control/ColorPicker
+extras/src/org/apache/click/extras/control/NumberField
+framework/test/org/apache/click/utilinvokelistener/ClickUtilsInvokeListenerTest
 
 Distributed under the terms of the Apache Software License 2.0.
 
