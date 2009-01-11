@@ -1,17 +1,35 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package click.cayenne;
 
 import java.util.List;
 import java.util.Map;
 
-import net.sf.click.util.Format;
+import org.apache.click.util.Format;
 
-import org.objectstyle.cayenne.CayenneRuntimeException;
-import org.objectstyle.cayenne.DataObject;
-import org.objectstyle.cayenne.DataObjectUtils;
-import org.objectstyle.cayenne.access.DataContext;
-import org.objectstyle.cayenne.map.DbAttribute;
-import org.objectstyle.cayenne.map.ObjEntity;
-import org.objectstyle.cayenne.util.Util;
+import org.apache.cayenne.CayenneRuntimeException;
+import org.apache.cayenne.DataObject;
+import org.apache.cayenne.DataObjectUtils;
+import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.map.DbAttribute;
+import org.apache.cayenne.map.ObjEntity;
+import org.apache.cayenne.util.Util;
 
 /**
  * Provides a Cayenne customised Click <tt>Format</tt> object.

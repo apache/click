@@ -73,13 +73,13 @@
 	<obj-relationship name="department" source="Project" target="Department" db-relationship-path="department"/>
 	<obj-relationship name="manager" source="Project" target="Person" db-relationship-path="manager"/>
 	<obj-relationship name="members" source="Project" target="Person" db-relationship-path="members.person"/>
-	<query name="DepartmentSearch" factory="org.objectstyle.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="Department">
+	<query name="DepartmentSearch" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="Department">
 		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
 		<property name="cayenne.GenericSelectQuery.pageSize" value="10"/>
 		<qualifier><![CDATA[name = $name]]></qualifier>
 		<ordering><![CDATA[name]]></ordering>
 	</query>
-    <query name="PersonSearch" factory="org.objectstyle.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="Person">
+    <query name="PersonSearch" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="Person">
         <property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
         <property name="cayenne.GenericSelectQuery.pageSize" value="10"/>
         <qualifier><![CDATA[fullName = $fullName]]></qualifier>
