@@ -8,7 +8,7 @@ import java.util.List;
  * since it may be overwritten next time code is regenerated. 
  * If you need to make any customizations, please use subclass. 
  */
-public class _Person extends org.objectstyle.cayenne.CayenneDataObject {
+public class _Person extends org.apache.cayenne.CayenneDataObject {
 
     private static final long serialVersionUID = -4456863269273520419L;
     
