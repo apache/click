@@ -421,3 +421,9 @@ framework/test/org/apache/click/utilinvokelistener/ClickUtilsInvokeListenerTest
 Distributed under the terms of the Apache Software License 2.0.
 
 ======================================================================
+
+GOOGLE CODE PRETTIFY LICENSE
+
+Distributed under the terms of the Apache Software License 2.0.
+
+======================================================================
