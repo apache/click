@@ -18,12 +18,12 @@
 -->
 
 <Context
-   path="/click-examples" 
+   path="/click-examples"
    reloadable="true"
    antiJARLocking="true">
 
-   <ResourceLink 
-      name="users" 
+   <ResourceLink
+      name="users"
       global="UserDatabase"
       type="org.apache.catalina.UserDatabase"/>
 </Context>
