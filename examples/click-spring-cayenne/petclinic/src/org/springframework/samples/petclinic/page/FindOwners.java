@@ -2,9 +2,9 @@ package org.springframework.samples.petclinic.page;
 
 import java.util.Collection;
 
-import net.sf.click.control.Form;
-import net.sf.click.control.Submit;
-import net.sf.click.control.TextField;
+import org.apache.click.control.Form;
+import org.apache.click.control.Submit;
+import org.apache.click.control.TextField;
 
 import org.springframework.samples.petclinic.control.CustomForm;
 import org.springframework.samples.petclinic.model.Owner;

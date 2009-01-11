@@ -2,7 +2,7 @@ package org.springframework.orm.cayenne;
 
 import junit.framework.TestCase;
 
-import org.objectstyle.cayenne.access.DataDomain;
+import org.apache.cayenne.access.DataDomain;
 
 public class WebInterceptorTests extends TestCase {
     public void testDomain() {

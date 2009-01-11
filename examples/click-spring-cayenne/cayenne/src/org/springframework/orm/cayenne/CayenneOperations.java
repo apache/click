@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.objectstyle.cayenne.access.OperationObserver;
-import org.objectstyle.cayenne.access.ResultIterator;
-import org.objectstyle.cayenne.query.GenericSelectQuery;
-import org.objectstyle.cayenne.query.Query;
+import org.apache.cayenne.access.OperationObserver;
+import org.apache.cayenne.access.ResultIterator;
+import org.apache.cayenne.query.GenericSelectQuery;
+import org.apache.cayenne.query.Query;
 import org.springframework.dao.DataAccessException;
 
 /**

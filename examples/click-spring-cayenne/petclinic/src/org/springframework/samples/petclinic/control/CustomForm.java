@@ -1,7 +1,6 @@
 package org.springframework.samples.petclinic.control;
 
-import net.sf.click.Context;
-import net.sf.click.control.Form;
+import org.apache.click.control.Form;
 
 public class CustomForm extends Form {
 
@@ -17,24 +16,19 @@ public class CustomForm extends Form {
     
     public CustomForm(String name) {
         super(name);
-        setLabelRequiredPrefix("<b>");
-        setLabelRequiredSuffix("</b>");
         setLabelsPosition(Form.POSITION_TOP);
         setErrorsPosition(Form.POSITION_TOP);
     }
 
     public CustomForm() {
         super();
-        setLabelRequiredPrefix("<b>");
-        setLabelRequiredSuffix("</b>");
         setLabelsPosition(Form.POSITION_TOP);
         setErrorsPosition(Form.POSITION_TOP);
     }
-    
+
     // --------------------------------------------------------- Public Methods
-    
-    public void setContext(Context context) {
-        super.setContext(context);
+
+    public void onInit() {
         bindObject();
         if (getBoundObject() != null && !isFormSubmission()) {
             copyFrom(getBoundObject());   
@@ -45,11 +39,7 @@ public class CustomForm extends Form {
         if (boundObject != null) {
             return boundObject;
         }
-        
-        if (getContext() == null) {
-            throw new IllegalStateException("Context has not been set");
-        }
-        
+
         String key = getContext().getResourcePath() + BOUND_OBJECT_KEY;
         boundObject = getContext().getSessionAttribute(key);
         
@@ -77,8 +67,9 @@ public class CustomForm extends Form {
         if (getBoundObject() != null && !isFormSubmission()) {
             copyFrom(getBoundObject());
         }
-        
-        return super.onProcess();
+        boolean continueProcessing = super.onProcess();
+        onAfterProcess();
+        return continueProcessing;
     }
     
     // ------------------------------------------------------ Protected Methods
@@ -96,12 +87,9 @@ public class CustomForm extends Form {
         }
     }
 
-    /**
-     * @see net.sf.click.control.Form#onAfterProcessFields()
-     */
-    protected void onAfterProcessFields() {
+    protected void onAfterProcess() {
         if (getBoundObject() != null) {
-            copyTo(getBoundObject());   
+            copyTo(getBoundObject());
         }
     }
     

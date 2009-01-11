@@ -3,9 +3,9 @@ package org.springframework.orm.cayenne;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Level;
-import org.objectstyle.cayenne.conf.Configuration;
-import org.objectstyle.cayenne.conf.DataSourceFactory;
-import org.objectstyle.cayenne.conf.DefaultConfiguration;
+import org.apache.cayenne.conf.Configuration;
+import org.apache.cayenne.conf.DataSourceFactory;
+import org.apache.cayenne.conf.DefaultConfiguration;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;

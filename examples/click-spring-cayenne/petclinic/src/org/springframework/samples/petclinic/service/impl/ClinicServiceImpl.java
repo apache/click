@@ -3,7 +3,7 @@ package org.springframework.samples.petclinic.service.impl;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.objectstyle.cayenne.query.SelectQuery;
+import org.apache.cayenne.query.SelectQuery;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.cayenne.CayenneTemplate;
 import org.springframework.samples.petclinic.model.Owner;

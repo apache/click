@@ -2,7 +2,7 @@ package org.springframework.orm.cayenne;
 
 import java.util.Map;
 
-import org.objectstyle.cayenne.access.OptimisticLockException;
+import org.apache.cayenne.access.OptimisticLockException;
 import org.springframework.dao.OptimisticLockingFailureException;
 
 /**

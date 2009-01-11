@@ -1,6 +1,6 @@
 package org.springframework.orm.cayenne;
 
-import org.objectstyle.cayenne.exp.ExpressionException;
+import org.apache.cayenne.exp.ExpressionException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 /**

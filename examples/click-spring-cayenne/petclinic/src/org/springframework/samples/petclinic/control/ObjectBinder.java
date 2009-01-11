@@ -1,6 +1,6 @@
 package org.springframework.samples.petclinic.control;
 
-import net.sf.click.Context;
+import org.apache.click.Context;
 
 public interface ObjectBinder {
     

@@ -1,10 +1,10 @@
 package org.springframework.samples.petclinic.model;
 
-import org.objectstyle.cayenne.CayenneDataObject;
-import org.objectstyle.cayenne.CayenneRuntimeException;
-import org.objectstyle.cayenne.DataObject;
-import org.objectstyle.cayenne.DataObjectUtils;
-import org.objectstyle.cayenne.PersistenceState;
+import org.apache.cayenne.CayenneDataObject;
+import org.apache.cayenne.CayenneRuntimeException;
+import org.apache.cayenne.DataObject;
+import org.apache.cayenne.DataObjectUtils;
+import org.apache.cayenne.PersistenceState;
 
 /**
  * Superclass of Pet Clinic entity objects.

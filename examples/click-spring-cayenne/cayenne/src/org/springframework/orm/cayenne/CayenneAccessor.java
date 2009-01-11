@@ -2,14 +2,14 @@ package org.springframework.orm.cayenne;
 
 import java.sql.SQLException;
 
-import org.objectstyle.cayenne.CayenneException;
-import org.objectstyle.cayenne.CayenneRuntimeException;
-import org.objectstyle.cayenne.access.DataContext;
-import org.objectstyle.cayenne.access.DeleteDenyException;
-import org.objectstyle.cayenne.access.OptimisticLockException;
-import org.objectstyle.cayenne.exp.ExpressionException;
-import org.objectstyle.cayenne.util.Util;
-import org.objectstyle.cayenne.validation.ValidationException;
+import org.apache.cayenne.CayenneException;
+import org.apache.cayenne.CayenneRuntimeException;
+import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.access.DeleteDenyException;
+import org.apache.cayenne.access.OptimisticLockException;
+import org.apache.cayenne.exp.ExpressionException;
+import org.apache.cayenne.util.Util;
+import org.apache.cayenne.validation.ValidationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.support.SQLExceptionTranslator;

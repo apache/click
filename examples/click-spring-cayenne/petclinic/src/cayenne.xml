@@ -8,8 +8,8 @@
 
 	<node name="hsqldb"
 		 datasource="hsqldb.driver.xml"
-		 adapter="org.objectstyle.cayenne.dba.hsqldb.HSQLDBAdapter"
-		 factory="org.objectstyle.cayenne.conf.DriverDataSourceFactory">
+		 adapter="org.apache.cayenne.dba.hsqldb.HSQLDBAdapter"
+		 factory="org.apache.cayenne.conf.DriverDataSourceFactory">
 			<map-ref name="petclinic"/>
 	 </node>
 </domain>

@@ -6,15 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.objectstyle.cayenne.CayenneException;
-import org.objectstyle.cayenne.CayenneRuntimeException;
-import org.objectstyle.cayenne.DataObjectUtils;
-import org.objectstyle.cayenne.access.DataContext;
-import org.objectstyle.cayenne.access.DeleteDenyException;
-import org.objectstyle.cayenne.access.OperationObserver;
-import org.objectstyle.cayenne.access.ResultIterator;
-import org.objectstyle.cayenne.query.GenericSelectQuery;
-import org.objectstyle.cayenne.query.Query;
+import org.apache.cayenne.CayenneException;
+import org.apache.cayenne.CayenneRuntimeException;
+import org.apache.cayenne.DataObjectUtils;
+import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.access.DeleteDenyException;
+import org.apache.cayenne.access.OperationObserver;
+import org.apache.cayenne.access.ResultIterator;
+import org.apache.cayenne.query.GenericSelectQuery;
+import org.apache.cayenne.query.Query;
 import org.springframework.dao.DataAccessException;
 
 /**

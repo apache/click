@@ -3,19 +3,20 @@
    <!-- Project Properties -->
    <property file="build.properties"/>
    <property name="name" value="click-spring-cayenne"/>
-   <property name="jar.ashwood" value="ashwood-1.1.jar"/>
-   <property name="jar.cayenne" value="cayenne-nodeps-1.2M9.jar"/>
-   <property name="jar.click" value="click-0.19.jar"/>
-   <property name="jar.click-extras" value="click-extras-0.19.jar"/>
-   <property name="jar.hsqldb" value="hsqldb-1.8.0.1.jar"/>
-   <property name="jar.junit" value="junit-3.8.1.jar"/>
-   <property name="jar.logging" value="commons-logging-1.0.4.jar"/>
-   <property name="jar.log4j" value="log4j-1.2.9.jar"/>
-   <property name="jar.oro" value="oro-2.0.8.jar"/>
-   <property name="jar.servlet" value="servlet-api-2.4.jar"/>
-   <property name="jar.spring" value="spring-1.2.6.jar"/>
+   <property name="jar.ashwood" value="ashwood-${ashwood.version}.jar"/>
+   <property name="jar.cayenne" value="cayenne-nodeps-${cayenne.version}.jar"/>
+   <property name="jar.click" value="click-${click.version}-incubating.jar"/>
+   <property name="jar.click-extras" value="click-extras-${click.version}-incubating.jar"/>
+   <property name="jar.hsqldb" value="hsqldb-${hsqldb.version}.jar"/>
+   <property name="jar.junit" value="junit-${junit.version}.jar"/>
+   <property name="jar.logging" value="commons-logging-${logging.version}.jar"/>
+   <property name="jar.log4j" value="log4j-${log4j.version}.jar"/>
+   <property name="jar.oro" value="oro-${oro.version}.jar"/>
+   <property name="jar.servlet" value="servlet-api-${servlet.api.version}.jar"/>
+   <property name="jar.spring" value="spring-${spring.version}.jar"/>
    <property name="dir.weblib" value="petclinic/war/WEB-INF/lib"/>
-	
+   <property name="repository" value="http://repo1.maven.org"/>
+
    <path id="classpath">
       <pathelement location="lib/${jar.servlet}"/>
       <pathelement location="${dir.weblib}/${jar.cayenne}"/>
@@ -24,7 +25,19 @@
       <pathelement location="${dir.weblib}/${jar.log4j}"/>
       <pathelement location="${dir.weblib}/${jar.spring}"/>
    </path>
-    
+
+   <!-- Macro Definitions -->
+   <macrodef name="downloadMacro">
+      <attribute name="name"/>
+      <attribute name="path"/>
+      <sequential>
+         <get src="${repository}/maven2/@{path}/@{name}"
+            dest="${dir.weblib}/@{name}"
+            verbose="true"
+            usetimestamp="true"/>
+      </sequential>
+   </macrodef>
+
    <!-- Tasks -->
 
    <target name="build" description="build web application WAR file" depends="compile">
@@ -45,7 +58,7 @@
          <link href="http://click.sourceforge.net/docs/click-api/"/>
          <link href="http://click.sourceforge.net/docs/extras-api/"/>
          <link href="http://www.objectstyle.org/cayenne/api/cayenne/"/>
-         <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
+         <link href="http://static.springframework.org/spring/docs/2.5.x/api/"/>
       </javadoc>
       <delete dir="deploy" quiet="false"/>
       <mkdir dir="deploy"/>
@@ -61,85 +74,69 @@
          </fileset>
       </war>
    </target>
-   
+
    <target name="compile" description="compile Java source">
       <delete dir="petclinic/war/WEB-INF/classes" quiet="false"/>
       <mkdir dir="petclinic/war/WEB-INF/classes"/>
-      <javac srcdir="petclinic/src:cayenne/src" 
-             destdir="petclinic/war/WEB-INF/classes" 
+      <javac srcdir="petclinic/src:cayenne/src"
+             destdir="petclinic/war/WEB-INF/classes"
+             source="1.4"
              debug="true">
           <classpath refid="classpath"/>
-      </javac> 
+      </javac>
       <copy todir="petclinic/war/WEB-INF/classes">
          <fileset dir="petclinic/src">
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
    </target>
-               
-   <target name="deploy" description="copy WAR files to application server"> 
+
+   <target name="deploy" description="copy WAR files to application server">
       <copy file="deploy/click-spring-cayenne.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
-   
+
    <target name="get-deps" description="download JAR dependencies">
       <mkdir dir="petclinic/war/WEB-INF/lib"/>
       <property name="repository" value="http://www.ibiblio.org/maven"/>
-       <get src="${repository}/net.sf.click/jars/${jar.click}" verbose="true"
-            dest="${dir.weblib}/${jar.click}"
-            usetimestamp="true"/>
-       <get src="${repository}/net.sf.click/jars/${jar.click-extras}" verbose="true"
-            dest="${dir.weblib}/${jar.click-extras}"
-            usetimestamp="true"/>
-      <get src="${repository}/org.objectstyle.cayenne/jars/${jar.cayenne}" verbose="true"
-           dest="${dir.weblib}/${jar.cayenne}"
-           usetimestamp="true"/>
-       <get src="${repository}/org.objectstyle.ashwood/jars/${jar.ashwood}" verbose="true"
-            dest="${dir.weblib}/${jar.ashwood}"
-            usetimestamp="true"/>       
-      <get src="${repository}/hsqldb/jars/${jar.hsqldb}" verbose="true"
-           dest="${dir.weblib}/${jar.hsqldb}"
-           usetimestamp="true"/>
-      <get src="${repository}/commons-logging/jars/${jar.logging}" verbose="true"
-           dest="${dir.weblib}/${jar.logging}"
-           usetimestamp="true"/>
-      <get src="${repository}/log4j/jars/${jar.log4j}" verbose="true"
-           dest="${dir.weblib}/${jar.log4j}"
-           usetimestamp="true"/>
-      <get src="${repository}/oro/jars/${jar.oro}" verbose="true" 
-           dest="${dir.weblib}/${jar.oro}"
-           usetimestamp="true"/>
-      <get src="${repository}/junit/jars/${jar.junit}" verbose="true"
+      <downloadMacro name="${jar.click}" path="org/apache/click/click/${click.version}"/>
+      <downloadMacro name="${jar.click-extras}" path="org/apache/click/click-extras/${click.version}"/>
+      <downloadMacro name="${jar.ashwood}" path="org/objectstyle/ashwood/ashwood/${ashwood.version}"/>
+      <downloadMacro name="${jar.cayenne}" path="org/apache/cayenne/cayenne-nodeps/${cayenne.version}"/>
+      <downloadMacro name="${jar.log4j}" path="log4j/log4j/${log4j.version}"/>
+      <downloadMacro name="${jar.hsqldb}" path="hsqldb/hsqldb/${hsqldb.version}"/>
+      <downloadMacro name="${jar.oro}" path="oro/oro/${oro.version}"/>
+      <downloadMacro name="${jar.logging}" path="commons-logging/commons-logging/${logging.version}"/>
+      <downloadMacro name="${jar.spring}" path="org/springframework/spring/${spring.version}"/>
+      <get src="${repository}/maven2/junit/junit/${junit.version}/${jar.junit}" verbose="true"
            dest="lib/${jar.junit}"
            usetimestamp="true"/>
-      <get src="${repository}/javax.servlet/jars/${jar.servlet}" verbose="true"
+      <get src="${repository}/maven2/javax/servlet/servlet-api/${servlet.api.version}/${jar.servlet}" verbose="true"
            dest="lib/${jar.servlet}"
            usetimestamp="true"/>
-      <get src="${repository}/springframework/jars/${jar.spring}" verbose="true"
-           dest="${dir.weblib}/${jar.spring}"
-           usetimestamp="true"/>
+
    </target>
 
    <target name="get-deps-proxy" description="download JAR dependencies via proxy">
       <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
       <antcall target="get-deps"/>
    </target>
- 
+
    <target name="help" description="display the Help message">
       <echo message="Click Spring Cayenne example web application"/>
-      <echo message="============================================"/> 
-      <echo/>  
-      <echo message="Main targets:"/> 
-      <echo/>    
-      <echo message="build                 build web application WAR file"/> 
+      <echo message="============================================"/>
+      <echo/>
+      <echo message="Main targets:"/>
+      <echo/>
+      <echo message="build                 build web application WAR file"/>
       <echo message="compile               compile Java code"/>
       <echo message="deploy                copy WAR file to application server"/>
-      <echo message="get-deps              download JAR dependencies"/> 
-      <echo message="get-deps-proxy        download JAR dependencies via proxy"/> 
-      <echo message="help                  display the Help message"/>  
+      <echo message="get-deps              download JAR dependencies"/>
+      <echo message="get-deps-proxy        download JAR dependencies via proxy"/>
+      <echo message="help                  display the Help message"/>
       <echo/>
       <echo/>
-      <echo message="Please ensure you have configured build.properties"/> 
-      <echo/>  
-   </target>  
-	   
+      <echo message="Please ensure you have configured build.properties"/>
+      <echo/>
+   </target>
+
 </project>

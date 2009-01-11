@@ -1,9 +1,9 @@
 package org.springframework.samples.petclinic.page;
 
-import net.sf.click.Context;
-import net.sf.click.control.Submit;
-import net.sf.click.control.TextField;
-import net.sf.click.extras.control.LongField;
+import org.apache.click.Context;
+import org.apache.click.control.Submit;
+import org.apache.click.control.TextField;
+import org.apache.click.extras.control.LongField;
 
 import org.springframework.samples.petclinic.control.CustomForm;
 import org.springframework.samples.petclinic.control.ObjectBinder;

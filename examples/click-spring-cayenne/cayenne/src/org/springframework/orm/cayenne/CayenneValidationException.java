@@ -1,8 +1,8 @@
 package org.springframework.orm.cayenne;
 
-import org.objectstyle.cayenne.access.DeleteDenyException;
-import org.objectstyle.cayenne.validation.ValidationException;
-import org.objectstyle.cayenne.validation.ValidationResult;
+import org.apache.cayenne.access.DeleteDenyException;
+import org.apache.cayenne.validation.ValidationException;
+import org.apache.cayenne.validation.ValidationResult;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 
 /**

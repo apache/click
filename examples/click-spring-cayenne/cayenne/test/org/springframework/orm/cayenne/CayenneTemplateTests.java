@@ -1,8 +1,8 @@
 package org.springframework.orm.cayenne;
 
-import org.objectstyle.cayenne.CayenneException;
-import org.objectstyle.cayenne.CayenneRuntimeException;
-import org.objectstyle.cayenne.access.DataContext;
+import org.apache.cayenne.CayenneException;
+import org.apache.cayenne.CayenneRuntimeException;
+import org.apache.cayenne.access.DataContext;
 import org.springframework.dao.DataAccessException;
 
 import junit.framework.TestCase;

@@ -2,9 +2,9 @@ package org.springframework.orm.cayenne;
 
 import java.sql.SQLException;
 
-import org.objectstyle.cayenne.CayenneRuntimeException;
-import org.objectstyle.cayenne.access.OptimisticLockException;
-import org.objectstyle.cayenne.exp.ExpressionException;
+import org.apache.cayenne.CayenneRuntimeException;
+import org.apache.cayenne.access.OptimisticLockException;
+import org.apache.cayenne.exp.ExpressionException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 

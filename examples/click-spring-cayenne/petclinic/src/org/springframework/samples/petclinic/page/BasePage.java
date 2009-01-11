@@ -1,6 +1,6 @@
 package org.springframework.samples.petclinic.page;
 
-import net.sf.click.Page;
+import org.apache.click.Page;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

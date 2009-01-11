@@ -73,7 +73,7 @@
 
     <servlet>
 		<servlet-name>springClickServlet</servlet-name>
-		<servlet-class>net.sf.click.extras.spring.SpringClickServlet</servlet-class>
+		<servlet-class>org.apache.click.extras.spring.SpringClickServlet</servlet-class>
 		<load-on-startup>3</load-on-startup>
 	</servlet>
     

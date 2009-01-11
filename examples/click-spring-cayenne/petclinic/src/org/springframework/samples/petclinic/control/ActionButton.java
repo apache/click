@@ -2,9 +2,9 @@ package org.springframework.samples.petclinic.control;
 
 import org.apache.commons.lang.StringUtils;
 
-import net.sf.click.control.Button;
-import net.sf.click.util.ClickUtils;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.control.Button;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.HtmlStringBuffer;
 
 public class ActionButton extends Button {
     
@@ -167,7 +167,7 @@ public class ActionButton extends Button {
      * ActionButton was clicked, and if an action callback listener was set
      * this will be invoked.
      *
-     * @see net.sf.click.Control#onProcess()
+     * @see org.apache.click.Control#onProcess()
      *
      * @return true to continue Page event processing or false otherwise
      */

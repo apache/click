@@ -101,7 +101,7 @@
 	<obj-relationship name="visits" source="Pet" target="Visit" deleteRule="Cascade" db-relationship-path="visitsArray"/>
 	<obj-relationship name="specialties" source="Vet" target="Specialty" db-relationship-path="vetSpecialtiesArray.toSpecialties"/>
 	<obj-relationship name="pet" source="Visit" target="Pet" db-relationship-path="toPets"/>
-	<query name="OwnerSearch" factory="org.objectstyle.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="Owner">
+	<query name="OwnerSearch" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="Owner">
 		<prefetch>pets</prefetch>
 		<qualifier><![CDATA[lastName likeIgnoreCase $name]]></qualifier>
 		<ordering><![CDATA[firstName]]></ordering>

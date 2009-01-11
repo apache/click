@@ -1,11 +1,11 @@
 package org.springframework.samples.petclinic.page;
 
-import net.sf.click.Context;
-import net.sf.click.Page;
-import net.sf.click.control.Select;
-import net.sf.click.control.Submit;
-import net.sf.click.control.TextField;
-import net.sf.click.extras.control.DateField;
+import org.apache.click.Context;
+import org.apache.click.Page;
+import org.apache.click.control.Select;
+import org.apache.click.control.Submit;
+import org.apache.click.control.TextField;
+import org.apache.click.extras.control.DateField;
 
 import org.springframework.samples.petclinic.control.CustomForm;
 import org.springframework.samples.petclinic.control.ObjectBinder;
@@ -24,7 +24,6 @@ public class EditPet extends BasePage implements ObjectBinder {
 
     private CustomForm form = new CustomForm("form");
     private Select typeSelect = new Select("type.id", "Type:");
-    private Pet pet;
 
     /**
      * Create a new Edit Pet page.
@@ -51,8 +50,6 @@ public class EditPet extends BasePage implements ObjectBinder {
      */
     public void onInit() {
         typeSelect.addAll(getClinic().getPetTypes(), "id", "name");
-        pet = (Pet) form.getBoundObject();
-        addModel("pet", pet);             
     }
     
     /**
@@ -84,6 +81,8 @@ public class EditPet extends BasePage implements ObjectBinder {
     public boolean onSubmitClick() {
 
         int typeId = Integer.parseInt(typeSelect.getValue());
+        Pet pet = getPet();
+        pet = (Pet) form.getBoundObject();
         pet.setType((PetType) EntityUtils.getById(getClinic().getPetTypes(), 
                                                   PetType.class, 
                                                   typeId));
@@ -101,9 +100,8 @@ public class EditPet extends BasePage implements ObjectBinder {
         return true;
     }
     
-    
     public boolean onCancelClick() {  
-        Pet pet = (Pet) form.getBoundObject();
+        Pet pet = getPet();
         form.removeBoundObject();
         
         String url = getContext().getPagePath(OwnerDetails.class);
@@ -111,4 +109,12 @@ public class EditPet extends BasePage implements ObjectBinder {
         return false;
     }
 
+    public void onRender() {
+        Pet pet = getPet();
+        addModel("pet", pet);
+    }
+
+    public Pet getPet() {
+        return (Pet) form.getBoundObject();
+    }
 }
