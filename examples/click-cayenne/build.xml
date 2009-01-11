@@ -115,7 +115,7 @@
       <downloadMacro name="${jar.log4j}" path="log4j/log4j/${log4j.version}"/>
       <downloadMacro name="${jar.hsqldb}" path="hsqldb/hsqldb/${hsqldb.version}"/>
       <downloadMacro name="${jar.oro}" path="oro/oro/${oro.version}"/>
-      <get src="${repository}/maven2/javax/servlet/servlet-api/${servlet.api.version}" verbose="true"
+      <get src="${repository}/maven2/javax/servlet/servlet-api/${servlet.api.version}/${jar.servlet}" verbose="true"
            dest="lib/${jar.servlet}"
            usetimestamp="true"/>
 
