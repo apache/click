@@ -1,8 +1,9 @@
 package benchmark.dao;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Customer implements Comparable {
+public class Customer implements Comparable, Serializable {
     private Integer id;
     private String firstName;
     private String lastName;
