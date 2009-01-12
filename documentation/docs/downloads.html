@@ -25,20 +25,49 @@
         <meta name="keywords" lang="en" content="Apache Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
         <title>Apache Click</title>
         <link rel="stylesheet" type="text/css" href="../help.css"/>
+        <style rel="stylesheet" type="text/css">
+          .heading {
+            margin-top: 2em;
+          }
+        </style>
     </head>
 
     <body>
 
         <h1>Downloads</h1>
 
-        Please select a release from the table below.
+        <h2 class="heading">Apache Incubating Releases</h2>
+
+        <table cellspacing="1" cellpadding="8" style="border: 1px solid black;" width="600px">
+            <tbody><tr style="background-color: navy; color: white;">
+                    <th align="center">Package</th>
+                    <th align="center">PGP key</th>
+                    <th align="center">MD5</th>
+                    <th align="center">Version</th>
+                    <th align="center">Release date</th>
+                    <th align="center">Status</th>
+                </tr>
+                <tr>
+                    <td><a target="_blank" class="external" href="http://www.apache.org/dyn/closer.cgi/incubator/click/click/2.0.1/click-2.0.1-incubating.zip">
+                    click-2.0.1-incubating.zip</a></td>
+                    <td><a target="_blank" class="external" href="http://www.apache.org/dist/incubator/click/click/2.0.1/click-2.0.1-incubating.zip.asc">pgp</a></td>
+                    <td><a target="_blank" class="external" href="http://www.apache.org/dist/incubator/click/click/2.0.1/click-2.0.1-incubating.zip.md5">md5</a></td>
+                    <td>2.0.1</td>
+                    <td>2009-01-??</td>
+                    <td><b>Stable</b></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="heading">Pre Apache Releases</h2>
+        <b>Note:</b> these releases are hosted at <a target="_blank" class="external" href="http://sourceforge.net/">http://sourceforge.net/</a>
+        and is not endorsed by nor affiliated with the Apache Software Foundation.
         <p/>
-        
-        <table cellspacing="1" cellpadding="8" style="border: 1px solid black;">
+        <table cellspacing="1" cellpadding="8" style="border: 1px solid black;" width="600px">
             <tbody><tr style="background-color: navy; color: white;">
                     <th align="center">Package</th>
                     <th align="center">Version</th>
-                    <th align="center">Releaset date</th>
+                    <th align="center">Release date</th>
                     <th align="center">Status</th>
                 </tr>
                 <tr>
@@ -74,16 +103,11 @@
             </tbody>
         </table>
 
-        <p/>
-
-        <b>Note:</b> these releases are hosted at <a target="_blank" class="external" href="http://sourceforge.net/">http://sourceforge.net/</a>
-        and is not endorsed by nor affiliated with the Apache Software Foundation.
-
-        <h2>Maven</h2>
+        <h2 class="heading">Maven</h2>
 
         <p/>
         Click Maven bundles are also available from the Maven 2 repository
-        <a target="_blank" class="external" href="http://repo1.maven.org/maven2/net/sf/click/">http://repo1.maven.org/maven2/net/sf/click/</a>.
+        <a target="_blank" class="external" href="http://repo1.maven.org/maven2/org/apache/click/">http://repo1.maven.org/maven2/org/apache/click/</a>.
 
         <p/>
         To include Click in your project add the following dependency in your <tt>pom.xml</tt>:
@@ -91,22 +115,22 @@
 <pre style="border: 1px solid #888888; padding: 1em; overflow: auto">
 &lt;!-- Specifying the artifactId click will include Click Core in your pom.xml --&gt;
 <span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>net.sf.click<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.apache.click<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>click<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>1.5<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;version&gt;</span>X.X.X<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;scope&gt;</span>compile<span class="tag">&lt;/scope&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span>
 
 &lt;!-- Specifying the artifactId click-extras will include Click Extras in your pom.xml --&gt;
 <span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>net.sf.click<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>org.apache.click<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>click-extras<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>1.5<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;version&gt;</span>X.X.X<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;scope&gt;</span>compile<span class="tag">&lt;/scope&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span>
 </pre>
 
-        Using the <tt>version</tt> tag you can specify the version of Click you need.
+        Specify your Click version in the <tt>version</tt> tag e.g: <span class="tag">&lt;version&gt;</span>2.0.1<span class="tag">&lt;/version&gt;</span>
 
         <p/>
         The following <tt>artifactId</tt>'s are available:

@@ -6,6 +6,10 @@ Click is a J2EE web application framework featuring a Page
 and Component oriented design. Click is an open source project 
 licensed using the Apache license. 
 
+
+Docmentation
+============
+
 Comprehensive HTML documentation is available online at:
 
     http://incubator.apache.org/click
@@ -13,7 +17,19 @@ Comprehensive HTML documentation is available online at:
 This documentation is also available in the directory:
 
    documentation
-	
+
+
+Release Notes
+=============
+
+Detailed release notes are available here:
+
+   documentation/docs/roadmap-changes.html
+
+
+Distribution Jars
+=================
+
 Distributed Click JAR files include:
 
    dist/click-xx.jar        - Click runtime JAR including dependencies
@@ -24,9 +40,17 @@ Distributed Click JAR files include:
 
    dist/click-mock-xx.jar   - Click Mock Utilities JAR
 
+
+Examples
+========
+
 Example pre-built web appliation include:
 
    dist/click-examples.war
+
+
+Build Information
+=================
 
 Click is built using the J2SE 1.4.2 and Ant 1.6.5. 
 
