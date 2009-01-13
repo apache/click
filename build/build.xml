@@ -694,6 +694,10 @@ Please ensure you have configured build.properties</echo>
    </target>
 
 
+    <!--
+     Testing tasks
+     -->
+
    <target name="test-framework">
       <copy todir="framework/classes">
          <fileset dir="framework/src">
@@ -809,17 +813,74 @@ Please ensure you have configured build.properties</echo>
        description="Run all unit tests"/>
 
 
+    <!--
+     Javadoc macro
+     -->
+
+   <macrodef name="javadocMacro">
+      <attribute name="src"/>
+      <attribute name="destdir"/>
+      <attribute name="windowtitle"/>
+      <attribute name="doctitle"/>
+      <attribute name="classpath"/>
+      <attribute name="overview"/>
+      <sequential>
+         <javadoc sourcepath="@{src}"
+               destdir="@{destdir}"
+               author="true"
+               version="true"
+               verbose="false"
+               windowtitle="@{windowtitle}"
+      	       packagenames="org.*"
+         	     overview="@{overview}"
+               doctitle="@{doctitle}">
+            <classpath refid="@{classpath}"/>
+            <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+            <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
+            <link href="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
+            <link href="http://incubator.apache.org/click/docs/click-api/"/>
+            <link href="http://www.hibernate.org/hib_docs/v3/api/"/>
+            <link href="http://static.springframework.org/spring/docs/2.5.x/api/"/>
+         </javadoc>
+
+         <!-- Add syntax highlighter to each javadoc page -->
+         <replace dir="@{destdir}" value="${root.properties.highlighter}&lt;/BODY&gt;">
+            <include name="**/*.html"/>
+            <replacetoken>&lt;/BODY&gt;</replacetoken>
+         </replace>
+
+         <!-- Add IE Mark of the Web to each javadoc page -->
+         <replace dir="@{destdir}" value="&lt;!-- saved from url=(0014)about:internet --&gt;">
+            <include name="**/*.html"/>
+            <replacetoken>&lt;!--NewPage--&gt;</replacetoken>
+         </replace>
+
+         <!--
+         IE throws exception when trying to access parent frame and Mark of the Web is active.
+         Disable setting of window title, which needs to access the parent frame.
+         -->
+         <replace dir="@{destdir}" value="">
+            <include name="**/*.html"/>
+            <replacetoken> onload="windowTitle();"</replacetoken>
+         </replace>
+
+      </sequential>
+   </macrodef>
+
+
+    <!--
+     Quickstart project task
+     -->
+
    <target name="project-quick-start" description="build application template">
-      <downloadMacro name="${jar.servlet}" path="javax.servlet"/>
       <available file="lib/${jar.servlet}" property="isServletJarAvail"/>
-      <fail message="Failed to download the file ${jar.servlet}. Please download it separately and place it in the 'lib' directory">
+      <fail message="The lib/${jar.servlet} JAR is not available. To resolve this download the JAR dependencies with 'ant get-deps'.">
          <condition>
   	        <or><isfalse value="${isServletJarAvail}"/></or>
   	     </condition>
       </fail>
-      <downloadMacro name="${jar.log4j}" path="log4j"/>
       <available file="lib/${jar.log4j}" property="isLog4JJarAvail"/>
-      <fail message="Failed to download the file ${jar.log4j}. Please download it separately and place it in the 'lib' directory">
+      <fail message="The lib/${jar.log4j} JAR is not available. To resolve this download the JAR dependencies with 'ant get-deps'.">
          <condition>
   	        <or><isfalse value="${isLog4JJarAvail}"/></or>
   	     </condition>
@@ -901,55 +962,5 @@ Please ensure you have configured build.properties</echo>
  	  	value="${context-path}"
  	  	dir="../${project-name}"/>
    </target>
-
-   <macrodef name="javadocMacro">
-      <attribute name="src"/>
-      <attribute name="destdir"/>
-      <attribute name="windowtitle"/>
-      <attribute name="doctitle"/>
-      <attribute name="classpath"/>
-      <attribute name="overview"/>
-      <sequential>
-         <javadoc sourcepath="@{src}"
-               destdir="@{destdir}"
-               author="true"
-               version="true"
-               verbose="false"
-               windowtitle="@{windowtitle}"
-      	       packagenames="org.*"
-         	     overview="@{overview}"
-               doctitle="@{doctitle}">
-            <classpath refid="@{classpath}"/>
-            <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
-            <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
-            <link href="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
-            <link href="http://incubator.apache.org/click/docs/click-api/"/>
-            <link href="http://www.hibernate.org/hib_docs/v3/api/"/>
-            <link href="http://static.springframework.org/spring/docs/2.5.x/api/"/>
-         </javadoc>
-
-         <!-- Add syntax highlighter to each javadoc page -->
-         <replace dir="@{destdir}" value="${root.properties.highlighter}&lt;/BODY&gt;">
-            <include name="**/*.html"/>
-            <replacetoken>&lt;/BODY&gt;</replacetoken>
-         </replace>
-
-         <!-- Add IE Mark of the Web to each javadoc page -->
-         <replace dir="@{destdir}" value="&lt;!-- saved from url=(0014)about:internet --&gt;">
-            <include name="**/*.html"/>
-            <replacetoken>&lt;!--NewPage--&gt;</replacetoken>
-         </replace>
-
-         <!-- 
-         IE throws exception when trying to access parent frame and Mark of the Web is active.
-         Disable setting of window title, which needs to access the parent frame.
-         -->
-         <replace dir="@{destdir}" value="">
-            <include name="**/*.html"/>
-            <replacetoken> onload="windowTitle();"</replacetoken>
-         </replace>
-
-      </sequential>
-   </macrodef>
 
 </project>
