@@ -404,7 +404,6 @@ extras/src/org/apache/click/extras/control/CountrySelect
 extras/src/org/apache/click/extras/control/PageButton
 extras/src/org/apache/click/extras/control/VirtualKeyboard
 documentation/images/click-icon-43.png
-documentation/images/click-icon-blue-48.png
 examples/webapp/assets/images/click-icon-blue-32.png
 
 Distributed under the terms of the Apache Software License 2.0.
