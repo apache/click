@@ -35,7 +35,7 @@ ${cssImports}
 		<table cellpadding="0" cellspacing="0" width="100%" border="0" style="border-collapse:collapse;">
 			<tr>
 				<td class="title-icon">
-					<a target="blank" href="http://click.sourceforge.net"><img src="${context}/assets/images/click-icon-blue-32.png" border="0" alt="Click"/></a>
+					<a target="blank" href="http://incubator.apache.org/click/"><img src="${context}/assets/images/click-icon-blue-32.png" border="0" alt="Click"/></a>
 				</td>
 				<td class="title-left" width="100%">
 					${title}

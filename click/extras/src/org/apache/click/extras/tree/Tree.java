@@ -144,7 +144,7 @@ import org.apache.commons.lang.StringUtils;
  *      <dd>renders the collapsed state of a node</dd>
  * </dl>
  *
- * <strong>Credit</strong> goes to <a href="http://wicket.sourceforge.net">Wicket</a>
+ * <strong>Credit</strong> goes to <a href="http://wicket.apache.org">Wicket</a>
  * for the following:
  * <ul>
  *      <li>images/folder-closed.png</li>
