@@ -426,3 +426,9 @@ GOOGLE CODE PRETTIFY LICENSE
 Distributed under the terms of the Apache Software License 2.0.
 
 ======================================================================
+
+FAMFAMFAM LICENSE
+
+Licensed under http://creativecommons.org/licenses/by/2.5/
+
+======================================================================
