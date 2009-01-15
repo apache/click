@@ -229,3 +229,10 @@ a.tb_label {
 	border-left-width: 0px;
 	font-size: 12px;
 }
+
+/*
+ * Add a 2px space between the Menu icon and Menu text.
+ */
+.menustyle img.link {
+    margin-right: 2px;
+}
