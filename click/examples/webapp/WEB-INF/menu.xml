@@ -19,7 +19,7 @@
 -->
 
 <menu>
-  <menu label=" Home" path="home.htm" imageSrc="/assets/images/icons-16px/home.png">
+  <menu label=" Home" path="home.htm" imageSrc="/assets/images/home.png">
     <menu label="BorderPage Class" path="source-viewer.htm?filename=WEB-INF/classes/org/apache/click/examples/page/BorderPage.java" title="BorderPage Java source" target="_blank"/>
     <menu label="Border Template HTML" path="source-viewer.htm?filename=border-template.htm" title="Page border HTML template" target="_blank" />
     <menu separator="true"/>
@@ -68,7 +68,7 @@
     <menu label="Velocity Action Table" path="velocity/action-table.htm"/>
   </menu>
 
-  <menu label=" Controls" path="#"  imageSrc="/assets/images/icons-16px/text_rich_colored.png">
+  <menu label=" Controls" path="#"  imageSrc="/assets/images/controls.png">
     <menu label="Action Controls" path="control/action-demo.htm"/>
     <menu label="CheckList" path="control/check-list-demo.htm"/>
     <menu label="FieldSet" path="control/field-set-demo.htm"/>
@@ -97,7 +97,7 @@
     <menu label="Custom Form Layout" path="form/contact-details.htm"/>
   </menu>
 
-  <menu label=" Table" path="#" imageSrc="/assets/images/icons-16px/table.png">
+  <menu label=" Table" path="#" imageSrc="/assets/images/table.png">
     <menu label="Table Decorator" path="table/table-decorator.htm"/>
     <menu label="Table Footer" path="table/table-footer.htm"/>
     <menu label="Table Paging" path="table/table-paging.htm"/>
@@ -112,14 +112,14 @@
     <menu label="Search Table Pattern" path="table/search-table.htm"/>
   </menu>
 
-  <menu label=" Tree" path="#" imageSrc="/assets/images/icons-16px/text_tree.png">
+  <menu label=" Tree" path="#" imageSrc="/assets/images/tree.png">
     <menu label="Basic Tree" path="tree/plain-tree-page.htm"/>
     <menu label="Advanced Tree" path="tree/advanced-tree-page.htm"/>
     <menu label="Checkbox Tree" path="tree/checkbox-tree-page.htm"/>
     <menu label="Page Link Tree" path="tree/page-link-tree-page.htm"/>
   </menu>
 
-  <menu label=" Panel" path="#" imageSrc="/assets/images/icons-16px/window_split_ver.png">
+  <menu label=" Panel" path="#" imageSrc="/assets/images/panel.png">
     <menu label="Simple Panel" path="panel/simple-panel-demo.htm"/>
     <menu label="List Panel" path="panel/list-panel-demo.htm"/>
     <menu label="Tabbed Panel" path="panel/tabbed-panel-demo.htm"/>
