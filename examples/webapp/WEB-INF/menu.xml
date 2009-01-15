@@ -29,7 +29,7 @@
     <menu label="web.xml" path="source-viewer.htm?filename=WEB-INF/web.xml" title="Web application descriptor" target="_blank" />
   </menu>
 
-  <menu label="Intro Examples" path="#">
+  <menu label="Intro Examples" path="#" imageSrc="/assets/images/intro.png">
     <menu label="Hello World" path="introduction/hello-world.htm"/>
     <menu label="Control Listener" path="introduction/control-listener.htm"/>
     <menu separator="true"/>
@@ -40,7 +40,7 @@
     <menu label="Advanced Form" path="introduction/advanced-form.htm"/>
   </menu>
 
-  <menu label="General" path="#">
+  <menu label="General" path="#" imageSrc="/assets/images/general.png">
     <menu label="Direct Page" path="general/direct-page.htm"/>
     <menu label="Excel Export Page" path="general/excel-export.htm"/>
     <menu label="Exception Demo" path="general/exception.htm"/>
@@ -68,7 +68,7 @@
     <menu label="Velocity Action Table" path="velocity/action-table.htm"/>
   </menu>
 
-  <menu label=" Controls" path="#"  imageSrc="/assets/images/controls.png">
+  <menu label=" Controls" path="#" imageSrc="/assets/images/controls.png">
     <menu label="Action Controls" path="control/action-demo.htm"/>
     <menu label="CheckList" path="control/check-list-demo.htm"/>
     <menu label="FieldSet" path="control/field-set-demo.htm"/>
