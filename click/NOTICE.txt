@@ -72,3 +72,8 @@ This product includes the Google Code Prettify JavaScript library
 developer by Mike Samuel (http://code.google.com/p/google-code-prettify/).
 
 ======================================================================
+
+This project include the FamFamFam icons by Mark James
+(http://www.famfamfam.com/lab/icons)
+
+======================================================================
