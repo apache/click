@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+
+<!--
+NOTE: This build file depends on the Velocity Docbook Framework and won't
+work unless that framework is installed. Set the property 'dbf.basedir' in
+project.properties to refer to the installation directory before using this
+script.
+-->
+<project name="click-docbook" default="all" basedir=".">
+
+    <!-- Load our properties -->
+    <property file="project.properties"/>
+
+    <!-- Some sanity checks to ensure docbook is setup correctly -->
+    <available file="${dbf.basedir}" property="isDBFAvail"/>
+    <fail message="The Docbook framework is not installed correctly. The specified
+Docbook installation refers to the folder, '${dbf.basedir}', which does not exist.
+Set the property 'dbf.basedir' in project.properties to the correct Docbook installation.">
+        <condition>
+            <or>
+                <isfalse value="${isDBFAvail}"/>
+            </or>
+        </condition>
+    </fail>
+
+    <available file="${dbf.basedir}/fop-lib/fop.jar" property="isFop095Avail"/>
+    <fail message="The JAR '${dbf.basedir}/fop-lib/fop.lib' is not available. To resolve this,
+download the FOP 0.95 distribution and add the new jars to the folder ${dbf.basedir}/fop-lib.">
+        <condition>
+            <or>
+                <isfalse value="${isFop095Avail}"/>
+            </or>
+        </condition>
+    </fail>
+
+    <import file="${dbf.basedir}/build-docbook.xml"/>
+    
+    <property name="docbook.dir" value="click"/>
+    <property name="docbook.file" value="ClickManual"/>
+
+  <!-- ======================================================================== -->
+  <!-- ==                                                                    == -->
+  <!-- == Build all the Velocity Docbook Documentation                       == -->
+  <!-- ==                                                                    == -->
+  <!-- ======================================================================== -->
+    <target name="all" description="--> Build all documentation">
+
+    <!-- Build the Users Guide -->
+        <ant antfile="${dbf.basedir}/build-docbook.xml" target="html">
+            <property name="docbook.dir" value="${docbook.dir}"/>
+            <property name="docbook.file" value="${docbook.file}"/>
+        </ant>
+
+        <ant antfile="${dbf.basedir}/build-docbook.xml" target="htmlsingle">
+            <property name="docbook.dir" value="${docbook.dir}"/>
+            <property name="docbook.file" value="${docbook.file}"/>
+        </ant>
+
+        <antcall target="pdf"/>
+
+        <delete quiet="true" dir="${target.dir}/${docbook.dir}/tmp"/>
+
+        <!--
+            Add IE Mark of the Web to each html page.
+            NB: The MARK_OF_THE_WEB comment must end with a newline!
+        -->
+        <replace dir="${target.dir}/${docbook.dir}">
+            <include name="**/*.html"/>
+            <replacetoken>&lt;!-- MARK_OF_THE_WEB --&gt;</replacetoken>
+            <replacevalue>&lt;!-- saved from url=(0014)about:internet --&gt;
+            </replacevalue>
+        </replace>
+    
+    <!--<fixcrlf srcdir="target/click" includes="**/*.html" eol="crlf" /> -->
+    </target>
+
+  <!-- ======================================================================== -->
+  <!-- ==                                                                    == -->
+  <!-- == Create the PDF documentation                                       == -->
+  <!-- ==                                                                    == -->
+  <!-- ======================================================================== -->
+
+    <taskdef name="fop"
+         classname="org.apache.fop.tools.anttasks.Fop">
+        <classpath>
+            <fileset dir="${dbf.basedir}/fop-lib">
+                <include name="*.jar"/>
+            </fileset>
+           
+        </classpath>
+    </taskdef>
+
+    <target name="pdf" description="Generates a single PDF file" depends="prepare">
+        <available file="${dbf.basedir}/fop-lib/fop.jar" property="isFop095Avail"/>
+        <fail message="The ${dbf.basedir}/fop-lib/fop.lib JAR is not available. To resolve this,
+download the FOP 0.95 distribution and add the new jars to the folder ${dbf.basedir}/fop-lib.">
+            <condition>
+                <or>
+                    <isfalse value="${isFop095Avail}"/>
+                </or>
+            </condition>
+        </fail>
+
+        <transform type="pdf" target="tmp" title="pdf" xsl="fo" dir="${docbook.dir}" file="${docbook.file}"/>
+
+        <mkdir dir="target/${docbook.dir}/pdf"/>
+
+        <fop format="application/pdf"
+            basedir="${src.dir}"
+            fofile="${pdf.target.file}.xml"
+            outfile="target/${docbook.dir}/pdf/${docbook.file}.pdf" />
+    </target>
+
+  <!-- ======================================================================== -->
+  <!-- ==                                                                    == -->
+  <!-- == Clean up the target directory                                      == -->
+  <!-- ==                                                                    == -->
+  <!-- ======================================================================== -->
+    <target name="clean"
+          description="--> Delete temporary and distribution directories for docs">
+        <ant antfile="${dbf.basedir}/build-docbook.xml" target="clean"/>
+    </target>
+</project>
