@@ -34,7 +34,7 @@ script.
     <available file="${dbf.basedir}" property="isDBFAvail"/>
     <fail message="The Docbook framework is not installed correctly. The specified
 Docbook installation refers to the folder, '${dbf.basedir}', which does not exist.
-Set the property 'dbf.basedir' in project.properties to the correct Docbook installation.">
+Set the property 'dbf.basedir' in project.properties to the correct Docbook installation folder.">
         <condition>
             <or>
                 <isfalse value="${isDBFAvail}"/>
@@ -42,12 +42,13 @@ Set the property 'dbf.basedir' in project.properties to the correct Docbook inst
         </condition>
     </fail>
 
-    <available file="${dbf.basedir}/fop-lib/fop.jar" property="isFop095Avail"/>
-    <fail message="The JAR '${dbf.basedir}/fop-lib/fop.lib' is not available. To resolve this,
-download the FOP 0.95 distribution and add the new jars to the folder ${dbf.basedir}/fop-lib.">
+    <available file="${fop.basedir}" property="isFopAvail"/>
+    <fail message="The FOP framework is not installed correctly. The specified
+FOP installation refers to the folder, '${fop.basedir}', which does not exist.
+Set the property 'fop.basedir' in project.properties to the correct FOP installation folder.">
         <condition>
             <or>
-                <isfalse value="${isFop095Avail}"/>
+                <isfalse value="${isFopAvail}"/>
             </or>
         </condition>
     </fail>
