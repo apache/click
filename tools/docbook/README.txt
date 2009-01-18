@@ -57,6 +57,28 @@ The PDF, HTML and HTML (single) documentation is available at the following loca
   target/click/htmlsingle
 
 
+Linking to resources
+====================
+
+The Click documentation output files (PDF and HTML), will be placed in the
+folder 'user-guide' of the Click distribution:
+
+  <click-distribution>/documentation/docs/user-guide/pdf
+  <click-distribution>/documentation/docs/user-guide/html
+  <click-distribution>/documentation/docs/user-guide/htmlsingle
+
+When linking to other Click documentation such as 'click-api' and other images,
+use the relative path and '../../'.
+
+For example:
+
+  <para>This framework uses a single servlet, called
+  <ulink url="../../click-api/org/apache/click/ClickServlet.html">ClickServlet</ulink>
+
+Notice we link to ClickServlet using the relative path '../../' since that is
+where the click-api will be located relative to the user-guide.
+
+
 Soft pagebreaks
 ===============
 
@@ -81,11 +103,12 @@ content should be moved to the next page.
 
 For example:
 
-  <?dbfo-need height="2in" ?>
   <section id="section-hello-world">
-  <para>Some content</para>
 
-This will ensure that the <section> will be forced to the next page if less
+  <?dbfo-need height="2in" ?>
+  <title>Hello World</title>
+
+This will ensure that the section <title> will be forced to the next page if less
 than 2 inches are available on the current page. This alleviates the problem where
 the section title is displayed at the bottom of the page but the actual content
 only starts on the next page, which looks awkward.
@@ -95,14 +118,16 @@ Another example:
   <para>Some text</para>
 
   <!-- Below we would like to have the description and code listing on the same page,
-       so we add a soft page break (2 inches) as shown below -->
-  <?dbfo-need height="2in" ?>
+       so we add a soft page break of 0.8 inches as shown below -->
+  <?dbfo-need height="0.8in" ?>
 
   <para>For example:</para>
   <programlisting>public class MyPage extends Page {
   ...
 } </programlisting>
 
+Here there must be at least an 8th of an inch available at the bottom of the page,
+otherwise the paragraph and program listing will be forced to the next page.
 
 For more info see:
   http://www.sagehill.net/docbookxsl/PageBreaking.html

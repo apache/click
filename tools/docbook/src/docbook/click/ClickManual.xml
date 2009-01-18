@@ -29,7 +29,7 @@
       <holder>The Apache Software Foundation</holder>
     </copyright>
 
-    <releaseinfo>V 1.5</releaseinfo>
+    <releaseinfo>V 2.1.0</releaseinfo>
 
     <productname>Click</productname>
 
@@ -56,7 +56,7 @@
       Java developers.</para>
 
       <para>Click is an open source project, licensed under the <ulink
-      url="images/LICENSE.txt"><citetitle>Apache
+      url="../../LICENSE.txt"><citetitle>Apache
       license.</citetitle></ulink>.</para>
 
       <para>Click uses an event based programming model for processing Servlet
@@ -67,9 +67,9 @@
       supported)</para>
 
       <para>This framework uses a single servlet, called <ulink
-      url="click-api/net/sf/click/ClickServlet.html">ClickServlet</ulink>, to
+      url="../../click-api/org/apache/click/ClickServlet.html">ClickServlet</ulink>, to
       act as a request dispatcher. When a request arrives ClickServlet creates
-      a <ulink url="../../click-api/net/sf/click/Page.html">Page</ulink>
+      a <ulink url="../../click-api/org/apache/click/Page.html">Page</ulink>
       object to process the request and then uses the page's Velocity template
       to render the results.</para>
 
@@ -107,7 +107,6 @@ public HelloWorld extends Page {
         </callout>
       </calloutlist>
 
-      <?dbfo-need height="2in" ?>
       <para>Next we would have a page template
       <filename>hello-world.htm:</filename></para>
       <programlisting>&lt;html&gt;
@@ -118,7 +117,7 @@ public HelloWorld extends Page {
     Hello world from Click at <varname>$time</varname>
     
   &lt;/body&gt;
-&lt;/html&gt;       </programlisting>
+&lt;/html&gt; </programlisting>
 
       <para>And finally we have a <filename>click.xml</filename> configuration
       file which tells our Click application to map
@@ -154,7 +153,7 @@ public HelloWorld extends Page {
       functionality.</para>
 
       <para>One of the commonly used controls is the <ulink
-      url="click-api/net/sf/click/control/ActionLink.html">ActionLink</ulink>,
+      url="../../click-api/org/apache/click/control/ActionLink.html">ActionLink</ulink>,
       which you can use to have a HTML link call a method on a Page object.
       For example:</para>
 
@@ -235,7 +234,7 @@ public HelloWorld extends Page {
       <title>Simple Table Example</title>
 
       <para>One of the most useful Click controls is the <ulink
-      url="click-api/net/sf/click/control/Table.html">Table</ulink>
+      url="../../click-api/org/apache/click/control/Table.html">Table</ulink>
       control.</para>
 
       <para>An example usage of the Table control in a customers Page is
@@ -269,7 +268,7 @@ public HelloWorld extends Page {
 
       <para>In this Page code example a Table control is declared, we set the
       table's HTML class, and then define a number of table <ulink
-      url="click-api/net/sf/click/control/Column.html">Column</ulink> objects.
+      url="../../click-api/org/apache/click/control/Column.html">Column</ulink> objects.
       In the column definitions we specify the name of the column in the
       constructor, which is used for the table column header and also to
       specify the row object property to render.</para>
@@ -398,9 +397,9 @@ public HelloWorld extends Page {
 
       <para>In this Page code example a Table control is declared and a number
       of <ulink
-      url="click-api/net/sf/click/control/Column.html">Column</ulink> objects
+      url="../../click-api/org/apache/click/control/Column.html">Column</ulink> objects
       are added. A deleteLink <ulink
-      url="click-api/net/sf/click/control/ActionLink.html">ActionLink</ulink>
+      url="../../click-api/org/apache/click/control/ActionLink.html">ActionLink</ulink>
       control is used as a decorator for the "Action" column. This control
       will invoke the Page <methodname>onDeleteClick()</methodname> method
       when it is clicked. Finally we have the Page
@@ -436,12 +435,13 @@ public HelloWorld extends Page {
       Page deleting the customer record.</para>
     </section>
 
-    <section>
+    <section id="section-simple-form-example">
+
       <title>Simple Form Example</title>
 
       <para>The <ulink
-      url="click-api/net/sf/click/control/Form.html">Form</ulink> and <ulink
-      url="click-api/net/sf/click/control/Field.html">Field</ulink> controls
+      url="../../click-api/org/apache/click/control/Form.html">Form</ulink> and <ulink
+      url="../../click-api/org/apache/click/control/Field.html">Field</ulink> controls
       are also some of the most commonly used controls in the Click
       Framework.</para>
 
@@ -449,9 +449,9 @@ public HelloWorld extends Page {
       controls.</para>
 
       <para>In our example code we have the page's constructor adding a <ulink
-      url="click-api/net/sf/click/control/TextField.html">TextField</ulink>
+      url="../../click-api/org/apache/click/control/TextField.html">TextField</ulink>
       field and a <ulink
-      url="click-api/net/sf/click/control/Submit.html">Submit</ulink> button
+      url="../../click-api/org/apache/click/control/Submit.html">Submit</ulink> button
       to the form. A page method is also set as a control listener on the
       form. Also note in this example the page's public
       <varname>form</varname> field is automatically added to its list of
@@ -546,7 +546,7 @@ public HelloWorld extends Page {
       </mediaobject>
     </section>
 
-    <section>
+    <section id="section-advanced-form-example">
       <title>Advanced Form Example</title>
 
       <para>The <classname>AdvancedForm</classname> page below provides a more
@@ -555,9 +555,9 @@ public HelloWorld extends Page {
 
       <para>First we have an <classname>AdvancedForm</classname> class which
       setups up a <ulink
-      url="click-api/net/sf/click/control/Form.html">Form</ulink> in its
+      url="../../click-api/org/apache/click/control/Form.html">Form</ulink> in its
       constructor. The form's investment <ulink
-      url="click-api/net/sf/click/control/Select.html">Select</ulink> list is
+      url="../../click-api/org/apache/click/control/Select.html">Select</ulink> list is
       populated in the page's <methodname>onInit()</methodname> method. At
       this point any page dependencies such as the CustomerService should be
       available.</para>
@@ -678,7 +678,7 @@ public HelloWorld extends Page {
       <para>If the user clicks on the Cancel button the request is redirected
       to the applications HomePage.</para>
 
-      <section>
+      <section id="section-form-layout">
         <title>Form Layout</title>
 
         <para>In the example above the Form control automatically renders the
@@ -692,7 +692,7 @@ public HelloWorld extends Page {
         and fields in your page template. See the <link
         linkend="section-template-layout">Template Layout</link> section and
         <ulink
-        url="click-api/net/sf/click/control/Form.html#form-layout">Form</ulink>
+        url="../../click-api/org/apache/click/control/Form.html#form-layout">Form</ulink>
         Javadoc for more details.</para>
 
         <para>An alternative approach to page template design is using a
