@@ -103,7 +103,10 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
     <taskdef name="fop"
          classname="org.apache.fop.tools.anttasks.Fop">
         <classpath>
-            <fileset dir="${dbf.basedir}/fop-lib">
+            <fileset dir="${fop.basedir}/build">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${fop.basedir}/lib">
                 <include name="*.jar"/>
             </fileset>
            
@@ -111,15 +114,6 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
     </taskdef>
 
     <target name="pdf" description="Generates a single PDF file" depends="prepare">
-        <available file="${dbf.basedir}/fop-lib/fop.jar" property="isFop095Avail"/>
-        <fail message="The ${dbf.basedir}/fop-lib/fop.lib JAR is not available. To resolve this,
-download the FOP 0.95 distribution and add the new jars to the folder ${dbf.basedir}/fop-lib.">
-            <condition>
-                <or>
-                    <isfalse value="${isFop095Avail}"/>
-                </or>
-            </condition>
-        </fail>
 
         <transform type="pdf" target="tmp" title="pdf" xsl="fo" dir="${docbook.dir}" file="${docbook.file}"/>
 
