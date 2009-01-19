@@ -119,7 +119,7 @@ public class ExternalLink extends AbstractLink {
                 buffer.append("=");
                 buffer.append(ClickUtils.encodeUrl(value, getContext()));
                 if (i.hasNext()) {
-                    buffer.append("&");
+                    buffer.append("&amp;");
                 }
             }
         }

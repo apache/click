@@ -198,12 +198,12 @@ public abstract class AutoCompleteTextField extends TextField {
      * <pre class="prettyprint">
      * public void onInit() {
      *     AutoCompleteTextField cityField = new AutoCompleteTextField("cityField");
-        *     HtmlStringBuffer buffer = new HtmlStringBuffer();
+     *     HtmlStringBuffer buffer = new HtmlStringBuffer();
      *     buffer.append("{"); // Options opens with squiggly bracket
-           *     buffer.append(stateField.getName());
-           *     buffer.append("=");
-           *     buffer.append(stateField.getValue());
-           *     buffer.append("&");
+     *     buffer.append(stateField.getName());
+     *     buffer.append("=");
+     *     buffer.append(stateField.getValue());
+     *     buffer.append("&amp;");
      *     buffer.append(idField.getName());
      *     buffer.append("=");
      *     buffer.append(idField.getValue());

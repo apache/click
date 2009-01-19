@@ -305,7 +305,7 @@ public class ActionLink extends AbstractLink {
         buffer.append("=");
         buffer.append(getName());
         if (value != null) {
-            buffer.append("&");
+            buffer.append("&amp;");
             buffer.append(VALUE);
             buffer.append("=");
             buffer.append(ClickUtils.encodeUrl(value, context));
@@ -319,7 +319,7 @@ public class ActionLink extends AbstractLink {
                     Object paramValue = getParameters().get(name);
                     String encodedValue =
                         ClickUtils.encodeUrl(paramValue, context);
-                    buffer.append("&");
+                    buffer.append("&amp;");
                     buffer.append(name);
                     buffer.append("=");
                     buffer.append(encodedValue);
