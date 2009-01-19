@@ -18,6 +18,8 @@
  */
 package org.apache.click.util;
 
+import java.sql.Timestamp;
+
 /**
  * User value object.
  */
@@ -26,6 +28,7 @@ public class User {
     private String name;
     private Address address;
     private String telephone;
+    private Timestamp timestamp;
     
     public Address getAddress() {
         return address;
@@ -50,5 +53,11 @@ public class User {
     }
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 }

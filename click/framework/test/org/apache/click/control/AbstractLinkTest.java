@@ -44,4 +44,18 @@ public class AbstractLinkTest extends TestCase {
         // Check that the value <script> is not rendered
         assertTrue(link.toString().indexOf(value) < 0);
     }
+
+    /**
+     * Check that Ampersands are url encoded -> '&amp;'.
+     *
+     * CLK-483.
+     */
+    public void testAmpersandEncoding() {
+        MockContext.initContext();
+
+        ActionLink link = new ActionLink("name");
+        link.setParameter("param1", "value1");
+
+        assertTrue(link.toString().indexOf("&amp;") > 0);
+    }
 }
