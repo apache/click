@@ -163,7 +163,7 @@ public class PageLink extends AbstractLink {
                 buffer.append("=");
                 buffer.append(ClickUtils.encodeUrl(value, context));
                 if (i.hasNext()) {
-                    buffer.append("&");
+                    buffer.append("&amp;");
                 }
             }
         }

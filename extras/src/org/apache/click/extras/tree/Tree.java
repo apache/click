@@ -1528,7 +1528,7 @@ public class Tree extends AbstractControl {
                 buffer.append("=");
                 buffer.append(ClickUtils.encodeUrl(value, context));
                 if (i.hasNext()) {
-                    buffer.append("&");
+                    buffer.append("&amp;");
                 }
             }
         }
