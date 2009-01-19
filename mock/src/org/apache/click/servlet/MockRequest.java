@@ -638,7 +638,7 @@ public class MockRequest implements HttpServletRequest {
                     buf.append('=');
                     buf.append(URLEncoder.encode(value, "UTF-8"));
                     if (iterator.hasNext()) {
-                        buf.append('&');
+                        buf.append("&amp;");
                     }
                 }
             } catch (UnsupportedEncodingException e) {

@@ -20,6 +20,8 @@ package org.apache.click.control;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import org.apache.click.util.ClickUtils;
@@ -287,6 +289,18 @@ public class HiddenField extends Field {
 
             } else if (valueClass == Short.class) {
                 setValueObject(Short.valueOf(aValue));
+
+            } else if (valueClass == Timestamp.class) {
+                long time = Long.parseLong(aValue);
+                setValueObject(new Timestamp(time));
+
+            } else if (valueClass == java.sql.Date.class) {
+                long time = Long.parseLong(aValue);
+                setValueObject(new java.sql.Date(time));
+
+            } else if (valueClass == Time.class) {
+                long time = Long.parseLong(aValue);
+                setValueObject(new Time(time));
 
             } else if (Date.class.isAssignableFrom(valueClass)) {
                 long time = Long.parseLong(aValue);

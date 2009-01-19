@@ -18,8 +18,12 @@
  */
 package org.apache.click.control;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
+import org.apache.click.servlet.MockRequest;
+import org.apache.click.util.User;
 
 /**
  * Test HiddenField behavior.
@@ -43,5 +47,40 @@ public class HiddenFieldTest extends TestCase {
 
         // Check that the value <script> is not rendered
         assertTrue(field.toString().indexOf(value) < 0);
+    }
+
+    /**
+     * Check that timestamp copies to and from a HiddenField.
+     *
+     * CLK-484.
+     */
+    public void testTimestampCopy() {
+        MockContext context = MockContext.initContext();
+        MockRequest request = context.getMockRequest();
+        request.setParameter("timestamp", String.valueOf(new Date().getTime()));
+
+        // set up the form for copyTo
+        Form form = new Form("sample");
+
+        HiddenField hiddenField = new HiddenField("timestamp", Timestamp.class);
+        form.add(hiddenField);
+
+        hiddenField.bindRequestValue();
+
+        User user = new User();
+
+        form.copyTo(user, true);
+        assertEquals(hiddenField.getValueObject(), user.getTimestamp());
+
+        // set up the form for copyFrom
+        form = new Form("sample");
+        hiddenField = new HiddenField("timestamp", Timestamp.class);
+        form.add(hiddenField);
+
+        user = new User();
+        user.setTimestamp(new Timestamp(new Date().getTime()));
+        form.copyFrom(user);
+
+        assertEquals(user.getTimestamp(), hiddenField.getValueObject());
     }
 }
