@@ -25,7 +25,7 @@
 
   <issueManagement>
     <system>jira</system>
-    <url>http://www.avoka.com/jira/</url>
+    <url>https://issues.apache.org/click/</url>
   </issueManagement>
 
   <mailingLists>
