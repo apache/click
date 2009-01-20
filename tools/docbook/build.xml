@@ -56,7 +56,7 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
     <import file="${dbf.basedir}/build-docbook.xml"/>
     
     <property name="docbook.dir" value="click"/>
-    <property name="docbook.file" value="ClickManual"/>
+    <property name="docbook.file" value="click-book"/>
 
   <!-- ======================================================================== -->
   <!-- ==                                                                    == -->
