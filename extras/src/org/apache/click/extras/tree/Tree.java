@@ -1121,6 +1121,9 @@ public class Tree extends AbstractControl {
 
         //renders the node value
         renderValue(buffer, treeNode);
+
+        // IE requires a newline here otherwise a large space appear between
+        buffer.append("\n");
         buffer.elementEnd("span");
     }
 
@@ -1171,7 +1174,6 @@ public class Tree extends AbstractControl {
             buffer.append(treeNode.getValue());
         }
         buffer.elementEnd("a");
-        buffer.append("\n");
     }
 
     /**
