@@ -20,6 +20,7 @@ package org.apache.click;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.apache.click.control.Form;
 import org.apache.click.pages.ListenerPage;
 
 /**
@@ -38,7 +39,7 @@ public class ClickServletTest extends TestCase {
     public void testRegisterListener() {
         MockContainer container = new MockContainer("web");
         container.start();
-        container.setParameter("form_name", "form"); // Simulate form submitted
+        container.setParameter(Form.FORM_NAME, "form"); // Simulate form submitted
         container.setParameter("submit", "submit"); // Simulate Submit button clicked
         container.setParameter("field", "one"); // Simulate TextField value set
 
