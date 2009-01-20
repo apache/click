@@ -586,7 +586,7 @@ public class ContainerUtils {
                 HtmlStringBuffer buffer = new HtmlStringBuffer();
                 logBasicDescription(buffer, object, path, property);
                 buffer.append("Attempt to construct instance of class '");
-                buffer.append(targetClass.getName()).append(" resulted in error: '");
+                buffer.append(targetClass.getName()).append("' resulted in error: '");
                 buffer.append(targetClass.getName()).append("' does not seem");
                 buffer.append(" to have a default no argument constrcutor.");
                 buffer.append(" Please note another common problem is that the");
