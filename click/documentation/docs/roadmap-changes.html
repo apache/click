@@ -63,8 +63,7 @@
 <h1>Road Map and Changes</h1>
 
 <h2>Road Map</h2>
-The next scheduled Click release will be Apache Click based on the Click 
-SourceForge version 1.5.1 code base.
+The next scheduled Click release will be version 2.1.0.
 <p/>
 The feature roadmap for the next major release of Click is being determined.
 
@@ -73,84 +72,17 @@ The feature roadmap for the next major release of Click is being determined.
 <h2>Changes</h2>
 
 <dl>
-  <dt><a name="1.5.1"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release - Version 1.5.1 - ??? January 2009</div></dt>
-  <dd>
-    <div style="margin-left:-2em;margin-bottom:1em;">
-      <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
-    </div>
-    <div style="margin-left:-2em;margin-bottom:1em;">
-      Please note that this release is provided outside of the ASF and is not
-      endorsed or approved by the Apache Software Foundation.
-    </div>
-    <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;"> 
-      The following issues were resolved since 1.5:
-    </div>
-    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
-      <li class="change">
-        Added Turkish language support. This issue was raised and fixed by Ali Ok.
-        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-475">475</a>].
-      </li>
-      <li class="change">
-        Improved exception handling when a Control name is not defined
-        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-473">473</a>].
-      </li>
-      <li class="change">
-        Added new constructors to extra controls which accepts the <tt>size</tt>
-        attribute. This issue was raised by Christophe Foiret
-        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-475">475</a>].
-      </li>
-      <li class="change">
-        Added MessageFormat support to Format. New methods include
-        <a href="click-api/org/apache/click/util/Format.html#message(java.lang.String, java.lang.Object)">message(String, Object)</a>
-        and <a href="click-api/org/apache/click/util/Format.html#message(java.lang.String, java.util.List)">message(String, List)</a>.
-        This issue was raised by Yu Kobayashi
-        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-474">474</a>].
-      </li>
-      <li class="change">
-        Added new methods to CheckboxTree to improve customization. The new methods
-        include <a href="extras-api/org/apache/click/extras/tree/CheckboxTree.html#renderCheckbox(org.apache.click.util.HtmlStringBuffer, org.apache.click.extras.tree.TreeNode)">renderCheckbox</a>
-        and <a href="extras-api/org/apache/click/extras/tree/CheckboxTree.html#getInputType()">getInputType</a>.
-      </li>
-      <li class="change">
-        Added csv mime type. This issue was raised by Alvin Townsend.
-      </li>
-      <li class="change">
-        Fixed URL rendering to encode ampersand characeters.
-        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-483">483</a>].
-      </li>
-      <li class="change">
-        Fixed HiddenField to work with java.sql.Timestamp, java.sql.Time and java.sql.Date.
-        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-484">484</a>].
-      </li>
-      <li class="change">
-        Fixed WebappLoader to reload Velocity global macro's
-        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-467">467</a>].
-      </li>
-      <li class="change">
-        Fixed Page.setRedirect to check if redirect path starts with context path.
-        This issue was raised by Christophe Foiret
-        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-468">468</a>].
-      </li>
-      <li class="change">
-        Fixed a regression when manually setting the Page path to a JSP.
-        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-141">141</a>].
-      </li>
-      <li class="change">
-        Fixed DateField's French translation. This issue was raised by Alvin Townsend.
-      </li>
-    </ul>
-  </dd>
 
-  <dt><a name="2.0.1"></a><a name="stable-release" href="#"></a><div class="release-header">Version 2.0.1 RC 1 (released from Apache Incubator) - ??? January 2009</div></dt>
+  <dt><a name="2.0.1"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release - Version 2.0.1 (released from Apache Incubator) - 31 January 2009</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
     <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;">
-      This is our first Apache release and is based on Click 1.5.1. This is
+      This is our first Apache release and is based on <a href="#1.5.1">Click 1.5.1</a>. This is
       a release candidate and will be declared stable if no issues arrise.
       <p/>
-      Please note however that because of licensing issues, certain third-party
+      Please note that because of licensing issues, certain third-party
       libraries were removed and are hosted externally.
       <p/>
       Note the following changes when upgrading from 1.5 to 2.0.1:
@@ -254,6 +186,74 @@ DateField dateField = new CalendarField("date");
           <p/>
           The TinyMCE example was moved to the <a target="blank" class="external" href="http://code.google.com/p/clickclick/">ClickClick extensions</a>
           project.
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="1.5.1"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release (pre Apache) - Version 1.5.1 - 31 January 2009</div></dt>
+  <dd>
+    <div style="margin-left:-2em;margin-bottom:1em;">
+      <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
+    </div>
+    <div style="margin-left:-2em;margin-bottom:1em;">
+      Please note that this release is provided outside of the ASF and is not
+      endorsed or approved by the Apache Software Foundation.
+    </div>
+    <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;"> 
+      The following issues were resolved since 1.5:
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change">
+        Added Turkish language support. This issue was raised and fixed by Ali Ok.
+        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-475">475</a>].
+      </li>
+      <li class="change">
+        Improved exception handling when a Control name is not defined
+        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-473">473</a>].
+      </li>
+      <li class="change">
+        Added new constructors to extra controls which accepts the <tt>size</tt>
+        attribute. This issue was raised by Christophe Foiret
+        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-475">475</a>].
+      </li>
+      <li class="change">
+        Added MessageFormat support to Format. New methods include
+        <a href="click-api/org/apache/click/util/Format.html#message(java.lang.String, java.lang.Object)">message(String, Object)</a>
+        and <a href="click-api/org/apache/click/util/Format.html#message(java.lang.String, java.util.List)">message(String, List)</a>.
+        This issue was raised by Yu Kobayashi
+        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-474">474</a>].
+      </li>
+      <li class="change">
+        Added new methods to CheckboxTree to improve customization. The new methods
+        include <a href="extras-api/org/apache/click/extras/tree/CheckboxTree.html#renderCheckbox(org.apache.click.util.HtmlStringBuffer, org.apache.click.extras.tree.TreeNode)">renderCheckbox</a>
+        and <a href="extras-api/org/apache/click/extras/tree/CheckboxTree.html#getInputType()">getInputType</a>.
+      </li>
+      <li class="change">
+        Added csv mime type. This issue was raised by Alvin Townsend.
+      </li>
+      <li class="change">
+        Fixed URL rendering to encode ampersand characeters.
+        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-483">483</a>].
+      </li>
+      <li class="change">
+        Fixed HiddenField to work with java.sql.Timestamp, java.sql.Time and java.sql.Date.
+        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-484">484</a>].
+      </li>
+      <li class="change">
+        Fixed WebappLoader to reload Velocity global macro's
+        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-467">467</a>].
+      </li>
+      <li class="change">
+        Fixed Page.setRedirect to check if redirect path starts with context path.
+        This issue was raised by Christophe Foiret
+        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-468">468</a>].
+      </li>
+      <li class="change">
+        Fixed a regression when manually setting the Page path to a JSP.
+        [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-141">141</a>].
+      </li>
+      <li class="change">
+        Fixed DateField's French translation. This issue was raised by Alvin Townsend.
       </li>
     </ul>
   </dd>
