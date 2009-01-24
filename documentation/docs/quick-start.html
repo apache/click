@@ -486,14 +486,16 @@ To run the quick start application builder simply follow the example below:
 Buildfile: build.xml
 
 project-quick-start:
-    [input] Please enter the project name (e.g. quickstart):
+    [input] Please enter the project name (e.g. quickstart): [quickstart]
 <span class="yellow">quickstart</span>
-    [input] Please enter the root package name (e.g. com.quickstart):
+    [input] Please enter the root package name (e.g. com.quickstart): [com.quickstart]
 <span class="yellow">com.quickstart</span>
     [input] Please enter the web app context path: [quickstart]
 <span class="yellow">quickstart</span>
-     [copy] Copying 37 files to C:\quickstart\WebContent
-     [copy] Copied 15 empty directories to 1 empty directory under C:\quickstart\WebContent
+    [input] The directory 'C:\quickstart' will be deleted. Continue (y/n)? (y, n)
+<span class="yellow">y</span>
+     [copy] Copying 20 files to C:\quickstart\WebContent
+     [copy] Copied 9 empty directories to 2 empty directory under C:\quickstart\WebContent
      [copy] Copying 1 file to C:\quickstart\WebContent\WEB-INF\lib
      [copy] Copying 1 file to C:\quickstart\WebContent\WEB-INF\lib
      [copy] Copying 1 file to C:\quickstart\WebContent\WEB-INF\lib

@@ -162,6 +162,7 @@ a.navLinkTopic:visited {
 
 .codeConfig 
 {
+  overflow: auto;
 }
 
 .codeDtd 
