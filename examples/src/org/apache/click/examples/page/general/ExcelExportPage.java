@@ -55,6 +55,7 @@ public class ExcelExportPage extends SpringPage {
 
         // Set response headers
         String mimeType = ClickUtils.getMimeType(".xls");
+        response.setHeader("Content-Disposition", "attachment; filename=\"report.xls\"");
         response.setContentType(mimeType);
         response.setHeader("Pragma", "no-cache");
 
