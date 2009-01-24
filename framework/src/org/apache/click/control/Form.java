@@ -172,18 +172,19 @@ import org.apache.commons.lang.StringUtils;
  * request is made the form will validate the field values. To disable
  * automatic validation set {@link #setValidate(boolean)} to false.
  * <p/>
- * Form {@link #validate()} method provides special validation for multipart requests.
- * Multipart requests are used when uploading files from the client.
+ * <b>File Upload Validation</b>
  * <p/>
+ * Form {@link #validate()} method provides special validation for multipart requests
+ * (multipart requests are used for when files are uploaded from the browser).
  * The {@link #validate()} method checks that files being uploaded do not exceed the
  * {@link org.apache.click.service.CommonsFileUploadService#sizeMax maximum request size}
  * or the {@link org.apache.click.service.CommonsFileUploadService#fileSizeMax maximum file size}.
  * <p/>
- * <b>Please note</b> that if the <tt>maximum request size</tt> or <tt>maximum file size</tt>
- * is exceeded, the request is deemed {@link #hasPostError invalid} and no further
- * processing is performed on the form or fields. Instead the form will display
- * the appropriate error message for the invalid request. See {@link #validate()}
- * for details of the error message properties.
+ * <b>Note:</b> if the <tt>maximum request size</tt> or <tt>maximum file size</tt>
+ * is exceeded, the request is deemed invalid ({@link #hasPostError hasPostError}
+ * will return true), and no further processing is performed on the form or fields.
+ * Instead the form will display the appropriate error message for the invalid request.
+ * See {@link #validate()} for details of the error message properties.
  * <p/>
  * <b>JavaScript Validation</b>
  * <p/>
