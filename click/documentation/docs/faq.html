@@ -26,12 +26,14 @@
  <meta name="keywords" lang="en" content="Apache Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
  <title>Apache Click</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <link rel="stylesheet" type="text/css" href="../syntax-highlighter.css"/>
  <style type="text/css">
    dt { margin-top:2em; }
    dd { margin:1em; margin-left:2em; }
  </style>
+ <script type="text/javascript" src="../syntax-highlighter.js"></script>
 </head>
-<body>
+<body onload="prettyPrint();">
   
 <h1>Frequently Asked Questions</h1>
 <ol>
@@ -66,6 +68,8 @@
   <li><a href="#spring-integration">How can you integrate Click into Spring?</a>
   </li>
   <li><a href="#jsp-support">Does Click support JSP?</a>
+  </li>
+  <li><a href="#pdf-and-excel-rendering">How can I render PDF and Excel documents?</a>
   </li>
   <li><a href="#performance">What is the performance of Click?</a>
   </li>
@@ -558,9 +562,92 @@ public interface Controller {
   </dd>
 
 
-    
+ <a name="pdf-and-excel-rendering" class="heading"></a>
+  <dt><b>17.&nbsp; How can I render PDF and Excel documents?</b></dt>
+  <dd>
+   By making use of the <a href="pages.html#page-direct-rendering">Direct Rendering</a>
+   support you can render directly to the servlet response and bypass the page
+   template rendering.
+   <p/>
+   Here is an example to render either a PDF or Excel document:
+<pre class="prettyprint">
+
+public MyPage extends Page {
+
+    /** The PDF report type request parameter. */
+    public static final String PDF = "pdf";
+
+    /** The Excel report type request parameter. */
+    public static final String EXCEL = "excel";
+
+    /**
+     * The Page#onGet renders the report to the servlet output stream.
+     */
+    public void onGet() {
+        HttpServletResponse response = getContext().getResponse();
+
+        // report type is a request parameter which specifies either PDF or Excel
+        String reportType = getContext().getRequestParameter("reportType");
+
+        // Retrieve either a PDF or Excel document as an InputStream
+        InputStream inputStream = getInputStream(reportType);
+
+        // Set response headers
+        String mimeType = getMimeType(reportType);
+        response.setHeader("Content-Disposition", "attachment; filename=\"report.pdf\"");
+        response.setContentType(mimeType);
+        response.setHeader("Pragma", "no-cache");
+
+        OutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+
+            // Write out PDF Document to response stream
+            IOUtils.copy(inputStream, outputStream);
+
+            // By setting the Page path to null, we bypass template rendering
+            setPath(null);
+
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+
+        } finally {
+            ClickUtils.close(outputStream);
+        }
+    }
+
+    /**
+     * This method should contain the logic to retrieve the report as either a PDF
+     * or Excel document.
+     */
+    public InputStream getReport(String reportType) {
+        InputStream intputStream = null;
+        if (PDF.equals(reportType)) {
+            ...
+        } else if (EXCEL.equals(reportType)) {
+            ...
+        }
+        return intputStream;
+    }
+
+    /**
+     * This method returns the report mime type based on the specified report type.
+     */
+    public String getMimeType(String reportType) {
+        if (PDF.equals(reportType)) {
+            return ClickUtils.getMimeType(".pdf");
+        } else if (EXCEL.equals(reportType)) {
+            return ClickUtils.getMimeType(".xls");
+        }
+    }
+}
+</pre>
+  <p/>
+  </dd>
+
+
   <a name="performance" class="heading"></a>
-  <dt><b>17.&nbsp; What is the performance of Click?</b></dt>
+  <dt><b>18.&nbsp; What is the performance of Click?</b></dt>
   <dd>
   Click is fast. 
   <p/>
@@ -602,7 +689,7 @@ public interface Controller {
 
 
   <a name="unit-testing"></a>
-  <dt><b>18.&nbsp; How do I unit test Click pages?</b></dt>
+  <dt><b>19.&nbsp; How do I unit test Click pages?</b></dt>
   <dd>
   It is generally recommended that you don't write JUnit style automated unit 
   tests for Click pages as the cost to benefit ratio is quite poor.
@@ -618,7 +705,7 @@ public interface Controller {
 
 
   <a name="logging" class="heading"></a>
-  <dt><b>19.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
+  <dt><b>20.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
   <dd>
    Click by default does not use Commons Logging / Log4J to avoid the class 
    loader and configuration issues which often occur with these framework, and
@@ -630,7 +717,7 @@ public interface Controller {
     
 
   <a name="why-velocity" class="heading"></a>
-  <dt><b>20.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b></dt>
+  <dt><b>21.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b></dt>
   <dd>
    FreeMarker is a powerful templating engine which was evaluated along side 
    Velocity for use in Click. While FreeMarker has many sophisticated
@@ -643,7 +730,7 @@ public interface Controller {
 
 
   <a name="why-click" class="heading"></a>
-  <dt><b>21.&nbsp; Why develop a new Web Application Framework?</b></dt>
+  <dt><b>22.&nbsp; Why develop a new Web Application Framework?</b></dt>
   <dd>
   Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
   while Tapestry is too complicated. 
