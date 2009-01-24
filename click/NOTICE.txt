@@ -68,6 +68,13 @@ Click runtime library.
 
 ======================================================================
 
+This product includes the HSQLDB library developed by The HSQL Development Group
+(http://www.hsqldb.org/)
+Please note this library is NOT included in the
+Click runtime library.
+
+======================================================================
+
 This product includes the Google Code Prettify JavaScript library
 developer by Mike Samuel (http://code.google.com/p/google-code-prettify/).
 
