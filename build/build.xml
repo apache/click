@@ -233,6 +233,7 @@
             <exclude name="lib/${jar.velocity}"/>
             <exclude name="lib/spring-*.jar"/>
             <exclude name="lib/${jar.upload}"/>
+            <exclude name="lib/${jar.checkstyle}"/>
             <exclude name="**/Thumbs.db"/>
             <exclude name="**/classes/**"/>
             <exclude name="**/WEB-INF/lib/**"/>
