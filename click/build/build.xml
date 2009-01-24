@@ -885,6 +885,12 @@ Please ensure you have configured build.properties</echo>
   	        <or><isfalse value="${isLog4JJarAvail}"/></or>
   	     </condition>
       </fail>
+      <available file="dist/${click}.jar" property="isClickAvail"/>
+      <fail message="The dist/${click} JAR is not available. To resolve this build the project with 'ant build-distribution'.">
+         <condition>
+  	        <or><isfalse value="${isClickAvail}"/></or>
+  	     </condition>
+      </fail>
       <input 
       	message="Please enter the project name (e.g. quickstart):" 
         defaultvalue="quickstart"
