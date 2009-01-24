@@ -64,7 +64,9 @@ public class NestedCayenneForm extends CayenneForm {
     }
 
     /**
-     * Return the DataContext for this Form using the following heuristics:
+     * Return the DataContext for this Form.
+     *
+     * The following heuristics is applied:
      *
      * #1. return the dataObject DataContext if set
      * #2. return the {@link #nestedDataContext} instance if set

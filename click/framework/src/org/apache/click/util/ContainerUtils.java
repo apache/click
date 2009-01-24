@@ -79,7 +79,7 @@ public class ContainerUtils {
     }
 
     /**
-     * Return the list of input Fields (TextField, Select, Radio, Checkbox etc.)
+     * Return the list of input Fields (TextField, Select, Radio, Checkbox etc).
      * for the given Container, recursively including any Fields contained in
      * child containers. The list of returned fields will exclude any
      * <tt>Button</tt>, <tt>FieldSet</tt> and <tt>Label</tt> fields.
