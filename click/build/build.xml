@@ -216,7 +216,6 @@
             <exclude name=".**"/> 
             <exclude name=".**/**"/> 
             <exclude name="click-${version}"/> 
-            <exclude name="TODO.txt"/>   
             <exclude name="bin/**"/>
             <exclude name="design/**"/>
             <exclude name="dist/*-src.zip"/>
