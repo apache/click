@@ -108,8 +108,8 @@
             </li>
             <li>
                 Upload the distribution to your account at <tt>people.apache.org</tt>
-                under the folder <tt>~/public_html/click/click/X.X.X</tt>, where X.X.X
-                is the version number of Click.
+                under the folder <tt>/home/USER/public_html/click/click/X.X.X</tt>, where
+                USER is your Apache user name and X.X.X is the version number of Click.
 
                 <p/>
                 The following files must be uploaded:
@@ -232,11 +232,13 @@ cp ~/public_html/click/click/X.X.X/* /www/www.apache.org/dist/incubator/click/cl
                         to specify the KEY name.)
                         <p/>
                         <pre class="codeConfig">
-mvn gpg:sign-and-deploy-file -DpomFile=click/click-X.X.X-incubating.pom -Dfile=click/click-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
-mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-X.X.X-incubating.pom -Dfile=click-extras/click-extras-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
-mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-X.X.X-incubating.pom -Dfile=click-nodeps/click-nodeps-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
-mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X-incubating.pom -Dfile=click-mock/click-mock-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-snapshot-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click/click-X.X.X-incubating.pom -Dfile=click/click-X.X.X-incubating.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-X.X.X-incubating.pom -Dfile=click-extras/click-extras-X.X.X-incubating.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-X.X.X-incubating.pom -Dfile=click-nodeps/click-nodeps-X.X.X-incubating.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X-incubating.pom -Dfile=click-mock/click-mock-X.X.X-incubating.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
 </pre>
+               For the commands above remember to replace USER with your Apache
+               username and X.X.X with the Click version.
                     </li>
                     <li>
                         For <tt>releases</tt> execute the following commands from the <tt>maven-upload</tt> folder:
