@@ -209,13 +209,13 @@
            depends="clean, build-framework, build-mock, build-extras, build-examples, javadoc" 
            description="build distribution ZIP file">
       <!-- create distribution zip file -->
-      <delete dir="click-${version}" quiet="false"/>
-      <mkdir dir="click-${version}"/>
-      <copy todir="click-${version}">
+      <delete dir="${click}" quiet="false"/>
+      <mkdir dir="${click}"/>
+      <copy todir="${click}">
          <fileset dir="." casesensitive="yes">
             <exclude name=".**"/> 
             <exclude name=".**/**"/> 
-            <exclude name="click-${version}"/> 
+            <exclude name="${click}"/> 
             <exclude name="bin/**"/>
             <exclude name="design/**"/>
             <exclude name="dist/*-src.zip"/>
@@ -243,8 +243,8 @@
       <delete file="../${click}.zip"/>
       <zip basedir="."
            destfile="../${click}.zip"
-           includes="click-${version}/**"/>
-      <delete dir="click-${version}" quiet="false"/>
+           includes="${click}/**"/>
+      <delete dir="${click}" quiet="false"/>
       <digestMacro file="../${click}.zip"/>
    </target>
 
