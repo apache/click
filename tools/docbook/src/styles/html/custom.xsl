@@ -34,7 +34,11 @@
   <xsl:param name="table.borders.with.css" select="1"/>
   <xsl:param name="html.stylesheet">css/stylesheet.css</xsl:param>
   <xsl:param name="html.stylesheet.type">text/css</xsl:param>         
-  <xsl:param name="generate.toc">book toc,title</xsl:param>         
+  <xsl:param name="generate.toc">
+  book      toc,title
+  chapter   toc
+  </xsl:param>
+  <xsl:param name="toc.section.depth">5</xsl:param>
 
   <xsl:param name="admonition.title.properties">text-align: left</xsl:param>
 
