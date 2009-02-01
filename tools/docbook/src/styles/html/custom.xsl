@@ -21,6 +21,7 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version='1.0'>
+  <xsl:param name="ulink.target">_blank</xsl:param>
 
 <!-- Activate Graphics -->
   <xsl:param name="admon.graphics" select="1"/>
@@ -40,7 +41,7 @@
   <!-- Label Chapters and Sections (numbering) -->
   <xsl:param name="chapter.autolabel" select="1"/>
   <xsl:param name="section.autolabel" select="1"/>
-  <xsl:param name="section.autolabel.max.depth" select="1"/>
+  <xsl:param name="section.autolabel.max.depth" select="5"/>
 
   <xsl:param name="section.label.includes.component.label" select="1"/>
   <xsl:param name="table.footnote.number.format" select="'1'"/>
