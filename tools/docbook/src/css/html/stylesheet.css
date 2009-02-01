@@ -253,6 +253,10 @@ span.symbol, span.symbol span.pln {
     color: red;
 }
 
+span.package {
+    font-family: monospace;
+}
+
 code.computeroutput {
     background-color: #FFFFC0;
     border: 1px solid #A7BCD6;

@@ -206,7 +206,7 @@
     <!-- Label Chapters and Sections (numbering) -->
     <xsl:param name="chapter.autolabel" select="1"/>
     <xsl:param name="section.autolabel" select="1"/>
-    <xsl:param name="section.autolabel.max.depth" select="1"/>
+    <xsl:param name="section.autolabel.max.depth" select="5"/>
 
     <xsl:param name="section.label.includes.component.label" select="1"/>
     <xsl:param name="table.footnote.number.format" select="'1'"/>
