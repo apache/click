@@ -325,7 +325,7 @@
       </copy>
  	  <copy file="LICENSE.txt" todir="${dir.classes}/META-INF"/>
  	  <copy file="NOTICE.txt" todir="${dir.classes}/META-INF"/>
-    <copy file="DISCLAIMER.txt" todir="${dir.classes}/classes/META-INF"/>
+    <copy file="DISCLAIMER.txt" todir="${dir.classes}/META-INF"/>
       <!-- No Dependencies -->
       <javac srcdir="${dir.source}"
              destdir="${dir.classes}"
