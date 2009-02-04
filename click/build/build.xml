@@ -274,6 +274,7 @@
       </copy>
  	    <copy file="LICENSE.txt" todir="extras/classes/META-INF"/>
  	    <copy file="NOTICE.txt" todir="extras/classes/META-INF"/>
+      <copy file="DISCLAIMER.txt" todir="extras/classes/META-INF"/>
       <javac srcdir="extras/src"
              destdir="extras/classes"
              debug="true"
@@ -324,6 +325,7 @@
       </copy>
  	  <copy file="LICENSE.txt" todir="${dir.classes}/META-INF"/>
  	  <copy file="NOTICE.txt" todir="${dir.classes}/META-INF"/>
+    <copy file="DISCLAIMER.txt" todir="extras/classes/META-INF"/>
       <!-- No Dependencies -->
       <javac srcdir="${dir.source}"
              destdir="${dir.classes}"
@@ -411,6 +413,7 @@
       </copy>
  	  <copy file="LICENSE.txt" todir="mock/classes/META-INF"/>
  	  <copy file="NOTICE.txt" todir="mock/classes/META-INF"/>
+    <copy file="DISCLAIMER.txt" todir="extras/classes/META-INF"/>
       <javac srcdir="mock/src"
              destdir="mock/classes"
              debug="true"
