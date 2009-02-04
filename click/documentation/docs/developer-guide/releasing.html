@@ -219,7 +219,8 @@ cp ~/public_html/click/click/X.X.X/* /www/www.apache.org/dist/incubator/click/cl
                 <pre class="codeConfig">ant build-maven-bundles</pre>
             </li>
             <li>
-                Maven <tt>snapshots</tt> must be uploaded to: <tt>/www/people.apache.org/repo/m2-snapshot-repository</tt>,
+                Maven <tt>snapshots</tt> must be uploaded to: <tt>/home/USER/public_html/click/click/X.X.X/maven2</tt>
+                (USER should be replaced with your home dir on people.apache.org)
                 while <tt>releases</tt> must be uploaded to: <tt>/www/people.apache.org/repo/m2-ibiblio-rsync-repository</tt>.
                 <p/>
                 Please note the <tt>mvn gpg:sign-and-deploy-file</tt> command will both sign and upload
