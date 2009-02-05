@@ -110,10 +110,12 @@ div.authorgroup
 }
 
 div.toc, div.list-of-examples, div.list-of-figures {
-    font-size:      0.8em;
     margin-bottom:  3em;
 }
 
+.toc dt {
+    padding-bottom: 1px;
+}
 
 div.itemizedlist {
     margin-top:     0.5em;
