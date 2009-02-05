@@ -2,7 +2,7 @@
 <chapter id="chapter-introduction">
     <title>Introduction to Click</title>
 
-    <section id="section-preface">
+    <section id="preface">
       <title>Preface</title>
 
       <para>Click is a simple JEE web application framework for commercial
@@ -31,9 +31,34 @@
 
       <para>Possibly the best way to see how Click works is to dive right in
       and look at some examples.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link linkend="hello-world">Hello World</link> - the Hello World classic</para>
+        </listitem>
+        <listitem>
+          <para><link linkend="control-listener">Control Listener</link> - a ActionLink control listener example</para>
+        </listitem>
+        <listitem>
+          <para><link linkend="simple-table">Simple Table</link> - a simple Table control example</para>
+        </listitem>
+        <listitem>
+          <para><link linkend="advanced-table">Advanced Table</link> - a more advanced Table example</para>
+        </listitem>
+        <listitem>
+          <para><link linkend="simple-form">Simple Form</link> - a simple Form example</para>
+        </listitem>
+        <listitem>
+          <para><link linkend="advanced-form">Advanced Form</link> - a more advanced Form example</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
-    <section id="section-hello-world">
+    <para>
+    These examples are available online at <ulink url="http://www.avoka.com/click-examples/">http://www.avoka.com/click-examples/</ulink>
+    under the menu "Intro Examples".</para>
+
+    <section id="hello-world">
       <title>Hello World Example</title>
 
       <para>A Hello World example in Click would look something like
@@ -60,7 +85,7 @@ public HelloWorld extends Page {
         </callout>
       </calloutlist>
 
-      <para>Next we would have a page template
+      <para>Next we have a page template
       <filename>hello-world.htm:</filename></para>
       <programlisting>&lt;html&gt;
   &lt;body&gt;
@@ -72,10 +97,14 @@ public HelloWorld extends Page {
   &lt;/body&gt;
 &lt;/html&gt; </programlisting>
 
-      <para>And finally we have a <filename>click.xml</filename> configuration
-      file which tells our Click application to map
-      <filename>hello-world.htm</filename> requests to our
-      <classname>HelloWorld</classname> page class.</para>
+      <para>Click is smart enough to figure out that the <classname>HelloWorld</classname>
+      page class maps to the template <filename>hello-world.htm</filename>. We
+      only have to inform Click of the <package>package</package> of the
+      HelloWorld class, in this case <package>examples.page</package>.</para>
+
+      <para>We do that through the <link linkend="application-configuration">click.xml</link>
+      configuration file which tells Click to map <filename>hello-world.htm</filename>
+      requests to our <classname>examples.page.HelloWorld</classname> page class.</para>
 
       <programlisting>&lt;click-app&gt;  
   &lt;pages package="examples.page"/&gt;
@@ -98,7 +127,7 @@ public HelloWorld extends Page {
   Hello world from Click at Tue May 08 19:37:05 EST 2007</literallayout>
     </section>
 
-    <section id="section-control-listener-example">
+    <section id="control-listener-example">
       <title>Control Listener Example</title>
 
       <para>Click includes a library of <link
@@ -183,7 +212,7 @@ public HelloWorld extends Page {
 <computeroutput>ControlListenerPage#12767107 object method onMyLinkClick() invoked.</computeroutput></literallayout>
     </section>
 
-    <section id="section-simple-table-example">
+    <section id="simple-table-example">
       <title>Simple Table Example</title>
 
       <para>One of the most useful Click controls is the <ulink
@@ -260,7 +289,7 @@ public HelloWorld extends Page {
         </mediaobject></para>
     </section>
 
-    <section id="section-advanced-table-example">
+    <section id="advanced-table-example">
       <title>Advanced Table Example</title>
 
       <para>The Table control also provides support for:</para>
@@ -311,11 +340,11 @@ public HelloWorld extends Page {
         
         table.addColumn(new Column("investments"));
         
-        editLink.setImageSrc("/images/window-edit.png");
+        editLink.setImageSrc("/images/table-edit.png");
         editLink.setTitle("Edit customer details");
         editLink.setParameter("referrer", "/introduction/advanced-table.htm");
         
-        deleteLink.setImageSrc("/images/window-delete.png");
+        deleteLink.setImageSrc("/images/table-delete.png");
         deleteLink.setTitle("Delete customer record");
         deleteLink.setAttribute("onclick",
             "return window.confirm('Are you sure you want to delete this record?');");
@@ -388,7 +417,7 @@ public HelloWorld extends Page {
       Page deleting the customer record.</para>
     </section>
 
-    <section id="section-simple-form-example">
+    <section id="simple-form-example">
 
       <title>Simple Form Example</title>
 
@@ -499,7 +528,7 @@ public HelloWorld extends Page {
       </mediaobject>
     </section>
 
-    <section id="section-advanced-form-example">
+    <section id="advanced-form-example">
       <title>Advanced Form Example</title>
 
       <para>The <classname>AdvancedForm</classname> page below provides a more
@@ -631,7 +660,7 @@ public HelloWorld extends Page {
       <para>If the user clicks on the Cancel button the request is redirected
       to the applications HomePage.</para>
 
-      <section id="section-form-layout">
+      <section id="form-layout">
         <title>Form Layout</title>
 
         <para>In the example above the Form control automatically renders the
@@ -643,14 +672,14 @@ public HelloWorld extends Page {
 
         <para>For fine grained page design you can specifically layout form
         and fields in your page template. See the <link
-        linkend="section-template-layout">Template Layout</link> section and
+        linkend="template-layout">Template Layout</link> section and
         <ulink
         url="../../click-api/org/apache/click/control/Form.html#form-layout">Form</ulink>
         Javadoc for more details.</para>
 
         <para>An alternative approach to page template design is using a
         programmatic approach. See the <link
-        linkend="section-programmatic-layout">Programmatic Layout</link>
+        linkend="programmatic-layout">Programmatic Layout</link>
         section for more details.</para>
       </section>
     </section>
