@@ -87,6 +87,10 @@
                 Also ensure the release date in the <tt>downloads.html</tt> page is correct.
             </li>
             <li>
+                Run checkstyle to ensure source code adheres to the coding standard:
+                <pre class="codeConfig">ant checkstyle</pre>
+            </li>
+            <li>
                 Test the release and ensure there are no failures:
                 <pre class="codeConfig">ant test-all</pre>
             </li>
