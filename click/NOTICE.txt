@@ -6,14 +6,15 @@ The Apache Software Foundation (http://www.apache.org/).
 
 ======================================================================
 
-This product includes the OGNL library, 
-developed by Drew Davidson (http://www.ognl.org/).
+This product includes the OGNL library, developed by Drew Davidson and
+released under the BSD License.
+http://www.ognl.org/
 
 ======================================================================
 
-This product includes the Concurrent utilities library, 
-developed by Doug Lea 
-(http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html).
+This product includes the Concurrent utilities library,
+developed by Doug Lea and released to the public domain.
+http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html
 
 ======================================================================
 
@@ -23,51 +24,63 @@ released under the Apache 2.0 license.
 ======================================================================
 
 This product includes software from the Seraph project developed by Atlassian
-(http://www.atlassian.com/).
+and released under the BSD License.
+http://www.atlassian.com/
 
 ======================================================================
 
 This product includes the prototype JavaScript library,
-developed by Sam Stephenson (http://prototypejs.org/).
+developed by Sam Stephenson, distributed under the terms of the MIT
+license
+http://prototypejs.org/
 
 ======================================================================
 
 This product includes the script.aculo.us JavaScript library,
-developed by Thomas Fuchs (http://script.aculo.us/).
+developed by Thomas Fuchs, distributed under the terms of the MIT
+license
+http://script.aculo.us/
 
 ======================================================================
 
-This product includes the Virtual Keyboard JavaScript library
-(http://www.greywyvern.com/code/js/keyboard.html).
+This product includes the Virtual Keyboard JavaScript library,
+released under the BSD License.
+http://www.greywyvern.com/code/js/keyboard.html
 
 ======================================================================
 
-This product includes the ColorPicker library developer by Sebo Zoltan
-(http://www.dhtmlgoodies.com/index.html?whichScript=submitted-color-picker).
+This product includes the ColorPicker library developer by Sebo Zoltan,
+distributed under the terms of the MIT license
+http://www.dhtmlgoodies.com/index.html?whichScript=submitted-color-picker
 
 ======================================================================
 
-This product includes the rico JavaScript library,
-developed by Sabre Airline Solutions (http://openrico.org).
+This product includes the rico JavaScript library, developed by 
+Sabre Airline Solutions and released under the Apache 2.0 license.
+http://openrico.org
 
 ======================================================================
 
-This product includes the YUI JavaScript library,
-developed by Yahoo (http://developer.yahoo.com/yui/).
+This product includes the YUI JavaScript library, developed by Yahoo
+and released under the BSD License.
+http://developer.yahoo.com/yui/
 
 ======================================================================
 
-This product includes the HSQLDB library developed by The HSQL Development Group
-(http://www.hsqldb.org/)
+This product includes the HSQLDB library developed by
+The HSQL Development Group and released under the HSQLDB License
+http://www.hsqldb.org/
 
 ======================================================================
 
 This product includes the Google Code Prettify JavaScript library
-developer by Mike Samuel (http://code.google.com/p/google-code-prettify/).
+developed by Mike Samuel and released under the Apache 2.0 license.
+http://code.google.com/p/google-code-prettify/
 
 ======================================================================
 
-This project include the FamFamFam icons by Mark James
-(http://www.famfamfam.com/lab/icons)
+This project include the FamFamFam icons by Mark James, distributed
+under the terms of the Creative Commons Attribution 2.5 License.
+http://www.famfamfam.com/lab/icons
 
 ======================================================================
