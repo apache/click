@@ -164,18 +164,6 @@
       <pathelement location="dist/${click}.jar"/>
    </path>
 
-   <path id="classpath.extras.cayenne.1x">
-	  <pathelement location="temp/classes"/> 
-	  <pathelement location="lib/${jar.hibernate}"/>
-	  <pathelement location="lib/${jar.log4j}"/>
-	  <pathelement location="lib/${jar.servlet}"/>
-	  <pathelement location="lib/${jar.spring-beans}"/>
-	  <pathelement location="lib/${jar.spring-context}"/>
-	  <pathelement location="lib/${jar.spring-core}"/>
-	  <pathelement location="lib/${jar.spring-web}"/>
-	  <pathelement location="dist/${click}.jar"/>
-   </path>
-
    <path id="classpath.examples"> 
       <pathelement location="lib/${jar.servlet}"/>
       <pathelement location="lib/${jar.spring-beans}"/>
@@ -256,8 +244,7 @@
            inheritall="false"/>
    </target>
 
-
-   <target name="build-extras" description="build extras JAR file">
+   <target name="build-extras" description="build extras JAR file" depends="prepare-hibernate">
       <available file="dist/${click}.jar" property="isClickAvail"/>
       <fail message="Build framework first with 'build-framework'">
          <condition>
@@ -270,6 +257,7 @@
       <copy todir="extras/classes">
          <fileset dir="extras/src">
             <exclude name="**/package.html"/>
+            <exclude name="${exclude-hibernate}"/>
          </fileset>
       </copy>
  	    <copy file="LICENSE.txt" todir="extras/classes/META-INF"/>
@@ -278,7 +266,7 @@
       <javac srcdir="extras/src"
              destdir="extras/classes"
              debug="true"
-             excludes="**/Test*"
+             excludes="**/Test*, ${exclude-hibernate}"
              encoding="ISO-8859-1"
              source="${javac.source}">
          <classpath refid="classpath.extras"/>
@@ -497,7 +485,7 @@
   	     </condition>
       </fail>
       <checkstyle config="build/checkstyle-checks.xml">
-         <fileset dir="framework/src/net" includes="**/*.java"/>
+         <fileset dir="framework/src/org/apache/click/" includes="**/*.java"/>
          <fileset dir="extras/src" includes="**/*.java"/>
       	<classpath refid="classpath.checkstyle"/>
       </checkstyle>
@@ -548,7 +536,6 @@
       <downloadMacro name="${jar.log4j}" path="log4j"/>
       <downloadMacro name="${jar.ognl}" path="ognl"/>
       <downloadMacro name="${jar.upload}" path="commons-fileupload"/>
-      <downloadMacro name="${jar.hibernate}" path="org.hibernate"/>
       <downloadMacro name="${jar.junit}" path="junit"/>
       <downloadMacro name="${jar.servlet}" path="javax.servlet"/>
       <downloadMacro name="${jar.spring-beans}" path="org.springframework"/>
@@ -567,20 +554,44 @@
  	       dest="lib/${jar.freemarker}"
  	       verbose="true"
  	       usetimestamp="true"/>
-      <get src="http://clickclick.googlecode.com/svn/trunk/checkstyle/${jar.checkstyle}"
- 	       dest="lib/${jar.checkstyle}"
- 	       verbose="true"
- 	       usetimestamp="true"/> 
       <ant antfile="build.xml" 
            dir="examples"
            target="get-deps"
-           inheritall="false"/>	
+           inheritall="false"/>
+
+      <!-- Check if hibernate download is enabled -->
+      <condition property="hibernate.true">
+        <istrue value="${download.hibernate}" />
+      </condition>
+
+      <!-- Check if checkstyle download is enabled -->
+      <condition property="checkstyle.true">
+        <istrue value="${download.checkstyle}" />
+      </condition>
+
+      <!-- Download optional dependencies -->
+      <antcall target="download-hibernate"/>
+      <antcall target="download-checkstyle"/>
+      
    </target>
 
-   
+
    <target name="get-deps-proxy" description="download JAR dependencies">
       <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
       <antcall target="get-deps"/>
+   </target>
+
+
+   <target name="download-hibernate" if="hibernate.true">
+      <downloadMacro name="${jar.hibernate}" path="org.hibernate"/>
+   </target>
+
+
+   <target name="download-checkstyle" if="checkstyle.true">
+     <get src="http://clickclick.googlecode.com/svn/trunk/checkstyle/${jar.checkstyle}"
+ 	       dest="lib/${jar.checkstyle}"
+ 	       verbose="true"
+ 	       usetimestamp="true"/>
    </target>
 
 
@@ -615,7 +626,7 @@ Environment:
 Please ensure you have configured build.properties</echo>
    </target> 
 	
-   <target name="javadoc" description="create Javadoc HTML files">
+   <target name="javadoc" description="create Javadoc HTML files" depends="prepare-hibernate">
       <!-- Framework -->
       <delete quiet="false" failonerror="false">
          <fileset dir="documentation/docs/click-api" includes="**/*"/>
@@ -626,7 +637,8 @@ Please ensure you have configured build.properties</echo>
                     windowtitle="Click Framework API"
                     doctitle="Click API"
                     classpath="classpath.framework"
-      	            overview="documentation/docs/core-overview.html"/>
+      	            overview="documentation/docs/core-overview.html"
+                    excludes=""/>
 
       <copy file="framework/src/org/apache/click/control/image-submit.gif"
             todir="documentation/docs/click-api/org/apache/click/control"/>
@@ -641,7 +653,8 @@ Please ensure you have configured build.properties</echo>
                     windowtitle="Click Extras API"
                     doctitle="Click Extras API"
                     classpath="classpath.extras"
-                    overview="documentation/docs/extras-overview.html"/>
+                    overview="documentation/docs/extras-overview.html"
+                    excludes="${exclude-hibernate-package}"/>
 
       <!-- Mock -->
       <delete quiet="false" failonerror="false">
@@ -653,7 +666,8 @@ Please ensure you have configured build.properties</echo>
                     windowtitle="Click Mock API"
                     doctitle="Click Mock API"
                     classpath="classpath.mock"
-    				overview="documentation/docs/mock-overview.html"/>
+                    overview="documentation/docs/mock-overview.html"
+                    excludes=""/>
 
       <copy file="documentation/images/post-sequence-diagram.png"
             todir="documentation/docs/click-api/org/apache/click/"/>
@@ -827,6 +841,7 @@ Please ensure you have configured build.properties</echo>
       <attribute name="doctitle"/>
       <attribute name="classpath"/>
       <attribute name="overview"/>
+      <attribute name="excludes"/>
       <sequential>
          <javadoc sourcepath="@{src}"
                destdir="@{destdir}"
@@ -836,7 +851,8 @@ Please ensure you have configured build.properties</echo>
                windowtitle="@{windowtitle}"
       	       packagenames="org.*"
          	     overview="@{overview}"
-               doctitle="@{doctitle}">
+               doctitle="@{doctitle}"
+               excludepackagenames="@{excludes}">
             <classpath refid="@{classpath}"/>
             <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
             <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
@@ -970,6 +986,32 @@ Please ensure you have configured build.properties</echo>
  	  	token="template-context"
  	  	value="${context-path}"
  	  	dir="../${project-name}"/>
+   </target>
+
+
+   <target name="prepare-hibernate" depends="check-hibernate,check-hibernate-false"/>
+
+
+   <target name="check-hibernate">
+     <!--  note: check to see if hibernate.jar is available.  -->
+     <available classname="org.hibernate.Hibernate" property="hibernate.present">
+       <classpath refid="classpath.extras"/>
+     </available>
+   </target>
+
+
+   <target name="check-hibernate-false" unless="hibernate.present">
+     <property name="exclude-hibernate" value="**/hibernate/**"/>
+     <property name="exclude-hibernate-package" value="org.apache.click.extras.hibernate.*"/>
+     <echo level="warning">
+  ********************************************************
+  **
+  ** The Hibernate library has not been found on your
+  ** classpath. The newly built Click Extras jar will
+  ** exclude the Hibernate package.
+  **
+  ********************************************************
+    </echo>
    </target>
 
 </project>
