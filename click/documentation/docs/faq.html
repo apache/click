@@ -44,10 +44,12 @@
   <li><a href="#tool-support">What development tools are there?</a>
   </li>
   <li><a href="#html-control">How can the GUI designer define the HTML if Click Controls generates everything?</a>
-  </li> 
+  </li>
+  <li><a href="#customize-look-and-feel">How can I customize a control's look and feel (Stylesheet, JavaScript and other resources)?</a>
+  </li>
   <li><a href="#shared-template">How can I have many Pages using the same HTML template?</a>
   </li>
-  <li><a href="#listener-returns">Why do control listeners methods have to return a boolean value?</a>
+  <li><a href="#listener-returns">Why do control listener methods have to return a boolean value?</a>
   </li> 
   <li><a href="#exclude-fields">Can you exclude some fields from a Form?</a>
   </li> 
@@ -239,9 +241,16 @@
   </dd>
 
 
-  
+  <a name="customize-look-and-feel" class="heading"></a>
+  <dt><b>5.&nbsp; How can I customize a control's look and feel (Stylesheet, JavaScript and other resources)?</b></dt>
+  <dd>
+   See the section <a href="configuration.html#auto-deployed-files">aut deployed files</a>
+   for details on how to customize and override a control's resources.
+  </dd>
+
+
   <a name="shared-template" class="heading"></a>
-  <dt><b>5.&nbsp; How can I have many Pages using the same HTML template?</b></dt>
+  <dt><b>6.&nbsp; How can I have many Pages using the same HTML template?</b></dt>
   <dd>
    To do this use the Page templating technique detailed in the 
    <a href="pages.html#page-templating">Page Templating</a> topic. 
@@ -260,7 +269,7 @@
 
     
   <a name="listener-returns" class="heading"></a>
-  <dt><b>6.&nbsp; Why do control listeners methods have to return a boolean value?</b></dt>
+  <dt><b>7.&nbsp; Why do control listeners methods have to return a boolean value?</b></dt>
   <dd>
   Control listener methods have to return a boolean value to state whether the
   Pages controls and methods should continue to be processed. To continue
@@ -285,7 +294,7 @@
 
 
   <a name="exclude-fields" class="heading"></a>
-  <dt><b>7.&nbsp; Can you exclude some fields from a Form?</b></dt>
+  <dt><b>8.&nbsp; Can you exclude some fields from a Form?</b></dt>
   <dd>
    To exclude some fields from being displayed in a shared Form class use the
    <a href="click-api/org/apache/click/control/Form.html#removeFields(java.util.List)">Form.removeFields()</a>
@@ -303,7 +312,7 @@
 
   
   <a name="localization" class="heading"></a>
-  <dt><b>8.&nbsp; How do you internationalize Pages and Controls?</b></dt>
+  <dt><b>9.&nbsp; How do you internationalize Pages and Controls?</b></dt>
   <dd>
    Click provides good support for application localization and 
    internationalization (I18N) requirements.
@@ -369,7 +378,7 @@
 
 
   <a name="utf8-encoding" class="heading"></a>
-  <dt><b>9.&nbsp; How do you encode Pages in the UTF-8 character set?</b></dt>
+  <dt><b>10.&nbsp; How do you encode Pages in the UTF-8 character set?</b></dt>
   <dd>
   To encode pages in the UTF-8 character set you need to create a
   <tt>WEB-INF/velocity.properties</tt> file with the properties:
@@ -396,7 +405,7 @@
 
 
   <a name="charset" class="heading"></a>
-  <dt><b>10.&nbsp; How do you specify the character set which is used in your application?</b></dt>
+  <dt><b>11.&nbsp; How do you specify the character set which is used in your application?</b></dt>
   <dd>
   
   You can specify your application character set in <tt>WEB-INF/click.xml</tt>:
@@ -418,7 +427,7 @@
   
       
   <a name="multiple-posts" class="heading"></a>
-  <dt><b>11.&nbsp; How can you prevent multiple form posts?</b></dt>
+  <dt><b>12.&nbsp; How can you prevent multiple form posts?</b></dt>
   <dd>
   You can prevent multiple form posts by using the Post Redirect pattern. With 
   this pattern once the user has posted a form you redirect to another page. 
@@ -449,7 +458,7 @@
 
 
   <a name="html-pages"></a>
-  <dt><b>12.&nbsp; How can I use *.html Click pages?</b></dt>
+  <dt><b>13.&nbsp; How can I use *.html Click pages?</b></dt>
   <dd>
   Click does not support *.html files as Click pages. These files are not
   processed by the ClickServlet and are intended for use as static content.
@@ -458,7 +467,7 @@
 
 
   <a name="alternative-extension"></a>
-  <dt><b>13.&nbsp; Can Click be mapped to an extension other than *.htm?</b></dt>
+  <dt><b>14.&nbsp; Can Click be mapped to an extension other than *.htm?</b></dt>
   <dd>
   Currently Click only supports *.htm extension. You cannot create templates
   with a different extension for example '.xml'.
@@ -475,7 +484,7 @@
 
 
   <a name="cayenne-integration" class="heading"></a>
-  <dt><b>14.&nbsp; What JARs should I use with Click and Cayenne?</b></dt>
+  <dt><b>15.&nbsp; What JARs should I use with Click and Cayenne?</b></dt>
   <dd>
    To get Click and Cayenne to work happily with each other you will need to 
    include the following JAR files in your WEB-INF/lib directory:
@@ -496,7 +505,7 @@
 
 
   <a name="spring-integration" class="heading"></a>
-  <dt><b>15.&nbsp; How can you integrate Click into Spring?</b></dt>
+  <dt><b>16.&nbsp; How can you integrate Click into Spring?</b></dt>
   <dd>
    To integrate Spring with Click configure the
    <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
@@ -524,7 +533,7 @@ public interface Controller {
 
 
   <a name="jsp-support" class="heading"></a>
-  <dt><b>16.&nbsp; Does Click support JSP?</b></dt>
+  <dt><b>17.&nbsp; Does Click support JSP?</b></dt>
   <dd>
    Click fully supports JSP pages. 
    <p/>
@@ -563,7 +572,7 @@ public interface Controller {
 
 
  <a name="pdf-and-excel-rendering" class="heading"></a>
-  <dt><b>17.&nbsp; How can I render PDF and Excel documents?</b></dt>
+  <dt><b>18.&nbsp; How can I render PDF and Excel documents?</b></dt>
   <dd>
    By making use of the <a href="pages.html#page-direct-rendering">Direct Rendering</a>
    support you can render directly to the servlet response and bypass the page
@@ -647,7 +656,7 @@ public MyPage extends Page {
 
 
   <a name="performance" class="heading"></a>
-  <dt><b>18.&nbsp; What is the performance of Click?</b></dt>
+  <dt><b>19.&nbsp; What is the performance of Click?</b></dt>
   <dd>
   Click is fast. 
   <p/>
@@ -689,7 +698,7 @@ public MyPage extends Page {
 
 
   <a name="unit-testing"></a>
-  <dt><b>19.&nbsp; How do I unit test Click pages?</b></dt>
+  <dt><b>20.&nbsp; How do I unit test Click pages?</b></dt>
   <dd>
   It is generally recommended that you don't write JUnit style automated unit 
   tests for Click pages as the cost to benefit ratio is quite poor.
@@ -705,7 +714,7 @@ public MyPage extends Page {
 
 
   <a name="logging" class="heading"></a>
-  <dt><b>20.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
+  <dt><b>21.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
   <dd>
    Click by default does not use Commons Logging / Log4J to avoid the class 
    loader and configuration issues which often occur with these framework, and
@@ -717,7 +726,7 @@ public MyPage extends Page {
     
 
   <a name="why-velocity" class="heading"></a>
-  <dt><b>21.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b></dt>
+  <dt><b>22.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b></dt>
   <dd>
    FreeMarker is a powerful templating engine which was evaluated along side 
    Velocity for use in Click. While FreeMarker has many sophisticated
@@ -730,7 +739,7 @@ public MyPage extends Page {
 
 
   <a name="why-click" class="heading"></a>
-  <dt><b>22.&nbsp; Why develop a new Web Application Framework?</b></dt>
+  <dt><b>23.&nbsp; Why develop a new Web Application Framework?</b></dt>
   <dd>
   Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
   while Tapestry is too complicated. 
