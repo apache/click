@@ -732,6 +732,34 @@ You can modify these support files and Click will <b>not</b> overwrite them. The
 
 <p/>
 
+For example to customize the control styles you can place a customized copy
+(or even a brand new version) of <tt>control.css</tt> under the <tt>/click</tt>
+folder in your web project:
+
+<pre>
+/webapp/click/control.css
+</pre>
+
+When Click starts up it will <tt>not</tt> override your copy of <tt>control.css</tt>
+with its own default version.
+
+<p/>
+
+Different controls might deploy different stylesheet, javascript or image files, however
+the above principle still applies. By placing a customized copy of the stylesheet,
+javascript or image under the <tt>/click</tt> folder, you will override the default resource.
+
+<p/>
+
+Be aware that some of the more complex controls (checklist, colorpicker, tree),
+deploys resources to subfolders under <tt>/click</tt>, for example <tt>/click/checklist/*</tt>.
+
+<p/>
+
+A control's Javadoc will normally indicate what resources are deployed for that control.
+
+<p/>
+
 It is generally easier to work with unpacked WARs and most servlet containers
 do just that. However some contains such as WebLogic (at least version 10) does not.
 To enable WebLogic to unpack the WAR go to the <em>Admin Console > server node > Web Applications</em>
