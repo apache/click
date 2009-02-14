@@ -24,8 +24,8 @@ processing. At the top level a Pages controls are processed by the
 ClickServlet. Some controls can contain child controls which they will inturn
 process. These container controls include Form, FieldSet, Panel and Table.
 <p/>
-Using these controls is similar to traditional Swing GUI programming. While these 
-controls do not provide a full Swing style MVC implementation, they provided a
+Using these controls are similar to traditional Swing GUI programming. While these
+controls do not provide a full Swing style MVC implementation, they provide a
 simplified programming model and high performance.
 
 <h3>Action Listeners</h3>
@@ -77,7 +77,7 @@ public class ActionDemo extends BorderPage {
 } </pre>
 
 All call back listener methods must return a boolean value. If they return true
-the the further processing of other controls and page methods should continue.
+the further processing of other controls and page methods should continue.
 Otherwise if they return false, then any further processing should be aborted.
 By returning false you can effectively exit at this point and redirect or forward 
 to another page.
