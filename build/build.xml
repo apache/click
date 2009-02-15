@@ -246,14 +246,15 @@
    </target>
 
 
-   <target name="build-examples" description="build click-examples WAR file">
+   <target name="build-examples" description="build click-examples WAR file" depends="check-deps">
       <ant antfile="build.xml" 
            dir="examples"
            target="build" 
            inheritall="false"/>
    </target>
 
-   <target name="build-extras" description="build extras JAR file" depends="prepare-hibernate">
+
+   <target name="build-extras" description="build extras JAR file" depends="check-deps, prepare-hibernate">
       <available file="dist/${click}.jar" property="isClickAvail"/>
       <fail message="Build framework first with 'build-framework'">
          <condition>
@@ -301,14 +302,8 @@
    </target>
 
 
-   <target name="build-framework" description="build framework JAR file">
+   <target name="build-framework" description="build framework JAR file" depends="check-deps">
       <mkdir dir="dist"/>
-      <available file="lib/${jar.codec}" property="isJarAvail"/>
-      <fail message="Download JAR dependencies first with 'get-deps'">
-         <condition>
-  	        <or><isfalse value="${isJarAvail}"/></or>
-  	     </condition>
-      </fail>
       <delete file="dist/${click}.jar" quiet="false"/>
       <delete file="dist/${click-nodeps}.jar" quiet="false"/>
       <property name="dir.source" value="framework/src"/>
@@ -394,7 +389,7 @@
    </target>
 
 
-   <target name="build-mock" description="build mock JAR file">
+   <target name="build-mock" description="build mock JAR file" depends="check-deps">
       <available file="dist/${click}.jar" property="isClickAvail"/>
       <fail message="Build framework first with 'build-framework'">
          <condition>
@@ -501,7 +496,23 @@
       </checkstyle>
    </target>
 
-   
+
+   <target name="check-deps">
+      <available file="lib/${jar.codec}" property="isCodecAvail"/>
+      <fail message="Download JAR dependencies first with 'ant get-deps'">
+         <condition>
+  	        <or><isfalse value="${isCodecAvail}"/></or>
+  	     </condition>
+      </fail>
+      <available file="lib/${jar.junit}" property="isJUnitAvail"/>
+      <fail message="Download JAR dependencies first with 'ant get-deps'">
+         <condition>
+  	        <or><isfalse value="${isJUnitAvail}"/></or>
+  	     </condition>
+      </fail>
+   </target>
+
+
    <target name="clean"> 
       <delete dir="dist" quiet="false"/>
       <mkdir dir="dist"/>
@@ -725,7 +736,7 @@ Please ensure you have configured build.properties</echo>
      Testing tasks
      -->
 
-   <target name="test-framework">
+   <target name="test-framework" depends="check-deps">
       <copy todir="framework/classes">
          <fileset dir="framework/src">
             <exclude name="**/package.html"/>
@@ -762,7 +773,7 @@ Please ensure you have configured build.properties</echo>
    </target>
 
    
-   <target name="test-extras" >
+   <target name="test-extras" depends="check-deps">
       <copy todir="extras/classes">
          <fileset dir="extras/src">
             <exclude name="**/package.html"/>
@@ -799,7 +810,7 @@ Please ensure you have configured build.properties</echo>
    </target>
 
 
-   <target name="test-mock">
+   <target name="test-mock" depends="check-deps">
       <copy todir="mock/classes">
          <fileset dir="mock/src">
             <exclude name="**/package.html"/>
@@ -837,7 +848,7 @@ Please ensure you have configured build.properties</echo>
 
 
    <target name="test-all" depends="test-framework, test-extras, test-mock"
-       description="Run all unit tests"/>
+       description="run all unit tests"/>
 
 
     <!--

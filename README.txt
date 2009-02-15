@@ -65,11 +65,35 @@ The main Ant targets include:
     build-extras          build click-extras JAR file
     build-framework       build click framework JAR file
     build-maven-bundles   build Maven repository upload bundles
+    build-mock            build mock JAR file
     build-sources         build source ZIP files for use with IDEs
+    checkstyle            run checkstyle report on Java soruce
     deploy-examples       copy example WAR files to app server
     get-deps              download JAR dependencies
     get-deps-proxy        download JAR dependencies via proxy
     help                  display the Help message
     javadoc               create Javadoc HTML files
     project-quick-start   build application template
+    test-all              run all unit tests
 
+
+Before building the framework, all third-party library dependencies must be
+downloaded using the command:
+
+    ant get-deps
+
+To build a new distribution use run the command:
+
+    ant build-distribution
+
+To build the core library, click-x.x.x.jar, run the command:
+
+    ant build-framework
+
+To build the extras library, click-extras.x.x.x.jar, run the command:
+
+    ant build-extras
+
+Further information on building Click is available here:
+
+   documentation/docs/developer-guide/building.html
