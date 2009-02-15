@@ -68,10 +68,6 @@
    <taskdef name="package" 
    	        classname="org.apache.click.tools.devtasks.PackageTask"
    	        classpath="lib/click-dev-tasks-1.0.jar"/>
-            
-   <taskdef resource="checkstyletask.properties"
-            classpath="lib/${jar.checkstyle}"/>
-
 
     <!--
      Macro Definitions
@@ -489,6 +485,10 @@
   	        <or><isfalse value="${isJarAvail}"/></or>
   	     </condition>
       </fail>
+
+      <taskdef resource="checkstyletask.properties"
+          classpath="lib/${jar.checkstyle}"/>
+
       <checkstyle config="build/checkstyle-checks.xml">
          <fileset dir="framework/src/org/apache/click/" includes="**/*.java"/>
          <fileset dir="extras/src" includes="**/*.java"/>
