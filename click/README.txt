@@ -82,15 +82,19 @@ downloaded using the command:
 
     ant get-deps
 
-To build a new distribution use run the command:
+To run all tests execute the command:
+
+    ant test-all
+
+To build a new distribution run:
 
     ant build-distribution
 
-To build the core library, click-x.x.x.jar, run the command:
+To build the core library, click-x.x.x.jar, run:
 
     ant build-framework
 
-To build the extras library, click-extras.x.x.x.jar, run the command:
+To build the extras library, click-extras.x.x.x.jar, run:
 
     ant build-extras
 
