@@ -15,7 +15,6 @@
 pre.programlisting{
     padding:1em;
     border:1px solid #888;
-    overflow:auto;
     text-align: left;
     line-height: normal;
 }

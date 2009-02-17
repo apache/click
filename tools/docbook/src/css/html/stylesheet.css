@@ -67,7 +67,6 @@ a:hover {
 h1,h2,h3,h4,h5 {
     line-height:    1.3;
     margin-top:     1.5em;
-    font-family:    Arial, Sans-serif;
 }
 
 h1.title {
@@ -139,6 +138,7 @@ pre.programlisting {
     padding:        5pt 2pt;
     border:         1pt solid black;
     background:     #eeeeee;
+    font-family:    "Courier New",courier;
 }
 
 div.table {
@@ -192,15 +192,15 @@ div.navfooter, div.navfooter table {
 }
 
 div.figure {
-    text-align:     center;
+    text-align:     left;
     margin-top:     1em;
     margin-bottom:  1em;
 }
 
 div.figure p.title {
-    text-align:     center;
-    margin-left:    15%;
-    margin-right:   15%;
+    text-align:     left;
+    margin:         0.5em;
+    padding:        0.5em;
 }
 
 div.example p.title {
@@ -212,7 +212,7 @@ div.example p.title {
 }
 
 div.figure img {
-    border:         1px solid gray;
+    /*border:         1px solid gray;*/
     padding:        0.5em;
     margin:         0.5em;
 }
@@ -228,7 +228,7 @@ div.revhistory {
 div.revhistory table {
     font-family:    sans-serif;
     font-size:      12px;
-	border-collapse: collapse;
+	  border-collapse: collapse;
 }
 
 div.revhistory table tr {
@@ -240,19 +240,33 @@ div.revhistory table th {
 }
 
 div.literallayout {
-    background-color: #FAFAFA;
+    background-color: #EEEEEE;
     border: 1px solid #AAAAAA;
+    padding: 5pt 1em;
+    line-height: normal;
+    font-family: "Courier New",courier;
 }
 
 code.filename, code.filename span.pln {
 }
 
-code.varname, code.varname span.pln {
+code.varname, code.varname span.pln, code.varname span.atv, code.varname span.atn {
     color: blue;
+    font-weight: normal;
 }
 
-span.symbol, span.symbol span.pln {
+span.symbol, span.symbol span.pln, span.symbol span.atn, span.symbol span.tag,
+span.symbol span.atv {
     color: red;
+    font-weight: normal;
+}
+
+span.command, span.command span.pln {
+    color: #7F0055;
+}
+
+span.token, span.token span.pln, span.token span.atv {
+    color: maroon;
 }
 
 span.package {
@@ -264,4 +278,35 @@ code.computeroutput {
     border: 1px solid #A7BCD6;
     margin: 0.5em;
     padding: 0.5em;
+}
+
+div.informaltable table {
+  border: 1px solid black;
+}
+
+div.informaltable th {
+    padding: 6px 10px 2px;
+    background-color: navy;
+    color: white;
+}
+
+div.calloutlist td {
+    padding-right: 10px;
+}
+
+span.bold {
+    font-weight: bold;
+}
+
+a.external {
+  background: url(../images/external.png) center right no-repeat;
+  padding-right: 14px;
+}
+
+div.screenshot {
+  border: 1px solid gray;
+  padding: 1em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  float: left;
 }
