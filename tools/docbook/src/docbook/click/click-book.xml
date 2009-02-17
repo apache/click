@@ -26,11 +26,11 @@
  under the License.
 -->
 <book lang="en">
-	<title>Click Framework</title>
+	<title>Apache Click</title>
 	
 	<bookinfo>
 		<copyright>
-			<year>2008</year>
+			<year>2009</year>
 			
 			<holder>The Apache Software Foundation</holder>
 		</copyright>
@@ -40,7 +40,7 @@
 		<productname>Click</productname>
 		
 		<authorgroup>
-			<corpauthor>The Apache Click Framework Developers</corpauthor>
+			<corpauthor>Apache Click User Guide</corpauthor>
 		</authorgroup>
 		
 		<mediaobject>

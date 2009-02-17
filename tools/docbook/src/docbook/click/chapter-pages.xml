@@ -1,885 +1,1342 @@
 <?xml version='1.0' encoding='UTF-8'?>
-  <chapter remap="h1">
-    <title>Pages</title>
-    <para> Pages are the heart of web applications. In Click, Pages encapsulate the processing of HTML requests and the rendering of HTML responses. The section discusses Click pages and covers to following topics: </para>
-    <orderedlist>
-      <listitem>
-        <para><link linkend="pages.html-page-class">Classes</link>  - page Java classes</para>
-      </listitem>
-      <listitem>
-        <para><link linkend="pages.html-page-execution">Execution</link>  - page execution sequence</para>
-      </listitem>
-      <listitem>
-        <para><link linkend="pages.html-page-param-auto-binding">Request Param Auto Binding</link>  - request parameter to page field auto binding</para>
-      </listitem>
-      <listitem>
-        <para><link linkend="pages.html-page-security">Security</link>  - page security model</para>
-      </listitem>
-      <listitem>
-        <para><link linkend="pages.html-page-navigation">Navigation</link>  - navigation between pages</para>
-      </listitem>
-      <listitem>
-        <para><link linkend="pages.html-page-templating">Page Templating</link>  - templating common page content</para>
-      </listitem>
-      <listitem>
-        <para><link linkend="pages.html-page-direct-rendering">Direct Rendering</link>  - page direct rendering</para>
-      </listitem>
-      <listitem>
-        <para><link linkend="pages.html-page-stateful">Stateful</link>  - stateful pages</para>
-      </listitem>
-      <listitem>
-        <para><link linkend="pages.html-page-error-handling">Error Handling</link>  - page error handling</para>
-      </listitem>
-      <listitem>
-        <para><link linkend="pages.html-page-not-found">Page Not Found</link>  - page not found handling</para>
-      </listitem>
-      <listitem>
-        <para><link linkend="pages.html-page-messages">Message Properties</link>  - pages message properties</para>
-      </listitem>
-    </orderedlist>
-    <para> </para>
-    <para> In Click, a logical page is composed of a Java class and a Velocity template, with these components being defined in page elements of the <ulink url="configuration.html#application-configuration">click.xml</ulink> file. </para>
-    <screen>
-&lt;page path=&quot;
-search.htm&quot; classname=&quot;
-com.mycorp.page.Search&quot;/&gt; 
-</screen>
-    <para> The path attribute specifies the location of the page Velocity template, and the classname attribute specifies the page Java class name. If you use an alternative template engine such as Freemarker, the setup above is the same. Alternatively you can also configure Click to use JSP pages for rendering. <screen>
-&lt;page path=&quot;
-search.jsp&quot; classname=&quot;
-com.mycorp.page.Search&quot;/&gt; 
-</screen><anchor id="pages.html-page-class"/><indexterm>
-        <primary>page-class</primary>
-      </indexterm>
-</para>
-    <sect1 remap="h2">
-      <title>1.  Classes</title>
-      <para> All custom Click pages must subclass the <ulink url="click-api/org/apache/click/Page.html">Page</ulink> base class. The Page class and its associated companion classes, Context and Control, are depicted below in Figure 1. <inlinemediaobject>
-          <imageobject>
-            <imagedata fileref="./../images/click-class-diagram.png" format="PNG"/>
-          </imageobject>
-        </inlinemediaobject>
- <emphasis role="bold">Figure 1.   Page Class Diagram</emphasis> - created with Enterprise Architect courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink></para>
-      <para> The Page class provides a <ulink url="click-api/org/apache/click/Page.html#model">model</ulink> attribute which is used to hold all the objects that are rendered in the page&apos;s Velocity template. The model may also contain <ulink url="click-api/org/apache/click/Control.html">Control</ulink> objects, which provide user interface controls on the Page. Pages also have an associated <ulink url="click-api/org/apache/click/Context.html">Context</ulink> object which references all the javax.servlet objects associated with the request. When programming in Click you use the Context object to access HttpServletRequest attributes, parameters and the HttpSession object. <anchor id="pages.html-page-execution"/><indexterm>
-          <primary>page-execution</primary>
-        </indexterm>
-</para>
-    </sect1>
-    <sect1 remap="h2">
-      <title>2.  Execution</title>
-      <para> The Page class provide a number of empty handler methods which subclasses can override to provide functionality: <itemizedlist>
-          <listitem>
-            <para>
-              <ulink url="click-api/org/apache/click/Page.html#onSecurityCheck()">onSecurityCheck()</ulink>
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              <ulink url="click-api/org/apache/click/Page.html#onInit()">onInit()</ulink>
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              <ulink url="click-api/org/apache/click/Page.html#onGet()">onGet()</ulink>
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              <ulink url="click-api/org/apache/click/Page.html#onPost()">onPost()</ulink>
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              <ulink url="click-api/org/apache/click/Page.html#onRender()">onRender()</ulink>
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              <ulink url="click-api/org/apache/click/Page.html#onDestroy()">onDestroy()</ulink>
-            </para>
-          </listitem>
-        </itemizedlist>
- The ClickServlet relies on instantiating Pages using a public no arguments constructor, so when you create Page subclasses you must ensure you don&apos;t add an incompatible constructor. The GET request execution sequence for Pages is summarized below in the Figure 2. <inlinemediaobject>
-          <imageobject>
-            <imagedata fileref="./../images/get-sequence-diagram.png" format="PNG"/>
-          </imageobject>
-        </inlinemediaobject>
- <emphasis role="bold">Figure 2.   GET Request Sequence Diagram</emphasis> - created with Enterprise Architect courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink></para>
-      <para> Stepping through this GET request sequence, a new Page instance is created and the attributes for the Page are set (context, format, headers, path). Next, request parameter values are bound to any matching public Page fields. Then the <literal>onSecurityCheck()</literal> handler is executed. This method can be used to ensure the user is authorized to access the page, and if necessary abort any further processing. The next method invoked is <literal>onInit()</literal>, this is where you place any post constructor initialization code. <literal>onInit()</literal> is the ideal place to create controls such as Forms, Fields and Tables. As illustrated by the diagram, after a Page&apos;s <literal>onInit()</literal> is called, each Control, available at that stage, will have their <literal>onInit()</literal> method called. The next step is the processing of the Page&apos;s <ulink url="click-api/org/apache/click/Page.html#controls">controls</ulink>. The ClickSerlvet gets the list of Controls from the page and then iterates through the list calling <literal>onProcess()</literal>. If any of the Control&apos;s <literal>onProcess()</literal> methods return false, processing of subsequent controls and the Page&apos;s <literal>onGet()</literal> method is aborted. If everything is executing normally the Page&apos;s <literal>onGet()</literal> method is now called. The next step is rendering the page template to generate the displayed HTML. The ClickServlet gets the model (<literal>Map</literal>) from the Page then adds the following objects to the model: <itemizedlist>
-          <listitem>
-            <para> any public Page fields using the fields name</para>
-          </listitem>
-          <listitem>
-            <para> context   -   the Servlet context path, e.g. /mycorp</para>
-          </listitem>
-          <listitem>
-            <para> cssImports   -   the CSS imports and style blocks to include in the pages header. Please see <ulink url="../click-api/org/apache/click/util/PageImports.html">PageImports</ulink> for more details.</para>
-          </listitem>
-          <listitem>
-            <para> format   -   the <ulink url="../click-api/org/apache/click/util/Format.html">Format</ulink> object for formatting the display of objects.</para>
-          </listitem>
-          <listitem>
-            <para> imports   -   the CSS and JavaScript imports to include in the pages header. Please see <ulink url="../click-api/org/apache/click/util/PageImports.html">PageImports</ulink> for more details.</para>
-          </listitem>
-          <listitem>
-            <para> jsImports   -   the JavaScript imports and script blocks to include in the pages footer. Please see <ulink url="../click-api/org/apache/click/util/PageImports.html">PageImports</ulink> for more details.</para>
-          </listitem>
-          <listitem>
-            <para> messages   -   the <ulink url="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</ulink> adaptor for the Page <ulink url="click-api/org/apache/click/Page.html#getMessage(java.lang.String)">getMessage()</ulink> method</para>
-          </listitem>
-          <listitem>
-            <para> path   -   the <ulink url="click-api/org/apache/click/Page.html#path">path</ulink> of the page template to render</para>
-          </listitem>
-          <listitem>
-            <para> request   -   the pages <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</ulink> object</para>
-          </listitem>
-          <listitem>
-            <para> response   -   the pages <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</ulink> object</para>
-          </listitem>
-          <listitem>
-            <para> session   -   the <ulink url="click-api/org/apache/click/util/SessionMap.html">SessionMap</ulink> adaptor for the users <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</ulink></para>
-          </listitem>
-        </itemizedlist>
- It then merges the template with the page model and writes out results to the HttpServletResponse. When the model is being merged with the template, any Controls in the model may be rendered using their <literal>toString()</literal> method. The final step in this sequence is invoking each control&apos;s <literal>onDestroy()</literal> method and lastly invoke the Page&apos;s <literal>onDestroy()</literal> method. This method can be used to clean up resource associated with the Control or Page before it is garbage collected. The <literal>onDestroy()</literal> method is guaranteed to be called even if an exception occurs in the previous steps. The execution sequence for POST requests is almost identical, except the <literal>onPost()</literal> method is invoked instead on <literal>onGet()</literal>. See the <ulink url="../images/post-sequence-diagram.png">POST Request Sequence Diagram</ulink>. Another view on the execution flow of Pages is illustrated in the Activity diagram below. <anchor id="pages.html-activity-diagram"/><inlinemediaobject>
-          <imageobject>
-            <imagedata fileref="./../images/activity-diagram-small.png" format="PNG"/>
-          </imageobject>
-        </inlinemediaobject>
-<indexterm>
-          <primary>activity-diagram</primary>
-        </indexterm>
- <emphasis role="bold">Figure 3.   Page Execution Activity Diagram</emphasis> - created with Enterprise Architect courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink></para>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<chapter id="chapter-pages" remap="h1">
+  <title>Pages</title>
+
+  <para>Pages are the heart of web applications. In Click, Pages encapsulate
+  the processing of HTML requests and the rendering of HTML responses.
+  The section discusses Click pages and covers to following topics:
+  </para>
+
+  <orderedlist>
+    <listitem>
       <para>
-        <anchor id="pages.html-page-param-auto-binding"/>
+        <link linkend="classes">Classes</link>  - page Java classes
       </para>
-      <indexterm>
-        <primary>page-param-auto-binding</primary>
-      </indexterm>
-    </sect1>
-    <sect1 remap="h2">
-      <title>3.  Request Param Auto Binding</title>
-      <para> Click will automatically bind any request parameter values to public Page fields with the same name. When binding these values it will also attempt to convert them to the correct type. The best way to understand this is to walk through an example. Our application recieves a GET request: <screen>
-http://localhost:8080/mycorp/customer-details.htm?
-customerId=
-7203
-</screen> This request is automatically handled by our <literal>CustomerDetails</literal> page: <screen>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="execution">Execution</link>  - page execution sequence
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="request-param-auto-binding">Request Param Auto Binding</link>
+        - request parameter to page field auto binding
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="page-security">Security</link>  - page security model
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="page-navigation">Navigation</link>  - navigation
+        between pages
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="page-templating">Page Templating</link>  - templating
+        common page content
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="page-direct-rendering">Direct Rendering</link>
+        - page direct rendering
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="stateful-pages">Stateful</link>  - stateful pages
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="page-error-handling">Error Handling</link>  - page
+        error handling
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="page-not-found">Page Not Found</link>  - page not
+        found handling
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="page-message-properties">Page Message Properties</link>
+        - pages message properties
+      </para>
+    </listitem>
+  </orderedlist>
 
-package com.mycorp.page;
+  <para>In Click, a logical page is composed of a Java class and a Velocity
+  template, with these components being defined in page elements of the
+  <ulink url="configuration.html#application-configuration">click.xml</ulink>
+  file:
+  </para>
 
+  <literallayout>&lt;page path="<varname>search.htm</varname>" classname="<token>com.mycorp.page.Search</token>"/&gt;</literallayout>
 
-public class CustomerDetails 
-extends Page {
+  <para>The path attribute specifies the location of the page Velocity template,
+  and the classname attribute specifies the page Java class name. If you use
+  the Freemarker template engine instead of Velocity, the setup is the same.
+  </para>
 
-    
-public Integer 
-customerId;
+  <para>The template path must have an <varname>.htm</varname> extension which
+  is specified in <link linkend="servlet-configuration">web.xml</link> to route
+  *.htm requests to the <classname>ClickServlet</classname>. Please note that
+  currently Click only accepts <varname>.htm</varname> requests, and cannot be
+  mapped to a different extension in <filename>web.xml</filename>.
+  </para>
 
-}
-</screen> After the CustomerDetails page has been created the &quot;customerId&quot; request parameter value &quot;7023&quot; will be converted into an Integer and assigned to the public page field <literal>customerId</literal>. Another feature of Click is that any public Page fields are automatically added to the page&apos;s model before it is rendered. This will make these values available in the page template for display. In our example the public <literal>customerId</literal> field will be added to the Page model and will be available for rendering in the page template: Our customer-details.htm page template contains: <screen>
-&lt;html&gt;
+  <para>If you use JSP pages for rendering the <varname>.jsp</varname> extension
+  must be used. For example:
+  </para>
+
+  <literallayout>&lt;page path="<varname>search.jsp</varname>" classname="<token>com.mycorp.page.Search</token>"/&gt;</literallayout>
+
+  <para>At runtime Click automatically converts the page path from
+  <varname>.jsp</varname> to <varname>.htm</varname> and back, so there is no
+  need to map the <varname>.jsp</varname> extension in <filename>web.xml</filename>.
+  </para>
+
+  <sect1 id="classes" remap="h2">
+    <title>Classes</title>
+
+    <para> All custom Click pages must subclass the
+    <ulink url="click-api/org/apache/click/Page.html">Page</ulink> base class.
+    The Page class and its associated companion classes, Context and Control,
+    are depicted in the figure below.
+    </para>
+
+    <figure id="page-class-diagram">
+      <title>Page Class Diagram &nbsp;-&nbsp; created with Enterprise Architect
+      courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink>
+      </title>
+      <inlinemediaobject>
+        <imageobject>
+          <imagedata fileref="images/pages/click-class-diagram.png" format="PNG" scale="85"/>
+        </imageobject>
+      </inlinemediaobject>
+    </figure>
+
+    <para>The Page class provides a
+    <ulink url="click-api/org/apache/click/Page.html#model">model</ulink>
+    attribute which is used to hold all the objects that are rendered in the
+    page's Velocity template. The model may also contain
+    <ulink url="click-api/org/apache/click/Control.html">Control</ulink>
+    objects, which provide user interface controls on the Page.
+    </para>
+
+    <para>Pages also have an associated
+    <ulink url="click-api/org/apache/click/Context.html">Context</ulink>
+    object which references all the javax.servlet objects associated with the
+    request. When programming in Click you use the Context object to access
+    HttpServletRequest attributes, parameters and the HttpSession object.
+    </para>
+
+  </sect1>
+
+  <sect1 id="execution" remap="h2">
+    <title>Execution</title>
+
+    <para>The Page class provide a number of empty handler methods which
+    subclasses can override to provide functionality:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="click-api/org/apache/click/Page.html#onSecurityCheck()">onSecurityCheck()</ulink>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="click-api/org/apache/click/Page.html#onInit()">onInit()</ulink>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="click-api/org/apache/click/Page.html#onGet()">onGet()</ulink>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="click-api/org/apache/click/Page.html#onPost()">onPost()</ulink>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="click-api/org/apache/click/Page.html#onRender()">onRender()</ulink>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="click-api/org/apache/click/Page.html#onDestroy()">onDestroy()</ulink>
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The ClickServlet relies on instantiating Pages using a public no
+    arguments constructor, so when you create Page subclasses you must ensure
+    you don't add an incompatible constructor. The GET request execution sequence
+    for Pages is summarized below in the Figure 2.
+    </para>
+
+    <figure id="get-sequence-diagram">
+      <title>GET Request Sequence Diagram &nbsp;-&nbsp; created with Enterprise
+      Architect courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink>
+      </title>
+      <inlinemediaobject>
+        <imageobject>
+          <imagedata fileref="images/pages/get-sequence-diagram.png" format="PNG" scale="85"/>
+        </imageobject>
+      </inlinemediaobject>
+    </figure>
+
+    <para>Stepping through this GET request sequence, a new Page instance is
+    created and the attributes for the Page are set (context, format, headers,
+    path). Next, request parameter values are bound to any matching public
+    Page fields.
+    </para>
+
+    <para>Then the <methodname>onSecurityCheck()</methodname> handler is executed.
+    This method can be used to ensure the user is authorized to access the page,
+    and if necessary abort any further processing.
+    </para>
+
+    <para>The next method invoked is <methodname>onInit()</methodname>, this is
+    where you place any post constructor initialization code.
+    <methodname>onInit()</methodname> is the ideal place to create controls such
+    as Forms, Fields and Tables. As illustrated by the diagram, after a Page's
+    <methodname>onInit()</methodname> is called, each Control, available at that
+    stage, will have their <methodname>onInit()</methodname> method called.
+    </para>
+
+    <para>
+    The next step is the processing of the Page's
+    <ulink url="click-api/org/apache/click/Page.html#controls">controls</ulink>.
+    The ClickSerlvet gets the list of Controls from the page and then iterates
+    through the list calling <methodname>onProcess()</methodname>. If any of the
+    Control's <methodname>onProcess()</methodname> methods return false,
+    processing of subsequent controls and the Page's <methodname>onGet()</methodname>
+    method is aborted.
+    </para>
+
+    <para>If everything is executing normally the Page's
+    <methodname>onGet()</methodname> method is now called.
+    </para>
+
+    <para>The next step is rendering the page template to generate the displayed
+    HTML. The ClickServlet gets the model (<classname>Map</classname>) from the
+    Page then adds the following objects to the model:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>any public Page fields using the fields name</para>
+      </listitem>
+      <listitem>
+        <para>context &nbsp;-&nbsp; the Servlet context path, e.g. /mycorp</para>
+      </listitem>
+      <listitem>
+        <para>cssImports &nbsp;-&nbsp; the CSS imports and style blocks to include
+        in the pages header. Please see
+        <ulink url="../click-api/org/apache/click/util/PageImports.html">PageImports</ulink>
+        for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>format &nbsp;-&nbsp; the
+        <ulink url="../click-api/org/apache/click/util/Format.html">Format</ulink>
+        object for formatting the display of objects.
+        </para>
+      </listitem>
+      <listitem>
+        <para>imports &nbsp;-&nbsp; the CSS and JavaScript imports to include in the pages
+        header. Please see
+        <ulink url="../click-api/org/apache/click/util/PageImports.html">PageImports</ulink>
+        for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>jsImports &nbsp;-&nbsp; the JavaScript imports and script blocks to include in the pages footer. Please see
+          <ulink url="../click-api/org/apache/click/util/PageImports.html">PageImports</ulink> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>messages &nbsp;-&nbsp; the
+        <ulink url="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</ulink>
+        adaptor for the Page
+        <ulink url="click-api/org/apache/click/Page.html#getMessage(java.lang.String)">getMessage()</ulink>
+        method
+        </para>
+      </listitem>
+      <listitem>
+        <para>path &nbsp;-&nbsp; the
+        <ulink url="click-api/org/apache/click/Page.html#path">path</ulink> of
+        the page template to render
+        </para>
+      </listitem>
+      <listitem>
+        <para>request &nbsp;-&nbsp; the pages
+        <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</ulink>
+        object
+        </para>
+      </listitem>
+      <listitem>
+        <para>response &nbsp;-&nbsp; the pages
+        <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</ulink>
+        object
+        </para>
+      </listitem>
+      <listitem>
+        <para>session &nbsp;-&nbsp; the
+        <ulink url="click-api/org/apache/click/util/SessionMap.html">SessionMap</ulink>
+        adaptor for the users
+        <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</ulink>
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>It then merges the template with the page model and writes out results
+    to the HttpServletResponse. When the model is being merged with the template,
+    any Controls in the model may be rendered using their
+    <methodname>toString()</methodname> method.
+    </para>
+
+    <para>The final step in this sequence is invoking each control's
+    <methodname>onDestroy()</methodname> method and lastly invoke the Page's
+    <methodname>onDestroy()</methodname> method. This method can be used to
+    clean up resource associated with the Control or Page before it is garbage
+    collected. The <methodname>onDestroy()</methodname> method is guaranteed to
+    be called even if an exception occurs in the previous steps.
+    </para>
+
+    <para>The execution sequence for POST requests is almost identical, except
+    the <methodname>onPost()</methodname> method is invoked instead on
+    <methodname>onGet()</methodname>. See the
+    <ulink url="../../resources/post-sequence-diagram.png">POST Request Sequence Diagram</ulink>.
+    </para>
+
+    <para>Another view on the execution flow of Pages is illustrated in the
+    Activity diagram below.
+    </para>
+
+    <figure id="activity-diagram">
+      <title>Page Execution Activity Diagram &nbsp;-&nbsp; created with Enterprise
+      Architect courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink>
+      </title>
+      <inlinemediaobject>
+        <imageobject>
+          <imagedata fileref="images/pages/activity-diagram-small.png" format="PNG" scale="85"/>
+        </imageobject>
+      </inlinemediaobject>
+    </figure>
+
+  </sect1>
+
+  <sect1 id="request-param-auto-binding" remap="h2">
+    <title>Request Param Auto Binding</title>
+
+    <para>Click will automatically bind any request parameter values to public
+    Page fields with the same name. When binding these values it will also
+    attempt to convert them to the correct type.
+    </para>
+
+    <para>The best way to understand this is to walk through an example. Our
+    application recieves a GET request:
+    </para>
+
+    <literallayout>http://localhost:8080/mycorp/customer-details.htm?<varname>customerId</varname>=<symbol>7203</symbol></literallayout>
+
+    <para>This request is automatically handled by our
+    <classname>CustomerDetails</classname> page:
+    </para>
+
+    <programlisting>package com.mycorp.page;
+
+public class CustomerDetails extends Page {
+
+    public Integer <varname>customerId</varname>;
+}</programlisting>
+
+    <para>After the CustomerDetails page has been created the
+    "<varname>customerId</varname>" request parameter value "<symbol>7023</symbol>"
+    will be converted into an Integer and assigned to the public page field
+    <varname>customerId</varname>.
+    </para>
+
+    <para>Another feature of Click is that any public Page fields are
+    automatically added to the page's model before it is rendered. This will
+    make these values available in the page template for display. In our example
+    the public <varname>customerId</varname> field will be added to the Page
+    model and will be available for rendering in the page template.
+    </para>
+
+    <para>Our customer-details.htm page template contains:
+    </para>
+
+    <programlisting>&lt;html&gt;
 &lt;body&gt;
- 
-  Customer ID: 
-$
-customerId
- 
+
+  Customer ID: <symbol>$</symbol><varname>customerId</varname>
+
 &lt;/body&gt;
-&lt;/html&gt;
-</screen> After processing the request our page would be rendered as: <informaltable frame="none">
-          <tgroup cols="1">
-            <colspec colname="c1" colwidth="100*"/>
-            <tbody>
-              <row>
-                <entry>
-                  <para>Customer ID: 7203</para>
-                </entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
-</para>
-      <sect2 remap="h3">
-        <title>3.1  Customizing Auto Binding</title>
-        <para> Auto binding supports the conversion of request string parameters into the Java classes: Integer, Double, Boolean, Byte, Character, Short, Long, Float, BigInteger, BigDecimal, String and the various Date classes. By default type conversion is performed by the <ulink url="click-api/org/apache/click/util/RequestTypeConverter.html">RequestTypeConverter</ulink> class which is used by the ClickServlet method <ulink url="click-api/org/apache/click/ClickServlet.html#getTypeConverter()">getTypeConverter()</ulink>. If you need to add support for additional types, you would write your own type converter class and subclass the ClickSerlvet to use your custom converter. For example if we wanted to automatically load a <literal>Customer</literal> object from the database when a customer id request parameter is specified, you could write your own type converter: <screen>
+&lt;/html&gt;</programlisting>
 
-public class CustomTypeConverter 
-extends RequestTypeConverter {
+    <para>After processing the request our page would be rendered as:
+    </para>
 
-    
-private CustomerService customerService = 
-new CustomerService();
+    <literallayout>Customer ID: 7203</literallayout>
 
-    
-/**
+    <sect2 id="customizing-auto-binding" remap="h3">
+      <title>Customizing Auto Binding</title>
+
+      <para>Auto binding supports the conversion of request string parameters
+      into the Java classes: Integer, Double, Boolean, Byte, Character, Short,
+      Long, Float, BigInteger, BigDecimal, String and the various Date classes.
+      </para>
+
+      <para>By default type conversion is performed by the
+      <ulink url="click-api/org/apache/click/util/RequestTypeConverter.html">RequestTypeConverter</ulink>
+      class which is used by the ClickServlet method
+      <ulink url="click-api/org/apache/click/ClickServlet.html#getTypeConverter()">getTypeConverter()</ulink>.
+      </para>
+
+      <para>If you need to add support for additional types, you would write your
+      own type converter class and subclass the ClickSerlvet to use your custom
+      converter.
+      </para>
+
+      <para>For example if we wanted to automatically load a
+      <classname>Customer</classname> object from the database when a customer
+      id request parameter is specified, you could write your own type converter:
+      </para>
+
+      <programlisting>public class CustomTypeConverter extends RequestTypeConverter {
+
+    private CustomerService customerService = new CustomerService();
+
+    /**
      * @see RequestTypeConverter#convertValue(Object, Class)
      */
-    
-protected Object convertValue(Object value, Class toType) {
-        
-if (toType == Customer.
-class) {
-            
-return customerService.getCustomerForId(value);
-            
-        } 
-else {
-            
-return super.convertValue(value, toType);
+    protected Object convertValue(Object value, Class toType) {
+        if (toType == Customer.class) {
+            return customerService.getCustomerForId(value);
+
+        } else {
+            return super.convertValue(value, toType);
         }
     }
-}
-</screen> This type converter would handle the following request: <screen>
- http://localhost:8080/mycorp/customer-details.htm?
-customer=
-7203
-</screen> This request will load the customer object from the database using &quot;7203&quot; as the customer id value. The ClickServlet would then assign this customer object to the matching page field: <screen>
+}</programlisting>
 
-package com.mycorp.page;
+      <para>This type converter would handle the following request:
+      </para>
 
+      <literallayout>http://localhost:8080/mycorp/customer-details.htm?<varname>customer</varname>=<symbol>7203</symbol></literallayout>
 
-public class CustomerDetails 
-extends Page {
+      <para>This request will load the <varname>customer</varname> object from
+      the database using "<symbol>7203</symbol>" as the customer id value. The
+      ClickServlet would then assign this <varname>customer</varname> object to
+      the matching page field:
+      </para>
 
-    
-public Customer 
-customer;
+      <programlisting>package com.mycorp.page;
 
-}
-</screen> To make your custom type converter available you will need to subclass ClickServlet and override the <literal>getTypeConverter()</literal> method. For example: <screen>
+public class CustomerDetails extends Page {
 
-public class CustomClickServlet 
-extends ClickServlet {
+    public Customer <varname>customer</varname>;
 
-    
-/**
+}</programlisting>
+
+      <para>To make your custom type converter available you will need to
+      subclass ClickServlet and override the
+      <methodname>getTypeConverter()</methodname> method. For example:
+      </para>
+
+      <programlisting>public class CustomClickServlet extends ClickServlet {
+
+    /**
      * @see ClickServlet#getTypeConverter()
      */
-    
-protected TypeConverter getTypeConverter() {
-        
-if (typeConverter == 
-null) {
-            typeConverter = 
-new CustomTypeConverter();
+    protected TypeConverter getTypeConverter() {
+        if (typeConverter == null) {
+            typeConverter = new CustomTypeConverter();
         }
-        
-return typeConverter;
+        return typeConverter;
     }
-}
-</screen><anchor id="pages.html-page-security"/><indexterm>
-            <primary>page-security</primary>
-          </indexterm>
-</para>
-      </sect2>
-    </sect1>
-    <sect1 remap="h2">
-      <title>4.  Security</title>
-      <para> Pages provide an <ulink url="click-api/org/apache/click/Page.html#onSecurityCheck()">onSecurityCheck</ulink> event handler which application pages can override to implement a programmatic security model. Please note you generally don&apos;t need to use this capability, and where possible you should use the declarative JEE security model. See the Best Practices <ulink url="best-practices.html#security">Security</ulink> topic for more details. </para>
-      <sect2 remap="h3">
-        <title>4.1  Application Authentication</title>
-        <para> Applications can use the <literal>onSecurityCheck()</literal> method to implement their own security model. The example class below provides a base Secure page class which other pages can extend to ensure the user is logged in. In this example the login page creates a session when a user successfully authenticates. This Secure page then checks to make sure the user has a session, otherwise the request is redirected to the login page. <screen>
+}</programlisting>
 
-public class Secure 
-extends Page {
+    </sect2>
+  </sect1>
 
-    
-/**
+  <sect1 id="page-security" remap="h2">
+    <title>Security</title>
+
+    <para>Pages provide an
+    <ulink url="click-api/org/apache/click/Page.html#onSecurityCheck()">onSecurityCheck</ulink>
+    event handler which application pages can override to implement a
+    programmatic security model.
+    </para>
+
+    <para>Please note you generally don't need to use this capability, and where
+    possible you should use the declarative JEE security model. See the Best
+    Practices <ulink url="best-practices.html#security">Security</ulink> topic
+    for more details.
+    </para>
+
+    <sect2 id="applications-authentication" remap="h3">
+      <title>Application Authentication</title>
+
+      <para>Applications can use the <methodname>onSecurityCheck()</methodname>
+      method to implement their own security model. The example class below
+      provides a base Secure page class which other pages can extend to ensure
+      the user is logged in. In this example the login page creates a session
+      when a user successfully authenticates. This Secure page then checks to
+      make sure the user has a session, otherwise the request is redirected to
+      the login page.
+      </para>
+
+      <programlisting>public class Secure extends Page {
+
+    /**
      * @see Page#onSecurityCheck()
      */
-    
-public boolean onSecurityCheck() {
-    
-        
-if (getContext().hasSession()) {
-            
-return true;
-            
-        } 
-else {
-            setRedirect(LoginPage.
-class);
-            
-return false;
+    public boolean onSecurityCheck() {
+
+        if (getContext().hasSession()) {
+            return true;
+
+        } else {
+            setRedirect(LoginPage.class);
+            return false;
         }
     }
-} 
-</screen></para>
-      </sect2>
-      <sect2 remap="h3">
-        <title>4.2  Container Authentication</title>
-        <para> Alternatively you can also use the security services provided by the JEE Servlet Container. For instance to ensure users have been authenticated by the Serlvet Container you could use a Secure page of: <screen>
+}</programlisting>
+    </sect2>
 
-public class Secure 
-extends Page {
+    <sect2 id="container-authentication" remap="h3">
+      <title>Container Authentication</title>
 
-    
-/**
+      <para>Alternatively you can also use the security services provided by
+      the JEE Servlet Container. For instance to ensure users have been
+      authenticated by the Serlvet Container you could use a Secure page of:
+      </para>
+
+      <programlisting>public class Secure extends Page {
+
+    /**
      * @see Page#onSecurityCheck()
      */
-    
-public boolean onSecurityCheck() {
-    
-        
-if (getContext().getRequest().<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html#getRemoteUser()"> getRemoteUser</ulink>() != 
-null) {
-            
-return true;
-            
-        } 
-else {
-            setRedirect(LoginPage.
-class);
-            
-return false;
+    public boolean onSecurityCheck() {
+
+        if (getContext().getRequest().<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html#getRemoteUser()"><varname>getRemoteUser</varname></ulink>() != null) {
+            return true;
+
+        } else {
+            setRedirect(LoginPage.class);
+            return false;
         }
     }
-}
-</screen></para>
-      </sect2>
-      <sect2 remap="h3">
-        <title>4.3  Container Access Control</title>
-        <para> The Servlet Container also provides facilities to enforce role based access control (authorization). The example below is a base page to ensure only users in the &quot;admin&quot; role can access the page, otherwise users are redirected to the login page. Application Admin pages would extend this secure page to provide their functionality. <screen>
+}</programlisting>
 
-public class AdminPage 
-extends Page {
+    </sect2>
 
-    
-/**
+    <sect2 id="container-access-control" remap="h3">
+      <title>Container Access Control</title>
+
+      <para>The Servlet Container also provides facilities to enforce role
+      based access control (authorization). The example below is a base page
+      to ensure only users in the "admin" role can access the page, otherwise
+      users are redirected to the login page. Application Admin pages would
+      extend this secure page to provide their functionality.
+      </para>
+
+      <programlisting>public class AdminPage extends Page {
+
+    /**
      * @see Page#onSecurityCheck()
      */
-    
-public boolean onSecurityCheck() {
-    
-        
-if (getContext().getRequest().<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)"> isUserInRole</ulink>(
-&quot;admin&quot;)) {
-            
-return true;
+    public boolean onSecurityCheck() {
 
-        } 
-else {
-            setRedirect(LoginPage.
-class);
-            
-return false;
+        if (getContext().getRequest().<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)"><varname>isUserInRole</varname></ulink>("admin")) {
+            return true;
+
+        } else {
+            setRedirect(LoginPage.class);
+            return false;
         }
     }
-}
-</screen></para>
-      </sect2>
-      <sect2 remap="h3">
-        <title>4.4  Logging Out</title>
-        <para> To logout using the application or container based security models you would simply invalidate the session. <screen>
+}</programlisting>
 
-public class Logout 
-extends Page {
+    </sect2>
 
-    
-/**
+    <sect2 id="logging-out" remap="h3">
+      <title>Logging Out</title>
+
+      <para>To logout using the application or container based security models
+      you would simply invalidate the session.
+      </para>
+
+      <programlisting>public class Logout extends Page {
+
+    /**
      * @see Page#onInit()
      */
-    
-public void onInit() {
-        getContext().getSession().<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html#invalidate()"> invalidate</ulink>();
+    public void onInit() {
+        getContext().getSession().<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html#invalidate()"><varname>invalidate</varname></ulink>();
     }
-} 
-</screen><anchor id="pages.html-page-navigation"/><indexterm>
-            <primary>page-navigation</primary>
-          </indexterm>
-</para>
-      </sect2>
-    </sect1>
-    <sect1 remap="h2">
-      <title>5.  Navigation</title>
-      <para> Navigation between pages is achieved by using forwards, redirects and by setting the page template path. <anchor id="pages.html-page-foward"/><indexterm>
-          <primary>page-foward</primary>
-        </indexterm>
-</para>
-      <sect2 remap="h3">
-        <title>5.1  Forward</title>
-        <para> To forward to another page using the servlet <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/RequestDispatcher.html">RequestDispatcher</ulink>, set the Page&apos;s forward property. For example to forward to a page with a path index.htm: <screen>
+}</programlisting>
 
-/**
+    </sect2>
+  </sect1>
+
+  <sect1 id="page-navigation" remap="h2">
+    <title>Page Navigation</title>
+
+    <para> Navigation between pages is achieved by using forwards, redirects
+    and by setting the page template path.
+    </para>
+
+    <sect2 id="forward" remap="h3">
+      <title>Forward</title>
+
+      <para> To forward to another page using the servlet
+      <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/RequestDispatcher.html">RequestDispatcher</ulink>,
+      set the Page's forward property. For example to forward to a page with a
+      path <varname>index.htm</varname>:
+      </para>
+
+      <programlisting>/**
  * @see Page#onPost()
  */
-
 public void onPost() {
-   
-// Process form post
-   ..
-   
-   setForward(
-&quot;index.htm&quot;);
-} 
-</screen> This will invoke a new Page class instance mapped to the path index.htm. <emphasis role="bold">Please note</emphasis> when a request is forwarded to another Page, the controls on the second page will not be processed. This prevents confusion and bugs, like a form on the second page trying to process a POST request from the first page. </para>
-        <sect3 remap="h4">
-          <title>5.1.1  Forward Parameter Passing</title>
-          <para> When you forward to another page the request parameters are maintained. This is a handy way of passing through state information with the request. For example you could add a customer object as a request parameter which is displayed in the template of the forwarded page. <screen>
+    // Process form post
+    ..
 
-public boolean onViewClick() {
-   Long id = viewLink.getValueLong();
-   Customer customer = CustomerDAO.findByPK(id); 
-   
-   
-// Set the customer object as a request parameter
-   getContext().setRequestAttribute(
-&quot;customer&quot;, customer);
-   setForward(
-&quot;view-customer.htm&quot;);
-   
-   
-return false;
-} 
-</screen> The snippet above forwards to the page template view-customer.htm: <screen>
-&lt;html&gt;
+    setForward("index.htm");
+}</programlisting>
+
+      <para>This will invoke a new Page class instance mapped to the path
+      <varname>index.htm</varname>.
+      </para>
+
+      <para><emphasis role="bold">Please note</emphasis> when a request is
+      forwarded to another Page, the controls on the second page will not be
+      processed. This prevents confusion and bugs, like a form on the second page
+      trying to process a POST request from the first page.
+      </para>
+
+      <sect3 id="forward-parameter-passing" remap="h4">
+        <title>Forward Parameter Passing</title>
+
+        <para>When you forward to another page the request parameters are
+        maintained. This is a handy way of passing through state information
+        with the request. For example you could add a customer object as a
+        request parameter which is displayed in the template of the forwarded
+        page.
+        </para>
+
+        <programlisting>public boolean onViewClick() {
+    Long id = viewLink.getValueLong();
+    Customer customer = CustomerDAO.findByPK(id);
+
+    // Set the customer object as a request parameter
+    getContext().setRequestAttribute("customer", customer);
+    setForward("view-customer.htm");
+
+    return false;
+}</programlisting>
+
+        <para>The snippet above forwards to the page template
+        <varname>view-customer.htm</varname>:
+        </para>
+
+        <programlisting>&lt;html&gt;
  &lt;head&gt;
    &lt;title&gt;Customer Details&lt;/title&gt;
  &lt;/head&gt;
  &lt;body&gt;
    &lt;h1&gt;Customer Details&lt;/h1&gt;
    &lt;pre&gt;
-     Full Name: 
-$customer.fullName
-     Email:     
-$customer.email
-     Telephone: 
-$customer.telephone
+     Full Name: <varname>$customer.fullName</varname>
+     Email:     <varname>$customer.email</varname>
+     Telephone: <varname>$customer.telephone</varname>
     &lt;/pre&gt;
   &lt;/body&gt;
-&lt;/html&gt; 
-</screen> Request attributes are automatically added to the Velocity Context object so are available in the page template. <anchor id="pages.html-page-forwarding"/><indexterm>
-              <primary>page-forwarding</primary>
-            </indexterm>
-</para>
-        </sect3>
-        <sect3 remap="h4">
-          <title>5.1.2  Page Forwarding</title>
-          <para> Page forwarding is another way of passing information between pages. In this case you create the page to be forwarded to using the Context <ulink url="click-api/org/apache/click/Context.html#createPage(java.lang.String)">createPage()</ulink> method and then set properties directly on the Page. Finally set this page as the page to forward the request to. For example: <screen>
+&lt;/html&gt;</programlisting>
 
-public boolean onEditClick() {
-   Long id = viewLink.getValueLong();
-   Customer customer = CustomerDAO.findByPK(id); 
-   
-   
-// Create a new EditPage instance based on the specified path
-   EditPage editPage = (EditPage) getContext().createPage(
-&quot;/edit-customer.htm&quot;);
-   editPage.setCustomer(customer);
-   setForward(editPage);
-   
-   
-return false;
-} 
-</screen> When creating a page with the <literal>createPage()</literal> method ensure you prefix the page path with the <literal>&quot;/&quot;</literal> character. You can also specify the target page using its class as long as the Page has a unique path. (Although uncommon it is possible to map more than one path to the same class. In these cases invoking Context.createPage will throw an exception, because Click will not be able to determine which path to use). Using this technique the above code becomes: <screen>
+        <para>Request attributes are automatically added to the Velocity Context
+    object so are available in the page template.
+        </para>
+      </sect3>
 
-public boolean onEditClick() {
-   Long id = viewLink.getValueLong();
-   Customer customer = CustomerDAO.findByPK(id); 
-   
-   
-// Create a new EditPage instance based on its class
-   EditPage editPage = (EditPage) getContext().createPage(EditPage.
-class);
-   editPage.setCustomer(customer);
-   setForward(editPage);
-   
-   
-return false;
-}
-</screen> This Page forwarding technique is best practice as it provides you with compile time safety and alleviates you from having to specify page paths in your code. Please always use the Context <literal>createPage()</literal> methods to allow Click to inject Page dependencies. <anchor id="pages.html-page-template-path"/><indexterm>
-              <primary>page-template-path</primary>
-            </indexterm>
-</para>
-        </sect3>
-      </sect2>
-      <sect2 remap="h3">
-        <title>5.2  Template Path</title>
-        <para> An alternative method of forwarding to a new page is to simply set the current Page&apos;s path to the new page template to render. With this approach the page template being rendered must have everything it needs without having its associated Page object created. Our modified example would be: <screen>
+      <sect3 id="page-forwarding" remap="h4">
+        <title>Page Forwarding</title>
 
-public boolean onViewClick() {
-   Long id = viewLink.getValueLong();
-   Customer customer = CustomerDAO.findByPK(id); 
-    
-   addModel(
-&quot;customer&quot;, customer);
-   
-   
-// Set the Page&apos;s path to a new value
-   setPath(
-&quot;view-customer.htm&quot;);
-   
-   
-return false;
-} 
-</screen> Note how the <emphasis condition="red" role="color">customer</emphasis> object is passed through to the template in the Page model. This approach of using the Page model is not available when you forward to another Page, as the first Page object is &quot;<ulink url="click-api/org/apache/click/Page.html#onDestroy()">destroyed</ulink>&quot; before the second Page object is created and any model values would be lost. <anchor id="pages.html-page-redirect"/><indexterm>
-            <primary>page-redirect</primary>
-          </indexterm>
-</para>
-      </sect2>
-      <sect2 remap="h3">
-        <title>5.3  Redirect</title>
-        <para> Redirects are another very useful way to navigate between pages. See HttpServletResponse.<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html#sendRedirect(java.lang.String)">sendRedirect</ulink>(location) for details. The great thing about redirects are that they provide a clean URL in the users browser which matches the page that they are viewing. This is important for when users want to bookmark a page. The downside of redirects are that they involve a communications round trip with the users browser which requests the new page. Not only does this take time, it also means that all the page and request information is lost. An example of a redirect to a logout.htm page is provided below: <screen>
+        <para>Page forwarding is another way of passing information between
+        pages. In this case you create the page to be forwarded to using the
+        Context <ulink url="click-api/org/apache/click/Context.html#createPage(java.lang.String)">createPage(String)</ulink>
+        method and then set properties directly on the Page. Finally set this
+        page as the page to forward the request to. For example:
+        </para>
 
-public boolean onLogoutClick() {
-   setRedirect(
-&quot;/logout.htm&quot;);
-   
-return false;
-} 
-</screen> If the redirect location begins with a &quot;/&quot; character the redirect location will be prefixed with the web applications context path. For example if an application is deployed to the context &quot;mycorp&quot; calling <literal>setRedirect(&quot;/customer/details.htm&quot;)</literal> will redirect the request to: &quot;/mycorp/customer/details.htm&quot; You can also obtain the redirect path via the target Page&apos;s class. For example: <screen>
+        <programlisting>public boolean onEditClick() {
+    Long id = viewLink.getValueLong();
+    Customer customer = CustomerDAO.findByPK(id);
 
-public boolean onLogoutClick() {
-   String path = getContext().getPagePath(Logout.
-class);
-   setRedirect(path);
-   
-return false;
-} 
-</screen> Note when using this redirect method, the target Page class must have a unique path. A short hand way of redirecting is to simply specify the target Page class in the redirect method. For example: <screen>
+    // Create a new EditPage instance based on the specified path
+    EditPage editPage = (EditPage) getContext().createPage("/edit-customer.htm");
+    editPage.setCustomer(customer);
+    setForward(editPage);
 
-public boolean onLogoutClick() {
-   setRedirect(Logout.
-class);
-   
-return false;
-} 
-</screen></para>
-        <sect3 remap="h4">
-          <title>5.3.1  Redirect Parameter Passing</title>
-          <para> You can pass information between redirected pages using URL request parameters. The ClickServlet will encode the URL for you using HttpServletResponse.<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html#encodeRedirectURL(java.lang.String)">encodeRedirectURL</ulink>(url). In the example below a user will click on an OK button to confirm a payment. The <literal>onOkClick()</literal> button handler processes the payment, gets the payment transaction id, and then redirects to the trans-complete.htm page with the transaction id encoded in the URL. <screen>
+    return false;
+}</programlisting>
 
-public class Payment 
-extends Page {
-   ..
-   
-   
-public boolean onOkClick() {
-      
-if (form.isValid()) {
-         
-// Process payment
-         ..
-         
-         
-// Get transaction id
-         Long transId = OrderDAO.purchase(order);
-   
-         setRedirect(
-&quot;trans-complete.htm?transId=&quot; + transId);
-      
-         
-return false; 
-      } 
-  
-      
-return true;
-   }
-} 
-</screen> The Page class for the trans-complete.htm page can then get the transaction id through the request parameter <literal>&quot;transId&quot;</literal>: <screen>
+        <para>When creating a page with the <methodname>createPage()</methodname>
+        method, ensure you prefix the page path with the <varname>"/"</varname>
+        character.
+        </para>
 
-public class TransComplete 
-extends Page {
-   
-   
-/**
-    * @see Page#onInit()
-    */
-   
-public void onInit() {
-      String transId = getContext().getRequest().getParameter(
-&quot;transId&quot;);
-   
-      
-if (transId != 
-null) {
-      
-         
-// Get order details
-         Order order = OrderDAO.findOrderByPK(
-new Long(transId));
-         
-if (order != 
-null) {
-            addModel(
-&quot;order&quot;, order);
-         }
-      }
-   }
-} 
-</screen></para>
-        </sect3>
-        <sect3 remap="h4">
-          <title>5.3.2  Post Redirect</title>
-          <para> The parameter passing example above is also an example of a Post Redirect. The Post Redirect technique is a very useful method of preventing users from submitting a form twice by hitting the refresh button. <anchor id="pages.html-page-templating"/><indexterm>
-              <primary>page-templating</primary>
-            </indexterm>
-</para>
-        </sect3>
-      </sect2>
-    </sect1>
-    <sect1 remap="h2">
-      <title>6.  Page Templating</title>
-      <para> Click supports page templating (a.k.a. <emphasis>Tiles</emphasis> in Struts) enabling you to create a standardized look and feel for your web application and greatly reducing the amount of HTML you need to maintain. To implement templating define a border template base Page which content Pages should extend. The template base Page class overrides the Page <ulink url="click-api/org/apache/click/Page.html#getTemplate()">getTemplate()</ulink> method, returning the path of the border template to render. For example: <screen>
+        <para>You can also specify the target page using its class as long as
+        the Page has a unique path. Using this technique the above code becomes:
+        </para>
 
-public class BorderedPage 
-extends Page {
+        <programlisting>public boolean onEditClick() {
+    Long id = viewLink.getValueLong();
+    Customer customer = CustomerDAO.findByPK(id);
 
-    
-/**
-     * @see Page#getTemplate()
-     */
-    
-public String getTemplate() {
-        
-return 
-&quot;/border.htm&quot;;  
+    // Create a new EditPage instance based on its class
+    EditPage editPage = (EditPage) getContext().createPage(EditPage.class);
+    editPage.setCustomer(customer);
+    setForward(editPage);
+
+    return false;
+}</programlisting>
+
+        <para>This Page forwarding technique is best practice as it provides you
+        with compile time safety and alleviates you from having to specify page
+        paths in your code. Please always use the Context
+        <methodname>createPage()</methodname> methods to allow Click to inject
+        Page dependencies.
+        </para>
+
+        <para>Although uncommon it is possible to map more than one path to the
+        same class. In these cases invoking Context
+        <methodname>createPage(Class)</methodname> will throw an exception, because
+        Click will not be able to determine which path to use for the Page.
+        </para>
+
+      </sect3>
+    </sect2>
+
+    <sect2 id="template-path" remap="h3">
+      <title>Template Path</title>
+
+      <para>An alternative method of forwarding to a new page is to simply set
+      the current Page's path to the new page template to render. With this
+      approach the page template being rendered must have everything it needs
+      without having its associated Page object created. Our modified example
+      would be:
+      </para>
+
+      <programlisting>public boolean onViewClick() {
+    Long id = viewLink.getValueLong();
+    Customer customer = CustomerDAO.findByPK(id);
+
+    addModel("customer", customer);
+
+    // Set the Page's path to a new value
+    setPath("view-customer.htm");
+
+    return false;
+}</programlisting>
+
+      <para>Note how the <varname>customer</varname> object is passed through to
+      the template in the Page model. This approach of using the Page model is
+      not available when you forward to another Page, as the first Page object is
+      "<ulink url="click-api/org/apache/click/Page.html#onDestroy()">destroyed</ulink>"
+      before the second Page object is created and any model values would be lost.
+      </para>
+
+    </sect2>
+    <sect2 id="redirect" remap="h3">
+      <title>Redirect</title>
+
+      <para>Redirects are another very useful way to navigate between pages.
+      See HttpServletResponse.
+      <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html#sendRedirect(java.lang.String)">sendRedirect</ulink>
+      (location) for details.
+      </para>
+
+      <para>The great thing about redirects are that they provide a clean URL in
+      the users browser which matches the page that they are viewing. This is
+      important for when users want to bookmark a page. The downside of
+      redirects are that they involve a communications round trip with the users
+      browser which requests the new page. Not only does this take time, it also
+      means that all the page and request information is lost.
+      </para>
+
+      <para>An example of a redirect to a <varname>logout.htm</varname> page is
+      provided below:
+      </para>
+
+      <programlisting>public boolean onLogoutClick() {
+    setRedirect("/logout.htm");
+    return false;
+}</programlisting>
+
+      <para>If the redirect location begins with a <symbol>"/"</symbol> character
+      the redirect location will be prefixed with the web applications context
+      path. For example if an application is deployed to the context
+      <varname>"mycorp"</varname> calling
+      <methodname>setRedirect(<varname>"/customer/details.htm"</varname>)</methodname>
+      will redirect the request to: <varname>"/mycorp/customer/details.htm"</varname>.
+      </para>
+
+      <para>You can also obtain the redirect path via the target Page's class.
+      For example:
+      </para>
+
+      <programlisting>public boolean onLogoutClick() {
+    String path = getContext().getPagePath(Logout.class);
+    setRedirect(path);
+    return false;
+}</programlisting>
+
+      <para>Note when using this redirect method, the target Page class must have
+      a unique path.
+      </para>
+
+      <para>A short hand way of redirecting is to simply specify the target Page
+      class in the redirect method. For example:
+      </para>
+
+      <programlisting>public boolean onLogoutClick() {
+    setRedirect(Logout.class);
+    return false;
+}</programlisting>
+
+      <sect3 id="redirect-parameter-passing" remap="h4">
+        <title>Redirect Parameter Passing</title>
+
+        <para>You can pass information between redirected pages using URL
+        request parameters. The ClickServlet will encode the URL for you using
+        HttpServletResponse.<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html#encodeRedirectURL(java.lang.String)">encodeRedirectURL</ulink>
+        (url).
+        </para>
+
+        <para>In the example below a user will click on an OK button to confirm
+        a payment. The <methodname>onOkClick()</methodname> button handler
+        processes the payment, gets the payment transaction id, and then
+        redirects to the <varname>trans-complete.htm</varname> page with the
+        transaction id encoded in the URL.
+        </para>
+
+        <programlisting>public class Payment extends Page {
+    ..
+
+    public boolean onOkClick() {
+        if (form.isValid()) {
+            // Process payment
+            ..
+
+            // Get transaction id
+            Long transId = OrderDAO.purchase(order);
+
+            setRedirect("trans-complete.htm?transId=" + transId);
+
+            return false;
+        }
+        return true;
     }
-}
-</screen> The BorderedPage template border.htm: <screen>
- &lt;html&gt;
-   &lt;head&gt;
-     &lt;title&gt;
-$title&lt;/title&gt;
-     &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;style.css&quot; title=&quot;Style&quot;/&gt;
-   &lt;/head&gt;
-   &lt;body&gt;
- 
-     &lt;h2 class=&quot;title&quot;&gt;
-$title&lt;/h2&gt;
- 
-     
-#parse(
-$path)
- 
-   &lt;/body&gt;
- &lt;/html&gt;
-</screen> Other pages insert their content into this template using the Velocity <ulink url="velocity/vtl-reference-guide.html#parse">#parse</ulink> directive, passing it their contents pages <ulink url="click-api/org/apache/click/Page.html#path">path</ulink>. The $path value is automatically added to the VelocityContext by the ClickServlet. An example bordered Home page is provided below: <screen>
-&lt;page path=&quot;
-home.htm&quot; classname=&quot;Home&quot;/&gt; 
-</screen><screen>
+}</programlisting>
 
-public class Home 
-extends BorderedPage {
-   
-     
-public String title = 
-&quot;Home&quot;;
+        <para>The Page class for the trans-complete.htm page can then get the
+        transaction id through the request parameter <varname>"transId"</varname>:
+        </para>
 
-}
-</screen> The Home page&apos;s content home.htm: <screen>
-&lt;b&gt;Welcome&lt;/b&gt; to Home page your starting point for the application.
-</screen> When a request is made for the Home page (home.htm) Velocity will merge the border.htm page and home.htm page together returning: <screen>
- &lt;html&gt;
-   &lt;head&gt;
-     &lt;title&gt;Home&lt;/title&gt;
-     &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;style.css&quot; title=&quot;Style&quot;/&gt;
-   &lt;/head&gt;
-   &lt;body&gt;
- 
-     &lt;h2 class=&quot;title&quot;&gt;Home&lt;/h2&gt;
- 
-     &lt;b&gt;Welcome&lt;/b&gt; to Home page your application starting point.
- 
-   &lt;/body&gt;
- &lt;/html&gt;
-</screen> Which may be rendered as: <informaltable frame="none">
-          <tgroup cols="1">
-            <colspec colname="c1" colwidth="100*"/>
-            <tbody>
-              <row>
-                <entry>
-                  <para>
-                    <emphasis remap="h2" role="bold">Home</emphasis>
-                  </para>
-                  <para><emphasis role="bold">Welcome</emphasis> to Home page your application starting point. </para>
-                </entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
- Note how the Home page class defines a title model value which is referenced in the border.htm template as $title. Each bordered page can define their own title which is rendered in this template. Templating with JSP pages is also supported using the same pattern. Please see the Click Examples application for a demonstration. <anchor id="pages.html-page-direct-rendering"/><indexterm>
-          <primary>page-direct-rendering</primary>
-        </indexterm>
-</para>
-    </sect1>
-    <sect1 remap="h2">
-      <title>7.  Direct Rendering</title>
-      <para> Pages support a direct rendering mode where you can render directly to the servlet response and bypass the page template rendering. This is useful for scenarios where you want to render non HTML content to the response, such as a PDF or Excel document. To do this: <itemizedlist>
-          <listitem>
-            <para> get the servlet response object</para>
-          </listitem>
-          <listitem>
-            <para> set the content type on the response</para>
-          </listitem>
-          <listitem>
-            <para> get the response output stream</para>
-          </listitem>
-          <listitem>
-            <para> write to the output stream</para>
-          </listitem>
-          <listitem>
-            <para> close the output stream</para>
-          </listitem>
-          <listitem>
-            <para> set the page path to null to inform the ClickServlet that rendering has been completed</para>
-          </listitem>
-        </itemizedlist>
- A direct rendering example is provided below. <screen>
-    
-    
-/**
-     * Render the Java source file as &quot;text/plain&quot;.
-     *
-     * @see Page#onGet()
+        <programlisting>public class TransComplete extends Page {
+    /**
+     * @see Page#onInit()
      */
-    
-public void onGet() {
-        String filename = ..
+    public void onInit() {
+        String transId = getContext().getRequest().getParameter("transId");
 
-        HttpServletResponse response = getContext().getResponse();
+        if (transId != null) {
 
-        response.setContentType(
-&quot;text/plain&quot;);
-        response.setHeader(
-&quot;Pragma&quot;, 
-&quot;no-cache&quot;);
-
-        ServletContext context = getContext().getServletContext();
-
-        InputStream inputStream = 
-null;
-        
-try {
-            inputStream = context.getResourceAsStream(filename);
-
-            PrintWriter writer = response.getWriter();
-
-            BufferedReader reader =
-                
-new BufferedReader(new InputStreamReader(inputStream));
-
-            String line = reader.readLine();
-
-            
-while (line != 
-null) {
-                writer.println(line);
-                line = reader.readLine();
+            // Get order details
+            Order order = OrderDAO.findOrderByPK(new Long(transId));
+            if (order != null) {
+                addModel("order", order);
             }
-            
-            setPath(
-null);
-
-        } 
-catch (IOException ioe) {
-            ioe.printStackTrace();
-
-        } 
-finally {
-            ClickUtils.close(inputStream);
         }
     }
-</screen><anchor id="pages.html-page-stateful"/><indexterm>
-          <primary>page-stateful</primary>
-        </indexterm>
-</para>
-    </sect1>
-    <sect1 remap="h2">
-      <title>8.  Stateful Pages</title>
-      <para> Click supports stateful pages where the state of the page is saved between the users requests. Stateful pages are useful in a number of scenarios including: <itemizedlist>
-          <listitem>
-            <para> Search page and edit page interactions. In this scenario you navigage from a stateful search page which may have filter criteria applied to an object edit page. Once object update has been completed on the edit page, the user is redirected to the search page and the stateful filter criteria still applies.</para>
-          </listitem>
-          <listitem>
-            <para> Complex pages with multiple forms and or tables which need to maintain their state between interactions.</para>
-          </listitem>
-        </itemizedlist>
- To make a page stateful you simply need to set the page <ulink url="click-api/org/apache/click/Page.html#stateful">stateful</ulink> property to true, have the page implement the <literal>Serializable</literal> interface and set the <literal>serialVersionUID</literal> indicator. For example: <screen>
+}</programlisting>
 
-package com.mycorp.page;
+      </sect3>
 
+      <sect3 id="post-redirect" remap="h4">
+        <title>Post Redirect</title>
+
+        <para>The parameter passing example above is also an example of a Post
+        Redirect. The Post Redirect technique is a very useful method of
+        preventing users from submitting a form twice by hitting the refresh
+        button.
+        </para>
+
+      </sect3>
+    </sect2>
+  </sect1>
+
+  <sect1 id="page-templating" remap="h2">
+    <title>Page Templating</title>
+
+    <para>Click supports page templating (a.k.a. <emphasis>Tiles</emphasis> in
+    Struts) enabling you to create a standardized look and feel for your web
+    application and greatly reducing the amount of HTML you need to maintain.
+    </para>
+
+    <para>To implement templating define a border template base Page which
+    content Pages should extend. The template base Page class overrides the Page
+    <ulink url="click-api/org/apache/click/Page.html#getTemplate()">getTemplate()</ulink>
+    method, returning the path of the border template to render. For example:
+    </para>
+
+    <programlisting>public class BorderedPage extends Page {
+
+    /**
+     * @see Page#getTemplate()
+     */
+    public String getTemplate() {
+        return "/border.htm";
+    }
+}</programlisting>
+
+    <para>The BorderedPage template <varname>border.htm</varname>:
+    </para>
+
+    <programlisting>&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;<varname>$title</varname>&lt;/title&gt;
+    &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+
+    &lt;h2 class="title"&gt;<varname>$title</varname>&lt;/h2&gt;
+
+    <command>#parse</command>(<varname>$path</varname>)
+
+  &lt;/body&gt;
+&lt;/html&gt;
+    </programlisting>
+
+    <para>Other pages insert their content into this template using the Velocity
+    <ulink url="velocity/vtl-reference-guide.html#parse">#parse</ulink>
+    directive, passing it their contents pages
+    <ulink url="click-api/org/apache/click/Page.html#path">path</ulink>. The
+    <varname>$path</varname> value is automatically added to the VelocityContext
+    by the ClickServlet.
+    </para>
+
+    <para>An example bordered Home page is provided below:
+    </para>
+
+    <literallayout>&lt;page path="<varname>home.htm</varname>" classname="<token>Home</token>"/&gt;</literallayout>
+
+    <programlisting>public class Home extends BorderedPage {
+
+    public String title = "Home";
+
+}</programlisting>
+
+    <para>The Home page's content <varname>home.htm</varname>:
+    </para>
+
+    <literallayout>&lt;b&gt;Welcome&lt;/b&gt; to Home page your starting point for the application.</literallayout>
+
+    <?dbfo-need height="1.2in" ?>
+
+    <para>When a request is made for the Home page (home.htm) Velocity will
+    merge the <varname>border.htm</varname> page and <varname>home.htm</varname>
+    page together returning:
+    </para>
+
+    <programlisting>&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Home&lt;/title&gt;
+    &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+
+    &lt;h2 class="title"&gt;Home&lt;/h2&gt;
+
+    &lt;b&gt;Welcome&lt;/b&gt; to Home page your application starting point.
+
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+    <para>Which may be rendered as:
+    </para>
+
+    <figure id="home-page-screenshot">
+      <title>Home Page</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/pages/home-page-screenshot.png" format="PNG" scale="85"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Note how the Home page class defines a <varname>title</varname> model
+    value which is referenced in the <varname>border.htm</varname> template as
+    <varname>$title</varname>. Each bordered page can define their own title
+    which is rendered in this template.
+    </para>
+
+    <para>Templating with JSP pages is also supported using the same pattern.
+    Please see the Click Examples application for a demonstration.
+    </para>
+
+  </sect1>
+
+  <sect1 id="page-direct-rendering" remap="h2">
+    <title>Direct Rendering</title>
+
+    <para>Pages support a direct rendering mode where you can render directly
+    to the servlet response and bypass the page template rendering. This is
+    useful for scenarios where you want to render non HTML content to the
+    response, such as a PDF or Excel document. To do this:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para> get the servlet response object</para>
+      </listitem>
+      <listitem>
+        <para> set the content type on the response</para>
+      </listitem>
+      <listitem>
+        <para> get the response output stream</para>
+      </listitem>
+      <listitem>
+        <para> write to the output stream</para>
+      </listitem>
+      <listitem>
+        <para> close the output stream</para>
+      </listitem>
+      <listitem>
+        <para> set the page path to null to inform the ClickServlet that
+        rendering has been completed</para>
+      </listitem>
+    </itemizedlist>
+
+    <?dbfo-need height="1.2in" ?>
+
+    <para>A direct rendering example is provided below.
+    </para>
+
+    <programlisting>/**
+ * Render the Java source file as "text/plain".
+ *
+ * @see Page#onGet()
+ */
+public void onGet() {
+    String filename = ..
+
+    HttpServletResponse response = getContext().getResponse();
+
+    response.setContentType("text/plain");
+    response.setHeader("Pragma", "no-cache");
+
+    ServletContext context = getContext().getServletContext();
+
+    InputStream inputStream = null;
+    try {
+        inputStream = context.getResourceAsStream(filename);
+
+        PrintWriter writer = response.getWriter();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+        String line = reader.readLine();
+
+        while (line != null) {
+            writer.println(line);
+            line = reader.readLine();
+        }
+
+        setPath(null);
+
+    } catch (IOException ioe) {
+        ioe.printStackTrace();
+
+    } finally {
+        ClickUtils.close(inputStream);
+    }
+}</programlisting>
+
+  </sect1>
+  <sect1 id="stateful-pages" remap="h2">
+    <title>Stateful Pages</title>
+
+    <para>Click supports stateful pages where the state of the page is saved
+    between the users requests. Stateful pages are useful in a number of
+    scenarios including:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+
+        <para>Search page and edit page interactions. In this scenario you
+        navigage from a stateful search page which may have filter criteria
+        applied to an object edit page. Once object update has been completed
+        on the edit page, the user is redirected to the search page and the
+        stateful filter criteria still applies.
+        </para>
+
+      </listitem>
+      <listitem>
+
+        <para>Complex pages with multiple forms and or tables which need to
+        maintain their state between interactions.
+        </para>
+
+      </listitem>
+    </itemizedlist>
+
+    <para>To make a page stateful you simply need to set the page
+    <ulink url="click-api/org/apache/click/Page.html#stateful">stateful</ulink>
+    property to true, have the page implement the <classname>Serializable</classname>
+    interface and set the <literal>serialVersionUID</literal> indicator.
+    For example:
+    </para>
+
+    <programlisting>package com.mycorp.page;
 
 import java.io.Serializable;
 
-
 import org.apache.click.Page;
- 
 
-public class SearchPage 
-extends Page 
-implements Serializable {
+public class SearchPage extends Page implements Serializable {
 
-    
-private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    
-public SearchPage() {
-        setStateful(
-true);
+    public SearchPage() {
+        setStateful(true);
         ..
     }
-} 
-</screen> Stateful page instances are stored in the user&apos;s <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</ulink> using the pages class name as the key. In the example above the page would be stored in the users session using the class name: <literal>com.mycorp.page.SearchPage</literal></para>
-      <sect2 remap="h3">
-        <title>8.1  Page Creation</title>
-        <para> With stateful pages they are only created once, after which they are retrieved from the session. However page event handlers are invoked for each request, including the <literal>onInit()</literal> method. When you are creating stateful pages you typically place all your control creation code in the Pages constructor so it is invoked only once. It is important not to place control creation code in the <literal>onInit()</literal> method which will be invoked with each request. If you have dynamic control creation code you would typically place this in the <literal>onInit()</literal> method, but you will need to take care that controls and or models are not already present in the page. </para>
-      </sect2>
-      <sect2 remap="h3">
-        <title>8.2  Page Execution</title>
-        <para> The default Click page execution model is thread safe as a new Page instance is created for each request and thread. With stateful pages a user will have a single page instance which is reused in multiple requests and threads. To ensure page execution is thread safe, users page instances are synchronized so only one request thread can execute a page instance at any one time. </para>
-      </sect2>
-      <sect2 remap="h3">
-        <title>8.3  Page Destruction</title>
-        <para> After normal page instances have been executed, they are de-referenced and garbage collected by the JVM. However with stateful pages they are stored in the users <literal>HttpSession</literal> so care needs to be take not to store too many objects in stateful page instances which may cause memory and performance issues. When pages have completed their execution, all the Page&apos;s controls <literal>onDestroy()</literal> methods are invoked, and then the Page&apos;s <literal>onDestroy()</literal> method is invoked. This is your opportunity to de-reference any large sets or graphs. For example the Table control by default de-references its rowList in its <ulink url="click-api/org/apache/click/control/Table.html#onDestroy()">onDestory()</ulink> method. <anchor id="pages.html-page-error-handling"/><indexterm>
-            <primary>page-error-handling</primary>
-          </indexterm>
-</para>
-      </sect2>
-    </sect1>
-    <sect1 remap="h2">
-      <title>9.  Error Handling</title>
-      <para> If an Exception occurs processing a Page object or rendering a template the error is delegated to the registered handler. The default Click error handler is the <ulink url="click-api/org/apache/click/util/ErrorPage.html">ErrorPage</ulink>, which is automatically configured as: <screen>
-&lt;page path=&quot;
-click/error.htm&quot; classname=&quot;
-org.apache.click.util.ErrorPage&quot;/&gt; 
-</screen> To register an alternative error handler you must subclass ErrorPage and define your page using the path &quot;click/error.htm&quot;. For example: <screen>
-&lt;page path=&quot;
-click/error.htm&quot; classname=&quot;
-com.mycorp.page.ErrorPage&quot;/&gt; 
-</screen> When the ClickSevlet starts up it checks to see whether the error.htm template exists in the click web sub directory. If it cannot find the page the ClickServlet will automatically deploy one. You can tailor the click/error.htm template to suite you own tastes, and the ClickServlet will not overwrite it. The default error template will display extensive debug information when the application is in <literal>development</literal> or <literal>debug</literal> mode. Example error page displays include: <itemizedlist>
-          <listitem>
-            <para><ulink url="error-npe.html">NullPointerException</ulink>  - in a page method</para>
-          </listitem>
-          <listitem>
-            <para><ulink url="error-parsing.html">ParseErrorException</ulink>  - in a page template</para>
-          </listitem>
-        </itemizedlist>
- When the application is in <literal>production</literal> mode only a simple error message is displayed. See <ulink url="configuration.html#application-mode">Configuration</ulink> for details on how to set the application mode. Please also see the <ulink url="examples.html">Examples</ulink> web app Exception Demo for demonstrations of Clicks error handling. <anchor id="pages.html-page-not-found"/><indexterm>
-          <primary>page-not-found</primary>
-        </indexterm>
-</para>
-    </sect1>
-    <sect1 remap="h2">
-      <title>10.  Page Not Found</title>
-      <para> If the ClickServlet cannot find a requested page in the <literal>click.xml</literal> config file it will use the registered <ulink url="not-found.html">not-found.htm</ulink> page. The Click not found page is automatically configured as: <screen>
-&lt;page path=&quot;
-click/not-found.htm&quot; classname=&quot;
-org.apache.click.Page&quot;/&gt; 
-</screen> You can override the default configuration and specify your own class, but you cannot change the path. When the ClickSevlet starts up it checks to see whether the not-found.htm template exists in the click web sub directory. If it cannot find the page the ClickServlet will automatically deploy one. You can tailor the click/not-found.htm template to suite you own needs. This page template has access to the usual Click objects. <anchor id="pages.html-page-messages"/><indexterm>
-          <primary>page-messages</primary>
-        </indexterm>
-</para>
-    </sect1>
-    <sect1 remap="h2">
-      <title>11.  Message Properties</title>
-      <para> The Page class provides a <ulink url="click-api/org/apache/click/Page.html#messages">messages</ulink> property which is a <ulink url="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</ulink> of localized messages for the page. These messages are made available in the VelocityContext when the page is rendered under the key <literal>messages</literal>. So for example if you had a page title message you would access it in your page template as: <screen>
-    &lt;h1&gt; 
-$
-messages.title &lt;/h1&gt;
-</screen> This messages map is loaded from the page class property bundle. For example if you had a page class <literal>com.mycorp.page.CustomerList</literal> you could have an associated property file containing the pages localized messages: <screen>
-/com/mycorp/page/CustomerList.properties
-</screen> You can also defined a application global page messages properties file: <screen>
-/click-page.properties
-</screen> Messages defined in this file will be available to all pages throughout your application. Note messages defined in your page class properties file will override any messages defined in the application global page properties file. Page messages can also be used to override Control messages, see the Controls <ulink url="controls.html#message-properties">Message Properties</ulink> topic for more details. </para>
-    </sect1>
-  </chapter>
+}</programlisting>
+
+    <para>Stateful page instances are stored in the user's
+    <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</ulink>
+    using the pages class name as the key. In the example above the page would
+    be stored in the users session using the class name:
+    <classname>com.mycorp.page.SearchPage</classname>
+    </para>
+
+    <sect2 id="page-creation" remap="h3">
+      <title>Page Creation</title>
+
+      <para>With stateful pages they are only created once, after which they
+      are retrieved from the session. However page event handlers are invoked
+      for each request, including the <methodname>onInit()</methodname> method.
+      </para>
+
+      <para>When you are creating stateful pages you typically place all your
+      control creation code in the Pages constructor so it is invoked only once.
+      It is important not to place control creation code in the
+      <methodname>onInit()</methodname> method which will be invoked with each
+      request.
+      </para>
+
+      <para>If you have dynamic control creation code you would typically place
+      this in the <methodname>onInit()</methodname> method, but you will need to
+      take care that controls and or models are not already present in the page.
+      </para>
+
+    </sect2>
+    <sect2 id="page-execution" remap="h3">
+      <title>Page Execution</title>
+
+      <para>The default Click page execution model is thread safe as a new
+      Page instance is created for each request and thread. With stateful
+      pages a user will have a single page instance which is reused in multiple
+      requests and threads. To ensure page execution is thread safe, users page
+      instances are synchronized so only one request thread can execute a page
+      instance at any one time.
+      </para>
+
+    </sect2>
+    <sect2 id="page-destruction" remap="h3">
+      <title>Page Destruction</title>
+
+      <para>After normal page instances have been executed, they are
+      de-referenced and garbage collected by the JVM. However with stateful
+      pages they are stored in the users <classname>HttpSession</classname> so
+      care needs to be take not to store too many objects in stateful page
+      instances which may cause memory and performance issues.
+      </para>
+
+      <para>When pages have completed their execution, all the Page's controls
+      <methodname>onDestroy()</methodname> methods are invoked, and then the
+      Page's <methodname>onDestroy()</methodname> method is invoked. This is
+      your opportunity to de-reference any large sets or graphs. For example the
+      Table control by default de-references its rowList in its
+      <ulink url="click-api/org/apache/click/control/Table.html#onDestroy()">onDestory()</ulink>
+      method.
+      </para>
+
+    </sect2>
+  </sect1>
+
+  <sect1 id="page-error-handling" remap="h2">
+    <title>Error Handling</title>
+
+    <para>If an Exception occurs processing a Page object or rendering a
+    template the error is delegated to the registered handler. The default
+    Click error handler is the
+    <ulink url="click-api/org/apache/click/util/ErrorPage.html">ErrorPage</ulink>,
+    which is automatically configured as:
+    </para>
+
+    <literallayout>&lt;page path="<varname>click/error.htm</varname>" classname="<symbol>org.apache.click.util.ErrorPage</symbol>"/&gt;</literallayout>
+
+    <para>To register an alternative error handler you must subclass ErrorPage
+    and define your page using the path <varname>"click/error.htm"</varname>.
+    For example:
+    </para>
+
+    <literallayout>&lt;page path="<varname>click/error.htm</varname>" classname="<symbol>com.mycorp.page.ErrorPage</symbol>"/&gt;</literallayout>
+
+    <para>When the ClickSevlet starts up it checks to see whether the
+    <varname>error.htm</varname> template exists in the <varname>click</varname>
+    web sub directory. If it cannot find the page the ClickServlet will
+    automatically deploy one. You can tailor the <varname>click/error.htm</varname>
+    template to suite you own tastes, and the ClickServlet will
+    not overwrite it.
+    </para>
+
+    <para>The default error template will display extensive debug information
+    when the application is in <literal>development</literal> or
+    <literal>debug</literal> mode. Example error page displays include:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="error-npe.html">NullPointerException</ulink> - in a page
+          method
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="error-parsing.html">ParseErrorException</ulink> - in a
+          page template
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>When the application is in <literal>production</literal> mode only
+    a simple error message is displayed. See
+    <ulink url="configuration.html#application-mode">Configuration</ulink>
+    for details on how to set the application mode.
+    </para>
+
+    <para>Please also see the <ulink url="examples.html">Examples</ulink> web
+    app Exception Demo for demonstrations of Clicks error handling.
+    </para>
+
+  </sect1>
+  <sect1 id="page-not-found" remap="h2">
+    <title>Page Not Found</title>
+
+    <para>If the ClickServlet cannot find a requested page in the
+    <literal>click.xml</literal> config file it will use the registered
+    <ulink url="not-found.html">not-found.htm</ulink> page.
+    </para>
+
+    <para>The Click <literal>not found page</literal> is automatically configured
+    as:
+    </para>
+
+    <literallayout>&lt;page path="<varname>click/not-found.htm</varname>" classname="<symbol>org.apache.click.Page</symbol>"/&gt;</literallayout>
+
+    <para>You can override the default configuration and specify your own class,
+    but you cannot change the path.
+    </para>
+
+    <para>When the ClickSevlet starts up it checks to see whether the
+    <varname>not-found.htm</varname> template exists in the <varname>click</varname>
+    web sub directory. If it cannot find the page the ClickServlet will
+    automatically deploy one.
+    </para>
+
+    <para>You can tailor the <varname>click/not-found.htm</varname> template to
+    suite you own needs. This page template has access to the usual Click objects.
+    </para>
+
+  </sect1>
+  <sect1 id="page-message-properties" remap="h2">
+    <title>Page Message Properties</title>
+
+    <para>The Page class provides a
+    <ulink url="click-api/org/apache/click/Page.html#messages">messages</ulink>
+    property which is a
+    <ulink url="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</ulink>
+    of localized messages for the page. These messages are made available in the
+    VelocityContext when the page is rendered under the key
+    <literal>messages</literal>. So for example if you had a page title message
+    you would access it in your page template as:
+    </para>
+
+    <literallayout>&lt;h1&gt; <symbol>$</symbol><varname>messages.title</varname> &lt;/h1&gt;</literallayout>
+
+    <para>This messages map is loaded from the page class property bundle. For
+    example if you had a page class <classname>com.mycorp.page.CustomerList</classname>
+    you could have an associated property file containing the pages localized
+    messages:
+    </para>
+
+    <literallayout>/com/mycorp/page/CustomerList.properties</literallayout>
+
+    <para>You can also defined a application global page messages properties file:
+    </para>
+
+    <literallayout>/click-page.properties</literallayout>
+
+    <para>Messages defined in this file will be available to all pages throughout
+    your application. Note messages defined in your page class properties file
+    will override any messages defined in the application global page properties
+    file.
+    </para>
+
+    <para>Page messages can also be used to override Control messages, see the
+    Controls <ulink url="controls.html#control-message-properties">Message Properties</ulink>
+    topic for more details.
+    </para>
+
+  </sect1>
+</chapter>
