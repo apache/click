@@ -189,6 +189,7 @@ div.navheader, div.navheader table {
 div.navfooter, div.navfooter table {
     font-family:    sans-serif;
     font-size:      12px;
+    clear:          both;
 }
 
 div.figure {
