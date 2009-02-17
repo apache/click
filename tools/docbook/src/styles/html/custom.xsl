@@ -20,7 +20,11 @@
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                xmlns:xslthl="http://xslthl.sf.net"
+                exclude-result-prefixes="xslthl"
                 version='1.0'>
+
   <xsl:param name="ulink.target">_blank</xsl:param>
 
 <!-- Activate Graphics -->
@@ -30,6 +34,7 @@
   <xsl:param name="callout.graphics" select="1" />
   <xsl:param name="callout.graphics.path">images/callouts/</xsl:param>
   <xsl:param name="callout.graphics.extension">.gif</xsl:param>
+  <xsl:param name="ignore.image.scaling" select="1"></xsl:param>
 
   <xsl:param name="table.borders.with.css" select="1"/>
   <xsl:param name="html.stylesheet">css/stylesheet.css</xsl:param>
@@ -59,5 +64,88 @@
         <l:template name="section" text="%n&#160;%t"/>
       </l:context>
     </l:l10n>
-  </l:i18n>      
+  </l:i18n>
+
+  <!-- Override title heading to print <i> instead of <b> -->
+  <xsl:template name="formal.object.heading">
+    <xsl:param name="object" select="."/>
+    <xsl:param name="title">
+      <xsl:apply-templates select="$object" mode="object.title.markup">
+        <xsl:with-param name="allow-anchors" select="1"/>
+      </xsl:apply-templates>
+    </xsl:param>
+
+    <p class="title">
+      <i>
+        <xsl:copy-of select="$title"/>
+      </i>
+    </p>
+  </xsl:template>
+
+  <!-- Placement of titles -->
+  <xsl:param name="formal.title.placement">
+        figure after
+        example after
+        equation before
+        table before
+        procedure before
+  </xsl:param>
+
+  <!-- Remove callout column width. Default is 5% -->
+  <xsl:template match="callout">
+    <tr>
+      <xsl:call-template name="tr.attributes">
+        <xsl:with-param name="rownum">
+          <xsl:number from="calloutlist" count="callout"/>
+        </xsl:with-param>
+      </xsl:call-template>
+
+      <td valign="top" align="left">
+        <xsl:call-template name="anchor"/>
+        <xsl:call-template name="callout.arearefs">
+          <xsl:with-param name="arearefs" select="@arearefs"/>
+        </xsl:call-template>
+      </td>
+      <td valign="top" align="left">
+        <xsl:apply-templates/>
+      </td>
+    </tr>
+  </xsl:template>
+
+  <!-- For external links (<ulink>), set the class attribute to "external" -->
+  <xsl:template match="ulink" name="ulink">
+    <xsl:variable name="link">
+      <a>
+        <xsl:if test="@id">
+          <xsl:attribute name="name">
+            <xsl:value-of select="@id"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:attribute name="class">external</xsl:attribute>
+        <!--<xsl:attribute name="title">
+          <xsl:value-of select="@url"/>
+        </xsl:attribute>-->
+        <xsl:attribute name="href">
+          <xsl:value-of select="@url"/>
+        </xsl:attribute>
+        <xsl:if test="$ulink.target != ''">
+          <xsl:attribute name="target">
+            <xsl:value-of select="$ulink.target"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="count(child::node())=0">
+            <xsl:value-of select="@url"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </a>
+    </xsl:variable>
+
+    <xsl:copy-of select="$link"/>
+  </xsl:template>
+
+
 </xsl:stylesheet>

@@ -54,7 +54,7 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
     </fail>
 
     <import file="${dbf.basedir}/build-docbook.xml"/>
-    
+
     <property name="docbook.dir" value="click"/>
     <property name="docbook.file" value="click-book"/>
 
@@ -80,17 +80,6 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
 
         <delete quiet="true" dir="${target.dir}/${docbook.dir}/tmp"/>
 
-        <!--
-            Add IE Mark of the Web to each html page.
-            NB: The MARK_OF_THE_WEB comment must end with a newline!
-        -->
-        <replace dir="${target.dir}/${docbook.dir}">
-            <include name="**/*.html"/>
-            <replacetoken>&lt;!-- MARK_OF_THE_WEB --&gt;</replacetoken>
-            <replacevalue>&lt;!-- saved from url=(0014)about:internet --&gt;
-            </replacevalue>
-        </replace>
-    
     <!--<fixcrlf srcdir="target/click" includes="**/*.html" eol="crlf" /> -->
     </target>
 
@@ -123,6 +112,59 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
             basedir="${src.dir}"
             fofile="${pdf.target.file}.xml"
             outfile="target/${docbook.dir}/pdf/${docbook.file}.pdf" />
+
+        <antcall target="postprocess"/>
+    </target>
+
+    <target name="html"
+            description="--> Generate HTML docs in multiple files">
+
+        <ant antfile="${dbf.basedir}/build-docbook.xml" target="html">
+            <property name="docbook.dir" value="${docbook.dir}"/>
+            <property name="docbook.file" value="${docbook.file}"/>
+        </ant>
+
+        <!--
+            Add IE Mark of the Web to each html page.
+            NB: The MARK_OF_THE_WEB comment must end with a newline!
+        -->
+        <replace dir="${target.dir}/${docbook.dir}">
+            <include name="**/html/*.html"/>
+            <replacetoken>&lt;!-- MARK_OF_THE_WEB --&gt;</replacetoken>
+            <replacevalue>&lt;!-- saved from url=(0014)about:internet --&gt;
+            </replacevalue>
+        </replace>
+
+        <antcall target="postprocess"/>
+
+    </target>
+
+    <target name="htmlsingle"
+            description="--> Generate HTML docs in a single, big file">
+
+        <ant antfile="${dbf.basedir}/build-docbook.xml" target="htmlsingle">
+            <property name="docbook.dir" value="${docbook.dir}"/>
+            <property name="docbook.file" value="${docbook.file}"/>
+        </ant>
+
+        <!--
+            Add IE Mark of the Web to each html page.
+            NB: The MARK_OF_THE_WEB comment must end with a newline!
+        -->
+        <replace dir="${target.dir}/${docbook.dir}">
+            <include name="**/htmlsingle/*.html"/>
+            <replacetoken>&lt;!-- MARK_OF_THE_WEB --&gt;</replacetoken>
+            <replacevalue>&lt;!-- saved from url=(0014)about:internet --&gt;
+            </replacevalue>
+        </replace>
+
+        <antcall target="postprocess"/>
+    </target>
+
+    <target name="postprocess">
+        <copy todir="${target.dir}/resources">
+            <fileset dir="${src.dir}/resources/"/>
+        </copy>
     </target>
 
   <!-- ======================================================================== -->
