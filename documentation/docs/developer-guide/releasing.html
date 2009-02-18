@@ -116,7 +116,7 @@
             </li>
             <li>
                 Upload the distribution to your account at <tt>people.apache.org</tt>
-                under the folder <tt>/home/USER/public_html/click/click/X.X.X</tt>, where
+                under the folder <tt>/home/USER/public_html/click/click/X.X.X/dist</tt>, where
                 USER is your Apache user name and X.X.X is the version number of Click.
 
                 <p/>
@@ -148,7 +148,7 @@ gpg --keyserver pgp.mit.edu --recv-keys 709F7561
                 Next verify the signature with the following command:
                 <pre class="codeConfig">
 ssh people.apache.org
-cd ~/public_html/click/click/X.X.X
+cd ~/public_html/click/click/X.X.X/dist
 gpg --verify click-X.X.X-incubating.zip.asc click-X.X.X-incubating.zip
 </pre>
             </li>
@@ -187,10 +187,16 @@ gpg --verify click-X.X.X-incubating.zip.asc click-X.X.X-incubating.zip
                 <tt>/www/www.apache.org/dist/incubator/click/click/X.X.X</tt>
 
                 <p/>
-                An easy way to do this is to copy the files from your <tt>public_html</tt>
-                folder for example:
-                <pre class="codeConfig">ssh people.apache.org
-cp ~/public_html/click/click/X.X.X/* /www/www.apache.org/dist/incubator/click/click/X.X.X
+                First off login at apache:
+                <pre class="codeConfig">ssh people.apache.org</pre>
+                Then make sure your umask is set to 002. If not, enter the following command:
+                <pre class="codeConfig">umask 002</pre>
+                <p/>
+                In order to publish the release you can copy the files from your
+                <tt>/public_html</tt> account to the apache distribution folder,
+                for example:
+                <pre class="codeConfig">
+cp -r ~/public_html/click/click/X.X.X/dist/click/ /www/www.apache.org/dist/incubator/click/click/X.X.X
 </pre>
             </li>
             <li>
