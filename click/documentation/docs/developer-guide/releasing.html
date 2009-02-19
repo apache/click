@@ -207,19 +207,6 @@ gpg --verify click-X.X.X-incubating.zip.asc click-X.X.X-incubating.zip
 cp -r ~/public_html/click/click/X.X.X/dist/click/ /www/www.apache.org/dist/incubator/click/click/X.X.X
 </pre>
             </li>
-            <li>
-                Upload the web site at <tt>people.apache.org</tt> under the folder
-                <p/>
-                <tt>/www/incubator.apache.org/click/</tt>
-                <p/>
-                Make sure the uploaded files have the right permissions (<tt>664</tt>).
-                If not execute the following commands to ensure file and directory
-                permissions are correct:
-                <pre class="codeConfig">ssh people.apache.org
-cd /www/incubator.apache.org/click/
-find . -type d | xargs chmod 776
-find . -type f | xargs chmod 664</pre>
-            </li>
         </ol>
 
         <h3>Publishing Maven Bundles</h3>
@@ -343,6 +330,32 @@ cp -r . /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click
 
         The following tasks should be completed once the release is out:
         <ul>
+            <li>
+            Upload the web site at <tt>people.apache.org</tt> under the folder
+                <tt>/www/incubator.apache.org/click/</tt>.
+                <p/>
+                You can either upload the website from your local machine or
+                checkout and sync the site on the people.apache.org server. For
+                example:
+                <pre class="codeConfig">
+ssh people.apache.org
+mkdir temp
+cd temp
+svn co http://svn.apache.org/repos/asf/incubator/click/trunk/click/
+cd click/build
+ant get-deps
+ant build-distribution
+rsync -avz --exclude ".svn" ~/temp/click/documentation/ /www/incubator.apache.org/click/</pre>
+
+                <p/>
+                Make sure the website files and folders have the right permissions (<tt>664</tt>).
+                If not execute the following commands to ensure file and directory
+                permissions are correct:
+                <pre class="codeConfig">ssh people.apache.org
+cd /www/incubator.apache.org/click/
+find . -type d | xargs chmod 776
+find . -type f | xargs chmod 664</pre>
+            </li>
             <li>
                 Email release announcement to <tt>click-user</tt> and <tt>click-dev</tt>
                 mailing lists.
