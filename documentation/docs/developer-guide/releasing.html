@@ -250,7 +250,7 @@ gpg --armor --output click-nodeps/click-nodeps-X.X.X-incubating.pom.asc --detach
                 artifacts have been deployed. More on this in the next section.
             </li>
             <li>
-                Maven <b>snapshots</b> must be uploaded to: <tt>/home/USER/public_html/click/click/X.X.X/maven2</tt>
+                Maven <tt>snapshots</tt> must be uploaded to: <tt>/home/USER/public_html/click/click/X.X.X/maven2</tt>
                 (USER should be replaced with your home dir on people.apache.org)
                 while <tt>releases</tt> must be uploaded to: <tt>/www/people.apache.org/repo/m2-ibiblio-rsync-repository</tt>.
                 <p/>
@@ -258,44 +258,61 @@ gpg --armor --output click-nodeps/click-nodeps-X.X.X-incubating.pom.asc --detach
                 the maven artifacts to the server. You will be prompted for your
                 GPG passphrase.
                 <ul>
-                    <li>
-                        For <tt>snapshots</tt> execute the following commands from the <tt>maven-upload</tt> folder:
-                        (If you have more than 1 GPG Key, use the <tt>keyname</tt> attribute
-                        to specify the KEY name.)
-                        <p/>
-                        <pre class="codeConfig">
+                    <li>For <b>snapshots</b> execute the following commands from the <tt>maven-upload</tt> folder:
+                    (If you have more than 1 GPG Key, use the <tt>keyname</tt> attribute
+                    to specify the KEY name.)
+                    <pre class="codeConfig">
+cd maven-upload
 mvn gpg:sign-and-deploy-file -DpomFile=click/click-X.X.X-incubating.pom -Dfile=click/click-X.X.X-incubating.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
 mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-X.X.X-incubating.pom -Dfile=click-extras/click-extras-X.X.X-incubating.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
 mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-X.X.X-incubating.pom -Dfile=click-nodeps/click-nodeps-X.X.X-incubating.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
 mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X-incubating.pom -Dfile=click-mock/click-mock-X.X.X-incubating.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
 </pre>
-               For the commands above remember to replace USER with your Apache
-               username and X.X.X with the Click version.
-               <p/>
-               Next upload the POM signature files to each artifact folder. The
-               following POM's must be uploaded to their respective folders:
-               <pre class="codeConfig">
-click/click-X.X.X-incubating.pom.asc   ->  /home/USER/public_html/click/click/X.X.X/maven2/org/apache/click/click/
-click-extras-X.X.X-incubating.pom.asc  ->  /home/USER/public_html/click/click/X.X.X/maven2/org/apache/click/click-extras/
-click-mock-X.X.X-incubating.pom.asc    ->  /home/USER/public_html/click/click/X.X.X/maven2/org/apache/click/click-mock/
-click-nodeps-X.X.X-incubating.pom.asc  ->  /home/USER/public_html/click/click/X.X.X/maven2/org/apache/click/click-nodeps/</pre>
-               <p/>
-               Once the artifacts and POM signatures have been uploaded, execute
-               the following commands to ensure the file and directory permissions
-               are correct. Note that because of a bug in "maven deploy", all
-               <tt>maven-metadata.xml*</tt> files must have their permissions set
-               to 664.
-               <pre class="codeConfig">
+                    For the commands above remember to replace USER with your Apache
+                    username and X.X.X with the Click version.
+                    </li>
+                    <li>For <b>releases</b> execute the following commands from the <tt>maven-upload</tt> folder:
+                    (If you have more than 1 GPG Key, use the <tt>keyname</tt> attribute
+                    to specify the KEY name.)
+ 		                <pre class="codeConfig">
+cd maven-upload
+mvn gpg:sign-and-deploy-file -DpomFile=click/click-X.X.X-incubating.pom -Dfile=click/click-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-X.X.X-incubating.pom -Dfile=click-extras/click-extras-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-X.X.X-incubating.pom -Dfile=click-nodeps/click-nodeps-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X-incubating.pom -Dfile=click-mock/click-mock-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+</pre>
+                    </li>
+                </ul>
+                    <li>Next upload the POM signature files to each artifact folder. The
+                    following POM's must be uploaded to their respective folders:
+                    (this step must be done for both <tt>snapshots</tt> and <tt>releases</tt>)
+                    <pre class="codeConfig">
+click-X.X.X-incubating.pom.asc         ->  /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/click/X.X.X-incubating/
+click-extras-X.X.X-incubating.pom.asc  ->  /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/click-extras/X.X.X-incubating/
+click-mock-X.X.X-incubating.pom.asc    ->  /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/click-mock/X.X.X-incubating/
+click-nodeps-X.X.X-incubating.pom.asc  ->  /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/click-nodeps/X.X.X-incubating/</pre>
+                    </li>
+                    <li>Once the artifacts and POM signatures have been uploaded, execute
+                    the following commands to ensure the file and directory permissions
+                    are correct. Note that because of a bug in "maven deploy", all
+                    <tt>maven-metadata.xml*</tt> files must have their permissions set
+                    to 664. (this step must be done for both <tt>snapshots</tt> and <tt>releases</tt>)
+
+                    <pre class="codeConfig">
 ssh people.apache.org
-cd public_html/click/click/X.X.X/maven2
+cd /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/
+#cd public_html/click/click/X.X.X/maven2
 find . ! -perm 775 -type d -user ${USER} -exec chmod 775 {} \;
 find . ! -perm 664 -iname maven-metadata.xml* -user ${USER} -exec chmod 664 {} \;
 find . ! -perm 644 ! -iname maven-metadata.xml* -type f -user ${USER} -exec chmod 644 {} \;</pre>
-               <p/>
-               Once the <tt>release</tt> artifacts are uploaded you need to verify the signatures:
-                <pre class="codeConfig">
+                    </li>
+                    <li>Once the artifacts are uploaded you need to verify the signatures:
+                    (this step must be done for both <tt>snapshots</tt> and <tt>releases</tt>)
+                    <pre class="codeConfig">
 ssh people.apache.org
-cd /home/USER/public_html/click/click/X.X.X/maven2/org/apache/click
+cd /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/
+#cd public_html/click/click/X.X.X/maven2/org/apache/click
+
 gpg --verify click/X.X.X-incubating/click-X.X.X-incubating.jar.asc click/X.X.X-incubating/click-X.X.X-incubating.jar
 gpg --verify click/X.X.X-incubating/click-X.X.X-incubating.pom.asc click/X.X.X-incubating/click-X.X.X-incubating.pom
 
@@ -309,20 +326,6 @@ gpg --verify click-mock/X.X.X-incubating/click-mock-X.X.X-incubating.jar.asc cli
 gpg --verify click-mock/X.X.X-incubating/click-mock-X.X.X-incubating.pom.asc click-mock/X.X.X-incubating/click-mock-X.X.X-incubating.pom
 </pre>
                     </li>
-                    <li>
-                        For <b>releases</b> simply copy the artifacts from the
-                        <tt>snapshot</tt> folder to Apache's repository:
-                        <tt>/www/people.apache.org/repo/m2-ibiblio-rsync-repository</tt>.
-                        <p/>
-                        You can use the following commands:
-                        <p/>
-                        <pre class="codeConfig">
-ssh people.apache.org
-cd /home/USER/public_html/click/click/X.X.X/maven2/org/apache/click
-cp -r . /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/</pre>
-                    
-                    </li>
-                </ul>
             </li>
         </ol>
 
