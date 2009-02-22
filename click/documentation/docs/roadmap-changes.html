@@ -72,8 +72,43 @@ The feature roadmap for the next major release of Click is being determined.
 <h2>Changes</h2>
 
 <dl>
+  <dt><a name="2.1.0"></a>
+  <div class="release-header">Latest Development Release - Version 2.1.0 - ??? March 2009</div></dt>
+  <dd>
+    <div style="margin-left:-2em;margin-bottom:1em;">
+      <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">1.5 upgrade path</a>
+      and <a href="#2.0.1">2.0.1 upgrade path</a> when upgrading from Click 1.4
+      or 1.5 respectively.
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change">
+          Improved PickList methods <a href="extras-api/org/apache/click/extras/control/PickList.html#getValueObject()">getValueObject()</a>
+          and <a href="extras-api/org/apache/click/extras/control/PickList.html#setValueObject(java.lang.Object)">setValueObject(Object)</a>
+          to delegate to <a href="extras-api/org/apache/click/extras/control/PickList.html#getSelectedValues()">getSelectedValues()</a>
+          and <a href="extras-api/org/apache/click/extras/control/PickList.html#addSelectedValue(java.lang.String)">addSelectedValue(String)</a>
+          respectively [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-490">490</a>].
+      </li>
+    </ul>
+  </dd>
 
-  <dt><a name="2.0.1"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release - Version 2.0.1 - 15 February 2009</div></dt>
+  <dt><a name="2.0.2"></a><a name="1.5.2"></a>
+  <a name="stable-release"></a><div class="release-header">Latest Stable Releases - Version 1.5.2 and Version 2.0.2 - ??? March 2009</div></dt>
+  <dd>
+    <div style="margin-left:-2em;margin-bottom:1em;">
+      <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">1.5 upgrade path</a>
+      and <a href="#2.0.1">2.0.1 upgrade path</a> when upgrading from Click 1.4
+      or 1.5 respectively.
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change">
+          Fixed extras <tt>pom.xml</tt> dependencies [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-492">492</a>].
+      </li>
+    </ul>
+  </dd>
+
+  <dt><div class="release-header">Archives</div></dt>
+
+  <dt><a name="2.0.1"></a>Version 2.0.1 (Apache incubator) - 15 February 2009</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
@@ -189,7 +224,7 @@ DateField dateField = new CalendarField("date");
     </ul>
   </dd>
 
-  <dt><a name="1.5.1"></a><a name="stable-release" href="#"></a><div class="release-header">Stable Release (pre Apache) - Version 1.5.1 - 23 January 2009</div></dt>
+  <dt><a name="1.5.1"></a>Version 1.5.1 (pre-Apache) - 23 January 2009</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
@@ -257,8 +292,6 @@ DateField dateField = new CalendarField("date");
     </ul>
   </dd>
 
-  <dt><div class="release-header">Archives</div></dt>
-  
   <dt><a name="1.5"></a>Version 1.5 - 2 November 2008</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
