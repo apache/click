@@ -471,6 +471,24 @@ public class PickList extends Field {
     public Object getValueObject() {
         return getSelectedValues();
     }
+    
+    /**
+     * Set the value the value must be a List of String.
+     *
+     * @see org.apache.click.control.Field#setValueObject(java.lang.Object)
+     *
+     * @param object a List or null
+     */
+    public void setValueObject(Object object) {
+        if (object instanceof List) {
+            getSelectedValues().clear();
+            
+            List list = (List) object;
+            for (int i = 0; i < list.size(); i++) {
+                addSelectedValue((String) list.get(i));
+            }
+        }
+    }
 
     /**
      * Set the component size.
