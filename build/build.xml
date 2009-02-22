@@ -870,7 +870,7 @@ Please ensure you have configured build.properties</echo>
                version="true"
                verbose="false"
                windowtitle="@{windowtitle}"
-      	       packagenames="org.*"
+      	       packagenames="org.apache.click.*"
          	     overview="@{overview}"
                doctitle="@{doctitle}"
                excludepackagenames="@{excludes}">
