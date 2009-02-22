@@ -873,6 +873,8 @@ Please ensure you have configured build.properties</echo>
       	       packagenames="org.apache.click.*"
          	     overview="@{overview}"
                doctitle="@{doctitle}"
+               encoding="UTF-8"
+               charset="UTF-8"
                excludepackagenames="@{excludes}">
             <classpath refid="@{classpath}"/>
             <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
