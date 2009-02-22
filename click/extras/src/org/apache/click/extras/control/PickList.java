@@ -460,6 +460,17 @@ public class PickList extends Field {
         }
         return selectedValues;
     }
+    
+    /**
+     * Returns the values list {@link #getSelectedValues()} return a list or String.
+     *
+     * @see org.apache.click.control.Field#getValueObject()
+     *
+     * @return List of selected values (Strings)
+     */
+    public Object getValueObject() {
+        return getSelectedValues();
+    }
 
     /**
      * Set the component size.
