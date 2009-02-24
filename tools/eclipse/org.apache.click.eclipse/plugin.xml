@@ -33,7 +33,7 @@
       <description>Click Description</description>
     </project-facet>
 
-    <project-facet-version facet="click" version="1.5">
+    <project-facet-version facet="click" version="2.0.1">
        <constraint>
         <and>
           <requires facet="jst.web" version="[2.3"/>
@@ -45,7 +45,7 @@
           facet="click"
           id="click.install"
           type="install"
-          version="1.5">
+          version="2.0.1">
       <delegate class="org.apache.click.eclipse.core.facet.ClickFacetInstallDelegate"/>
       <config-factory class="org.apache.click.eclipse.core.facet.ClickFacetInstallDataModelProvider"/>
       <!--
@@ -57,7 +57,7 @@
        facet="click"
        id="click.uninstall"
        type="uninstall"
-       version="1.5">
+       version="2.0.1">
       <delegate class="org.apache.click.eclipse.core.facet.ClickFacetUninstallDelegate"/>
  	</action>
   </extension>
@@ -65,7 +65,7 @@
   <extension point="org.eclipse.wst.common.project.facet.core.runtimes">
     <supported>
       <runtime-component any="true"/>
-      <facet id="click" version="1.5"/>
+      <facet id="click" version="2.0.1"/>
     </supported>
   </extension>
 
