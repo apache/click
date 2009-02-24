@@ -1,3 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+
 <!-- The Click Application (click.xml) Document Type Definition. -->
 <!ELEMENT click-app (pages*, headers?, format?, mode?, controls?, file-upload-service?, log-service?, template-service?)>
   <!ATTLIST click-app charset CDATA #IMPLIED>
@@ -30,7 +51,7 @@
   <!-- Page template formatter class. An new format object added to
        the Velocity context under the key: "format". -->
   <!ELEMENT format (#PCDATA)>
-   <!ATTLIST format classname CDATA #FIXED "net.sf.click.util.Format">
+   <!ATTLIST format classname CDATA #FIXED "org.apache.click.util.Format">
  
   <!-- Application mode, which configures logging and caching. -->
   <!ELEMENT mode (#PCDATA)>
@@ -49,7 +70,7 @@
   
   <!-- File Upload Service. -->
   <!ELEMENT file-upload-service (property*)>
-   <!ATTLIST file-upload-service classname CDATA #FIXED "net.sf.click.service.FileUploadService">
+   <!ATTLIST file-upload-service classname CDATA #FIXED "org.apache.click.service.FileUploadService">
    
     <!-- Property definition. -->
     <!ELEMENT property (#PCDATA)>
@@ -58,9 +79,9 @@
   
   <!-- Log Service. -->
   <!ELEMENT log-service (property*)>
-   <!ATTLIST log-service classname CDATA #FIXED "net.sf.click.service.ConsoleLogService">
+   <!ATTLIST log-service classname CDATA #FIXED "org.apache.click.service.ConsoleLogService">
   
   <!-- Template Service class. -->
   <!ELEMENT template-service (property*)>
-   <!ATTLIST template-service classname CDATA #FIXED "net.sf.click.service.VelocityTemplateService">
+   <!ATTLIST template-service classname CDATA #FIXED "org.apache.click.service.VelocityTemplateService">
   

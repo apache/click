@@ -32,13 +32,13 @@ import org.eclipse.core.runtime.Path;
  */
 public class ClickFacetUtil {
 
-	public static String CLICK_DIR = "click-1.5";
+	public static String CLICK_DIR = "click-2.0.1";
 	public static String CAYENNE_DIR = "cayenne-2.0.4";
 	public static String SPRING_DIR = "spring-2.5.4";
 
 	public static final String[] COPY_FILES = {
-		"/lib/click-1.5.jar",
-		"/lib/click-extras-1.5.jar",
+		"/lib/click-2.0.1-incubating.jar",
+		"/lib/click-extras-2.0.1-incubating.jar",
 		"/click.xml",
 	};
 
