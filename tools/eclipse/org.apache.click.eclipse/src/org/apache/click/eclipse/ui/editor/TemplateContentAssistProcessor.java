@@ -71,13 +71,13 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	
 	private static final Map defaultObjects = new HashMap();
 	static {
-		defaultObjects.put("imports", "net.sf.click.util.PageImports");
+		defaultObjects.put("imports", "org.apache.click.util.PageImports");
 		defaultObjects.put("context", "java.lang.String");
 		defaultObjects.put("messages", "java.util.Map");
 		defaultObjects.put("path", "java.lang.String");
 		defaultObjects.put("request", "javax.servlet.http.HttpServletRequest");
 		defaultObjects.put("response", "javax.servlet.http.HttpServletResponse");
-		defaultObjects.put("session", "net.sf.click.util.SessionMap");
+		defaultObjects.put("session", "org.apache.click.util.SessionMap");
 	};
 	
 	/**

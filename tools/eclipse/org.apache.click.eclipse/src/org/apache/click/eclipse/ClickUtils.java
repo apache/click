@@ -84,10 +84,10 @@ import org.w3c.dom.NodeList;
 public class ClickUtils {
 	
 	public static final String CLICK_SERVLET_NAME = "ClickServlet";
-	public static final String CLICK_SERVLET_CLASS = "net.sf.click.ClickServlet";
-	public static final String CLICK_SPRING_SERVLET_CLASS = "net.sf.click.extras.spring.SpringClickServlet";
-	public static final String CAYENNE_FILTER_CLASS = "net.sf.click.extras.cayenne.DataContextFilter";
-	public static final String DEFAULT_FORMAT_CLASS = "net.sf.click.util.Format";
+	public static final String CLICK_SERVLET_CLASS = "org.apache.click.ClickServlet";
+	public static final String CLICK_SPRING_SERVLET_CLASS = "org.apache.click.extras.spring.SpringClickServlet";
+	public static final String CAYENNE_FILTER_CLASS = "org.apache.click.extras.cayenne.DataContextFilter";
+	public static final String DEFAULT_FORMAT_CLASS = "org.apache.click.util.Format";
 	
 	/**
 	 * Creates <code>GridData</code>.

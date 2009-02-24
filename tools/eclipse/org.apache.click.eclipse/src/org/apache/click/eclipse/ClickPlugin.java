@@ -47,7 +47,7 @@ import org.osgi.framework.BundleContext;
  */
 public class ClickPlugin extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "net.sf.clickide";
+	public static final String PLUGIN_ID = "org.apache.click.eclipse";
 
 	//The shared instance.
 	private static ClickPlugin plugin;
@@ -56,8 +56,8 @@ public class ClickPlugin extends AbstractUIPlugin {
 
 	private List configProviders = new ArrayList();
 
-	public static final String CLICK_PAGE_CLASS = "net.sf.click.Page";
-	public static final String CLICK_CONTROL_IF = "net.sf.click.Control";
+	public static final String CLICK_PAGE_CLASS = "org.apache.click.Page";
+	public static final String CLICK_CONTROL_IF = "org.apache.click.Control";
 
 	public static final String TAG_CLICK_APP = "click-app";
 	public static final String TAG_HEADERS = "headers";
@@ -101,7 +101,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	 */
 	public ClickPlugin() {
 		plugin = this;
-		resource = ResourceBundle.getBundle("net.sf.clickide.ClickPlugin");
+		resource = ResourceBundle.getBundle("org.apache.click.eclipse.ClickPlugin");
 
 		configProviders.addAll(loadContributedClasses(
 				"configurationProvider", "configurationProvider"));
@@ -192,7 +192,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
-		return AbstractUIPlugin.imageDescriptorFromPlugin("net.sf.clickide", path);
+		return AbstractUIPlugin.imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
 	/**
