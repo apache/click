@@ -575,8 +575,8 @@ public class CheckList extends Field {
     }
 
     /**
-     * Return the list of selected values. The values are the values of the
-     * Options selected.
+     * Return the list of selected values as a <tt>List</tt> of Strings. The
+     * returned List will contain the values of the Options selected.
      *
      * @deprecated use {@link #getSelectedValues()} instead
      *
@@ -587,8 +587,8 @@ public class CheckList extends Field {
     }
 
     /**
-     * Return the list of selected values. The values are the values of the
-     * Options selected.
+     * Return the list of selected values as a <tt>List</tt> of Strings. The
+     * returned List will contain the values of the Options selected.
      *
      * @return the list of selected values
      */
@@ -602,8 +602,8 @@ public class CheckList extends Field {
     }
 
     /**
-     * Set the list of selected values. The specified values must match
-     * the values of the Options
+     * Set the list of selected values. The specified values must be Strings and
+     * match the values of the Options.
      *
      * @deprecated use {@link #setSelectedValues(List)} instead
      *
@@ -614,8 +614,8 @@ public class CheckList extends Field {
     }
 
     /**
-     * Set the list of selected values. The specified values must match
-     * the values of the Options.
+     * Set the list of selected values. The specified values must be Strings and
+     * match the values of the Options.
      * <p/>
      * For example:
      * <pre class="prettyprint">
@@ -627,6 +627,7 @@ public class CheckList extends Field {
      *     options.add(new Option("2", "Option 2");
      *     options.add(new Option("3", "Option 3");
      *     checkList.setOptionList(options);
+     *     ...
      * }
      *
      * public void onRender() {
@@ -644,26 +645,33 @@ public class CheckList extends Field {
     }
 
     /**
-     * Returns the values list {@link #getValues()} return a list or String.
+     * This method delegates to {@link #getSelectedValues()} to return the
+     * selected values as a <tt>java.util.List</tt> of Strings.
      *
      * @see org.apache.click.control.Field#getValueObject()
+     * @see #getSelectedValues()
      *
-     * @return List of selected values (Strings)
+     * @return selected values as a List of Strings
      */
     public Object getValueObject() {
-        return getValues();
+        return getSelectedValues();
     }
 
     /**
-     * Set the value the value must be a List of String.
+     * This method delegates to {@link #setSelectedValues(java.util.List)}
+     * to set the selected values of the CheckList. The given object parameter
+     * must be a <tt>java.util.List</tt> of Strings, otherwise it is ignored.
+     * <p/>
+     * The List of values match the values of the Options.
      *
      * @see org.apache.click.control.Field#setValueObject(java.lang.Object)
+     * @see #setSelectedValues(java.util.List)
      *
-     * @param object a List or null
+     * @param object a List of Strings
      */
     public void setValueObject(Object object) {
         if (object instanceof List) {
-            setValues((List) object);
+            setSelectedValues((List) object);
         }
     }
 
