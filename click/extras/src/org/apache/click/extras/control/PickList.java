@@ -436,9 +436,9 @@ public class PickList extends Field {
     }
 
     /**
-     * Add the selected value.
+     * Add the selected value to the List of {@link #selectedValues}.
      *
-     * @param value the selected value
+     * @param value the selected value to add
      * @throws IllegalArgumentException if the value is null
      */
     public void addSelectedValue(String value) {
@@ -450,9 +450,10 @@ public class PickList extends Field {
     }
 
     /**
-     * Return selected values.
+     * Return the list of selected values as a <tt>List</tt> of Strings. The
+     * returned List will contain the values of the Options selected.
      *
-     * @return selected values
+     * @return selected values as a List of Strings
      */
     public List getSelectedValues() {
         if (selectedValues == null) {
@@ -460,33 +461,65 @@ public class PickList extends Field {
         }
         return selectedValues;
     }
-    
+
     /**
-     * Returns the values list {@link #getSelectedValues()} return a list or String.
+     * Set the list of selected values. The specified values must be Strings and
+     * match the values of the Options.
+     * <p/>
+     * For example:
+     * <pre class="prettyprint">
+     * PickList pickList = new PickList("languages");
+     *
+     * public void onInit() {
+     *     pickList.add(new Option("005", "Java"));
+     *     pickList.add(new Option("006", "Ruby"));
+     *     pickList.add(new Option("007", "Perl"));
+     *     ...
+     * }
+     *
+     * public void onRender() {
+     *     // Preselect Java and Perl.
+     *     List selected = new ArrayList();
+     *     selected.add("005");
+     *     selected.add("007");
+     *     pickList.setSelectedValues(selected);
+     * } </pre>
+     *
+     * @param selectedValues the list of selected string values or null
+     */
+    public void setSelectedValues(List selectedValues) {
+        this.selectedValues = selectedValues;
+    }
+
+    /**
+     * This method delegates to {@link #getSelectedValues()} to return the
+     * selected values as a <tt>java.util.List</tt> of Strings.
      *
      * @see org.apache.click.control.Field#getValueObject()
+     * @see #getSelectedValues()
      *
-     * @return List of selected values (Strings)
+     * @return selected values as a List of Strings
      */
     public Object getValueObject() {
         return getSelectedValues();
     }
-    
+
     /**
-     * Set the value the value must be a List of String.
+     * This method delegates to {@link #setSelectedValues(java.util.List)}
+     * to set the selected values of the PickList. The given object
+     * parameter must be a <tt>java.util.List</tt> of Strings, otherwise it is
+     * ignored.
+     * <p/>
+     * The List of values match the values of the Options.
      *
      * @see org.apache.click.control.Field#setValueObject(java.lang.Object)
+     * @see #setSelectedValues(java.util.List)
      *
-     * @param object a List or null
+     * @param object a List of Strings
      */
     public void setValueObject(Object object) {
         if (object instanceof List) {
-            getSelectedValues().clear();
-            
-            List list = (List) object;
-            for (int i = 0; i < list.size(); i++) {
-                addSelectedValue((String) list.get(i));
-            }
+            setSelectedValues((List) object);
         }
     }
 
