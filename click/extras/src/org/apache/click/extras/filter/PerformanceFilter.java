@@ -52,7 +52,7 @@ import org.apache.commons.lang.StringUtils;
  * <li>Rule 4 - Gzip Components</li>
  * </ul>
  *
- * The Click Framework can also help you with the other rules:
+ * The Click Framework can also help you with the following rules:
  * <ul>
  * <li>Rule 5 - Put Stylesheets at the Top, by using $cssImports at the
  * top of you page</li>
@@ -125,7 +125,7 @@ import org.apache.commons.lang.StringUtils;
  *  &lt;filter-class&gt;<span class="red">org.apache.click.extras.filter.PerformanceFilter</span>&lt;/filter-class&gt;
  *   &lt;init-param&gt;
  *     &lt;param-name&gt;<font color="blue">cachable-paths</font>&lt;/param-name&gt;
- *   &lt;param-value&gt;<font color="red">/assets/*, *.css</font>&lt;/param-value&gt;
+ *     &lt;param-value&gt;<font color="red">/assets/*</font>, <font color="red">*.css</font>&lt;/param-value&gt;
  *  &lt;/init-param&gt;
  * &lt;/filter&gt;
  *
@@ -157,6 +157,30 @@ import org.apache.commons.lang.StringUtils;
  * &lt;servlet&gt;
  *  &lt;servlet-name&gt;<span class="green">ClickServlet</span>&lt;/servlet-name&gt;
  * .. </pre>
+ *
+ * The <tt>init-param</tt> <span class="blue">"cachable-paths"</span>, allows
+ * you to specify paths for resources such as JavaScript, CSS and images to be
+ * <tt>cached</tt> by the browser. (Caching here means setting the
+ * "Expires" and "Cache-Control" headers). The <tt>param-value</tt> accepts a
+ * comma separated list of directories and files to match against.
+ * To differentiate between directory and file values the following convention
+ * is used:
+ * <ul>
+ * <li>To specify a directory, the value must <b>end</b> with the asterisk
+ * character (*). When a resource is requested, the filter will only cache
+ * the resource if the resource path starts with the specified value. For example
+ * if the specified value is <tt>&lt;param-value&gt;<span class="red">/assets/*</span>&lt;/param-value&gt;</tt>,
+ * the resource <tt>"<span class="red">/assets/</span>library.js"</tt> will be
+ * cached while <tt>"/public/library.js"</tt> will not be.
+ * </li>
+ * <li>To specify a file, the value must <b>start</b> with the asterisk character
+ * (*). When a resource is requested, the filter will only cache the resource
+ * if the resource path ends with the specified value. For example if the specified
+ * value is <tt>&lt;param-value&gt;<span class="red">*.css</span>&lt;/param-value&gt;</tt>,
+ * the resource <tt>"/public/table<span class="red">.css</span>"</tt> will be
+ * cached while <tt>"/public/table.js"</tt> will not be.
+ * </li>
+ * </ul>
  *
  * This filter will automatically set the configured click.xml charset as the
  * requests character encoding.
@@ -444,7 +468,7 @@ public class PerformanceFilter implements Filter {
                     excludeFiles.add(path.substring(1));
 
                 } else {
-                    String message = "cachable-path '" + path + "' ignored, "
+                    String message = "exclude-path '" + path + "' ignored, "
                     + "path must start or end with a wildcard character: *";
                     getConfigService().getLogService().warn(message);
                 }
@@ -529,7 +553,7 @@ public class PerformanceFilter implements Filter {
     }
 
     /**
-     * Return true if the response should be cached using the configure cache
+     * Return true if the response should be cached using the configured cache
      * max-age.
      *
      * @param path the request path to test
