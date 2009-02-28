@@ -104,6 +104,20 @@ public class ColumnCompareTest extends TestCase {
     }
 
     /**
+     * Check that Column sorting handles edge cases.
+     */
+    public void test_3() {
+        Column column = new Column("name");
+
+        Table table = new Table("table");
+        table.addColumn(column);
+
+        Column.ColumnComparator comparator = new Column.ColumnComparator(column);
+        List rowList = createRowList3();
+        Collections.sort(rowList, comparator);
+    }
+
+    /**
      * Create and return a test Table row list.
      *
      * @return a test Table row list
@@ -145,6 +159,24 @@ public class ColumnCompareTest extends TestCase {
         rowList.add(createRow(null));
         rowList.add(createRow(Boolean.TRUE));
         rowList.add(createRow(Boolean.FALSE));
+
+        return rowList;
+    }
+
+    /**
+     * Create and return a test Table row list.
+     *
+     * @return a test Table row list
+     */
+    private List createRowList3() {
+        List rowList = new ArrayList();
+
+        rowList.add(createRow("113L - 7 - 107"));
+        rowList.add(createRow("113D - 7 - 107"));
+        rowList.add(createRow("113d - 7 - 107"));
+        rowList.add(createRow("11i3 - 7 - 107"));
+        rowList.add(createRow("105"));
+        rowList.add(createRow("ABC"));
 
         return rowList;
     }
