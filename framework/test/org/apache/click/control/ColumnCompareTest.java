@@ -41,7 +41,7 @@ public class ColumnCompareTest extends TestCase {
 
         Column.ColumnComparator comparator = new Column.ColumnComparator(column);
         List rowList = createRowList1();
-        
+
         assertTrue(indexOf("-234", rowList) == 11);
         assertTrue(indexOf(Boolean.TRUE, rowList) == 3);
         assertTrue(indexOf("Data 213 Services", rowList) == 5);
@@ -58,7 +58,7 @@ public class ColumnCompareTest extends TestCase {
 
         table.setSortedAscending(false);
         Collections.sort(rowList, comparator);
-        
+
         // Perform spot checks for descending order
         // "-234" should be last
         assertTrue(indexOf("-234", rowList) == rowList.size() - 1);
@@ -93,7 +93,7 @@ public class ColumnCompareTest extends TestCase {
 
         table.setSortedAscending(false);
         Collections.sort(rowList, comparator);
-        
+
         // Check sort order for descending
         // null should be last
         assertTrue(indexOf(null, rowList) == rowList.size() - 1);
@@ -101,6 +101,20 @@ public class ColumnCompareTest extends TestCase {
         assertTrue(indexOf(Boolean.TRUE, rowList) == 0);
         // false should still be in the middle
         assertTrue(indexOf(Boolean.FALSE, rowList) == 1);
+    }
+
+    /**
+     * Check that Column sorting handles edge cases.
+     */
+    public void test_3() {
+        Column column = new Column("name");
+
+        Table table = new Table("table");
+        table.addColumn(column);
+
+        Column.ColumnComparator comparator = new Column.ColumnComparator(column);
+        List rowList = createRowList3();
+        Collections.sort(rowList, comparator);
     }
 
     /**
@@ -145,6 +159,24 @@ public class ColumnCompareTest extends TestCase {
         rowList.add(createRow(null));
         rowList.add(createRow(Boolean.TRUE));
         rowList.add(createRow(Boolean.FALSE));
+
+        return rowList;
+    }
+
+    /**
+     * Create and return a test Table row list.
+     *
+     * @return a test Table row list
+     */
+    private List createRowList3() {
+        List rowList = new ArrayList();
+
+        rowList.add(createRow("113L - 7 - 107"));
+        rowList.add(createRow("113D - 7 - 107"));
+        rowList.add(createRow("113d - 7 - 107"));
+        rowList.add(createRow("11i3 - 7 - 107"));
+        rowList.add(createRow("105"));
+        rowList.add(createRow("ABC"));
 
         return rowList;
     }

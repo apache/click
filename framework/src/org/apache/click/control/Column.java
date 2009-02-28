@@ -1563,7 +1563,7 @@ public class Column implements Serializable {
          * @return true if a numeric sort should be used
          */
         protected boolean useNumericSort(String value1, String value2) {
-            return NumberUtils.isNumber(value1) && NumberUtils.isNumber(value2);
+            return NumberUtils.isDigits(value1) && NumberUtils.isDigits(value2);
         }
 
         /**
