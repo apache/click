@@ -1107,6 +1107,7 @@ public class FieldSet extends Field implements Container {
          */
         public Control insert(Control control, int index) {
             super.insert(control, index);
+            control.setParent(FieldSet.this);
 
             if (control instanceof Field) {
                 Field field = (Field) control;
@@ -1145,6 +1146,9 @@ public class FieldSet extends Field implements Container {
         public boolean remove(Control control) {
 
             boolean removed = super.remove(control);
+            if (control.getParent() == FieldSet.this) {
+                control.setParent(null);
+            }
 
             if (removed && control instanceof Field) {
                 Field field = (Field) control;

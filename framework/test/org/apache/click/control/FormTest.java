@@ -708,6 +708,42 @@ public class FormTest extends TestCase {
     }
 
     /**
+     * Test the isDisabled() for a child component. Intent is to ensure that a
+     * child component of the Form is disabled when the Form is itself disabled.
+     */
+    public void testIsDisabled() {
+        // Form is not disabled.
+        assertFalse(this.form.isDisabled());
+
+        // Hiddenfield inside is not disabled.
+        assertFalse(this.trackField.isDisabled());
+
+        // Change form state.
+        this.form.setDisabled(true);
+
+        // Hiddenfield is now disabled too.
+        assertTrue(this.trackField.isDisabled());
+    }
+
+    /**
+     * Test the isReadonly() for a child component. Intent is to ensure that a
+     * child component of the Form is disabled when the Form is itself disabled.
+     */
+    public void testIsReadonly() {
+        // Form is not disabled.
+        assertFalse(this.form.isReadonly());
+
+        // Hiddenfield inside is not disabled.
+        assertFalse(this.trackField.isReadonly());
+
+        // Change form state.
+        this.form.setReadonly(true);
+
+        // Hiddenfield is now disabled too.
+        assertTrue(this.trackField.isReadonly());
+    }
+
+    /**
      * Populate the given Form with hidden fields.
      *
      * @param count the number of hidden fields to add
