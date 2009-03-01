@@ -152,6 +152,9 @@ function handleChildMenuIfExists(objectArg, newIndex) {
 function handleIcons(iconId, newClassName) {
     var span = document.getElementById(iconId);
 
+    if(span==null) {
+        return; //skip iconId target is null. This occurs when customIcon is set
+    }
     if(isLeaf(span)) {
         return; //we do not handle leaf nodes
     }

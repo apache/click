@@ -1134,22 +1134,31 @@ public class Tree extends AbstractControl {
      * @param treeNode treeNode to render
      */
     protected void renderIcon(HtmlStringBuffer buffer, TreeNode treeNode) {
-        //render the icon to display
-        buffer.elementStart("span");
-        buffer.appendAttribute("class", getIconClass(treeNode));
+        if (treeNode.getIcon() == null) {
 
-        if (isJavascriptEnabled()) {
-            //An id is needed on the element to do quick lookup using javascript
-            //document.getElementById(id)
-            javascriptHandler.getJavascriptRenderer().renderIcon(buffer);
+            //render the icon to display
+            buffer.elementStart("span");
+            buffer.appendAttribute("class", getIconClass(treeNode));
+
+            if (isJavascriptEnabled()) {
+                //An id is needed on the element to do quick lookup using javascript
+                //document.getElementById(id)
+                javascriptHandler.getJavascriptRenderer().renderIcon(buffer);
+            }
+            buffer.append(">");
+
+            //TODO IE HACK. With a empty span <span></span> IE does not render the
+            //icons. Putting a '&nbsp;' in the span seemed to work. Perhaps there is a
+            //better workaround.
+            buffer.append("&nbsp;");
+            buffer.append("</span>");
+
+        } else {
+            buffer.elementStart("img");
+            buffer.appendAttribute("class", "customIcon");
+            buffer.appendAttribute("src", treeNode.getIcon());
+            buffer.closeTag();
         }
-        buffer.append(">");
-
-        //TODO IE HACK. With a empty span <span></span> IE does not render the
-        //icons. Putting a '&nbsp;' in the span seemed to work. Perhaps there is a
-        //better workaround.
-        buffer.append("&nbsp;");
-        buffer.append("</span>");
     }
 
     /**
