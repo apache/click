@@ -19,6 +19,7 @@
 package org.apache.click.control;
 
 import junit.framework.TestCase;
+import org.apache.click.Control;
 import org.apache.click.MockContext;
 
 /**
@@ -374,6 +375,66 @@ public class FieldSetTest extends TestCase {
         // Check that field map is cached
         assertSame(form.getFields(), form.getFields());
         assertSame(form.getFields(), form.getControlMap());
+    }
+
+    /**
+     * Test that Fields added to FieldSet, correctly returns FieldSet as their
+     * parent.
+     *
+     * CLK-497
+     */
+    public void testFieldParent() {
+        // Initially fieldSet contains 1 hidden field
+        assertTrue(fieldSet.getControls().size() == 1);
+
+        TextField nameField = new TextField("score");
+        fieldSet.add(nameField);
+
+        assertTrue(fieldSet.getControls().size() == 2);
+
+        // Test that Field parent is a FieldSet
+        assertEquals(FieldSet.class, nameField.getParent().getClass());
+
+        assertTrue(fieldSet.remove((Control) nameField));
+
+        assertTrue(nameField.getParent() == null);
+        assertTrue(fieldSet.getControls().size() == 1);
+    }
+
+    /**
+     * Test the isDisabled() for a child component. Intent is to ensure that a child
+     * component of the FieldSet is disabled when the FieldSet is itself disabled.
+     */
+    public void testIsDisabled() {
+    	// Fieldset is not disabled.
+    	assertFalse(this.fieldSet.isDisabled());
+
+    	// Textfield inside is not disabled.
+    	assertFalse(this.trackField.isDisabled());
+
+    	// Change fieldset state.
+    	this.fieldSet.setDisabled(true);
+
+    	// Textfield is now disabled too.
+    	assertTrue(this.trackField.isDisabled());
+    }
+
+    /**
+     * Test the isReadonly() for a child component. Intent is to ensure that a child
+     * component of the FieldSet is disabled when the FieldSet is itself disabled.
+     */
+    public void testIsReadonly() {
+    	  // Fieldset is not disabled.
+   	    assertFalse(this.fieldSet.isReadonly());
+
+    	  // Textfield inside is not disabled.
+    	  assertFalse(this.trackField.isReadonly());
+
+    	  // Change fieldset state.
+    	  this.fieldSet.setReadonly(true);
+
+    	  // Textfield is now disabled too.
+    	  assertTrue(this.trackField.isReadonly());
     }
 
     /**
