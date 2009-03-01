@@ -444,7 +444,7 @@ public class PerformanceFilter implements Filter {
                     excludeFiles.add(path.substring(1));
 
                 } else {
-                    String message = "cachable-path '" + path + "' ignored, "
+                    String message = "exclude-path '" + path + "' ignored, "
                     + "path must start or end with a wildcard character: *";
                     getConfigService().getLogService().warn(message);
                 }
