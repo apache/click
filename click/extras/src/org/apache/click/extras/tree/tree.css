@@ -127,7 +127,14 @@
 .treestyle span.leafIcon,
 .treestyle span.expandedIcon,
 .treestyle span.collapsedIcon,
-.treestyle .spacer {
+.treestyle .spacer,
+.treestyle img.customIcon {
     clear: both;
     _float: none; /*IE only*/
+}
+
+/* Style for a custom TreeNode icon. Tweak it if further customization is needed */
+.treestyle img.customIcon {
+    margin-right: 2px;
+    vertical-align: top;
 }

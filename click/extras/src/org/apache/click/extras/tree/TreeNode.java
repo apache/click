@@ -31,8 +31,8 @@ import java.util.Random;
  * TreeNode's are used to store hierarchical data representations for example
  * directories, subdirectories and files.
  * <p/>
- * Nodes <strong>must</strong> have an <strong>unique</strong> id. If nodes
- * do not have an unique id's, the tree might be behave erratic.
+ * Nodes <strong>must</strong> have a <strong>unique</strong> id. If nodes
+ * do not have a unique id, the tree might behave erratic.
  * <p/>
  * Each node can store a user defined value of type {@link java.lang.Object}.
  * <p/>
@@ -94,6 +94,9 @@ public class TreeNode implements Serializable {
 
     /** List containing this nodes children. */
     private List children;
+
+    /** A custom icon the Tree will render for this node. */
+    private String icon;
 
     // ---------------------------------------------------- Public Constructors
 
@@ -280,6 +283,47 @@ public class TreeNode implements Serializable {
      */
     public boolean isExpanded() {
         return expanded;
+    }
+
+    /**
+     * Returns the TreeNode's custom icon.
+     *
+     * @see #setIcon(java.lang.String)
+     *
+     * @return the TreeNode's custom icon
+     */
+    public String getIcon() {
+    		return icon;
+    }
+
+    /**
+     * Set a custom icon for this TreeNode.
+     * <p/>
+     * The icon will be set as the <tt>src</tt> attribute of an HTML <tt>img</tt>
+     * element. Ensure the icon value specifies the full path to the actual
+     * icon resource.
+     * <p/>
+     * For example:
+     * <pre class="prettyprint">
+     * public TreeNode createNodes() {
+     *     // Retrieve the web application context path
+     *     String contextPath = getContext().getRequest().getContextPath();
+     *
+     *     TreeNode book = new TreeNode("book");
+     *
+     *     TreeNode chapter = new TreeNode("chapter", "1", book);
+     *
+     *     // Specify the full path to the chapter.png icon
+     *     chapter.setIcon(contextPath + "/assets/chapter.png");
+     *     ...
+     *
+     *     return book;
+     * } </pre>
+     *
+     * @param icon the TreeNode icon
+     */
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     // -------------------------------------------------------- Public Behavior
