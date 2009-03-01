@@ -337,7 +337,7 @@
     <para>The execution sequence for POST requests is almost identical, except
     the <methodname>onPost()</methodname> method is invoked instead on
     <methodname>onGet()</methodname>. See the
-    <ulink url="../../resources/post-sequence-diagram.png">POST Request Sequence Diagram</ulink>.
+    <ulink url="../../../images/post-sequence-diagram.png">POST Request Sequence Diagram</ulink>.
     </para>
 
     <para>Another view on the execution flow of Pages is illustrated in the

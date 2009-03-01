@@ -43,10 +43,11 @@ Download and unzip both the Docbook Framework (DBF) 1.0, Apache FOP 0.95 and
 Docbook XLS 1.75 (or latest snapshot) somewhere on your computer. Once done set
 the following properties in the file project.properties:
 
-  dbf.basedir = directory-where-DBF-is-installed
-  fop.basedir = directory-where-FOP-is-installed
+  dbf.basedir   = directory-where-DBF-is-installed
+  fop.basedir   = directory-where-FOP-is-installed
+  click.basedir = directory-where-Click-is-located
 
-The following changes must also be made to DBF:
+The following changes must be made to DBF:
 
 # Replace the existing docbook-xsl version of DBF with 1.75.0. You can do that
   by copying docbook-xsl-1.75.0.zip to the DBF folder '<dbf-install>/src/zip/'.
@@ -75,6 +76,9 @@ The PDF, HTML and HTML (single) documentation is available at the following loca
   target/click/html
   target/click/htmlsingle
 
+NOTE: All documentation artifacts will also be copied to the Click folder specified
+by the property 'click.basedir'. The artifacts will be copied to the folder:
+'<click-distribution>/documentation/docs/user-guide/'
 
 Linking to resources
 ====================

@@ -28,12 +28,12 @@
     </para>
 
     <para>Click is an open source project, licensed under the
-    <ulink url="../../resources/LICENSE.txt"><citetitle>Apache license</citetitle>
+    <ulink url="../../LICENSE.txt"><citetitle>Apache license</citetitle>
     </ulink>.
     </para>
 
     <para>Click uses an event based programming model for processing Servlet
-    requests and <ulink url="velocity/velocity.html">Velocity</ulink> for
+    requests and <ulink url="../../velocity/velocity.html">Velocity</ulink> for
     rendering the response. (Note other template engines such as
     <ulink url="http://java.sun.com/products/jsp/">JSP</ulink> and
     <ulink url="http://freemarker.sourceforge.net/">Freemarker</ulink> are also

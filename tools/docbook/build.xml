@@ -95,6 +95,7 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
     <target name="all" description="--> Build all documentation" depends="init">
 
     <!-- Build the Users Guide -->
+    <!--
         <ant antfile="${dbf.basedir}/build-docbook.xml" target="html">
             <property name="docbook.dir" value="${docbook.dir}"/>
             <property name="docbook.file" value="${docbook.file}"/>
@@ -103,8 +104,10 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
         <ant antfile="${dbf.basedir}/build-docbook.xml" target="htmlsingle">
             <property name="docbook.dir" value="${docbook.dir}"/>
             <property name="docbook.file" value="${docbook.file}"/>
-        </ant>
+        </ant>-->
 
+        <antcall target="html"/>
+        <antcall target="htmlsingle"/>
         <antcall target="pdf"/>
 
         <delete quiet="true" dir="${target.dir}/${docbook.dir}/tmp"/>
@@ -143,6 +146,13 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
             outfile="target/${docbook.dir}/pdf/${docbook.file}.pdf" />
 
         <antcall target="postprocess"/>
+
+        <!-- Copy artifacts to Click user-guide folder -->
+        <delete dir="${click.basedir}/documentation/docs/user-guide/pdf/"/>
+        <copy todir="${click.basedir}/documentation/docs/user-guide/pdf/">
+            <fileset dir="target/${docbook.dir}/pdf/"/>
+        </copy>
+
     </target>
 
     <target name="html"
@@ -153,18 +163,15 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
             <property name="docbook.file" value="${docbook.file}"/>
         </ant>
 
-        <!--
-            Add IE Mark of the Web to each html page.
-            NB: The MARK_OF_THE_WEB comment must end with a newline!
-        -->
-        <replace dir="${target.dir}/${docbook.dir}">
-            <include name="**/html/*.html"/>
-            <replacetoken>&lt;!-- MARK_OF_THE_WEB --&gt;</replacetoken>
-            <replacevalue>&lt;!-- saved from url=(0014)about:internet --&gt;
-            </replacevalue>
-        </replace>
-
         <antcall target="postprocess"/>
+
+        <!-- Copy artifacts to Click user-guide folder -->
+        <delete dir="${click.basedir}/documentation/docs/user-guide/html/"/>
+        <copy todir="${click.basedir}/documentation/docs/user-guide/html/">
+            <fileset dir="target/${docbook.dir}/html/">
+                <exclude name="**/*.zip"/>
+            </fileset>
+        </copy>
 
     </target>
 
@@ -176,18 +183,15 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
             <property name="docbook.file" value="${docbook.file}"/>
         </ant>
 
-        <!--
-            Add IE Mark of the Web to each html page.
-            NB: The MARK_OF_THE_WEB comment must end with a newline!
-        -->
-        <replace dir="${target.dir}/${docbook.dir}">
-            <include name="**/htmlsingle/*.html"/>
-            <replacetoken>&lt;!-- MARK_OF_THE_WEB --&gt;</replacetoken>
-            <replacevalue>&lt;!-- saved from url=(0014)about:internet --&gt;
-            </replacevalue>
-        </replace>
-
         <antcall target="postprocess"/>
+
+        <!-- Copy artifacts to Click user-guide folder -->
+        <delete dir="${click.basedir}/documentation/docs/user-guide/htmlsingle/"/>
+        <copy todir="${click.basedir}/documentation/docs/user-guide/htmlsingle/">
+            <fileset dir="target/${docbook.dir}/htmlsingle/">
+                <exclude name="**/*.zip"/>
+            </fileset>
+        </copy>
     </target>
 
     <target name="postprocess">
