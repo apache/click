@@ -140,7 +140,7 @@
       resources under the <symbol>admin</symbol> directory:
       </para>
 
-      <programlisting>&lt;security-constraint&gt;
+      <programlisting language="xml">&lt;security-constraint&gt;
    &lt;web-resource-collection&gt;
       &lt;web-resource-name&gt;admin&lt;/web-resource-name&gt;
       &lt;url-pattern&gt;<symbol>/admin/*</symbol>&lt;/url-pattern&gt;
@@ -154,7 +154,7 @@
       file as <literal>security-role</literal> elements:
       </para>
 
-      <programlisting>&lt;security-role&gt;
+      <programlisting language="xml">&lt;security-role&gt;
    &lt;role-name&gt;<varname>admin</varname>&lt;/role-name&gt;
 &lt;/security-role&gt;</programlisting>
 
@@ -195,7 +195,7 @@
       For example to use the BASIC authentication method you would specify:
       </para>
 
-      <programlisting>&lt;login-config&gt;
+      <programlisting language="xml">&lt;login-config&gt;
    &lt;auth-method&gt;<varname>BASIC</varname>&lt;/auth-method&gt;
    &lt;realm-name&gt;Admin Realm&lt;/realm-name&gt;
 &lt;/login-config&gt;</programlisting>
@@ -204,7 +204,7 @@
       page and the login error page:
       </para>
 
-      <programlisting>&lt;login-config&gt;
+      <programlisting language="xml">&lt;login-config&gt;
    &lt;auth-method&gt;<varname>FORM</varname>&lt;/auth-method&gt;
    &lt;realm-name&gt;Secure Realm&lt;/realm-name&gt;
    &lt;form-login-config&gt;
@@ -219,8 +219,7 @@
       For example:
       </para>
 
-      <programlisting>&lt;!-- login.htm --&gt;
-<command>#if</command> ($request.getParameter("<symbol>auth-error</symbol>"))
+      <programlisting language="xml"><command>#if</command> ($request.getParameter("<symbol>auth-error</symbol>"))
 &lt;div style="margin-bottom:1em;margin-top:1em;color:red;"&gt;
   Invalid User Name or Password, please try again.&lt;br/&gt;
   Please ensure Caps Lock is off.
@@ -260,7 +259,7 @@
       <filename>/not-authorized.htm</filename> page.
       </para>
 
-      <programlisting>&lt;web-app&gt;
+      <programlisting language="xml">&lt;web-app&gt;
 
     ..
 
@@ -440,7 +439,7 @@
       service objects and a Log4J logger object:
       </para>
 
-      <programlisting>public class BasePage extends Page implements ApplicationContextAware {
+      <programlisting language="java">public class BasePage extends Page implements ApplicationContextAware {
 
     /** The Spring application context. */
     protected ApplicationContext applicationContext;
@@ -502,7 +501,7 @@
       and defines the template. For example:
       </para>
 
-      <programlisting>public class BorderPage extends BasePage {
+      <programlisting language="java">public class BorderPage extends BasePage {
 
     /** The root Menu item. */
     public Menu rootMenu = new Menu();
@@ -554,7 +553,7 @@
     provided below (automapping is enabled by default):
     </para>
 
-    <programlisting>&lt;click-app&gt;
+    <programlisting language="xml">&lt;click-app&gt;
   &lt;pages package="com.mycorp.dashboard.page"/&gt;
 &lt;/click-app&gt;</programlisting>
 
@@ -564,10 +563,10 @@
     example Click startup listing is provided below:
     </para>
 
-    <programlisting>[Click] [debug] automapped pages:
+    <literallayout>[Click] [debug] automapped pages:
 [Click] [debug] /category-tree.htm -&gt; com.mycorp.dashboard.page.CategoryTree
 [Click] [debug] /process-list.htm -&gt; com.mycorp.dashboard.page.ProcessList
-[Click] [debug] /user-list.htm -&gt; com.mycorp.dashboard.page.UserList</programlisting>
+[Click] [debug] /user-list.htm -&gt; com.mycorp.dashboard.page.UserList</literallayout>
   </sect1>
 
   <sect1 id="navigation" remap="h2">
@@ -582,7 +581,7 @@
     <para>To forward to another page using the Page class:
     </para>
 
-    <programlisting>public class CustomerListPage extends Page {
+    <programlisting language="java">public class CustomerListPage extends Page {
 
     public ActionLink customerLink = new ActionLink(this,"onCustomerClick");
 
@@ -607,7 +606,7 @@
     through the customer id as a request parameter to the target page.
     </para>
 
-    <programlisting>public class CustomerListPage extends Page {
+    <programlisting language="java">public class CustomerListPage extends Page {
 
     public ActionLink customerLink = new ActionLink(this, "onCustomerClick");
 
@@ -628,7 +627,7 @@
     then redirects them to the application home page.
     </para>
 
-    <programlisting>public boolean onLogoutClick() {
+    <programlisting language="java">public boolean onLogoutClick() {
     getContext().getSession().invalidate();
 
     setRedirect(HomePage.class);
@@ -718,7 +717,7 @@
     <para>The best place to define your logger is in a common base page, for example:
     </para>
 
-    <programlisting>public class BasePage extends Page {
+    <programlisting language="java">public class BasePage extends Page {
 
     protected Logger logger;
 
@@ -735,7 +734,7 @@
     <methodname>getLogger()</methodname> method.
     </para>
 
-    <programlisting>public class CustomerListPage extends BasePage {
+    <programlisting language="java">public class CustomerListPage extends BasePage {
 
     public void onGet() {
         try {
@@ -751,7 +750,7 @@
     not required.
     </para>
 
-    <programlisting>public class CustomerListPage extends BasePage {
+    <programlisting language="java">public class CustomerListPage extends BasePage {
 
     public void onGet() {
         if (getLogger().isDebugEnabled()) {
@@ -781,7 +780,7 @@
     For example:
     </para>
 
-    <programlisting>&lt;pages package="com.mycorp.page" automapping="true"/&gt;
+    <programlisting language="xml">&lt;pages package="com.mycorp.page" automapping="true"/&gt;
   &lt;page path="click/error.htm" classname="ErrorPage"/&gt;
 &lt;/pages&gt;</programlisting>
 
@@ -799,7 +798,7 @@
     page is provided below:
     </para>
 
-    <programlisting>package com.mycorp.page.ErrorPage;
+    <programlisting language="java">package com.mycorp.page.ErrorPage;
 ..
 
 public class ErrorPage extends org.apache.click.util.ErrorPage {
@@ -914,7 +913,7 @@ public class ErrorPage extends org.apache.click.util.ErrorPage {
 
     <para>Here is an example:</para>
 
-    <programlisting>public class HomePage extends Page {
+    <programlisting language="java">public class HomePage extends Page {
 
     private Form form = new Form("form");
 
@@ -943,7 +942,7 @@ public class ErrorPage extends org.apache.click.util.ErrorPage {
     <para>Using the following <filename>border-template.htm</filename>:
     </para>
 
-    <programlisting>&lt;html&gt;
+    <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
     &lt;title&gt;Click Examples&lt;/title&gt;
     ${cssImports}
@@ -958,7 +957,7 @@ public class ErrorPage extends org.apache.click.util.ErrorPage {
 
     <para>the rendered HTML will include one CSS and one JavaScript import:</para>
 
-    <programlisting>&lt;html&gt;
+    <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
     &lt;title&gt;Click Examples&lt;/title&gt;
     &lt;link type="text/css" rel="stylesheet"

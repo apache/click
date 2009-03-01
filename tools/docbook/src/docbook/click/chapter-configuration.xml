@@ -94,7 +94,7 @@
     to a ClickServlet is provided below.
     </para>
 
-    <programlisting>&lt;web-app&gt;
+    <programlisting language="xml">&lt;web-app&gt;
 
   &lt;servlet&gt;
     &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
@@ -166,7 +166,7 @@
     <para>A basic Click app config file is provided below:
     </para>
 
-    <programlisting>&lt;click-app&gt;
+    <programlisting language="xml">&lt;click-app&gt;
 
   &lt;pages package="com.mycorp.page"/&gt;
 
@@ -177,7 +177,7 @@
     <para>An advanced config file would look like this:
     </para>
 
-    <programlisting>&lt;click-app charset="UTF-8" locale="de"&gt;
+    <programlisting language="xml">&lt;click-app charset="UTF-8" locale="de"&gt;
 
   &lt;pages package="com.mycorp.banking.page"&gt;
     &lt;page path="index.htm" classname="com.mycorp.page.Home"/&gt;
@@ -235,7 +235,7 @@
       character set to UTF-8 and the default Locale as German (de):
       </para>
 
-      <programlisting>&lt;click-app charset=" UTF-8" locale="de"&gt;
+      <programlisting language="xml">&lt;click-app charset=" UTF-8" locale="de"&gt;
   ..
 &lt;/click-app&gt;</programlisting>
     </sect2>
@@ -270,7 +270,7 @@
         of multiple packages.
         </para>
 
-        <programlisting>&lt;click-app&gt;
+        <programlisting language="xml">&lt;click-app&gt;
 
   &lt;pages package="com.mycorp.banking.page"/&gt;
 
@@ -353,7 +353,7 @@ security/change-password.htm  =&gt; <token>com.mycorp.page.security.ChangePasswo
         prefix, for example:
         </para>
 
-        <programlisting>&lt;click-app&gt;
+        <programlisting language="xml">&lt;click-app&gt;
   &lt;pages package="<token>com.mycorp.page</token>" <symbol>automapping</symbol>="false"&gt;
     &lt;page path="index.htm"                    classname="<token>Home</token>"/&gt;
     &lt;page path="search.htm"                   classname="<token>Search</token>"/&gt;
@@ -369,7 +369,7 @@ security/change-password.htm  =&gt; <token>com.mycorp.page.security.ChangePasswo
         to index.html)
         </para>
 
-        <programlisting>&lt;click-app&gt;
+        <programlisting language="xml">&lt;click-app&gt;
   &lt;pages package="<token>com.mycorp.page</token>" <symbol>automapping</symbol>="true"&gt;
     &lt;page path="index.htm" classname="Home"/&gt;
   &lt;/pages&gt;
@@ -414,9 +414,9 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         files under the <literal>/tiny_mce</literal> directory.
         </para>
 
-        <programlisting>&lt;click-app&gt;
+        <programlisting language="xml">&lt;click-app&gt;
   &lt;pages package="com.mycorp.page"&gt;
-    &lt;<symbol>excludes</symbol> pattern="<varname>/tiny_mce/*</varname>"/&gt;
+    <symbol>&lt;excludes</symbol> pattern="<varname>/tiny_mce/*</varname>"/&gt;
   &lt;/pages&gt;
 &lt;/click-app&gt;</programlisting>
 
@@ -424,9 +424,9 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
           comma separated notation. For example:
         </para>
 
-        <programlisting>&lt;click-app&gt;
+        <programlisting language="xml">&lt;click-app&gt;
   &lt;pages package="com.mycorp.page"&gt;
-    &lt;<symbol>excludes</symbol> pattern="<varname>/dhtml/*, /tiny_mce/*, banner.htm, about.htm</varname>"/&gt;
+    <symbol>&lt;excludes</symbol> pattern="<varname>/dhtml/*, /tiny_mce/*, banner.htm, about.htm</varname>"/&gt;
   &lt;/pages&gt;
 &lt;/click-app&gt;</programlisting>
 
@@ -469,7 +469,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         <para>For example:
         </para>
 
-        <programlisting>public class EmployeePage extends Page {
+        <programlisting language="java">public class EmployeePage extends Page {
 
     public Form employeeForm = new Form();
 
@@ -499,7 +499,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         <para>The above example is thus a shorthand way of writing the following:
         </para>
 
-        <programlisting>public class EmployeePage extends Page {
+        <programlisting language="java">public class EmployeePage extends Page {
 
     private Form employeeForm = new Form();
 
@@ -518,7 +518,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         attribute to false, for example:
         </para>
 
-        <programlisting>&lt;click-app&gt;
+        <programlisting language="xml">&lt;click-app&gt;
   &lt;pages package="com.mycorp.page" <symbol>autobinding</symbol>="<varname>false</varname>"/&gt;
 &lt;/click-app&gt;</programlisting>
 
@@ -560,7 +560,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         define a <literal>headers</literal> element in your application:
         </para>
 
-        <programlisting>&lt;click-app&gt;
+        <programlisting language="xml">&lt;click-app&gt;
   &lt;pages&gt;
      ..
   &lt;/pages&gt;
@@ -578,7 +578,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         be a long number value:
         </para>
 
-        <programlisting>&lt;page path="login.htm" classname="com.mycorp.page.Login"&gt;
+        <programlisting language="xml">&lt;page path="login.htm" classname="com.mycorp.page.Login"&gt;
   &lt;header name="Pragma" value="no-cache"/&gt;
   &lt;header name="Expires" value="1" type="Date"/&gt;
 &lt;/page&gt;</programlisting>
@@ -588,7 +588,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         for a period of 1 hour after which it should be reloaded.
         </para>
 
-        <programlisting>&lt;page path="home.htm" classname="com.mycorp.page.Home"&gt;
+        <programlisting language="xml">&lt;page path="home.htm" classname="com.mycorp.page.Home"&gt;
   &lt;header name="Cache-Control" value="max-age=3600, public, must-revalidate"/&gt;
 &lt;/page&gt;</programlisting>
 
@@ -596,7 +596,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         element. For example:
         </para>
 
-        <programlisting>&lt;click-app&gt;
+        <programlisting language="xml">&lt;click-app&gt;
   &lt;pages&gt;
      ..
   &lt;/pages&gt;
@@ -631,9 +631,9 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
       element in the click-app descriptor. For example:
       </para>
 
-      <programlisting>&lt;click-app&gt;
+      <programlisting language="xml">&lt;click-app&gt;
   ..
-  &lt;<symbol>format</symbol> classname="<varname>com.mycorp.util.CustomFormat</varname>"/&gt;
+  <symbol>&lt;format</symbol> classname="<varname>com.mycorp.util.CustomFormat</varname>"/&gt;
 &lt;/click-app&gt;</programlisting>
 
     </sect2>
@@ -658,9 +658,9 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
       mode you would add the following mode element:
       </para>
 
-      <programlisting>&lt;click-app&gt;
+      <programlisting language="xml">&lt;click-app&gt;
   ..
-  &lt;<symbol>mode</symbol> value="<varname>production</varname>"&gt;
+  <symbol>&lt;mode</symbol> value="<varname>production</varname>"&gt;
 &lt;/click-app&gt;</programlisting>
 
       <para>The application mode configuration can be overridden by setting the
@@ -670,7 +670,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
       restarting the application.
       </para>
 
-      <programlisting>-Dclick.mode=trace</programlisting>
+      <literallayout>-Dclick.mode=trace</literallayout>
 
       <para>The Click Application modes and their settings for Page auto loading,
       template caching and logging levels are:
@@ -892,11 +892,11 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
       elements to your <filename>click.xml</filename> file:
       </para>
 
-      <programlisting>&lt;click-app&gt;
+      <programlisting language="xml">&lt;click-app&gt;
    ..
 
    &lt;controls&gt;
-     &lt;<symbol>control</symbol> classname="<varname>com.mycorp.control.CustomField</varname>"/&gt;
+     <symbol>&lt;control</symbol> classname="<varname>com.mycorp.control.CustomField</varname>"/&gt;
    &lt;/controls&gt;
 &lt;/click-app&gt;</programlisting>
 

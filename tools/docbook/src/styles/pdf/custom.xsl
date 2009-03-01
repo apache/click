@@ -377,4 +377,89 @@
     </fo:inline>
   </xsl:template>
 
+  <!--
+  This section covers source highlighting customisation
+  -->
+  
+  <xsl:param name="highlight.source" select="1"/>
+  <xsl:output indent="no"/>
+  <xsl:param name="highlight.default.language">java</xsl:param>
+
+ <!--
+  Ant will automatically replace PATH_TO_XSLTHL_CONFIG with the path to
+  the config at runtime
+  -->
+  <xsl:param name="highlight.xslthl.config">PATH_TO_XSLTHL_CONFIG</xsl:param>
+
+  <xsl:template match='xslthl:keyword' mode="xslthl">
+    <fo:inline font-weight="bold" color="#7F0055">
+      <xsl:apply-templates mode="xslthl"/>
+    </fo:inline>
+  </xsl:template>
+
+  <xsl:template match='xslthl:string' mode="xslthl">
+    <fo:inline color="#2A00FF">
+      <xsl:apply-templates mode="xslthl"/>
+    </fo:inline>
+  </xsl:template>
+
+  <xsl:template match='xslthl:comment' mode="xslthl">
+    <fo:inline color="#3F7F5F">
+      <xsl:apply-templates mode="xslthl"/>
+    </fo:inline>
+  </xsl:template>
+
+  <xsl:template match='xslthl:value' mode="xslthl">
+    <fo:inline color="black">
+      <xsl:apply-templates mode="xslthl"/>
+    </fo:inline>
+  </xsl:template>
+
+  <xsl:template match='xslthl:tag' mode="xslthl">
+    <fo:inline font-weight="bold" color="#000099">
+      <xsl:apply-templates mode="xslthl"/>
+    </fo:inline>
+  </xsl:template>
+
+  <xsl:template match='xslthl:attribute' mode="xslthl">
+    <fo:inline color="#009900">
+      <xsl:apply-templates mode="xslthl"/>
+    </fo:inline>
+  </xsl:template>
+
+  <xsl:template match='xslthl:char' mode="xslthl">
+    <fo:inline font-style="italic" color="yellow">
+      <xsl:apply-templates mode="xslthl"/>
+    </fo:inline>
+  </xsl:template>
+
+  <xsl:template match='xslthl:number' mode="xslthl">
+    <fo:inline color="#006666">
+      <xsl:apply-templates mode="xslthl"/>
+    </fo:inline>
+  </xsl:template>
+
+  <xsl:template match='xslthl:annotation' mode="xslthl">
+    <fo:inline color="gray">
+      <xsl:apply-templates mode="xslthl"/>
+    </fo:inline>
+  </xsl:template>
+
+  <xsl:template match='xslthl:directive' mode="xslthl">
+    <xsl:apply-templates mode="xslthl"/>
+  </xsl:template>
+
+<!-- Not sure which element will be in final XSLTHL 2.0 -->
+  <xsl:template match='xslthl:doccomment|xslthl:doctype' mode="xslthl">
+    <fo:inline color="#3F7F5F">
+      <xsl:apply-templates mode="xslthl"/>
+    </fo:inline>
+  </xsl:template>
+
+  <xsl:template match='xslthl:html' mode="xslthl">
+    <fo:inline color="green">
+      <xsl:apply-templates mode="xslthl"/>
+    </fo:inline>
+  </xsl:template>
+
 </xsl:stylesheet>

@@ -58,12 +58,41 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
     <property name="docbook.dir" value="click"/>
     <property name="docbook.file" value="click-book"/>
 
+    <target name="init">
+        <!-- Hack Alert!!!
+            We need to set the property "highlight.xslthl.config" of
+            src/styles/html/custom.xsl and src/styles/pdf/custom.xsl
+            to the location of xslthl-config.xml file.
+        -->
+
+        <!-- Make backup of custom.xsl files -->
+        <available file="${styles.src.dir}/html/custom.xsl.tmp" property="html.config.present"/>
+        <available file="${styles.src.dir}/pdf/custom.xsl.tmp" property="pdf.config.present"/>
+        <antcall target="make-html-backup"/>
+        <antcall target="make-pdf-backup"/>
+
+    </target>
+
+    <target name="make-html-backup" unless="html.config.present">
+        <echo>Making backup of ${styles.src.dir}/html/custom.xsl and</echo>
+        <copy file="${styles.src.dir}/html/custom.xsl"
+            tofile="${styles.src.dir}/html/custom.xsl.tmp"/>
+        <replace file="${styles.src.dir}/html/custom.xsl" token="&gt;PATH_TO_XSLTHL_CONFIG&lt;" value="&gt;file:///${dbf.xsl.dir}/highlighting/xslthl-config.xml&lt;"/>
+    </target>
+
+     <target name="make-pdf-backup" unless="html.config.present">
+        <echo>Making backup of ${styles.src.dir}/pdf/custom.xsl</echo>
+        <copy file="${styles.src.dir}/pdf/custom.xsl"
+            tofile="${styles.src.dir}/pdf/custom.xsl.tmp"/>
+        <replace file="${styles.src.dir}/pdf/custom.xsl" token="&gt;PATH_TO_XSLTHL_CONFIG&lt;" value="&gt;file:///${dbf.xsl.dir}/highlighting/xslthl-config.xml&lt;"/>
+    </target>
+
   <!-- ======================================================================== -->
   <!-- ==                                                                    == -->
   <!-- == Build all the Velocity Docbook Documentation                       == -->
   <!-- ==                                                                    == -->
   <!-- ======================================================================== -->
-    <target name="all" description="--> Build all documentation">
+    <target name="all" description="--> Build all documentation" depends="init">
 
     <!-- Build the Users Guide -->
         <ant antfile="${dbf.basedir}/build-docbook.xml" target="html">
@@ -102,7 +131,7 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
         </classpath>
     </taskdef>
 
-    <target name="pdf" description="Generates a single PDF file" depends="prepare">
+    <target name="pdf" description="Generates a single PDF file" depends="init, prepare">
 
         <transform type="pdf" target="tmp" title="pdf" xsl="fo" dir="${docbook.dir}" file="${docbook.file}"/>
 
@@ -117,7 +146,7 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
     </target>
 
     <target name="html"
-            description="--> Generate HTML docs in multiple files">
+            description="--> Generate HTML docs in multiple files" depends="init">
 
         <ant antfile="${dbf.basedir}/build-docbook.xml" target="html">
             <property name="docbook.dir" value="${docbook.dir}"/>
@@ -140,7 +169,7 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
     </target>
 
     <target name="htmlsingle"
-            description="--> Generate HTML docs in a single, big file">
+            description="--> Generate HTML docs in a single, big file" depends="init">
 
         <ant antfile="${dbf.basedir}/build-docbook.xml" target="htmlsingle">
             <property name="docbook.dir" value="${docbook.dir}"/>
@@ -165,6 +194,15 @@ Set the property 'fop.basedir' in project.properties to the correct FOP installa
         <copy todir="${target.dir}/resources">
             <fileset dir="${src.dir}/resources/"/>
         </copy>
+
+        <!-- Hack alert!!! Restore the files that was copied in the "init" target -->
+        <copy file="${styles.src.dir}/html/custom.xsl.tmp"
+            tofile="${styles.src.dir}/html/custom.xsl" overwrite="true"/>
+        <delete file="${styles.src.dir}/html/custom.xsl.tmp"/>
+
+        <copy file="${styles.src.dir}/pdf/custom.xsl.tmp"
+            tofile="${styles.src.dir}/pdf/custom.xsl" overwrite="true"/>
+        <delete file="${styles.src.dir}/pdf/custom.xsl.tmp"/>
     </target>
 
   <!-- ======================================================================== -->

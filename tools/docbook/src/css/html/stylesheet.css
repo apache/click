@@ -169,7 +169,11 @@ p.releaseinfo, .copyright {
     padding:        0px;
 }
 
-div.note, div.important, div.example, div.informalexample, div.tip, div.caution {
+div.example {
+
+}
+
+div.note, div.important, div.informalexample, div.tip, div.caution {
     margin:         1em;
     padding:        0.5em;
     border:         1px solid gray;
@@ -189,7 +193,6 @@ div.navheader, div.navheader table {
 div.navfooter, div.navfooter table {
     font-family:    sans-serif;
     font-size:      12px;
-    clear:          both;
 }
 
 div.figure {
@@ -205,15 +208,9 @@ div.figure p.title {
 }
 
 div.example p.title {
-    margin-top:     0em;
-    margin-bottom:  0.6em;
-    text-align:     left;
-    padding-bottom: 0.4em;
-    border-bottom:  solid 1px gray;
 }
 
 div.figure img {
-    /*border:         1px solid gray;*/
     padding:        0.5em;
     margin:         0.5em;
 }
@@ -305,9 +302,56 @@ a.external {
 }
 
 div.screenshot {
+  /* Clear the float using overflow: hidden*/
+	overflow: hidden;
+  /* IE6 doesn't clear float unless we set width*/
+	width: 100%;
+}
+
+div.screenshot div {
   border: 1px solid gray;
   padding: 1em;
   margin-top: 1em;
   margin-bottom: 1em;
   float: left;
 }
+
+/* Syntax highlighting styles start */
+.str{color:#2A00FF;}
+.kwd{color:#7F0055;
+    font-weight:bold;}
+.com{color:#3F7F5F;}
+.typ{color:#000;}
+.lit{color:#066;}
+.pun{color:#660;}
+.pln{color:#000;}
+.tag{color:#000099;
+    font-weight:bold;}
+.atn{color:#009900;}
+.atv{color:#000;}
+.dec{color:#606;}
+
+pre.programlisting{
+    padding:1em;
+    border:1px solid #888;
+    text-align: left;
+    line-height: normal;
+}
+
+@media print{
+    .str{color:#2A00FF;}
+    .kwd{color:#7F0055;
+        font-weight:bold;}
+    .com{color:#3F7F5F;
+        font-style:italic;}
+    .typ{color:#000;
+        font-weight:bold;}
+    .lit{color:#044;}
+    .pun{color:#440;}
+    .pln{color:#000;}
+    .tag{color:#000099;
+        font-weight:bold;}
+    .atn{color:#009900;}
+    .atv{color:#000;}
+}
+/* Syntax highlighting styles end */

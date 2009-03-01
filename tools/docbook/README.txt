@@ -27,20 +27,39 @@ HowTo Setup the Project
 
 This project has the following dependencies:
 
-Ant version 1.7.1: http://ant.apache.org/
-Velocity Docbook Framework (DBF) version 1.0: http://velocity.apache.org/docbook/
-Apache FOP (at least version 0.95): http://xmlgraphics.apache.org/fop/0.95/index.html
+# Ant version 1.7.1: http://ant.apache.org/
+# Velocity Docbook Framework (DBF) version 1.0: http://velocity.apache.org/docbook/
+# Apache FOP (at least version 0.95): http://xmlgraphics.apache.org/fop/0.95/index.html
+# Docbook XLS project version 1.75.0: http://docbook.sourceforge.net/snapshots/
 
-Note DBF also ships with Apache FOP, but its an old version which doesn't support
-'soft pagebreaks' (see below) which Click Docs uses extensively.
+* Note DBF also ships with Apache FOP, but its an old version which does not
+  support 'soft pagebreaks' (see below).
 
-Download and unzip both the Docbook Framework (DBF) 1.0 and Apache FOP 0.95 somewhere
-on your computer. Once done set the following properties in the file
-project.properties:
+* As of this writing, Docbook-XLS 1.75.0 was not yet available. Instead download
+  the latest snapshot release from: http://docbook.sourceforge.net/snapshots/.
+  The reason for using 1.75.0 is it includes a syntax highlighter package.
+
+Download and unzip both the Docbook Framework (DBF) 1.0, Apache FOP 0.95 and
+Docbook XLS 1.75 (or latest snapshot) somewhere on your computer. Once done set
+the following properties in the file project.properties:
 
   dbf.basedir = directory-where-DBF-is-installed
   fop.basedir = directory-where-FOP-is-installed
 
+The following changes must also be made to DBF:
+
+# Replace the existing docbook-xsl version of DBF with 1.75.0. You can do that
+  by copying docbook-xsl-1.75.0.zip to the DBF folder '<dbf-install>/src/zip/'.
+  You can leave docbook-xsl-1.70.0.zip in the folder or remove it if you wish.
+
+# Now we need to update DBF to the new Docbook XSL version. To do this open the
+  file '<dbf-install>/docbook.properties' and search for the property
+  "dbf.xsl.version". Change its value from '1.70.0' to '1.75.0'. If you are using
+  a snapshot release change the value from '1.70.0' to 'snapshot':
+
+  dbf.xsl.version = snapshot
+
+That's it for setting up the project.
 
 Build Click Docs
 ================
@@ -135,6 +154,20 @@ For more info see:
 
 CHANGELOG
 =========
+
+--------------------------------------------------------------------------------
+
+Added custom syntax highlighting for both HTML and PDF:
+
+Changes made to src/styles/html/custom.xml
+Changes made to src/styles/pdf/custom.xml
+
+--------------------------------------------------------------------------------
+
+Replaced JavaScript Syntax Highlighter with XSLTHL[1] which handles both HTML
+and PDF.
+
+[1]: http://sourceforge.net/projects/xslthl
 
 --------------------------------------------------------------------------------
 

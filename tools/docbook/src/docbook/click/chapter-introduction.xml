@@ -109,7 +109,7 @@
     <para>First we create a <classname>HelloWorld</classname> page class:
     </para>
 
-    <programlisting>package <symbol>examples.page</symbol>;
+    <programlisting language="java">package <symbol>examples.page</symbol>;
 
 import java.util.Date;
 import org.apache.click.Page;
@@ -138,11 +138,12 @@ public HelloWorld extends Page {
     </calloutlist>
 
     <para>Next we have a page template <varname>hello-world.htm</varname>,
+    <indexterm><primary>Big Cats</primary><secondary>Tigers</secondary></indexterm>
     where we can access the Page's <literal>time</literal> variable using the
     reference <varname>$time</varname>:
     </para>
 
-    <programlisting>&lt;html&gt;
+    <programlisting language="xml">&lt;html&gt;
   &lt;body&gt;
 
     &lt;h2&gt;Hello World&lt;/h2&gt;
@@ -161,7 +162,7 @@ public HelloWorld extends Page {
     to the <classname>examples.page.HelloWorld</classname> page class.
     </para>
 
-    <programlisting>&lt;click-app&gt;
+    <programlisting language="xml">&lt;click-app&gt;
   &lt;pages package="<symbol>examples.page</symbol>"/&gt;
 &lt;/click-app&gt;</programlisting>
 
@@ -177,11 +178,6 @@ public HelloWorld extends Page {
     object. Velocity then renders the merged template which looks something like:
     </para>
 
-    <screenshot>
-      <graphic fileref="images/introduction/hello-world-screenshot.png" scale="85">Hello</graphic>
-    </screenshot>
-
-    <!--
     <figure id="hello-world-screenshot">
       <title>Hello World Screenshot</title>
       <inlinemediaobject>
@@ -189,7 +185,7 @@ public HelloWorld extends Page {
           <imagedata fileref="images/introduction/hello-world-screenshot.png" format="PNG" scale="85"/>
         </imageobject>
       </inlinemediaobject>
-    </figure>-->
+    </figure>
 
   </sect1>
 
@@ -206,7 +202,7 @@ public HelloWorld extends Page {
     For example:
     </para>
 
-    <programlisting>public class ControlListenerPage extends Page {
+    <programlisting language="java">public class ControlListenerPage extends Page {
 
     public ActionLink myLink = new ActionLink();
 
@@ -252,7 +248,7 @@ public HelloWorld extends Page {
     have the <varname>myLink</varname> control render the link's href attribute:
     </para>
 
-    <programlisting>&lt;html&gt;
+    <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
     &lt;link type="text/css" rel="stylesheet" href="style.css"&gt;&lt;/link&gt;
   &lt;/head&gt;
@@ -294,7 +290,7 @@ public HelloWorld extends Page {
     below:
     </para>
 
-    <programlisting>public class SimpleTablePage extends Page {
+    <programlisting language="java">public class SimpleTablePage extends Page {
 
     public Table table = new Table();
 
@@ -338,7 +334,7 @@ public HelloWorld extends Page {
     is called.
     </para>
 
-    <programlisting>&lt;html&gt;
+    <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
     <varname>$cssImports</varname>
   &lt;/head&gt;
@@ -397,7 +393,7 @@ public HelloWorld extends Page {
 
     <para>A more advanced Table example is provided below:</para>
 
-    <programlisting>public class CustomerPage extends Page {
+    <programlisting language="java">public class CustomerPage extends Page {
 
     public Table table = new Table();
     public PageLink editLink = new PageLink("Edit", EditCustomer.class);
@@ -474,7 +470,7 @@ public HelloWorld extends Page {
     is called.
     </para>
 
-    <programlisting>&lt;html&gt;
+    <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
     <varname>$cssImports</varname>
   &lt;/head&gt;
@@ -525,7 +521,7 @@ public HelloWorld extends Page {
     field is automatically added to its list of controls.
     </para>
 
-    <programlisting>public class SimpleForm extends Page {
+    <programlisting language="java">public class SimpleForm extends Page {
 
     public Form form = new Form();
     public String msg;
@@ -558,7 +554,7 @@ public HelloWorld extends Page {
     <classname>SimpleForm</classname> class.
     </para>
 
-    <programlisting>&lt;html&gt;
+    <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
     <varname>$cssImports</varname>
   &lt;/head&gt;
@@ -649,7 +645,7 @@ public HelloWorld extends Page {
     field is added to the page's model.
     </para>
 
-    <programlisting>public class AdvancedForm extends Page {
+    <programlisting language="java">public class AdvancedForm extends Page {
 
     public Form form = new Form();
     public String msg;
@@ -725,7 +721,7 @@ public HelloWorld extends Page {
     <classname>AdvancedForm</classname> class.
     </para>
 
-    <programlisting>&lt;html&gt;
+    <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
     <varname>$cssImports</varname>
   &lt;/head&gt;

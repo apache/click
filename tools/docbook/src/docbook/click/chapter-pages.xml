@@ -375,7 +375,7 @@
     <classname>CustomerDetails</classname> page:
     </para>
 
-    <programlisting>package com.mycorp.page;
+    <programlisting language="java">package com.mycorp.page;
 
 public class CustomerDetails extends Page {
 
@@ -398,7 +398,7 @@ public class CustomerDetails extends Page {
     <para>Our customer-details.htm page template contains:
     </para>
 
-    <programlisting>&lt;html&gt;
+    <programlisting language="xml">&lt;html&gt;
 &lt;body&gt;
 
   Customer ID: <symbol>$</symbol><varname>customerId</varname>
@@ -435,7 +435,7 @@ public class CustomerDetails extends Page {
       id request parameter is specified, you could write your own type converter:
       </para>
 
-      <programlisting>public class CustomTypeConverter extends RequestTypeConverter {
+      <programlisting language="java">public class CustomTypeConverter extends RequestTypeConverter {
 
     private CustomerService customerService = new CustomerService();
 
@@ -463,7 +463,7 @@ public class CustomerDetails extends Page {
       the matching page field:
       </para>
 
-      <programlisting>package com.mycorp.page;
+      <programlisting language="java">package com.mycorp.page;
 
 public class CustomerDetails extends Page {
 
@@ -476,7 +476,7 @@ public class CustomerDetails extends Page {
       <methodname>getTypeConverter()</methodname> method. For example:
       </para>
 
-      <programlisting>public class CustomClickServlet extends ClickServlet {
+      <programlisting language="java">public class CustomClickServlet extends ClickServlet {
 
     /**
      * @see ClickServlet#getTypeConverter()
@@ -519,7 +519,7 @@ public class CustomerDetails extends Page {
       the login page.
       </para>
 
-      <programlisting>public class Secure extends Page {
+      <programlisting language="java">public class Secure extends Page {
 
     /**
      * @see Page#onSecurityCheck()
@@ -545,7 +545,7 @@ public class CustomerDetails extends Page {
       authenticated by the Serlvet Container you could use a Secure page of:
       </para>
 
-      <programlisting>public class Secure extends Page {
+      <programlisting language="java">public class Secure extends Page {
 
     /**
      * @see Page#onSecurityCheck()
@@ -574,7 +574,7 @@ public class CustomerDetails extends Page {
       extend this secure page to provide their functionality.
       </para>
 
-      <programlisting>public class AdminPage extends Page {
+      <programlisting language="java">public class AdminPage extends Page {
 
     /**
      * @see Page#onSecurityCheck()
@@ -600,7 +600,7 @@ public class CustomerDetails extends Page {
       you would simply invalidate the session.
       </para>
 
-      <programlisting>public class Logout extends Page {
+      <programlisting language="java">public class Logout extends Page {
 
     /**
      * @see Page#onInit()
@@ -629,7 +629,7 @@ public class CustomerDetails extends Page {
       path <varname>index.htm</varname>:
       </para>
 
-      <programlisting>/**
+      <programlisting language="java">/**
  * @see Page#onPost()
  */
 public void onPost() {
@@ -659,7 +659,7 @@ public void onPost() {
         page.
         </para>
 
-        <programlisting>public boolean onViewClick() {
+        <programlisting language="java">public boolean onViewClick() {
     Long id = viewLink.getValueLong();
     Customer customer = CustomerDAO.findByPK(id);
 
@@ -674,7 +674,7 @@ public void onPost() {
         <varname>view-customer.htm</varname>:
         </para>
 
-        <programlisting>&lt;html&gt;
+        <programlisting language="xml">&lt;html&gt;
  &lt;head&gt;
    &lt;title&gt;Customer Details&lt;/title&gt;
  &lt;/head&gt;
@@ -703,7 +703,7 @@ public void onPost() {
         page as the page to forward the request to. For example:
         </para>
 
-        <programlisting>public boolean onEditClick() {
+        <programlisting language="java">public boolean onEditClick() {
     Long id = viewLink.getValueLong();
     Customer customer = CustomerDAO.findByPK(id);
 
@@ -724,7 +724,7 @@ public void onPost() {
         the Page has a unique path. Using this technique the above code becomes:
         </para>
 
-        <programlisting>public boolean onEditClick() {
+        <programlisting language="java">public boolean onEditClick() {
     Long id = viewLink.getValueLong();
     Customer customer = CustomerDAO.findByPK(id);
 
@@ -762,7 +762,7 @@ public void onPost() {
       would be:
       </para>
 
-      <programlisting>public boolean onViewClick() {
+      <programlisting language="java">public boolean onViewClick() {
     Long id = viewLink.getValueLong();
     Customer customer = CustomerDAO.findByPK(id);
 
@@ -803,7 +803,7 @@ public void onPost() {
       provided below:
       </para>
 
-      <programlisting>public boolean onLogoutClick() {
+      <programlisting language="java">public boolean onLogoutClick() {
     setRedirect("/logout.htm");
     return false;
 }</programlisting>
@@ -820,7 +820,7 @@ public void onPost() {
       For example:
       </para>
 
-      <programlisting>public boolean onLogoutClick() {
+      <programlisting language="java">public boolean onLogoutClick() {
     String path = getContext().getPagePath(Logout.class);
     setRedirect(path);
     return false;
@@ -834,7 +834,7 @@ public void onPost() {
       class in the redirect method. For example:
       </para>
 
-      <programlisting>public boolean onLogoutClick() {
+      <programlisting language="java">public boolean onLogoutClick() {
     setRedirect(Logout.class);
     return false;
 }</programlisting>
@@ -855,7 +855,7 @@ public void onPost() {
         transaction id encoded in the URL.
         </para>
 
-        <programlisting>public class Payment extends Page {
+        <programlisting language="java">public class Payment extends Page {
     ..
 
     public boolean onOkClick() {
@@ -878,7 +878,7 @@ public void onPost() {
         transaction id through the request parameter <varname>"transId"</varname>:
         </para>
 
-        <programlisting>public class TransComplete extends Page {
+        <programlisting language="java">public class TransComplete extends Page {
     /**
      * @see Page#onInit()
      */
@@ -925,7 +925,7 @@ public void onPost() {
     method, returning the path of the border template to render. For example:
     </para>
 
-    <programlisting>public class BorderedPage extends Page {
+    <programlisting language="java">public class BorderedPage extends Page {
 
     /**
      * @see Page#getTemplate()
@@ -938,7 +938,7 @@ public void onPost() {
     <para>The BorderedPage template <varname>border.htm</varname>:
     </para>
 
-    <programlisting>&lt;html&gt;
+    <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
     &lt;title&gt;<varname>$title</varname>&lt;/title&gt;
     &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
@@ -966,7 +966,7 @@ public void onPost() {
 
     <literallayout>&lt;page path="<varname>home.htm</varname>" classname="<token>Home</token>"/&gt;</literallayout>
 
-    <programlisting>public class Home extends BorderedPage {
+    <programlisting language="java">public class Home extends BorderedPage {
 
     public String title = "Home";
 
@@ -984,7 +984,7 @@ public void onPost() {
     page together returning:
     </para>
 
-    <programlisting>&lt;html&gt;
+    <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
     &lt;title&gt;Home&lt;/title&gt;
     &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
@@ -1058,7 +1058,7 @@ public void onPost() {
     <para>A direct rendering example is provided below.
     </para>
 
-    <programlisting>/**
+    <programlisting language="java">/**
  * Render the Java source file as "text/plain".
  *
  * @see Page#onGet()
@@ -1134,7 +1134,7 @@ public void onGet() {
     For example:
     </para>
 
-    <programlisting>package com.mycorp.page;
+    <programlisting language="java">package com.mycorp.page;
 
 import java.io.Serializable;
 

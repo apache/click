@@ -27,7 +27,7 @@
 
   <xsl:param name="ulink.target">_blank</xsl:param>
 
-<!-- Activate Graphics -->
+  <!-- Activate Graphics -->
   <xsl:param name="admon.graphics" select="1"/>
   <xsl:param name="admon.graphics.path">images/</xsl:param>
   <xsl:param name="admon.graphics.extension">.gif</xsl:param>
@@ -38,7 +38,7 @@
 
   <xsl:param name="table.borders.with.css" select="1"/>
   <xsl:param name="html.stylesheet">css/stylesheet.css</xsl:param>
-  <xsl:param name="html.stylesheet.type">text/css</xsl:param>         
+  <xsl:param name="html.stylesheet.type">text/css</xsl:param>
   <xsl:param name="generate.toc">
   book      toc,title
   chapter   toc
@@ -147,5 +147,92 @@
     <xsl:copy-of select="$link"/>
   </xsl:template>
 
+  <!--
+  This section enables source highlighting and custom colors
+  -->
+  <xsl:param name="highlight.source" select="1"/>
+  <xsl:output indent="no"/>
+  <xsl:param name="highlight.default.language">java</xsl:param>
+
+  <!--
+  Ant will automatically replace PATH_TO_XSLTHL_CONFIG with the path to
+  the config at runtime
+  -->
+  <xsl:param name="highlight.xslthl.config">file:///C:\dev\os\apache\click\docbook\click/target/docbook-xsl-snapshot/highlighting/xslthl-config.xml</xsl:param>
+
+  <xsl:template match='xslthl:keyword' mode="xslthl">
+    <span class="kwd">
+      <xsl:apply-templates mode="xslthl"/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match='xslthl:string' mode="xslthl">
+    <span class="str">
+      <xsl:apply-templates mode="xslthl"/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match='xslthl:comment' mode="xslthl">
+    <span class="com">
+      <xsl:apply-templates mode="xslthl"/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match='xslthl:directive' mode="xslthl">
+    <span class="dec">
+      <xsl:apply-templates mode="xslthl"/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match='xslthl:tag' mode="xslthl">
+    <span class="tag">
+      <xsl:apply-templates mode="xslthl"/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match='xslthl:attribute' mode="xslthl">
+    <span class="atn">
+      <xsl:apply-templates mode="xslthl"/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match='xslthl:value' mode="xslthl">
+    <span class="pln">
+      <xsl:apply-templates mode="xslthl"/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match='xslthl:number' mode="xslthl">
+    <span class="lit">
+      <xsl:apply-templates mode="xslthl"/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match='xslthl:annotation' mode="xslthl">
+    <span class="pun">
+      <xsl:apply-templates mode="xslthl"/>
+    </span>
+  </xsl:template>
+
+  <!-- Not sure which element will be in final XSLTHL 2.0 -->
+  <xsl:template match='xslthl:doccomment|xslthl:doctype' mode="xslthl">
+    <span class="com">
+      <xsl:apply-templates mode="xslthl"/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match='xslthl:html' mode="xslthl">
+    <b>
+      <i style="color: red">
+        <xsl:apply-templates mode="xslthl"/>
+      </i>
+    </b>
+  </xsl:template>
+
+  <xsl:template match='xslthl:xslt' mode="xslthl">
+    <b style="color: #0066FF">
+      <xsl:apply-templates mode="xslthl"/>
+    </b>
+  </xsl:template>
 
 </xsl:stylesheet>

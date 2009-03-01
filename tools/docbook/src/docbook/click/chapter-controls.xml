@@ -197,7 +197,7 @@
     <para>Examples of these two action listener styles are provided below:
     </para>
 
-    <programlisting>public class ActionDemo extends BorderPage {
+    <programlisting language="java">public class ActionDemo extends BorderPage {
 
     // Uses listener style 1
     public ActionLink link = new ActionLink();
@@ -595,7 +595,7 @@ production-error-message=
       <emphasis>div</emphasis> or <emphasis>span</emphasis> element:
       </para>
 
-      <programlisting>public class Div extends AbstractContainer {
+      <programlisting language="java">public class Div extends AbstractContainer {
 
     public Div(String name) {
         super(name);
@@ -613,7 +613,7 @@ production-error-message=
       documentation)
       </para>
 
-      <programlisting>public class Test {
+      <programlisting language="java">public class Test {
     public static void main (String args[]) {
         // Create mock context in which to test the container.
         MockContext.initContext();
@@ -632,7 +632,7 @@ production-error-message=
       <para>Executing the above example results in the following output:
       </para>
 
-      <programlisting>&lt;div name="mydiv" id="mydiv"&gt;
+      <programlisting language="xml">&lt;div name="mydiv" id="mydiv"&gt;
     &lt;input type="text" name="myfield" id="myfield" value="" size="20" /&gt;
 &lt;/div&gt;</programlisting>
 
@@ -649,7 +649,7 @@ production-error-message=
       <para>Below is an example of how AbstractContainerField might be used:
       </para>
 
-      <programlisting>public class FieldAndContainer extends AbstractContainerField {
+      <programlisting language="java">public class FieldAndContainer extends AbstractContainerField {
 
     public FieldAndContainer(String name) {
         super(name);
@@ -664,7 +664,7 @@ production-error-message=
       <para>To test the new class we use the following snippet:
       </para>
 
-      <programlisting>public class Test {
+      <programlisting language="java">public class Test {
     public static void main (String args[]) {
         // Create mock context in which to test the container.
         MockContext.initContext();
@@ -684,7 +684,7 @@ production-error-message=
       <para>Executing the snippet produces the output:
       </para>
 
-      <programlisting>&lt;div name="field_container" id="field_container"&gt;
+      <programlisting language="xml">&lt;div name="field_container" id="field_container"&gt;
     &lt;input type="text" name="myfield" id="myfield" value="" size="20"/&gt;
     &lt;textarea name="myarea" id="myarea" rows="3" cols="20"&gt;&lt;/textarea&gt;
 &lt;/div&gt;</programlisting>
@@ -732,7 +732,7 @@ production-error-message=
       and submit button.
       </para>
 
-      <programlisting>// EmployeePage.java
+      <programlisting language="java">// EmployeePage.java
 public EmployeePage extends Page {
 
     private Form form;
@@ -763,7 +763,7 @@ public EmployeePage extends Page {
       template as shown below, using a template engine such as Velocity:
       </para>
 
-      <programlisting>&lt;!-- employee.htm --&gt;
+      <programlisting language="xml">&lt;!-- employee.htm --&gt;
 ${form.startTag()}
     &lt;div style="margin: 1em;"&gt;
         &lt;ol&gt;
@@ -844,7 +844,7 @@ ${form.endTag()}</programlisting>
       which list item elements &lt;li&gt; can be added:
       </para>
 
-      <programlisting>// HtmlList.java
+      <programlisting language="java">// HtmlList.java
 public class HtmlList extends AbstractContainer {
 
     public String getTag() {
@@ -863,7 +863,7 @@ public class HtmlList extends AbstractContainer {
       <para>Next we create the HTML list item element &lt;li&gt;:
       </para>
 
-      <programlisting>// ListItem.java
+      <programlisting language="java">// ListItem.java
 public class ListItem extends AbstractContainer {
 
     public String getTag() {
@@ -875,7 +875,7 @@ public class ListItem extends AbstractContainer {
       which renders an HTML label element for a target Field.
       </para>
 
-      <programlisting>// FieldLabel.java
+      <programlisting language="java">// FieldLabel.java
 public class FieldLabel extends AbstractControl {
 
     private Field target;
@@ -921,7 +921,7 @@ public class FieldLabel extends AbstractControl {
       to create the custom layout:
       </para>
 
-      <programlisting>// EmployeePage.java
+      <programlisting language="java">// EmployeePage.java
 public class EmployeePage extends Page {
     // A form instance variable
     private HtmlForm form;
@@ -978,13 +978,13 @@ public class EmployeePage extends Page {
       <varname>form</varname>.
       </para>
 
-      <programlisting>&lt;!--employee.htm--&gt;
-${<varname>form</varname>}</programlisting>
+      <programlisting language="xml">&lt;!--employee.htm--&gt;
+<varname>${form}</varname></programlisting>
 
       <para>which produces the following markup:
       </para>
 
-      <programlisting>&lt;form method="post" id="form" action="/myapp/employee.htm"&gt;
+      <programlisting language="xml">&lt;form method="post" id="form" action="/myapp/employee.htm"&gt;
 &lt;input type="hidden" name="form_name" id="form_form_name" value="form"/&gt;
     &lt;ol&gt;
         &lt;li&gt;
