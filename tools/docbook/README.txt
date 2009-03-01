@@ -31,6 +31,7 @@ This project has the following dependencies:
 # Velocity Docbook Framework (DBF) version 1.0: http://velocity.apache.org/docbook/
 # Apache FOP (at least version 0.95): http://xmlgraphics.apache.org/fop/0.95/index.html
 # Docbook XLS project version 1.75.0: http://docbook.sourceforge.net/snapshots/
+# XSLTHL syntax highlighter version 2.0.1: http://sourceforge.net/projects/xslthl
 
 * Note DBF also ships with Apache FOP, but its an old version which does not
   support 'soft pagebreaks' (see below).
@@ -59,6 +60,9 @@ The following changes must be made to DBF:
   a snapshot release change the value from '1.70.0' to 'snapshot':
 
   dbf.xsl.version = snapshot
+
+# Lastly copy the XSLTHL jar (xslthl-2.0.1.jar) to the DBF lib folder. This will
+  provide syntax highlighting of all source code snippet.
 
 That's it for setting up the project.
 
