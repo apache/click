@@ -28,7 +28,15 @@ script.
 <project name="build-docbook" default="all" basedir=".">
 
     <!-- Load the properties -->
-    <!--<property file="project.properties"/>-->
+    <property file="project.properties"/>
+
+    <!-- Ensure Velocity Docbook Framework is available -->
+    <available file="${dbf.path}" property="dbf.downloaded"/>
+    <fail message="The Velocity Docbook Framework is not available. To resolve this download the dependencies (~9 MB) with 'ant get-deps'.">
+        <condition>
+            <or><isfalse value="${dbf.downloaded}"/></or>
+        </condition>
+    </fail>
 
     <import file="${dbf.basedir}/build-docbook.xml"/>
 
@@ -40,7 +48,7 @@ script.
   <!-- == Build all the Velocity Docbook Documentation                       == -->
   <!-- ==                                                                    == -->
   <!-- ======================================================================== -->
-    <target name="all" description="--> Build all documentation">
+    <target name="all" description="Build all documentation">
 
         <!-- Build the Users Guide -->
         <antcall target="html"/>
@@ -58,16 +66,16 @@ script.
   <!-- ==                                                                    == -->
   <!-- ======================================================================== -->
 
-    <taskdef name="fop"
-         classname="org.apache.fop.tools.anttasks.Fop">
-        <classpath>
-            <fileset dir="${fop.basedir}/build">
-                <include name="*.jar"/>
-            </fileset>
-        </classpath>
-    </taskdef>
-
     <target name="pdf" description="Generates a single PDF file" depends="prepare">
+
+        <taskdef name="fop"
+             classname="org.apache.fop.tools.anttasks.Fop">
+            <classpath>
+                <fileset dir="${dbf.basedir}/lib">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+        </taskdef>
 
         <transform type="pdf" target="tmp" title="pdf" xsl="fo" dir="${docbook.dir}" file="${docbook.file}"/>
 
@@ -86,8 +94,7 @@ script.
 
     </target>
 
-    <target name="html"
-            description="--> Generate HTML docs in multiple files">
+    <target name="html" description="Generate HTML docs in multiple files">
 
         <ant antfile="${dbf.basedir}/build-docbook.xml" target="html">
             <property name="docbook.dir" value="${docbook.dir}"/>
@@ -104,8 +111,7 @@ script.
 
     </target>
 
-    <target name="htmlsingle"
-            description="--> Generate HTML docs in a single, big file">
+    <target name="htmlsingle" description="Generate HTML docs in a single, big file">
 
         <ant antfile="${dbf.basedir}/build-docbook.xml" target="htmlsingle">
             <property name="docbook.dir" value="${docbook.dir}"/>
@@ -126,8 +132,7 @@ script.
   <!-- == Clean up the target directory                                      == -->
   <!-- ==                                                                    == -->
   <!-- ======================================================================== -->
-    <target name="clean"
-          description="--> Delete temporary and distribution directories for docs">
+    <target name="clean" description="Delete temporary and distribution directories for docs">
         <ant antfile="${dbf.basedir}/build-docbook.xml" target="clean"/>
     </target>
 </project>

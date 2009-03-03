@@ -30,14 +30,42 @@ script.
     <!-- Load the properties -->
     <property file="project.properties"/>
 
-    <target name="get-deps">
-
+    <target name="all" description="Build all documentation" depends="prepare">
+        <ant antfile="build-docbook.xml" target="all"/>
     </target>
 
-    <target name="do-prepare">
-        <available file="${dbf.zip}" property="dbf.downloaded"/>
-        <echo>${dbf.downloaded} ${dbf.zip}</echo>
-        <fail message="The Velocity Docbook Framework is not available. To resolve this download the dependencies with 'ant get-deps'.">
+    <target name="clean" depends="prepare"
+        description="--> Delete temporary and distribution directories for docs">
+        <delete dir="target"/>
+        <delete dir="${dbf.basedir}"/>
+    </target>
+
+    <target name="html" description="Generate HTML docs in multiple files" depends="prepare">
+        <ant antfile="build-docbook.xml" target="html"/>
+    </target>
+
+    <target name="htmlsingle" description="Generate HTML docs in a single, big file" depends="prepare">
+        <ant antfile="build-docbook.xml" target="htmlsingle"/>
+    </target>
+
+    <target name="extract" unless="dbf.extracted">
+        <unzip src="${dbf.path}" dest="${dbf.basedir}/"/>
+    </target>
+
+    <target name="get-deps">
+        <get src="http://click-docbook.googlecode.com/svn/trunk/build/${dbf.zip}"
+ 	       dest="${dbf.path}"
+ 	       verbose="true"
+ 	       usetimestamp="true"/>
+    </target>
+
+    <target name="pdf" description="Generates a single PDF file" depends="prepare">
+        <ant antfile="build-docbook.xml" target="pdf"/>
+    </target>
+
+    <target name="prepare">
+        <available file="${dbf.path}" property="dbf.downloaded"/>
+        <fail message="The Velocity Docbook Framework is not available. To resolve this download the dependencies (~9 MB) with 'ant get-deps'.">
             <condition>
                 <or><isfalse value="${dbf.downloaded}"/></or>
             </condition>
@@ -47,13 +75,4 @@ script.
         <antcall target="extract"/>
     </target>
 
-    <target name="extract" unless="dbf.extracted">
-        <unzip src="${dbf.zip}" dest="${dbf.basedir}/"/>
-    </target>
-
-    <target name="clean" depends="do-prepare"
-        description="--> Delete temporary and distribution directories for docs">
-        <ant antfile="build-docbook.xml" target="clean"/>
-        <delete dir="${dbf.basedir}"/>
-    </target>
 </project>
