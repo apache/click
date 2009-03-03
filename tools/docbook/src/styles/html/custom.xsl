@@ -155,10 +155,10 @@
   <xsl:param name="highlight.default.language">java</xsl:param>
 
   <!--
-  Ant will automatically replace PATH_TO_XSLTHL_CONFIG with the path to
+  Ant will automatically replace @dbf.xsl@ with the path to
   the config at runtime
   -->
-  <xsl:param name="highlight.xslthl.config">file:///C:\dev\os\apache\click\docbook\click/target/docbook-xsl-snapshot/highlighting/xslthl-config.xml</xsl:param>
+  <xsl:param name="highlight.xslthl.config">file:///@dbf.xsl@/highlighting/xslthl-config.xml</xsl:param>
 
   <xsl:template match='xslthl:keyword' mode="xslthl">
     <span class="kwd">

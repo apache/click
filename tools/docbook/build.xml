@@ -25,197 +25,35 @@ work unless that framework is installed. Set the property 'dbf.basedir' in
 project.properties to refer to the installation directory before using this
 script.
 -->
-<project name="click-docbook" default="all" basedir=".">
+<project name="click-book" default="all" basedir=".">
 
-    <!-- Load our properties -->
+    <!-- Load the properties -->
     <property file="project.properties"/>
 
-    <!-- Some sanity checks to ensure docbook is setup correctly -->
-    <available file="${dbf.basedir}" property="isDBFAvail"/>
-    <fail message="The Docbook framework is not installed correctly. The specified
-Docbook installation refers to the folder, '${dbf.basedir}', which does not exist.
-Set the property 'dbf.basedir' in project.properties to the correct Docbook installation folder.">
-        <condition>
-            <or>
-                <isfalse value="${isDBFAvail}"/>
-            </or>
-        </condition>
-    </fail>
-
-    <available file="${fop.basedir}" property="isFopAvail"/>
-    <fail message="The FOP framework is not installed correctly. The specified
-FOP installation refers to the folder, '${fop.basedir}', which does not exist.
-Set the property 'fop.basedir' in project.properties to the correct FOP installation folder.">
-        <condition>
-            <or>
-                <isfalse value="${isFopAvail}"/>
-            </or>
-        </condition>
-    </fail>
-
-    <import file="${dbf.basedir}/build-docbook.xml"/>
-
-    <property name="docbook.dir" value="click"/>
-    <property name="docbook.file" value="click-book"/>
-
-    <target name="init">
-        <!-- Hack Alert!!!
-            We need to set the property "highlight.xslthl.config" of
-            src/styles/html/custom.xsl and src/styles/pdf/custom.xsl
-            to the location of xslthl-config.xml file.
-        -->
-
-        <!-- Make backup of custom.xsl files -->
-        <available file="${styles.src.dir}/html/custom.xsl.tmp" property="html.config.present"/>
-        <available file="${styles.src.dir}/pdf/custom.xsl.tmp" property="pdf.config.present"/>
-        <antcall target="make-html-backup"/>
-        <antcall target="make-pdf-backup"/>
+    <target name="get-deps">
 
     </target>
 
-    <target name="make-html-backup" unless="html.config.present">
-        <echo>Making backup of ${styles.src.dir}/html/custom.xsl and</echo>
-        <copy file="${styles.src.dir}/html/custom.xsl"
-            tofile="${styles.src.dir}/html/custom.xsl.tmp"/>
-        <replace file="${styles.src.dir}/html/custom.xsl" token="&gt;PATH_TO_XSLTHL_CONFIG&lt;" value="&gt;file:///${dbf.xsl.dir}/highlighting/xslthl-config.xml&lt;"/>
+    <target name="do-prepare">
+        <available file="${dbf.zip}" property="dbf.downloaded"/>
+        <echo>${dbf.downloaded} ${dbf.zip}</echo>
+        <fail message="The Velocity Docbook Framework is not available. To resolve this download the dependencies with 'ant get-deps'.">
+            <condition>
+                <or><isfalse value="${dbf.downloaded}"/></or>
+            </condition>
+        </fail>
+
+        <available file="${dbf.basedir}" property="dbf.extracted"/>
+        <antcall target="extract"/>
     </target>
 
-     <target name="make-pdf-backup" unless="html.config.present">
-        <echo>Making backup of ${styles.src.dir}/pdf/custom.xsl</echo>
-        <copy file="${styles.src.dir}/pdf/custom.xsl"
-            tofile="${styles.src.dir}/pdf/custom.xsl.tmp"/>
-        <replace file="${styles.src.dir}/pdf/custom.xsl" token="&gt;PATH_TO_XSLTHL_CONFIG&lt;" value="&gt;file:///${dbf.xsl.dir}/highlighting/xslthl-config.xml&lt;"/>
+    <target name="extract" unless="dbf.extracted">
+        <unzip src="${dbf.zip}" dest="${dbf.basedir}/"/>
     </target>
 
-  <!-- ======================================================================== -->
-  <!-- ==                                                                    == -->
-  <!-- == Build all the Velocity Docbook Documentation                       == -->
-  <!-- ==                                                                    == -->
-  <!-- ======================================================================== -->
-    <target name="all" description="--> Build all documentation" depends="init">
-
-    <!-- Build the Users Guide -->
-    <!--
-        <ant antfile="${dbf.basedir}/build-docbook.xml" target="html">
-            <property name="docbook.dir" value="${docbook.dir}"/>
-            <property name="docbook.file" value="${docbook.file}"/>
-        </ant>
-
-        <ant antfile="${dbf.basedir}/build-docbook.xml" target="htmlsingle">
-            <property name="docbook.dir" value="${docbook.dir}"/>
-            <property name="docbook.file" value="${docbook.file}"/>
-        </ant>-->
-
-        <antcall target="html"/>
-        <antcall target="htmlsingle"/>
-        <antcall target="pdf"/>
-
-        <delete quiet="true" dir="${target.dir}/${docbook.dir}/tmp"/>
-
-    <!--<fixcrlf srcdir="target/click" includes="**/*.html" eol="crlf" /> -->
-    </target>
-
-  <!-- ======================================================================== -->
-  <!-- ==                                                                    == -->
-  <!-- == Create the PDF documentation                                       == -->
-  <!-- ==                                                                    == -->
-  <!-- ======================================================================== -->
-
-    <taskdef name="fop"
-         classname="org.apache.fop.tools.anttasks.Fop">
-        <classpath>
-            <fileset dir="${fop.basedir}/build">
-                <include name="*.jar"/>
-            </fileset>
-            <fileset dir="${fop.basedir}/lib">
-                <include name="*.jar"/>
-            </fileset>
-           
-        </classpath>
-    </taskdef>
-
-    <target name="pdf" description="Generates a single PDF file" depends="init, prepare">
-
-        <transform type="pdf" target="tmp" title="pdf" xsl="fo" dir="${docbook.dir}" file="${docbook.file}"/>
-
-        <mkdir dir="target/${docbook.dir}/pdf"/>
-
-        <fop format="application/pdf"
-            basedir="${src.dir}"
-            fofile="${pdf.target.file}.xml"
-            outfile="target/${docbook.dir}/pdf/${docbook.file}.pdf" />
-
-        <antcall target="postprocess"/>
-
-        <!-- Copy artifacts to Click user-guide folder -->
-        <delete dir="${click.basedir}/documentation/docs/user-guide/pdf/"/>
-        <copy todir="${click.basedir}/documentation/docs/user-guide/pdf/">
-            <fileset dir="target/${docbook.dir}/pdf/"/>
-        </copy>
-
-    </target>
-
-    <target name="html"
-            description="--> Generate HTML docs in multiple files" depends="init">
-
-        <ant antfile="${dbf.basedir}/build-docbook.xml" target="html">
-            <property name="docbook.dir" value="${docbook.dir}"/>
-            <property name="docbook.file" value="${docbook.file}"/>
-        </ant>
-
-        <antcall target="postprocess"/>
-
-        <!-- Copy artifacts to Click user-guide folder -->
-        <delete dir="${click.basedir}/documentation/docs/user-guide/html/"/>
-        <copy todir="${click.basedir}/documentation/docs/user-guide/html/">
-            <fileset dir="target/${docbook.dir}/html/">
-                <exclude name="**/*.zip"/>
-            </fileset>
-        </copy>
-
-    </target>
-
-    <target name="htmlsingle"
-            description="--> Generate HTML docs in a single, big file" depends="init">
-
-        <ant antfile="${dbf.basedir}/build-docbook.xml" target="htmlsingle">
-            <property name="docbook.dir" value="${docbook.dir}"/>
-            <property name="docbook.file" value="${docbook.file}"/>
-        </ant>
-
-        <antcall target="postprocess"/>
-
-        <!-- Copy artifacts to Click user-guide folder -->
-        <delete dir="${click.basedir}/documentation/docs/user-guide/htmlsingle/"/>
-        <copy todir="${click.basedir}/documentation/docs/user-guide/htmlsingle/">
-            <fileset dir="target/${docbook.dir}/htmlsingle/">
-                <exclude name="**/*.zip"/>
-            </fileset>
-        </copy>
-    </target>
-
-    <target name="postprocess">
-        <copy todir="${target.dir}/resources">
-            <fileset dir="${src.dir}/resources/"/>
-        </copy>
-
-        <!-- Hack alert!!! Restore the files that was copied in the "init" target -->
-        <copy file="${styles.src.dir}/html/custom.xsl.tmp"
-            tofile="${styles.src.dir}/html/custom.xsl" overwrite="true"/>
-        <delete file="${styles.src.dir}/html/custom.xsl.tmp"/>
-
-        <copy file="${styles.src.dir}/pdf/custom.xsl.tmp"
-            tofile="${styles.src.dir}/pdf/custom.xsl" overwrite="true"/>
-        <delete file="${styles.src.dir}/pdf/custom.xsl.tmp"/>
-    </target>
-
-  <!-- ======================================================================== -->
-  <!-- ==                                                                    == -->
-  <!-- == Clean up the target directory                                      == -->
-  <!-- ==                                                                    == -->
-  <!-- ======================================================================== -->
-    <target name="clean"
-          description="--> Delete temporary and distribution directories for docs">
-        <ant antfile="${dbf.basedir}/build-docbook.xml" target="clean"/>
+    <target name="clean" depends="do-prepare"
+        description="--> Delete temporary and distribution directories for docs">
+        <ant antfile="build-docbook.xml" target="clean"/>
+        <delete dir="${dbf.basedir}"/>
     </target>
 </project>
