@@ -45,184 +45,6 @@ import org.apache.commons.lang.ClassUtils;
 public class ContainerUtils {
 
     /**
-     * Return the list of Buttons for the given Container, recursively including
-     * any Fields contained in child containers.
-     *
-     * @param container the container to obtain the buttons from
-     * @return the list of contained buttons
-     */
-    public static List getButtons(final Container container) {
-        if (container == null) {
-            throw new IllegalArgumentException("Null container parameter");
-        }
-
-        final List buttons = new ArrayList();
-        addButtons(container, buttons);
-        return buttons;
-    }
-
-    /**
-     * Return the list of Fields for the given Container, recursively including
-     * any Fields contained in child containers.
-     *
-     * @param container the container to obtain the fields from
-     * @return the list of contained fields
-     */
-    public static List getFields(final Container container) {
-        if (container == null) {
-            throw new IllegalArgumentException("Null container parameter");
-        }
-
-        final List fields = new ArrayList();
-        addFields(container, fields);
-        return fields;
-    }
-
-    /**
-     * Return the list of input Fields (TextField, Select, Radio, Checkbox etc).
-     * for the given Container, recursively including any Fields contained in
-     * child containers. The list of returned fields will exclude any
-     * <tt>Button</tt>, <tt>FieldSet</tt> and <tt>Label</tt> fields.
-     *
-     * @param container the container to obtain the fields from
-     * @return the list of contained fields
-     */
-    public static List getInputFields(final Container container) {
-        if (container == null) {
-            throw new IllegalArgumentException("Null container parameter");
-        }
-
-        final List fields = new ArrayList();
-        addInputFields(container, fields);
-        return fields;
-    }
-
-    /**
-     * Return the list of Fields for the given Container, recursively including
-     * any Fields contained in child containers. The list of returned fields
-     * will exclude any <tt>Button</tt> and <tt>FieldSet</tt> fields.
-     *
-     * @param container the container to obtain the fields from
-     * @return the list of contained fields
-     */
-    public static List getFieldsAndLabels(final Container container) {
-        if (container == null) {
-            throw new IllegalArgumentException("Null container parameter");
-        }
-
-        final List fields = new ArrayList();
-        addFieldsAndLabels(container, fields);
-        return fields;
-    }
-
-    /**
-     * Return a map of all Fields for the given Container, recursively including
-     * any Fields contained in child containers.
-     * <p/>
-     * The map's key / value pair will consist of the control name and instance.
-     *
-     * @param container the container to obtain the fields from
-     * @return the map of contained fields
-     */
-    public static Map getFieldMap(final Container container) {
-        if (container == null) {
-            throw new IllegalArgumentException("Null container parameter");
-        }
-
-        final Map fields = new HashMap();
-        addFields(container, fields);
-        return fields;
-    }
-
-    /**
-     * Return the list of hidden Fields for the given Container, recursively including
-     * any Fields contained in child containers. The list of returned fields
-     * will exclude any <tt>Button</tt>, <tt>FieldSet</tt> and <tt>Label</tt>
-     * fields.
-     *
-     * @param container the container to obtain the fields from
-     * @return the list of contained fields
-     */
-    public static List getHiddenFields(final Container container) {
-        if (container == null) {
-            throw new IllegalArgumentException("Null container parameter");
-        }
-
-        final List fields = new ArrayList();
-        addHiddenFields(container, fields);
-        return fields;
-    }
-
-    /**
-     * Return a list of container fields which are not valid, not hidden and not
-     * disabled.
-     * <p/>
-     * The list of returned fields will exclude any <tt>Button</tt> fields.
-     *
-     * @param container the container to obtain the invalid fields from
-     * @return list of container fields which are not valid, not hidden and not
-     * disabled
-     */
-    public static List getErrorFields(final Container container) {
-        if (container == null) {
-            throw new IllegalArgumentException("Null container parameter");
-        }
-
-        final List fields = new ArrayList();
-        addErrorFields(container, fields);
-        return fields;
-    }
-
-    /**
-     * Find and return the specified controls parent Form or null
-     * if no Form is present.
-     *
-     * @param control the control to check for Form
-     * @return the controls parent Form or null if no parent is a Form
-     */
-    public static Form findForm(Control control) {
-        while (control.getParent() != null && !(control.getParent() instanceof Page)) {
-            control = (Control) control.getParent();
-            if (control instanceof Form) {
-                return (Form) control;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Find and return the first control with a matching name in the specified
-     * container.
-     *
-     * @param container the container that is checked for controls for matching
-     * names
-     * @param name the name of the control to find
-     * @return the control with a matching name
-     */
-    public static Control findControlByName(Container container, String name) {
-        Control control = (Control) container.getControl(name);
-
-        if (control != null) {
-            return control;
-
-        } else {
-            for (int i = 0; i < container.getControls().size(); i++) {
-                Control childControl = (Control) container.getControls().get(i);
-
-                if (childControl instanceof Container) {
-                    Container childContainer = (Container) childControl;
-                    Control found = findControlByName(childContainer, name);
-                    if (found != null) {
-                        return found;
-                    }
-                }
-
-            }
-        }
-        return null;
-    }
-
-    /**
      * Populate the given object attributes from the Containers field values.
      * <p/>
      * If a Field and object attribute matches, the object attribute is set to
@@ -472,19 +294,341 @@ public class ContainerUtils {
     }
 
     /**
-     * Return how deep the control is in the container hierarchy.
+     * Find and return the first control with a matching name in the specified
+     * container.
      *
-     * @param control the control which depth to return
-     * @return the depth of the control in the container hierarchy
+     * @param container the container that is checked for controls for matching
+     * names
+     * @param name the name of the control to find
+     * @return the control with a matching name
      */
-    protected int getDepth(Control control) {
-        int depth = 1;
+    public static Control findControlByName(Container container, String name) {
+        Control control = (Control) container.getControl(name);
 
+        if (control != null) {
+            return control;
+
+        } else {
+            for (int i = 0; i < container.getControls().size(); i++) {
+                Control childControl = (Control) container.getControls().get(i);
+
+                if (childControl instanceof Container) {
+                    Container childContainer = (Container) childControl;
+                    Control found = findControlByName(childContainer, name);
+                    if (found != null) {
+                        return found;
+                    }
+                }
+
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find and return the specified controls parent Form or null
+     * if no Form is present.
+     *
+     * @param control the control to check for Form
+     * @return the controls parent Form or null if no parent is a Form
+     */
+    public static Form findForm(Control control) {
         while (control.getParent() != null && !(control.getParent() instanceof Page)) {
             control = (Control) control.getParent();
-            depth++;
+            if (control instanceof Form) {
+                return (Form) control;
+            }
         }
-        return depth;
+        return null;
+    }
+
+    /**
+     * Return the list of Buttons for the given Container, recursively including
+     * any Fields contained in child containers.
+     *
+     * @param container the container to obtain the buttons from
+     * @return the list of contained buttons
+     */
+    public static List getButtons(final Container container) {
+        if (container == null) {
+            throw new IllegalArgumentException("Null container parameter");
+        }
+
+        final List buttons = new ArrayList();
+        addButtons(container, buttons);
+        return buttons;
+    }
+
+    /**
+     * Return a list of container fields which are not valid, not hidden and not
+     * disabled.
+     * <p/>
+     * The list of returned fields will exclude any <tt>Button</tt> fields.
+     *
+     * @param container the container to obtain the invalid fields from
+     * @return list of container fields which are not valid, not hidden and not
+     * disabled
+     */
+    public static List getErrorFields(final Container container) {
+        if (container == null) {
+            throw new IllegalArgumentException("Null container parameter");
+        }
+
+        final List fields = new ArrayList();
+        addErrorFields(container, fields);
+        return fields;
+    }
+
+    /**
+     * Return a map of all Fields for the given Container, recursively including
+     * any Fields contained in child containers.
+     * <p/>
+     * The map's key / value pair will consist of the control name and instance.
+     *
+     * @param container the container to obtain the fields from
+     * @return the map of contained fields
+     */
+    public static Map getFieldMap(final Container container) {
+        if (container == null) {
+            throw new IllegalArgumentException("Null container parameter");
+        }
+
+        final Map fields = new HashMap();
+        addFields(container, fields);
+        return fields;
+    }
+
+    /**
+     * Return the list of Fields for the given Container, recursively including
+     * any Fields contained in child containers.
+     *
+     * @param container the container to obtain the fields from
+     * @return the list of contained fields
+     */
+    public static List getFields(final Container container) {
+        if (container == null) {
+            throw new IllegalArgumentException("Null container parameter");
+        }
+
+        final List fields = new ArrayList();
+        addFields(container, fields);
+        return fields;
+    }
+
+    /**
+     * Return the list of Fields for the given Container, recursively including
+     * any Fields contained in child containers. The list of returned fields
+     * will exclude any <tt>Button</tt> and <tt>FieldSet</tt> fields.
+     *
+     * @param container the container to obtain the fields from
+     * @return the list of contained fields
+     */
+    public static List getFieldsAndLabels(final Container container) {
+        if (container == null) {
+            throw new IllegalArgumentException("Null container parameter");
+        }
+
+        final List fields = new ArrayList();
+        addFieldsAndLabels(container, fields);
+        return fields;
+    }
+
+    /**
+     * Return the list of hidden Fields for the given Container, recursively including
+     * any Fields contained in child containers. The list of returned fields
+     * will exclude any <tt>Button</tt>, <tt>FieldSet</tt> and <tt>Label</tt>
+     * fields.
+     *
+     * @param container the container to obtain the fields from
+     * @return the list of contained fields
+     */
+    public static List getHiddenFields(final Container container) {
+        if (container == null) {
+            throw new IllegalArgumentException("Null container parameter");
+        }
+
+        final List fields = new ArrayList();
+        addHiddenFields(container, fields);
+        return fields;
+    }
+
+    /**
+     * Return the list of input Fields (TextField, Select, Radio, Checkbox etc).
+     * for the given Container, recursively including any Fields contained in
+     * child containers. The list of returned fields will exclude any
+     * <tt>Button</tt>, <tt>FieldSet</tt> and <tt>Label</tt> fields.
+     *
+     * @param container the container to obtain the fields from
+     * @return the list of contained fields
+     */
+    public static List getInputFields(final Container container) {
+        if (container == null) {
+            throw new IllegalArgumentException("Null container parameter");
+        }
+
+        final List fields = new ArrayList();
+        addInputFields(container, fields);
+        return fields;
+    }
+
+    /**
+     * Add the given control to the container at the specified index, and return
+     * the added instance.
+     * <p/>
+     * <b>Please note</b> if the specified control already has a parent assigned,
+     * it will automatically be removed from that parent and inserted into the
+     * container.
+     * <p/>
+     * This method is useful for developers needing to implement the
+     * {@link org.apache.click.control.Container} interface but cannot for one
+     * reason or another extend from {@link org.apache.click.control.AbstractContainer}.
+     * For example if the Container already extends from an existing <tt>Control</tt>
+     * such as a <tt>Field</tt>, it won't be possible to extend
+     * <tt>AbstractContainer</tt> as well. In such scenarios instead of
+     * reimplementing {@link org.apache.click.control.Container#insert(org.apache.click.Control, int) insert},
+     * one can delegate to this method.
+     * <p/>
+     * For example, a custom Container that extends <tt>Field</tt> and
+     * implements <tt>Container</tt> could implement the <tt>insert</tt> method
+     * as follows:
+     * <pre class="prettyprint">
+     * public class MyContainer extends Field implements Container {
+     *
+     *     public Control insert(Control control, int index) {
+     *         return ContainerUtils.insert(this, control, index, getControlMap());
+     *     }
+     *
+     *     ...
+     * }
+     * </pre>
+     *
+     * @param container the container to insert the given control into
+     * @param control the control to add to the container
+     * @param index the index at which the control is to be inserted
+     * @param controlMap the container's map of controls keyed on control name
+     * @return the control that was added to the container
+     *
+     * @throws IllegalArgumentException if the control is null or if the control
+     * and container is the same instance or the container already contains
+     * a control with the same name or if a Field name is not defined
+     *
+     * @throws IndexOutOfBoundsException if index is out of range
+     * <tt>(index &lt; 0 || index &gt; container.getControls().size())</tt>
+     */
+    public static Control insert(Container container, Control control, int index,
+        Map controlMap) {
+
+        // Pre conditions start
+        if (control == null) {
+            throw new IllegalArgumentException("Null control parameter");
+        }
+        if (control == container) {
+            throw new IllegalArgumentException("Cannot add container to itself");
+        }
+        int size = container.getControls().size();
+        if (index > size || index < 0) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: "
+                + size);
+        }
+        // Check if container already contains the control
+        if (controlMap.containsKey(control.getName())
+            && !(control instanceof Label)) {
+
+            throw new IllegalArgumentException(
+                "Container already contains control named: " + control.getName());
+        }
+
+        // Pre conditions end
+
+        // Check if control already has parent
+        // If parent references the given container, there is no need to remove it
+        Object currentParent = control.getParent();
+        if (currentParent != null && currentParent != container) {
+
+            // Remove control from parent Page or Container
+            if (currentParent instanceof Page) {
+                ((Page) currentParent).removeControl(control);
+
+            } else if (currentParent instanceof Container) {
+                ((Container) currentParent).remove(control);
+            }
+
+            // Create warning message to users that the parent has been reset
+            logParentReset(container, control, currentParent);
+        }
+
+        // Note: set parent first since setParent might veto further processing
+        control.setParent(container);
+        container.getControls().add(index, control);
+
+        String controlName = control.getName();
+        if (controlName != null) {
+            controlMap.put(controlName, control);
+        }
+        return control;
+    }
+
+    /**
+     * Remove the given control from the container, returning <tt>true</tt> if
+     * the control was found in the container and removed, or <tt>false</tt> if
+     * the control was not found.
+     * <p/>
+     * This method is useful for developers needing to implement the
+     * {@link org.apache.click.control.Container} interface but cannot for one
+     * reason or another extend from {@link org.apache.click.control.AbstractContainer}.
+     * For example if the Container already extends from an existing <tt>Control</tt>
+     * such as a <tt>Field</tt>, it won't be possible to extend
+     * <tt>AbstractContainer</tt> as well. In such scenarios instead of
+     * reimplementing {@link org.apache.click.control.Container#remove(org.apache.click.Control) remove},
+     * one can delegate to this method.
+     * <p/>
+     * For example, a custom Container that extends <tt>Field</tt> and
+     * implements <tt>Container</tt> could implement the <tt>remove</tt> method
+     * as follows:
+     * <pre class="prettyprint">
+     * public class MyContainer extends Field implements Container {
+     *
+     *     public boolean remove (Control control) {
+     *         return ContainerUtils.remove(this, control, getControlMap());
+     *     }
+     *
+     *     ...
+     * }
+     * </pre>
+     *
+     * @param container the container to remove the given control from
+     * @param control the control to remove from the container
+     * @param controlMap the container's map of controls keyed on control name
+     *
+     * @return true if the control was removed from the container
+     * @throws IllegalArgumentException if the control is null
+     */
+    public static boolean remove(Container container, Control control,
+        Map controlMap) {
+
+        if (control == null) {
+            throw new IllegalArgumentException("Control cannot be null");
+        }
+
+        boolean contains = container.getControls().remove(control);
+
+        if (contains) {
+            // Only nullify if the container is parent. This check is for the
+            // case where a Control has two parents e.g. Page and Form.
+            // NOTE the current #insert logic does not allow Controls to have
+            // two parents so this check might be redundant.
+            if (control.getParent() == container) {
+                control.setParent(null);
+            }
+
+            String controlName = control.getName();
+
+            if (controlName != null) {
+                controlMap.remove(controlName);
+            }
+        }
+
+        return contains;
     }
 
     // -------------------------------------------------------- Private Methods
@@ -1051,5 +1195,63 @@ public class ContainerUtils {
                 }
             }
         }
+    }
+
+    /**
+     * Log a warning that the parent of the given control will be set to
+     * the specified container.
+     *
+     * @param container the parent container
+     * @param control the control which parent is being reset
+     * @param currentParent the control current parent
+     */
+    private static void logParentReset(Container container, Control control,
+        Object currentParent) {
+        HtmlStringBuffer message = new HtmlStringBuffer();
+
+        message.append("Changed ");
+        message.append(ClassUtils.getShortClassName(control.getClass()));
+        String controlId = control.getId();
+        if (controlId != null) {
+            message.append("[");
+            message.append(controlId);
+            message.append("]");
+        } else {
+            message.append("#");
+            message.append(control.hashCode());
+        }
+        message.append(" parent from ");
+
+        if (currentParent instanceof Page) {
+            message.append(ClassUtils.getShortClassName(currentParent.getClass()));
+
+        } else if (currentParent instanceof Container) {
+            Container parentContainer = (Container) currentParent;
+
+            message.append(ClassUtils.getShortClassName(parentContainer.getClass()));
+            String parentId = parentContainer.getId();
+            if (parentId != null) {
+                message.append("[");
+                message.append(parentId);
+                message.append("]");
+            } else {
+                message.append("#");
+                message.append(parentContainer.hashCode());
+            }
+        }
+
+        message.append(" to ");
+        message.append(ClassUtils.getShortClassName(container.getClass()));
+        String id = container.getId();
+        if (id != null) {
+            message.append("[");
+            message.append(id);
+            message.append("]");
+        } else {
+            message.append("#");
+            message.append(container.hashCode());
+        }
+
+        ClickUtils.getLogService().warn(message);
     }
 }

@@ -648,29 +648,6 @@ public class Form extends AbstractContainer {
     // --------------------------------------------------------- Container Impl
 
     /**
-     * Add a Control to the form and return the added instance.
-     * <p/>
-     * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
-     * where the key is the Control name and value is the Control instance.
-     * <p/>
-     * All controls are available on the {@link #getControls() controls} list
-     * in the order they were added. If you are only interested in Fields,
-     * note that Buttons are available on the {@link #getButtonList() buttonList}
-     * while other fields are available on {@link #getFieldList() fieldList}.
-     *
-     * @see Container#add(org.apache.click.Control)
-     *
-     * @param control the control to add to the container and return
-     * @return the control that was added to the container
-     * @throws IllegalArgumentException if the control is null, the Control name
-     * is not defined or the container already contains a control with the same
-     * name
-     */
-    public Control add(Control control) {
-        return super.add(control);
-    }
-
-    /**
      * Add the control to the form at the specified index, and return the
      * added instance.
      * <p/>
@@ -694,7 +671,7 @@ public class Form extends AbstractContainer {
      * hidden fields might influence the position of the Control you insert.
      * <em>This restriction might be removed in a future version of Click.</em>
      *
-     * @see org.apache.click.control.Container#insert(org.apache.click.Control, int)
+     * @see Container#insert(org.apache.click.Control, int)
      *
      * @param control the control to add to the container
      * @param index the index at which the control is to be inserted
@@ -738,6 +715,29 @@ public class Form extends AbstractContainer {
         }
 
         return control;
+    }
+
+    /**
+     * Add a Control to the form and return the added instance.
+     * <p/>
+     * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
+     * where the key is the Control name and value is the Control instance.
+     * <p/>
+     * All controls are available on the {@link #getControls() controls} list
+     * in the order they were added. If you are only interested in Fields,
+     * note that Buttons are available on the {@link #getButtonList() buttonList}
+     * while other fields are available on {@link #getFieldList() fieldList}.
+     *
+     * @see Container#add(org.apache.click.Control)
+     *
+     * @param control the control to add to the container and return
+     * @return the control that was added to the container
+     * @throws IllegalArgumentException if the control is null, the Control name
+     * is not defined or the container already contains a control with the same
+     * name
+     */
+    public Control add(Control control) {
+        return super.add(control);
     }
 
     /**
