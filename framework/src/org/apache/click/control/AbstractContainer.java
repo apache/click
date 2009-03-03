@@ -25,10 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.click.Control;
-import org.apache.click.Page;
 import org.apache.click.util.ClickUtils;
+import org.apache.click.util.ContainerUtils;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.commons.lang.ClassUtils;
 
 /**
  * Provides a default implementation of the {@link Container} interface,
@@ -118,63 +117,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      * <tt>(index &lt; 0 || index &gt; getControls().size())</tt>
      */
     public Control insert(Control control, int index) {
-
-        // Pre conditions start
-        if (control == null) {
-            throw new IllegalArgumentException("Null control parameter");
-        }
-        if (control == this) {
-            throw new IllegalArgumentException("Cannot add container to itself");
-        }
-        int size = getControls().size();
-        if (index > size || index < 0) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: "
-                + size);
-        }
-        if (control instanceof Field) {
-            Field field = (Field) control;
-            // Check if container already contains the field. Labels can share
-            // names though.
-            if (getControlMap().containsKey(field.getName())
-                && !(field instanceof Label)) {
-                String msg = "Container already contains field named: " + field.getName();
-                throw new IllegalArgumentException(msg);
-            }
-        } else {
-            // Check if container already contains the control
-            if (getControlMap().containsKey(control.getName())) {
-                throw new IllegalArgumentException(
-                    "Container already contains control named: " + control.getName());
-            }
-        }
-        // Pre conditions end
-
-        // Check if control already has parent
-        // If parent references *this* container, there is no need to remove it
-        Object currentParent = control.getParent();
-        if (currentParent != null && currentParent != this) {
-
-            // Remove control from parent Page or Container
-            if (currentParent instanceof Page) {
-                ((Page) currentParent).removeControl(control);
-
-            } else if (currentParent instanceof Container) {
-                ((Container) currentParent).remove(control);
-            }
-
-            // Create warning message to users that the parent has been reset
-            logParentReset(control, currentParent);
-        }
-
-        // Note: set parent first since setParent might veto further processing
-        control.setParent(this);
-        getControls().add(index, control);
-
-        String controlName = control.getName();
-        if (controlName != null) {
-            getControlMap().put(controlName, control);
-        }
-        return control;
+        return ContainerUtils.insert(this, control, index, getControlMap());
     }
 
     /**
@@ -185,29 +128,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      * @throws IllegalArgumentException if the control is null
      */
     public boolean remove(Control control) {
-        if (control == null) {
-            throw new IllegalArgumentException("Control cannot be null");
-        }
-
-        boolean contains = getControls().remove(control);
-
-        if (contains) {
-            // Only nullify if this container is parent. This check is for the
-            // case where a Control has two parents e.g. Page and Form.
-            // NOTE the current #insert logic does not allow Controls to have
-            // two parents so this check might be redundant.
-            if (control.getParent() == this) {
-                control.setParent(null);
-            }
-
-            String controlName = control.getName();
-
-            if (controlName != null) {
-                getControlMap().remove(controlName);
-            }
-        }
-
-        return contains;
+        return ContainerUtils.remove(this, control, getControlMap());
     }
 
     /**
@@ -463,63 +384,5 @@ public abstract class AbstractContainer extends AbstractControl implements
                 }
             }
         }
-    }
-
-    // -------------------------------------------------------- Private Methods
-
-    /**
-     * Log a warning that the parent of the specified control will be set to
-     * this container.
-     *
-     * @param control the control which parent is being reset
-     * @param currentParent the control current parent
-     */
-    private void logParentReset(Control control, Object currentParent) {
-        HtmlStringBuffer message = new HtmlStringBuffer();
-
-        message.append("Changed ");
-        message.append(ClassUtils.getShortClassName(control.getClass()));
-        String controlId = control.getId();
-        if (controlId != null) {
-            message.append("[");
-            message.append(controlId);
-            message.append("]");
-        } else {
-            message.append("#");
-            message.append(control.hashCode());
-        }
-        message.append(" parent from ");
-
-        if (currentParent instanceof Page) {
-            message.append(ClassUtils.getShortClassName(currentParent.getClass()));
-
-        } else if (currentParent instanceof Container) {
-            Container parentContainer = (Container) currentParent;
-
-            message.append(ClassUtils.getShortClassName(parentContainer.getClass()));
-            String parentId = parentContainer.getId();
-            if (parentId != null) {
-                message.append("[");
-                message.append(parentId);
-                message.append("]");
-            } else {
-                message.append("#");
-                message.append(parentContainer.hashCode());
-            }
-        }
-
-        message.append(" to ");
-        message.append(ClassUtils.getShortClassName(this.getClass()));
-        String id = this.getId();
-        if (id != null) {
-            message.append("[");
-            message.append(id);
-            message.append("]");
-        } else {
-            message.append("#");
-            message.append(this.hashCode());
-        }
-
-        ClickUtils.getLogService().warn(message);
     }
 }

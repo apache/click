@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.click.ActionListener;
-import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ContainerUtils;
@@ -104,6 +103,15 @@ public class FieldSet extends Field implements Container {
 
     // ----------------------------------------------------- Instance Variables
 
+    /** The list of controls. */
+    protected List controls;
+
+    /** The map of controls keyed by field name. */
+    protected Map controlMap;
+
+    /** The ordered list of fields, excluding buttons. */
+    protected final List fieldList = new ArrayList();
+
     /** The map of field width values. */
     protected Map fieldWidths;
 
@@ -123,9 +131,6 @@ public class FieldSet extends Field implements Container {
      * Currently only {@link Form} acts upon this property.
      */
     protected Integer columns;
-
-    /** Internal container instance. */
-    private InnerContainerField container = new InnerContainerField();
 
     // ----------------------------------------------------------- Constructors
 
@@ -177,7 +182,7 @@ public class FieldSet extends Field implements Container {
      * it will automatically be removed from that parent and inserted into the
      * fieldSet.
      *
-     * @see Container#add(org.apache.click.Control)
+     * @see Container#insert(org.apache.click.Control, int)
      *
      * @param control the control to add to the FieldSet and return
      * @param index the index at which the control is to be inserted
@@ -187,7 +192,33 @@ public class FieldSet extends Field implements Container {
      * name or if the control is neither a Field nor FieldSet
      */
     public Control insert(Control control, int index) {
-        return container.insert(control, index);
+        ContainerUtils.insert(this, control, index, getControlMap());
+
+        if (control instanceof Field) {
+            Field field = (Field) control;
+
+            // Add field to fieldList for fast access
+            if (!(field instanceof Button)) {
+                getFieldList().add(field);
+            }
+
+            Form form = getForm();
+            field.setForm(form);
+
+            if (form != null && form.getDefaultFieldSize() > 0) {
+                if (field instanceof TextField) {
+                    ((TextField) field).setSize(form.getDefaultFieldSize());
+
+                } else if (field instanceof FileField) {
+                    ((FileField) field).setSize(form.getDefaultFieldSize());
+
+                } else if (field instanceof TextArea) {
+                    ((TextArea) field).setCols(form.getDefaultFieldSize());
+                }
+            }
+        }
+
+        return control;
     }
 
     /**
@@ -298,7 +329,20 @@ public class FieldSet extends Field implements Container {
      * @throws IllegalArgumentException if the control is null
      */
     public boolean remove(Control control) {
-        return container.remove(control);
+        boolean removed = ContainerUtils.remove(this, control, getControlMap());
+
+        if (removed && control instanceof Field) {
+            Field field = (Field) control;
+
+            field.setForm(null);
+
+            if (!(field instanceof Button)) {
+                getFieldList().remove(field);
+            }
+        }
+        getFieldWidths().remove(control.getName());
+
+        return removed;
     }
 
     /**
@@ -336,7 +380,10 @@ public class FieldSet extends Field implements Container {
      * @return the sequential list of controls held by the container
      */
     public List getControls() {
-        return container.getControls();
+        if (controls == null) {
+            controls = new ArrayList();
+        }
+        return controls;
     }
 
     /**
@@ -346,7 +393,10 @@ public class FieldSet extends Field implements Container {
      * @return the named control from the container if found or null otherwise
      */
     public Control getControl(String controlName) {
-        return container.getControl(controlName);
+        if (hasControls()) {
+            return (Control) getControlMap().get(controlName);
+        }
+        return null;
     }
 
     /**
@@ -356,7 +406,7 @@ public class FieldSet extends Field implements Container {
      * @return true if the container contains the specified control
      */
     public boolean contains(Control control) {
-        return container.contains(control);
+        return getControls().contains(control);
     }
 
     /**
@@ -367,7 +417,7 @@ public class FieldSet extends Field implements Container {
      * @return true if the container has existing controls, false otherwise.
      */
     public boolean hasControls() {
-        return container.hasControls();
+        return (controls == null) ? false : !controls.isEmpty();
     }
 
     /**
@@ -429,7 +479,7 @@ public class FieldSet extends Field implements Container {
             return readonly;
         }
     }
- 
+
     /**
      * Set the FieldSet readonly flag which in turn will set all its fields
      * to readonly.
@@ -503,15 +553,17 @@ public class FieldSet extends Field implements Container {
     }
 
     /**
-     * Return the List of fields in the same order they were added to the
-     * fieldset.
+     * Return the ordered list of FieldSet fields, excluding buttons.
+     * <p/>
+     * The order of the fields is the same order they were added to the
+     * FieldSet.
      * <p/>
      * The returned list only includes fields directly added to the FieldSet.
      *
      * @return the ordered List of fieldset fields
      */
     public List getFieldList() {
-        return container.getFieldList();
+        return fieldList;
     }
 
     /**
@@ -566,9 +618,9 @@ public class FieldSet extends Field implements Container {
      * and JavaScript files
      */
     public String getHtmlImports() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
-
         if (hasControls()) {
+            HtmlStringBuffer buffer = new HtmlStringBuffer(512);
+
             for (int i = 0, size = getControls().size(); i < size; i++) {
                 Control control = (Control) getControls().get(i);
                 String htmlImports = control.getHtmlImports();
@@ -576,9 +628,10 @@ public class FieldSet extends Field implements Container {
                     buffer.append(htmlImports);
                 }
             }
+            return buffer.toString();
         }
 
-        return buffer.toString();
+        return null;
     }
 
     /**
@@ -712,21 +765,41 @@ public class FieldSet extends Field implements Container {
      * @see org.apache.click.Control#onDestroy()
      */
     public void onDestroy() {
-        container.onDestroy();
+        if (hasControls()) {
+            for (int i = 0, size = getControls().size(); i < size; i++) {
+                Control control = (Control) getControls().get(i);
+                try {
+                    control.onDestroy();
+                } catch (Throwable t) {
+                    ClickUtils.getLogService().error("onDestroy error", t);
+                }
+            }
+        }
     }
 
-    /**
-     * @see org.apache.click.Control#onInit()
-     */
+   /**
+    * @see org.apache.click.Control#onInit()
+    */
     public void onInit() {
-        container.onInit();
+        super.onInit();
+        if (hasControls()) {
+            for (int i = 0, size = getControls().size(); i < size; i++) {
+                Control control = (Control) getControls().get(i);
+                control.onInit();
+            }
+        }
     }
 
-    /**
-     * @see org.apache.click.Control#onRender()
-     */
+   /**
+    * @see org.apache.click.Control#onRender()
+    */
     public void onRender() {
-        container.onRender();
+        if (hasControls()) {
+            for (int i = 0, size = getControls().size(); i < size; i++) {
+                Control control = (Control) getControls().get(i);
+                control.onRender();
+            }
+        }
     }
 
     /**
@@ -838,7 +911,10 @@ public class FieldSet extends Field implements Container {
      * @return the map of controls
      */
     protected Map getControlMap() {
-        return container.getControlMap();
+        if (controlMap == null) {
+            controlMap = new HashMap();
+        }
+        return controlMap;
     }
 
     /**
@@ -847,7 +923,17 @@ public class FieldSet extends Field implements Container {
      * @return the estimated rendered control size in characters
      */
     protected int getControlSizeEst() {
-        return container.getControlSizeEst();
+        int size = 20;
+
+        if (getTag() != null && hasAttributes()) {
+            size += 20 * getAttributes().size();
+        }
+
+        if (hasControls()) {
+            size += getControls().size() * size;
+        }
+
+        return size;
     }
 
     /**
@@ -1068,214 +1154,6 @@ public class FieldSet extends Field implements Container {
             return false;
         } else {
             return ((Field) control).isHidden();
-        }
-    }
-
-    // ------------------------------------------------------------ Inner Class
-
-    /**
-     * Inner class providing the container implementation for
-     * FieldSet.
-     * <p/>
-     * Note this class delegates certain methods to FieldSet, so
-     * that the Container implementation can manipulate state of the
-     * FieldSet instance.
-     */
-    private class InnerContainerField extends AbstractContainer {
-
-        // ---------------------------------------------------------- Variables
-
-        private static final long serialVersionUID = 1L;
-
-        /** The ordered list of fields, excluding buttons. */
-        protected final List fieldList = new ArrayList();
-
-        // ----------------------------------------------------- Public Methods
-
-        /**
-         * Add a Field to the FieldSet and return the added instance.
-         *
-         * @see Container#add(org.apache.click.Control)
-         *
-         * @param control the control to add to the FieldSet and return
-         * @param index the index at which the control is to be inserted
-         * @return the control that was added to the FieldSet
-         *
-         * @throws IllegalArgumentException if the control is null, the Field's name
-         * is not defined, the container already contains a control with the same
-         * name or if the Field name is not defined
-         */
-        public Control insert(Control control, int index) {
-            super.insert(control, index);
-            control.setParent(FieldSet.this);
-
-            if (control instanceof Field) {
-                Field field = (Field) control;
-
-                // Add field to fieldList for fast access
-                if (!(field instanceof Button)) {
-                    getFieldList().add(field);
-                }
-
-                Form form = getForm();
-                field.setForm(form);
-
-                if (form != null && form.getDefaultFieldSize() > 0) {
-                    if (field instanceof TextField) {
-                        ((TextField) field).setSize(form.getDefaultFieldSize());
-
-                    } else if (field instanceof FileField) {
-                        ((FileField) field).setSize(form.getDefaultFieldSize());
-
-                    } else if (field instanceof TextArea) {
-                        ((TextArea) field).setCols(form.getDefaultFieldSize());
-                    }
-                }
-            }
-
-            return control;
-        }
-
-        /**
-         * @see org.apache.click.control.Container#remove(org.apache.click.Control).
-         *
-         * @param control the control to remove from the container
-         * @return true if the control was removed from the container
-         * @throws IllegalArgumentException if the control is null
-         */
-        public boolean remove(Control control) {
-
-            boolean removed = super.remove(control);
-            if (control.getParent() == FieldSet.this) {
-                control.setParent(null);
-            }
-
-            if (removed && control instanceof Field) {
-                Field field = (Field) control;
-
-                field.setForm(null);
-
-                if (!(field instanceof Button)) {
-                    getFieldList().remove(field);
-                }
-            }
-            getFieldWidths().remove(control.getName());
-
-            return removed;
-        }
-
-        /**
-         * Return the ordered list of FieldSet fields, excluding buttons.
-         * <p/>
-         * The order of the fields is the same order they were added to the
-         * FieldSet.
-         * <p/>
-         * The returned list only includes fields directly added to the FieldSet.
-         *
-         * @return the ordered List of fieldSet fields, excluding buttons
-         */
-        public List getFieldList() {
-            return fieldList;
-        }
-
-        /**
-         * Return the FieldSet html tag.
-         *
-         * @return the FieldSet html tag
-         */
-        public String getTag() {
-            return FieldSet.this.getTag();
-        }
-
-        /**
-         * Sets the FieldSet parent.
-         *
-         * @param parent the parent of the FieldSet
-         */
-        public void setParent(Object parent) {
-            FieldSet.this.setParent(parent);
-        }
-
-        /**
-         * Sets the FieldSet name.
-         *
-         * @param name the name of the FieldSet
-         */
-        public void setName(String name) {
-            FieldSet.this.setName(name);
-        }
-
-        /**
-         * Sets the action listener of the FieldSet.
-         *
-         * @param actionListener the action listener object to invoke
-         */
-        public void setActionListener(ActionListener actionListener) {
-            FieldSet.this.setActionListener(actionListener);
-        }
-
-        /**
-         * Sets the listener of the FieldSet.
-         *
-         * @param listener the listener object with the named method to invoke
-         * @param method the name of the method to invoke
-         */
-        public void setListener(Object listener, String method) {
-            FieldSet.this.setListener(listener, method);
-        }
-
-        /**
-         * Return the parent of the FieldSet.
-         *
-         * @return the parent of the FieldSet
-         */
-        public Object getParent() {
-            return FieldSet.this.getParent();
-        }
-
-        /**
-         * Return the name of the FieldSet.
-         *
-         * @return the name of the FieldSet
-         */
-        public String getName() {
-            return FieldSet.this.getName();
-        }
-
-        /**
-         * Return the messages of the FieldSet.
-         *
-         * @return the message of the FieldSet
-         */
-        public Map getMessages() {
-            return FieldSet.this.getMessages();
-        }
-
-        /**
-         * Return the id of the FieldSet.
-         *
-         * @return the id of the FieldSet
-         */
-        public String getId() {
-            return FieldSet.this.getId();
-        }
-
-        /**
-         * Return the html imports of the FieldSet.
-         *
-         * @return the html imports of the FieldSet
-         */
-        public String getHtmlImports() {
-            return FieldSet.this.getHtmlImports();
-        }
-
-        /**
-         * Return the Context of the FieldSet.
-         *
-         * @return the Context of the FieldSet
-         */
-        public Context getContext() {
-            return FieldSet.this.getContext();
         }
     }
 }
