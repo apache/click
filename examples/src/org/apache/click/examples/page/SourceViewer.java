@@ -7,7 +7,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE_START-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -150,6 +150,9 @@ public class SourceViewer extends BorderPage {
 
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
+        // Filter out the license from displaying
+        skipLicense(reader, buffer);
+
         String line = reader.readLine();
 
         while (line != null) {
@@ -161,6 +164,52 @@ public class SourceViewer extends BorderPage {
         addModel("source", buffer.toString());
 
         addModel("name", name);
+    }
+
+    private void skipLicense(BufferedReader reader, HtmlStringBuffer buffer)
+        throws IOException {
+
+        // Mark reader so we can undo the read in case no license is found
+        reader.mark(500);
+        String line = reader.readLine();
+        if (line == null) {
+            return;
+        }
+
+        line = line.trim();
+
+        // Check for license start tokens
+        if (line.startsWith("/*") || line.startsWith("<!--")) {
+
+            line = reader.readLine();
+            while (line != null) {
+                line = line.trim();
+
+                // Check for license end tokens
+                if (line.startsWith("*/") || line.startsWith("-->")) {
+                    // Move the reader past the end of license token
+                    line = reader.readLine();
+                    break;
+                }
+
+                line = reader.readLine();
+            }
+        } else {
+            // undo the read
+            reader.reset();
+            line = null;
+        }
+
+        // Gobble whitespace
+        while (line != null) {
+            if (!"".equals(line.trim())) {
+                // If the line is not empty, write it to buffer and break loop
+                buffer.append(getEncodedLine(line));
+                buffer.append("\n");
+                break;
+            }
+            line = reader.readLine();
+        }
     }
 
     private String getEncodedLine(String line) {
