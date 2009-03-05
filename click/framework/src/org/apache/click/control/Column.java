@@ -1246,7 +1246,7 @@ public class Column implements Serializable {
             }
 
             // Provide spacer for sorting icon
-            controlLink.setLabel(getHeaderTitle() + "&nbsp;&nbsp;&nbsp;");
+            controlLink.setLabel(getHeaderTitle() + "&#160;&#160;&#160;");
 
             controlLink.render(buffer);
 
