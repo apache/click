@@ -62,14 +62,14 @@ $form.startTag()
 	#end
 #end	
 	
-	<tr><td style="height:0.5em;">&nbsp;</td></tr>
+	<tr><td style="height:0.5em;">&#160;</td></tr>
 
 	#* Render tab titles *#
 	<tr>
     	<td> 
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td class="tf_separator"> &nbsp;&nbsp; </td>
+					<td class="tf_separator"> &#160;&#160; </td>
 					#foreach ($tabSheet in $form.tabSheets)
 					<td id="tab-title-${velocityCount}" 
 						#if ($velocityCount == $form.displayTab)
@@ -82,9 +82,9 @@ $form.startTag()
 						   onClick="onShowTab(${velocityCount})"
 						   >${tabSheet.label}</a>
 					</td>
-					<td class="tf_separator"> &nbsp; </td>
+					<td class="tf_separator"> &#160; </td>
 					#end
-					<td class="tf_separator" style="width:100%"> &nbsp; </td>
+					<td class="tf_separator" style="width:100%"> &#160; </td>
 				</tr>
 			</table>
 		</td>
@@ -126,7 +126,7 @@ $form.startTag()
 	#end
 #end
 
-	<tr><td style="height:0.5em;">&nbsp;</td></tr>
+	<tr><td style="height:0.5em;">&#160;</td></tr>
 
 	#* Render buttons *#
   	<tr>
@@ -140,7 +140,7 @@ $form.startTag()
 	#* Render form errors at the bottom position *#
 #if ($form.errorsPosition == "bottom")
 
-	<tr><td style="height:0.5em;">&nbsp;</td></tr>
+	<tr><td style="height:0.5em;">&#160;</td></tr>
 
 	#if ($form.error)
 	<tr style="${form.errorsStyle}">

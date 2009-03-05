@@ -155,7 +155,7 @@ public class TableInlinePaginator extends TablePaginator {
             }
 
             if (i < upperBound - 1) {
-                pagesBuffer.append("&nbsp; ");
+                pagesBuffer.append("&#160; ");
             }
         }
 
