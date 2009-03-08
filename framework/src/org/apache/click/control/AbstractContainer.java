@@ -361,7 +361,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      */
     public String getHtmlImports() {
         if (hasControls()) {
-            HtmlStringBuffer buffer = new HtmlStringBuffer(512);
+            HtmlStringBuffer buffer = new HtmlStringBuffer(0);
             for (int i = 0, size = getControls().size(); i < size; i++) {
                 Control control = (Control) getControls().get(i);
                 String htmlImports = control.getHtmlImports();
