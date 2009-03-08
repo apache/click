@@ -293,7 +293,7 @@ public class TreeNode implements Serializable {
      * @return the TreeNode's custom icon
      */
     public String getIcon() {
-    		return icon;
+        return icon;
     }
 
     /**
