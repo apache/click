@@ -199,9 +199,9 @@ public abstract class AbstractContainerField extends Field implements Container 
      * and JavaScript files
      */
     public String getHtmlImports() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
-
         if (hasControls()) {
+            HtmlStringBuffer buffer = new HtmlStringBuffer(0);
+
             for (int i = 0, size = getControls().size(); i < size; i++) {
                 Control control = (Control) getControls().get(i);
                 String htmlImports = control.getHtmlImports();
@@ -209,9 +209,9 @@ public abstract class AbstractContainerField extends Field implements Container 
                     buffer.append(htmlImports);
                 }
             }
+            return buffer.toString();
         }
-
-        return buffer.toString();
+        return null;
     }
 
     /**
