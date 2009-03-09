@@ -19,6 +19,7 @@
 package org.apache.click;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -143,9 +144,9 @@ public interface Control extends Serializable {
     public Context getContext();
 
     /**
-     * Return the HTML import string to be include in the page.
+     * Return the HTML import string to be included in the page.
      * <p/>
-     * Override this method to specify JavaScript and CSS includes for the
+     * Implement this method to specify JavaScript and CSS includes for the
      * page. For example:
      *
      * <pre class="codeJava">
@@ -161,17 +162,108 @@ public interface Control extends Serializable {
      * parse multiple import lines on the <tt>'\n'</tt> char and ensure that
      * imports are not included twice.
      * <p/>
-     * The order in which JS and CSS files are include will be preserved in the
+     * The order in which JS and CSS files are included will be preserved in the
      * page.
      * <p/>
      * <b>Also note:</b> a common problem when overriding getHtmlImports in
      * subclasses is forgetting to call <em>super.getHtmlImports</em>. Consider
      * carefully whether you should call <em>super.getHtmlImports</em> or not.
      *
+     * @deprecated use the new {@link #getHtmlHeaders()} instead
+     *
      * @return the HTML includes statements for the control stylesheet and
      * JavaScript files, or null if no includes are available
      */
     public String getHtmlImports();
+
+    /**
+     * Return the list of {@link org.apache.click.util.HtmlHeader HTML HEAD entries}
+     * to be included in the page. Example HTML headers include
+     * {@link org.apache.click.util.JavascriptImport JavascriptImport},
+     * {@link org.apache.click.util.Javascript inline Javascript},
+     * {@link org.apache.click.util.CssImport CssImport} and
+     * {@link org.apache.click.util.Css inline CSS}.
+     * <p/>
+     * Controls can include their own list of HTML HEAD entries by implementing
+     * this method.
+     * <p/>
+     * The recommended approach when implementing this method is to use
+     * <tt>lazy loading</tt> to only add HTML headers <tt>once</tt> and when
+     * <tt>needed</tt>.
+     * For example:
+     *
+     * <pre class="prettyprint">
+     * public MyControl extends AbstractControl {
+     *
+     *     public List getHtmlHeaders() {
+     *         // Use lazy loading to ensure the JS is only added the
+     *         // first time this method is called.
+     *         if (htmlHeaders == null) {
+     *             // Get the header entries from the super implementation
+     *             htmlHeaders = super.getHtmlHeaders();
+     *
+     *             // Include the control's external Javascript resource
+     *             JavascriptImport jsImport = new JavascriptImport("/mycorp/mycontrol/mycontrol.js");
+     *             htmlHeaders.add(jsImport);
+     *
+     *             // Include the control's external Css resource
+     *             CssImport cssImport = new CssImport("/mycorp/mycontrol/mycontrol.css");
+     *             htmlHeaders.add(cssImport);
+     *         }
+     *         return htmlHeaders;
+     *     }
+     * } </pre>
+     *
+     * An alternative is to add the HTML headers in the Control's constructor:
+     *
+     * <pre class="prettyprint">
+     * public MyControl extends AbstractControl {
+     *
+     *     public MyControl() {
+     *         JavascriptImport jsImport = new JavascriptImport("/mycorp/mycontrol/mycontrol.js");
+     *         getHtmlHeaders().add(jsImport);
+     *         CssImport cssImport = new CssImport("/mycorp/mycontrol/mycontrol.css");
+     *         getHtmlHeaders().add(cssImport);
+     *     }
+     * } </pre>
+     *
+     * One can also add HTML headers from event handler methods such as
+     * {@link #onInit()}, {@link #onProcess()}, {@link #onRender()}
+     * etc. However its possible the control will be added to a {@link Page#stateful Stateful}
+     * page, so you will need to set the HTML header list to <tt>null</tt> in the
+     * Control's {@link #onDestroy()} event handler, otherwise the HTML header
+     * list will continue to grow with each request:
+     *
+     * <pre class="prettyprint">
+     * public MyControl extends AbstractControl {
+     *
+     *     public void onInit() {
+     *         // Add HTML headers
+     *         JavascriptImport jsImport = new JavascriptImport("/mycorp/mycontrol/mycontrol.js");
+     *         getHtmlHeaders().add(jsImport);
+     *         CssImport cssImport = new CssImport("/mycorp/mycontrol/mycontrol.css");
+     *         getHtmlHeaders().add(cssImport);
+     *     }
+     *
+     *     public void onDestroy() {
+     *         // Nullify the HTML headers
+     *         htmlHeaders = null;
+     *     }
+     * } </pre>
+     *
+     * The order in which JS and CSS files are included will be preserved in the
+     * page.
+     * <p/>
+     * <b>Note:</b> this method must never return null. If no HTML HEAD entries
+     * are available this method must return an empty {@link java.util.List}.
+     * <p/>
+     * <b>Also note:</b> a common problem when overriding getHtmlHeaders in
+     * subclasses is forgetting to call <em>super.getHtmlHeaders</em>. Consider
+     * carefully whether you should call <em>super.getHtmlHeaders</em> or not.
+     *
+     * @return the list of HTML HEAD entries to be included in the page
+     */
+    public List getHtmlHeaders();
 
     /**
      * Return HTML element identifier attribute "id" value.

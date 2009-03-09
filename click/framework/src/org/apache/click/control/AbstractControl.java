@@ -19,10 +19,12 @@
 package org.apache.click.control;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -123,6 +125,12 @@ public abstract class AbstractControl implements Control {
 
     /** The control's action listener. */
     protected ActionListener actionListener;
+
+    /**
+     * The list of control HTML head entries including: JavaScript imports,
+     * CSS imports, inline JavaScript and inline CSS.
+     */
+    protected List htmlHeaders;
 
     /** The Control attributes Map. */
     protected Map attributes;
@@ -540,11 +548,27 @@ public abstract class AbstractControl implements Control {
     /**
      * @see org.apache.click.Control#getHtmlImports()
      *
+     * @deprecated use the new {@link #getHtmlHeaders()} instead
+     *
      * @return the HTML includes statements for the control stylesheet and
      * JavaScript files
      */
     public String getHtmlImports() {
         return null;
+    }
+
+    /**
+     * @see org.apache.click.Control#getHtmlHeaders()
+     *
+     * @return the list of HTML HEAD entries to be included in the page
+     */
+    public List getHtmlHeaders() {
+        if (htmlHeaders == null) {
+            // Most controls won't provide their own html headers, so save
+            // memory by creating an empty array list
+            htmlHeaders = new ArrayList(0);
+        }
+        return htmlHeaders;
     }
 
     /**
