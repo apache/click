@@ -153,6 +153,12 @@ public class Page {
     /** The list of page controls. */
     protected List controls;
 
+    /**
+     * The list of page HTML head entries including: JavaScript imports,
+     * CSS imports, inline JavaScript and inline CSS.
+     */
+    protected List htmlHeaders;
+
     /** The Velocity template formatter object. */
     protected Format format;
 
@@ -636,7 +642,7 @@ public class Page {
      * parse multiple import lines on the <tt>'\n'</tt> char and ensure that
      * imports are not included twice.
      * <p/>
-     * The order in which JS and CSS files are include will be preserved in the
+     * The order in which JS and CSS files are included will be preserved in the
      * page.
      * <p/>
      * If you need to customize the HTML imports included in your page override
@@ -644,9 +650,109 @@ public class Page {
      *
      * @return the HTML includes statements for the control stylesheet and
      * JavaScript files, by default this method returns null
+     *
+     * @deprecated use the new {@link #getHtmlHeaders()} instead
      */
     public String getHtmlImports() {
         return null;
+    }
+
+    /**
+     * Return the list of {@link org.apache.click.util.HtmlHeader HTML HEAD entries}
+     * to be included in the page. Example HTML headers include
+     * {@link org.apache.click.util.JavascriptImport JavascriptImport},
+     * {@link org.apache.click.util.Javascript inline Javascript},
+     * {@link org.apache.click.util.CssImport CssImport} and
+     * {@link org.apache.click.util.Css inline CSS}.
+     * <p/>
+     * Pages can include their own list of HTML HEAD entries by implementing
+     * this method.
+     * <p/>
+     * The recommended approach when implementing this method is to use
+     * <tt>lazy loading</tt> to only add HTML headers once and when needed.
+     * For example:
+     *
+     * <pre class="prettyprint">
+     * public MyPage extends Page {
+     *
+     *     public List getHtmlHeaders() {
+     *         // Use lazy loading to ensure the JS is only added the
+     *         // first time this method is called.
+     *         if (htmlHeaders == null) {
+     *             // Get the header entries from the super implementation
+     *             htmlHeaders = super.getHtmlHeaders();
+     *
+     *             // Include the page's external Javascript resource
+     *             JavascriptImport jsImport = new JavascriptImport("/mycorp/js/mypage.js");
+     *             htmlHeaders.add(jsImport);
+     *
+     *             // Include the page's external Css resource
+     *             CssImport cssImport = new CssImport("/mycorp/js/mypage.css");
+     *             htmlHeaders.add(cssImport);
+     *         }
+     *         return htmlHeaders;
+     *     }
+     * } </pre>
+     *
+     * An alternative is to add the HTML headers in the Page constructor:
+     *
+     * <pre class="prettyprint">
+     * public MyPage extends Page {
+     *
+     *     public MyPage() {
+     *         JavascriptImport jsImport = new JavascriptImport("/mycorp/js/mypage.js");
+     *         getHtmlHeaders().add(jsImport);
+     *         CssImport cssImport = new CssImport("/mycorp/js/mypage.css");
+     *         getHtmlHeaders().add(cssImport);
+     *     }
+     * } </pre>
+     *
+     * One can also add HTML headers from event handler methods such as
+     * {@link #onInit()}, {@link #onGet()}, {@link #onPost()}, {@link #onRender()}
+     * etc. However when using {@link #stateful Stateful} pages, you will need to
+     * set the HTML header list to <tt>null</tt> in the {@link #onDestroy()} event
+     * handler, otherwise the HTML header list will continue to grow with each
+     * request:
+     *
+     * <pre class="prettyprint">
+     * public MyPage extends Page {
+     *
+     *     public MyPage() {
+     *         // Activate stateful page
+     *         setStateful(true);
+     *     }
+     *
+     *     public void onInit() {
+     *         // Add HTML headers
+     *         JavascriptImport jsImport = new JavascriptImport("/mycorp/js/mypage.js");
+     *         getHtmlHeaders().add(jsImport);
+     *         CssImport cssImport = new CssImport("/mycorp/js/mypage.css");
+     *         getHtmlHeaders().add(cssImport);
+     *     }
+     *
+     *     public void onDestroy() {
+     *         // Nullify the HTML headers
+     *         htmlHeaders = null;
+     *     }
+     * } </pre>
+     *
+     * The order in which JS and CSS files are included will be preserved in the
+     * page.
+     * <p/>
+     * <b>Note:</b> this method must never return null. If no HTML HEAD entries
+     * are available this method must return an empty {@link java.util.List}.
+     * <p/>
+     * <b>Also note:</b> a common problem when overriding getHtmlHeaders in
+     * subclasses is forgetting to call <em>super.getHtmlHeaders</em>. Consider
+     * carefully whether you should call <em>super.getHtmlHeaders</em> or not.
+     *
+     * @return the list of HTML HEAD entries to be included in the page
+     */
+    public List getHtmlHeaders() {
+        if (htmlHeaders == null) {
+            htmlHeaders = new ArrayList(2);
+        }
+        return htmlHeaders;
     }
 
     /**
@@ -944,13 +1050,14 @@ public class Page {
      * Set the location to redirect the request to.
      * <p/>
      * If the {@link #redirect} property is not null it will be used to redirect
-     * the request in preference to {@link #forward} or {@link #path} properties.
-     * The request is redirected to using the HttpServletResponse.setRedirect()
+     * the request in preference to the {@link #forward} and {@link #path}
+     * properties. The request is redirected using the HttpServletResponse.setRedirect()
      * method.
      * <p/>
      * If the redirect location begins with a <tt class="wr">"/"</tt>
      * character the redirect location will be prefixed with the web applications
-     * context path.
+     * <tt>context path</tt>. Note if the given location is already prefixed
+     * with the <tt>context path</tt>, Click won't add it a second time.
      * <p/>
      * For example if an application is deployed to the context
      * <tt class="wr">"mycorp"</tt> calling

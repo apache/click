@@ -897,7 +897,7 @@ public class ClickUtils {
      * <p/>
      * The version indicator is based on the current Click release version.
      * For example when using Click 1.4 this method will return the string
-     * <tt>"-1.4"</tt>.
+     * <tt>"_1.4"</tt>.
      *
      * @param context the request context
      * @return a version indicator for web resources
