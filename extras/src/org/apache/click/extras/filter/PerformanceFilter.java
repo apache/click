@@ -297,12 +297,17 @@ public class PerformanceFilter implements Filter {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
 
+        final String path = ClickUtils.getResourcePath(request);
+
+        if (isExcludePath(path)) {
+            chain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
         // Enable resource versioning in Click
         request.setAttribute(ClickUtils.ENABLE_RESOURCE_VERSION, "true");
 
         // Apply cache expiry Headers
-        final String path = ClickUtils.getResourcePath(request);
-
         if (useForeverCacheHeader(path)) {
             setHeaderExpiresCache(response, FOREVER_CACHE_MAX_AGE);
 
@@ -468,6 +473,34 @@ public class PerformanceFilter implements Filter {
     }
 
     /**
+     * Return true if a path should be excluded from the performance filter.
+     *
+     * @param path the request path to test
+     * @return true if the response should be excluded from the performance filter
+     */
+    protected boolean isExcludePath(String path) {
+        if (!excludeFiles.isEmpty()) {
+            for (int i = 0; i < excludeFiles.size(); i++) {
+                String file = excludeFiles.get(i).toString();
+                if (path.endsWith(file)) {
+                    return true;
+                }
+            }
+        }
+
+        if (!excludeFiles.isEmpty()) {
+            for (int i = 0; i < excludeDirs.size(); i++) {
+                String dir = excludeDirs.get(i).toString();
+                if (path.startsWith(dir)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Return the <tt>version indicator</tt> for the specified path.
      *
      * @param path the resource path
@@ -480,8 +513,8 @@ public class PerformanceFilter implements Filter {
     /**
      * Removes the version indicator from the specified path.
      * <p/>
-     * For example, given the path <tt>'/example/control-1.4.js'</tt>, where
-     * <tt>'-1.4'</tt> is the <tt>version indicator</tt>, this method will
+     * For example, given the path <tt>'/example/control_1.4.js'</tt>, where
+     * <tt>'_1.4'</tt> is the <tt>version indicator</tt>, this method will
      * return <tt>'/example/control.js'</tt>.
      *
      * @see #getResourceVersionIndicator(String)

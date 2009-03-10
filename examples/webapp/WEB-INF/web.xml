@@ -52,6 +52,8 @@
 	and sets the Expires header on selected static resources. 
 	The "cachable-paths" init parameter tells the filter resources can have 
 	their Expires header set so the browser will cache them.
+  The "excludes-path" init parameter tells the filter which requests should
+	be ignored by the filter.
 	-->
 	<filter>
 		<filter-name>PerformanceFilter</filter-name>
@@ -59,6 +61,10 @@
 		<init-param>
 			<param-name>cachable-paths</param-name>
  			<param-value>/assets/*</param-value>
+		</init-param>
+    <init-param>
+			<param-name>exclude-paths</param-name>
+ 			<param-value>*/excel-export.htm</param-value>
 		</init-param>
 	</filter>
 
