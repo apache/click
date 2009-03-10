@@ -321,12 +321,17 @@ public class PerformanceFilter implements Filter {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
 
+        final String path = ClickUtils.getResourcePath(request);
+
+        if (isExcludePath(path)) {
+            chain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
         // Enable resource versioning in Click
         request.setAttribute(ClickUtils.ENABLE_RESOURCE_VERSION, "true");
 
         // Apply cache expiry Headers
-        final String path = ClickUtils.getResourcePath(request);
-
         if (useForeverCacheHeader(path)) {
             setHeaderExpiresCache(response, FOREVER_CACHE_MAX_AGE);
 
@@ -489,6 +494,34 @@ public class PerformanceFilter implements Filter {
         getConfigService().getLogService().info(message);
 
         configured = true;
+    }
+
+    /**
+     * Return true if a path should be excluded from the performance filter.
+     *
+     * @param path the request path to test
+     * @return true if the response should be excluded from the performance filter
+     */
+    protected boolean isExcludePath(String path) {
+        if (!excludeFiles.isEmpty()) {
+            for (int i = 0; i < excludeFiles.size(); i++) {
+                String file = excludeFiles.get(i).toString();
+                if (path.endsWith(file)) {
+                    return true;
+                }
+            }
+        }
+
+        if (!excludeFiles.isEmpty()) {
+            for (int i = 0; i < excludeDirs.size(); i++) {
+                String dir = excludeDirs.get(i).toString();
+                if (path.startsWith(dir)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
