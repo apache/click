@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+
+<!--
+NOTE: This build file depends on the Velocity Docbook Framework and won't
+work unless that framework is installed. Set the property 'dbf.basedir' in
+project.properties to refer to the installation directory before using this
+script.
+-->
+<project name="click-book" default="all" basedir=".">
+
+    <!-- Load the properties -->
+    <property file="project.properties"/>
+
+    <target name="all" description="Build all documentation" depends="prepare">
+        <ant antfile="build-docbook.xml" target="all"/>
+    </target>
+
+    <target name="clean" depends="prepare"
+        description="--> Delete temporary and distribution directories for docs">
+        <delete dir="target"/>
+        <delete dir="${dbf.basedir}"/>
+    </target>
+
+    <target name="html" description="Generate HTML docs in multiple files" depends="prepare">
+        <ant antfile="build-docbook.xml" target="html"/>
+    </target>
+
+    <target name="htmlsingle" description="Generate HTML docs in a single, big file" depends="prepare">
+        <ant antfile="build-docbook.xml" target="htmlsingle"/>
+    </target>
+
+    <target name="extract" unless="dbf.extracted">
+        <unzip src="${dbf.path}" dest="${dbf.basedir}/"/>
+    </target>
+
+    <target name="get-deps">
+        <mkdir dir="lib"/>
+        <get src="http://click-docbook.googlecode.com/svn/trunk/build/${dbf.zip}"
+ 	       dest="${dbf.path}"
+ 	       verbose="true"
+ 	       usetimestamp="true"/>
+    </target>
+
+    <target name="pdf" description="Generates a single PDF file" depends="prepare">
+        <ant antfile="build-docbook.xml" target="pdf"/>
+    </target>
+
+    <target name="prepare">
+        <available file="${dbf.path}" property="dbf.downloaded"/>
+        <fail message="The Velocity Docbook Framework is not available. To resolve this download the dependencies (~9 MB) with 'ant get-deps'.">
+            <condition>
+                <or><isfalse value="${dbf.downloaded}"/></or>
+            </condition>
+        </fail>
+
+        <available file="${dbf.basedir}" property="dbf.extracted"/>
+        <antcall target="extract"/>
+    </target>
+
+</project>
