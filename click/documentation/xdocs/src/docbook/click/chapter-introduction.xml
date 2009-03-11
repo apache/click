@@ -1,0 +1,792 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<chapter id="chapter-introduction">
+  <title>Introduction to Click</title>
+
+  <sect1 id="preface">
+    <title>Preface</title>
+
+    <para>Click is a simple JEE web application framework for commercial
+    Java developers.
+    </para>
+
+    <para>Click is an open source project, licensed under the
+    <ulink url="../../LICENSE.txt"><citetitle>Apache license</citetitle>
+    </ulink>.
+    </para>
+
+    <para>Click uses an event based programming model for processing Servlet
+    requests and <ulink url="../../velocity/velocity.html">Velocity</ulink> for
+    rendering the response. (Note other template engines such as
+    <ulink url="http://java.sun.com/products/jsp/">JSP</ulink> and
+    <ulink url="http://freemarker.sourceforge.net/">Freemarker</ulink> are also
+    supported)
+    </para>
+
+    <para>This framework uses a single servlet, called
+    <ulink url="../../click-api/org/apache/click/ClickServlet.html">ClickServlet</ulink>,
+    to act as a request dispatcher. When a request arrives ClickServlet creates
+    a <ulink url="../../click-api/org/apache/click/Page.html">Page</ulink>
+    object to process the request and then uses the page's Velocity template to
+    render the results.
+    </para>
+
+    <para>Pages provide a simple thread safe programming environment, with a new
+    page instance created for each servlet request.
+    </para>
+
+    <para>Possibly the best way to see how Click works is to dive right in and
+    look at some examples.
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <link linkend="hello-world">Hello World</link> - the Hello World
+          classic
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link linkend="control-listener">Control Listener</link> - an
+          ActionLink control listener example
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link linkend="simple-table">Simple Table</link> - a simple Table
+          control example
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link linkend="advanced-table">Advanced Table</link> - a more advanced
+          Table example
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link linkend="simple-form">Simple Form</link> - a simple Form example
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link linkend="advanced-form">Advanced Form</link> - a more advanced
+          Form example
+        </para>
+      </listitem>
+    </itemizedlist>
+  </sect1>
+
+  <para>These examples are available online at
+  <ulink url="http://www.avoka.com/click-examples/">http://www.avoka.com/click-examples/</ulink>
+  under the menu "Intro Examples".
+  </para>
+
+  <sect1 id="hello-world">
+    <title>Hello World Example</title>
+
+    <para>A Hello World example in Click would look something like this.
+    </para>
+
+    <para>First we create a <classname>HelloWorld</classname> page class:
+    </para>
+
+    <programlisting language="java">package <symbol>examples.page</symbol>;
+
+import java.util.Date;
+import org.apache.click.Page;
+
+public HelloWorld extends Page {
+
+    private Date time = new Date(); <co id="co-hello-world-date" linkends="ca-hello-world-date"/>
+
+    public HelloWorld() {
+        addModel("time", time); <co id="co-hello-world-addmodel" linkends="ca-hello-world-addmodel"/>
+    }
+
+}</programlisting>
+
+    <calloutlist>
+      <callout arearefs="co-hello-world-date" id="ca-hello-world-date">
+        <para>Assign a new Date instance to the <literal>time</literal> variable.
+        </para>
+      </callout>
+      <callout arearefs="co-hello-world-addmodel" id="ca-hello-world-addmodel">
+        <para>Add the <literal>time</literal> variable to the Page model under
+        the name <varname>"time"</varname>. Click ensures all objects added
+        to the Page model is automatically available in the Page template.
+        </para>
+      </callout>
+    </calloutlist>
+
+    <para>Next we have a page template <varname>hello-world.htm</varname>,
+    <indexterm><primary>Big Cats</primary><secondary>Tigers</secondary></indexterm>
+    where we can access the Page's <literal>time</literal> variable using the
+    reference <varname>$time</varname>:
+    </para>
+
+    <programlisting language="xml">&lt;html&gt;
+  &lt;body&gt;
+
+    &lt;h2&gt;Hello World&lt;/h2&gt;
+
+    Hello world from Click at <varname>$time</varname>
+
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+    <para>Click is smart enough to figure out that the <classname>HelloWorld</classname>
+    page class maps to the template <varname>hello-world.htm</varname>. We only
+    have to inform Click of the <package>package</package> of the HelloWorld
+    class, in this case <symbol>examples.page</symbol>. We do that through the
+    <link linkend="application-configuration">click.xml</link> configuration
+    file which allows Click to map <varname>hello-world.htm</varname> requests
+    to the <classname>examples.page.HelloWorld</classname> page class.
+    </para>
+
+    <programlisting language="xml">&lt;click-app&gt;
+  &lt;pages package="<symbol>examples.page</symbol>"/&gt;
+&lt;/click-app&gt;</programlisting>
+
+    <para>At runtime the following sequence of events occur. The ClickSerlvet
+    maps a GET <varname>hello-world.htm</varname> request to our page class
+    <classname>example.page.HelloWorld</classname> and creates a new instance.
+    The HelloWorld page creates a new private <emphasis>Date</emphasis> object,
+    which is added to the page's model under the name <varname>time</varname>.
+    </para>
+
+    <para>The page model is then merged with the template which substitutes
+    the <varname>$time</varname> reference with the <emphasis>Date</emphasis>
+    object. Velocity then renders the merged template which looks something like:
+    </para>
+
+    <figure id="hello-world-screenshot">
+      <title>Hello World Screenshot</title>
+      <inlinemediaobject>
+        <imageobject>
+          <imagedata fileref="images/introduction/hello-world-screenshot.png" format="PNG" scale="85"/>
+        </imageobject>
+      </inlinemediaobject>
+    </figure>
+
+  </sect1>
+
+  <sect1 id="control-listener">
+    <title>Control Listener Example</title>
+
+    <para>Click includes a library of <link linkend="chapter-controls">Controls</link>
+    which provide user interface functionality.
+    </para>
+
+    <para>One of the commonly used controls is the
+    <ulink url="../../click-api/org/apache/click/control/ActionLink.html">ActionLink</ulink>,
+    which you can use to have an HTML link call a method on a Page object.
+    For example:
+    </para>
+
+    <programlisting language="java">public class ControlListenerPage extends Page {
+
+    public ActionLink myLink = new ActionLink();
+
+    public String msg;
+    
+    // ------------------------------------------------------- Constructors
+
+    /**
+     * Create a new Page instance.
+     */
+    public ControlListenerPage() {
+        myLink.setListener(this, "onMyLinkClick");
+    }
+    
+    // ----------------------------------------------------- Event Handlers
+
+    /**
+     * Handle the myLink control click event.
+     */
+    public boolean onMyLinkClick() {
+        msg = "ControlListenerPage#" + hashCode()
+            + " object method &lt;tt&gt;onMyLinkClick()&lt;/tt&gt; invoked.";
+
+        return true;
+    }
+}</programlisting>
+
+    <para>In the Page class we create an ActionLink called
+    <varname>myLink</varname> and define the control's listener to be the page
+    method <methodname>onMyLinkClick()</methodname>. When a user clicks on
+    <varname>myLink</varname> control it will invoke the listener method
+    <methodname>onMyLinkClick()</methodname>.
+    </para>
+
+    <para>In Click a control listener method can have any name but it must
+    return a boolean value. The boolean return value specifies whether
+    processing of page events should continue. This control listener pattern
+    provides a short hand way for wiring up action listener methods without
+    having to define anonymous inner classes.
+    </para>
+
+    <para>Back to our example, in the page template we define a HTML link and
+    have the <varname>myLink</varname> control render the link's href attribute:
+    </para>
+
+    <programlisting language="xml">&lt;html&gt;
+  &lt;head&gt;
+    &lt;link type="text/css" rel="stylesheet" href="style.css"&gt;&lt;/link&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+  
+  Click myLink control &lt;a href="<varname>$myLink.href</varname>"&gt;here&lt;/a&gt;.
+
+  <command>#if</command> (<varname>$msg</varname>)
+    &lt;div id="msgDiv"&gt; <varname>$msg</varname> &lt;/div&gt;
+  <command>#end</command>
+
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+    <para>At runtime this page would be rendered as:</para>
+
+    <literallayout>Click myLink control <varname>here</varname>.</literallayout>
+
+    <para>When a user clicks on the link the <methodname>onMyLinkClick()</methodname>
+    method is invoked. This method then creates <varname>msg</varname> model
+    value, which is rendered in the page as:
+    </para>
+
+    <literallayout>Click myLink control <varname>here</varname>.
+
+<computeroutput>ControlListenerPage#12767107 object method onMyLinkClick() invoked.</computeroutput></literallayout>
+
+  </sect1>
+
+  <sect1 id="simple-table">
+    <title>Simple Table Example</title>
+
+    <para>One of the most useful Click controls is the
+    <ulink url="../../click-api/org/apache/click/control/Table.html">Table</ulink>
+    control.
+    </para>
+
+    <para>An example usage of the Table control in a customers Page is provided
+    below:
+    </para>
+
+    <programlisting language="java">public class SimpleTablePage extends Page {
+
+    public Table table = new Table();
+
+    // -------------------------------------------------------- Constructor
+     
+    public SimpleTablePage() {
+        table.setClass(Table.CLASS_ITS);
+        
+        table.addColumn(new Column("id"));
+        table.addColumn(new Column("name"));
+        table.addColumn(new Column("email"));
+        table.addColumn(new Column("investments"));
+    }
+    
+    // ----------------------------------------------------- Event Handlers
+     
+    /**
+     * @see Page#onRender()
+     */
+    public void onRender() {
+        List list = getCustomerService().getCustomersSortedByName(10);
+        table.setRowList(list); 
+    }
+}</programlisting>
+
+    <para>In this Page code example a Table control is declared, we set the
+    table's HTML class, and then define a number of table
+    <ulink url="../../click-api/org/apache/click/control/Column.html">Column</ulink>
+    objects. In the column definitions we specify the name of the column in the
+    constructor, which is used for the table column header and also to specify
+    the row object property to render.
+    </para>
+
+    <para>The last thing we need to do is populate the table with data. To do
+    this we override the Page onRender() method and set the table row list
+    before it is rendered.
+    </para>
+
+    <para>In our Page template we simply reference the <varname>$table</varname>
+    object which is rendered when its <methodname>toString()</methodname> method
+    is called.
+    </para>
+
+    <programlisting language="xml">&lt;html&gt;
+  &lt;head&gt;
+    <varname>$cssImports</varname>
+  &lt;/head&gt;
+  &lt;body&gt;
+
+    <varname>$table</varname>
+
+    <varname>$jsImports</varname>
+
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+    <para>Note above we also specify the <varname>$cssImports</varname>
+    reference so the table can include any CSS imports or styles in the header,
+    and the <varname>$jsImports</varname> reference any JavaScript imports or
+    scripts at the bottom. At runtime Click automatically makes the variables
+    <varname>$cssImports</varname> and <varname>$jsImports</varname> available
+    to the template.
+    </para>
+
+    <para>At runtime the Table would be rendered in the page as:</para>
+
+    <figure id="simple-table-image">
+      <title>Simple Table</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/introduction/simple-table.png" scale="85"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+  </sect1>
+
+  <sect1 id="advanced-table">
+    <title>Advanced Table Example</title>
+
+    <para>The Table control also provides support for:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>automatic rendering</para>
+      </listitem>
+
+      <listitem>
+        <para>column formatting and custom rendering</para>
+      </listitem>
+
+      <listitem>
+        <para>automatic pagination</para>
+      </listitem>
+
+      <listitem>
+        <para>link control support</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>A more advanced Table example is provided below:</para>
+
+    <programlisting language="java">public class CustomerPage extends Page {
+
+    public Table table = new Table();
+    public PageLink editLink = new PageLink("Edit", EditCustomer.class);
+    public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
+
+    // ------------------------------------- Constructor
+     
+    public CustomersPage() {
+        table.setClass(Table.CLASS_ITS);
+        table.setPageSize(10);
+        table.setShowBanner(true);
+        table.setSortable(true);
+
+        table.addColumn(new Column("id"));
+
+        table.addColumn(new Column("name"));
+        
+        Column column = new Column("email");
+        column.setAutolink(true);
+        column.setTitleProperty("name");
+        table.addColumn(column);
+        
+        table.addColumn(new Column("investments"));
+        
+        editLink.setImageSrc("/images/table-edit.png");
+        editLink.setTitle("Edit customer details");
+        editLink.setParameter("referrer", "/introduction/advanced-table.htm");
+        
+        deleteLink.setImageSrc("/images/table-delete.png");
+        deleteLink.setTitle("Delete customer record");
+        deleteLink.setAttribute("onclick",
+            "return window.confirm('Are you sure you want to delete this record?');");
+
+        column = new Column("Action");
+        column.setTextAlign("center");
+        AbstractLink[] links = new AbstractLink[] { editLink, deleteLink };
+        column.setDecorator(new LinkDecorator(table, links, "id"));
+        column.setSortable(false);
+        table.addColumn(column);
+    }
+    
+    // ---------------------------------- Event Handlers
+         
+    /**
+     * Handle the delete row click event.
+     */    
+    public boolean onDeleteClick() {
+        Integer id = deleteLink.getValueInteger();
+        getCustomerService().deleteCustomer(id);
+        return true;
+    }
+    
+    /**
+     * @see Page#onRender()
+     */
+    public void onRender() {
+        List list = getCustomerService().getCustomersByName();
+        table.setRowList(list);
+    }
+}</programlisting>
+
+    <para>In this Page code example a Table control is declared and a number of
+    <ulink url="../../click-api/org/apache/click/control/Column.html">Column</ulink>
+    objects are added. A deleteLink
+    <ulink url="../../click-api/org/apache/click/control/ActionLink.html">ActionLink</ulink>
+    control is used as a decorator for the "Action" column. This control will
+    invoke the Page <methodname>onDeleteClick()</methodname> method when it is
+    clicked. Finally we have the Page <methodname>onRender()</methodname> method
+    which is used to populate the Table control with rows before it is rendered.
+    </para>
+
+    <para>In our Page template we simply reference the <varname>$table</varname>
+    object which is rendered when its <methodname>toString()</methodname> method
+    is called.
+    </para>
+
+    <programlisting language="xml">&lt;html&gt;
+  &lt;head&gt;
+    <varname>$cssImports</varname>
+  &lt;/head&gt;
+  &lt;body&gt;
+
+    <varname>$table</varname>
+
+    <varname>$jsImports</varname>
+
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+    <para>At runtime the Table would be rendered in the page as:</para>
+
+    <figure id="advanced-table-image">
+      <title>Advanced Table</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/introduction/advanced-table.png" scale="85"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>In this example if a user click on the Delete link, the
+    <methodname>onDeleteClick()</methodname> method will be called on the Page
+    deleting the customer record.
+    </para>
+
+  </sect1>
+
+  <sect1 id="simple-form">
+    <title>Simple Form Example</title>
+
+    <para>The <ulink url="../../click-api/org/apache/click/control/Form.html">Form</ulink>
+    and <ulink url="../../click-api/org/apache/click/control/Field.html">Field</ulink>
+    controls are also some of the most commonly used controls in the Click Framework.
+    </para>
+
+    <para>The SimpleForm page below provides a demonstration of using these
+    controls.
+    </para>
+
+    <para>In our example code we have the page's constructor adding a
+    <ulink url="../../click-api/org/apache/click/control/TextField.html">TextField</ulink>
+    field and a <ulink url="../../click-api/org/apache/click/control/Submit.html">Submit</ulink>
+    button to the form. A page method is also set as a control listener on the
+    form. Also note in this example the page's public <varname>form</varname>
+    field is automatically added to its list of controls.
+    </para>
+
+    <programlisting language="java">public class SimpleForm extends Page {
+
+    public Form form = new Form();
+    public String msg;
+
+    // -------------------------------------------------------- Constructor
+
+    public SimpleForm() {
+        form.add(new TextField("name", true));
+        form.add(new Submit("OK"));
+
+        form.setListener(this, "onSubmit");
+    }
+
+    // ----------------------------------------------------- Event Handlers
+
+    /**
+     * Handle the form submit event.
+     */
+    public boolean onSubmit() {
+        if (form.isValid()) {
+            msg = "Your name is " + form.getFieldValue("name");
+        }
+        return true;
+    }
+}</programlisting>
+
+    <para>Next we have the SimpleForm template <varname>simple-form.htm</varname>.
+    The Click application automatically associates the
+    <varname>simple-form.htm</varname> template with the
+    <classname>SimpleForm</classname> class.
+    </para>
+
+    <programlisting language="xml">&lt;html&gt;
+  &lt;head&gt;
+    <varname>$cssImports</varname>
+  &lt;/head&gt;
+  &lt;body&gt;
+
+    <varname>$form</varname>
+
+    <command>#if</command> (<varname>$msg</varname>)
+      &lt;div id="msgDiv"&gt; <varname>$msg</varname> &lt;/div&gt;
+    <command>#end</command>
+
+    <varname>$jsImports</varname>
+
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+    <para>When the SimpleForm page is first requested the <varname>$form</varname>
+    object will automatically render itself as:
+    </para>
+
+    <figure id="simple-form-image">
+      <title>Simple Form</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/introduction/simple-form.png" scale="85"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Say the user does not enter their name and presses the OK button to
+    submit the form. The <classname>ClickServlet</classname> creates a new
+    SimpleForm page and processes the form control.
+    </para>
+
+    <para>The form control processes its fields and determines that it is
+    invalid. The form then invokes the listener method
+    <methodname>onSubmit()</methodname>. As the form is not valid this method
+    simply returns true and the form renders the field validation errors.
+    </para>
+
+    <figure id="simple-form-error-image">
+      <title>Form after an invalid request</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/introduction/simple-form-error.png" scale="85"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Note the form will automatically maintain the entered state during the
+    post and validate cycle.
+    </para>
+
+    <para>Now if the user enters their name and clicks the OK button, the form
+    will be valid and the <methodname>onSubmit()</methodname> add a
+    <varname>msg</varname> to the Pages model. This will be rendered as:
+    </para>
+
+    <figure id="simple-form-success-image">
+      <title>Form after a valid request</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/introduction/simple-form-success.png" scale="85"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+  </sect1>
+
+  <sect1 id="advanced-form">
+    <title>Advanced Form Example</title>
+
+    <para>The <classname>AdvancedForm</classname> page below provides a more
+    advanced demonstration of using Form, Field and FielsSet controls.
+    </para>
+
+    <para>First we have an <classname>AdvancedForm</classname> class which
+    setups up a <ulink url="../../click-api/org/apache/click/control/Form.html">Form</ulink>
+    in its constructor. The form's investment
+    <ulink url="../../click-api/org/apache/click/control/Select.html">Select</ulink>
+    list is populated in the page's <methodname>onInit()</methodname> method. At
+    this point any page dependencies such as the CustomerService should be
+    available.
+    </para>
+
+    <para>Note in this example the page's public <varname>form</varname> field
+    is automatically added to its list of controls. The <varname>msg</varname>
+    field is added to the page's model.
+    </para>
+
+    <programlisting language="java">public class AdvancedForm extends Page {
+
+    public Form form = new Form();
+    public String msg;
+
+    private Select investmentSelect = new Select("investment");
+
+    // -------------------------------------------------------- Constructor
+
+    public AdvancedForm() {
+        FieldSet fieldSet = new FieldSet("Customer");
+        form.add(fieldSet);
+
+        TextField nameField = new TextField("name", true);
+        nameField.setMinLength(5);
+        nameField.setFocus(true);
+        fieldSet.add(nameField);
+
+        fieldSet.add(new EmailField("email", true));
+
+        fieldSet.add(investmentSelect);
+
+        fieldSet.add(new DateField("dateJoined", true));
+        fieldSet.add(new Checkbox("active"));
+
+        form.add(new Submit("ok", " OK ", this, "onOkClicked"));
+        form.add(new Submit("cancel", this, "onCancelClicked"));
+    }
+
+    // ----------------------------------------------------- Event Handlers
+
+    /**
+     * @see Page#onInit()
+     */
+    public void onInit() {
+        CustomerService customerService = getCustomerService();
+        investmentSelect.add(Option.EMPTY_OPTION);
+        investmentSelect.addAll(customerService.getInvestmentCatetories());
+    }
+
+    /**
+     * Handle the OK button click event.
+     *
+     * @return true
+     */
+    public boolean onOkClicked() {
+        if (form.isValid()) {
+            Customer customer = new Customer();
+            form.copyTo(customer);
+
+            getCustomerService().saveCustomer(customer);
+
+            form.clearValues();
+
+            msg = "A new customer record has been created.";
+        }
+        return true;
+    }
+
+    /**
+     * Handle the Cancel button click event.
+     *
+     * @return false
+     */
+    public boolean onCancelClicked() {
+        setRedirect(HomePage.class);
+        return false;
+    }
+}</programlisting>
+
+    <para>Next we have the AdvancedForm template
+    <filename>advanced-form.htm</filename>. The Click application automatically
+    associates the <filename>advanced-form.htm</filename> template with the
+    <classname>AdvancedForm</classname> class.
+    </para>
+
+    <programlisting language="xml">&lt;html&gt;
+  &lt;head&gt;
+    <varname>$cssImports</varname>
+  &lt;/head&gt;
+  &lt;body&gt;
+
+    <command>#if</command> (<varname>$msg</varname>)
+      &lt;div id="msgDiv"&gt; <varname>$msg</varname> &lt;/div&gt;
+    <command>#end</command>
+
+    <varname>$form</varname>
+
+    <varname>$jsImports</varname>
+
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+    <para>When the AdvancedForm page is first requested the
+    <varname>$form</varname> object will automatically render itself as:
+    </para>
+
+    <figure id="advanced-form-image">
+      <title>Advanced Form</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/introduction/advanced-form.png" scale="85"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>In this example when the OK button is clicked the
+    <methodname>onOkClicked()</methodname> method is invoked. If the form is
+    valid a new customer object is created and the forms field values are copied
+    to the new object using the Form
+    <ulink url="../../click-api/org/apache/click/control/Form.html#copyTo(java.lang.Object)">copyTo()</ulink>
+    method. The customer object is then saved, the form's field values are
+    cleared and an info message is presented to the user.
+    </para>
+
+    <para>If the user clicks on the Cancel button the request is redirected to
+    the applications HomePage.
+    </para>
+
+    <sect2 id="form-layout">
+      <title>Form Layout</title>
+
+      <para>In the example above the Form control automatically renders the form
+      and the fields HTML markup. This is a great feature for quickly building
+      screens, and the form control provides a number of layout options. See the
+      Click Examples for an interactive
+      <ulink url="http://www.avoka.com/click-examples/form/form-properties.htm">Form Properties demo</ulink>.
+      </para>
+
+      <para>For fine grained page design you can specifically layout form and
+      fields in your page template. See the
+      <link linkend="template-layout">Template Layout</link> section and
+      <ulink url="../../click-api/org/apache/click/control/Form.html#form-layout">Form</ulink>
+      Javadoc for more details.
+      </para>
+
+      <para>An alternative to page template design is using a programmatic
+      approach. See <link linkend="programmatic-layout">Programmatic Layout</link>
+      for more details.
+      </para>
+
+    </sect2>
+
+  </sect1>
+</chapter>

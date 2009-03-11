@@ -1,0 +1,1053 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<chapter id="chapter-configuration" remap="h1">
+  <title>Configuration</title>
+
+  <para>This section discusses how to setup and configure a Click web application
+  and covers the following topics:
+  </para>
+
+  <orderedlist>
+    <listitem>
+      <para>
+        <link linkend="servlet-configuration">Servlet Configuration</link>
+        - how to setup the ClickServlet
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="application-configuration">Application Configuration</link>
+        - how to configure the Click application descriptor
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="auto-deployed-files">Auto Deployed Files</link>
+        - automatically deployed Click files
+      </para>
+    </listitem>
+  </orderedlist>
+
+  <para>The Click configuration files include:
+  </para>
+
+  <informaltable frame="none">
+    <tgroup cols="2">
+      <colspec colname="c1" colwidth="30*"/>
+      <colspec colname="c2" colwidth="70*"/>
+      <tbody>
+        <row>
+          <entry>
+            <inlinemediaobject>
+              <imageobject>
+                <imagedata fileref="images/configuration/config-files.png" format="PNG" scale="85"/>
+              </imageobject>
+            </inlinemediaobject>
+          </entry>
+          <entry>
+            <itemizedlist>
+              <listitem>
+                <para> WEB-INF/
+                  <link linkend="application-configuration">click.xml</link>
+                    &nbsp; - &nbsp; Application Configuration (
+                  <emphasis role="bold">required</emphasis>)
+                </para>
+              </listitem>
+              <listitem>
+                <para> WEB-INF/
+                  <link linkend="servlet-configuration">web.xml</link>
+                    &nbsp; - &nbsp; Servlet Configuration (
+                  <emphasis role="bold">required</emphasis>)
+                </para>
+              </listitem>
+            </itemizedlist>
+          </entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </informaltable>
+
+  <sect1 id="servlet-configuration" remap="h2">
+    <title>Servlet Configuration</title>
+
+    <para>For a Click web application to function the
+    <ulink url="../../click-api/org/apache/click/ClickServlet.html">ClickServlet</ulink>
+    must be configured in the web application's <filename>/WEB-INF/web.xml</filename>
+    file. A basic web application which maps all <literal>*.htm</literal> requests
+    to a ClickServlet is provided below.
+    </para>
+
+    <programlisting language="xml">&lt;web-app&gt;
+
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.apache.click.ClickServlet&lt;/servlet-class&gt;
+    &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
+  &lt;/servlet&gt;
+
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+
+&lt;/web-app&gt;</programlisting>
+
+    <sect2 id="servlet-mapping" remap="h3">
+      <title>Servlet Mapping</title>
+
+      <para>By convention all Click page templates should have a .htm extension,
+      and the ClickServlet should be mapped to process all *.htm URL requests.
+      With this convention you have all the static HTML pages use a .html extension
+      and they will not be processed as Click pages.
+      </para>
+
+    </sect2>
+
+    <sect2 id="load-on-startup" remap="h3">
+      <title>Load On Startup</title>
+
+      <para>Note you should always set <literal>load-on-startup</literal> element
+      to be 0 so the servlet is initialized when the server is started. This will
+      prevent any delay for the first client which uses the application.
+      </para>
+
+      <para>The <classname>ClickServlet</classname> performs as much work as possible
+      at startup to improve performance later on. The Click start up and caching
+      strategy is configured with the Click application mode element in the
+      "<filename>click.xml</filename>" config file, covered next.
+      </para>
+
+    </sect2>
+  </sect1>
+
+  <sect1 id="application-configuration" remap="h2">
+    <title>Application Configuration</title>
+
+    <para> The heart of a Click application is the <filename>click.xml</filename>
+    configuration file. This file specifies the application pages, headers, the
+    format object and the applications mode.
+    </para>
+
+    <para>By default the ClickServlet will attempt to load the application
+    configuration file using the path: &nbsp; <filename>/WEB-INF/click.xml</filename>
+    </para>
+
+    <para>If this file is not found under the <literal>WEB-INF</literal> directory,
+    then ClickServlet will attempt to load it from the classpath as
+    <filename>/click.xml</filename>.
+    </para>
+
+    <para>See <ulink url="../../click-dtd.html">Click DTD</ulink> for the click-app
+    XML definition.
+    </para>
+
+    <para>A complete Click configuration example is available
+    <ulink url="../../click-dtd-example.html">here</ulink> which can be used as a quick
+    reference when configuring Click.
+    </para>
+
+    <para>A basic Click app config file is provided below:
+    </para>
+
+    <programlisting language="xml">&lt;click-app&gt;
+
+  &lt;pages package="com.mycorp.page"/&gt;
+
+  &lt;mode value="profile"/&gt;
+
+&lt;/click-app&gt;</programlisting>
+
+    <para>An advanced config file would look like this:
+    </para>
+
+    <programlisting language="xml">&lt;click-app charset="UTF-8" locale="de"&gt;
+
+  &lt;pages package="com.mycorp.banking.page"&gt;
+    &lt;page path="index.htm" classname="com.mycorp.page.Home"/&gt;
+  &lt;/pages&gt;
+
+  &lt;pages package="com.mycorp.common.page"/&gt;
+
+  &lt;format classname="com.mycorp.util.Format"/&gt;
+
+  &lt;mode value="profile"/&gt;
+
+  &lt;log-service classname="org.apache.click.extras.service.Log4JLogService"/&gt;
+
+&lt;/click-app&gt;</programlisting>
+
+    <para>The take away point is that there is not much to configure, even for
+    advanced uses.
+    </para>
+
+    <sect2 id="click-app" remap="h3">
+      <title>Click App</title>
+
+      <para>The root <symbol>click-app</symbol> element defines two application
+      localization attributes <varname>charset</varname> and <varname>locale</varname>.
+      </para>
+
+      <literallayout>&lt;!ELEMENT <symbol>click-app</symbol> (pages*, headers?, format?, mode?, controls?,
+                         file-upload-service?, log-service?, template-service?)&gt;
+  &lt;!ATTLIST click-app <varname>charset</varname> CDATA #IMPLIED&gt;
+  &lt;!ATTLIST click-app <varname>locale</varname> CDATA #IMPLIED&gt;</literallayout>
+
+      <para>The <varname>charset</varname> attribute defines the character encoding
+      set for:
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Velocity templates</para>
+        </listitem>
+        <listitem>
+          <para>HttpServletRequest character encoding</para>
+        </listitem>
+        <listitem>
+          <para>Page Content-Type charset, see Page
+            <ulink url="../../click-api/org/apache/click/Page.html#getContentType()">getContentType()</ulink>
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <varname>locale</varname> attribute defines the default application
+      Locale. If this value is defined it will override Locale returned by the request.
+      Please see the Context
+      <ulink url="../../click-api/org/apache/click/Context.html#getLocale()">getLocale()</ulink>
+      for details. For example the folliwing configuration sets the application
+      character set to UTF-8 and the default Locale as German (de):
+      </para>
+
+      <programlisting language="xml">&lt;click-app charset=" UTF-8" locale="de"&gt;
+  ..
+&lt;/click-app&gt;</programlisting>
+    </sect2>
+
+    <sect2 id="application-pages" remap="h3">
+      <title>Pages</title>
+
+      <para>The first child element of the click-app is the mandatory
+      <literal>pages</literal> element which defines the list of Click pages.
+      </para>
+
+      <literallayout>&lt;!ELEMENT <varname>pages</varname> (<symbol>page</symbol>*)&gt;
+   &lt;!ATTLIST pages <varname>package</varname> CDATA #IMPLIED&gt;
+   &lt;!ATTLIST pages <varname>automapping</varname> (true|false) "true"&gt;
+   &lt;!ATTLIST pages <varname>autobinding</varname> (true|false) "true"&gt;</literallayout>
+
+      <para>The pages element can specify a default <varname>package</varname> name
+      which is prepended to the classname of any pages defined.
+      </para>
+
+      <para>The pages element also defines the <varname>automapping</varname> and
+      <varname>automapping</varname> attributes which is discussed in the
+      <link linkend="application-automapping">Page Automapping</link> and
+      <link linkend="application-autobinding">Page Autobinding</link> sections
+      respectively.
+      </para>
+
+      <sect3 id="application-multiple-packages" remap="h4">
+        <title>Multiple Pages Packages</title>
+
+        <para>Click can support multiple pages elements to enable the automapping
+        of multiple packages.
+        </para>
+
+        <programlisting language="xml">&lt;click-app&gt;
+
+  &lt;pages package="com.mycorp.banking.page"/&gt;
+
+  &lt;pages package="com.mycorp.common.page"/&gt;
+
+&lt;/click-app&gt;</programlisting>
+
+        <para>With multiple pages elements, pages are loaded in the order of the page
+            elements, with manual page elements being loaded before automapped pages.
+            Once a page template has been mapped to a Page class it will not be replaced
+            by a subsequent potential match. So pages elements at the top take priority
+            over lower pages elements.
+        </para>
+
+      </sect3>
+    </sect2>
+
+    <sect2 id="application-page" remap="h3">
+      <title>Page</title>
+
+      <para>The page element defines the Click application pages.
+      </para>
+
+      <literallayout>&lt;!ELEMENT <symbol>page</symbol>(<varname>header</varname>*)&gt;
+   &lt;!ATTLIST page <varname>path</varname> CDATA #REQUIRED&gt;
+   &lt;!ATTLIST page <varname>classname</varname> CDATA #REQUIRED&gt;</literallayout>
+
+      <para>Each page <varname>path</varname> must be unique, as the Click
+      application maps HTTP requests to the page paths.
+      </para>
+
+      <para>The Click application will create a new Page instance for
+      the given request using the configured page <varname>classname</varname>.
+      All pages must subclass
+      <ulink url="../../click-api/org/apache/click/Page.html">Page</ulink> and provide
+      a public no arguments constructor, so they can be instantiated.
+      </para>
+
+      <para>Pages can also define <varname>header</varname> values which are
+      discussed in the next topic.
+      </para>
+
+      <para>When the Click application starts up it will check all the page
+      definitions. If there is a critical configuration error the ClickSerlvet
+      will log an <literal>ERROR</literal> message and throw an
+      <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/UnavailableException.html">UnavailableException</ulink>.
+      If this occurs the click application will be permanently unavailable until
+      the error is fixed and the web app is restarted.
+      </para>
+
+      <sect3 id="application-automapping" remap="h4">
+        <title>Page Automapping</title>
+
+        <para> Page automapping will automatically configure application pages
+        using a simple set of rules. This enables you to greatly streamline your
+        configuration file as you only need to define pages which don't fit
+        the automapping rules.
+        </para>
+
+        <para>Automapping will attempt to associate each page template (*.htm)
+        and JSP file in the web application (excluding those under the WEB-INF
+        and click directories) to a Page class. Automapped pages are loaded after
+        the manually defined pages are loaded, and manually defined pages takes
+        preference. When automapping is enabled the Click application will log
+        the page mappings when in debug or trace mode.
+        </para>
+
+        <para>For example, given the following page path to class mapping:
+        </para>
+
+        <literallayout>index.htm                     =&gt; <token>com.mycorp.page.Home</token>
+search.htm                    =&gt; <token>com.mycorp.page.Search</token>
+contacts/contacts.htm         =&gt; <token>com.mycorp.page.contacts.Contacts</token>
+security/login.htm            =&gt; <token>com.mycorp.page.security.Login</token>
+security/logout.htm           =&gt; <token>com.mycorp.page.security.Logout</token>
+security/change-password.htm  =&gt; <token>com.mycorp.page.security.ChangePassword</token></literallayout>
+
+        <para>The above mapping could be configured manually by setting the
+        <symbol>automapping</symbol> attribute to "false" and using the package
+        prefix, for example:
+        </para>
+
+        <programlisting language="xml">&lt;click-app&gt;
+  &lt;pages package="<token>com.mycorp.page</token>" <symbol>automapping</symbol>="false"&gt;
+    &lt;page path="index.htm"                    classname="<token>Home</token>"/&gt;
+    &lt;page path="search.htm"                   classname="<token>Search</token>"/&gt;
+    &lt;page path="contacts/contacts.htm"        classname="<token>contacts.Contacts</token>"/&gt;
+    &lt;page path="security/login.htm"           classname="<token>security.Login</token>"/&gt;
+    &lt;page path="security/logout.htm"          classname="<token>security.Logout</token>"/&gt;
+    &lt;page path="security/change-password.htm" classname="<token>security.ChangePassword</token>"/&gt;
+  &lt;/pages&gt;
+&lt;/click-app&gt;</programlisting>
+
+        <para>By using <symbol>automapping</symbol> the page paths will automatically
+        map to page classes: (except for Home page which doesn't automatically map
+        to index.html)
+        </para>
+
+        <programlisting language="xml">&lt;click-app&gt;
+  &lt;pages package="<token>com.mycorp.page</token>" <symbol>automapping</symbol>="true"&gt;
+    &lt;page path="index.htm" classname="Home"/&gt;
+  &lt;/pages&gt;
+&lt;/click-app&gt;</programlisting>
+
+        <para>Note <symbol>automapping</symbol> is true by default, so it could be
+        omitted from the configuration file.
+        </para>
+
+        <para>The page template name to classname convention is:
+        </para>
+
+        <literallayout>change-password.htm  =&gt;  <token>ChangePassword</token>
+change_password.htm  =&gt;  <token>ChangePassword</token>
+changePassword.htm   =&gt;  <token>ChangePassword</token>
+ChangePassword.htm   =&gt;  <token>ChangePassword</token></literallayout>
+
+        <para>When automapping pages, if a class cannot be found Click will attempt
+        to add the 'Page' suffix to the classname if not already present and map
+        this. For example:
+        </para>
+
+        <literallayout>customer.htm         =&gt;  <token>CustomerPage</token>
+change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
+      </sect3>
+
+      <sect3 id="application-excludes" remap="h4">
+        <title>Automapping Excludes</title>
+
+        <para>With Page automapping there can be resources where you don't want
+        automapping applied. For example when using a JavaScript library with lots
+        of <literal>.htm</literal> files, you don't want automapping to try and
+        find Page class for each of these files. In these situations you can use
+        the pages <symbol>excludes</symbol> element.
+        </para>
+
+        <literallayout>&lt;!ELEMENT <symbol>excludes</symbol> (#PCDATA)&gt;
+   &lt;!ATTLIST excludes <varname>pattern</varname> CDATA #REQUIRED&gt;</literallayout>
+
+        <para>For example if our application uses the TinyMCE JavaScript library
+        we could configure our pages automapping to exclude all <literal>.htm</literal>
+        files under the <literal>/tiny_mce</literal> directory.
+        </para>
+
+        <programlisting language="xml">&lt;click-app&gt;
+  &lt;pages package="com.mycorp.page"&gt;
+    <symbol>&lt;excludes</symbol> pattern="<varname>/tiny_mce/*</varname>"/&gt;
+  &lt;/pages&gt;
+&lt;/click-app&gt;</programlisting>
+
+        <para>The excludes pattern can specify multiple directories or files using a
+          comma separated notation. For example:
+        </para>
+
+        <programlisting language="xml">&lt;click-app&gt;
+  &lt;pages package="com.mycorp.page"&gt;
+    <symbol>&lt;excludes</symbol> pattern="<varname>/dhtml/*, /tiny_mce/*, banner.htm, about.htm</varname>"/&gt;
+  &lt;/pages&gt;
+&lt;/click-app&gt;</programlisting>
+
+        <para>HTM files excluded from Page automapping are handled by an internal
+        Page class with caching headers enabled.
+        </para>
+
+      </sect3>
+
+      <sect3 id="application-autobinding" remap="h4">
+        <title>Page Autobinding</title>
+
+        <para>By default all pages have autobinding enabled. With autobinding
+        enabled the ClickServlet will automatically:
+        </para>
+
+        <itemizedlist>
+          <listitem>
+            <para> add any public controls to the page, after the page constructor
+            has been invoked
+            </para>
+          </listitem>
+          <listitem>
+            <para> if the public control's name is not defined, its name will be
+            set to the the value its field name
+            </para>
+          </listitem>
+          <listitem>
+            <para> bind any request parameters to public page fields, after page
+            constructor has been invoked. See
+            <ulink url="../../click-api/org/apache/click/ClickServlet.html#processPageRequestParams(org.apache.click.Page)">ClickServlet.processPageRequestParams(Page)</ulink>
+            for more details
+            </para>
+          </listitem>
+          <listitem>
+            <para> add any public page fields to the page model, before rendering</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For example:
+        </para>
+
+        <programlisting language="java">public class EmployeePage extends Page {
+
+    public Form employeeForm = new Form();
+
+    public Table myTable = new Table();
+
+}</programlisting>
+
+        <para>In the example above the <varname>employeeForm</varname> and
+        <varname>myTable</varname> controls were not added to the page. Also note
+        that Form and Table do not have their names defined.
+        </para>
+
+        <para>When autobinding is enabled, ClickServlet will create a new Page and
+        add the public controls to the page. In the example above the
+        <varname>employeeForm</varname> and <varname>myTable</varname> will be
+        added to the page, as if you had invoked,
+        <methodname>addControl(employeeForm)</methodname> and
+        <methodname>addControl(myTable)</methodname>.
+        </para>
+
+        <para>The control's names were not defined so ClickServlet will set their
+        names to the value of their field/variable name. In this case the Form
+        name will be set to <varname>employeeForm</varname> while the Table name
+        will set to <varname>myTable</varname>.
+        </para>
+
+        <para>The above example is thus a shorthand way of writing the following:
+        </para>
+
+        <programlisting language="java">public class EmployeePage extends Page {
+
+    private Form employeeForm = new Form();
+
+    private Table myTable = new Table();
+
+    public void onInit() {
+        employeeForm.setName("employeeForm");
+        addControl(employeeForm);
+
+        myTable.setName("myTable");
+        addControl(myTable);
+    }
+}</programlisting>
+
+        <para>You can turn this behaviour off by setting the <symbol>autobinding</symbol>
+        attribute to false, for example:
+        </para>
+
+        <programlisting language="xml">&lt;click-app&gt;
+  &lt;pages package="com.mycorp.page" <symbol>autobinding</symbol>="<varname>false</varname>"/&gt;
+&lt;/click-app&gt;</programlisting>
+
+      </sect3>
+    </sect2>
+
+    <sect2 id="application-headers" remap="h3">
+      <title>Headers</title>
+
+      <para>The optional <literal>headers</literal> element defines a list of
+      <literal>header</literal> elements which are applied to all pages.
+      </para>
+
+      <literallayout>&lt;!ELEMENT <varname>headers</varname> (<symbol>header</symbol>*)&gt;</literallayout>
+
+      <para>The <symbol>header</symbol> element defines header name and value
+      pairs which are applied to the
+      <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</ulink>.
+      </para>
+
+      <literallayout>&lt;!ELEMENT <symbol>header</symbol> (#PCDATA)&gt;
+   &lt;!ATTLIST header <varname>name</varname> CDATA #REQUIRED&gt;
+   &lt;!ATTLIST header <varname>value</varname> CDATA #REQUIRED&gt;
+   &lt;!ATTLIST header <varname>type</varname> (String|Integer|Date) "String"&gt;</literallayout>
+
+      <para>Page headers are set after the Page has been constructed and before
+      <methodname>onInit()</methodname> is called. Pages can then modify their
+      <ulink url="../../click-api/org/apache/click/Page.html#headers">headers</ulink>
+      property using the
+      <ulink url="../../click-api/org/apache/click/Page.html#setHeader(java.lang.String,%20java.lang.Object)">setHeader()</ulink>
+      method.
+      </para>
+
+      <sect3 id="browser-caching" remap="h4">
+        <title>Browser Caching</title>
+
+        <para>Headers are typically used to switch off browser caching. By
+        default Click will use the following no caching header values if you don't
+        define a <literal>headers</literal> element in your application:
+        </para>
+
+        <programlisting language="xml">&lt;click-app&gt;
+  &lt;pages&gt;
+     ..
+  &lt;/pages&gt;
+  &lt;headers&gt;
+    &lt;header name="Pragma" value="no-cache"/&gt;
+    &lt;header name="Cache-Control"
+            value="no-store, no-cache, must-revalidate, post-check=0, pre-check=0"/&gt;
+    &lt;header name="Expires" value="1" type="Date"/&gt;
+  &lt;/headers&gt;
+&lt;/click-app&gt;</programlisting>
+
+        <para>Alternatively you can define your headers individually in pages or
+        for all application pages by setting header values. For example to switch
+        off caching in the login page, note the value for a Date type should
+        be a long number value:
+        </para>
+
+        <programlisting language="xml">&lt;page path="login.htm" classname="com.mycorp.page.Login"&gt;
+  &lt;header name="Pragma" value="no-cache"/&gt;
+  &lt;header name="Expires" value="1" type="Date"/&gt;
+&lt;/page&gt;</programlisting>
+
+        <para>If you wanted to enable caching for a particular page you could set
+        the following page cache control header. This will mark the page as cachable
+        for a period of 1 hour after which it should be reloaded.
+        </para>
+
+        <programlisting language="xml">&lt;page path="home.htm" classname="com.mycorp.page.Home"&gt;
+  &lt;header name="Cache-Control" value="max-age=3600, public, must-revalidate"/&gt;
+&lt;/page&gt;</programlisting>
+
+        <para>To apply header values globally define header values in the headers
+        element. For example:
+        </para>
+
+        <programlisting language="xml">&lt;click-app&gt;
+  &lt;pages&gt;
+     ..
+  &lt;/pages&gt;
+  &lt;headers&gt;
+    &lt;header name="Pragma" value="no-cache"/&gt;
+    &lt;header name="Cache-Control"
+               value="no-store, no-cache, must-revalidate, post-check=0, pre-check=0"/&gt;
+    &lt;header name="Expires" value="1" type="Date"/&gt;
+  &lt;/headers&gt;
+&lt;/click-app&gt;</programlisting>
+
+      </sect3>
+    </sect2>
+
+    <sect2 id="application-format" remap="h3">
+      <title>Format</title>
+
+      <para>The optional <literal>format</literal> element defines the Format
+      object classname which is applied to all pages.
+      </para>
+
+      <literallayout>&lt;!ELEMENT <symbol>format</symbol> (#PCDATA)&gt;
+    &lt;ATTLIST format <varname>classname</varname> CDATA #FIXED "org.apache.click.util.Format"&gt;</literallayout>
+
+      <para>By default all Click pages are configured with a
+      <ulink url="../../click-api/org/apache/click/util/Format.html">org.apache.click.util.Format</ulink>
+      object. The format object is made available in the Velocity page templates
+      using the name <varname>$format</varname>.
+      </para>
+
+      <para>To specify a custom format class configure a <literal>format</literal>
+      element in the click-app descriptor. For example:
+      </para>
+
+      <programlisting language="xml">&lt;click-app&gt;
+  ..
+  <symbol>&lt;format</symbol> classname="<varname>com.mycorp.util.CustomFormat</varname>"/&gt;
+&lt;/click-app&gt;</programlisting>
+
+    </sect2>
+
+    <sect2 id="application-mode" remap="h3">
+      <title>Mode</title>
+
+      <para>The optional <literal>mode</literal> element defines the application
+      logging and caching mode.
+      </para>
+
+      <literallayout>&lt;!ELEMENT <symbol>mode</symbol> (#PCDATA)&gt;
+    &lt;ATTLIST mode value (<varname>production|profile|development|debug|trace</varname>) "development"&gt;</literallayout>
+
+      <para>By default Click applications run in <literal>development</literal> mode,
+      which switches off page template caching, and the logging level is set to
+      <literal>INFO</literal>.
+      </para>
+
+      <para>To change the default application mode configure a mode element in the
+      click-app descriptor. For example to specify <literal>production</literal>
+      mode you would add the following mode element:
+      </para>
+
+      <programlisting language="xml">&lt;click-app&gt;
+  ..
+  <symbol>&lt;mode</symbol> value="<varname>production</varname>"&gt;
+&lt;/click-app&gt;</programlisting>
+
+      <para>The application mode configuration can be overridden by setting the
+      system property <literal>"click.mode"</literal>. This can be use in the scenario
+      of debugging a problem on a production system, where you change the mode to
+      <literal>trace</literal> by setting the following system property and
+      restarting the application.
+      </para>
+
+      <literallayout>-Dclick.mode=trace</literallayout>
+
+      <para>The Click Application modes and their settings for Page auto loading,
+      template caching and logging levels are:
+      </para>
+
+      <informaltable frame="all">
+        <tgroup cols="5">
+          <colspec colname="c1" colwidth="20*"/>
+          <colspec colname="c2" colwidth="20*"/>
+          <colspec colname="c3" colwidth="20*"/>
+          <colspec colname="c4" colwidth="20*"/>
+          <colspec colname="c5" colwidth="20*"/>
+          <thead>
+            <row>
+             <?dbfo bgcolor="navy"?>
+             <entry>
+                <para>
+                  Application mode
+                </para>
+              </entry>
+              <entry>
+                <para>
+                  Page auto loading
+                </para>
+              </entry>
+              <entry>
+                <para>
+                  Template caching
+                </para>
+              </entry>
+              <entry>
+                <para>
+                  Click log level
+                </para>
+              </entry>
+              <entry>
+                <para>
+                  Velocity log level
+                </para>
+              </entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry align="center" valign="middle">
+                <para>
+                  <emphasis role="bold">production</emphasis>
+                </para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>No</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>Yes</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>WARN</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>ERROR</para>
+              </entry>
+            </row>
+            <row>
+              <entry align="center" valign="middle">
+                <para>
+                  <emphasis role="bold">profile</emphasis>
+                </para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>No</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>Yes</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>INFO</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>ERROR</para>
+              </entry>
+            </row>
+            <row>
+              <entry align="center" valign="middle">
+                <para>
+                  <emphasis role="bold">development</emphasis>
+                </para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>Yes</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>No</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>INFO</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>ERROR</para>
+              </entry>
+            </row>
+            <row>
+              <entry align="center" valign="middle">
+                <para>
+                  <emphasis role="bold">debug</emphasis>
+                </para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>Yes</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>No</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>DEBUG</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>ERROR</para>
+              </entry>
+            </row>
+            <row>
+              <entry align="center" valign="middle">
+                <para>
+                  <emphasis role="bold">trace</emphasis>
+                </para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>Yes</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>No</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>TRACE</para>
+              </entry>
+              <entry align="center" valign="middle">
+                <para>WARN</para>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <sect3 id="page-auto-loading" remap="h4">
+        <title>Page Auto Loading</title>
+
+        <para>When Page Auto Loading is enabled any new page templates and classes
+        will be automatically loaded at runtime. These pages are loaded using the
+        <link linkend="application-automapping">Page Automapping</link> rules.
+        </para>
+
+        <para>Page auto loading is a very handy feature for rapid development as
+        you do not have to restart you application server to pick up new pages.
+        </para>
+
+      </sect3>
+
+      <sect3 id="click-logging" remap="h4">
+        <title>Click and Velocity Logging</title>
+
+        <para>The Click and Velocity runtimes use
+        <ulink url="../../click-api/org/apache/click/service/LogService.html">LogService</ulink>
+        for logging messages. The default LogService implementation is
+        <ulink url="../../click-api/org/apache/click/service/ConsoleLogService.html">ConsoleLogService</ulink>
+        which will send messages to the console [System.out]. For example the
+        following logging output is for a HomePage request when the application
+        mode is <literal>trace</literal>:
+        </para>
+
+        <literallayout>[Click] [debug] GET http://localhost:8080/quickstart/home.htm
+[Click] [trace]    invoked: HomePage.&lt;&lt;init&gt;&gt;
+[Click] [trace]    invoked: HomePage.onSecurityCheck() : true
+[Click] [trace]    invoked: HomePage.onInit()
+[Click] [trace]    invoked: HomePage.onGet()
+[Click] [trace]    invoked: HomePage.onRender()
+[Click] [info ]    renderTemplate: /home.htm - 6 ms
+[Click] [trace]    invoked: HomePage.onDestroy()
+[Click] [info ] handleRequest:  /home.htm - 24 ms</literallayout>
+
+        <para>Any unhandled <literal>Throwable</literal> errors are logged by the
+        ClickServlet.
+        </para>
+
+        <para>Note that Click Extras also provide log adaptors for
+        <ulink url="../../extras-api/org/apache/click/extras/service/Log4JLogService.html">Log4J</ulink>
+        and the <ulink url="../../extras-api/org/apache/click/extras/service/JdkLogService.html">JDK Logging API</ulink>.
+        </para>
+
+        <para>When an application is not in <literal>production</literal> mode the
+        error page displays detailed debugging information. When the application
+        mode is <literal>production</literal> no debug information is displayed to
+        prevent sensitive information being revealed. This behaviour can be changed
+        by modifying the deployed <filename>click/error.htm</filename> page template.
+        </para>
+
+      </sect3>
+    </sect2>
+
+    <sect2 id="application-controls" remap="h3">
+      <title>Controls</title>
+
+      <para>The optional <literal>controls</literal> element defines a list of
+      <literal>control</literal> elements which will be deployed on application
+      startup.
+      </para>
+
+      <literallayout>&lt;!ELEMENT <varname>controls</varname> (<symbol>control</symbol>*)&gt;</literallayout>
+
+      <para>The <symbol>control</symbol> registers
+      <ulink url="../../click-api/org/apache/click/Control.html">Control</ulink> classes
+      which will have their <ulink url="../../click-api/org/apache/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</ulink>
+      method invoked when the click application starts.
+      </para>
+
+      <literallayout>&lt;!ELEMENT <symbol>control</symbol> (#PCDATA)&gt;
+   &lt;!ATTLIST control <varname>classname</varname> CDATA #REQUIRED&gt;</literallayout>
+
+      <para>For example to have a <classname>CustomField</classname> control
+      deploy its resources on application startup, you would add the following
+      elements to your <filename>click.xml</filename> file:
+      </para>
+
+      <programlisting language="xml">&lt;click-app&gt;
+   ..
+
+   &lt;controls&gt;
+     <symbol>&lt;control</symbol> classname="<varname>com.mycorp.control.CustomField</varname>"/&gt;
+   &lt;/controls&gt;
+&lt;/click-app&gt;</programlisting>
+
+    </sect2>
+  </sect1>
+
+  <sect1 id="auto-deployed-files" remap="h2">
+    <title>Auto Deployed Files</title>
+
+    <para>To make pre-configured resources (templates, stylesheets, etc.)
+    available to web applications, Click automatically deploys configured
+    classpath resources to the <varname>/click</varname> directory at startup
+    (if not already present).
+    </para>
+
+    <para>You can modify these support files and Click will
+    <emphasis role="bold">not</emphasis> overwrite them. These files include:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para> click/error.htm &nbsp; - &nbsp; the Page
+          <link linkend="page-error-handling">Error Handling</link> template
+        </para>
+      </listitem>
+      <listitem>
+        <para> click/control.css &nbsp; - &nbsp; the Controls cascading stylesheet</para>
+      </listitem>
+      <listitem>
+        <para> click/control.js &nbsp; - &nbsp; the Controls JavaScript library</para>
+      </listitem>
+      <listitem>
+        <para> click/not-found.htm &nbsp; - &nbsp; the
+          <link linkend="page-not-found">Page Not Found</link> template
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>For example to customize the control styles you can place a customized
+    copy (or even a brand new version) of <filename>control.css</filename> under
+    the <varname>/click</varname> folder in your web project:
+    </para>
+
+    <literallayout>/webapp/click/control.css</literallayout>
+
+    <para>When Click starts up it will <emphasis role="bold">not</emphasis>
+    override your copy of <filename>control.css</filename> with its own default
+    version.
+    </para>
+
+    <para>Different controls might deploy different stylesheet, javascript or image
+    files, however the above principle still applies. By placing a customized copy
+    of the stylesheet, javascript or image under the <varname>/click</varname> folder,
+    you will override the default resource.
+    </para>
+
+    <para>Be aware that some of the more complex controls (checklist, colorpicker,
+    tree), deploys resources to subfolders under <varname>/click</varname>, for
+    example <literal>/click/checklist/*</literal>.
+    </para>
+
+    <para>A control's Javadoc will normally indicate what resources are deployed
+    for that control.
+    </para>
+
+    <para>It is generally easier to work with unpacked WARs and most servlet
+    containers do just that. However some contains such as WebLogic (at least
+    version 10) does not. To enable WebLogic to unpack the WAR go to the
+    <emphasis>Admin Console &gt; server node &gt; Web Applications</emphasis>
+    tab and check the <emphasis>Archived Real Path Enabled</emphasis> parameter.
+    </para>
+
+    <para>If Click cannot deploy resources because of restricted file system
+    permissions, warning messages will be logged.
+    </para>
+
+    <para>If your application server does not unpack the WAR/EAR or has restricted
+    permissions, you will need to package up these auto deployed files in your web
+    applications WAR file. To do this you should run you application on a development
+    machine without these restrictions and then package up the deployed files into
+    the WAR/EAR before deployment.
+    </para>
+
+    <sect2 id="deploying-custom-resources" remap="h3">
+      <title>Deploying Custom Resources</title>
+
+      <para> Click supports two ways of deploying pre-configured resources
+      (templates, stylesheets, JavaScript etc.) from a Jar to a web applications.
+      </para>
+
+      <orderedlist>
+        <listitem>
+          <para> Through a Control's
+          <ulink url="../../click-api/org/apache/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</ulink>
+          event handler. See the <link linkend="application-controls">Controls</link>
+          section above.
+          </para>
+        </listitem>
+        <listitem>
+          <para> By packaging the resources (stylesheets, JavaScript, Images etc.)
+          into a special folder called <emphasis>'META-INF/web'</emphasis>.
+          </para>
+        </listitem>
+      </orderedlist>
+
+      <para>As option #1 was already discussed above in section
+      <link linkend="application-controls">Controls</link>, lets look at option #2.
+      </para>
+
+      <para>When Click starts up, it scans each Jar in the classpath for
+      specially marked entries starting with 'META-INF/web/'. (Please note that
+      even though Click will scan the entire classpath it is strongly recommended
+      to host your Jar files inside your WAR lib folder e.g. WEB-INF/lib. Sharing
+      Jars on the classpath can lead to class loading issues.)
+      </para>
+
+      <para>Click will then copy all files found under 'META-INF/web/' to the web
+      application folder.
+      </para>
+
+      <para>
+      For example, given a Jar file with the following entries:
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>META-INF/web/mycorp/edit_customer.js</para>
+        </listitem>
+        <listitem>
+          <para>META-INF/web/mycorp/edit_customer.css</para>
+        </listitem>
+        <listitem>
+          <para>mycorp/pages/EditCustomerPage.class</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Click will copy the files <emphasis>'/mycorp/edit_customer.js'</emphasis>
+      and <emphasis>'/mycorp/edit_customer.css'</emphasis> to the web application
+      folder.
+      </para>
+
+      <para>Thus if the web application is called 'webapp', the files will be
+      deployed as <emphasis>'webapp/mycorp/edit_customer.js'</emphasis> and
+      <emphasis>'webapp/mycorp/edit_customer.css'</emphasis>.
+      </para>
+
+      <para>Option #2 is especially useful when you need to deploy a large number
+      of resources from a Jar. Note, only Jars placed under the
+      <emphasis>'WEB-INF/lib'</emphasis> folder will be deployed.
+      </para>
+
+    </sect2>
+  </sect1>
+</chapter>

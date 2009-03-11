@@ -1,0 +1,1046 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<chapter id="chapter-controls" remap="h1">
+  <title>Controls</title>
+
+  <para> Click provides a rich set of Controls which support client side
+  rendering and server side processing. This section covers the following topics:
+  </para>
+
+  <orderedlist>
+    <listitem>
+      <para>
+        <link linkend="control-interface">Control Interface</link>  - describes
+        the Control interface
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="control-callback">Control Callback</link>  - control
+        event callback pattern
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="control-class">Control Classes</link>  - control Java
+        classes
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="control-message-properties">Control Message Properties</link>
+        - control message properties
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="container">Container</link>  - a Container is a Control
+        that can contain other Controls.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <link linkend="layout">Layouts</link>  - describes layout options and
+        how to create custom layouts.
+      </para>
+    </listitem>
+  </orderedlist>
+
+  <para>While this section provides an overview how Controls work please see the
+  <ulink url="../../click-api/org/apache/click/control/package-summary.html">Javadoc</ulink>,
+  which provides extensive information and examples.
+  </para>
+
+  <sect1 id="control-interface" remap="h2">
+    <title>Control Interface</title>
+
+    <para> Controls provide the server side components that process user input,
+    and render their display to the user. Controls are equivalent to Visual
+    Basic Controls or Delphi Components.
+    </para>
+
+    <para>Controls handle the processing of user input in the
+    <ulink url="../../click-api/org/apache/click/Control.html#onProcess()">onProcess</ulink>
+    method and render their HTML display using the toString() method. The
+    execution sequence for a Control being processed and rendered is illustrated
+    in the figure below.
+    </para>
+
+    <figure id="control-post-sequence-diagram">
+      <title>Post Sequence Diagram &nbsp;-&nbsp; created with Enterprise Architect
+      courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink>
+      </title>
+      <inlinemediaobject>
+        <imageobject>
+          <imagedata fileref="images/controls/control-post-sequence-diagram.png" format="PNG" scale="85"/>
+        </imageobject>
+      </inlinemediaobject>
+    </figure>
+
+    <para>In Click all control classes must implement the
+    <ulink url="../../click-api/org/apache/click/Control.html">Control</ulink> interface.
+    The Control interface is depicted in the figure below.
+    </para>
+
+    <figure id="control-class-diagram">
+      <title>Control Interface Diagram &nbsp;-&nbsp; created with Enterprise Architect
+      courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink>
+      </title>
+      <inlinemediaobject>
+        <imageobject>
+          <imagedata fileref="images/controls/control-class-diagram.png" format="PNG" scale="85"/>
+        </imageobject>
+      </inlinemediaobject>
+    </figure>
+
+    <para>Methods on the Control interface include:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Control.html#getHtmlImports()">getHtmlImports()</ulink>
+          - defines the controls HTML header imports.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Control.html#getMessages()">getMessages()</ulink>
+          - defines the controls localized messages map.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Control.html#getName()">getName()</ulink> /
+          <ulink url="../../click-api/org/apache/click/Control.html#setName(java.lang.String)">setName()</ulink>
+            -   defines the controls name in the Page model or Form fields.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Control.html#getParent()">getParent()</ulink> /
+          <ulink url="../../click-api/org/apache/click/Control.html#setParent(java.lang.Object)">setParent()</ulink>
+            -   defines the controls parent.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</ulink>
+          - deploy resources on startup.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Control.html#onInit()">onInit()</ulink>
+          - on initialize event handler.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Control.html#onProcess()">onProcess()</ulink>
+          - process request event handler.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Control.html#onDestroy()">onDestroy()</ulink>
+          - on destroy event handler.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Control.html#render(org.apache.click.util.HtmlStringBuffer)">render()</ulink>
+          - generate the control's HTML representation.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+  </sect1>
+
+  <sect1 id="control-callback" remap="h2">
+    <title>Control Callback</title>
+
+    <para>Click Controls provide an event callback mechanism similar to a
+    <classname>java.awt.ActionListener</classname> callback.
+    </para>
+
+    <para>Click supports two styles of action listeners. The first is using the
+    <ulink url="../../click-api/org/apache/click/ActionListener.html">ActionListener</ulink>
+    interface and
+    <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#setActionListener(org.apache.click.ActionListener)">setActionListener(ActionListener)</ulink>
+    method which provides compile time safety.
+    </para>
+
+    <para>The second is to register the action listener via the
+    <ulink url="../../click-api/org/apache/click/Control.html#setListener(java.lang.Object, java.lang.String)">setListener(Object, String)</ulink>
+    method where you specify the call back method via its name. This second style
+    uses less lines of code, but has no compile time safety.
+    </para>
+
+    <para>Examples of these two action listener styles are provided below:
+    </para>
+
+    <programlisting language="java">public class ActionDemo extends BorderPage {
+
+    // Uses listener style 1
+    public ActionLink link = new ActionLink();
+
+    // Uses listener style 2
+    public ActionButton button = new ActionButton();
+
+    public ActionDemo() {
+
+        // Verbose but provides compile time safety
+        link.setActionListener(new ActionListener() {
+            public boolean onAction(Control source) {
+                return onLinkClick(source);
+            }
+        });
+
+        // Succinct but typos will cause runtime errors
+        button.setListener(this, "onButtonClick");
+    }
+
+    // Event Handlers ---------------------------------------------------------
+
+    public boolean onLinkClick(Control source) {
+        ..
+        return true;
+    }
+
+    public boolean onButtonClick() {
+        ..
+        return true;
+    }
+}</programlisting>
+
+    <para>All call back listener methods must return a boolean value. If they
+    return true the further processing of other controls and page methods should
+    continue. Otherwise if they return false, then any further processing should
+    be aborted. By returning false you can effectively exit at this point and
+    redirect or forward to another page. This execution logic is illustrated in
+    the <link linkend="activity-diagram">Page Execution Activity Diagram</link>.
+    </para>
+
+    <para>Being able to stop further processing and do something else can be very
+    handy. For example your Pages onRender() method may perform an expensive database
+    operation. By returning false in an event handler you can skip this step and
+    render the template or forward to the next page.
+    </para>
+
+  </sect1>
+
+  <sect1 id="control-class" remap="h2">
+    <title>Control Classes</title>
+
+    <para>Core control classes are defined in the package
+    <ulink url="../../click-api/org/apache/click/control/package-summary.html">org.apache.click.control</ulink>.
+    This package includes controls for the essential HTML elements.
+    </para>
+
+    <para>Extended control classes are provided in the Click Extras package
+    <ulink url="../../extras-api/org/apache/click/extras/control/package-summary.html">org.apache.click.extras.control</ulink>.
+    Click Extras classes can contain dependencies to 3rd party frameworks.
+    </para>
+
+    <para>A subset of these control classes are depicted in the figure below.
+    </para>
+
+    <figure id="control-package-class-diagram">
+      <title>Package Class Diagram &nbsp;-&nbsp; created with Enterprise Architect
+      courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink>
+      </title>
+      <inlinemediaobject>
+        <imageobject>
+          <imagedata fileref="images/controls/control-package-class-diagram.png" format="PNG" scale="75"/>
+        </imageobject>
+      </inlinemediaobject>
+    </figure>
+
+    <para>The key control classes include:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/control/ActionLink.html">ActionLink</ulink>
+          - provides an anchor link which can invoke callback listeners.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/control/Field.html">Field</ulink>
+          - provides the abstract form field control.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/control/Form.html">Form</ulink>
+          - provides a form control for processing, validation and rendering.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/control/Submit.html">Submit</ulink>
+          - provides an input type submit control which can invoke callback listeners.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/control/TextField.html">TextField</ulink>
+          - provides an input type text control which can invoke callback listeners.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The control classes are designed to support subclassing for customized
+    behaviour. All control fields have protected visibility and have public
+    accessor methods.
+    </para>
+
+    <para>You can also aggregate controls to build more complex controls. For
+    example the <ulink url="../../extras-api/org/apache/click/extras/control/CreditCardField.html">CreditCardField</ulink>
+    uses a <ulink url="../../click-api/org/apache/click/control/Select.html">Select</ulink>
+    control to render the different credit card types.
+    </para>
+
+  </sect1>
+
+  <sect1 id="control-message-properties" remap="h2">
+    <title>Message Properties</title>
+
+    <para>Control strings for field validation messages and HTML formatting
+    strings are externalized in the properties file. By using these properties
+    files you can localize a Click application for your particular language and
+    dialect.
+    </para>
+
+    <sect2 id="message-resolution" remap="h3">
+      <title>Message Resolution</title>
+
+      <para>Messages are looked up in a particular order enabling taylor specific
+      messages, for your controls, individual pages or across your entire
+      application. The order in which localized messages are resolved is:
+      </para>
+
+      <variablelist>
+        <varlistentry>
+          <term><emphasis role="bold">Page scope messages</emphasis></term>
+          <listitem>
+            <para>Message lookups are first resolved to the Page classes message
+            bundle if it exists. For example a <classname>Login</classname> page
+            may define the message properties:
+            </para>
+
+            <literallayout>/com/mycorp/page/Login.properties</literallayout>
+
+            <para>If you want to tailor messages for a particular page this is
+            where to place them.
+            </para>
+
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><emphasis role="bold">Global page scope messages</emphasis></term>
+          <listitem>
+            <para>Next message lookups are resolved to the global pages message
+            bundle if it exists.
+            </para>
+
+            <literallayout>/click-page.properties</literallayout>
+
+            <para>If you want messages to be used across your entire application
+            this is where to place them.
+            </para>
+
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <para>&nbsp;</para>
+          <term><emphasis role="bold">Control scope messages</emphasis></term>
+          <listitem>
+            <para>Next message lookups are resolved to the Control classes
+            message bundle if it exists. For example a
+            <classname>CustomTextField</classname> control may define the
+            message properties:
+            </para>
+
+            <literallayout>/com/mycorp/control/CustomTextField.properties</literallayout>
+
+            <para>A custom control's messages can be placed here
+            (or the global control scope covered next) and overridden by one of the
+            above options.
+            </para>
+
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><emphasis role="bold">Global control scope messages</emphasis></term>
+          <listitem>
+            <para>Finally message lookups are resolved to the global application
+            control message bundle if the message has not already been found.
+            The global control properties file is:
+            </para>
+
+            <literallayout>/click-control.properties</literallayout>
+
+            <para>Control messages can be placed here and overridden by one of
+            the above options.
+            </para>
+
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+    </sect2>
+
+    <sect2 id="control-properties" remap="h3">
+      <title>Control Properties</title>
+
+      <para>To customize the <filename>click-control.properties</filename> simply
+      add this file to your classpath and tailor the specific values.
+      </para>
+
+      <para>Note when customizing the message properties you must include all
+      the properties, not just the ones you want to override.
+      </para>
+
+      <literallayout># Click Control messages
+field-maxlength-error={0} must be no longer than {1} characers
+field-minlength-error={0} must be at least {1} characters
+field-required-error=You must enter a value for {0}
+
+file-required-error=You must enter a filename for {0}
+
+label-required-prefix=
+label-required-suffix=&lt;span class="required"&gt;*&lt;/span&gt;
+label-not-required-prefix=
+label-not-required-suffix=&amp;nbsp;
+
+not-checked-error=You must select {0}
+
+number-maxvalue-error={0} must not be larger than {1}
+number-minvalue-error={0} must not be smaller than {1}
+
+select-error=You must select a value for {0}
+
+table-first-label=First
+table-first-title=Go to first page
+table-previous-label=Prev
+table-previous-title=Go to previous page
+table-next-label=Next
+table-next-title=Go to next page
+table-last-label=Last
+table-last-title=Go to last page
+table-goto-title=Go to page
+table-page-banner=&lt;span class="pagebanner"&gt;{0} items found, displaying {1} to {2}.&lt;/span&gt;
+table-page-banner-nolinks=
+  &lt;span class="pagebanner-nolinks"&gt;{0} items found, displaying {1} to {2}.&lt;/span&gt;
+table-page-links=&lt;span class="pagelinks"&gt;[{0}/{1}] {2} [{3}/{4}]&lt;/span&gt;
+table-page-links-nobanner=&lt;span class="pagelinks-nobanner"&gt;[{0}/{1}] {2} [{3}/{4}]&lt;/span&gt;
+table-no-rows-found=No records found.
+
+table-inline-first-image=/click/paging-first.gif
+table-inline-first-disabled-image=/click/paging-first-disabled.gif
+table-inline-previous-image=/click/paging-prev.gif
+table-inline-previous-disabled-image=/click/paging-prev-disabled.gif
+table-inline-next-image=/click/paging-next.gif
+table-inline-next-disabled-image=/click/paging-next-disabled.gif
+table-inline-last-image=/click/paging-last.gif
+table-inline-last-disabled-image=/click/paging-last-disabled.gif
+table-inline-page-links=Page   {0} {1} {2} {3} {4}
+
+# Message displayed when a error occurs when the application is in "production" mode
+production-error-message=
+  &lt;div id='errorReport' class='errorReport'&gt;The application encountered an unexpected error.
+  &lt;/div&gt;
+      </literallayout>
+
+    </sect2>
+
+    <sect2 id="accessing-messages" remap="h3">
+      <title>Accessing Messages</title>
+
+      <para>Field classes support a hierarchy of resource bundles for displaying
+      validation error messages and display messages. These localized messages
+      can be accessed through the Field methods:
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#getMessage(java.lang.String)">getMessage(String)</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#getMessage(java.lang.String,%20java.lang.Object)">getMessage(String, Object)</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#getMessage(java.lang.String,%20java.lang.Object[])">getMessage(String, Object[])</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#getMessages()">getMessages()</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <ulink url="../../click-api/org/apache/click/control/Field.html#setErrorMessage(java.lang.String)">setErrorMessage(String)</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <ulink url="../../click-api/org/apache/click/control/Field.html#setErrorMessage(java.lang.String,%20java.lang.Object)">setErrorMessage(String, Object)</ulink>
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>These methods use the <literal>Locale</literal> of the request to
+      lookup the string resource bundle, and use <classname>MessageFormat</classname>
+      for any string formatting.
+      </para>
+
+    </sect2>
+  </sect1>
+
+  <sect1 id="container" remap="h2">
+    <title>Container</title>
+
+    <para><ulink url="../../click-api/org/apache/click/control/Container.html">Container</ulink>
+    is a Control that can contain other Controls, thus forming a hierarchy
+    of components. Container enables components to add, remove and retrieve other
+    controls. Listed below are example Containers:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/control/Form.html">Form</ulink>
+          - an HTML form which provides default layout of fields and error feedback.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/control/Panel.html">Panel</ulink>
+          - similar to
+          <ulink url="../../click-api/org/apache/click/Page.html">Page</ulink>, this
+          Container provides its own template and model.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/control/FieldSet.html">FieldSet</ulink>
+          - draws a legend (border) around its child Controls.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>These Containers are depicted in the figure below.
+    </para>
+
+    <figure id="container-package-class-diagram">
+      <title>Container Class Diagram</title>
+      <inlinemediaobject>
+        <imageobject>
+          <imagedata fileref="images/controls/container-package-class-diagram.png" format="PNG" scale="70"/>
+        </imageobject>
+      </inlinemediaobject>
+    </figure>
+
+    <para>The following classes provides convenient extension points for creating
+    custom Containers:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/control/AbstractContainer.html">AbstractContainer</ulink>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../extras-api/org/apache/click/extras/control/AbstractContainerField.html">AbstractContainerField</ulink>
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Lets cover each of them here.
+    </para>
+
+    <sect2 id="abstractcontainer" remap="h3">
+      <title>AbstractContainer</title>
+
+      <para>Enables easy creation of custom Containers, for example an html
+      <emphasis>div</emphasis> or <emphasis>span</emphasis> element:
+      </para>
+
+      <programlisting language="java">public class Div extends AbstractContainer {
+
+    public Div(String name) {
+        super(name);
+    }
+
+    public String getTag() {
+        // Return the control's HTML tag.
+        return "div";
+    }
+}</programlisting>
+
+      <para>Lets try out the newly created <classname>Container</classname>
+      above: (note the <classname>MockContext</classname> used in this test is
+      described in the <ulink url="../../mock-api/overview-summary.html">Mock Test Support</ulink>
+      documentation)
+      </para>
+
+      <programlisting language="java">public class Test {
+    public static void main (String args[]) {
+        // Create mock context in which to test the container.
+        MockContext.initContext();
+
+        // Create a div instance called "mydiv"
+        String containerName = "mydiv";
+        Div mydiv = new Div(containerName);
+
+        // Add a control to the container
+        mydiv.add(new TextField("myfield"));
+
+        System.out.println(mydiv);
+    }
+}</programlisting>
+
+      <para>Executing the above example results in the following output:
+      </para>
+
+      <programlisting language="xml">&lt;div name="mydiv" id="mydiv"&gt;
+    &lt;input type="text" name="myfield" id="myfield" value="" size="20" /&gt;
+&lt;/div&gt;</programlisting>
+
+    </sect2>
+
+    <sect2 id="abstractcontainerfield" remap="h3">
+      <title>AbstractContainerField</title>
+
+      <para>AbstractContainerField extends Field and implements the Container
+      interface. This provides a convenient base class in case you run into
+      a situation where you need both a Field and Container.
+      </para>
+
+      <para>Below is an example of how AbstractContainerField might be used:
+      </para>
+
+      <programlisting language="java">public class FieldAndContainer extends AbstractContainerField {
+
+    public FieldAndContainer(String name) {
+        super(name);
+    }
+
+    // Return the html tag to render
+    public String getTag() {
+        return "div";
+    }
+}</programlisting>
+
+      <para>To test the new class we use the following snippet:
+      </para>
+
+      <programlisting language="java">public class Test {
+    public static void main (String args[]) {
+        // Create mock context in which to test the container.
+        MockContext.initContext();
+
+        // Create a FieldContainer instance called "field_container"
+        String containerName = "field_container";
+        FieldAndContainer fieldAndContainer = new FieldAndContainer(containerName);
+
+        // Add a couple of fields to the container
+        fieldAndContainer.add(new TextField("myfield"));
+        fieldAndContainer.add(new TextArea("myarea"));
+
+        System.out.println(fieldAndContainer);
+    }
+}</programlisting>
+
+      <para>Executing the snippet produces the output:
+      </para>
+
+      <programlisting language="xml">&lt;div name="field_container" id="field_container"&gt;
+    &lt;input type="text" name="myfield" id="myfield" value="" size="20"/&gt;
+    &lt;textarea name="myarea" id="myarea" rows="3" cols="20"&gt;&lt;/textarea&gt;
+&lt;/div&gt;</programlisting>
+
+    </sect2>
+  </sect1>
+
+  <sect1 id="layout" remap="h2">
+    <title>Layouts</title>
+
+    <para>Controls such as <ulink url="../../click-api/org/apache/click/control/Form.html">Form</ulink>
+    takes care of layout and error reporting automatically, and for many use
+    cases the auto-layout approach is good enough. It is certainly very productive.
+    </para>
+
+    <para>However for custom or complex layouts, auto-layout is not always the best
+    choice. There are two approaches for creating custom layouts.
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Template approach - use a template engine such as Velocity,
+        Freemarker or JSP to declare the layout as HTML markup.
+        </para>
+      </listitem>
+      <listitem>
+        <para> Programmatic approach - build custom layout components using Java.
+        This option is very similar to building components using Swing.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <sect2 id="template-layout" remap="h3">
+      <title>Template layout</title>
+
+      <para>The <ulink url="../../click-api/org/apache/click/control/Form.html#manual-layout">Template</ulink>
+      approach separates the Page and layout logic. The Page is used to implement
+      the presentation logic such as creating controls, registering listeners
+      and copying data to domain objects, while the template is used to layout
+      the Page controls.
+      </para>
+
+      <para>Lets walk through an example using the template approach. Below
+      we create an EmployeePage which contains a Form and a bunch of fields
+      and submit button.
+      </para>
+
+      <programlisting language="java">// EmployeePage.java
+public EmployeePage extends Page {
+
+    private Form form;
+
+    public void onInit() {
+        // Create form
+        Form form = new Form("form");
+
+        // Add a couple of fields to the form
+        form.add(new TextField("firstname"));
+        form.add(new TextField("lastname"));
+        form.add(new IntegerField("age"));
+        form.add(new DoubleField("salary"));
+
+        // Add a submit button to form
+        form.add(new Submit("submit", "Add Employee"));
+
+        // Add form the page
+        addControl(form);
+    }
+}</programlisting>
+
+      <para>Lets imagine we want to create a layout using the HTML tags,
+      &lt;div&gt; and &lt;ol&gt;.
+      </para>
+
+      <para>We would then provide the markup for the <varname>employee.htm</varname>
+      template as shown below, using a template engine such as Velocity:
+      </para>
+
+      <programlisting language="xml">&lt;!-- employee.htm --&gt;
+${form.startTag()}
+    &lt;div style="margin: 1em;"&gt;
+        &lt;ol&gt;
+            &lt;li&gt;
+                &lt;label for="firstname"&gt;Firstname:&lt;/label&gt;
+                ${form.fields.firstname}
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="lastname"&gt;Lastname:&lt;/label&gt;
+                ${form.fields.lastname}
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="age"&gt;Age:&lt;/label&gt;
+                ${form.fields.age}
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="salary"&gt;Salary:&lt;/label&gt;
+                ${form.fields.salary}
+            &lt;/li&gt;
+        &lt;/ol&gt;
+    &lt;/div&gt;
+    ${form.fields.submit}
+${form.endTag()}</programlisting>
+
+      <para>Using CSS the markup above can further be styled and transformed
+      into a nice looking form.
+      </para>
+
+      <para>There are pros and cons to using the template approach.
+      </para>
+
+      <para>One of the advantages is that the layout is explicit and one can
+      easily tweak it if needed. For example instead of using divs and ordered
+      lists, one can change the template to leverage a table layout.
+      </para>
+
+      <para>A disadvantage is added redundancy. In the example above we created
+      the fields in Java, and laid them out using markup in the template. If the
+      requirements should change to add a new field for example, one will have to
+      add the field in the Page as well as the template.
+      </para>
+
+      <para>However it is possible to "generify" the layout using template
+      engines such as Velocity, Freemarker and JSP.
+      <ulink url="../../click-api/org/apache/click/control/Form.html#velocity-macros">Macro.vm</ulink>
+      is an example of a generic form layout using Velocity.
+      </para>
+
+    </sect2>
+
+    <sect2 id="programmatic-layout" remap="h3">
+      <title>Programmatic layout</title>
+
+      <para>To combat the redundancy introduced by the Template approach, you can
+      take a programmatic approach and use normal Java and some Click classes to
+      build custom layouts.
+      </para>
+
+      <para>Click extras provides two useful classes in this situation namely,
+      <ulink url="../../extras-api/org/apache/click/extras/control/HtmlForm.html">HtmlForm</ulink>
+      and <ulink url="../../extras-api/org/apache/click/extras/control/HtmlFieldSet.html">HtmlFieldSet</ulink>.
+      </para>
+
+      <para>Unlike Form and FieldSet which renders its controls using a Table
+      layout, HtmlForm and HtmlFieldSet renders its controls in the order they
+      were added and does not add any extra markup. HtmlForm will be used in the
+      examples below.
+      </para>
+
+      <para>To make it easy to compare the two layout approaches we will recreate
+      the example from the template layout section, but using the programmatic
+      approach.
+      </para>
+
+      <para>When creating custom layouts, the HTML construct List &lt;ul&gt; is
+      pretty useful. Since Click does not provide this component, we will create
+      it as shown below. First we create the HTML list element &lt;ol&gt;, to
+      which list item elements &lt;li&gt; can be added:
+      </para>
+
+      <programlisting language="java">// HtmlList.java
+public class HtmlList extends AbstractContainer {
+
+    public String getTag() {
+        return "ol";
+    }
+
+    // Can only add ListItems: &lt;li&gt; tags
+    public Control add(Control control) {
+        if (!(control instanceof ListItem)) {
+            throw new IllegalArgumentException("Only list items can be added.");
+        }
+        return super.add(control);
+    }
+}</programlisting>
+
+      <para>Next we create the HTML list item element &lt;li&gt;:
+      </para>
+
+      <programlisting language="java">// ListItem.java
+public class ListItem extends AbstractContainer {
+
+    public String getTag() {
+        return "li";
+    }
+}</programlisting>
+
+      <para>Another component that will be used in the example is a FieldLabel
+      which renders an HTML label element for a target Field.
+      </para>
+
+      <programlisting language="java">// FieldLabel.java
+public class FieldLabel extends AbstractControl {
+
+    private Field target;
+
+    private String label;
+
+    public FieldLabel(Field target, String label) {
+        this.target = target;
+        this.label = label;
+    }
+
+    public String getTag() {
+        return "label";
+    }
+
+    // Override render to produce an html label for the specified field.
+    public void render(HtmlStringBuffer buffer) {
+        // Open tag: &lt;label
+        buffer.elementStart(getTag());
+
+        // Set attribute to target field's id
+        setAttribute("for", target.getId());
+
+        // Render the labels attributes
+        appendAttributes(buffer);
+
+        // Close tag: &lt;label for="firstname"&gt;
+        buffer.closeTag();
+
+        // Add label text: &lt;label for="firstname"&gt;Firstname:
+        buffer.append(label);
+
+        // Close tag: &lt;label for="firstname"&gt;Firstname:&lt;/label&gt;
+        buffer.elementEnd(getTag());
+    }
+
+}</programlisting>
+
+      <para>Now the form can be assembled. Continuing with the employee example
+      from the <link linkend="template-layout">template approach</link>, we again
+      create an <classname>EmployeePage</classname>, but this time an
+      <classname>HtmlForm</classname> and <classname>HtmlList</classname> is used
+      to create the custom layout:
+      </para>
+
+      <programlisting language="java">// EmployeePage.java
+public class EmployeePage extends Page {
+    // A form instance variable
+    private HtmlForm form;
+
+    // Build the form when the page is initialized
+    public void onInit() {
+        // Create an HtmlForm which is ideal for composing manual layouts
+        form = new HtmlForm("form");
+
+        // Create a list and add it to the form.
+        HtmlList list = new HtmlList();
+        form.add(list);
+
+        // Add firstname field and pass in its name, label and the list to add the field to
+        addTextField("firstname", "Firstname:", list);
+        addTextField("lastname", "Lastname:", list);
+        addTextField("age", "Age:", list);
+        addTextField("salary", "Salary:", list);
+
+        // Add a submit button to form
+        form.add(new Submit("submit", "Add Employee"));
+
+        // Add the form to the page
+        addControl(form);
+    }
+
+    // Provide a helper method to add fields to the form
+    private void addTextField(String nameStr, String labelStr, List list) {
+        // Create a new ListItem &lt;li&gt; and add it to the List
+        ListItem item = new ListItem();
+        list.add(item);
+
+        // Create a textfield with the specified name
+        Field field = new TextField(nameStr);
+
+        // Create a field label, which associates the label with the field id.
+        // label.toString would output: &lt;label for="firstname"&gt;Firstname:&lt;/name&gt;
+        FieldLabel label = new FieldLabel(field, labelStr);
+
+        // Next add the label and field to the list item.
+        // item.toString would then produce:
+        // &lt;li&gt;
+        //   &lt;label for="firstname"&gt;Firstname:&lt;/name&gt;
+        //   &lt;input type="text" name="firstname" id="form_firstname" value="" size="20"/&gt;
+        // &lt;/li&gt;
+        //
+        item.add(label);
+        item.add(field);
+    }
+}</programlisting>
+
+      <para>And lastly the <filename>employee.htm</filename> template would only
+      need to specify the name of the top level component, in this case
+      <varname>form</varname>.
+      </para>
+
+      <programlisting language="xml">&lt;!--employee.htm--&gt;
+<varname>${form}</varname></programlisting>
+
+      <para>which produces the following markup:
+      </para>
+
+      <programlisting language="xml">&lt;form method="post" id="form" action="/myapp/employee.htm"&gt;
+&lt;input type="hidden" name="form_name" id="form_form_name" value="form"/&gt;
+    &lt;ol&gt;
+        &lt;li&gt;
+            &lt;label for="firstname"&gt;Firstname:&lt;/label&gt;
+            &lt;input type="text" name="firstname" id="form_firstname" value="" size="20"/&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;label for="lastname"&gt;Lastname:&lt;/label&gt;
+            &lt;input type="text" name="lastname" id="form_lastname" value="" size="20"/&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;label for="age"&gt;Age:&lt;/label&gt;
+            &lt;input type="text" name="age" id="form_age" value="" size="20"/&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;label for="salary"&gt;Salary:&lt;/label&gt;
+            &lt;input type="text" name="salary" id="form_salary" value="" size="20"/&gt;
+        &lt;/li&gt;
+    &lt;/ol&gt;
+    &lt;input type="submit" name="submit" id="form_submit" value="Add Employee"/&gt;
+&lt;/form&gt;</programlisting>
+
+      <para>Again using a CSS stylesheet, the markup above can be styled and
+      transformed into a fancy looking form.
+      </para>
+
+      <para>There is a <ulink url="http://www.avoka.com/click-examples/form/contact-details.htm">live demo</ulink>
+      showing the programmatic approach.
+      </para>
+
+      <para>The advantage of the programmatic approach is that there is no
+      redundancy. Each Field is created and added using normal Java. There is no
+      need to specify where the Field must reside in the markup.
+      </para>
+
+      <para>If new requirements arrive and more fields added, only the Page needs
+      to change. There is no need to change the template as the layout is taken
+      care of by CSS and the markup produced by the components.
+      </para>
+
+      <para>Disadvantages are that more upfront work is needed to write the
+      components and it is more difficult to
+      <emphasis>visualize</emphasis> what output would be rendered by the
+      components.
+      </para>
+
+      <para>However once your custom layout components are in place, it can be
+      reused across your project and boost productivity.
+      </para>
+
+      <para>Whether you use the <link linkend="template-layout">template</link>
+      or <link linkend="programmatic-layout">programmatic</link> layout approach,
+      is up to you. Both work well and have advantages and disadvantages over the
+      other.
+      </para>
+
+    </sect2>
+  </sect1>
+</chapter>
