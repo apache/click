@@ -169,7 +169,7 @@ public interface Control extends Serializable {
      * subclasses is forgetting to call <em>super.getHtmlImports</em>. Consider
      * carefully whether you should call <em>super.getHtmlImports</em> or not.
      *
-     * @deprecated use the new {@link #getHtmlHeaders()} instead
+     * @deprecated use the new {@link #getHeadElements()} instead
      *
      * @return the HTML includes statements for the control stylesheet and
      * JavaScript files, or null if no includes are available
@@ -263,7 +263,7 @@ public interface Control extends Serializable {
      *
      * @return the list of HTML HEAD entries to be included in the page
      */
-    public List getHtmlHeaders();
+    public List getHeadElements();
 
     /**
      * Return HTML element identifier attribute "id" value.

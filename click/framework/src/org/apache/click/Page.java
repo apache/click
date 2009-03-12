@@ -154,10 +154,10 @@ public class Page {
     protected List controls;
 
     /**
-     * The list of page HTML head entries including: JavaScript imports,
-     * CSS imports, inline JavaScript and inline CSS.
+     * The list of page HTML HEAD elements including: Javascript imports,
+     * Css imports, inline Javascript and inline Css.
      */
-    protected List htmlHeaders;
+    protected List headElements;
 
     /** The Velocity template formatter object. */
     protected Format format;
@@ -651,7 +651,7 @@ public class Page {
      * @return the HTML includes statements for the control stylesheet and
      * JavaScript files, by default this method returns null
      *
-     * @deprecated use the new {@link #getHtmlHeaders()} instead
+     * @deprecated use the new {@link #getHeadElements()} instead
      */
     public String getHtmlImports() {
         return null;
@@ -748,11 +748,11 @@ public class Page {
      *
      * @return the list of HTML HEAD entries to be included in the page
      */
-    public List getHtmlHeaders() {
-        if (htmlHeaders == null) {
-            htmlHeaders = new ArrayList(2);
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = new ArrayList(2);
         }
-        return htmlHeaders;
+        return headElements;
     }
 
     /**
