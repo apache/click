@@ -18,9 +18,7 @@
  */
 package org.apache.click.element;
 
-import org.apache.click.util.HtmlHeader;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.Javascript;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -172,12 +170,12 @@ public class JsScript extends ResourceElement {
         }
 
         //2. Use the instanceof operator to check if the argument is of the correct type.
-        if (!(o instanceof Javascript)) {
+        if (!(o instanceof JsScript)) {
             return false;
         }
 
         //3. Cast the argument to the correct type.
-        Javascript that = (Javascript) o;
+        JsScript that = (JsScript) o;
 
         String id = getId();
         String thatId = that.getId();
