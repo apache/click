@@ -19,13 +19,10 @@
 package org.apache.click.element;
 
 import org.apache.click.Context;
-import org.apache.click.util.HtmlHeader;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.JavascriptImport;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
- *
  * @author Bob Schellink
  */
 public class JsImport extends ResourceElement {
@@ -154,12 +151,12 @@ public class JsImport extends ResourceElement {
         }
 
         //2. Use the instanceof operator to check if the argument is of the correct type.
-        if (!(o instanceof JavascriptImport)) {
+        if (!(o instanceof JsImport)) {
             return false;
         }
 
         //3. Cast the argument to the correct type.
-        JavascriptImport that = (JavascriptImport) o;
+        JsImport that = (JsImport) o;
 
         return getSrc() == null ? that.getSrc() == null
             : getSrc().equals(that.getSrc());
