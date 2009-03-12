@@ -33,6 +33,9 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class HelloWorld extends BorderPage {
 
-    public Date time = new Date();
+    private Date time = new Date();
 
+    public HelloWorld() {
+        addModel("time", time);
+    }
 }
