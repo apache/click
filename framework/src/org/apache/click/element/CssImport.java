@@ -19,7 +19,6 @@
 package org.apache.click.element;
 
 import org.apache.click.Context;
-import org.apache.click.util.HtmlHeader;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
