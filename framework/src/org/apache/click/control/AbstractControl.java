@@ -127,10 +127,10 @@ public abstract class AbstractControl implements Control {
     protected ActionListener actionListener;
 
     /**
-     * The list of control HTML head entries including: JavaScript imports,
-     * CSS imports, inline JavaScript and inline CSS.
+     * The list of page HTML HEAD elements including: Javascript imports,
+     * Css imports, inline Javascript and inline Css.
      */
-    protected List htmlHeaders;
+    protected List headElements;
 
     /** The Control attributes Map. */
     protected Map attributes;
@@ -558,17 +558,17 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * @see org.apache.click.Control#getHtmlHeaders()
+     * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the list of HTML HEAD entries to be included in the page
+     * @return the list of HTML HEAD elements to be included in the page
      */
-    public List getHtmlHeaders() {
-        if (htmlHeaders == null) {
-            // Most controls won't provide their own html headers, so save
+    public List getHeadElements() {
+        if (headElements == null) {
+            // Most controls won't provide their own head elements, so save
             // memory by creating an empty array list
-            htmlHeaders = new ArrayList(0);
+            headElements = new ArrayList(0);
         }
-        return htmlHeaders;
+        return headElements;
     }
 
     /**

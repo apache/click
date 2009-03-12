@@ -30,6 +30,11 @@ import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.click.control.Container;
 import org.apache.click.control.Table;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.CssStyle;
+import org.apache.click.element.Element;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 import org.apache.click.service.LogService;
 
 import org.apache.commons.lang.StringUtils;
@@ -92,6 +97,9 @@ public class PageImports {
     /** The page imports initialized flag. */
     protected boolean initialized = false;
 
+    /** The list of head elements. */
+    protected List headElements = new ArrayList();
+
     /** The list of CSS import lines. */
     protected List cssImports = new ArrayList();
 
@@ -123,40 +131,39 @@ public class PageImports {
     /**
      * Add the given HtmlHeader to the Page HTML imports.
      *
-     * @param htmlHeader the HtmlHeader to add
+     * @param element the HtmlHeader to add
      */
-    public void add(HtmlHeader htmlHeader) {
-        if (htmlHeader instanceof JavascriptImport) {
-            if (jsImports.contains(htmlHeader)) {
+    public void add(Element element) {
+        if (element instanceof JsImport) {
+            if (jsImports.contains(element)) {
                 return;
             }
-            jsImports.add(htmlHeader);
+            jsImports.add(element);
 
-        } else if (htmlHeader instanceof Javascript) {
-            if (((Javascript) htmlHeader).isUnique()) {
-                if (jsScripts.contains(htmlHeader)) {
+        } else if (element instanceof JsScript) {
+            if (((JsScript) element).isUnique()) {
+                if (jsScripts.contains(element)) {
                     return;
                 }
             }
-            jsScripts.add(htmlHeader);
+            jsScripts.add(element);
 
-        } else if (htmlHeader instanceof CssImport) {
-            if (cssImports.contains(htmlHeader)) {
+        } else if (element instanceof CssImport) {
+            if (cssImports.contains(element)) {
                 return;
             }
-            cssImports.add(htmlHeader);
+            cssImports.add(element);
 
-        } else if (htmlHeader instanceof Css) {
-            if (((Css) htmlHeader).isUnique()) {
-                if (cssStyles.contains(htmlHeader)) {
+        } else if (element instanceof CssStyle) {
+            if (((CssStyle) element).isUnique()) {
+                if (cssStyles.contains(element)) {
                     return;
                 }
             }
-            cssStyles.add(htmlHeader);
+            cssStyles.add(element);
 
         } else {
-            throw new IllegalArgumentException(htmlHeader.getClass().getName()
-                + " is not a supported type.");
+            headElements.add(element);
         }
     }
 
@@ -182,19 +189,19 @@ public class PageImports {
                 add(cssImport);
 
             } else if (line.startsWith("<style") && line.indexOf("text/css") != -1) {
-                Css css = asCss(lines[i]);
-                css.setUnique(true);
-                add(css);
+                CssStyle cssStyle = asCssStyle(lines[i]);
+                setUnique(cssStyle, cssStyle.getContent().toString());
+                add(cssStyle);
 
             } else if (line.startsWith("<script")) {
                 if (line.indexOf(" src=") != -1) {
-                    JavascriptImport javascriptImport = asJavascriptImport(lines[i]);
-                    add(javascriptImport);
+                    JsImport jsImport = asJsImport(lines[i]);
+                    add(jsImport);
 
                 } else {
-                    Javascript javascript = asJavascript(lines[i]);
-                    javascript.setUnique(true);
-                    add(javascript);
+                    JsScript jsScript = asJsScript(lines[i]);
+                    setUnique(jsScript, jsScript.getContent().toString());
+                    add(jsScript);
 
                 }
             } else {
@@ -228,7 +235,27 @@ public class PageImports {
      */
     public void popuplateTemplateModel(Map model) {
         LogService logger = ClickUtils.getLogService();
-        Object pop = model.put("imports", new Imports());
+
+        Object pop = model.put("headElements", new HeadElements());
+        if (pop != null && !page.isStateful()) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                         + " model contains an object keyed with reserved "
+                         + "name \"headElements\". The page model object "
+                         + pop + " has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
+        pop = model.put("jsElements", new JsElements());
+        if (pop != null && !page.isStateful()) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                         + " model contains an object keyed with reserved "
+                         + "name \"jsElements\". The page model object "
+                         + pop + " has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
+        // For backwards compatibility
+        pop = model.put("imports", new Imports());
         if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
@@ -237,7 +264,8 @@ public class PageImports {
             logger.warn(msg);
         }
 
-        pop = model.put("cssImports", new CssImports());
+        // For backwards compatibility
+        pop = model.put("cssImports", new CssElements());
         if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
             + " model contains an object keyed with reserved "
@@ -246,7 +274,8 @@ public class PageImports {
             logger.warn(msg);
         }
 
-        pop = model.put("jsImports", new JsImports());
+        // For backwards compatibility
+        pop = model.put("jsImports", new JsElements());
         if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
             + " model contains an object keyed with reserved "
@@ -264,6 +293,26 @@ public class PageImports {
      */
     public void popuplateRequest(HttpServletRequest request, Map model) {
         LogService logger = ClickUtils.getLogService();
+
+        request.setAttribute("headElements", new HeadElements());
+        if (model.containsKey("headElements")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                             + " model contains an object keyed with reserved "
+                             + "name \"headElements\". The request attribute "
+                             + "has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
+        request.setAttribute("jsElements", new JsElements());
+        if (model.containsKey("jeElements")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                             + " model contains an object keyed with reserved "
+                             + "name \"jsElements\". The request attribute "
+                             + "has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
+        // For backwards compatibility
         request.setAttribute("imports", new Imports());
         if (model.containsKey("imports")) {
             String msg = page.getClass().getName() + " on " + page.getPath()
@@ -273,7 +322,8 @@ public class PageImports {
             logger.warn(msg);
         }
 
-        request.setAttribute("cssImports", new CssImports());
+        // For backwards compatibility
+        request.setAttribute("cssImports", new CssElements());
         if (model.containsKey("cssImports")) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                              + " model contains an object keyed with reserved "
@@ -282,7 +332,8 @@ public class PageImports {
             logger.warn(msg);
         }
 
-        request.setAttribute("jsImports", new JsImports());
+        // For backwards compatibility
+        request.setAttribute("jsImports", new JsElements());
         if (model.containsKey("jsImports")) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                              + " model contains an object keyed with reserved "
@@ -295,14 +346,35 @@ public class PageImports {
     // ------------------------------------------------------ Protected Methods
 
     /**
+     * Render an HTML representation of all the page's HTML head elements,
+     * including: CSS imports, CSS styles, Title and Meta elements.
+     *
+     * @param buffer the specified buffer to render the page's HTML imports to
+     */
+    protected void renderHeadElements(HtmlStringBuffer buffer) {
+        // First include miscellaneous elements e.g. Title and Meta elements.
+        for (Iterator it = headElements.iterator(); it.hasNext();) {
+            Element element = (Element) it.next();
+            element.render(buffer);
+            buffer.append('\n');
+        }
+
+        // Next include all CSS imports and styles.
+        renderCssElements(buffer);
+    }
+
+    /**
      * Render an HTML representation of all the page's HTML imports,
      * including: CSS imports, CSS styles, JS imports and JS scripts.
+     *
+     * @deprecated rather use {@link #renderHeadElements(org.apache.click.util.HtmlStringBuffer)}
+     * and {@link #renderJsElements(org.apache.click.util.HtmlStringBuffer)}
      *
      * @param buffer the specified buffer to render the page's HTML imports to
      */
     protected void renderAllIncludes(HtmlStringBuffer buffer) {
-        renderCssImports(buffer);
-        renderJsImports(buffer);
+        renderCssElements(buffer);
+        renderJsElements(buffer);
     }
 
     /**
@@ -311,7 +383,7 @@ public class PageImports {
      *
      * @param buffer the specified buffer to render the page's HTML imports to
      */
-    protected void renderCssImports(HtmlStringBuffer buffer) {
+    protected void renderCssElements(HtmlStringBuffer buffer) {
         // First include all the imports e.g. <link href="...">
         for (Iterator it = cssImports.iterator(); it.hasNext();) {
             CssImport cssImport = (CssImport) it.next();
@@ -321,8 +393,8 @@ public class PageImports {
 
         // Then include all the styles e.g. <style>...</style>
         for (Iterator it = cssStyles.iterator(); it.hasNext();) {
-            Css cssInclude = (Css) it.next();
-            cssInclude.render(buffer);
+            CssStyle cssStyle = (CssStyle) it.next();
+            cssStyle.render(buffer);
             buffer.append('\n');
         }
     }
@@ -333,18 +405,18 @@ public class PageImports {
      *
      * @param buffer the specified buffer to render the page's HTML imports to
      */
-    protected void renderJsImports(HtmlStringBuffer buffer) {
+    protected void renderJsElements(HtmlStringBuffer buffer) {
         // First include all the imports e.g. <script src="...">
         for (Iterator it = jsImports.iterator(); it.hasNext();) {
-            JavascriptImport javascriptImport = (JavascriptImport) it.next();
-            javascriptImport.render(buffer);
+            JsImport jsImport = (JsImport) it.next();
+            jsImport.render(buffer);
             buffer.append('\n');
         }
 
         // Then include all the scripts e.g. <script>...</script>
         for (Iterator it = jsScripts.iterator(); it.hasNext();) {
-            Javascript javascriptInclude = (Javascript) it.next();
-            javascriptInclude.render(buffer);
+            JsScript jsScript = (JsScript) it.next();
+            jsScript.render(buffer);
             buffer.append('\n');
         }
     }
@@ -366,14 +438,14 @@ public class PageImports {
                 // import from getHtmlImports
                 addImport(control.getHtmlImports());
 
-                // import from getHtmlHeaders
+                // import from getHeadElement
                 processControl(control);
             }
         }
 
         addImport(page.getHtmlImports());
 
-        processHtmlHeaders(page.getHtmlHeaders());
+        processHtmlHeaders(page.getHeadElements());
     }
 
     /**
@@ -386,7 +458,7 @@ public class PageImports {
      * @param control the control to process
      */
     protected void processControl(Control control) {
-        processHtmlHeaders(control.getHtmlHeaders());
+        processHtmlHeaders(control.getHeadElements());
 
         if (control instanceof Container) {
             Container container = (Container) control;
@@ -411,19 +483,19 @@ public class PageImports {
     /**
      * Process the given list of HTML headers.
      * <p/>
-     * This method invokes {@link #add(org.apache.click.util.HtmlHeader)} for
-     * every <tt>HtmlHeader</tt> entry in the specified list.
+     * This method invokes {@link #add(org.apache.click.element.Element)} for
+     * every <tt>HeadElement</tt> entry in the specified list.
      *
-     * @param htmlHeaders the list of HTML headers to process
+     * @param headElements the list of HTML HEAD elements to process
      */
-    protected void processHtmlHeaders(List htmlHeaders) {
-        if (htmlHeaders == null || htmlHeaders.isEmpty()) {
+    protected void processHtmlHeaders(List headElements) {
+        if (headElements == null || headElements.isEmpty()) {
             return;
         }
 
-        Iterator it = htmlHeaders.iterator();
+        Iterator it = headElements.iterator();
         while (it.hasNext()) {
-            add((HtmlHeader) it.next());
+            add((Element) it.next());
         }
     }
 
@@ -432,6 +504,30 @@ public class PageImports {
     /**
      * This class enables lazy, on demand importing for
      * {@link #renderAllIncludes(org.apache.click.util.HtmlStringBuffer)}.
+     */
+    class HeadElements {
+
+        /**
+         * @see java.lang.Object#toString()
+         *
+         * @return a string representing miscellaneous head and CSS elements
+         */
+        public String toString() {
+            processPageControls();
+            HtmlStringBuffer buffer = new HtmlStringBuffer(
+                80 * cssImports.size()
+                + 80 * cssStyles.size()
+                + 80 * headElements.size());
+            PageImports.this.renderHeadElements(buffer);
+            return buffer.toString();
+        }
+    }
+
+    /**
+     * This class enables lazy, on demand importing for
+     * {@link #renderAllIncludes(org.apache.click.util.HtmlStringBuffer)}.
+     *
+     * @deprecated rather use {@link HeadElements} and {@link JsImports}
      */
     class Imports {
 
@@ -454,42 +550,42 @@ public class PageImports {
 
     /**
      * This class enables lazy, on demand importing for
-     * {@link #renderJsImports(org.apache.click.util.HtmlStringBuffer)}.
+     * {@link #renderJsElements(org.apache.click.util.HtmlStringBuffer)}.
      */
-    class JsImports {
+    class JsElements {
 
         /**
          * @see java.lang.Object#toString()
          *
-         * @return a string representing all JavaScript imports
+         * @return a string representing all JavaScript elements
          */
         public String toString() {
             processPageControls();
             HtmlStringBuffer buffer = new HtmlStringBuffer(
                 80 * jsImports.size() + 80 * jsScripts.size());
 
-            PageImports.this.renderJsImports(buffer);
+            PageImports.this.renderJsElements(buffer);
             return buffer.toString();
         }
     }
 
     /**
      * This class enables lazy, on demand importing for
-     * {@link #renderCssImports(org.apache.click.util.HtmlStringBuffer)}.
+     * {@link #renderCssElements(org.apache.click.util.HtmlStringBuffer)}.
      */
-    class CssImports {
+    class CssElements {
 
         /**
          * @see java.lang.Object#toString()
          *
-         * @return a string representing all CSS imports
+         * @return a string representing all CSS elements
          */
         public String toString() {
             processPageControls();
             HtmlStringBuffer buffer = new HtmlStringBuffer(
                 80 * cssImports.size() + 80 * cssStyles.size());
 
-            PageImports.this.renderCssImports(buffer);
+            PageImports.this.renderCssElements(buffer);
             return buffer.toString();
         }
     }
@@ -509,16 +605,16 @@ public class PageImports {
     }
 
     /**
-     * Convert the given HTML import line to a {@link Css} instance.
+     * Convert the given HTML import line to a {@link CssStyle} instance.
      *
      * @param line the HTML import line to convert to a Css instance
      * @return a Css instance
      */
-    private Css asCss(String line) {
-        Css css = new Css();
-        copyAttributes(css, line);
-        css.append(extractContent(line));
-        return css;
+    private CssStyle asCssStyle(String line) {
+        CssStyle cssStyle = new CssStyle();
+        copyAttributes(cssStyle, line);
+        cssStyle.append(extractContent(line));
+        return cssStyle;
     }
 
     /**
@@ -527,10 +623,10 @@ public class PageImports {
      * @param line the HTML import line to convert to a JavaScriptImport instance
      * @return a JavascriptImport instance
      */
-    private JavascriptImport asJavascriptImport(String line) {
-        JavascriptImport javascriptImport = new JavascriptImport();
-        copyAttributes(javascriptImport, line);
-        return javascriptImport;
+    private JsImport asJsImport(String line) {
+        JsImport jsImport = new JsImport();
+        copyAttributes(jsImport, line);
+        return jsImport;
     }
 
     /**
@@ -539,11 +635,11 @@ public class PageImports {
      * @param line the HTML import line to convert to a JavaScript instance
      * @return a Javascript instance
      */
-    private Javascript asJavascript(String line) {
-        Javascript javascript = new Javascript();
-        copyAttributes(javascript, line);
-        javascript.append(extractContent(line));
-        return javascript;
+    private JsScript asJsScript(String line) {
+        JsScript jsScript = new JsScript();
+        copyAttributes(jsScript, line);
+        jsScript.append(extractContent(line));
+        return jsScript;
     }
 
     /**
@@ -571,13 +667,13 @@ public class PageImports {
     }
 
     /**
-     * Copy all available attributes from HTML import line to the HtmlHeader
+     * Copy all available attributes from HTML import line to the Element
      * instance.
      *
-     * @param htmlHeader the HTML header to copy the attributes to
+     * @param element the HTML head element to copy the attributes to
      * @param line the HTML import line to copy attributes from
      */
-    private void copyAttributes(HtmlHeader htmlHeader, String line) {
+    private void copyAttributes(Element element, String line) {
         // Find index where attributes start: the first space
         int start = line.indexOf(' ');
         if (start == -1) {
@@ -601,7 +697,29 @@ public class PageImports {
             StringTokenizer attribute = new StringTokenizer(token, "=");
             String key = attribute.nextToken();
             String value = attribute.nextToken();
-            htmlHeader.setAttribute(key, StringUtils.strip(value, "'\""));
+            element.setAttribute(key, StringUtils.strip(value, "'\""));
+        }
+    }
+
+    /**
+     * This method provides backwards compatibility with the String based
+     * HTML imports, to indicate whether Javascript and CSS must be unique
+     * or not. The replacement functionality is provided by the html
+     * {@link org.apache.click.element.Element#setId(java.lang.String) ID}
+     * attribute.
+     *
+     * @deprecated use {@link org.apache.click.element.Element#setId(java.lang.String) ID}
+     * instead
+     *
+     * @param cssStyle sets whether the HtmlHeader import should be unique or not
+     */
+    private void setUnique(Element element, String content) {
+        String id = element.getId();
+        // If Element is unique and ID is not defined, derive the ID from the
+        // content
+        if (StringUtils.isBlank(id) && content.length() > 0) {
+            int hash = Math.abs(content.hashCode());
+            element.setId(Integer.toString(hash));
         }
     }
 }
