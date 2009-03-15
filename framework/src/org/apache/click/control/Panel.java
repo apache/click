@@ -36,7 +36,11 @@ import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.SessionMap;
 
 /**
- * Provides a Panel control for creating customized layout sections within a page.
+ * Provides a Panel container that has its own {@link #template} and
+ * {@link #model}.
+ * <p/>
+ * Panels are powerful components for creating modular, reusable
+ * and customized layout sections within a page.
  *
  * <table style='margin-bottom: 1.25em'>
  * <tr>
@@ -49,21 +53,69 @@ import org.apache.click.util.SessionMap;
  * </tr>
  * </table>
  *
- * The Panel class uses a template for rendering any model data or
- * controls you have added to the Page.
+ * The Panel class uses a template for rendering model data and controls that
+ * have been added to the Panel. Furthermore the Panel's parent
+ * {@link org.apache.click.Page#model Page model} is also made available to the
+ * Panel template.
  * <p/>
- * Panel is a very powerful component and provides the same capability as a
- * Page, since it has its own associated {@link #template} and {@link #model}.
+ *
+ * <h3>Example 1 - A Simple Panel</h3>
+ *
+ * This example shows how to create a basic Panel and adding it to a Page.
  * <p/>
- * This allows you to create very modular components. For example, if you add
- * a tab control to your Page, each tab could refer to a separate Panel.
- * Each Panel template could then render its own {@link Form} or {@link Table}
- * controls.
+ * First we create the <tt>/panel/simple-panel.htm</tt> that references the
+ * variable <span class="st">$time</span>:
  *
- * <h3>Panel Example</h3>
+ * <pre class="codeHtml">The time is now <span class="st">$time</span></pre>
  *
- * An simple example creating a Panel with the <tt>panel-template.htm</tt> is
- * provided below:
+ * Then in our page class, <tt>SimplePageDemo</tt>, we create and add the Panel
+ * instance:
+ *
+ * <pre class="prettyprint">
+ * public class SimplePageDemo extends Page {
+ *
+ *     private Panel panel = new Panel("panel", "/panel/simple-panel.htm");
+ *
+ *     public SimplePanelDemo() {
+ *          Date time = new Date();
+ *
+ *         // Add the $time variable to the panel model
+ *         panel.getModel().put("time", time);
+ *
+ *         addControl(panel);
+ *     }
+ * } </pre>
+ *
+ * The SimplePanelDemo template, <tt>/simple-panel-demo.htm</tt>, would
+ * reference the panel control:
+ *
+ * <pre class="codeHtml"><span class="st">$panel</span></pre>
+ *
+ * The Panel template would then be merged with the Panel model and
+ * rendered in the page as:
+ *
+ * <pre class="codeHtml">Time time is now Sun Mar 15 07:32:51 EST 2009 </pre>
+ *
+ * <h3>Example 2 - Localization support</h3>
+ *
+ * In this example, we demonstrate localization support by
+ * specifying the Panel content in the <tt>SimplePanelDemo.properties</tt> file.
+ * Since the Panel model and Page model are merged at runtime, the Panel template
+ * can access the Page messages.
+ *
+ * <p/>
+ * First we create the <tt>SimplePanelDemo.properties</tt> file which specifies
+ * two properties: <span style="color:#7F0055">heading</span> and <span style="color:#7F0055">content</span>.
+ * <pre class="codeConfig">
+ * <span style="color:#7F0055">heading</span>=Welcome
+ * <span style="color:#7F0055">content</span>=Welcome to MyCorp&lt;p/&gt;MyCorp is your telecommuting office portal. Its just like being there at the office!</pre>
+ *
+ * <p/>
+ * Then we create the <tt>/panel/simple-panel.htm</tt> that references the
+ * localized Page properties. Since a Page properties are made available through
+ * the <span class="st">$messages</span> map, the Panel can access the Page
+ * properties using the variables <span class="st">$messages.header</span> and
+ * <span class="st">$messages.content</span>:
  *
  * <pre class="codeHtml">
  * &lt;fieldset&gt;
@@ -71,44 +123,108 @@ import org.apache.click.util.SessionMap;
  *   <span class="st">$messages.content</span>
  * &lt;/fieldset&gt; </pre>
  *
- * Then in our page class we would include the Panel. With the
- * <span class="st"><tt>$messages.heading</tt></span> and
- * <span class="st"><tt>$messages.content</tt></span> values defined in the
- * Pages properties file.
+ * In our page class, <tt>SimplePageDemo</tt>, we create and add the Panel
+ * instance:
  *
- * <pre class="codeJava">
- * <span class="kw">public class</span> WelcomePage <span class="kw">extends</span> Page {
+ * <pre class="prettyprint">
+ * public class SimplePanelDemo extends Page {
  *
- *     <span class="kw">public</span> Panel panel = <span class="kw">new</span> Panel(<span class="st">"panel"</span>, <span class="st">"/panel-template.htm"</span>);
+ *     public Panel panel = new Panel("panel", "/panel/simple-panel.htm");
  * } </pre>
  *
+ * In the Page above we make use of Click's <tt>autobinding</tt> feature by
+ * declaring a <tt>public</tt> Panel field. Autobinding will automatically add
+ * the Panel to the Page model.
+ *
  * <p/>
- * In our <tt>WelcomePage</tt> template <tt>welcome.htm</tt> would simply
- * reference our panel control:
+ * The SimplePanelDemo template, <tt>/simple-panel-demo.htm</tt>, would
+ * reference the panel control:
  *
  * <pre class="codeHtml"> <span class="st">$panel</span> </pre>
  *
- * The Panel template would then be merged with the template model and rendered
- * in the page as:
+ * And the result is:
  *
  * <fieldset style="margin:2em;width:550px;">
  * <legend><b>Welcome</b></legend>
- * Welcome to <a href="#">MyCorp</a>.
+ * Welcome to MyCorp.
  * <p/>
  * MyCorp is your telecommuting office portal. Its just like being there at the
  * office!
  * </fieldset>
  *
- * Panel rendering is performed using the {@link #toString()} method, and the
- * template model is created using {@link #createTemplateModel()}.
+ * <h3>Example 3 - Reusing and Nesting Panels</h3>
+ *
+ * Panels provide a good way to create reusable components, and since Panel is
+ * a Container it can hold child controls, even other Panels.
+ *
+ * <p/>
+ * In this example we create a reusable <tt>CustomerPanel</tt> which is added
+ * to a Border Panel.
+ *
+ * <p/>
+ * First we create the <tt>/panel/customer-panel.htm</tt> template which references
+ * the <span class="st">$form</span> variable:
+ *
+ * <pre class="codeHtml"> <span class="st">$form</span> </pre>
+ *
+ * Next up is the <tt>CustomerPanel</tt>:
+ *
+ * <pre class="prettyprint">
+ * public class CustomerPanel extends Panel {
+ *
+ *     private Form form = new Form("form");
+ *
+ *     public CustomerPanel(String name) {
+ *         super(name);
+ *
+ *         // We explicitly set the customer panel template
+ *         setTemplate("/panel/customer-panel.htm");
+ *
+ *         form.add(new TextField("name");
+ *         form.add(new DateField("dateJoined");
+ *         form.add(new DoubleField("holdings");
+ *     }
+ * } </pre>
+ *
+ * The Border Panel template, <tt>/panel/border-panel.htm</tt>, will draw a
+ * Border around its contents:
+ *
+ * <pre class="codeHtml">
+ * &lt;div&gt; style="border: 1px solid black"&gt;
+ * <span class="st">$panel</span>
+ * &lt;/div&gt; </pre>
+ *
+ * Lastly we specify the <tt>NestedDemo</tt> Page, that creates a Border Panel,
+ * and adds <tt>CustomerPanel</tt> as a child.
+ *
+ * <pre class="prettyprint">
+ * public class NestedDemo extends Page {
+ *
+ *     private Panel borderPanel = new Panel("borderPanel", "/panel/border-panel.htm");
+ *
+ *     private CustomerPanel customerPanel = new CustomerPanel("panel");
+ *
+ *     public void onInit() {
+ *         // Add CustomerPanel to the Border panel
+ *         parentPanel.add(childPanel);
+ *
+ *         // Add border panel to page
+ *         addControl(parentPanel);
+ *     }
+ * } </pre>
+ *
+ * The Page template, <tt>/nested-demo.htm</tt>, would reference the
+ * <span class="st">$borderPanel</span> variable:
+ *
+ * <pre class="codeHtml"> <span class="st">$borderPanel</span> </pre>
  *
  * <h3>Template Model</h3>
  *
- * To render the panel's template, a model is created which is merged with
- * the template.  This model will include the pages model values,
- * plus any Panel defined model values, with the Panels values overriding any
- * Page defined values. In addition a number of values are automatically added
- * model. These values include:
+ * To render the panel's template, a model is created ({@link #createTemplateModel()})
+ * which is merged with the template.  This model will include the page model
+ * values, plus any Panel defined model values, with the Panel's values overriding
+ * the Page defined values. In addition a number of predefined values are
+ * automatically added to the model. These values include:
  * <ul>
  * <li>attributes - the panel HTML attributes map</li>
  * <li>context - the Servlet context path, e.g. /mycorp</li>

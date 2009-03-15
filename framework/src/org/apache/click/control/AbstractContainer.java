@@ -30,8 +30,8 @@ import org.apache.click.util.ContainerUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
- * Provides a default implementation of the {@link Container} interface,
- * to make it easier for developers to implement their own containers.
+ * Provides a default implementation of the {@link Container} interface
+ * to make it easier for developers to create their own containers.
  * <p/>
  * Subclasses can override {@link #getTag()} to return a specific HTML element.
  * <p/>

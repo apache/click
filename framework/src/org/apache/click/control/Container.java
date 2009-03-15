@@ -22,14 +22,16 @@ import java.util.List;
 import org.apache.click.Control;
 
 /**
+ * Provides the interface for a container which holds a list of child controls.
+ * <p/>
  * Container extends {@link org.apache.click.Control} and enables the creation of
  * nested controls.
  * <p/>
- * Container allows one to add, remove and retrieve controls.
+ * Container allows one to add, remove and retrieve child controls.
  * <p/>
  * <b>Please note</b> {@link AbstractContainer} provides
- * a default implementation of the Container interface and allows easy creation
- * of new containers.
+ * a default implementation of the Container interface to make it easier for
+ * developers to create their own containers.
  *
  * @see org.apache.click.util.ContainerUtils
  *
