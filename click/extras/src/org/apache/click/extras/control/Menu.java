@@ -541,9 +541,10 @@ public class Menu extends AbstractControl {
      * @return true if the user is in one of the menu roles, or false otherwise
      */
     public boolean isUserInRoles() {
+        Context context = getContext();
         for (Iterator i = getRoles().iterator(); i.hasNext();) {
             String rolename = (String) i.next();
-            if (getContext().getRequest().isUserInRole(rolename)) {
+            if (context.getRequest().isUserInRole(rolename)) {
                 return true;
             }
         }
