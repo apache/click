@@ -27,12 +27,8 @@ import javax.servlet.ServletContext;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
- * Provides the interface for Page controls. Controls are sometimes referred to
+ * Provides the interface for Page controls. Controls are also referred to
  * as components or widgets.
- * <p/>
- * <b>Please note</b> {@link org.apache.click.control.AbstractControl} provides
- * a default implementation of the Control interface and allows easy creation
- * of new controls.
  * <p/>
  * When a Page request event is processed Controls may perform server side event
  * processing through their {@link #onProcess()} method. Controls are generally
@@ -120,6 +116,11 @@ import org.apache.click.util.HtmlStringBuffer;
  * specific convention. See the section
  * <a href="../../../../configuration.html#deploying-custom-resources">Deploying Custom Resources</a>
  * for further details.
+ *
+ * <p/>
+ * <b>Please note</b> {@link org.apache.click.control.AbstractControl} provides
+ * a default implementation of the Control interface to make it easier for
+ * developers to create their own controls.
  *
  * @see org.apache.click.util.PageImports
  *

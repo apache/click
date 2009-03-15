@@ -43,8 +43,8 @@ import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.MessagesMap;
 
 /**
- * Provides a default implementation of the {@link Control} interface,
- * to make it easier for developers to implement their own controls.
+ * Provides a default implementation of the {@link Control} interface
+ * to make it easier for developers to create their own controls.
  * <p/>
  * Subclasses are expected to at least override {@link #getTag()}
  * to differentiate the control. However some controls does not map cleanly
