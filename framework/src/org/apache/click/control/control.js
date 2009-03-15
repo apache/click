@@ -22,14 +22,16 @@ if ( typeof Click == 'undefined' )
 /**
  * DomReady state variables.
  */
-Click.domready = {
-    events: [],
-    ready: false,
-    run : function() {
-        Click.domready.ready=true;
-        var e;
-        while(e = Click.domready.events.shift()) {
-            e();
+if ( typeof Click.domready == 'undefined' ) {
+    Click.domready = {
+        events: [],
+        ready: false,
+        run : function() {
+            Click.domready.ready=true;
+            var e;
+            while(e = Click.domready.events.shift()) {
+                e();
+            }
         }
     }
 };
