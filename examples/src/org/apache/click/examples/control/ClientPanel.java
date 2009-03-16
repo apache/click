@@ -41,6 +41,9 @@ public class ClientPanel extends Panel {
     }
 
     public void onInit() {
+        // Invoke super onInit implementation
+        super.onInit();
+
         form.add(new TextField("name")).setRequired(true);
         form.add(new DateField("dateJoined"));
         form.add(new DoubleField("holdings"));
