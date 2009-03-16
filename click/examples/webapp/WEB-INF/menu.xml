@@ -125,6 +125,7 @@
     <menu label="Tabbed Panel" path="panel/tabbed-panel-demo.htm"/>
     <menu label="Filter Panel" path="panel/filter-panel-demo.htm"/>
     <menu label="Column Panel" path="panel/panel-column-demo.htm"/>
+    <menu label="Reusable Panel" path="panel/reusable-panel-demo.htm"/>
   </menu>
 
   <menu label=" Cayenne" path="#" imageSrc="/assets/images/cayenne.png">
