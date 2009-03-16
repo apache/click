@@ -41,9 +41,6 @@ public class ClientPanel extends Panel {
     }
 
     public void onInit() {
-        // Invoke super onInit implementation
-        super.onInit();
-
         form.add(new TextField("name")).setRequired(true);
         form.add(new DateField("dateJoined"));
         form.add(new DoubleField("holdings"));
@@ -52,6 +49,11 @@ public class ClientPanel extends Panel {
         form.add(new Submit("cancel", this, "onCancel"));
 
         add(form);
+
+        // Invoke super onInit AFTER controls have been added to Panel, otherwise
+        // the controls will not be reachable from the Panel and their onInit
+        // event won't be invoked.
+        super.onInit();
     }
 
     public boolean onSubmit() {
