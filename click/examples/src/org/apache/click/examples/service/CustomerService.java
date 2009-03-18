@@ -185,13 +185,18 @@ public class CustomerService extends CayenneTemplate {
     }
 
     public List getCustomersForPage(int offset, int pageSize) {
-        SelectQuery query = new SelectQuery(Customer.class);
-        query.setPageSize(pageSize);
-        List list = performQuery(query);
+        List list = getCustomers();
 
         List pageList = new ArrayList(pageSize);
         for (int i = 0; i < pageSize; i++) {
-            pageList.add(list.get(offset + i));
+            // Increment row index with the offset
+            int rowIndex = offset + i;
+
+            // Guard against rowIndex that moves past the end of the list
+            if (rowIndex >= list.size()) {
+                break;
+            }
+            pageList.add(list.get(rowIndex));
         }
 
         return pageList;
