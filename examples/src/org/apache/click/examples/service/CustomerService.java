@@ -22,12 +22,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import java.util.Map;
+import org.apache.cayenne.CayenneRuntimeException;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.extras.cayenne.CayenneTemplate;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.exp.ExpressionFactory;
+import org.apache.cayenne.map.DbEntity;
+import org.apache.cayenne.map.EntityResolver;
+import org.apache.cayenne.query.IndirectQuery;
+import org.apache.cayenne.query.Query;
+import org.apache.cayenne.query.SQLTemplate;
 import org.apache.cayenne.query.SelectQuery;
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -44,6 +51,14 @@ public class CustomerService extends CayenneTemplate {
         SelectQuery query = new SelectQuery(Customer.class);
         query.addOrdering(Customer.NAME_PROPERTY, true);
         return performQuery(query);
+    }
+
+    public int getNumberOfCustomers() {
+        CountQuery query = new CountQuery(Customer.class);
+        List result = performQuery(query);
+        Map row = (Map) result.get(0);
+        Integer count = (Integer) row.get("C");
+        return count.intValue();
     }
 
     public List getCustomersSortedBy(String property, boolean ascending) {
@@ -194,4 +209,31 @@ public class CustomerService extends CayenneTemplate {
         return categories;
     }
 
+    /**
+     * A custom Cayenne query which performs a count(*) query on the database.
+     */
+    class CountQuery extends IndirectQuery {
+
+        protected Class objectClass;
+
+        public CountQuery(Class objectClass) {
+            this.objectClass = objectClass;
+        }
+
+        protected Query createReplacementQuery(EntityResolver resolver) {
+            DbEntity entity = resolver.lookupDbEntity(objectClass);
+
+            if (entity == null) {
+                throw new CayenneRuntimeException(
+                    "No entity is mapped for java class: "
+                    + objectClass.getName());
+            }
+
+            String sql = "SELECT #result('count(*)' 'int' 'C') FROM "
+                + entity.getName();
+            SQLTemplate replacement = new SQLTemplate(entity, sql);
+            replacement.setFetchingDataRows(true);
+            return replacement;
+        }
+    }
 }
