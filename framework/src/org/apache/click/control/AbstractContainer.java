@@ -277,7 +277,7 @@ public abstract class AbstractContainer extends AbstractControl implements
     /**
      * @see org.apache.click.Control#getHtmlImports()
      *
-     * @deprecated use the new {@link #getHtmlHeaders()} instead
+     * @deprecated use the new {@link #getHeadElements()} instead
      *
      * @return the HTML includes statements for the container and child Controls,
      * or null if no includes are available

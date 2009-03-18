@@ -548,7 +548,7 @@ public abstract class AbstractControl implements Control {
     /**
      * @see org.apache.click.Control#getHtmlImports()
      *
-     * @deprecated use the new {@link #getHtmlHeaders()} instead
+     * @deprecated use the new {@link #getHeadElements()} instead
      *
      * @return the HTML includes statements for the control stylesheet and
      * JavaScript files
@@ -560,7 +560,7 @@ public abstract class AbstractControl implements Control {
     /**
      * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the list of HTML HEAD elements to be included in the page
+     * @return the list of HEAD elements to be included in the page
      */
     public List getHeadElements() {
         if (headElements == null) {

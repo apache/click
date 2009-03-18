@@ -178,91 +178,94 @@ public interface Control extends Serializable {
     public String getHtmlImports();
 
     /**
-     * Return the list of {@link org.apache.click.util.HtmlHeader HTML HEAD entries}
-     * to be included in the page. Example HTML headers include
-     * {@link org.apache.click.util.JavascriptImport JavascriptImport},
-     * {@link org.apache.click.util.Javascript inline Javascript},
-     * {@link org.apache.click.util.CssImport CssImport} and
-     * {@link org.apache.click.util.Css inline CSS}.
+     * Return the list of {@link org.apache.click.element.Element HEAD elements}
+     * to be included in the page. Example HEAD elements include
+     * {@link org.apache.click.element.JsImport JavaScript imports},
+     * {@link org.apache.click.element.JsScript inline JavasSript},
+     * {@link org.apache.click.util.CssImport Css imports} and
+     * {@link org.apache.click.util.Css inline Css}.
      * <p/>
-     * Controls can include their own list of HTML HEAD entries by implementing
+     * Controls can include their own list of HEAD elements by implementing
      * this method.
      * <p/>
      * The recommended approach when implementing this method is to use
-     * <tt>lazy loading</tt> to only add HTML headers <tt>once</tt> and when
+     * <tt>lazy loading</tt> to only add HEAD elements <tt>once</tt> and when
      * <tt>needed</tt>.
      * For example:
      *
      * <pre class="prettyprint">
      * public MyControl extends AbstractControl {
      *
-     *     public List getHtmlHeaders() {
+     *     public List getHeadElements() {
      *         // Use lazy loading to ensure the JS is only added the
      *         // first time this method is called.
-     *         if (htmlHeaders == null) {
-     *             // Get the header entries from the super implementation
-     *             htmlHeaders = super.getHtmlHeaders();
+     *         if (headElements == null) {
+     *             // Get the head elements from the super implementation
+     *             headElements = super.getHeadElements();
      *
-     *             // Include the control's external Javascript resource
-     *             JavascriptImport jsImport = new JavascriptImport("/mycorp/mycontrol/mycontrol.js");
-     *             htmlHeaders.add(jsImport);
+     *             // Include the control's external JavaScript resource
+     *             JsImport jsImport = new JsImport("/mycorp/mycontrol/mycontrol.js");
+     *             headElements.add(jsImport);
      *
      *             // Include the control's external Css resource
      *             CssImport cssImport = new CssImport("/mycorp/mycontrol/mycontrol.css");
-     *             htmlHeaders.add(cssImport);
+     *             headElements.add(cssImport);
      *         }
-     *         return htmlHeaders;
+     *         return headElements;
      *     }
      * } </pre>
      *
-     * An alternative is to add the HTML headers in the Control's constructor:
+     * Alternative one can add the HEAD elements in the Control's constructor:
      *
      * <pre class="prettyprint">
      * public MyControl extends AbstractControl {
      *
      *     public MyControl() {
-     *         JavascriptImport jsImport = new JavascriptImport("/mycorp/mycontrol/mycontrol.js");
-     *         getHtmlHeaders().add(jsImport);
+     *         JsImport jsImport = new JsImport("/mycorp/mycontrol/mycontrol.js");
+     *         getHeadElements().add(jsImport);
      *         CssImport cssImport = new CssImport("/mycorp/mycontrol/mycontrol.css");
-     *         getHtmlHeaders().add(cssImport);
+     *         getHeadHeaders().add(cssImport);
      *     }
      * } </pre>
      *
-     * One can also add HTML headers from event handler methods such as
+     * One can also add HEAD elements from event handler methods such as
      * {@link #onInit()}, {@link #onProcess()}, {@link #onRender()}
-     * etc. However its possible the control will be added to a {@link Page#stateful Stateful}
-     * page, so you will need to set the HTML header list to <tt>null</tt> in the
-     * Control's {@link #onDestroy()} event handler, otherwise the HTML header
-     * list will continue to grow with each request:
+     * etc. <b>Please note:</b> when adding HEAD elements to event handlers,
+     * its possible that the control will be added to a
+     * {@link Page#stateful Stateful} page, so you will need to set the HEAD
+     * elements list to <tt>null</tt> in the Control's {@link #onDestroy()}
+     * event handler, otherwise the HEAD elements list will continue to grow
+     * with each request:
      *
      * <pre class="prettyprint">
      * public MyControl extends AbstractControl {
      *
+     *     // Set HEAD elements in the onInit event handler
      *     public void onInit() {
-     *         // Add HTML headers
-     *         JavascriptImport jsImport = new JavascriptImport("/mycorp/mycontrol/mycontrol.js");
-     *         getHtmlHeaders().add(jsImport);
+     *         // Add HEAD elements
+     *         JsImport jsImport = new JsImport("/mycorp/mycontrol/mycontrol.js");
+     *         getHeadElements().add(jsImport);
      *         CssImport cssImport = new CssImport("/mycorp/mycontrol/mycontrol.css");
-     *         getHtmlHeaders().add(cssImport);
+     *         getHeadElements().add(cssImport);
      *     }
      *
      *     public void onDestroy() {
-     *         // Nullify the HTML headers
-     *         htmlHeaders = null;
+     *         // Nullify the HEAD elements
+     *         headElements = null;
      *     }
      * } </pre>
      *
      * The order in which JS and CSS files are included will be preserved in the
      * page.
      * <p/>
-     * <b>Note:</b> this method must never return null. If no HTML HEAD entries
+     * <b>Note:</b> this method must never return null. If no HEAD elements
      * are available this method must return an empty {@link java.util.List}.
      * <p/>
-     * <b>Also note:</b> a common problem when overriding getHtmlHeaders in
-     * subclasses is forgetting to call <em>super.getHtmlHeaders</em>. Consider
-     * carefully whether you should call <em>super.getHtmlHeaders</em> or not.
+     * <b>Also note:</b> a common problem when overriding getHeadElements in
+     * subclasses is forgetting to call <em>super.getHeadElements</em>. Consider
+     * carefully whether you should call <em>super.getHeadElements</em> or not.
      *
-     * @return the list of HTML HEAD entries to be included in the page
+     * @return the list of HEAD elements to be included in the page
      */
     public List getHeadElements();
 
