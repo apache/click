@@ -110,6 +110,8 @@
     <menu separator="true"/>
     <menu label="Edit Table Pattern" path="table/edit-table.htm"/>
     <menu label="Search Table Pattern" path="table/search-table.htm"/>
+    <menu separator="true"/>
+    <menu label="Large Dataset Demo" path="table/large-dataset-demo.htm"/>
   </menu>
 
   <menu label=" Tree" path="#" imageSrc="/assets/images/tree.png">
