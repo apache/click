@@ -218,24 +218,22 @@ import org.apache.commons.lang.math.NumberUtils;
  * dataset entries. With very large datasets (e.g. 100,000 rows), its not
  * possible to retrieve that many rows from the database.
  * <p/>
- * In these cases a custom List implementation can be used as the
+ * For these rarer cases a custom List implementation can be used as the
  * Table's {@link #setRowList(java.util.List) row list}. The custom List will
  * only be populated with the rows that must be displayed for the selected page.
  * <p/>
- * The Table methods {@link #getFirstRow()}, {@link #getLastRow()} and
- * {@link #getPageSize()} provides enough information to calculate which
- * rows to display for the selected page. Most databases provide the ability
- * to either limit retrieved rows to a start and end value or a start offset
- * and max number of rows.
- * <p/>
- * A prerequisite is that the <tt>total number of rows</tt> must be retrieved
- * beforehand, otherwise it won't be possible to calculate the {@link #getLastRow()
- * last row}.
- * <p/>
- * A custom List have two responsibilities: it must override {@link java.util.List#size()
+ * A custom List has two responsibilities: it must override {@link java.util.List#size()
  * List.size()} to return the <tt>total number of rows</tt> and it must override
  * {@link java.util.List#get(int) List.get(index)} to ensure the List returns the
  * correct row for the specified index.
+ * <p/>
+ * A prerequisite for this strategy is that the <tt>total number of rows</tt>
+ * must be retrieved beforehand, otherwise it won't be possible to calculate the
+ * {@link #getLastRow() last row} value.
+ * <p/>
+ * The methods {@link #getFirstRow()}, {@link #getLastRow()} and
+ * {@link #getPageSize()} provides you with the necessary information to limit
+ * the database rows to the selected page.
  * <p/>
  * Please see the <a href="http://www.avoka.com/click-examples/table/large-dataset-demo.htm">Large Dataset Demo</a>
  * which provides a custom List implementation as described above.
