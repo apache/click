@@ -228,7 +228,7 @@ import org.apache.commons.lang.math.NumberUtils;
  * correct row for the specified index.
  * <p/>
  * A prerequisite for this strategy is that the <tt>total number of rows</tt>
- * must be retrieved beforehand, otherwise it won't be possible to calculate the
+ * must be available beforehand, otherwise it won't be possible to calculate the
  * {@link #getLastRow() last row} value.
  * <p/>
  * The methods {@link #getFirstRow()}, {@link #getLastRow()} and
