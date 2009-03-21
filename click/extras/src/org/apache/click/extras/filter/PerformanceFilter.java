@@ -48,17 +48,18 @@ import org.apache.commons.lang.StringUtils;
  * best practices for speeding up your web site. This filter will enable you to
  * apply the rules:
  * <ul>
- * <li>Rule 3 - Add an Expires Header</li>
- * <li>Rule 4 - Gzip Components</li>
+ * <li><a class="external" target="_blank" href="http://developer.yahoo.com/performance/rules.html#expires">Add an Expires Header</a></li>
+ * <li><a class="external" target="_blank" href="http://developer.yahoo.com/performance/rules.html#gzip">Gzip Components</a></li>
  * </ul>
  *
- * The Click Framework can also help you with the following rules:
+ * Apache Click can also help you with the following rules:
  * <ul>
- * <li>Rule 5 - Put Stylesheets at the Top, by using $cssImports at the
- * top of you page</li>
- * <li>Rule 6 - Put Scripts at the Bottom, by using $jsImports at the bottom
- * of your page</li>
- * <li>Rule 12 - {@link org.apache.click.Control#getHtmlImports()} automatically
+ * <li><a class="external" target="_blank" href="http://developer.yahoo.com/performance/rules.html#css_top">Put Stylesheets at the Top</a>,
+ * by using $headElements at the top of your page</li>
+ * <li><a class="external" target="_blank" href="http://developer.yahoo.com/performance/rules.html#js_bottom">Put Scripts at the Bottom</a>,
+ * by using $jsElements at the bottom of your page</li>
+ * <li><a class="external" target="_blank" href="http://developer.yahoo.com/performance/rules.html#js-dupes">Remove Duplicate Scripts</a>
+ * - {@link org.apache.click.Control#getHeadElements()} automatically
  * removes duplicate scripts.</li>
  * </ul>
  *
@@ -66,53 +67,72 @@ import org.apache.commons.lang.StringUtils;
  * This filter will automatically add long expiry headers (5 years) to static Click
  * resources such as CSS style sheets imports, JavaScript imports, and images.
  * This will ensure these resources are cached in the users browser and will not
- * have to be requested again.  With Click static resources are deployed automatically
- * on startup to the web directory <tt style="color:blue;">/click</tt>.
+ * have to be requested again. With Click, static resources are automatically
+ * deployed on startup to the web directory <tt style="color:blue;">/click</tt>.
  * <p/>
- * When the PerformanceFilter is active Click will add a version number to the
- * static resource filenames and apply a long expiry header to these versioned files.
- * When you upgrade the the next version of Click Framework this version number
- * will increment, and the new static resources will be requested and cached by
- * the users browser.
+ * When the PerformanceFilter is active Click will add a <tt>version</tt> number
+ * to the static resource filenames and the long expiry header will be applied to
+ * these versioned files. When you upgrade the the next version of Click, this
+ * version number will increment, and the new static resources will be requested
+ * again and cached by the users browser.
  * <p/>
- * When the PerformanceFilter is not active Click will not include a version number
- * in the static resource filenames and no expiry header will be applied.
+ * When the PerformanceFilter is not active Click will not include a version
+ * number in the static resource filenames and no expiry header will be applied.
  * <p/>
- * The filter will always compress non image static Click resources such as
+ * The filter will always GZIP compress non image, static Click resources, such as
  * style sheets and JavaScript imports.
  *
  * <h3>Configured Static Resources</h3>
- * You can also configure your own applications static resources such as CSS, JS
+ * You can also configure your application's static resources such as CSS, JS
  * files and images to be processed by the filter.
- *
- * Provides a GZIP compression <tt>Filter</tt> to compress HTML ServletResponse
+ * <p/>
+ * This filter will automatically add long expiry headers to configured
+ * resources. The default expiry header is 1 year, but can be changed through
+ * the <tt>init-param</tt> <span class="blue">"cachable-max-age"</span>.
+ * This ensures the resources are cached in the users browser and will not
+ * have to be requested again.
+ * <p/>
+ * The PerformanceFilter provides the ability to add <tt>versioning</tt>
+ * to application specific resources through the
+ * <tt>init-param</tt> <span class="blue">"application-version"</span>.
+ * <p/>
+ * Application versioning is supported by {@link org.apache.click.element.ResourceElement resource elements}
+ * such as {@link org.apache.click.element.JsImport JsImport} and
+ * {@link org.apache.click.element.CssImport CssImport}. When the
+ * <tt>application version</tt> is set, {@link org.apache.click.element.ResourceElement ResourceElements}
+ * will add the <tt>application version</tt> number to their filenames
+ * and PerformanceFilter will apply the long expiry header to these versioned files.
+ * When you increment the <tt>application version</tt>, the resource path will
+ * change and the static resources will be requested again and cached by the
+ * browser.
+ * <p/>
+ * PerformanceFilter provides GZIP compression to compress HTML ServletResponse
  * content. The content will only be compressed if it is bigger than a
- * configurable threshold. The default threshold is 384 bytes.
+ * configurable threshold. The default threshold is 384 bytes but can be changed
+ * through the <tt>init-param</tt> <span class="blue">"compression-threshold"</span>.
  * <p/>
  * Click *.htm pages are automatically compressed by the filter.
  *
  * <h3>Page Template Import References</h3>
  *
  * To import static control references in your page template you simply reference
- * the <tt class="blue">$cssImports</tt> and <tt class="blue">$jsImports</tt>.
+ * the <tt class="blue">$headElements</tt> and <tt class="blue">$jsElements</tt>.
  * For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
  * &lt;head&gt;
- * <span class="blue">$cssImports</span>
+ * <span class="blue">$headElements</span>
  * &lt;/head&gt;
  * &lt;body&gt;
  * <span class="red">$table</span>
  * &lt;/body&gt;
  * &lt;/html&gt;
- * <span class="blue">$jsImports</span></pre>
+ * <span class="blue">$jsElements</span></pre>
  *
- * CSS imports should be included in the head section of your page, and the
- * JavaScript imports should be included at the bottom of your page to support
+ * HEAD elements should be included in the head section of your page, and
+ * JavaScript elements should be included at the bottom of your page to support
  * progressive rendering in the browser.
- *
- * <h3>Click Pages</h3>
  *
  * <h3>Configuration</h3>
  *
@@ -271,6 +291,9 @@ public class PerformanceFilter implements Filter {
     /** The cachable-path exclude files. */
     protected List excludeFiles = new ArrayList();
 
+    /** The application resource version indicator. */
+    protected String applicationVersionIndicator = "";
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -331,7 +354,6 @@ public class PerformanceFilter implements Filter {
         // Enable resource versioning in Click
         request.setAttribute(ClickUtils.ENABLE_RESOURCE_VERSION, "true");
 
-        // Apply cache expiry Headers
         if (useForeverCacheHeader(path)) {
             setHeaderExpiresCache(response, FOREVER_CACHE_MAX_AGE);
 
@@ -438,6 +460,13 @@ public class PerformanceFilter implements Filter {
             }
         }
 
+        param = filterConfig.getInitParameter("application-version");
+        if (StringUtils.isNotBlank(param)) {
+            applicationVersionIndicator = ClickUtils.VERSION_INDICATOR_SEP
+                + param;
+            ClickUtils.setApplicationVersion(param);
+        }
+
         param = filterConfig.getInitParameter("cachable-paths");
         if (param != null) {
             String[] paths = StringUtils.split(param, ',');
@@ -535,27 +564,47 @@ public class PerformanceFilter implements Filter {
     }
 
     /**
+     * Return the application <tt>version indicator</tt> for the specified path.
+     *
+     * @param path the resource path
+     * @return an application version indicator for web resources
+     */
+    protected String getApplicationResourceVersionIndicator(String path) {
+        String indicator = ClickUtils.getApplicationResourceVersionIndicator();
+
+        if (StringUtils.isBlank(indicator)) {
+            // NOTE: getApplicationResourceVersionIndicator will return an empty
+            // string on the first request to this filter because the Context is
+            // not available. Thus we default to the application version
+            // indicator that may have been set on the filter.
+            indicator = applicationVersionIndicator;
+        }
+        return indicator;
+    }
+
+    /**
      * Removes the version indicator from the specified path.
      * <p/>
-     * For example, given the path <tt>'/example/control-1.4.js'</tt>, where
-     * <tt>'-1.4'</tt> is the <tt>version indicator</tt>, this method will
+     * For example, given the path <tt>'/example/control_1.4.js'</tt>, where
+     * <tt>'_1.4'</tt> is the <tt>version indicator</tt>, this method will
      * return <tt>'/example/control.js'</tt>.
      *
      * @see #getResourceVersionIndicator(String)
+     * @see #getApplicationResourceVersionIndicator(java.lang.String)
      *
      * @param path the resource path
      * @return path without the version indicator
      */
     protected String stripResourceVersionIndicator(String path) {
-        int versionIndex =
-            path.lastIndexOf(getResourceVersionIndicator(path));
+        String realPath = path;
 
-        if (versionIndex >= 0) {
-            String extension = path.substring(
-                versionIndex + getResourceVersionIndicator(path).length());
-            return path.substring(0, versionIndex) + extension;
-        }
-        return path;
+        realPath = StringUtils.replace(realPath,
+            getApplicationResourceVersionIndicator(path), "");
+
+        realPath = StringUtils.replace(realPath,
+            getResourceVersionIndicator(path), "");
+
+        return realPath;
     }
 
     /**
@@ -572,17 +621,25 @@ public class PerformanceFilter implements Filter {
     }
 
     /**
-     * Return true if a path is a static versioned Click resource and should be
+     * Return true if a path is a static versioned resource and should be
      * cached forever.
      *
-     * @see #getResourceVersionIndicator(String)
+     * @see #getResourceVersionIndicator(java.lang.String)
+     * @see #getApplicationResourceVersionIndicator(java.lang.String)
      *
      * @param path the request path to test
      * @return true if the response should be cached forever
      */
     protected boolean useForeverCacheHeader(String path) {
         String versionIndicator = getResourceVersionIndicator(path);
-        return path.startsWith("/click/") && path.indexOf(versionIndicator) != -1;
+        if (path.startsWith("/click/") && path.indexOf(versionIndicator) != -1) {
+            return true;
+        }
+        versionIndicator = getApplicationResourceVersionIndicator(path);
+        if (path.indexOf(versionIndicator) != -1) {
+            return true;
+        }
+        return false;
     }
 
     /**

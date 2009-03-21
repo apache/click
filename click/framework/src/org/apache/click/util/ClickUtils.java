@@ -107,14 +107,23 @@ public class ClickUtils {
      */
     public static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
 
+    /** The version indicator separator string. */
+    public static final String VERSION_INDICATOR_SEP = "_";
+
     /** The static web resource version number indicator string. */
     public static final String RESOURCE_VERSION_INDICATOR =
-        "_" + getClickVersion();
+        VERSION_INDICATOR_SEP + getClickVersion();
 
     // ------------------------------------------------------ Private Constants
 
     /** The cached resource version indicator. */
     private static String cachedResourceVersionIndicator;
+
+    /** The static application-wide resource version indicator. */
+    private static String applicationVersion;
+
+    /** The cached application version indicator string. */
+    private static String cachedApplicationVersionIndicator;
 
     /**
      * Character used to separate username and password in persistent cookies.
@@ -891,10 +900,37 @@ public class ClickUtils {
     }
 
     /**
-     * Return a version indicator for static web resources
-     * (eg css, js and image files), if resource versioning is active,
+     * Return the web application version string.
+     *
+     * @return the web application version string
+     */
+    public static String getApplicationVersion() {
+        return applicationVersion;
+    }
+
+    /**
+     * Set the web application version string.
+     *
+     * @param applicationVersion the web application version string
+     */
+    public static void setApplicationVersion(String applicationVersion) {
+        ClickUtils.applicationVersion = applicationVersion;
+        cachedApplicationVersionIndicator = null;
+    }
+
+    /**
+     * Return Click's version indicator for static web resources
+     * (eg css, js and image files) if resource versioning is active,
      * otherwise this method will return an empty string.
      * <p/>
+     * Click's resource versioning becomes active under the following
+     * conditions:
+     * <ul>
+     * <li>the {@link #ENABLE_RESOURCE_VERSION} request attribute must be set
+     * to <tt>true</tt></li>
+     * <li>the application mode must be either "production" or "profile"</li>
+     * </ul>
+     *
      * The version indicator is based on the current Click release version.
      * For example when using Click 1.4 this method will return the string
      * <tt>"_1.4"</tt>.
@@ -921,6 +957,55 @@ public class ClickUtils {
         } else {
             return "";
         }
+    }
+
+    /**
+     * If resource versioning is active this method will return the
+     * application version indicator for static web resources
+     * (eg JavaScript and Css) otherwise this method will return an empty string.
+     * <p/>
+     * Application resource versioning becomes active under the following
+     * conditions:
+     * <ul>
+     * <li>the {@link #ENABLE_RESOURCE_VERSION} request attribute must be set
+     * to <tt>true</tt></li>
+     * <li>the application mode must be either "production" or "profile"</li>
+     * </ul>
+     *
+     * The version indicator is based on the application version.
+     * For example if the application version is 1.2 this method will
+     * return the string <tt>"_1.2"</tt>.
+     * <p/>
+     * The application version can be set through the static method
+     * {@link #setApplicationVersion(java.lang.String)}.
+     *
+     * @return an application version indicator for web resources
+     */
+    public static String getApplicationResourceVersionIndicator() {
+        // Return the cached version first
+        if (cachedApplicationVersionIndicator != null) {
+            return cachedApplicationVersionIndicator;
+        }
+
+        // Check if the Context has been set
+        if (Context.hasThreadLocalContext()) {
+
+            Context context = Context.getThreadLocalContext();
+            ConfigService configService = ClickUtils.getConfigService(context.getServletContext());
+
+            boolean isProductionModes = configService.isProductionMode()
+                || configService.isProfileMode();
+
+            if (isProductionModes && ClickUtils.isEnableResourceVersion(context)) {
+                String version = getApplicationVersion();
+                if (StringUtils.isNotBlank(version)) {
+                    cachedApplicationVersionIndicator = VERSION_INDICATOR_SEP
+                        + version;
+                    return cachedApplicationVersionIndicator;
+                }
+            }
+        }
+        return "";
     }
 
     /**

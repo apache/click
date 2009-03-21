@@ -58,6 +58,10 @@ public class JsImport extends ResourceElement {
 
     /**
      * Constructs a new JavaScript import element.
+     * <p/>
+     * The JsImport {@link #setVersionIndicator(java.lang.String) version indicator}
+     * will automatically be set to the
+     * {@link ClickUtils#getApplicationResourceVersionIndicator() application version indicator}.
      */
     public JsImport() {
         this(null);
@@ -67,6 +71,10 @@ public class JsImport extends ResourceElement {
      * Construct a new JavaScript import element with the specified
      * <tt>src</tt> attribute.
      * <p/>
+     * The JsImport {@link #setVersionIndicator(java.lang.String) version indicator}
+     * will automatically be set to the
+     * {@link ClickUtils#getApplicationResourceVersionIndicator() application version indicator}.
+     * <p/>
      * <b>Please note</b> if the given <tt>src</tt> begins with a
      * <tt class="wr">"/"</tt> character the src will be prefixed with the web
      * application <tt>context path</tt>.
@@ -74,8 +82,48 @@ public class JsImport extends ResourceElement {
      * @param src the JavaScript import src attribute
      */
     public JsImport(String src) {
+        this(src, true);
+    }
+
+    /**
+     * Construct a new JavaScript import element with the specified <tt>src</tt>
+     * attribute.
+     * <p/>
+     * If useApplicationVersionIndicator is true the
+     * {@link #setVersionIndicator(java.lang.String) version indicator} will
+     * automatically be set to the
+     * {@link ClickUtils#getApplicationResourceVersionIndicator() application version indicator}.
+     * <p/>
+     * <b>Please note</b> if the given <tt>src</tt> begins with a
+     * <tt class="wr">"/"</tt> character the src will be prefixed with the web
+     * application <tt>context path</tt>.
+     *
+     * @param src the JavaScript import src attribute
+     * @param useApplicationVersionIndicator indicates whether the version
+     * indicator will automatically be set to the application version indicator
+     */
+    public JsImport(String src, boolean useApplicationVersionIndicator) {
+        this(src, null);
+        if (useApplicationVersionIndicator) {
+            setVersionIndicator(ClickUtils.getApplicationResourceVersionIndicator());
+        }
+    }
+
+    /**
+     * Construct a new JavaScript import element with the specified <tt>src</tt>
+     * attribute and version indicator.
+     * <p/>
+     * <b>Please note</b> if the given <tt>src</tt> begins with a
+     * <tt class="wr">"/"</tt> character the src will be prefixed with the web
+     * application <tt>context path</tt>.
+     *
+     * @param src the JsImport src attribute
+     * @param versionIndicator the version indicator to add to the src path
+     */
+    public JsImport(String src, String versionIndicator) {
         setSrc(src);
         setAttribute("type", "text/javascript");
+        setVersionIndicator(versionIndicator);
     }
 
     // ------------------------------------------------------ Public properties
@@ -152,6 +200,9 @@ public class JsImport extends ResourceElement {
      * @param buffer the buffer to render output to
      */
     public void render(HtmlStringBuffer buffer) {
+        // Add version indicator to the href
+        setSrc(addVersionIndicator(getSrc()));
+
         renderConditionalCommentPrefix(buffer);
 
         buffer.elementStart(getTag());
