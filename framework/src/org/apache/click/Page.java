@@ -694,7 +694,7 @@ public class Page {
      *     }
      * } </pre>
      *
-     * An alternative is to add the HEAD elements in the Page constructor:
+     * Alternatively one can add the HEAD elements in the Page constructor:
      *
      * <pre class="prettyprint">
      * public MyPage extends Page {

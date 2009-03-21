@@ -19,10 +19,131 @@
 package org.apache.click.element;
 
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
+ * Provides a HEAD element for including <tt>inline</tt> JavaScript using the
+ * &lt;script&gt; tag.
+ * <p/>
+ * Example usage:
+ *
+ * <pre class="prettyprint">
+ * public class MyPage extends Page {
+ *
+ *     public List getHeadElements() {
+ *         // We use lazy loading to ensure the JS is only added the
+ *         // first time this method is called.
+ *         if (headElements == null) {
+ *             // Get the head elements from the super implementation
+ *             headElements = super.getHeadElements();
+ *
+ *             JsScript jsScript = new JsScript("alert('Hello World!);");
+ *             headElements.add(jsScript);
+ *         }
+ *         return headElements;
+ *     }
+ * } </pre>
+ *
+ * The <tt>jsScript</tt> instance will be rendered as follows:
+ *
+ * <pre class="prettyprint">
+ * &lt;script type="text/javascript"&gt;
+ * alert('Hello World');
+ * &lt;/script&gt;
+ * </pre>
+ *
+ * Below is an example showing how to render inline Javascript from a
+ * Velocity template.
+ * <p/>
+ * First we create a Velocity template <tt>(/js/mycorp-template.js)</tt> which
+ * contains the variable <tt>$divId</tt> that must be replaced at runtime with
+ * the real Div ID attribute:
+ *
+ * <pre class="prettyprint">
+ * hide = function() {
+ *     var div = document.getElementById('$divId');
+ *     div.style.display = "none";
+ * }
+ * </pre>
+ *
+ * Next is the Page implementation:
+ *
+ * <pre class="prettyprint">
+ * public class MyPage extends Page {
+ *
+ *     public List getHeadElements() {
+ *         // We use lazy loading to ensure the JS is only added the
+ *         // first time this method is called.
+ *         if (headElements == null) {
+ *             // Get the head elements from the super implementation
+ *             headElements = super.getHeadElements();
+ *
+ *             // Create a default template model to pass to the template
+ *             Map model = ClickUtils.createTemplateModel(this, getContext());
+ *
+ *             // Add the id of the div to hide
+ *             model.put("divId", "myDiv");
+ *
+ *             // Specify the path to the JavaScript Velocity template
+ *             String jsTemplate = "/js/mycorp-template.js";
+ *
+ *             // Render the template providing it with the model
+ *             String template = getContext().renderTemplate(jsTemplate, model);
+ *
+ *             // Create the inline JavaScript for the given template
+ *             JsScript jsScript = new JsScript(template);
+ *             headElements.add(jsScript);
+ *         }
+ *         return headElements;
+ *     }
+ * } </pre>
+ *
+ * The <tt>jsScript</tt> instance will render as follows (assuming the context
+ * path is <tt>myApp</tt>):
+ *
+ * <pre class="prettyprint">
+ * &lt;script type="text/javascript"&gt;
+ *     hide = function() {
+ *         var div = document.getElementById('myDiv');
+ *         div.style.display = "none";
+ *     }
+ * &lt;/style&gt;
+ * </pre>
+ *
+ * <h3>Character data (CDATA) support</h3>
+ *
+ * Sometimes it is necessary to wrap <tt>inline</tt> {@link JsScript} in CDATA
+ * tags. Two use cases are common for doing this:
+ * <ul>
+ * <li>For XML parsing: When using Ajax one often send back partial
+ * XML snippets to the browser, which is parsed as valid XML. However the XML
+ * parser will throw an error if the script contains reserved XML characters
+ * such as '&amp;', '&lt;' and '&gt;'. For these situations it is recommended
+ * to wrap the script content inside CDATA tags.
+ * </li>
+ * <li>XHTML validation: if you want to validate your site using an XHTML
+ * validator e.g: <a target="_blank" href="http://validator.w3.org/">http://validator.w3.org/</a>.</li>
+ * </ul>
+ *
+ * To wrap the JavaScript content in CDATA tags, set
+ * {@link #setCharacterData(boolean)} to true. Below is how the JavaScript
+ * content would be rendered:
+ *
+ * <pre class="prettyprint">
+ * &lt;script type="text/javascript"&gt;
+ *  /&lowast;&lt;![CDATA[&lowast;/
+ *
+ *  if(x &lt; y) alert('Hello');
+ *
+ *  /&lowast;]]&gt;&lowast;/
+ * &lt;/script&gt; </pre>
+ *
+ * Notice the CDATA tags are commented out which ensures older browsers that
+ * don't understand the CDATA tag, will ignore it and only process the actual
+ * content.
+ * <p/>
+ * For an overview of XHTML validation and CDATA tags please see
+ * <a target="_blank" href="http://javascript.about.com/library/blxhtml.htm">http://javascript.about.com/library/blxhtml.htm</a>.
  *
  * @author Bob Schellink
  */
@@ -30,29 +151,27 @@ public class JsScript extends ResourceElement {
 
     // -------------------------------------------------------------- Variables
 
-    /** A buffer holding the inline CSS content. */
+    /** A buffer holding the inline JavaScript content. */
     private HtmlStringBuffer content = new HtmlStringBuffer();
 
     /**
-     * Indicates if the HtmlHeader's content should be wrapped in a CDATA tag.
-     * <b>Note:</b> this property only applies to HtmlHeader imports which contain
-     * <tt>inline</tt> content.
+     * Indicates if the JsScript's content should be wrapped in a CDATA tag.
      */
     private boolean characterData = false;
 
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct a new inline Javascript element.
+     * Construct a new inline JavaScript element.
      */
     public JsScript() {
         this(null);
     }
 
     /**
-     * Construct a new inline Javascript element with the given content.
+     * Construct a new inline JavaScript element with the given content.
      *
-     * @param content the Javascript content
+     * @param content the JavaScript content
      */
     public JsScript(String content) {
         if (content != null) {
@@ -64,25 +183,25 @@ public class JsScript extends ResourceElement {
     // ------------------------------------------------------ Public Properties
 
     /**
-     * Returns the Javascript HTML tag: &lt;script&gt;.
+     * Returns the JavaScript HTML tag: &lt;script&gt;.
      *
-     * @return the Javascript HTML tag: &lt;script&gt;
+     * @return the JavaScript HTML tag: &lt;script&gt;
      */
     public String getTag() {
         return "script";
     }
 
     /**
-     * Return the Javascript content buffer.
+     * Return the JavaScript content buffer.
      *
-     * @return the Javascript content buffer
+     * @return the JavaScript content buffer
      */
     public HtmlStringBuffer getContent() {
         return content;
     }
 
     /**
-     * Set the Javascript content buffer.
+     * Set the JavaScript content buffer.
      *
      * @param content the new content buffer
      */
@@ -91,10 +210,10 @@ public class JsScript extends ResourceElement {
     }
 
     /**
-     * Return true if the HtmlHeader's content should be wrapped in CDATA tags,
+     * Return true if the JsScript's content should be wrapped in CDATA tags,
      * false otherwise.
      *
-     * @return true if the HtmlHeader's content should be wrapped in CDATA tags,
+     * @return true if the JsScript's content should be wrapped in CDATA tags,
      * false otherwise
      */
     public boolean isCharacterData() {
@@ -102,9 +221,9 @@ public class JsScript extends ResourceElement {
     }
 
     /**
-     * Sets whether the HtmlHeader's content should be wrapped in CDATA tags or not.
+     * Sets whether the JsScript's content should be wrapped in CDATA tags or not.
      *
-     * @param characterData true indicates that the HtmlHeader's content should be
+     * @param characterData true indicates that the JsScript's content should be
      * wrapped in CDATA tags, false otherwise
      */
     public void setCharacterData(boolean characterData) {
@@ -114,17 +233,18 @@ public class JsScript extends ResourceElement {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Append the given Javascript string to the content buffer.
+     * Append the given JavaScript string to the content buffer.
      *
-     * @param content the Javascript string to append to the content
+     * @param content the JavaScript string to append to the content
      * buffer
+     * @return the JavaScript content buffer
      */
-    public void append(String content) {
-        this.content.append(content);
+    public HtmlStringBuffer append(String content) {
+        return this.content.append(content);
     }
 
     /**
-     * Render the HTML representation of the JavaScript to the specified
+     * Render the HTML representation of the JsScript element to the specified
      * buffer.
      *
      * @param buffer the buffer to render output to
@@ -144,7 +264,7 @@ public class JsScript extends ResourceElement {
         // Render CDATA tag if necessary
         renderCharacterDataPrefix(buffer);
 
-        buffer.append(getContent());
+        renderContent(buffer);
 
         renderCharacterDataSuffix(buffer);
 
@@ -194,6 +314,17 @@ public class JsScript extends ResourceElement {
         return new HashCodeBuilder(17, 37).append(getId()).toHashCode();
     }
 
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Render this JsScript content to the specified buffer.
+     *
+     * @param buffer the buffer to append the output to
+     */
+    protected void renderContent(HtmlStringBuffer buffer) {
+        buffer.append(getContent());
+    }
+
     // ------------------------------------------------ Package Private Methods
 
     /**
@@ -220,23 +351,6 @@ public class JsScript extends ResourceElement {
     void renderCharacterDataSuffix(HtmlStringBuffer buffer) {
         if (isCharacterData()) {
             buffer.append(" /*]]>*/");
-        }
-    }
-
-    /**
-     * @see HtmlHeader#setUnique(boolean)
-     *
-     * @deprecated use {@link #setId(java.lang.String)} instead
-     *
-     * @param unique sets whether the HtmlHeader import should be unique or not
-     */
-    void setUnique(boolean unique) {
-        super.setUnique(unique);
-
-        // If CSS is unique and ID is not defined, derive the ID from the content
-        if (unique && StringUtils.isBlank(getId()) && getContent().length() > 0) {
-            int hash = Math.abs(getContent().toString().hashCode());
-            setId(Integer.toString(hash));
         }
     }
 }

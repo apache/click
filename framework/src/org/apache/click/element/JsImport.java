@@ -19,10 +19,37 @@
 package org.apache.click.element;
 
 import org.apache.click.Context;
+import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
+ * Provides a JavaScript HEAD element for importing <tt>external</tt> JavaScript
+ * files using the &lt;script&gt; tag.
+ * <p/>
+ * Example usage:
+ * <pre class="prettyprint">
+ * public class MyPage extends Page {
+ *
+ *     public List getHeadElements() {
+ *         // We use lazy loading to ensure the JS import is only added the
+ *         // first time this method is called.
+ *         if (headElements == null) {
+ *             // Get the head elements from the super implementation
+ *             headElements = super.getHeadElements();
+ *
+ *             JsImport jsImport = new JsImport("/js/js-library.js");
+ *             headElements.add(jsImport);
+ *         }
+ *         return headElements;
+ *     }
+ * } </pre>
+ *
+ * The <tt>jsImport</tt> instance will be rendered as follows (assuming the context
+ * path is <tt>myApp</tt>):
+ * <pre class="prettyprint">
+ * &lt;script type="text/javascript" href="/myApp/js/js-library.js"&gt;&lt;/script&gt; </pre>
+ *
  * @author Bob Schellink
  */
 public class JsImport extends ResourceElement {
@@ -30,20 +57,21 @@ public class JsImport extends ResourceElement {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Constructs a new JavascriptImport.
+     * Constructs a new JavaScript import element.
      */
     public JsImport() {
         this(null);
     }
 
     /**
-     * Construct a new JavascriptImport with the specified <tt>src</tt> attribute.
+     * Construct a new JavaScript import element with the specified
+     * <tt>src</tt> attribute.
      * <p/>
-     * <b>Please note</b> if the given <tt>src</tt> begins with a <tt class="wr">"/"</tt>
-     * character the src will be prefixed with the web application
-     * <tt>context path</tt>.
+     * <b>Please note</b> if the given <tt>src</tt> begins with a
+     * <tt class="wr">"/"</tt> character the src will be prefixed with the web
+     * application <tt>context path</tt>.
      *
-     * @param src the Javascript src attribute
+     * @param src the JavaScript import src attribute
      */
     public JsImport(String src) {
         setSrc(src);
@@ -53,20 +81,20 @@ public class JsImport extends ResourceElement {
     // ------------------------------------------------------ Public properties
 
     /**
-     * Returns the Css import HTML tag: &lt;script&gt;.
+     * Returns the JavaScript import HTML tag: &lt;script&gt;.
      *
-     * @return the Css import HTML tag: &lt;script&gt;
+     * @return the JavaScript import HTML tag: &lt;script&gt;
      */
     public String getTag() {
         return "script";
     }
 
     /**
-     * This method always return true because JavaScript import must be unique
+     * This method always return true because a JavaScript import must be unique
      * based on its <tt>src</tt> attribute. In other words the Page HEAD should
      * only contain a single JavaScript import for the specific <tt>src</tt>.
      *
-     * @see HtmlHeader#isUnique()
+     * @see ResourceElement#isUnique()
      *
      * @return true because JavaScript import must unique based on its
      * <tt>src</tt> attribute
@@ -118,7 +146,7 @@ public class JsImport extends ResourceElement {
     // ------------------------------------------------ Package Private Methods
 
     /**
-     * Render the HTML representation of the JavaScript import to the specified
+     * Render the HTML representation of the JsImport element to the specified
      * buffer.
      *
      * @param buffer the buffer to render output to
@@ -169,20 +197,5 @@ public class JsImport extends ResourceElement {
      */
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(getSrc()).toHashCode();
-    }
-
-    // ------------------------------------------------ Package Private Methods
-
-    /**
-     * This operation is not supported because JavaScript imports is always
-     * unique based on their <tt>src</tt> attribute.
-     *
-     * @see HtmlHeader#setUnique(boolean)
-     *
-     * @param unique sets whether the JavaScript import should be unique or not
-     */
-    void setUnique(boolean unique) {
-        throw new UnsupportedOperationException("JavascriptImport is always"
-            + " unique based on the 'src' attribute");
     }
 }

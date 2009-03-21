@@ -215,7 +215,7 @@ public interface Control extends Serializable {
      *     }
      * } </pre>
      *
-     * Alternative one can add the HEAD elements in the Control's constructor:
+     * Alternatively one can add the HEAD elements in the Control's constructor:
      *
      * <pre class="prettyprint">
      * public MyControl extends AbstractControl {

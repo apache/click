@@ -19,10 +19,129 @@
 package org.apache.click.element;
 
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
+ * Provides a Css HEAD element for including <tt>inline</tt> Cascading
+ * Stylesheets using the &lt;style&gt; tag.
+ * <p/>
+ * Example usage:
+ *
+ * <pre class="prettyprint">
+ * public class MyPage extends Page {
+ *
+ *     public List getHeadElements() {
+ *         // We use lazy loading to ensure the CSS import is only added the
+ *         // first time this method is called.
+ *         if (headElements == null) {
+ *             // Get the header entries from the super implementation
+ *             headElements = super.getHeadElements();
+ *
+ *             CssStyle cssStyle = new CssStyle("body { font: 12px arial; }");
+ *             headElements.add(cssStyle);
+ *         }
+ *         return headElements;
+ *     }
+ * } </pre>
+ *
+ * The <tt>cssStyle</tt> instance will render as follows:
+ *
+ * <pre class="prettyprint">
+ * &lt;style type="text/css" rel="stylesheet"&gt;
+ * body { font: 12px arial; }
+ * &lt;/style&gt;
+ * </pre>
+ *
+ * Below is an example showing how to render inline CSS from a Velocity
+ * template.
+ * <p/>
+ * First we create a Velocity template <tt>(/css/style-template.css)</tt> which
+ * contains the variable <tt>$context</tt> that must be replaced at runtime with
+ * the application <tt>context path</tt>:
+ *
+ * <pre class="prettyprint">
+ * .blue {
+ *     background: #00ff00 url('$context/css/blue.png') no-repeat fixed center;
+ * } </pre>
+ *
+ * Next is the Page implementation:
+ *
+ * <pre class="prettyprint">
+ * public class MyPage extends Page {
+ *
+ *     public List getHeadElements() {
+ *         // We use lazy loading to ensure the CSS is only added the first time
+ *         // this method is called.
+ *         if (headElements == null) {
+ *             // Get the head elements from the super implementation
+ *             headElements = super.getHeadElements();
+ *
+ *             Context context = getContext();
+ *
+ *             // Create a default template model to pass to the template
+ *             Map model = ClickUtils.createTemplateModel(this, context);
+ *
+ *             // Specify the path to CSS Velocity template
+ *             String cssTemplate = "/css/style-template.css";
+ *
+ *             // Render the template using the model above
+ *             String content = context.renderTemplate(cssTemplate, model);
+ *
+ *             // Create the inline Css for the given template
+ *             CssStyle cssStyle = new CssStyle(content);
+ *             headElements.add(cssStyle);
+ *         }
+ *         return headElements;
+ *     }
+ * } </pre>
+ *
+ * The <tt>Css</tt> above will render as follows (assuming the context path is
+ * <tt>myApp</tt>):
+ *
+ * <pre class="prettyprint">
+ * &lt;style type="text/css" rel="stylesheet"&gt;
+ * .blue {
+ *     background: #00ff00 url('/myApp/css/blue.png') no-repeat fixed center;
+ * }
+ * &lt;/style&gt;
+ * </pre>
+ *
+ * <h3>Character data (CDATA) support</h3>
+ *
+ * Sometimes it is necessary to wrap <tt>inline</tt> {link Css} in CDATA tags.
+ * Two use cases are common for doing this:
+ * <ul>
+ * <li>For XML parsing: When using Ajax one often send back partial
+ * XML snippets to the browser, which is parsed as valid XML. However the XML
+ * parser will throw an error if the script contains reserved XML characters
+ * such as '&amp;', '&lt;' and '&gt;'. For these situations it is recommended
+ * to wrap the script content inside CDATA tags.
+ * </li>
+ * <li>XHTML validation: if you want to validate your site using an XHTML
+ * validator e.g: <a target="_blank" href="http://validator.w3.org/">http://validator.w3.org/</a>.</li>
+ * </ul>
+ *
+ * To wrap the CSS Style content in CDATA tags, set
+ * {@link #setCharacterData(boolean)} to true. Below is how a CSS content would
+ * be rendered:
+ *
+ * <pre class="prettyprint">
+ * &lt;style type="text/css"&gt;
+ *  /&lowast;&lt;![CDATA[&lowast;/
+ *
+ *  div &gt; p {
+ *    border: 1px solid black;
+ *  }
+ *
+ *  /&lowast;]]&gt;&lowast;/
+ * &lt;/style&gt; </pre>
+ *
+ * Notice the CDATA tags are commented out which ensures older browsers that
+ * don't understand the CDATA tag, will ignore it and only process the actual
+ * content.
+ * <p/>
+ * For an overview of XHTML validation and CDATA tags please see
+ * <a target="_blank" href="http://javascript.about.com/library/blxhtml.htm">http://javascript.about.com/library/blxhtml.htm</a>.
  *
  * @author Bob Schellink
  */
@@ -30,29 +149,27 @@ public class CssStyle extends ResourceElement {
 
      // -------------------------------------------------------------- Variables
 
-    /** A buffer holding the inline CSS content. */
+    /** A buffer holding the inline Css content. */
     private HtmlStringBuffer content = new HtmlStringBuffer();
 
     /**
-     * Indicates if the HtmlHeader's content should be wrapped in a CDATA tag.
-     * <b>Note:</b> this property only applies to HtmlHeader imports which contain
-     * <tt>inline</tt> content.
+     * Indicates if the HeadElement's content should be wrapped in a CDATA tag.
      */
     private boolean characterData = false;
 
     // ------------------------------------------------------------ Constructor
 
     /**
-     * Construct a new CSS Style element.
+     * Construct a new Css style element.
      */
     public CssStyle() {
         this(null);
     }
 
     /**
-     * Construct a new CSS Style element with the given content.
+     * Construct a new Css style element with the given content.
      *
-     * @param content the CSS content
+     * @param content the Css content
      */
     public CssStyle(String content) {
         if (content != null) {
@@ -74,16 +191,16 @@ public class CssStyle extends ResourceElement {
     }
 
     /**
-     * Return the CSS content buffer.
+     * Return the Css content buffer.
      *
-     * @return the CSS content buffer
+     * @return the Css content buffer
      */
     public HtmlStringBuffer getContent() {
         return content;
     }
 
     /**
-     * Set the CSS content buffer.
+     * Set the Css content buffer.
      *
      * @param content the new content buffer
      */
@@ -92,10 +209,10 @@ public class CssStyle extends ResourceElement {
     }
 
     /**
-     * Return true if the HtmlHeader's content should be wrapped in CDATA tags,
+     * Return true if the CssStyle's content should be wrapped in CDATA tags,
      * false otherwise.
      *
-     * @return true if the HtmlHeader's content should be wrapped in CDATA tags,
+     * @return true if the CssStyle's content should be wrapped in CDATA tags,
      * false otherwise
      */
     public boolean isCharacterData() {
@@ -103,9 +220,10 @@ public class CssStyle extends ResourceElement {
     }
 
     /**
-     * Sets whether the HtmlHeader's content should be wrapped in CDATA tags or not.
+     * Sets whether the CssStyle's content should be wrapped in CDATA tags or
+     * not.
      *
-     * @param characterData true indicates that the HtmlHeader's content should be
+     * @param characterData true indicates that the CssStyle's content should be
      * wrapped in CDATA tags, false otherwise
      */
     public void setCharacterData(boolean characterData) {
@@ -115,16 +233,18 @@ public class CssStyle extends ResourceElement {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Append the given CSS string to the content buffer.
+     * Append the given Css string to the content buffer.
      *
      * @param content the CSS string to append to the content buffer
+     * @return the Css content buffer
      */
-    public void append(String content) {
-        this.content.append(content);
+    public HtmlStringBuffer append(String content) {
+        return this.content.append(content);
     }
 
     /**
-     * Render the HTML representation of the CSS to the specified buffer.
+     * Render the HTML representation of the CssStyle element to the specified
+     * buffer.
      *
      * @param buffer the buffer to render output to
      */
@@ -143,7 +263,7 @@ public class CssStyle extends ResourceElement {
         // Render CDATA tag if necessary
         renderCharacterDataPrefix(buffer);
 
-        buffer.append(getContent());
+        renderContent(buffer);
 
         renderCharacterDataSuffix(buffer);
 
@@ -193,6 +313,17 @@ public class CssStyle extends ResourceElement {
         return new HashCodeBuilder(17, 37).append(getId()).toHashCode();
     }
 
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Render this CssStyle content to the specified buffer.
+     *
+     * @param buffer the buffer to append the output to
+     */
+    protected void renderContent(HtmlStringBuffer buffer) {
+        buffer.append(getContent());
+    }
+
     // ------------------------------------------------ Package Private Methods
 
     /**
@@ -219,23 +350,6 @@ public class CssStyle extends ResourceElement {
     void renderCharacterDataSuffix(HtmlStringBuffer buffer) {
         if (isCharacterData()) {
             buffer.append(" /*]]>*/");
-        }
-    }
-
-    /**
-     * @see HtmlHeader#setUnique(boolean)
-     *
-     * @deprecated use {@link #setId(java.lang.String)} instead
-     *
-     * @param unique sets whether the HtmlHeader import should be unique or not
-     */
-    void setUnique(boolean unique) {
-        super.setUnique(unique);
-
-        // If CSS is unique and ID is not defined, derive the ID from the content
-        if (unique && StringUtils.isBlank(getId()) && getContent().length() > 0) {
-            int hash = getContent().toString().hashCode();
-            setId(Integer.toString(hash));
         }
     }
 }

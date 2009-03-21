@@ -24,6 +24,11 @@ import org.apache.click.Context;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
+ * Provides a base class for rendering HTML elements, for example
+ * JavaScript (&lt;script&gt;) and Cascading Stylesheets
+ * (&lt;link&gt;/&lt;style&gt;).
+ * <p/>
+ * Subclasses should override {@link #getTag()} to return a specific HTML tag.
  *
  * @author Bob Schellink
  */
@@ -31,7 +36,7 @@ public class Element {
 
     // -------------------------------------------------------------- Variables
 
-    /** The HtmlHeader attributes Map. */
+    /** The Element attributes Map. */
     private Map attributes;
 
     // ------------------------------------------------------ Public properties
