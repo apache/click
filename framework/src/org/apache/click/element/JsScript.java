@@ -123,16 +123,16 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * </ul>
  *
  * To wrap the JavaScript content in CDATA tags, set
- * {@link #setCharacterData(boolean)} to true. Below is how the JavaScript
+ * {@link #setCharacterData(boolean)} to true. Below is shown how the JavaScript
  * content would be rendered:
  *
- * <pre class="prettyprint">
+ * <pre class="codeHtml">
  * &lt;script type="text/javascript"&gt;
- *  /&lowast;&lt;![CDATA[&lowast;/
+ *  <span style="color:#3F7F5F">/&lowast;&lt;![CDATA[&lowast;/</span>
  *
  *  if(x &lt; y) alert('Hello');
  *
- *  /&lowast;]]&gt;&lowast;/
+ *  <span style="color:#3F7F5F">/&lowast;]]&gt;&lowast;/</span>
  * &lt;/script&gt; </pre>
  *
  * Notice the CDATA tags are commented out which ensures older browsers that
