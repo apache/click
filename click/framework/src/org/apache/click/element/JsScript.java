@@ -49,8 +49,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * <pre class="prettyprint">
  * &lt;script type="text/javascript"&gt;
  * alert('Hello World');
- * &lt;/script&gt;
- * </pre>
+ * &lt;/script&gt; </pre>
  *
  * Below is an example showing how to render inline Javascript from a
  * Velocity template.
@@ -63,8 +62,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * hide = function() {
  *     var div = document.getElementById('$divId');
  *     div.style.display = "none";
- * }
- * </pre>
+ * } </pre>
  *
  * Next is the Page implementation:
  *
@@ -107,8 +105,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  *         var div = document.getElementById('myDiv');
  *         div.style.display = "none";
  *     }
- * &lt;/style&gt;
- * </pre>
+ * &lt;/style&gt; </pre>
  *
  * <h3>Character data (CDATA) support</h3>
  *

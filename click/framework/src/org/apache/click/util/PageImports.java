@@ -58,7 +58,7 @@ import org.apache.commons.lang.StringUtils;
  * To use the HEAD elements simply reference them in your page template. For
  * example:
  *
- * <pre class="htmlCode">
+ * <pre class="codeHtml">
  * &lt;html&gt;
  *  &lt;head&gt;
  *   <span class="blue">$headElements</span>
@@ -75,7 +75,7 @@ import org.apache.commons.lang.StringUtils;
  * situations you can simply place the JavaScript elements variable in the Page
  * HEAD section:
  *
- * <pre class="htmlCode">
+ * <pre class="codeHtml">
  * &lt;html&gt;
  *  &lt;head&gt;
  *   <span class="blue">$headElements</span>
@@ -86,7 +86,8 @@ import org.apache.commons.lang.StringUtils;
  *  &lt;body&gt;
  * &lt;/html&gt; </pre>
  *
- * <b>Please note: </b>the above variables are new in Click 2.1.0. For backwards
+ * <b>Please note: </b>the variables <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> are new in Click 2.1.0. For backwards
  * compatibility the HEAD elements are also available through the following
  * variables:
  *

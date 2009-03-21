@@ -49,8 +49,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * <pre class="prettyprint">
  * &lt;style type="text/css" rel="stylesheet"&gt;
  * body { font: 12px arial; }
- * &lt;/style&gt;
- * </pre>
+ * &lt;/style&gt; </pre>
  *
  * Below is an example showing how to render inline CSS from a Velocity
  * template.
@@ -103,8 +102,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * .blue {
  *     background: #00ff00 url('/myApp/css/blue.png') no-repeat fixed center;
  * }
- * &lt;/style&gt;
- * </pre>
+ * &lt;/style&gt; </pre>
  *
  * <h3>Character data (CDATA) support</h3>
  *
