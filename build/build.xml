@@ -692,7 +692,7 @@ Please ensure you have configured build.properties</echo>
 
       <copy file="documentation/images/post-sequence-diagram.png"
             todir="documentation/docs/click-api/org/apache/click/"/>
-      <copy file="documentation/images/control-post-sequence-diagram.png"
+      <copy file="documentation/xdocs/src/images/controls/control-post-sequence-diagram.png"
             todir="documentation/docs/click-api/org/apache/click/"/>
       <copy file="documentation/images/service-package.png"
             todir="documentation/docs/click-api/org/apache/click/service/"/>
