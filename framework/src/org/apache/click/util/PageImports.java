@@ -40,55 +40,65 @@ import org.apache.click.service.LogService;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provides a utility object for rendering a Page's HTML header imports and its
- * control HTML header imports.
+ * Provides a utility object for rendering a Page's HEAD elements and
+ * control HEAD elements.
  * <p/>
- * A PageImports instance is automatically added to the Velocity Context
- * for Velocity templates, or as a request attribute for JSP pages using the key
- * name "<span class="blue">imports</span>".
+ * PageImports automatically makes the HEAD elements available to Velocity
+ * templates and JSP pages through the following variables:
+ * <ul>
+ * <li><span class="st">$headElements</span> - this variable includes all HEAD
+ * elements except JavaScript elements</li>
+ * <li><span class="st">$jsElements</span> - this variable includes only
+ * JavaScript elements</li>
+ * </ul>
+ * By splitting JavaScript elements from other HEAD elements allows you to place
+ * JavaScript elements at the bottom of the Page which allows the HTML content
+ * to be rendered faster.
+ * <p/>
+ * To use the HEAD elements simply reference them in your page template. For
+ * example:
  *
- * <h3>PageImports Examples</h3>
- *
- * To use the PageImports object simply reference it your page header
- * section. For example:
- * <pre class="codeHtml">
+ * <pre class="htmlCode">
  * &lt;html&gt;
  *  &lt;head&gt;
- *   <span class="blue">$imports</span>
+ *   <span class="blue">$headElements</span>
+ *  &lt;/head&gt;
+ *  &lt;body&gt;
+ *   <span class="red">$form</span>
+ *
+ *  <span class="blue">$jsElements</span>
+ *  &lt;body&gt;
+ * &lt;/html&gt; </pre>
+ *
+ * Its not always possible to move the JavaScript elements to the bottom of
+ * the Page, for example there might be JavaScript scoping issues. In those
+ * situations you can simply place the JavaScript elements variable in the Page
+ * HEAD section:
+ *
+ * <pre class="htmlCode">
+ * &lt;html&gt;
+ *  &lt;head&gt;
+ *   <span class="blue">$headElements</span>
+ *   <span class="blue">$jsElements</span>
  *  &lt;/head&gt;
  *  &lt;body&gt;
  *   <span class="red">$form</span>
  *  &lt;body&gt;
  * &lt;/html&gt; </pre>
  *
- * "<span class="blue">imports</span>" include all javascript and stylesheet
- * imports.
- * <p/>
- * PageImports also provides a way of including the javascript and stylesheet
- * separately using the key names "<span class="blue">cssImports</span>" and
- * "<span class="blue">jsImports</span>".
- * <p/>
- * You should follow the performance best practice by importing CSS includes
- * in the head section, then include the JS imports after the html body.
- * For example:
- * <pre class="codeHtml">
- * &lt;html&gt;
- *  &lt;head&gt;
- *   <span class="blue">$cssImports</span>
- *  &lt;/head&gt;
- *  &lt;body&gt;
- *   <span class="red">$form</span>
- *   &lt;br/&gt;
- *   <span class="red">$table</span>
- *  &lt;body&gt;
- * &lt;/html&gt;
- * <span class="blue">$jsImports</span>
- * </pre>
+ * <b>Please note: </b>the above variables are new in Click 2.1.0. For backwards
+ * compatibility the HEAD elements are also available through the following
+ * variables:
  *
- * Please also see {@link org.apache.click.Page#getHtmlHeaders()},
- * {@link org.apache.click.Control#getHtmlHeaders()},
- * {@link org.apache.click.Page#getHtmlImports()} and
- * {@link org.apache.click.Control#getHtmlImports()}.
+ * <ul>
+ * <li><span class="st">$imports</span> - this variable includes all HEAD
+ * elements including JavaScript and Css elements</li>
+ * <li><span class="st">$cssImports</span> - this variable includes only Css elements</li>
+ * <li><span class="st">$jsImports</span> - this variable includes only Javascript elements</li>
+ * </ul>
+ *
+ * Please also see {@link org.apache.click.Page#getHeadElements()},
+ * {@link org.apache.click.Control#getHeadElements()}.
  *
  * @author Malcolm Edgar
  */
@@ -129,9 +139,9 @@ public class PageImports {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Add the given HtmlHeader to the Page HTML imports.
+     * Add the given Element to the Page HEAD elements.
      *
-     * @param element the HtmlHeader to add
+     * @param element the Element to add
      */
     public void add(Element element) {
         if (element instanceof JsImport) {
@@ -170,7 +180,7 @@ public class PageImports {
     /**
      * Add the given HTML import line to the Page HTML imports.
      *
-     * @deprecated use the new {@link #add(org.apache.click.util.HtmlHeader)}
+     * @deprecated use the new {@link #add(org.apache.click.element.Element)}
      * instead
      *
      * @param value the HTML import line to add
@@ -422,7 +432,7 @@ public class PageImports {
     }
 
     /**
-     * Process the Page's set of control HTML head imports.
+     * Process the Page's set of control HEAD elements.
      */
     protected void processPageControls() {
         if (isInitialized()) {
@@ -445,20 +455,20 @@ public class PageImports {
 
         addImport(page.getHtmlImports());
 
-        processHtmlHeaders(page.getHeadElements());
+        processHeadElements(page.getHeadElements());
     }
 
     /**
-     * Process the given control HTML headers. This method will recursively
+     * Process the given control HEAD elements. This method will recursively
      * process Containers and all child controls.
      * <p/>
-     * This method delegates to {@link #processHtmlHeaders(java.util.List)}
-     * to add the HTML headers to the Page imports.
+     * This method delegates to {@link #processHeadElements(java.util.List)}
+     * to add the HEAD elements to the Page imports.
      *
      * @param control the control to process
      */
     protected void processControl(Control control) {
-        processHtmlHeaders(control.getHeadElements());
+        processHeadElements(control.getHeadElements());
 
         if (control instanceof Container) {
             Container container = (Container) control;
@@ -481,21 +491,26 @@ public class PageImports {
     }
 
     /**
-     * Process the given list of HTML headers.
+     * Process the given list of HEAD elements.
      * <p/>
      * This method invokes {@link #add(org.apache.click.element.Element)} for
-     * every <tt>HeadElement</tt> entry in the specified list.
+     * every <tt>Element</tt> entry in the specified list.
      *
-     * @param headElements the list of HTML HEAD elements to process
+     * @param elements the list of HEAD elements to process
      */
-    protected void processHtmlHeaders(List headElements) {
-        if (headElements == null || headElements.isEmpty()) {
+    protected void processHeadElements(List elements) {
+        if (elements == null || elements.isEmpty()) {
             return;
         }
 
-        Iterator it = headElements.iterator();
+        Iterator it = elements.iterator();
         while (it.hasNext()) {
-            add((Element) it.next());
+            Object element = it.next();
+            if (!(element instanceof Element)) {
+                throw new IllegalStateException("non Element object added to"
+                    + " head elements.");
+            }
+            add((Element) element);
         }
     }
 
@@ -702,16 +717,13 @@ public class PageImports {
     }
 
     /**
-     * This method provides backwards compatibility with the String based
-     * HTML imports, to indicate whether Javascript and CSS must be unique
-     * or not. The replacement functionality is provided by the html
-     * {@link org.apache.click.element.Element#setId(java.lang.String) ID}
-     * attribute.
+     * Ensure the given element and content will be unique.
      *
      * @deprecated use {@link org.apache.click.element.Element#setId(java.lang.String) ID}
      * instead
      *
-     * @param cssStyle sets whether the HtmlHeader import should be unique or not
+     * @param element sets whether the HEAD element should be unique or not
+     * @param content sets whether the HEAD element should be unique or not
      */
     private void setUnique(Element element, String content) {
         String id = element.getId();
