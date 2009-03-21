@@ -589,8 +589,7 @@ public class VelocityTemplateService implements TemplateService {
      * Please see the {@link VelocityTemplateService} class for more details on
      * Velocity logging.
      * <p/>
-     * <b>PLEASE NOTE</b> this class is <b>not</b> for public use, and can
-     * be ignored.
+     * <b>PLEASE NOTE</b> this class is <b>not</b> for public use.
      *
      *  @author Malcolm Edgar
      */
