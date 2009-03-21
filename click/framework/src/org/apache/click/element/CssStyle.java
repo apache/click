@@ -120,18 +120,18 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * </ul>
  *
  * To wrap the CSS Style content in CDATA tags, set
- * {@link #setCharacterData(boolean)} to true. Below is how a CSS content would
- * be rendered:
+ * {@link #setCharacterData(boolean)} to true. Below is shown how the Css
+ * content would be rendered:
  *
- * <pre class="prettyprint">
+ * <pre class="codeHtml">
  * &lt;style type="text/css"&gt;
- *  /&lowast;&lt;![CDATA[&lowast;/
+ *  <span style="color:#3F7F5F">/&lowast;&lt;![CDATA[&lowast;/</span>
  *
  *  div &gt; p {
  *    border: 1px solid black;
  *  }
  *
- *  /&lowast;]]&gt;&lowast;/
+ *  <span style="color:#3F7F5F">/&lowast;]]&gt;&lowast;/</span>
  * &lt;/style&gt; </pre>
  *
  * Notice the CDATA tags are commented out which ensures older browsers that

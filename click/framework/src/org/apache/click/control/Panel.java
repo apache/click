@@ -311,7 +311,7 @@ public class Panel extends AbstractContainer {
     /**
      * @see #add(org.apache.click.Control)
      *
-     * @deprecated use {@link #add(org.apache.click.Control) instead
+     * @deprecated use {@link #add(org.apache.click.Control)} instead
      *
      * @param control the control to add to the container
      * @return the control that was added to the container
@@ -370,7 +370,7 @@ public class Panel extends AbstractContainer {
     /**
      * @see #remove(org.apache.click.Control)
      *
-     * @deprecated use {@link #remove(org.apache.click.Control) instead
+     * @deprecated use {@link #remove(org.apache.click.Control)} instead
      *
      * @param control the control to remove from the container
      * @return true if the control was removed from the container

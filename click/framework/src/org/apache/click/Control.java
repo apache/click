@@ -182,8 +182,8 @@ public interface Control extends Serializable {
      * to be included in the page. Example HEAD elements include
      * {@link org.apache.click.element.JsImport JavaScript imports},
      * {@link org.apache.click.element.JsScript inline JavasSript},
-     * {@link org.apache.click.util.CssImport Css imports} and
-     * {@link org.apache.click.util.Css inline Css}.
+     * {@link org.apache.click.element.CssImport Css imports} and
+     * {@link org.apache.click.element.CssStyle inline Css}.
      * <p/>
      * Controls can include their own list of HEAD elements by implementing
      * this method.
