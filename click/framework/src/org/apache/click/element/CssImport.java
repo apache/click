@@ -19,10 +19,36 @@
 package org.apache.click.element;
 
 import org.apache.click.Context;
+import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
+ * Provides a Css HEAD element for importing <tt>external</tt> Cascading
+ * Stylesheet files using the &lt;link&gt; tag.
+ * <p/>
+ * Example usage:
+ * <pre class="prettyprint">
+ * public class MyPage extends Page {
+ *
+ *     public List getHeadElements() {
+ *         // We use lazy loading to ensure the CSS import is only added the
+ *         // first time this method is called.
+ *         if (headElements == null) {
+ *             // Get the head elements from the super implementation
+ *             headElements = super.getHeadElements();
+ *
+ *             CssImport cssImport = new CssImport("/css/style.css");
+ *             headElements.add(cssImport);
+ *         }
+ *         return headElements;
+ *     }
+ * } </pre>
+ *
+ * The <tt>cssImport</tt> instance will be rendered as follows (assuming the
+ * context path is <tt>myApp</tt>):
+ * <pre class="prettyprint">
+ * &lt;link type="text/css" rel="stylesheet" href="/myApp/css/style.css"/&gt; </pre>
  *
  * @author Bob Schellink
  */
@@ -31,20 +57,21 @@ public class CssImport extends ResourceElement {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Constructs a new CssImport link.
+     * Constructs a new Css import element.
      */
     public CssImport() {
         this(null);
     }
 
     /**
-     * Construct a new CssImport link with the specified <tt>href</tt> attribute.
+     * Construct a new Css import element with the specified <tt>href</tt>
+     * attribute.
      * <p/>
-     * <b>Please note</b> if the given <tt>href</tt> begins with a <tt class="wr">"/"</tt>
-     * character the href will be prefixed with the web application
-     * <tt>context path</tt>.
+     * <b>Please note</b> if the given <tt>href</tt> begins with a
+     * <tt class="wr">"/"</tt> character the href will be prefixed with the web
+     * application <tt>context path</tt>.
      *
-     * @param href the CSS link href attribute
+     * @param href the Css import href attribute
      */
     public CssImport(String href) {
         setHref(href);
@@ -64,13 +91,13 @@ public class CssImport extends ResourceElement {
     }
 
     /**
-     * This method always return true because CSS import must be unique based on
+     * This method always return true because Css import must be unique based on
      * its <tt>href</tt> attribute. In other words the Page HEAD should only
      * contain a single CSS import for the specific <tt>href</tt>.
      *
-     * @see HtmlHeader#isUnique()
+     * @see ResourceElement#isUnique()
      *
-     * @return true because CSS import must unique based on its <tt>href</tt>
+     * @return true because Css import must unique based on its <tt>href</tt>
      * attribute
      */
     public boolean isUnique() {
@@ -120,7 +147,8 @@ public class CssImport extends ResourceElement {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Render the HTML representation of the CSS import to the specified buffer.
+     * Render the HTML representation of the CssImport element to the specified
+     * buffer.
      *
      * @param buffer the buffer to render output to
      */
@@ -172,20 +200,5 @@ public class CssImport extends ResourceElement {
      */
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(getHref()).toHashCode();
-    }
-
-    // ------------------------------------------------ Package Private Methods
-
-    /**
-     * This operation is not supported because CSS imports is always unique
-     * based on their <tt>href</tt> attribute.
-     *
-     * @see HtmlHeader#setUnique(boolean)
-     *
-     * @param unique sets whether the Css import should be unique or not
-     */
-    void setUnique(boolean unique) {
-        throw new UnsupportedOperationException("CssImport is always"
-            + " unique based on the 'href' attribute");
     }
 }
