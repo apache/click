@@ -40,11 +40,12 @@ import org.apache.commons.lang.StringUtils;
  * using the &lt;style&gt; element.</li>
  * </ul>
  *
+ * <a name="remove-duplicates"></a>
  * <h3>Remove duplicates</h3>
  * Click will ensure that duplicate Resource elements are removed by checking
- * the {@link #isUnique()} property. No matter how many Controls or Pages
- * import the same Resource, only one will be rendered if {@link #isUnique()}
- * returns <tt>true</tt>.
+ * the {@link #isUnique()} property. Thus if the same Resource is imported
+ * mutliple times by the Page or different Controls, only one Resource will be
+ * rendered, if {@link #isUnique()} returns <tt>true</tt>.
  * <p/>
  * The rules for defining a unique Resource is as follows:
  * <ul>
@@ -97,6 +98,33 @@ import org.apache.commons.lang.StringUtils;
  *     }
  * } </pre>
  *
+ * <a name="versioning"></a>
+ * <h3>Automatic Resource versioning</h3>
+ *
+ * ResourceElement provides the ability to automatically version elements
+ * according to Yahoo Performance Rule: <a target="_blank" href="http://developer.yahoo.com/performance/rules.html#expires">Add an Expires or a Cache-Control Header</a>.
+ * This rule recommends adding an expiry header to JavaScript, Css
+ * and image resources, which forces the browser to cache the resources. It also
+ * suggests <em>versioning</em> the resources so that each new release of the
+ * web application renders resources with different paths, forcing the browser
+ * to download the new resources.
+ * <p/>
+ * For detailed information on versioning JavaScript, Css and image resources
+ * see the <a href="../../../../extras-api/org/apache/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a>.
+ * <p/>
+ * To enable versioning of JavaScript, Css and image resources the following
+ * conditions must be met:
+ * <ul>
+ * <li>the {@link org.apache.click.util.ClickUtils#ENABLE_RESOURCE_VERSION}
+ * request attribute must be set to <tt>true</tt></li>
+ * <li>the application mode must be either "production" or "profile"</li>
+ * <li>the {@link org.apache.click.util.ClickUtils#setApplicationVersion(java.lang.String)
+ * application version} must be set</li>
+ * </ul>
+ * <b>Please note:</b> <a href="../../../../extras-api/org/apache/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a>
+ * handles the above steps for you.
+ *
+ * <a name="conditional-comment"></a>
  * <h3>Conditional comment support for Internet Explorer</h3>
  *
  * Sometimes it is necessary to provide additional JavaScript and Css for
@@ -176,7 +204,33 @@ public class ResourceElement extends Element {
      */
     private boolean unique = false;
 
+    /**
+     * The <tt>version indicator</tt> to append to the Resource element.
+     */
+    private String versionIndicator;
+
     // ------------------------------------------------------ Public properties
+
+    /**
+     * Return the <tt>version indicator</tt> to be appended to the resource
+     * path.
+     *
+     * @return the <tt>version indicator</tt> to be appended to the resource
+     * path.
+     */
+    public String getVersionIndicator() {
+        return versionIndicator;
+    }
+
+    /**
+     * Set the <tt>version indicator</tt> to be appended to the resource path.
+     *
+     * @param versionIndicator the version indicator to be appended to the
+     * resource path
+     */
+    public void setVersionIndicator(String versionIndicator) {
+        this.versionIndicator = versionIndicator;
+    }
 
     /**
      * Return true if the Resource should be unique, false otherwise. The default
@@ -241,6 +295,34 @@ public class ResourceElement extends Element {
     }
 
     // ------------------------------------------------ Package Private Methods
+
+    /**
+     * Add the {@link #getApplicationResourceVersionIndicator(org.apache.click.Context)}
+     * to the specified resourcePath. If the version indicator is not defined
+     * this method will return the resourcePath unchanged.
+     *
+     * @param resourcePath the resource path to add the version indicator to
+     */
+    String addVersionIndicator(String resourcePath) {
+        String versionIndicator = getVersionIndicator();
+
+        // If no resourcePath or version indicator is defined, exit early
+        if (resourcePath == null || StringUtils.isBlank(versionIndicator)) {
+            return resourcePath;
+        }
+
+        int start = resourcePath.lastIndexOf(".");
+        // Exit early if extension is not found
+        if (start < 0) {
+            return resourcePath;
+        }
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        buffer.append(resourcePath.substring(0, start));
+        buffer.append(versionIndicator);
+        buffer.append(resourcePath.substring(start));
+        return buffer.toString();
+    }
 
     /**
      * Render the {@link #getConditionalComment() conditional comment} prefix

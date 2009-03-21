@@ -58,6 +58,10 @@ public class CssImport extends ResourceElement {
 
     /**
      * Constructs a new Css import element.
+     * <p/>
+     * The CssImport {@link #setVersionIndicator(java.lang.String) version indicator}
+     * will automatically be set to the
+     * {@link ClickUtils#getApplicationResourceVersionIndicator() application version indicator}.
      */
     public CssImport() {
         this(null);
@@ -67,6 +71,10 @@ public class CssImport extends ResourceElement {
      * Construct a new Css import element with the specified <tt>href</tt>
      * attribute.
      * <p/>
+     * The CssImport {@link #setVersionIndicator(java.lang.String) version indicator}
+     * will automatically be set to the
+     * {@link ClickUtils#getApplicationResourceVersionIndicator() application version indicator}.
+     * <p/>
      * <b>Please note</b> if the given <tt>href</tt> begins with a
      * <tt class="wr">"/"</tt> character the href will be prefixed with the web
      * application <tt>context path</tt>.
@@ -74,9 +82,49 @@ public class CssImport extends ResourceElement {
      * @param href the Css import href attribute
      */
     public CssImport(String href) {
+        this(href, true);
+    }
+
+    /**
+     * Construct a new Css import element with the specified <tt>href</tt>
+     * attribute.
+     * <p/>
+     * If useApplicationVersionIndicator is true the
+     * CssImport {@link #setVersionIndicator(java.lang.String) version indicator}
+     * will automatically be set to the
+     * {@link ClickUtils#getApplicationResourceVersionIndicator() application version indicator}.
+     * <p/>
+     * <b>Please note</b> if the given <tt>href</tt> begins with a
+     * <tt class="wr">"/"</tt> character the href will be prefixed with the web
+     * application <tt>context path</tt>.
+     *
+     * @param href the Css import href attribute
+     * @param useApplicationVersionIndicator indicates whether the version
+     * indicator will automatically be set to the application version indicator
+     */
+    public CssImport(String href, boolean useApplicationVersionIndicator) {
+        this(href, null);
+        if (useApplicationVersionIndicator) {
+            setVersionIndicator(ClickUtils.getApplicationResourceVersionIndicator());
+        }
+    }
+
+    /**
+     * Construct a new Css import element with the specified <tt>href</tt>
+     * attribute and version indicator.
+     * <p/>
+     * <b>Please note</b> if the given <tt>href</tt> begins with a
+     * <tt class="wr">"/"</tt> character the href will be prefixed with the web
+     * application <tt>context path</tt>.
+     *
+     * @param href the Css import href attribute
+     * @param versionIndicator the version indicator to add to the href path
+     */
+    public CssImport(String href, String versionIndicator) {
         setHref(href);
         setAttribute("type", "text/css");
         setAttribute("rel", "stylesheet");
+        setVersionIndicator(versionIndicator);
     }
 
     // ------------------------------------------------------ Public Properties
@@ -153,6 +201,9 @@ public class CssImport extends ResourceElement {
      * @param buffer the buffer to render output to
      */
     public void render(HtmlStringBuffer buffer) {
+        // Add version indicator to the href
+        setHref(addVersionIndicator(getHref()));
+
         renderConditionalCommentPrefix(buffer);
 
         buffer.elementStart(getTag());
