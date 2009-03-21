@@ -822,25 +822,27 @@ public class ErrorPage extends org.apache.click.util.ErrorPage {
     which caters for some of these rules. However not all rules can be easily automated.
     </para>
 
-    <para>This section will outline ways to apply rules which are not covered by the
-    PerformanceFilter namely,
-    <ulink url="http://developer.yahoo.com/performance/rules.html#num_http">#1 - Minimize HTTP Requests (by combining files)</ulink>
-    and <ulink url="http://developer.yahoo.com/performance/rules.html#minify">#10 - Minify Javascript and CSS</ulink>.
+    <para>This section outlines how to apply some important rules which are not
+    covered by the PerformanceFilter namely,
+    <ulink url="http://developer.yahoo.com/performance/rules.html#num_http">Minimize HTTP Requests (by combining files)</ulink>
+    and <ulink url="http://developer.yahoo.com/performance/rules.html#minify">Minify JavaScript and CSS</ulink>.
     </para>
 
-    <para>Rule #1 also mentions
-    <ulink url="http://alistapart.com/articles/sprites">CSS Sprites</ulink>,
+    <para>The Rule, <ulink url="http://developer.yahoo.com/performance/rules.html#num_http">Minimize HTTP Requests</ulink>,
+    also mentions <ulink url="http://alistapart.com/articles/sprites">CSS Sprites</ulink>,
     a method for combining multiple images into a single master image. CSS Sprites
-    are not covered here.
+    can boost performance when your application has many images, however it is
+    harder to create and maintain. Note that CSS Sprites is not covered here.
     </para>
 
-    <para>It is worth pointing out that its not necessary to blindly optimize
+    <para>It is worth pointing out that its not necessary to optimize
     every page in your application. Instead concentrate on popular pages, for
     example a web site's <emphasis>Home Page</emphasis> would be a good
     candidate.
     </para>
 
-    <para>There are a couple of tools that are useful in applying Rule #1 and #10:
+    <para>There are a couple of tools that are useful in applying the rules
+    "Minimize HTTP Requests" and "Minify JavaScript and CSS":
     </para>
 
     <itemizedlist>
