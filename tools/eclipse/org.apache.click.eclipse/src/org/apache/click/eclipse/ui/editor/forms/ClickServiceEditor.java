@@ -23,6 +23,7 @@ import org.apache.click.eclipse.ClickPlugin;
 import org.apache.click.eclipse.ClickUtils;
 import org.apache.click.eclipse.ui.editor.actions.ElementAppendAction;
 import org.apache.click.eclipse.ui.editor.attrs.IAttributeEditor;
+import org.apache.click.eclipse.ui.editor.attrs.PropertyAttributeEditor;
 import org.apache.click.eclipse.ui.editor.attrs.ServiceClassNameAttributeEditor;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
@@ -42,10 +43,14 @@ public class ClickServiceEditor extends AbstractMasterDetailEditor {
 				newMenu.add(new ElementAppendAction(ClickPlugin.TAG_TEMPLATE_SERVICE, element, null, this));
 			}
 		}
+		if(element.getNodeName().equals(ClickPlugin.TAG_LOG_SERVICE) ||
+				element.getNodeName().equals(ClickPlugin.TAG_TEMPLATE_SERVICE)){
+			newMenu.add(new ElementAppendAction(ClickPlugin.TAG_PROPERTY, element, null, this));
+		}
 	}
 
 	protected String[] getAcceptElementNames() {
-		return new String[]{ClickPlugin.TAG_LOG_SERVICE, ClickPlugin.TAG_TEMPLATE_SERVICE};
+		return new String[]{ClickPlugin.TAG_LOG_SERVICE, ClickPlugin.TAG_TEMPLATE_SERVICE, ClickPlugin.TAG_PROPERTY};
 	}
 
 	protected IAttributeEditor getAttributeEditor(String elementName) {
@@ -54,6 +59,9 @@ public class ClickServiceEditor extends AbstractMasterDetailEditor {
 		}
 		if(elementName.equals(ClickPlugin.TAG_TEMPLATE_SERVICE)){
 			return new ServiceClassNameAttributeEditor("net.sf.click.service.TemplateService");
+		}
+		if(elementName.equals(ClickPlugin.TAG_PROPERTY)){
+			return new PropertyAttributeEditor();
 		}
 		return null;
 	}
