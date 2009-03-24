@@ -85,6 +85,22 @@ The feature roadmap for the next major release of Click is being determined.
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li>
+        <a target="_blank" class="external" href="http://www.avoka.com/click-examples/general/page-head-demo.htm">
+        Page HEAD elements example</a> demonstrates how to add
+        <a href="click-api/org/apache/click/control/element/JsImport.html">JsImport</a>,
+        <a href="click-api/org/apache/click/control/element/JsScript.html">JsScript</a>,
+        <a href="click-api/org/apache/click/control/element/CssImport.html">CssImport</a>
+        and <a href="click-api/org/apache/click/control/element/CssStyle.html">CssStyle</a>
+        HEAD elements to a Page.
+      </li>
+      <li>
+        <a target="_blank" class="external" href="http://www.avoka.com/click-examples/general/control-head-demo.htm">
+        Control HEAD elements example</a> demonstrates how to add
+        <a href="click-api/org/apache/click/control/element/JsImport.html">JsImport</a> and
+        <a href="click-api/org/apache/click/control/element/CssImport.html">CssImport</a>
+        HEAD elements to a custom Control.
+      </li>
+      <li>
         <a target="_blank" class="external" href="http://www.avoka.com/click-examples/table/large-dataset-demo.htm">
         Large Dataset Demo</a> demonstrates a Table with a large number of rows
         and how to lazily page through the rows using a custom Table model.
@@ -97,9 +113,47 @@ The feature roadmap for the next major release of Click is being determined.
     </ul>
 
     <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+      New documentation:
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li>
+        Added documentation describing the new HEAD element support.
+        Please see the new section on Page HEAD elements
+        <a target="blank" class="external" href="user-guide/html/ch02s12.html">here</a>
+        the section on Control HEAD elements <a target="blank" class="external" href="user-guide/html/ch03s05.html">here</a>.
+      </li>
+    </ul>
+
+    <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
       New features and issues resolved:
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change">
+          Added first class support for HEAD elements such as JavaScript and Css.
+          The following classes were added:
+          <a href="click-api/org/apache/click/control/element/Element.html">Element</a>,
+          <a href="click-api/org/apache/click/control/element/ResourceElement.html">ResourceElement</a>,
+          <a href="click-api/org/apache/click/control/element/JsImport.html">JsImport</a>,
+          <a href="click-api/org/apache/click/control/element/JsScript.html">JsScript</a>,
+          <a href="click-api/org/apache/click/control/element/CssImport.html">CssImport</a>
+          and <a href="click-api/org/apache/click/control/element/CssStyle.html">CssStyle</a>.
+          A new method was added to Page and Control: <a href="click-api/org/apache/click/Control.html#getHeadElements()">Control.getHeadElements()</a>
+          and <a href="click-api/org/apache/click/Page.html#getHeadElements()">Page.getHeadElements()</a>.
+          [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-501">501</a>].
+      </li>
+      <li class="change">
+          Deprecated methods: <a href="click-api/org/apache/click/Control.html#getHtmlImports()">Control.getHtmlImports()</a> and
+          <a href="click-api/org/apache/click/Page.html#getHtmlImports()">Page.getHtmlImports()</a>.
+          These methods have been deprecated in favor of
+          <a href="click-api/org/apache/click/Control.html#getHeadElements()">Control.getHeadElements()</a>
+          and <a href="click-api/org/apache/click/Page.html#getHeadElements()">Page.getHeadElements()</a>.
+      </li>
+      <li class="change">
+          Added method,
+          <a href="click-api/org/apache/click/util/ClickUtils.html#createTemplateModel(org.apache.click.Page, org.apache.click.Context)">ClickUtils.createTemplateModel</a>,
+          which returns a template model containing objects such as the Context
+          path, Page path, HTTP request, HTTP response, HTTP session etc.
+      </li>
       <li class="change">
           Improved Table to support very large datasets by promoting the methods
           <a href="click-api/org/apache/click/control/Table.html#getFirstRow()">getFirstRow()</a>
