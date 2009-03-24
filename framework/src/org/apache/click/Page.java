@@ -24,7 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.click.element.Element;
 import org.apache.click.util.Format;
+import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.MessagesMap;
 import org.apache.click.util.PageImports;
 
@@ -658,19 +660,19 @@ public class Page {
     }
 
     /**
-     * Return the list of {@link org.apache.click.element.Element HEAD elements}
+     * Return the list of HEAD {@link org.apache.click.element.Element elements}
      * to be included in the page. Example HEAD elements include
-     * {@link org.apache.click.element.JsImport JavaScript imports},
-     * {@link org.apache.click.element.JsScript inline JavasSript},
-     * {@link org.apache.click.element.CssImport Css imports} and
-     * {@link org.apache.click.element.CssStyle inline Css}.
+     * {@link org.apache.click.element.JsImport JsImport},
+     * {@link org.apache.click.element.JsScript JsScript},
+     * {@link org.apache.click.element.CssImport CssImport} and
+     * {@link org.apache.click.element.CssStyle CssStyle}.
      * <p/>
-     * Pages can include their own list of HEAD elements by implementing
+     * Pages can contribute their own list of HEAD elements by overriding
      * this method.
      * <p/>
-     * The recommended approach when implementing this method is to use
-     * <tt>lazy loading</tt> to only add HEAD elements once and when needed.
-     * For example:
+     * The recommended approach when overriding this method is to use
+     * <tt>lazy loading</tt> to ensure the HEAD elements are only added
+     * <tt>once</tt> and when <tt>needed</tt>. For example:
      *
      * <pre class="prettyprint">
      * public MyPage extends Page {
@@ -702,6 +704,7 @@ public class Page {
      *     public MyPage() {
      *         JsImport jsImport = new JsImport("/mycorp/js/mypage.js");
      *         getHeadElements().add(jsImport);
+     *
      *         CssImport cssImport = new CssImport("/mycorp/js/mypage.css");
      *         getHeadElements().add(cssImport);
      *     }
@@ -709,7 +712,9 @@ public class Page {
      *
      * One can also add HEAD elements from event handler methods such as
      * {@link #onInit()}, {@link #onGet()}, {@link #onPost()}, {@link #onRender()}
-     * etc. <b>Please note:</b> when using {@link #stateful Stateful} pages, you
+     * etc.
+     * <p/>
+     * <b>Please note:</b> when using {@link #stateful Stateful} pages, you
      * will need to set the HEAD elements list to <tt>null</tt> in the
      * {@link #onDestroy()} event handler, otherwise the HEAD elements list will
      * continue to grow with each request:
@@ -724,9 +729,11 @@ public class Page {
      *
      *     // Set HEAD elements in the onInit event handler
      *     public void onInit() {
+     *
      *         // Add HEAD elements
      *         JsImport jsImport = new JsImport("/mycorp/js/mypage.js");
      *         getHeadElements().add(jsImport);
+     *
      *         CssImport cssImport = new CssImport("/mycorp/js/mypage.css");
      *         getHeadElements().add(cssImport);
      *     }

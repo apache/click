@@ -63,6 +63,9 @@
     <menu label="Page Flow Patterns" path="pageflow/start-page.htm"/>
     <menu label="Wizard Demo" path="wizard/wizard.htm"/>
     <menu separator="true"/>
+    <menu label="Page Head Demo" path="general/page-head-demo.htm"/>
+    <menu label="Control Head Demo" path="general/control-head-demo.htm"/>
+    <menu separator="true"/>
     <menu label="Velocity Macro" path="velocity/velocity-macro.htm"/>
     <menu label="Velocity Simple Table" path="velocity/simple-table.htm"/>
     <menu label="Velocity Action Table" path="velocity/action-table.htm"/>
