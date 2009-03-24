@@ -23,7 +23,7 @@
 <head>
 <title>Click Examples</title>
 <link type="text/css" rel="stylesheet" href="${context}/assets/css/style.css" title="Style"/>
-${cssImports}
+${headElements}
 </head>
 <body>
 
@@ -94,6 +94,7 @@ ${cssImports}
 </table>
 </center>
 
+${jsElements}
+
 </body>
 </html>
-${jsImports}

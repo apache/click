@@ -21,7 +21,7 @@
 <head>
 <title>Click Examples</title>
 <link type="text/css" rel="stylesheet" href="${context}/assets/css/style.css" title="Style"/>
-${cssImports}
+${headElements}
 #if($headInclude)#parse($headInclude)#end
 </head>
 <body>
@@ -69,7 +69,10 @@ ${cssImports}
 </tr>
 </table>
 </center>
+
+${jsElements}
+
+#if (${jsInclude}) #parse(${jsInclude}) #end
+
 </body>
 </html>
-${jsImports}
-#if (${jsInclude}) #parse(${jsInclude}) #end
