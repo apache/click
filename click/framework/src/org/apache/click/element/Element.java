@@ -26,7 +26,7 @@ import org.apache.click.util.HtmlStringBuffer;
 /**
  * Provides a base class for rendering HTML elements, for example
  * JavaScript (&lt;script&gt;) and Cascading Stylesheets
- * (&lt;link&gt;/&lt;style&gt;).
+ * (&lt;link&gt; / &lt;style&gt;).
  * <p/>
  * Subclasses should override {@link #getTag()} to return a specific HTML tag.
  *
@@ -185,6 +185,19 @@ public class Element {
         return buffer.toString();
     }
 
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Append all the Element attributes to the specified buffer.
+     *
+     * @param buffer the specified buffer to append all the attributes
+     */
+    protected void appendAttributes(HtmlStringBuffer buffer) {
+        if (hasAttributes()) {
+            buffer.appendAttributes(attributes);
+        }
+    }
+
     // ------------------------------------------------ Package Private Methods
 
     /**
@@ -244,16 +257,5 @@ public class Element {
             size += 20 * getAttributes().size();
         }
         return size;
-    }
-
-    /**
-     * Append all the Element attributes to the specified buffer.
-     *
-     * @param buffer the specified buffer to append all the attributes
-     */
-    void appendAttributes(HtmlStringBuffer buffer) {
-        if (hasAttributes()) {
-            buffer.appendAttributes(attributes);
-        }
     }
 }
