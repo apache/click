@@ -20,63 +20,9 @@
 <chapter id="chapter-best-practices" remap="h1">
   <title>Best Practices</title>
 
-  <para> This section discusses Best Practices for designing and building Click
-  application. The following topics are covered:
+  <para>This chapter discusses Best Practices for designing and building Click
+  applications.
   </para>
-
-  <orderedlist>
-    <listitem>
-      <para>
-        <link linkend="security">Security</link>  - use JEE role based security
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="packages-classes">Packages and Classes</link>  - project
-        package structures and page classes
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="automapping">Page Auto Mapping</link>  - use
-        Convention over Configuration
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="navigation">Navigation</link>  - use Page classes
-        to forward and redirect
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="templating">Templating</link>  - to standardize your
-        web application
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="menus">Menus</link>  - centralize your page navigation
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="logging">Logging</link>  - use Log4j in a base page
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="error-handling">Error Handling</link>  - use custom
-        error page
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="performance">Performance</link>  - enhancing page
-        performance
-      </para>
-    </listitem>
-  </orderedlist>
 
   <sect1 id="security" remap="h2">
     <title>Security</title>
@@ -926,16 +872,14 @@ public class ErrorPage extends org.apache.click.util.ErrorPage {
 
     public void getPageImports () {
         PageImports pageImports = super.getPageImports();
-        String contextPath = getContext().getRequest().getContextPath();
 
-        String cssInclude = contextPath + "/assets/css/home-page.css";
-        pageImports.addImport("&lt;link type=\"text/javascript\" href=\"" + cssInclude + "\"/&gt;");
+        // Add the Page Css to the PageImports
+        pageImports.add(new CssImport("/assets/css/home-page.css"));
 
-        String jsInclude = contextPath + "/assets/js/home-page.js";
-        pageImports.addImport("&lt;script type=\"text/javascript\"
-            src=\"" + jsInclude + "\"&gt;&lt;/script&gt;");
+        // Add the Page JS to the PageImports
+        pageImports.add(new JsImport("/assets/js/home-page.js"));
 
-        // Set pageImports to initialized so that no other CSS and JavaScript
+        // Set pageImports to initialized so that no other Css and JavaScript
         // files will be included.
         pageImports.setInitialized(true);
     }
@@ -947,13 +891,13 @@ public class ErrorPage extends org.apache.click.util.ErrorPage {
     <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
     &lt;title&gt;Click Examples&lt;/title&gt;
-    ${cssImports}
+    ${headElements}
   &lt;/head&gt;
   &lt;body&gt;
 
   ...
 
-  ${jsImports}
+  ${jsElements}
   &lt;/body&gt;
 &lt;/html&gt;</programlisting>
 

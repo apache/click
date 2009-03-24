@@ -21,51 +21,14 @@
   <title>Controls</title>
 
   <para> Click provides a rich set of Controls which support client side
-  rendering and server side processing. This section covers the following topics:
+  rendering and server side processing. Please see the
+  <ulink url="../../click-api/org/apache/click/control/package-summary.html">Javadoc</ulink>,
+  which provides extensive information and examples of the core Controls.
   </para>
 
-  <orderedlist>
-    <listitem>
-      <para>
-        <link linkend="control-interface">Control Interface</link>  - describes
-        the Control interface
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="control-callback">Control Callback</link>  - control
-        event callback pattern
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="control-class">Control Classes</link>  - control Java
-        classes
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="control-message-properties">Control Message Properties</link>
-        - control message properties
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="container">Container</link>  - a Container is a Control
-        that can contain other Controls.
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="layout">Layouts</link>  - describes layout options and
-        how to create custom layouts.
-      </para>
-    </listitem>
-  </orderedlist>
+  <para>This chapter covers Control in detail including the Control life cycle,
+  Control event callbacks and localization.
 
-  <para>While this section provides an overview how Controls work please see the
-  <ulink url="../../click-api/org/apache/click/control/package-summary.html">Javadoc</ulink>,
-  which provides extensive information and examples.
   </para>
 
   <sect1 id="control-interface" remap="h2">
@@ -522,6 +485,92 @@ production-error-message=
       </para>
 
     </sect2>
+  </sect1>
+
+  <sect1 id="control-head-elements" remap="h2">
+    <title>Control HEAD Elements</title>
+
+    <para>The Control interface provides the method
+    <ulink url="../../click-api/org/apache/click/Control.html#getHeadElements()">getHeadElements()</ulink>
+    which allows the Control to add Page HEAD
+    <ulink url="../../click-api/org/apache/click/element/Element.html">elements</ulink>
+    such as <ulink url="../../click-api/org/apache/click/element/JsImport.html">JsImport</ulink>,
+    <ulink url="../../click-api/org/apache/click/element/JsScript.html">JsScript</ulink>,
+    <ulink url="../../click-api/org/apache/click/element/CssImport.html">CssImport</ulink>
+    and <ulink url="../../click-api/org/apache/click/element/CssStyle.html">CssStyle</ulink>.
+    </para>
+
+    <para>Here is an example of adding new HEAD elements to a custom
+    <classname>Control</classname>:
+    </para>
+
+    <programlisting language="java">public class MyControl extends AbstractControl {
+
+    public MyControl() {
+
+        /**
+         * Override the default getHeadElements implementation to return
+         * MyControl's list of HEAD elements.
+         *
+         * Note that the variable <varname>headElements</varname> is defined
+         * in AbstractControl.
+         *
+         * @return list the list of HEAD elements
+         */
+        public List getHeadElements() {
+
+            // Use lazy loading to only add the HEAD elements once and when needed.
+            if (headElements == null) {
+
+                // Get the head elements from the super implementation
+                headElements = super.getHeadElements();
+
+                // Add the JavaScript import "/mycontrol.js" to the control
+                headElements.add(new JsImport("/mycontrol.js"));
+
+                // Add the Css import "/mycontrol.css" to the control
+                headElements.add(new CssImport("/mycontrol.css"));
+            }
+            return headElements;
+        }
+    }
+
+    ...
+
+} </programlisting>
+
+    <para>In the example above we added the HEAD elements by overriding the
+    Control's <methodname>getHeadElements</methodname> method, however you can
+    add HEAD elements from anywhere in the Control including the event handlers
+    <literal>onInit</literal>, <literal>onGet</literal>,
+    <literal>onPost</literal>, <literal>onRender</literal> etc.
+    Please see <ulink url="../../click-api/org/apache/click/Page.html#getHeadElements()">getHeadElements()</ulink>
+    for more details.
+    </para>
+
+    <para><classname>MyControl</classname> will add the following HEAD elements
+    to the Page HEAD section, together with HEAD elements added by the Page and
+    other controls (assume the application context is "/myapp"):
+    </para>
+
+    <programlisting language="xml">&lt;html&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" type="text/css" href="<symbol>/myapp/mycontrol.css</symbol>"&gt;&lt;/link&gt;
+  &lt;/head&gt;
+
+  &lt;body&gt;
+
+    ...
+
+    &lt;script type="text/javascript" src="<symbol>/myapp/mycontrol.js</symbol>"/&gt;
+
+  &lt;/body&gt;
+&lt;/html&gt; </programlisting>
+
+  <para>A live demo showing how to add HEAD elements from a custom Control can
+  be seen <ulink url="http://www.avoka.com/click-examples/general/control-head-demo.htm">here</ulink>.
+  </para>
+
   </sect1>
 
   <sect1 id="container" remap="h2">

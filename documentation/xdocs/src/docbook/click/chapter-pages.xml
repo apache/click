@@ -22,73 +22,8 @@
 
   <para>Pages are the heart of web applications. In Click, Pages encapsulate
   the processing of HTML requests and the rendering of HTML responses.
-  The section discusses Click pages and covers to following topics:
+  This chapter discusses Click pages in detail.
   </para>
-
-  <orderedlist>
-    <listitem>
-      <para>
-        <link linkend="classes">Classes</link>  - page Java classes
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="execution">Execution</link>  - page execution sequence
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="request-param-auto-binding">Request Param Auto Binding</link>
-        - request parameter to page field auto binding
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="page-security">Security</link>  - page security model
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="page-navigation">Navigation</link>  - navigation
-        between pages
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="page-templating">Page Templating</link>  - templating
-        common page content
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="page-direct-rendering">Direct Rendering</link>
-        - page direct rendering
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="stateful-pages">Stateful</link>  - stateful pages
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="page-error-handling">Error Handling</link>  - page
-        error handling
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="page-not-found">Page Not Found</link>  - page not
-        found handling
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="page-message-properties">Page Message Properties</link>
-        - pages message properties
-      </para>
-    </listitem>
-  </orderedlist>
 
   <para>In Click, a logical page is composed of a Java class and a Velocity
   template, with these components being defined in page elements of the
@@ -261,28 +196,23 @@
         <para>context &nbsp;-&nbsp; the Servlet context path, e.g. /mycorp</para>
       </listitem>
       <listitem>
-        <para>cssImports &nbsp;-&nbsp; the CSS imports and style blocks to include
-        in the pages header. Please see
-        <ulink url="../../click-api/org/apache/click/util/PageImports.html">PageImports</ulink>
-        for more details.
-        </para>
-      </listitem>
-      <listitem>
         <para>format &nbsp;-&nbsp; the
         <ulink url="../../click-api/org/apache/click/util/Format.html">Format</ulink>
         object for formatting the display of objects.
         </para>
       </listitem>
       <listitem>
-        <para>imports &nbsp;-&nbsp; the CSS and JavaScript imports to include in the pages
-        header. Please see
+        <para>headElements &nbsp;-&nbsp; the HEAD <ulink url="../../click-api/org/apache/click/element/Element.html">elements</ulink>,
+        excluding JavaScript, to include in the page header. Please see
         <ulink url="../../click-api/org/apache/click/util/PageImports.html">PageImports</ulink>
         for more details.
         </para>
       </listitem>
       <listitem>
-        <para>jsImports &nbsp;-&nbsp; the JavaScript imports and script blocks to include in the pages footer. Please see
-          <ulink url="../../click-api/org/apache/click/util/PageImports.html">PageImports</ulink> for more details.
+        <para>jsElements &nbsp;-&nbsp; the JavaScript imports and script blocks to
+        include in the pages footer. Please see
+        <ulink url="../../click-api/org/apache/click/util/PageImports.html">PageImports</ulink>
+        for more details.
         </para>
       </listitem>
       <listitem>
@@ -358,7 +288,7 @@
   </sect1>
 
   <sect1 id="request-param-auto-binding" remap="h2">
-    <title>Request Param Auto Binding</title>
+    <title>Request Parameter Auto Binding</title>
 
     <para>Click will automatically bind any request parameter values to public
     Page fields with the same name. When binding these values it will also
@@ -1269,6 +1199,7 @@ public class SearchPage extends Page implements Serializable {
     </para>
 
   </sect1>
+
   <sect1 id="page-not-found" remap="h2">
     <title>Page Not Found</title>
 
@@ -1298,6 +1229,7 @@ public class SearchPage extends Page implements Serializable {
     </para>
 
   </sect1>
+
   <sect1 id="page-message-properties" remap="h2">
     <title>Page Message Properties</title>
 
@@ -1335,6 +1267,103 @@ public class SearchPage extends Page implements Serializable {
     <para>Page messages can also be used to override Control messages, see the
     Controls <link linkend="control-message-properties">Message Properties</link>
     topic for more details.
+    </para>
+
+  </sect1>
+
+  <sect1 id="page-head-elements" remap="h2">
+    <title>Page HEAD Elements</title>
+
+    <para>The Page class provides the method
+    <ulink url="../../click-api/org/apache/click/Page.html#getHeadElements()">getHeadElements()</ulink>
+    for contributing HEAD <ulink url="../../click-api/org/apache/click/element/Element.html">elements</ulink>
+    such as <ulink url="../../click-api/org/apache/click/element/JsImport.html">JsImport</ulink>,
+    <ulink url="../../click-api/org/apache/click/element/JsScript.html">JsScript</ulink>,
+    <ulink url="../../click-api/org/apache/click/element/CssImport.html">CssImport</ulink>
+    and <ulink url="../../click-api/org/apache/click/element/CssStyle.html">CssStyle</ulink>.
+    </para>
+
+    <para>Here is an example of adding new HEAD elements to the
+    <classname>MyPage</classname> class:
+    </para>
+
+    <programlisting language="java">public class MyPage extends Page {
+
+    public MyPage() {
+        // Add the JavaScript import "/mypage.js" to the page
+        getHeadElements().add(new JsImport("/mypage.js"));
+
+        // Add some inline JavaScript content to the page
+        getHeadElements().add(new JsScript("alert('Welcome to MyPage');"));
+
+        // Add the Css import "/mypage.css" to the page
+        getHeadElements().add(new CssImport("/mypage.css"));
+
+        // Add some inline Css content to the page
+        getHeadElements().add(new CssStyle("body { font-family: Verdana; }"));
+    }
+
+    ...
+
+} </programlisting>
+
+    <para>In the example above we added the HEAD elements from the Page constructor,
+    however you can add HEAD elements from anywhere in the Page including the
+    event handlers <literal>onInit</literal>, <literal>onGet</literal>,
+    <literal>onPost</literal>, <literal>onRender</literal> etc.
+    Please see <ulink url="../../click-api/org/apache/click/Page.html#getHeadElements()">getHeadElements()</ulink>
+    for more details.
+    </para>
+
+    <para>Below is the <filename>/my-page.htm</filename> template:
+    </para>
+
+    <programlisting language="xml">&lt;html&gt;
+  &lt;head&gt;
+    <varname>$headElements</varname>
+  &lt;/head&gt;
+
+  &lt;body&gt;
+
+    ...
+
+    <varname>$jsElements</varname>
+
+  &lt;/body&gt;
+&lt;/html&gt; </programlisting>
+
+    <para>The two variables, <varname>$headElements</varname> and
+    <varname>$jsElements</varname>, are automatically made available to the Page
+    template. These variables references the JavaScript and Css HEAD elements
+    specified in <classname>MyPage</classname>.
+    </para>
+
+    <para>The following HTML will be rendered (assuming the application context
+    is "/myapp"):
+    </para>
+
+    <programlisting language="xml">&lt;html&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" type="text/css" href="<symbol>/myapp/mypage.css</symbol>"&gt;&lt;/link&gt;
+    &lt;style rel="stylesheet" type="text/css"&gt;
+      <symbol>body { font-family: Verdana; }</symbol>
+    &lt;/style&gt;
+  &lt;/head&gt;
+
+  &lt;body&gt;
+
+    ...
+
+    &lt;script type="text/javascript" src="<symbol>/myapp/mypage.js</symbol>"/&gt;
+    &lt;script type="text/javascript"&gt;
+      <symbol>alert('Welcome to MyPage');</symbol>
+    &lt;/script&gt;
+
+  &lt;/body&gt;
+&lt;/html&gt; </programlisting>
+
+    <para>A live demo showing how to add HEAD elements to a Page can be seen
+    <ulink url="http://www.avoka.com/click-examples/general/page-head-demo.htm">here</ulink>.
     </para>
 
   </sect1>

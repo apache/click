@@ -100,7 +100,6 @@ div.titlepage {
 div.section {
 }
 
-
 div.authorgroup
 {
     text-align:     left;
@@ -113,7 +112,7 @@ div.toc, div.list-of-examples, div.list-of-figures {
 }
 
 .toc dt {
-    padding-bottom: 1px;
+    padding-bottom: 4px;
 }
 
 div.itemizedlist {
