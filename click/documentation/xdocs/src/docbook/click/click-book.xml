@@ -42,8 +42,8 @@
 		<authorgroup>
 			<corpauthor>Apache Click User Guide</corpauthor>
 		</authorgroup>
-		
-		<mediaobject>
+
+    <mediaobject>
 			<imageobject>
 				<imagedata fileref="images/click-logo.png" />
 			</imageobject>
@@ -59,7 +59,3 @@
   &chapter-best-practices;
 
 </book>
-
-
-
- 

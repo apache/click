@@ -60,7 +60,6 @@
   <l:i18n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0">
     <l:l10n language="en">
       <l:context name="title-numbered">
-        <l:template name="chapter" text="%n.&#160;%t"/>
         <l:template name="section" text="%n&#160;%t"/>
       </l:context>
     </l:l10n>

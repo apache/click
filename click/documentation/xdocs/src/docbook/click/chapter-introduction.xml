@@ -20,84 +20,39 @@
 <chapter id="chapter-introduction">
   <title>Introduction to Click</title>
 
-  <sect1 id="preface">
-    <title>Preface</title>
+  <para>Click is a simple JEE web application framework for commercial
+  Java developers.
+  </para>
 
-    <para>Click is a simple JEE web application framework for commercial
-    Java developers.
-    </para>
+  <para>Click is an open source project, licensed under the
+  <ulink url="../../LICENSE.txt"><citetitle>Apache license</citetitle>
+  </ulink>.
+  </para>
 
-    <para>Click is an open source project, licensed under the
-    <ulink url="../../LICENSE.txt"><citetitle>Apache license</citetitle>
-    </ulink>.
-    </para>
+  <para>Click uses an event based programming model for processing Servlet
+  requests and <ulink url="../../velocity/velocity.html">Velocity</ulink> for
+  rendering the response. (Note other template engines such as
+  <ulink url="http://java.sun.com/products/jsp/">JSP</ulink> and
+  <ulink url="http://freemarker.sourceforge.net/">Freemarker</ulink> are also
+  supported)
+  </para>
 
-    <para>Click uses an event based programming model for processing Servlet
-    requests and <ulink url="../../velocity/velocity.html">Velocity</ulink> for
-    rendering the response. (Note other template engines such as
-    <ulink url="http://java.sun.com/products/jsp/">JSP</ulink> and
-    <ulink url="http://freemarker.sourceforge.net/">Freemarker</ulink> are also
-    supported)
-    </para>
+  <para>This framework uses a single servlet, called
+  <ulink url="../../click-api/org/apache/click/ClickServlet.html">ClickServlet</ulink>,
+  to act as a request dispatcher. When a request arrives ClickServlet creates
+  a <ulink url="../../click-api/org/apache/click/Page.html">Page</ulink>
+  object to process the request and then uses the page's Velocity template to
+  render the results.
+  </para>
 
-    <para>This framework uses a single servlet, called
-    <ulink url="../../click-api/org/apache/click/ClickServlet.html">ClickServlet</ulink>,
-    to act as a request dispatcher. When a request arrives ClickServlet creates
-    a <ulink url="../../click-api/org/apache/click/Page.html">Page</ulink>
-    object to process the request and then uses the page's Velocity template to
-    render the results.
-    </para>
+  <para>Pages provide a simple thread safe programming environment, with a new
+  page instance created for each servlet request.
+  </para>
 
-    <para>Pages provide a simple thread safe programming environment, with a new
-    page instance created for each servlet request.
-    </para>
-
-    <para>Possibly the best way to see how Click works is to dive right in and
-    look at some examples.
-    </para>
-
-    <itemizedlist>
-      <listitem>
-        <para>
-          <link linkend="hello-world">Hello World</link> - the Hello World
-          classic
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link linkend="control-listener">Control Listener</link> - an
-          ActionLink control listener example
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link linkend="simple-table">Simple Table</link> - a simple Table
-          control example
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link linkend="advanced-table">Advanced Table</link> - a more advanced
-          Table example
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link linkend="simple-form">Simple Form</link> - a simple Form example
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link linkend="advanced-form">Advanced Form</link> - a more advanced
-          Form example
-        </para>
-      </listitem>
-    </itemizedlist>
-  </sect1>
-
-  <para>These examples are available online at
+  <para>Possibly the best way to see how Click works is to dive right in and
+  look at some examples. (The examples are also available online at
   <ulink url="http://www.avoka.com/click-examples/">http://www.avoka.com/click-examples/</ulink>
-  under the menu "Intro Examples".
+  under the menu "Intro Examples".)
   </para>
 
   <sect1 id="hello-world">
@@ -336,22 +291,23 @@ public HelloWorld extends Page {
 
     <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
-    <varname>$cssImports</varname>
+    <varname>$headElements</varname>
   &lt;/head&gt;
   &lt;body&gt;
 
     <varname>$table</varname>
 
-    <varname>$jsImports</varname>
+    <varname>$jsElements</varname>
 
   &lt;/body&gt;
 &lt;/html&gt;</programlisting>
 
-    <para>Note above we also specify the <varname>$cssImports</varname>
-    reference so the table can include any CSS imports or styles in the header,
-    and the <varname>$jsImports</varname> reference any JavaScript imports or
-    scripts at the bottom. At runtime Click automatically makes the variables
-    <varname>$cssImports</varname> and <varname>$jsImports</varname> available
+    <para>Note from the example above that we specify the <varname>$headElements</varname>
+    reference so that the table can include any HEAD elements, which includes Css
+    imports and styles, in the header. Also note we specify the
+    <varname>$jsElements</varname> reference which include any JavaScript imports
+    and scripts at the bottom. At runtime Click automatically makes the variables
+    <varname>$headElements</varname> and <varname>$jsElements</varname> available
     to the template.
     </para>
 
@@ -472,13 +428,13 @@ public HelloWorld extends Page {
 
     <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
-    <varname>$cssImports</varname>
+    <varname>$headElements</varname>
   &lt;/head&gt;
   &lt;body&gt;
 
     <varname>$table</varname>
 
-    <varname>$jsImports</varname>
+    <varname>$jsElements</varname>
 
   &lt;/body&gt;
 &lt;/html&gt;</programlisting>
@@ -556,7 +512,7 @@ public HelloWorld extends Page {
 
     <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
-    <varname>$cssImports</varname>
+    <varname>$headElements</varname>
   &lt;/head&gt;
   &lt;body&gt;
 
@@ -566,7 +522,7 @@ public HelloWorld extends Page {
       &lt;div id="msgDiv"&gt; <varname>$msg</varname> &lt;/div&gt;
     <command>#end</command>
 
-    <varname>$jsImports</varname>
+    <varname>$jsElements</varname>
 
   &lt;/body&gt;
 &lt;/html&gt;</programlisting>
@@ -723,7 +679,7 @@ public HelloWorld extends Page {
 
     <programlisting language="xml">&lt;html&gt;
   &lt;head&gt;
-    <varname>$cssImports</varname>
+    <varname>$headElements</varname>
   &lt;/head&gt;
   &lt;body&gt;
 
@@ -733,7 +689,7 @@ public HelloWorld extends Page {
 
     <varname>$form</varname>
 
-    <varname>$jsImports</varname>
+    <varname>$headElements</varname>
 
   &lt;/body&gt;
 &lt;/html&gt;</programlisting>

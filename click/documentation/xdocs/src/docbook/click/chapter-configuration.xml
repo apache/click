@@ -20,30 +20,8 @@
 <chapter id="chapter-configuration" remap="h1">
   <title>Configuration</title>
 
-  <para>This section discusses how to setup and configure a Click web application
-  and covers the following topics:
+  <para>This section discusses how to setup and configure a Click web application.
   </para>
-
-  <orderedlist>
-    <listitem>
-      <para>
-        <link linkend="servlet-configuration">Servlet Configuration</link>
-        - how to setup the ClickServlet
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="application-configuration">Application Configuration</link>
-        - how to configure the Click application descriptor
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        <link linkend="auto-deployed-files">Auto Deployed Files</link>
-        - automatically deployed Click files
-      </para>
-    </listitem>
-  </orderedlist>
 
   <para>The Click configuration files include:
   </para>
