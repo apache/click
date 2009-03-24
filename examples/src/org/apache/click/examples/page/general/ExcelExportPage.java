@@ -24,8 +24,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.click.ActionListener;
+import org.apache.click.Control;
+import org.apache.click.control.ActionLink;
 import org.apache.click.examples.domain.Customer;
-import org.apache.click.examples.page.SpringPage;
+import org.apache.click.examples.page.BorderPage;
 import org.apache.click.util.ClickUtils;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -41,14 +44,30 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
  *
  * @author Malcolm Edgar
  */
-public class ExcelExportPage extends SpringPage {
+public class ExcelExportPage extends BorderPage {
 
     // -------------------------------------------------------- Event Handlers
 
+    public void onInit() {
+        super.onInit();
+
+        ActionLink link = new ActionLink("export");
+        link.setActionListener(new ActionListener() {
+
+            public boolean onAction(Control source) {
+                export();
+                return false;
+            }
+        });
+
+        addControl(link);
+    }
+
     /**
-     * @see org.apache.click.Page#onGet()
+     * Export the spreadsheet.
      */
-    public void onGet() {
+    public void export() {
+
         HttpServletResponse response = getContext().getResponse();
 
         HSSFWorkbook wb = createWorkbook();
