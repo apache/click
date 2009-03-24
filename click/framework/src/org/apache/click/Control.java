@@ -178,20 +178,19 @@ public interface Control extends Serializable {
     public String getHtmlImports();
 
     /**
-     * Return the list of {@link org.apache.click.element.Element HEAD elements}
+     * Return the list of HEAD {@link org.apache.click.element.Element elements}
      * to be included in the page. Example HEAD elements include
-     * {@link org.apache.click.element.JsImport JavaScript imports},
-     * {@link org.apache.click.element.JsScript inline JavasSript},
-     * {@link org.apache.click.element.CssImport Css imports} and
-     * {@link org.apache.click.element.CssStyle inline Css}.
+     * {@link org.apache.click.element.JsImport JsImport},
+     * {@link org.apache.click.element.JsScript JsScript},
+     * {@link org.apache.click.element.CssImport CssImport} and
+     * {@link org.apache.click.element.CssStyle CssStyle}.
      * <p/>
-     * Controls can include their own list of HEAD elements by implementing
+     * Controls can contribute their own list of HEAD elements by implementing
      * this method.
      * <p/>
      * The recommended approach when implementing this method is to use
-     * <tt>lazy loading</tt> to only add HEAD elements <tt>once</tt> and when
-     * <tt>needed</tt>.
-     * For example:
+     * <tt>lazy loading</tt> to ensure the HEAD elements are only added
+     * <tt>once</tt> and when <tt>needed</tt>. For example:
      *
      * <pre class="prettyprint">
      * public MyControl extends AbstractControl {
@@ -221,8 +220,10 @@ public interface Control extends Serializable {
      * public MyControl extends AbstractControl {
      *
      *     public MyControl() {
+     *
      *         JsImport jsImport = new JsImport("/mycorp/mycontrol/mycontrol.js");
      *         getHeadElements().add(jsImport);
+     *
      *         CssImport cssImport = new CssImport("/mycorp/mycontrol/mycontrol.css");
      *         getHeadHeaders().add(cssImport);
      *     }
@@ -230,7 +231,9 @@ public interface Control extends Serializable {
      *
      * One can also add HEAD elements from event handler methods such as
      * {@link #onInit()}, {@link #onProcess()}, {@link #onRender()}
-     * etc. <b>Please note:</b> when adding HEAD elements to event handlers,
+     * etc.
+     * <p/>
+     * <b>Please note:</b> when adding HEAD elements to event handlers,
      * its possible that the control will be added to a
      * {@link Page#stateful Stateful} page, so you will need to set the HEAD
      * elements list to <tt>null</tt> in the Control's {@link #onDestroy()}
@@ -242,9 +245,11 @@ public interface Control extends Serializable {
      *
      *     // Set HEAD elements in the onInit event handler
      *     public void onInit() {
+     *
      *         // Add HEAD elements
      *         JsImport jsImport = new JsImport("/mycorp/mycontrol/mycontrol.js");
      *         getHeadElements().add(jsImport);
+     *
      *         CssImport cssImport = new CssImport("/mycorp/mycontrol/mycontrol.css");
      *         getHeadElements().add(cssImport);
      *     }

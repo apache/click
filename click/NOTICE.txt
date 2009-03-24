@@ -63,9 +63,21 @@ http://www.greywyvern.com/code/js/keyboard.html
 
 ======================================================================
 
-This product includes the ColorPicker library developer by Sebo Zoltan,
+This product includes the ColorPicker library, developed by Sebo Zoltan,
 distributed under the terms of the MIT license.
 http://www.dhtmlgoodies.com/index.html?whichScript=submitted-color-picker
+
+======================================================================
+
+This product includes the JQuery JavaScript library, developed by
+John Resig, distributed under the terms of the MIT license.
+http://jquery.com/
+
+======================================================================
+
+This product includes the JQuery Star Rating plugin, developed by
+Fyneworks.com, distributed under the terms of the MIT license.
+http://www.fyneworks.com/jquery/star-rating/
 
 ======================================================================
 
