@@ -1011,84 +1011,8 @@ public class ClickServlet extends HttpServlet {
             });
         }
 
-        final Map model = new HashMap(page.getModel());
-
-        final HttpServletRequest request = page.getContext().getRequest();
-
-        Object pop = model.put("request", request);
-        if (pop != null && !page.isStateful()) {
-            String msg = page.getClass().getName() + " on " + page.getPath()
-                         + " model contains an object keyed with reserved "
-                         + "name \"request\". The page model object "
-                         + pop + " has been replaced with the request object";
-            logger.warn(msg);
-        }
-
-        pop = model.put("response", page.getContext().getResponse());
-        if (pop != null && !page.isStateful()) {
-            String msg = page.getClass().getName() + " on " + page.getPath()
-                         + " model contains an object keyed with reserved "
-                         + "name \"response\". The page model object "
-                         + pop + " has been replaced with the response object";
-            logger.warn(msg);
-        }
-
-        SessionMap sessionMap = new SessionMap(request.getSession(false));
-        pop = model.put("session", sessionMap);
-        if (pop != null && !page.isStateful()) {
-            String msg = page.getClass().getName() + " on " + page.getPath()
-                         + " model contains an object keyed with reserved "
-                         + "name \"session\". The page model object "
-                         + pop + " has been replaced with the request "
-                         + " session";
-            logger.warn(msg);
-        }
-
-        pop = model.put("context", request.getContextPath());
-        if (pop != null && !page.isStateful()) {
-            String msg = page.getClass().getName() + " on " + page.getPath()
-                         + " model contains an object keyed with reserved "
-                         + "name \"context\". The page model object "
-                         + pop + " has been replaced with the request "
-                         + " context path";
-            logger.warn(msg);
-        }
-
-        Format format = page.getFormat();
-        if (format != null) {
-            pop = model.put("format", format);
-            if (pop != null && !page.isStateful()) {
-                String msg = page.getClass().getName() + " on "
-                        + page.getPath()
-                        + " model contains an object keyed with reserved "
-                        + "name \"format\". The page model object " + pop
-                        + " has been replaced with the format object";
-                logger.warn(msg);
-            }
-        }
-
-        String path = page.getPath();
-        if (path != null) {
-           pop = model.put("path", path);
-            if (pop != null && !page.isStateful()) {
-                String msg = page.getClass().getName() + " on "
-                        + page.getPath()
-                        + " model contains an object keyed with reserved "
-                        + "name \"path\". The page model object " + pop
-                        + " has been replaced with the page path";
-                logger.warn(msg);
-            }
-        }
-
-        pop = model.put("messages", page.getMessages());
-        if (pop != null && !page.isStateful()) {
-            String msg = page.getClass().getName() + " on " + page.getPath()
-                         + " model contains an object keyed with reserved "
-                         + "name \"messages\". The page model object "
-                         + pop + " has been replaced with the request "
-                         + " messages";
-            logger.warn(msg);
-        }
+        final Context context = page.getContext();
+        final Map model = ClickUtils.createTemplateModel(page, context);
 
         PageImports pageImports = page.getPageImports();
         pageImports.popuplateTemplateModel(model);
