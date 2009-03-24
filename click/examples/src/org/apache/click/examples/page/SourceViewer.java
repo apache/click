@@ -47,6 +47,17 @@ public class SourceViewer extends BorderPage {
             "boolean", "int", "char", "long", "float", "double", "short",
             "this," };
 
+    private static final String[] JAVASCRIPT_KEYWORDS = { "break", "continue",
+            "do", "else", "for", "if", "return", "while", "auto", "case",
+            "char", "const", "default", "double", "enum", "extern", "float",
+            "goto", "int", "long", "register", "short", "signed", "sizeof",
+            "static", "struct", "switch", "typedef", "union", "unsigned",
+            "void", "volatile", "catch", "class", "delete", "false", "import",
+            "new", "operator", "private", "protected", "public", "this",
+            "throw", "true", "try", "debugger", "eval", "export", "function",
+            "get", "null", "set", "undefined", "var", "with", "Infinity",
+            "NaN" };
+
     private static final String[] HTML_KEYWORDS = { "html", "head", "style",
             "script", "title", "link", "body", "h1", "h2", "h3", "h4", "h5",
             "h6", "p", "hr", "br", "span", "table", "tr", "th", "td", "a", "b",
@@ -73,6 +84,8 @@ public class SourceViewer extends BorderPage {
             "#macro(", "#foreach", "#foreach(", "##", "#*", "*#", "#" };
 
     private boolean isJava = false;
+
+    private boolean isJavaScript = false;
 
     private boolean javaMultilineComment = false;
 
@@ -135,6 +148,7 @@ public class SourceViewer extends BorderPage {
             throws IOException {
 
         isJava = name.endsWith(".java");
+        isJavaScript = name.endsWith(".js");
         isXml = name.endsWith(".xml");
         isHtml = name.endsWith(".htm");
         if (!isHtml) {
@@ -220,20 +234,45 @@ public class SourceViewer extends BorderPage {
             line = ClickUtils.escapeHtml(line);
 
             // Check if line is part of multiline comment
-            if (isJavaMultilineComment(line)) {
-                line = renderJavaComment(line);
+            if (isMultilineComment(line)) {
+                line = renderComment(line);
             } else {
                 // Check if line contains singleline comment
                 String comment = "";
-                if (hasJavaComment(line)) {
-                    comment = getJavaComment(line);
-                    comment = renderJavaComment(comment);
-                    line = removeJavaComment(line);
+                if (hasComment(line)) {
+                    comment = getComment(line);
+                    comment = renderComment(comment);
+                    line = removeComment(line);
                 }
 
                 if (StringUtils.isNotBlank(line)) {
                     for (int i = 0; i < JAVA_KEYWORDS.length; i++) {
                         String keyword = JAVA_KEYWORDS[i];
+                        line = renderJavaKeywords(line, keyword);
+                    }
+                }
+                line = line + comment;
+            }
+
+        } else if (isJavaScript) {
+            line = ClickUtils.escapeHtml(line);
+
+            // Check if line is part of multiline comment
+            if (isMultilineComment(line)) {
+                line = renderComment(line);
+            } else {
+                // Check if line contains singleline comment
+                String comment = "";
+                if (hasComment(line)) {
+                    comment = getComment(line);
+                    comment = renderComment(comment);
+                    line = removeComment(line);
+                }
+
+                if (StringUtils.isNotBlank(line)) {
+                    for (int i = 0; i < JAVASCRIPT_KEYWORDS.length; i++) {
+                        String keyword = JAVASCRIPT_KEYWORDS[i];
+                        // Reuse renderJavaKeywords method
                         line = renderJavaKeywords(line, keyword);
                     }
                 }
@@ -290,11 +329,11 @@ public class SourceViewer extends BorderPage {
         return line;
     }
 
-    private boolean hasJavaComment(String line) {
+    private boolean hasComment(String line) {
         return line.indexOf("//") != -1;
     }
 
-    private String removeJavaComment(String line) {
+    private String removeComment(String line) {
         int lineCommentStart = line.indexOf("//");
         if (lineCommentStart != -1) {
             line = line.substring(0, lineCommentStart);
@@ -302,7 +341,7 @@ public class SourceViewer extends BorderPage {
         return line;
     }
 
-    private String getJavaComment(String line) {
+    private String getComment(String line) {
         int lineCommentStart = line.indexOf("//");
         if (lineCommentStart != -1) {
             return line.substring(lineCommentStart);
@@ -310,7 +349,7 @@ public class SourceViewer extends BorderPage {
         return "";
     }
 
-    private boolean isJavaMultilineComment(String line) {
+    private boolean isMultilineComment(String line) {
         boolean isComment = false;
         line = line.trim();
         if (line.startsWith("/*")) {
@@ -403,7 +442,7 @@ public class SourceViewer extends BorderPage {
         return "<font color=\"#7f0055\"><b>" + token + "</b></font>";
     }
 
-    private String renderJavaComment(String comment) {
+    private String renderComment(String comment) {
         return "<font color=\"#3F7F5F\">" + comment + "</font>";
     }
 }
