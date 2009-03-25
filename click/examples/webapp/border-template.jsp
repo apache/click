@@ -24,6 +24,7 @@
 <title>Click Examples</title>
 <link type="text/css" rel="stylesheet" href="${context}/assets/css/style.css" title="Style"/>
 ${headElements}
+<link rel="Click icon" href="$context/favicon.ico" type="image/ico"/>
 </head>
 <body>
 
