@@ -71,34 +71,6 @@ public class ContainerUtilsTest extends TestCase {
     }
 
     /**
-     * Check that the first control of specified type if found in container.
-     */
-    public void testFindControlByType() {
-        MockContext.initContext();
-        // set up the form
-        Form form = new Form("sample");
-
-        Panel panel = new Panel("panel");
-
-        form.add(panel);
-
-        panel.add(new Label("label1"));
-
-        // TextField to find
-        Field field1 = new TextField("field1");
-        panel.add(field1);
-
-        panel.add(new Label("label2"));
-        panel.add(new TextField("field2"));
-
-        Field result = (Field) ContainerUtils.findControlByType(form,
-            TextField.class);
-
-        // Check that field1 was found
-        assertEquals(field1, result);
-    }
-
-    /**
      * Check that domain class with duplicate getter methods resolves to the
      * no-argument version.
      *
