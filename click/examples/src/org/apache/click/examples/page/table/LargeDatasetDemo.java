@@ -68,20 +68,20 @@ public class LargeDatasetDemo extends BorderPage {
      * @see org.apache.click.Page#onRender()
      */
     public void onRender() {
-        // Create TableModel for the specified table and total number of customers
-        TableModel model = new TableModel(table, getCustomerCount());
+        // Create DataProvider for the specified table and total number of customers
+        DataProvider dataProvider = new DataProvider(table, getCustomerCount());
 
-        // Set the TableModel as the Table row list. Table is now able to
+        // Set the DataProvider as the Table row list. Table is now able to
         // calculate the last row value.
         // NOTE: If table rowList is not set, table cannot calculate the last row
         // and invoking #getLastRow will return 0.
-        table.setRowList(model);
+        table.setRowList(dataProvider);
 
         // Retrieve customers given the firstRow, lastRow and pageSize
         List customers = getCustomers(table.getFirstRow(), table.getLastRow(), table.getPageSize());
 
-        // Add the customers to the table model
-        model.addAll(customers);
+        // Add the customers to the table dataProvider
+        dataProvider.addAll(customers);
     }
 
     // ---------------------------------------------------------- Inner Classes
@@ -93,22 +93,22 @@ public class LargeDatasetDemo extends BorderPage {
      * The List also returns correct row for a specified index by offsetting
      * the index against the Table's firstRow value.
      */
-    class TableModel extends ArrayList {
+    class DataProvider extends ArrayList {
 
-        /** The model's Table instance. */
+        /** The DataProvider Table instance. */
         private Table table;
 
-        /** The total number of rows of the model. */
+        /** The total number of rows of the dataProvider. */
         private int numOfRows;
 
         /**
-         * Create a new TableModel instance for the given Table and total number
+         * Create a new DataProvider instance for the given Table and total number
          * of rows.
          *
-         * @param table this model's Table instance
-         * @param numOfRows the total number of rows of the model
+         * @param table this dataProvider Table instance
+         * @param numOfRows the total number of rows of the dataProvider
          */
-        public TableModel(Table table, int numOfRows) {
+        public DataProvider(Table table, int numOfRows) {
             this.table = table;
             this.numOfRows = numOfRows;
         }
