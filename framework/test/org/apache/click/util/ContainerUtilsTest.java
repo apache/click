@@ -22,10 +22,12 @@ import java.util.List;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
 import org.apache.click.control.Button;
+import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.Label;
+import org.apache.click.control.Panel;
 import org.apache.click.control.TextField;
 
 /**
@@ -66,6 +68,34 @@ public class ContainerUtilsTest extends TestCase {
         // Total should be 3 consisting of the fields "hidden", "id" and the
         // Forms internal HiddenFields "form_name".
         assertEquals(3, fields.size());
+    }
+
+    /**
+     * Check that the first control of specified type if found in container.
+     */
+    public void testFindControlByType() {
+        MockContext.initContext();
+        // set up the form
+        Form form = new Form("sample");
+
+        Panel panel = new Panel("panel");
+
+        form.add(panel);
+
+        panel.add(new Label("label1"));
+
+        // TextField to find
+        Field field1 = new TextField("field1");
+        panel.add(field1);
+
+        panel.add(new Label("label2"));
+        panel.add(new TextField("field2"));
+
+        Field result = (Field) ContainerUtils.findControlByType(form,
+            TextField.class);
+
+        // Check that field1 was found
+        assertEquals(field1, result);
     }
 
     /**

@@ -297,10 +297,10 @@ public class ContainerUtils {
      * Find and return the first control with a matching name in the specified
      * container.
      *
-     * @param container the container that is checked for controls for matching
-     * names
+     * @param container the container that is searched for a control with a
+     * matching name
      * @param name the name of the control to find
-     * @return the control with a matching name
+     * @return the control which name matched the given name
      */
     public static Control findControlByName(Container container, String name) {
         Control control = (Control) container.getControl(name);
@@ -320,6 +320,34 @@ public class ContainerUtils {
                     }
                 }
 
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find and return the first control of a given type in the specified
+     * container.
+     * <p/>
+     * Please note that this method does exact matching. If the given type is a
+     * superclass of a control, it won't count as a match.
+     *
+     * @param container the container that is searched for a control of a
+     * given type
+     * @param type the type of the control to find
+     * @return the control which type matched the given type
+     */
+    public static Control findControlByType(Container container, Class type) {
+        for (int i = 0; i < container.getControls().size(); i++) {
+            Control childControl = (Control) container.getControls().get(i);
+
+            if (childControl.getClass().equals(type)) {
+                return childControl;
+            } else {
+                if (childControl instanceof Container) {
+                    Container childContainer = (Container) childControl;
+                    return findControlByType(childContainer, type);
+                }
             }
         }
         return null;
