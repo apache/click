@@ -362,7 +362,7 @@ public class PageImports {
      * This method delegates to {@link #processControl(org.apache.click.Control)}
      * to add the given Control's HEAD elements to the Page imports.
      *
-     * @param list the list of Controls which HEAD elements to process
+     * @param controls the list of Controls which HEAD elements to process
      */
     public void processControls(List controls) {
         for (int i = 0; i < controls.size(); i++) {
