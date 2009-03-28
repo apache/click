@@ -374,12 +374,11 @@ public abstract class Field extends AbstractControl {
      * @return the parent Form containing the Field
      */
     public Form getForm() {
-        if (form != null) {
-            return form;
-        } else {
+        if (form == null) {
             // Find form in parent hierarchy
-            return ContainerUtils.findForm(this);
+            form = ContainerUtils.findForm(this);
         }
+        return form;
     }
 
     /**
@@ -896,14 +895,15 @@ public abstract class Field extends AbstractControl {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        bindRequestValue();
+        if (canProcess()) {
+            bindRequestValue();
 
-        if (getValidate()) {
-            validate();
+            if (getValidate()) {
+                validate();
+            }
+
+            registerActionEvent();
         }
-
-        registerActionEvent();
-
         return true;
     }
 
@@ -919,6 +919,40 @@ public abstract class Field extends AbstractControl {
     }
 
     // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Returns true if the Field's onProcess event handler should be invoked,
+     * false otherwise.
+     * <p/>
+     * By default this method will return true if:
+     * <ul>
+     * <li>the Field's Form is submitted. This method invokes
+     * {@link Form#isFormSubmission()} to check if the Form is submitted or not
+     * </li>
+     * <li>the request is an Ajax request. This method invoked
+     * {@link org.apache.click.Context#isAjaxRequest()} to check if the request
+     * is an Ajax request or not
+     * </li>
+     * </ul>
+     *
+     * @return true if the Field's onProcess event handler should be invoked,
+     * false otherwise
+     */
+    protected boolean canProcess() {
+        // An Ajax request forces the Field to process itself. Otherwise, if
+        // the Form is not submitted, an Ajax request targeting this field won't
+        // be processed.
+        if (getContext().isAjaxRequest()) {
+            return true;
+        }
+
+        Form form = getForm();
+        if (form != null) {
+            return form.isFormSubmission();
+        } else {
+            return true;
+        }
+    }
 
     /**
      * Return a normalized label for display in error messages.

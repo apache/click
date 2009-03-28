@@ -746,14 +746,17 @@ public class FieldSet extends Field implements Container {
      * returned false
      */
     public boolean onProcess() {
-        if (hasControls()) {
-            for (Iterator it = getControls().iterator(); it.hasNext();) {
-                Control control = (Control) it.next();
-                String controlName = control.getName();
-                if (controlName == null || !controlName.startsWith(Form.SUBMIT_CHECK)) {
-                    boolean continueProcessing = control.onProcess();
-                    if (!continueProcessing) {
-                        return false;
+        if (canProcess()) {
+            if (hasControls()) {
+                for (Iterator it = getControls().iterator(); it.hasNext();) {
+                    Control control = (Control) it.next();
+                    String controlName = control.getName();
+                    if (controlName == null || !controlName.startsWith(
+                        Form.SUBMIT_CHECK)) {
+                        boolean continueProcessing = control.onProcess();
+                        if (!continueProcessing) {
+                            return false;
+                        }
                     }
                 }
             }
