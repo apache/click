@@ -677,7 +677,6 @@ public class ClickUtils {
      * @param context the request context
      * @return a template model as a map
      */
-    //public static Map createTemplateModel(final Page page, Context context) {
     public static Map createTemplateModel(final Page page, Context context) {
 
         ConfigService configService = ClickUtils.getConfigService(context.getServletContext());
