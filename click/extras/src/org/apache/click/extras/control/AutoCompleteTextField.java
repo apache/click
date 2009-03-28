@@ -20,14 +20,17 @@ package org.apache.click.extras.control;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.MessageFormat;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.click.Context;
+import org.apache.click.Page;
 import org.apache.click.control.TextField;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -77,15 +80,6 @@ public abstract class AutoCompleteTextField extends TextField {
         "/org/apache/click/extras/control/prototype/effects.js",
         "/org/apache/click/extras/control/prototype/prototype.js",
     };
-
-    /** The JavaScript sorting HTML import statements. */
-    public static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/extras-control{1}.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/effects{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/controls{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\">addLoadEvent(function() '{'new Ajax.Autocompleter( ''{2}'', ''{2}_auto_complete_div'', ''{0}{3}'', {4} );'}');</script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -221,23 +215,57 @@ public abstract class AutoCompleteTextField extends TextField {
     }
 
     /**
-     * Return the HTML CSS and JavaScript includes.
+     * Return the list of HEAD elements to be included in the page.
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the HTML CSS and JavaScript includes
+     * @return the list of HEAD elements to be included in the page
+     * @throws IllegalStateException if the field's name has not been set
+     * @throws IllegalStateException if the field is not attached to the Page
      */
-    public String getHtmlImports() {
-        Context context = getContext();
-        String[] args = {
-            context.getRequest().getContextPath(),
-            ClickUtils.getResourceVersionIndicator(context),
-            getId(),
-            getPage().getPath(),
-            getAutoCompleteOptions()
-        };
+    public List getHeadElements() {
+        // Check that the field name and parent Page has been set
+        String fieldName = getName();
+        if (fieldName == null) {
+            throw new IllegalStateException("AutoCompleteTextField name"
+                + " is not defined. Set the name before calling"
+                + " getHeadElements().");
+        }
 
-        return MessageFormat.format(HTML_IMPORTS, args);
+        Page page = getPage();
+        if (page == null) {
+            throw new IllegalStateException("The AutoCompleteTextField, '"
+                + fieldName + "', is not attached to the Page. Add"
+                + " AutoCompleteTextField to a parent form or container and"
+                + " attach the parent to the Page before calling"
+                + " getHeadElements().");
+        }
+
+        Context context = getContext();
+
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+            headElements.add(new CssImport("/click/extras-control.css"));
+            headElements.add(new JsImport("/click/control.js"));
+            headElements.add(new JsImport("/click/prototype/prototype.js"));
+            headElements.add(new JsImport("/click/prototype/effects.js"));
+            headElements.add(new JsImport("/click/prototype/controls.js"));
+
+            String fieldId = getId();
+            String contextPath = context.getRequest().getContextPath();
+
+            JsScript script = new JsScript();
+            script.setId(fieldName + "_autocomplete");
+            HtmlStringBuffer buffer = new HtmlStringBuffer(150);
+            buffer.append("addLoadEvent(function() { new Ajax.Autocompleter(");
+            buffer.append("'").append(fieldId).append("'");
+            buffer.append(",'").append(fieldId).append("_auto_complete_div'");
+            buffer.append(",'").append(contextPath).append(page.getPath()).append("'");
+            buffer.append(",").append(getAutoCompleteOptions()).append(");})");
+
+            headElements.add(script);
+        }
+        return headElements;
     }
 
     /**
@@ -259,31 +287,6 @@ public abstract class AutoCompleteTextField extends TextField {
     // --------------------------------------------------------- Event Handlers
 
     /**
-     * Register the field with the parent page to intercept POST autocompletion
-     * requests.
-     *
-     * @see org.apache.click.Control#onInit()
-     */
-    public void onInit() {
-        super.onInit();
-        // See whether control has been registered at Page level.
-        Object control = getPage().getModel().get(getName());
-
-        // If not registered, then register control
-        if (control == null) {
-            getPage().addControl(this);
-
-        } else if (!(control instanceof AutoCompleteTextField)) {
-            String message =
-                "Non AutoCompleteTextField object '"
-                + control.getClass().toString()
-                + "' already registered in Page as: "
-                + getName();
-            throw new IllegalStateException(message);
-        }
-    }
-
-    /**
      * Process the page request and if an auto completion POST request then
      * render an list of suggested values.
      *
@@ -293,18 +296,16 @@ public abstract class AutoCompleteTextField extends TextField {
      */
     public boolean onProcess() {
         Context context = getContext();
-        if (context.isPost()) {
-            // If an auto complete POST request then render suggested list,
-            // otherwise continue as normal
-            if (getForm().isFormSubmission()) {
-                return super.onProcess();
-            } else if (context.isAjaxRequest()) {
-                String criteria = context.getRequestParameter(getName());
-                if (criteria != null) {
-                    List autoCompleteList = getAutoCompleteList(criteria);
-                    renderAutoCompleteList(autoCompleteList);
-                    return false;
-                }
+        // If an auto complete POST request, render suggestion list,
+        // otherwise continue as normal
+        if (getForm().isFormSubmission()) {
+            return super.onProcess();
+        } else {
+            String criteria = context.getRequestParameter(getName());
+            if (criteria != null) {
+                List autoCompleteList = getAutoCompleteList(criteria);
+                renderAutoCompleteList(autoCompleteList);
+                return false;
             }
         }
         return true;

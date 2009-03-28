@@ -431,6 +431,7 @@ import org.apache.commons.lang.StringUtils;
  *  </li>
  * </ul>
  *
+ * <a name="post-redirect"></a>
  * <h3>Preventing Accidental Form Posts</h3>
  *
  * Users may accidentally make multiple form submissions by refreshing a page
@@ -624,6 +625,9 @@ public class Form extends AbstractContainer {
 
     /** The label &lt;td&gt; "style" attribute value. */
     protected String labelStyle;
+
+    /** The form submission flag. */
+    protected Boolean formSubmission;
 
     // ----------------------------------------------------------- Constructors
 
@@ -1124,14 +1128,20 @@ public class Form extends AbstractContainer {
      * @return true if the page request is a submission from this form
      */
     public boolean isFormSubmission() {
+        if (formSubmission != null) {
+            return formSubmission.booleanValue();
+        }
+
         Context context = getContext();
         String requestMethod = context.getRequest().getMethod();
 
-        if (!getMethod().equalsIgnoreCase(requestMethod)) {
-            return false;
+        if (getMethod().equalsIgnoreCase(requestMethod)
+            && getName().equals(context.getRequestParameter(FORM_NAME))) {
+            formSubmission = Boolean.TRUE;
+        } else {
+            formSubmission = Boolean.FALSE;
         }
-
-        return getName().equals(context.getRequestParameter(FORM_NAME));
+        return formSubmission.booleanValue();
     }
 
     /**
@@ -1740,19 +1750,20 @@ public class Form extends AbstractContainer {
         }
 
         boolean continueProcessing = true;
-        if (isFormSubmission()) {
 
-            for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
-                String controlName = control.getName();
-                if (controlName == null || !controlName.startsWith(Form.SUBMIT_CHECK)) {
+        for (int i = 0, size = getControls().size(); i < size; i++) {
+            Control control = (Control) getControls().get(i);
+            String controlName = control.getName();
+            if (controlName == null ||
+                !controlName.startsWith(Form.SUBMIT_CHECK)) {
 
-                    if (!control.onProcess()) {
-                        continueProcessing = false;
-                    }
+                if (!control.onProcess()) {
+                    continueProcessing = false;
                 }
             }
+        }
 
+        if (isFormSubmission()) {
             registerActionEvent();
         }
 
@@ -1768,6 +1779,7 @@ public class Form extends AbstractContainer {
     public void onDestroy() {
         super.onDestroy();
 
+        formSubmission = null;
         setError(null);
     }
 
