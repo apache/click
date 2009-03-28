@@ -354,6 +354,53 @@ public class PageImports {
         }
     }
 
+    /**
+     * Process the HEAD elements of the given list of Controls. You can retrieve
+     * the processed HEAD elements through {@link #getHeadElements} and
+     * {@link #getJsElements()}.
+     * <p/>
+     * This method delegates to {@link #processControl(org.apache.click.Control)}
+     * to add the given Control's HEAD elements to the Page imports.
+     *
+     * @param list the list of Controls which HEAD elements to process
+     */
+    public void processControls(List controls) {
+        for (int i = 0; i < controls.size(); i++) {
+            Control control = (Control) controls.get(i);
+
+            // import from getHtmlImports
+            addImport(control.getHtmlImports());
+
+            // import from getHeadElement
+            processControl(control);
+        }
+    }
+
+    /**
+     * Return the list of processed HEAD elements, excluding any JavaScript
+     * elements. To retrieve JavaScript elements please see
+     * {@link #getJsElements()}.
+     *
+     * @return the list of processed HEAD elements
+     */
+    public final List getHeadElements() {
+        List result = new ArrayList(headElements);
+        result.addAll(cssImports);
+        result.addAll(cssStyles);
+        return result;
+    }
+
+    /**
+     * Return the list of processed JavaScript elements.
+     *
+     * @return the list of processed JavaScript elements
+     */
+    public final List getJsElements() {
+        List result = new ArrayList(jsImports);
+        result.addAll(jsScripts);
+        return result;
+    }
+
     // ------------------------------------------------------ Protected Methods
 
     /**
@@ -443,15 +490,7 @@ public class PageImports {
         setInitialized(true);
 
         if (page.hasControls()) {
-            for (int i = 0; i < page.getControls().size(); i++) {
-                Control control = (Control) page.getControls().get(i);
-
-                // import from getHtmlImports
-                addImport(control.getHtmlImports());
-
-                // import from getHeadElement
-                processControl(control);
-            }
+            processControls(page.getControls());
         }
 
         addImport(page.getHtmlImports());
@@ -506,12 +545,12 @@ public class PageImports {
 
         Iterator it = elements.iterator();
         while (it.hasNext()) {
-            Object element = it.next();
-            if (!(element instanceof Element)) {
-                throw new IllegalStateException("non Element object added to"
-                    + " head elements.");
+            Object item = it.next();
+            if (!(item instanceof Element)) {
+                throw new IllegalStateException(item.getClass() + " is not"
+                    + " of type " + Element.class);
             }
-            add((Element) element);
+            add((Element) item);
         }
     }
 
@@ -519,7 +558,7 @@ public class PageImports {
 
     /**
      * This class enables lazy, on demand importing for
-     * {@link #renderAllIncludes(org.apache.click.util.HtmlStringBuffer)}.
+     * {@link #renderHeadElements(org.apache.click.util.HtmlStringBuffer)}.
      */
     class HeadElements {
 
@@ -588,6 +627,8 @@ public class PageImports {
     /**
      * This class enables lazy, on demand importing for
      * {@link #renderCssElements(org.apache.click.util.HtmlStringBuffer)}.
+     *
+     * @deprecated use {@link HeadElements} instead
      */
     class CssElements {
 
