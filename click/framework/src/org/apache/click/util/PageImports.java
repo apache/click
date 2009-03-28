@@ -377,6 +377,40 @@ public class PageImports {
     }
 
     /**
+     * Process the given control HEAD elements. This method will recursively
+     * process Containers and all child controls. You can retrieve
+     * the processed HEAD elements through {@link #getHeadElements} and
+     * {@link #getJsElements()}.
+     * <p/>
+     * This method delegates to {@link #processHeadElements(java.util.List)}
+     * to add the HEAD elements to the Page imports.
+     *
+     * @param control the control to process
+     */
+    public void processControl(Control control) {
+        processHeadElements(control.getHeadElements());
+
+        if (control instanceof Container) {
+            Container container = (Container) control;
+            if (container.hasControls()) {
+                List controls = container.getControls();
+                for (int i = 0, size = controls.size(); i < size; i++) {
+                    processControl((Control) controls.get(i));
+                }
+            }
+
+        } else if (control instanceof Table) {
+            Table table = (Table) control;
+            if (table.hasControls()) {
+                List controls = table.getControls();
+                for (int i = 0, size = controls.size(); i < size; i++) {
+                    processControl((Control) controls.get(i));
+                }
+            }
+        }
+    }
+
+    /**
      * Return the list of processed HEAD elements, excluding any JavaScript
      * elements. To retrieve JavaScript elements please see
      * {@link #getJsElements()}.
@@ -496,38 +530,6 @@ public class PageImports {
         addImport(page.getHtmlImports());
 
         processHeadElements(page.getHeadElements());
-    }
-
-    /**
-     * Process the given control HEAD elements. This method will recursively
-     * process Containers and all child controls.
-     * <p/>
-     * This method delegates to {@link #processHeadElements(java.util.List)}
-     * to add the HEAD elements to the Page imports.
-     *
-     * @param control the control to process
-     */
-    protected void processControl(Control control) {
-        processHeadElements(control.getHeadElements());
-
-        if (control instanceof Container) {
-            Container container = (Container) control;
-            if (container.hasControls()) {
-                List controls = container.getControls();
-                for (int i = 0, size = controls.size(); i < size; i++) {
-                    processControl((Control) controls.get(i));
-                }
-            }
-
-        } else if (control instanceof Table) {
-            Table table = (Table) control;
-            if (table.hasControls()) {
-                List controls = table.getControls();
-                for (int i = 0, size = controls.size(); i < size; i++) {
-                    processControl((Control) controls.get(i));
-                }
-            }
-        }
     }
 
     /**
