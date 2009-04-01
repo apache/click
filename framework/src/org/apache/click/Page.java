@@ -983,7 +983,7 @@ public class Page {
      * @param location the path to redirect the request to
      */
     public void setRedirect(String location) {
-        if (location != null) {
+        if (StringUtils.isNotBlank(location)) {
             if (location.charAt(0) == '/') {
                 Context context = getContext();
                 String contextPath = context.getRequest().getContextPath();
