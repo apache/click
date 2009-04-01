@@ -929,6 +929,12 @@ public abstract class Field extends AbstractControl {
      * <li>the Field's Form is submitted. This method invokes
      * {@link Form#isFormSubmission()} to check if the Form is submitted or not
      * </li>
+     * <li>the method {@link #getForm()} returns null, meaning the Field is
+     * not added to a Form but to a different Container.
+     * </li>
+     * <li>the Field is added directly to the Page, for example through
+     * autobinding
+     * </li>
      * <li>the request is an Ajax request. This method invoked
      * {@link org.apache.click.Context#isAjaxRequest()} to check if the request
      * is an Ajax request or not
@@ -939,15 +945,23 @@ public abstract class Field extends AbstractControl {
      * false otherwise
      */
     protected boolean canProcess() {
-        // An Ajax request forces the Field to process itself. Otherwise, if
-        // the Form is not submitted, an Ajax request targeting this field won't
-        // be processed.
+        // This method should return true for Ajax requests. Otherwise,
+        // if the Form is not submitted, an Ajax request targeting this field
+        // won't be processed.
         if (getContext().isAjaxRequest()) {
             return true;
         }
 
         Form form = getForm();
         if (form != null) {
+
+            // If the Field was added to both Form and Page (normally via
+            // autobinding), return true in order for the field to be processed
+            Page page = getPage();
+            if (page != null && page.getModel().containsKey(getName())) {
+                return true;
+            }
+
             return form.isFormSubmission();
         } else {
             return true;
