@@ -29,7 +29,7 @@ import org.apache.click.examples.page.velocity.SimpleTable;
 import org.apache.click.extras.tree.Tree;
 import org.apache.click.extras.tree.TreeNode;
 import org.apache.click.util.HtmlStringBuffer;
-import org.springframework.util.ClassUtils;
+import org.apache.commons.lang.ClassUtils;
 
 /**
  * Demonstrates how to customize the rendering of tree nodes.
@@ -60,7 +60,7 @@ public class PageLinkTreePage extends PlainTreePage {
                 // If node value is a Page class, render a PageLink, otherwise
                 // render the node value
                 if (cls != null && Page.class.isAssignableFrom(cls)) {
-                    String shortName = ClassUtils.getShortName(cls);
+                    String shortName = ClassUtils.getShortClassName(cls);
                     PageLink link = new PageLink(shortName, cls);
                     buffer.append(link);
                 } else {
