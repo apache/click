@@ -672,7 +672,7 @@ public class PageImports {
     private CssStyle asCssStyle(String line) {
         CssStyle cssStyle = new CssStyle();
         copyAttributes(cssStyle, line);
-        cssStyle.append(extractContent(line));
+        cssStyle.append(extractCssContent(line));
         return cssStyle;
     }
 
@@ -697,17 +697,17 @@ public class PageImports {
     private JsScript asJsScript(String line) {
         JsScript jsScript = new JsScript();
         copyAttributes(jsScript, line);
-        jsScript.append(extractContent(line));
+        jsScript.append(extractJsContent(line));
         return jsScript;
     }
 
     /**
-     * Extract the JavaScript or CSS content from the given HTML import line.
+     * Extract the CSS content from the given HTML import line.
      *
      * @param line the HTML import line
-     * @return the JavaScript or CSS content contained in the HTML import line
+     * @return the CSS content contained in the HTML import line
      */
-    private String extractContent(String line) {
+    private String extractCssContent(String line) {
         if (line.endsWith("/>")) {
             // If tag has no content, exit early
             return "";
@@ -718,7 +718,31 @@ public class PageImports {
         if (start == -1) {
             throw new IllegalArgumentException(line + " is not a valid element");
         }
-        int end = line.indexOf('<', start);
+        int end = line.lastIndexOf("</style>");
+        if (end == -1) {
+            return "";
+        }
+        return line.substring(start + 1, end);
+    }
+
+    /**
+     * Extract the JavaScript content from the given HTML import line.
+     *
+     * @param line the HTML import line
+     * @return the Javacript content contained in the HTML import line
+     */
+    private String extractJsContent(String line) {
+        if (line.endsWith("/>")) {
+            // If tag has no content, exit early
+            return "";
+        }
+
+        // Find index where tag ends
+        int start = line.indexOf('>');
+        if (start == -1) {
+            throw new IllegalArgumentException(line + " is not a valid element");
+        }
+        int end = line.lastIndexOf("</script>");
         if (end == -1) {
             return "";
         }
