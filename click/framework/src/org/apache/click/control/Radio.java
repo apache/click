@@ -313,12 +313,10 @@ public class Radio extends Field {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        if (canProcess()) {
-            bindRequestValue();
+        bindRequestValue();
 
-            if (isChecked()) {
-                registerActionEvent();
-            }
+        if (isChecked()) {
+            registerActionEvent();
         }
         return true;
     }

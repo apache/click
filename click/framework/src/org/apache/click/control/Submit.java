@@ -202,12 +202,10 @@ public class Submit extends Button {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        if (canProcess()) {
-            bindRequestValue();
+        bindRequestValue();
 
-            if (isClicked()) {
-                registerActionEvent();
-            }
+        if (isClicked()) {
+            registerActionEvent();
         }
 
         return true;
