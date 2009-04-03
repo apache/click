@@ -216,6 +216,15 @@ public abstract class AutoCompleteTextField extends TextField {
 
     /**
      * Return the list of HEAD elements to be included in the page.
+     * <p/>
+     * This list of resources returned are:
+     * <ul>
+     * <li>/click/extras-control.css</li>
+     * <li>/click/control.js</li>
+     * <li>/click/prototype/prototype.js</li>
+     * <li>/click/prototype/effects.js</li>
+     * <li>/click/prototype/controls.js</li>
+     * </ul>
      *
      * @see org.apache.click.Control#getHeadElements()
      *
@@ -287,6 +296,31 @@ public abstract class AutoCompleteTextField extends TextField {
     // --------------------------------------------------------- Event Handlers
 
     /**
+     * Register the field with the parent page to intercept POST autocompletion
+     * requests.
+     *
+     * @see org.apache.click.Control#onInit()
+     */
+    public void onInit() {
+        super.onInit();
+        // See whether control has been registered at Page level.
+        Object control = getPage().getModel().get(getName());
+
+        // If not registered, then register control
+        if (control == null) {
+            getPage().addControl(this);
+
+        } else if (!(control instanceof AutoCompleteTextField)) {
+            String message =
+                "Non AutoCompleteTextField object '"
+                + control.getClass().toString()
+                + "' already registered in Page as: "
+                + getName();
+            throw new IllegalStateException(message);
+        }
+    }
+
+    /**
      * Process the page request and if an auto completion POST request then
      * render an list of suggested values.
      *
@@ -296,16 +330,18 @@ public abstract class AutoCompleteTextField extends TextField {
      */
     public boolean onProcess() {
         Context context = getContext();
-        // If an auto complete POST request, render suggestion list,
-        // otherwise continue as normal
-        if (getForm().isFormSubmission()) {
-            return super.onProcess();
-        } else {
-            String criteria = context.getRequestParameter(getName());
-            if (criteria != null) {
-                List autoCompleteList = getAutoCompleteList(criteria);
-                renderAutoCompleteList(autoCompleteList);
-                return false;
+        if (context.isPost()) {
+            // If an auto complete POST request then render suggested list,
+            // otherwise continue as normal
+            if (getForm().isFormSubmission()) {
+                return super.onProcess();
+            } else if (context.isAjaxRequest()) {
+                String criteria = context.getRequestParameter(getName());
+                if (criteria != null) {
+                    List autoCompleteList = getAutoCompleteList(criteria);
+                    renderAutoCompleteList(autoCompleteList);
+                    return false;
+                }
             }
         }
         return true;

@@ -895,15 +895,14 @@ public abstract class Field extends AbstractControl {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        if (canProcess()) {
-            bindRequestValue();
+        bindRequestValue();
 
-            if (getValidate()) {
-                validate();
-            }
-
-            registerActionEvent();
+        if (getValidate()) {
+            validate();
         }
+
+        registerActionEvent();
+
         return true;
     }
 
@@ -919,54 +918,6 @@ public abstract class Field extends AbstractControl {
     }
 
     // ------------------------------------------------------ Protected Methods
-
-    /**
-     * Returns true if the Field's onProcess event handler should be invoked,
-     * false otherwise.
-     * <p/>
-     * By default this method will return true if:
-     * <ul>
-     * <li>the Field's Form is submitted. This method invokes
-     * {@link Form#isFormSubmission()} to check if the Form is submitted or not
-     * </li>
-     * <li>the method {@link #getForm()} returns null, meaning the Field is
-     * not added to a Form but to a different Container.
-     * </li>
-     * <li>the Field is added directly to the Page, for example through
-     * autobinding
-     * </li>
-     * <li>the request is an Ajax request. This method invoked
-     * {@link org.apache.click.Context#isAjaxRequest()} to check if the request
-     * is an Ajax request or not
-     * </li>
-     * </ul>
-     *
-     * @return true if the Field's onProcess event handler should be invoked,
-     * false otherwise
-     */
-    protected boolean canProcess() {
-        // This method should return true for Ajax requests. Otherwise,
-        // if the Form is not submitted, an Ajax request targeting this field
-        // won't be processed.
-        if (getContext().isAjaxRequest()) {
-            return true;
-        }
-
-        Form form = getForm();
-        if (form != null) {
-
-            // If the Field was added to both Form and Page (normally via
-            // autobinding), return true in order for the field to be processed
-            Page page = getPage();
-            if (page != null && page.getModel().containsKey(getName())) {
-                return true;
-            }
-
-            return form.isFormSubmission();
-        } else {
-            return true;
-        }
-    }
 
     /**
      * Return a normalized label for display in error messages.

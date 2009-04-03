@@ -276,7 +276,7 @@ public class RadioGroup extends Field {
         if (objects.isEmpty()) {
             return;
         }
- 
+
         Map cache = new HashMap();
 
         for (Iterator i = objects.iterator(); i.hasNext();) {
@@ -422,24 +422,22 @@ public class RadioGroup extends Field {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
+        bindRequestValue();
+
         boolean continueProcessing = true;
-
-        if (canProcess()) {
-            bindRequestValue();
-
-            for (int i = 0, size = getRadioList().size(); i < size; i++) {
-                Radio radio = (Radio) getRadioList().get(i);
-                if (!radio.onProcess()) {
-                    continueProcessing = false;
-                }
+        for (int i = 0, size = getRadioList().size(); i < size; i++) {
+            Radio radio = (Radio) getRadioList().get(i);
+            if (!radio.onProcess()) {
+                continueProcessing = false;
             }
-
-            if (getValidate()) {
-                validate();
-            }
-
-            registerActionEvent();
         }
+
+        if (getValidate()) {
+            validate();
+        }
+
+        registerActionEvent();
+
         return continueProcessing;
     }
 

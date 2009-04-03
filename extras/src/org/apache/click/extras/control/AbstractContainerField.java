@@ -257,13 +257,9 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        boolean continueProcessing = true;
-
-        if (canProcess()) {
-            continueProcessing = super.onProcess();
-            if (!container.onProcess()) {
-                continueProcessing = false;
-            }
+        boolean continueProcessing = super.onProcess();
+        if (!container.onProcess()) {
+            continueProcessing = false;
         }
         return continueProcessing;
     }
