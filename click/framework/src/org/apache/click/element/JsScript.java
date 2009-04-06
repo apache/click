@@ -18,6 +18,9 @@
  */
 package org.apache.click.element;
 
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.click.Context;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -82,14 +85,11 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  *             // Add the id of the div to hide
  *             model.put("divId", "myDiv");
  *
- *             // Specify the path to the JavaScript Velocity template
- *             String jsTemplate = "/js/mycorp-template.js";
+ *             // Specify the path to the JavaScript template
+ *             String templatePath = "/js/mycorp-template.js";
  *
- *             // Render the template providing it with the model
- *             String template = getContext().renderTemplate(jsTemplate, model);
- *
- *             // Create the inline JavaScript for the given template
- *             JsScript jsScript = new JsScript(template);
+ *             // Create the inline JavaScript for the given template path and model
+ *             JsScript jsScript = new JsScript(templatePath, model);
  *             headElements.add(jsScript);
  *         }
  *         return headElements;
@@ -109,12 +109,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  *
  * <h3>Character data (CDATA) support</h3>
  *
- * Sometimes it is necessary to wrap <tt>inline</tt> {@link JsScript} in CDATA
- * tags. Two use cases are common for doing this:
+ * Sometimes it is necessary to wrap <tt>inline</tt> {@link JsScript JavaScript}
+ * in CDATA tags. Two use cases are common for doing this:
  * <ul>
  * <li>For XML parsing: When using Ajax one often send back partial
  * XML snippets to the browser, which is parsed as valid XML. However the XML
- * parser will throw an error if the script contains reserved XML characters
+ * parser will throw an error if the content contains reserved XML characters
  * such as '&amp;', '&lt;' and '&gt;'. For these situations it is recommended
  * to wrap the script content inside CDATA tags.
  * </li>
@@ -156,6 +156,12 @@ public class JsScript extends ResourceElement {
      */
     private boolean characterData = false;
 
+    /** The path of the template to render. */
+    private String template;
+
+    /** The model of the template to render. */
+    private Map model;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -175,6 +181,41 @@ public class JsScript extends ResourceElement {
             this.content.append(content);
         }
         setAttribute("type", "text/javascript");
+    }
+
+    /**
+     * Construct a new inline JavaScript element for the given template path
+     * and template model.
+     * <p/>
+     * When the JsScript is rendered the template and model will be merged and
+     * the result will be rendered together with any JsScript
+     * {@link #setContent(org.apache.click.util.HtmlStringBuffer) content}.
+     * <p/>
+     *
+     * For example:
+     * <pre class="prettyprint">
+     * public class MyPage extends Page {
+     *     public void onInit() {
+     *         Context context = getContext();
+     *
+     *         // Create a default template model
+     *         Map model = ClickUtils.createTemplateModel(this, context);
+     *
+     *         // Create JsScript for the given template path and model
+     *         JsScript script = new JsScript("/mypage-template.js", model);
+     *
+     *         // Add script to the Page Head elements
+     *         getHeadElements().add(script);
+     *     }
+     * } </pre>
+     *
+     * @param template the path of the template to render
+     * @param model the template model
+     */
+    public JsScript(String template, Map model) {
+        this(null);
+        setTemplate(template);
+        setModel(model);
     }
 
     // ------------------------------------------------------ Public Properties
@@ -225,6 +266,55 @@ public class JsScript extends ResourceElement {
      */
     public void setCharacterData(boolean characterData) {
         this.characterData = characterData;
+    }
+
+    /**
+     * Return the path of the template to render.
+     *
+     * @see #setTemplate(java.lang.String)
+     *
+     * @return the path of the template to render
+     */
+    public String getTemplate() {
+        return template;
+    }
+
+    /**
+     * Set the path of the template to render.
+     * <p/>
+     * If the {@link #template} property is set, the template and {@link #model}
+     * will be merged and the result will be rendered together with any JsScript
+     * {@link #setContent(org.apache.click.util.HtmlStringBuffer) content}.
+     *
+     * @param template the path of the template to render
+     */
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
+    /**
+     * Return the model of the {@link #setTemplate(java.lang.String) template}
+     * to render.
+     *
+     * @see #setModel(java.util.Map)
+     *
+     * @return the model of the template to render
+     */
+    public Map getModel() {
+        return model;
+    }
+
+    /**
+     * Set the model of the template to render.
+     * <p/>
+     * If the {@link #template} property is set, the template and {@link #model}
+     * will be merged and the result will be rendered together with any JsScript
+     * {@link #setContent(org.apache.click.util.HtmlStringBuffer) content}.
+     *
+     * @param model the model of the template to render
+     */
+    public void setModel(Map model) {
+        this.model = model;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -314,11 +404,29 @@ public class JsScript extends ResourceElement {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Render this JsScript content to the specified buffer.
+     * Render the JsScript {@link #setContent(org.apache.click.util.HtmlStringBuffer) content}
+     * to the specified buffer.
+     * <p/>
+     * <b>Please note:</b> if the {@link #setTemplate(java.lang.String) template}
+     * property is set, this method will merge the {@link #setTemplate(java.lang.String) template}
+     * and {@link #setModel(java.util.Map) model} and the result will be
+     * rendered, together with the JsScript
+     * {@link #setContent(org.apache.click.util.HtmlStringBuffer) content},
+     * to the specified buffer.
      *
      * @param buffer the buffer to append the output to
      */
     protected void renderContent(HtmlStringBuffer buffer) {
+        if (getTemplate() != null) {
+            Context context = getContext();
+
+            Map templateModel = getModel();
+            if (templateModel == null) {
+                templateModel = new HashMap();
+            }
+            buffer.append(context.renderTemplate(getTemplate(), templateModel));
+
+        }
         buffer.append(getContent());
     }
 
