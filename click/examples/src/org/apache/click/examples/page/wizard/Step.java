@@ -240,7 +240,7 @@ public abstract class Step extends SimplePanel {
     }
 
     /**
-     * Step up and initializes the Step. This method must be called before
+     * Setup and initializes the Step. This method must be called before
      * the Step can be used.
      */
     public final void init() {
