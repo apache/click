@@ -681,14 +681,13 @@ public abstract class AbstractControl implements Control {
      * <p/>
      * For example given the ActionLink:
      *
-     * <pre class="codeJava">
-     * ActionLink addLink = <span class="kw">new</span> ActionLink(<span class="red">"addLink"</span>, <span class="st">"Add"</span>);
-     * addLink.setStyle(<span class="st">"color"</span>, <span class="st">"red"</span>);
-     * addLink.setStyle(<span class="st">"border"</span>, <span class="st">"1px solid black"</span>); </pre>
+     * <pre class="prettyprint">
+     * ActionLink addLink = new ActionLink("addLink", "Add");
+     * addLink.addStyleClass("red"); </pre>
      *
      * Will render the HTML as:
-     * <pre class="codeHtml">
-     * &lt;a href=".." <span class="st">style</span>=<span class="st">"color:red;border:1px solid black;"</span>&gt;<span class="st">Add</span>&lt;/a&gt; </pre>
+     * <pre class="prettyprint">
+     * &lt;a href=".." class="red"&gt;Add&lt;/a&gt; </pre>
      *
      * @param value the class attribute to add
      */
