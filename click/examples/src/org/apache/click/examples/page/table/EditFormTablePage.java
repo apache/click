@@ -116,6 +116,7 @@ public class EditFormTablePage extends BorderPage {
         table.addColumn(new Column("id"));
 
         FieldColumn column = new FieldColumn("name", new TextField());
+        column.getField().setRequired(true);
         column.setVerticalAlign("baseline");
         table.addColumn(column);
 
