@@ -22,12 +22,10 @@ import java.util.List;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
 import org.apache.click.control.Button;
-import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.Label;
-import org.apache.click.control.Panel;
 import org.apache.click.control.TextField;
 
 /**
@@ -94,10 +92,14 @@ public class ContainerUtilsTest extends TestCase {
         // Process form to bind request parameter to field
         form.onProcess();
 
+        // Assert that the bound priceField value is equal to price
+        assertEquals(price, priceField.getValue());
+
         Car car = new Car();
         form.copyTo(car);
 
-        assertEquals(price, priceField.getValue());
+        // Assert that the copied part price value is equal to the price
+        assertEquals(price, Double.toString(car.getPart().getPrice()));
     }
 
     /**
