@@ -119,14 +119,13 @@ public abstract class FormTablePage extends BorderPage {
 
             saveDataObject(dataObject);
 
-            onCancelClick();
+            clear();
         }
         return true;
     }
 
     public boolean onCancelClick() {
-        form.setDataObject(null);
-        form.clearErrors();
+        clear();
         return true;
     }
 
@@ -146,9 +145,14 @@ public abstract class FormTablePage extends BorderPage {
 
             deleteDataObject(dataObject);
 
-            onCancelClick();
+            clear();
         }
         return true;
+    }
+
+    public void clear() {
+        form.setDataObject(null);
+        form.clearErrors();
     }
 
     /**
