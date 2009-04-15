@@ -24,11 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.click.element.Element;
 import org.apache.click.util.Format;
 import org.apache.click.util.MessagesMap;
 import org.apache.click.util.PageImports;
-
 import org.apache.commons.lang.StringUtils;
 
 /**

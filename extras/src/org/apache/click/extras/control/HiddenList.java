@@ -31,20 +31,20 @@ import org.apache.click.util.HtmlStringBuffer;
  * However it can not render multiple values as a same name.
  * This control can have multiple values and it renders them as multiple hidden field.
  * </p>
- * 
+ *
  * <h3>HiddenList Examples</h3>
- * 
+ *
  * <pre class="codeJava">
  * HiddenList hiddenList = <span class="kw">new</span> HiddenList(<span class="st">"hiddenList"</span>);
  * hiddenList.addValue(<span class="st">"001"</span>);
  * hiddenList.addValue(<span class="st">"002"</span>); </pre>
- * 
+ *
  * This <code>HiddenList</code> would generate following HTML:
- * 
+ *
  * <pre class="codeHtml">
  * &lt;input type="hidden" name="hiddenList" id="form-hiddenList_1" value="001"/&gt;
  * &lt;input type="hidden" name="hiddenList" id="form-hiddenList_2" value="002"/&gt; </pre>
- * 
+ *
  * @author Naoki Takezoe
  * @since 2.1.0
  */
@@ -61,7 +61,7 @@ public class HiddenList extends Field {
 
     /**
      * Create a HiddenList with the given name.
-     * 
+     *
      * @param name the name of the field
      */
     public HiddenList(String name) {
@@ -72,7 +72,7 @@ public class HiddenList extends Field {
 
     /**
      * Set the list of hidden values.
-     * 
+     *
      * @param valueObject a list of Strings
      */
     public void setValueObject(Object valueObject) {
@@ -84,7 +84,7 @@ public class HiddenList extends Field {
 
     /**
      * Returns the list of added values as a <tt>List</tt> of Strings.
-     * 
+     *
      * @return a list of Strings
      */
     public Object getValueObject() {
@@ -97,16 +97,16 @@ public class HiddenList extends Field {
     /**
      * This method delegates to {@link #getValueObject()} to return the
      * hidden values as a <tt>java.util.List</tt> of Strings.
-     * 
+     *
      * @return a list of Strings
      */
     public List getValues() {
         return (List) getValueObject();
     }
-    
+
     /**
      * Add the given value to this <code>HiddenList</code>.
-     * 
+     *
      * @param value the hidden value to add
      */
     public void addValue(String value) {
@@ -120,7 +120,7 @@ public class HiddenList extends Field {
      */
     public void bindRequestValue() {
         String[] values = getContext().getRequestParameterValues(getName());
-        
+
         if (values != null) {
             List list = new ArrayList();
             for (int i = 0; i < values.length; i++) {
