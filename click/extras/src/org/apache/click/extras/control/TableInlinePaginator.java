@@ -46,6 +46,8 @@ public class TableInlinePaginator extends TablePaginator {
     /** Private Control which handles resource bundle properties. */
     private AbstractControl paginatorMessages = new AbstractControl() {
 
+        private static final long serialVersionUID = 1L;
+
         /**
          * Messages are defined in the resource bundle:
          * <tt>org/apache/click/extras/control/TableInlinePaginator.properties</tt>.

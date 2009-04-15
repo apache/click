@@ -252,4 +252,5 @@ public class CssImport extends ResourceElement {
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(getHref()).toHashCode();
     }
+
 }

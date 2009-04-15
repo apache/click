@@ -23,7 +23,6 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -38,21 +37,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import ognl.Ognl;
+import ognl.OgnlException;
+import ognl.TypeConverter;
+
 import org.apache.click.service.ConfigService;
 import org.apache.click.service.LogService;
 import org.apache.click.service.XmlConfigService;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ErrorPage;
-import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PageImports;
 import org.apache.click.util.PropertyUtils;
 import org.apache.click.util.RequestTypeConverter;
-import org.apache.click.util.SessionMap;
-import ognl.Ognl;
-import ognl.OgnlException;
-import ognl.TypeConverter;
-
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
