@@ -29,6 +29,7 @@ import org.apache.click.examples.page.velocity.SimpleTable;
 import org.apache.click.extras.tree.Tree;
 import org.apache.click.extras.tree.TreeNode;
 import org.apache.click.util.HtmlStringBuffer;
+
 import org.apache.commons.lang.ClassUtils;
 
 /**
@@ -49,6 +50,8 @@ public class PageLinkTreePage extends PlainTreePage {
      */
     protected Tree createTree() {
         return new Tree("tree") {
+
+            private static final long serialVersionUID = 1L;
 
             protected void renderValue(HtmlStringBuffer buffer, TreeNode treeNode) {
                 Object nodeValue = treeNode.getValue();
