@@ -1,23 +1,39 @@
 <!DOCTYPE' HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
  "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
- <meta name="description" lang="en" content="Click Java web application framework"/>
- <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
- <title>Click Framework</title>
+ <meta name="description" lang="en" content="Apache Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Apache Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
+ <title>Apache Click</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
 </head>
 <body>
   
 <h1>Quick Start Guide</h1>
 
-This section discusses how to get a Click web application up quickly. This section
-will not discuss how to configure your build system or IDE, but will focus on all 
+This section discusses how to get a Click web application up and running quickly. We
+will not look at how to configure your build system or IDE, but will focus on all 
 the basic pieces you need to get a Click application running.
-<p/>
-A Quick Start application is also included in the <a href="examples.html">Examples</a>.
 <p/>
 The following topics are covered:
 <ol>
@@ -88,7 +104,7 @@ Your <tt>web.xml</tt> file should contain:
 
   &lt;servlet&gt;
     &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;net.sf.click.ClickServlet&lt;/servlet-class&gt;
+    &lt;servlet-class&gt;org.apache.click.ClickServlet&lt;/servlet-class&gt;
     &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
   &lt;/servlet&gt;
   
@@ -111,10 +127,13 @@ Your <tt>web.xml</tt> file should contain:
 Add the following JAR files to your application <tt>WEB-INF/lib</tt>:
 
 <ul>
-<li>click-1.x.jar</li>
-<li>click-extras-1.x.jar</li>
+<li>click-x.x.x-incubating.jar</li>
+<li>click-extras-x.x.x-incubating.jar</li>
 </ul>
 
+where <tt>x.x.x</tt> is the version of Click.
+
+<p/>
 You can obtain these files from the Click distribution <tt>dist</tt> directory.
 
 <a name="welcome" class="heading"></a><h2>3.&nbsp; Welcome File</h2>
@@ -147,7 +166,7 @@ to our web applications <tt>WEB-INF/classes</tt> directory:
 <pre class="codeJava">
 <span class="kw">package</span> com.quickstart.page;
 
-<span class="kw">import</span> net.sf.click.Page;
+<span class="kw">import</span> org.apache.click.Page;
 
 <span class="kw">public class</span> HomePage <span class="kw">extends</span> Page {
 
@@ -277,7 +296,7 @@ new <tt>border-template.htm</tt> file:
 <pre class="codeJava">
 <span class="kw">package</span> com.quickstart.page;
 
-<span class="kw">import</span> net.sf.click.Page;
+<span class="kw">import</span> org.apache.click.Page;
 
 <span class="kw">public class</span> BorderPage <span class="kw">extends</span> Page {
 
@@ -424,7 +443,7 @@ where do I go from here? At this point you are recommended to:
 <li>
  Review the Click <a href="examples.html">Examples</a> application. 
  <p/>
- There is lot of good code examples and patterns you can lift into your application.
+ There is a lot of good code examples and patterns you can lift into your application.
 </li>
 </ol>
 
@@ -467,14 +486,16 @@ To run the quick start application builder simply follow the example below:
 Buildfile: build.xml
 
 project-quick-start:
-    [input] Please enter the project name (e.g. quickstart):
+    [input] Please enter the project name (e.g. quickstart): [quickstart]
 <span class="yellow">quickstart</span>
-    [input] Please enter the root package name (e.g. com.quickstart):
+    [input] Please enter the root package name (e.g. com.quickstart): [com.quickstart]
 <span class="yellow">com.quickstart</span>
     [input] Please enter the web app context path: [quickstart]
 <span class="yellow">quickstart</span>
-     [copy] Copying 37 files to C:\quickstart\WebContent
-     [copy] Copied 15 empty directories to 1 empty directory under C:\quickstart\WebContent
+    [input] The directory 'C:\quickstart' will be deleted. Continue (y/n)? (y, n)
+<span class="yellow">y</span>
+     [copy] Copying 20 files to C:\quickstart\WebContent
+     [copy] Copied 9 empty directories to 2 empty directory under C:\quickstart\WebContent
      [copy] Copying 1 file to C:\quickstart\WebContent\WEB-INF\lib
      [copy] Copying 1 file to C:\quickstart\WebContent\WEB-INF\lib
      [copy] Copying 1 file to C:\quickstart\WebContent\WEB-INF\lib

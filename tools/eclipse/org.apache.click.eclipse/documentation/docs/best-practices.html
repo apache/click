@@ -1,12 +1,30 @@
 <!DOCTYPE' HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
  "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
- <meta name="description" lang="en" content="Click Java web application framework"/>
- <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
- <title>Click Framework</title>
+ <meta name="description" lang="en" content="Apache Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Apache Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
+  <title>Apache Click</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
  <link rel="stylesheet" type="text/css" href="../syntax-highlighter.css"/>
  <script type="text/javascript" src="../syntax-highlighter.js"></script>
@@ -244,11 +262,35 @@ unauthorized (403) requests to the <tt>/not-authorized.htm</tt> page.
 &lt;/web-app&gt;
 </pre>
 
+<h4>Alternative Security solutions</h4>
+
+There are also alternative security solutions that provide extra features not
+available in JEE, such as RememberMe functionality, better resource mapping
+and <tt>Post Logon Page</tt> support. (<tt>Post Logon Page</tt> support allows one to
+specify a default URL where the user will be forwarded after successful login.
+This feature allows one to embed a login form in all non-secure pages and after
+successful authentication the user will be forwarded to their home page.)
+
+<p/>
+Below are some of the alternative security solutions available:
+<ul>
+    <li>
+        <a class="external" target="_blank" href="http://static.springframework.org/spring-security/site/index.html">Spring Security</a>
+    </li>
+    <li>
+        <a class="external" target="_blank" href="http://securityfilter.sourceforge.net/">SecurityFilter</a>
+    </li>
+    <li>
+        <a class="external" target="_blank" href="http://www.jsecurity.org/">JSecurity</a>
+    </li>
+</ul>
+
+
 <h4>Resources</h4>
 
 For more information on using security see the resources below:
 <ul>
-  <li><a href="http://infinity.crosslogic.com/clinfinity/ContentPath/crosslogic/Resources/WebPages/cl_site/downloads/white_papers/FormBasedAuthentication.pdf">Form Based Authentication</a> by Louis E. Mauget
+  <li><a href="http://stc.cis.brown.edu/~stc/Projects/Shibboleth/Version-3/Checklist/Tomcat-Authn/FormBasedAuthentication.pdf">Form Based Authentication</a> by Louis E. Mauget
   </li>
   <li><a href="http://java.sun.com/products/servlet/download.html">Servlet Specification</a> by Sun Microsystems
   </li>
@@ -496,7 +538,7 @@ Also see the Click <a href="examples.html">Examples</a> use of page templating.
 
 <a name="menus" class="heading"></a><h2>6.&nbsp; Menus</h2>
 
-For many applications using the <a href="extras-api/net/sf/click/extras/control/Menu.html">Menu</a>
+For many applications using the <a href="extras-api/org/apache/click/extras/control/Menu.html">Menu</a>
 control to centralize application navigation is very useful. 
 Menus are defined in a <tt>WEB-INF/menu.xml</tt> file which is very easy to change.
 <p/>
@@ -515,7 +557,7 @@ A good place to define your macros is in the webroot <tt>/macro.vm</tt> file
 as it is automatically included by Click. 
 <p/>
 Using macros you can create dynamic menu behaviour such as only rendering menu items 
-a user is authorized to access with <a href="extras-api/net/sf/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>.
+a user is authorized to access with <a href="extras-api/org/apache/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>.
 
 <pre class="codeHtml">
 <span class="kw">#if</span> (<span class="red">$</span>menu.isUserInRoles())
@@ -592,7 +634,7 @@ it will not produce any logging output.
 
 <a name="error-handling" class="heading"></a><h2>8.&nbsp; Error Handling</h2>
 
-In Click unhandled errors are directed to the <a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a>
+In Click unhandled errors are directed to the <a href="click-api/org/apache/click/util/ErrorPage.html">ErrorPage</a>
 for display. If applications require additional error handling they can create and
 register a custom error page in <tt>WEB-INF/click.xml</tt>. For example:
 
@@ -602,14 +644,14 @@ register a custom error page in <tt>WEB-INF/click.xml</tt>. For example:
 &lt;/pages&gt; </pre>
 
 Generally application handle transactional errors using service layer code or via a
-servlet <a href="servlet-api/javax/servlet/Filter.html">Filter</a> and would not 
+servlet <a class="external" target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/Filter.html">Filter</a> and would not
 need to include error handling logic in an error page.
 <p/>
 Potential uses for a custom error page include custom logging. 
 <p/>
 For example if an application requires unhandled errors to be logged to an 
 application log (rather than System.out) then a custom 
-<a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a> could be
+<a href="click-api/org/apache/click/util/ErrorPage.html">ErrorPage</a> could be
 configured. An example <tt>ErrorPage</tt> error logging page is provided 
 below:
 
@@ -617,7 +659,7 @@ below:
 <span class="kw">package</span> com.mycorp.page.ErrorPage;
 ..
 
-<span class="kw">public class</span> ErrorPage <span class="kw">extends</span> net.sf.click.util.ErrorPage {
+<span class="kw">public class</span> ErrorPage <span class="kw">extends</span> org.apache.click.util.ErrorPage {
 	
     <span class="kw">public void</span> onDestory() {
     	Logger.getLogger(getClass()).error(getError());
@@ -630,7 +672,7 @@ below:
 Yahoo published a list of <a target="_blank" class="external" href="http://developer.yahoo.com/performance/rules.html">best practices</a>
 for improving web application performance.
 <p/>
-Click Framework provides a <a href="extras-api/net/sf/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a>
+Click Framework provides a <a href="extras-api/org/apache/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a>
 which caters for some of these rules. However not all rules can be easily automated.
 <p/>
 This section will outline ways to apply rules which are not covered by the PerformanceFilter namely, <a target="_blank" class="external" href="http://developer.yahoo.com/performance/rules.html#num_http">#1 - Minimize HTTP Requests (by combining files)</a>
@@ -685,13 +727,13 @@ Note that the two files must include all the JavaScript and CSS that is generate
 by the Page and its Controls. Then you can instruct Click to <em>only</em>
 include the two compressed files, home-page.css and home-page.js.
 <p/>
-Click makes use of the utility class  <a href="click-api/net/sf/click/util/PageImports.html">PageImports</a>
+Click makes use of the utility class  <a href="click-api/org/apache/click/util/PageImports.html">PageImports</a>
 to include the CSS and JavaScript. PageImports exposes the method
-<a href="click-api/net/sf/click/util/PageImports.html#setInitialized(boolean)">setInitialized(boolean)</a>,
+<a href="click-api/org/apache/click/util/PageImports.html#setInitialized(boolean)">setInitialized(boolean)</a>,
 which controls when PageImports are fully initialized. Once PageImports have been
 initialized, no other CSS and JavaScript will be included.
 <p/>
-Knowing this one can override <a href="click-api/net/sf/click/Page.html#getPageImports()">Page.getPageImports()</a>,
+Knowing this one can override <a href="click-api/org/apache/click/Page.html#getPageImports()">Page.getPageImports()</a>,
 and import the necessary JavaScript and CSS files and then set PageImports to <tt>initialized</tt>,
 forcing PageImports to skip other CSS and JavaScript files.
 <p/>
@@ -701,7 +743,7 @@ Here is an example:
     private Form form = new Form("form");
 
     public void onInit() {
-        form.add(new DateField("date");
+        form.add(new EmailField("email");
         addControl(form);
     }
 

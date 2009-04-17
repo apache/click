@@ -1,19 +1,39 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
  "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
- <meta name="description" lang="en" content="Click Java web application framework"/>
- <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
- <title>Click Framework</title>
+ <meta name="description" lang="en" content="Apache Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Apache Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
+ <title>Apache Click</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <link rel="stylesheet" type="text/css" href="../syntax-highlighter.css"/>
  <style type="text/css">
    dt { margin-top:2em; }
    dd { margin:1em; margin-left:2em; }
  </style>
+ <script type="text/javascript" src="../syntax-highlighter.js"></script>
 </head>
-<body>
+<body onload="prettyPrint();">
   
 <h1>Frequently Asked Questions</h1>
 <ol>
@@ -24,10 +44,12 @@
   <li><a href="#tool-support">What development tools are there?</a>
   </li>
   <li><a href="#html-control">How can the GUI designer define the HTML if Click Controls generates everything?</a>
-  </li> 
+  </li>
+  <li><a href="#customize-look-and-feel">How can I customize a control's look and feel (Stylesheet, JavaScript and other resources)?</a>
+  </li>
   <li><a href="#shared-template">How can I have many Pages using the same HTML template?</a>
   </li>
-  <li><a href="#listener-returns">Why do control listeners methods have to return a boolean value?</a>
+  <li><a href="#listener-returns">Why do control listener methods have to return a boolean value?</a>
   </li> 
   <li><a href="#exclude-fields">Can you exclude some fields from a Form?</a>
   </li> 
@@ -48,6 +70,8 @@
   <li><a href="#spring-integration">How can you integrate Click into Spring?</a>
   </li>
   <li><a href="#jsp-support">Does Click support JSP?</a>
+  </li>
+  <li><a href="#pdf-and-excel-rendering">How can I render PDF and Excel documents?</a>
   </li>
   <li><a href="#performance">What is the performance of Click?</a>
   </li>
@@ -162,7 +186,7 @@
   not meet all your UI style requirements. 
   <p/>
   Please note the Forms control provides many 
-  <a href="click-api/net/sf/click/control/Form.html#auto-layout">auto layout</a> 
+  <a href="click-api/org/apache/click/control/Form.html#auto-layout">auto layout</a> 
   options, see the <a href="examples.html">click-examples</a> 'Form Properties' 
   for a demonstration. 
   <p/>
@@ -189,7 +213,7 @@
   <u>Use Panel to class to create reusable HTML blocks.</u> 
   <p/>
   The 
-  <a href="click-api/net/sf/click/control/Panel.html">Panel</a> 
+  <a href="click-api/org/apache/click/control/Panel.html">Panel</a> 
   control support custom Velocity templates, which is an ideal way
   to create reusable HTML sections which you can include in many pages.
   Panels also support nested controls, enabling your sections to support 
@@ -200,7 +224,7 @@
   This is easy to do and gives you good reuse across your web application.
   <p/>
   Please see the Form 
-  <a href="click-api/net/sf/click/control/Form.html#velocity-macros">velocity macros</a> 
+  <a href="click-api/org/apache/click/control/Form.html#velocity-macros">velocity macros</a> 
   example, and also see the <a href="examples.html">click-examples</a> 'Velocity Macro' 
   demonstration. 
   </li><li>
@@ -210,16 +234,23 @@
   across your web application. 
   <p/>
   Please see the Form
-  <a href="click-api/net/sf/click/control/Form.html#manual-layout">manual layout</a>
+  <a href="click-api/org/apache/click/control/Form.html#manual-layout">manual layout</a>
   example.
   </li>
   </ol>
   </dd>
 
 
-  
+  <a name="customize-look-and-feel" class="heading"></a>
+  <dt><b>5.&nbsp; How can I customize a control's look and feel (Stylesheet, JavaScript and other resources)?</b></dt>
+  <dd>
+   See the section <a href="configuration.html#auto-deployed-files">aut deployed files</a>
+   for details on how to customize and override a control's resources.
+  </dd>
+
+
   <a name="shared-template" class="heading"></a>
-  <dt><b>5.&nbsp; How can I have many Pages using the same HTML template?</b></dt>
+  <dt><b>6.&nbsp; How can I have many Pages using the same HTML template?</b></dt>
   <dd>
    To do this use the Page templating technique detailed in the 
    <a href="pages.html#page-templating">Page Templating</a> topic. 
@@ -238,7 +269,7 @@
 
     
   <a name="listener-returns" class="heading"></a>
-  <dt><b>6.&nbsp; Why do control listeners methods have to return a boolean value?</b></dt>
+  <dt><b>7.&nbsp; Why do control listeners methods have to return a boolean value?</b></dt>
   <dd>
   Control listener methods have to return a boolean value to state whether the
   Pages controls and methods should continue to be processed. To continue
@@ -263,10 +294,10 @@
 
 
   <a name="exclude-fields" class="heading"></a>
-  <dt><b>7.&nbsp; Can you exclude some fields from a Form?</b></dt>
+  <dt><b>8.&nbsp; Can you exclude some fields from a Form?</b></dt>
   <dd>
    To exclude some fields from being displayed in a shared Form class use the
-   <a href="click-api/net/sf/click/control/Form.html#removeFields(java.util.List)">Form.removeFields()</a>
+   <a href="click-api/org/apache/click/control/Form.html#removeFields(java.util.List)">Form.removeFields()</a>
    method. 
    <p/>
    You can even do this in your page template. Just make sure you call you call 
@@ -281,7 +312,7 @@
 
   
   <a name="localization" class="heading"></a>
-  <dt><b>8.&nbsp; How do you internationalize Pages and Controls?</b></dt>
+  <dt><b>9.&nbsp; How do you internationalize Pages and Controls?</b></dt>
   <dd>
    Click provides good support for application localization and 
    internationalization (I18N) requirements.
@@ -290,7 +321,7 @@
 
    The Page class supports page specific string localisation bundles using the 
    method 
-   <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage(String)</a>.
+   <a href="click-api/org/apache/click/Page.html#getMessage(java.lang.String)">getMessage(String)</a>.
    For example a Login class with three locale string property files on the classpath:
 <pre class="codeConfig">
 /com/mycorp/pages/Login.properties
@@ -306,7 +337,7 @@
 } </pre>
 
    In your HTML page template you can also access the localize message using
-   the <a href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a>
+   the <a href="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</a>
    object which is added to the template using the name "messages". For example:
 
     <pre class="codeHtml">
@@ -317,19 +348,19 @@
    the Javadoc:
    <ul style="margin-top:1em;">
     <li>
-     <a href="click-api/net/sf/click/control/ActionLink.html#getLabel()">ActionLink.getLabel()</a>
+     <a href="click-api/org/apache/click/control/ActionLink.html#getLabel()">ActionLink.getLabel()</a>
     </li>
     <li>
-     <a href="click-api/net/sf/click/control/ActionLink.html#getTitle()">ActionLink.getTitle()</a>
+     <a href="click-api/org/apache/click/control/ActionLink.html#getTitle()">ActionLink.getTitle()</a>
     </li>
     <li>
-     <a href="click-api/net/sf/click/control/Field.html#getLabel()">Field.getLabel()</a>
+     <a href="click-api/org/apache/click/control/Field.html#getLabel()">Field.getLabel()</a>
     </li>
     <li>
-     <a href="click-api/net/sf/click/control/Field.html#getTitle()">Field.getTitle()</a>
+     <a href="click-api/org/apache/click/control/Field.html#getTitle()">Field.getTitle()</a>
     </li>
     <li>
-     <a href="click-api/net/sf/click/control/FieldSet.html#getLegend()">FieldSet.getLegend()</a>
+     <a href="click-api/org/apache/click/control/FieldSet.html#getLegend()">FieldSet.getLegend()</a>
     </li>
    </ul>
 
@@ -340,14 +371,14 @@
 /click-control.properties </pre>  
 
    The field class provides a number of 
-   <a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a>
+   <a href="click-api/org/apache/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a>
    methods which support localized strings and message formatting.
    Please also see the Control topic <a href="controls.html#message-properties">Message Properties</a>.   
   </dd>
 
 
   <a name="utf8-encoding" class="heading"></a>
-  <dt><b>9.&nbsp; How do you encode Pages in the UTF-8 character set?</b></dt>
+  <dt><b>10.&nbsp; How do you encode Pages in the UTF-8 character set?</b></dt>
   <dd>
   To encode pages in the UTF-8 character set you need to create a
   <tt>WEB-INF/velocity.properties</tt> file with the properties:
@@ -368,13 +399,13 @@
 &lt;/click&gt; </pre>
   This will set the pages <tt>HttpServletResponse</tt> "Content-Type" header to be 
   "text/html;charset=UTF-8". Alternatively you can override the Page 
-  <a href="click-api/net/sf/click/Page.html#getContentType()">getContentType()</a> method
+  <a href="click-api/org/apache/click/Page.html#getContentType()">getContentType()</a> method
   to this content type.
   </dd>
 
 
   <a name="charset" class="heading"></a>
-  <dt><b>10.&nbsp; How do you specify the character set which is used in your application?</b></dt>
+  <dt><b>11.&nbsp; How do you specify the character set which is used in your application?</b></dt>
   <dd>
   
   You can specify your application character set in <tt>WEB-INF/click.xml</tt>:
@@ -396,7 +427,7 @@
   
       
   <a name="multiple-posts" class="heading"></a>
-  <dt><b>11.&nbsp; How can you prevent multiple form posts?</b></dt>
+  <dt><b>12.&nbsp; How can you prevent multiple form posts?</b></dt>
   <dd>
   You can prevent multiple form posts by using the Post Redirect pattern. With 
   this pattern once the user has posted a form you redirect to another page. 
@@ -408,7 +439,7 @@
   <p/>
   To prevent users resubmitting a form with the browser back button use the
   Form 
-  <a href="click-api/net/sf/click/control/Form.html#onSubmitCheck(net.sf.click.Page, java.lang.String)">onSubmitCheck()</a>
+  <a href="click-api/org/apache/click/control/Form.html#onSubmitCheck(org.apache.click.Page, java.lang.String)">onSubmitCheck()</a>
   method:
   
 <pre class="codeJava">
@@ -427,7 +458,7 @@
 
 
   <a name="html-pages"></a>
-  <dt><b>12.&nbsp; How can I use *.html Click pages?</b></dt>
+  <dt><b>13.&nbsp; How can I use *.html Click pages?</b></dt>
   <dd>
   Click does not support *.html files as Click pages. These files are not
   processed by the ClickServlet and are intended for use as static content.
@@ -436,7 +467,7 @@
 
 
   <a name="alternative-extension"></a>
-  <dt><b>13.&nbsp; Can Click be mapped to an extension other than *.htm?</b></dt>
+  <dt><b>14.&nbsp; Can Click be mapped to an extension other than *.htm?</b></dt>
   <dd>
   Currently Click only supports *.htm extension. You cannot create templates
   with a different extension for example '.xml'.
@@ -453,7 +484,7 @@
 
 
   <a name="cayenne-integration" class="heading"></a>
-  <dt><b>14.&nbsp; What JARs should I use with Click and Cayenne?</b></dt>
+  <dt><b>15.&nbsp; What JARs should I use with Click and Cayenne?</b></dt>
   <dd>
    To get Click and Cayenne to work happily with each other you will need to 
    include the following JAR files in your WEB-INF/lib directory:
@@ -474,10 +505,10 @@
 
 
   <a name="spring-integration" class="heading"></a>
-  <dt><b>15.&nbsp; How can you integrate Click into Spring?</b></dt>
+  <dt><b>16.&nbsp; How can you integrate Click into Spring?</b></dt>
   <dd>
    To integrate Spring with Click configure the
-   <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
+   <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
    instead of the normal ClickServlet. The SpringClickServlet is contained in the 
    <a href="extras.html">Extras</a> library.
    <p/>
@@ -502,7 +533,7 @@ public interface Controller {
 
 
   <a name="jsp-support" class="heading"></a>
-  <dt><b>16.&nbsp; Does Click support JSP?</b></dt>
+  <dt><b>17.&nbsp; Does Click support JSP?</b></dt>
   <dd>
    Click fully supports JSP pages. 
    <p/>
@@ -521,18 +552,18 @@ public interface Controller {
    the Servlet context path, e.g. <span class="">/mycorp</span>
   </li>  
   <li>format &nbsp; - &nbsp; 
-   the <a href="click-api/net/sf/click/util/Format.html">Format</a> 
+   the <a href="click-api/org/apache/click/util/Format.html">Format</a> 
     object for formatting the display of objects
   </li>
   <li>forward &nbsp; - &nbsp; 
    the page JSP resource (.jsp file)
   </li>
   <li>messages &nbsp; - &nbsp; 
-   the <a target="topic" href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a> adaptor
-   for the Page <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
+   the <a target="topic" href="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</a> adaptor
+   for the Page <a href="click-api/org/apache/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
    method
   </li>
-  <li>path &nbsp; - &nbsp; the mapped request <a href="click-api/net/sf/click/Page.html#path">path</a> 
+  <li>path &nbsp; - &nbsp; the mapped request <a href="click-api/org/apache/click/Page.html#path">path</a> 
     of the page. Note this will have a .htm not a .jsp extension
   </li>
    </ul>
@@ -540,9 +571,92 @@ public interface Controller {
   </dd>
 
 
-    
+ <a name="pdf-and-excel-rendering" class="heading"></a>
+  <dt><b>18.&nbsp; How can I render PDF and Excel documents?</b></dt>
+  <dd>
+   By making use of the <a href="pages.html#page-direct-rendering">Direct Rendering</a>
+   support you can render directly to the servlet response and bypass the page
+   template rendering.
+   <p/>
+   Here is an example to render either a PDF or Excel document:
+<pre class="prettyprint">
+
+public MyPage extends Page {
+
+    /** The PDF report type request parameter. */
+    public static final String PDF = "pdf";
+
+    /** The Excel report type request parameter. */
+    public static final String EXCEL = "excel";
+
+    /**
+     * The Page#onGet renders the report to the servlet output stream.
+     */
+    public void onGet() {
+        HttpServletResponse response = getContext().getResponse();
+
+        // report type is a request parameter which specifies either PDF or Excel
+        String reportType = getContext().getRequestParameter("reportType");
+
+        // Retrieve either a PDF or Excel document as an InputStream
+        InputStream inputStream = getInputStream(reportType);
+
+        // Set response headers
+        String mimeType = getMimeType(reportType);
+        response.setHeader("Content-Disposition", "attachment; filename=\"report.pdf\"");
+        response.setContentType(mimeType);
+        response.setHeader("Pragma", "no-cache");
+
+        OutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+
+            // Write out PDF Document to response stream
+            IOUtils.copy(inputStream, outputStream);
+
+            // By setting the Page path to null, we bypass template rendering
+            setPath(null);
+
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+
+        } finally {
+            ClickUtils.close(outputStream);
+        }
+    }
+
+    /**
+     * This method should contain the logic to retrieve the report as either a PDF
+     * or Excel document.
+     */
+    public InputStream getReport(String reportType) {
+        InputStream intputStream = null;
+        if (PDF.equals(reportType)) {
+            ...
+        } else if (EXCEL.equals(reportType)) {
+            ...
+        }
+        return intputStream;
+    }
+
+    /**
+     * This method returns the report mime type based on the specified report type.
+     */
+    public String getMimeType(String reportType) {
+        if (PDF.equals(reportType)) {
+            return ClickUtils.getMimeType(".pdf");
+        } else if (EXCEL.equals(reportType)) {
+            return ClickUtils.getMimeType(".xls");
+        }
+    }
+}
+</pre>
+  <p/>
+  </dd>
+
+
   <a name="performance" class="heading"></a>
-  <dt><b>17.&nbsp; What is the performance of Click?</b></dt>
+  <dt><b>19.&nbsp; What is the performance of Click?</b></dt>
   <dd>
   Click is fast. 
   <p/>
@@ -584,7 +698,7 @@ public interface Controller {
 
 
   <a name="unit-testing"></a>
-  <dt><b>18.&nbsp; How do I unit test Click pages?</b></dt>
+  <dt><b>20.&nbsp; How do I unit test Click pages?</b></dt>
   <dd>
   It is generally recommended that you don't write JUnit style automated unit 
   tests for Click pages as the cost to benefit ratio is quite poor.
@@ -594,13 +708,13 @@ public interface Controller {
   <p/>
   If you still need to write unit tests for your Click pages, please read the 
   <a href="mock-api/overview-summary.html">documentation</a> on the
-  <a href="mock-api/net/sf/click/MockContainer.html">MockContainer</a> and
-  <a href="mock-api/net/sf/click/MockContext.html">MockContext</a> classes.
+  <a href="mock-api/org/apache/click/MockContainer.html">MockContainer</a> and
+  <a href="mock-api/org/apache/click/MockContext.html">MockContext</a> classes.
   </dd>
 
 
   <a name="logging" class="heading"></a>
-  <dt><b>19.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
+  <dt><b>21.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
   <dd>
    Click by default does not use Commons Logging / Log4J to avoid the class 
    loader and configuration issues which often occur with these framework, and
@@ -612,7 +726,7 @@ public interface Controller {
     
 
   <a name="why-velocity" class="heading"></a>
-  <dt><b>20.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b></dt>
+  <dt><b>22.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b></dt>
   <dd>
    FreeMarker is a powerful templating engine which was evaluated along side 
    Velocity for use in Click. While FreeMarker has many sophisticated
@@ -625,7 +739,7 @@ public interface Controller {
 
 
   <a name="why-click" class="heading"></a>
-  <dt><b>21.&nbsp; Why develop a new Web Application Framework?</b></dt>
+  <dt><b>23.&nbsp; Why develop a new Web Application Framework?</b></dt>
   <dd>
   Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
   while Tapestry is too complicated. 

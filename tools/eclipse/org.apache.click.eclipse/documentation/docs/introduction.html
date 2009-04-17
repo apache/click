@@ -1,12 +1,30 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
  "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
- <meta name="description" lang="en" content="Click Java web application framework"/>
- <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
- <title>Click Framework</title>
+ <meta name="description" lang="en" content="Apache Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Apache Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
+ <title>Apache Click</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
  <link rel="stylesheet" type="text/css" href="table.css"/>
  <style type="text/css">
@@ -29,9 +47,9 @@ the response. (Note other template engines such as <a target="_blank" href="http
 and <a target="_blank" href="http://freemarker.sourceforge.net/">Freemarker</a> are also supported)
 <p>
 This framework uses a single servlet, called
-<a target="topic" href="click-api/net/sf/click/ClickServlet.html">ClickServlet</a>, to
+<a target="topic" href="click-api/org/apache/click/ClickServlet.html">ClickServlet</a>, to
 act as a request dispatcher. When a request arrives ClickServlet creates a 
-<a target="topic" href="click-api/net/sf/click/Page.html">Page</a> object to 
+<a target="topic" href="click-api/org/apache/click/Page.html">Page</a> object to 
 process the request and then uses the page's Velocity template to render the 
 results.
 <p>
@@ -56,6 +74,9 @@ examples:
   </li>
 </ol>
 
+These examples are available online at <a class="external" target="_blank" href="http://www.avoka.com/click-examples/">http://www.avoka.com/click-examples/</a>
+under the menu "Intro Examples".
+
 <p>&nbsp;</p>
 
 <a name="hello-world" class="heading"></a><h2>1.&nbsp; Hello World Example</h2>
@@ -67,7 +88,7 @@ First we create a <tt>HelloWorld</tt> page class:
 <span class="kw">package</span> <span class="red">examples.page</span>;
 
 <span class="kw">import</span> java.util.Date;
-<span class="kw">import</span> net.sf.click.Page;
+<span class="kw">import</span> org.apache.click.Page;
 
 <span class="kw">public</span> HelloWorld <span class="kw">extends</span> Page {
 
@@ -76,7 +97,7 @@ First we create a <tt>HelloWorld</tt> page class:
 } 
 </pre>
 
-Next we would have a page template <span class="blue">hello-world.htm</span>:
+Next we have a page template <span class="blue">hello-world.htm</span>:
 
 <pre class="codeHtml">
 &lt;html&gt;
@@ -90,9 +111,15 @@ Next we would have a page template <span class="blue">hello-world.htm</span>:
 &lt;/html&gt; 
 </pre>
 
-And finally we have a <tt>click.xml</tt> configuration file which tells our Click 
-application to map <span class="blue">hello-world.htm</span>
-requests to our <tt>HelloWorld</tt> page class.
+Click is smart enough to figure out that the <tt>HelloWorld</tt> page class maps
+to the template <span class="blue">hello-world.htm</span>. We only have to inform
+Click of the <tt>package</tt> of the HelloWorld class, in this case <tt>examples.page</tt>.
+
+<p/>
+We do that through the
+<a target='topic' href="configuration.html#application-configuration">click.xml</a>
+configuration file which tells Click to map <span class="blue">hello-world.htm</span>
+requests to our <tt>examples.page.HelloWorld</tt> page class.
 
 <pre class="codeConfig">
 &lt;click-app&gt;  
@@ -129,7 +156,7 @@ Click includes a library of <a target="topic" href="controls.html">Controls</a> 
 provide user interface functionality. 
 <p/>
 One of the commonly used controls is the 
-<a target="topic" href="click-api/net/sf/click/control/ActionLink.html">ActionLink</a>,
+<a target="topic" href="click-api/org/apache/click/control/ActionLink.html">ActionLink</a>,
 which you can use to have a HTML link call a method on a Page object. For example:
 
 <pre class="codeJava">
@@ -222,7 +249,7 @@ method then creates <span class="blue">msg</span> model value, which is rendered
 <a name="simple-table" class="heading"></a><h2>3.&nbsp; Simple Table Example</h2>
 
 One of the most useful Click controls is the 
-<a target="topic" href="click-api/net/sf/click/control/Table.html">Table</a>
+<a target="topic" href="click-api/org/apache/click/control/Table.html">Table</a>
 control.
 <p/>
 
@@ -256,7 +283,7 @@ An example usage of the Table control in a customers Page is provided below:
 } </pre>
 
 In this Page code example a Table control is declared, we set the table's HTML class,
-and then define a number of table <a target="topic" href="click-api/net/sf/click/control/Column.html">Column</a>
+and then define a number of table <a target="topic" href="click-api/org/apache/click/control/Column.html">Column</a>
 objects. In the column definitions we specify the name of the column in the constructor,
 which is used for the table column header and also to specify the row object property 
 to render.
@@ -339,11 +366,11 @@ A more advanced Table example is provided below:
         
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"investments"</span>));
         
-        editLink.setImageSrc(<span class="st">"/images/window-edit.png"</span>);
+        editLink.setImageSrc(<span class="st">"/images/table-edit.png"</span>);
         editLink.setTitle(<span class="st">"Edit customer details"</span>);
         editLink.setParameter(<span class="st">"referrer"</span>, <span class="st">"/introduction/advanced-table.htm"</span>);
         
-        deleteLink.setImageSrc(<span class="st">"/images/window-delete.png"</span>);
+        deleteLink.setImageSrc(<span class="st">"/images/table-delete.png"</span>);
         deleteLink.setTitle(<span class="st">"Delete customer record"</span>);
         deleteLink.setAttribute(<span class="st">"onclick"</span>, <span class="st">"return window.confirm('Are you sure you want to delete this record?');"</span>);
     	
@@ -376,9 +403,9 @@ A more advanced Table example is provided below:
 } </pre>
 
 In this Page code example a Table control is declared and a number of 
-<a target="topic" href="click-api/net/sf/click/control/Column.html">Column</a>
+<a target="topic" href="click-api/org/apache/click/control/Column.html">Column</a>
 objects are added. A deleteLink 
-<a target="topic" href="click-api/net/sf/click/control/ActionLink.html">ActionLink</a>
+<a target="topic" href="click-api/org/apache/click/control/ActionLink.html">ActionLink</a>
 control is used as a decorator for the "Action" column. This control will invoke the
 Page <tt>onDeleteClick()</tt> method when it is clicked. Finally we have the 
 Page <tt>onRender()</tt> method which is used to populate the Table control with
@@ -422,15 +449,15 @@ method will be called on the Page deleting the customer record.
 
 <a name="simple-form" class="heading"></a><h2>5.&nbsp; Simple Form Example</h2>
 
-The <a target="topic" href="click-api/net/sf/click/control/Form.html">Form</a> and 
-<a target="topic" href="click-api/net/sf/click/control/Field.html">Field</a> controls
+The <a target="topic" href="click-api/org/apache/click/control/Form.html">Form</a> and 
+<a target="topic" href="click-api/org/apache/click/control/Field.html">Field</a> controls
 are also some of the most commonly used controls in the Click Framework.
 <p/>
 The SimpleForm page below provides a demonstration of using these controls.
 <p/>
 In our example code we have the page's constructor adding a 
-<a target="topic" href="click-api/net/sf/click/control/TextField.html">TextField</a> field and a
-<a target="topic" href="click-api/net/sf/click/control/Submit.html">Submit</a> button to the form.
+<a target="topic" href="click-api/org/apache/click/control/TextField.html">TextField</a> field and a
+<a target="topic" href="click-api/org/apache/click/control/Submit.html">Submit</a> button to the form.
 A page method is also set as a control listener on the form.
 Also note in this example the page's public <span class="st">form</span> field is 
 automatically added to its list of controls.
@@ -603,10 +630,10 @@ The <tt>AdvancedForm</tt> page below provides a more advanced demonstration
 of using Form, Field and FielsSet controls.
 <p/>
 First we have an <tt>AdvancedForm</tt> class which setups up a 
-<a href="click-api/net/sf/click/control/Form.html">Form</a>
+<a href="click-api/org/apache/click/control/Form.html">Form</a>
 in its constructor. 
 The form's investment 
-<a href="click-api/net/sf/click/control/Select.html">Select</a> list is populated
+<a href="click-api/org/apache/click/control/Select.html">Select</a> list is populated
 in the page's <tt>onInit()</tt> method. At this point any page dependencies such
 as the CustomerService should be available.
 <p/>
@@ -740,7 +767,7 @@ automatically render itself as:
 </tr>
 <tr class="fields">
 <td class="fields" align="left"><label for="dateJoined_field">Date Joined</label><span class="required">*</span></td>
-<td align="left"><input type="text" name="dateJoined" id="dateJoined_field" value="" size="20"/><img align="top" style="cursor:hand" src="../images/calendar.gif" id="dateJoined_field-button"  alt="Calendar" title="Calendar"/></td>
+<td align="left"><input type="text" name="dateJoined" id="dateJoined_field" value="" size="20"/></td>
 </tr>
 <tr class="fields">
 <td class="fields" align="left"><label for="form_active">Active</label>&nbsp;</td>
@@ -767,7 +794,7 @@ automatically render itself as:
 In this example when the OK button is clicked the <tt>onOkClicked()</tt> method is invoked.
 If the form is valid a new customer object is created and the forms field values are copied
 to the new object using the Form 
-<a href="click-api/net/sf/click/control/Form.html#copyTo(java.lang.Object)">copyTo()</a>
+<a href="click-api/org/apache/click/control/Form.html#copyTo(java.lang.Object)">copyTo()</a>
 method. The customer object is then saved, the form's field values are cleared and an
 info message is presented to the user.
 <p/>
@@ -783,7 +810,7 @@ interactive Form Properties demo.
 <p/>
 For fine grained page design you can specifically layout form and fields in 
 your page template. See the <a href="controls.html#template-layout">Template Layout</a>
-section and <a href="click-api/net/sf/click/control/Form.html#form-layout">Form</a>
+section and <a href="click-api/org/apache/click/control/Form.html#form-layout">Form</a>
 Javadoc for more details.
 <p/>
 An alternative approach to page template design is using a programmatic approach.

@@ -1,12 +1,29 @@
 /*
- * This stylesheet was adapted from the book "The Art & Science Of CSS"
- * http://www.sitepoint.com/books/cssdesign1/
-*/
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 .sites {
-    border-collapse: collapse;
+    margin-left: 0;
+    padding-left: 0;
 }
 .sites td {
-    padding: 10px 2px;
+    margin-left: 0;
+    padding-left: 0;
+    padding-bottom: 5px;
 }
 .powered_by {
     background: #EFEFF7;
@@ -29,65 +46,15 @@ img {
   display: block;
   margin: 0 auto 5px auto;
   border: 1px solid #ccc;
-  border-bottom-color: #eee;
-  border-left-color: #ddd;
-  border-top-color: #bbb;
 }
-#content {
-  margin: 0 auto 20px 20px;
-  padding: 1em 0 0 0;
-  width: 730px;
-  background-color:#fff;
-  font-size: 1.25em; 
-  line-height: 1.75em;
-}
-ul.navigation {
-  margin: 0 0 10px 0;
-  padding: 0;
+.thumbnail a {
   float: left;
-  text-align: center;
-  background-color: #fff;
-  line-height: 1em;
-  list-style: none; 
-  position: absolute;
-  top: 58px;
-  left: 550px;
-}
-ul.thumbnails a {
-  display: block;
-  float: left;
-  margin: 0;
-  padding: 4px 4px 9px 4px;
   border: 1px solid #ccc;
-  border-top-color: #eee;
-  border-right-color: #ddd;
-  border-bottom-color: #bbb;
   background-color: #fff;
-  text-align: center;
+  margin: 10px 5px;
+  padding: 3px 3px 6px 3px;
+  width: 81px;
 }
-ul.thumbnails a {
-  width: 80px;
-  margin-right: 10px;
-  margin-left: 2px;
-}
-ul.thumbnails a:hover {
-  border: 1px solid #ccc;
+.thumbnail a:hover {
   background-color: #eee;
-}
-ul.thumbnails a {
-  width: 80px;
-  margin-right: 10px;
-}
-ul.thumbnails {
-  margin: 0;
-  padding: 0;
-  float: left;
-  text-align: center;
-  background-color: #fff;
-  line-height: 1em;
-  list-style: none;
-}
-ul.thumbnails li, ul.navigation li {
-  display: inline;
-  margin: 0;
 }
