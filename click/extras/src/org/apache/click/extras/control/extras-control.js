@@ -18,7 +18,11 @@
 /*
  * This file is dependend upon /click/control.js functions.
  */
- 
+
+ /* Ensure Click namespace exists */
+if ( typeof Click == 'undefined' )
+  Click = {};
+
 /* Validate Functions */
 
 function validateCreditCardField(id, typeId, required, minLength, maxLength, msgs){
@@ -248,3 +252,56 @@ function pickListMoveItem(from, to, values, hidden, isSelected){
 		}
 	}
 }
+
+/**
+ * Define the SubmitLink action. This function creates hidden fields for
+ * each SubmitLink parameter and submits the form.
+ */
+Click.submitLinkAction = function(link, formName) {
+  var params=Click.getUrlParams(link.href);
+  if (params == null) {
+      return false;
+  }
+  var form = document.getElementById(formName);
+  if(form == null) {
+      return false;
+  }
+  for(var i=0; i<params.length; i++){
+    var param=params[i];
+    var input = document.createElement("input");
+    input.setAttribute("type", "hidden");
+    input.setAttribute("name", param.name);
+    input.setAttribute("value", param.value);
+    form.appendChild(input);
+  }
+  form.submit();
+  return false;
+}
+
+/**
+ * Return the url parameters as an array of key/value pairs or null
+ * if no parameters can be extracted.
+ */
+Click.getUrlParams = function(url) {
+  if (url == null || url == '' || url == 'undefined') {
+    return null;
+  }
+  url = unescape(url);
+  var start = url.indexOf('?')
+  if (start == -1) {
+    return null;
+  }
+  url=url.substring(start + 1);
+  var pairs=url.split("&");
+  var params = new Array();
+  for (var i=0;i<pairs.length;i++) {
+    var param = new Object();
+    var pos = pairs[i].indexOf('=');
+    if (pos >= 0) {
+      param.name = pairs[i].substring(0,pos);
+      param.value = pairs[i].substring(pos+1);
+      params.push(param);
+    }
+  }
+  return params;
+};

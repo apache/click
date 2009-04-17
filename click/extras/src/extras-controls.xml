@@ -27,6 +27,7 @@
     <control classname="org.apache.click.extras.control.PickList"/>
     <control classname="org.apache.click.extras.control.Menu"/>
     <control classname="org.apache.click.extras.control.RegexField"/>
+    <control classname="org.apache.click.extras.control.SubmitLink"/>
     <control classname="org.apache.click.extras.control.TabbedForm"/>
     <control classname="org.apache.click.extras.control.VirtualKeyboard"/>
     <control classname="org.apache.click.extras.panel.ListPanel"/>
