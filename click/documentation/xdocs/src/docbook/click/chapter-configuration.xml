@@ -418,7 +418,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         <title>Page Autobinding</title>
 
         <para>By default all pages have autobinding enabled. With autobinding
-        enabled the ClickServlet will automatically:
+        the ClickServlet will automatically:
         </para>
 
         <itemizedlist>
@@ -428,8 +428,8 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
             </para>
           </listitem>
           <listitem>
-            <para> if the public control's name is not defined, its name will be
-            set to the the value its field name
+            <para> if the public control name is not defined, its name will be
+            set to the value of its field name
             </para>
           </listitem>
           <listitem>
@@ -440,7 +440,8 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
             </para>
           </listitem>
           <listitem>
-            <para> add any public page fields to the page model, before rendering</para>
+            <para> add any public page fields to the page model (this step occurs
+            right before the page is rendered)</para>
           </listitem>
         </itemizedlist>
 
