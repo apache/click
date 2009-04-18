@@ -488,16 +488,18 @@ public class ClickServlet extends HttpServlet {
             ErrorPage errorPage = (ErrorPage) page;
             errorPage.setMode(configService.getApplicationMode());
 
-            // Clear the control registry
-            ControlRegistry.getThreadLocalRegistry().clearRegistry();
+            // Clear the POST_ON_PROCESS_EVENT control listeners from the registry
+            // Registered listeners from other phases must still be invoked
+            ControlRegistry.getThreadLocalRegistry().getEventHolder(
+                ControlRegistry.POST_ON_PROCESS_EVENT).clear();
         }
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
 
+        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
+
         if (continueProcessing) {
             performOnInit(page, context);
-
-            ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
 
             continueProcessing = performOnProcess(page, context, controlRegistry);
 
@@ -507,6 +509,8 @@ public class ClickServlet extends HttpServlet {
                 performOnRender(page, context);
             }
         }
+
+        controlRegistry.fireActionEvents(context, ControlRegistry.POST_ON_RENDER_EVENT);
 
         performRender(page, context);
     }
@@ -1477,9 +1481,10 @@ public class ClickServlet extends HttpServlet {
                 }
             }
 
-            // Fire all the registered action events
             if (continueProcessing) {
-                continueProcessing = controlRegistry.fireActionEvents(context);
+                // Fire registered action events for the POST_PROCSESS phase
+                continueProcessing = controlRegistry.fireActionEvents(context,
+                    ControlRegistry.POST_ON_PROCESS_EVENT);
 
                 if (logger.isTraceEnabled()) {
                     String msg = "   invoked: Control listeners : "
