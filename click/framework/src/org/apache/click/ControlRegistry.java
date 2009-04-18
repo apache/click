@@ -24,13 +24,29 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 
 /**
- * Provides a thread local register for ActionListener events. The ClickServlet
- * will fire any ActionListeners registered after processing all the page's
- * controls.
+ * Provides a thread local register for ActionListener callbacks.
+ * <p/>
+ * <b>Please note:</b> this class is meant for component development and can be
+ * ignored otherwise.
+ * <p/>
+ * When registering an ActionListener you can specify the callback to occur for
+ * a specific event. For example ActionListeners can be registered to fire
+ * <tt>after</tt> the <tt>onProcess</tt> or <tt>onRender</tt> events. By default
+ * ActionListeners will be fired <tt>after</tt> the <tt>onProcess</tt> event.
+ * <p/>
+ * The ClickServlet will notify the ControlRegistry which ActionListeners
+ * to fire. For example, after the <tt>onProcess</tt> event, the ClickServlet
+ * will notify the registry to fire ActionListeners registered for the
+ * {@link #POST_ON_PROCESS_EVENT} (this is the default event when listeners are fired).
+ * Similarly, after the <tt>onRender</tt> event, ClickServlet will notify the
+ * registry to fire ActionListeners registered for the {@link #POST_ON_RENDER_EVENT}.
+ * <p/>
+ * Out of the box ControlRegistry supports the events {@link #POST_ON_PROCESS_EVENT}
+ * (the default) and {@link #POST_ON_RENDER_EVENT}.
  *
  * <h4>Example Usage</h4>
- * Developers who implement their own controls, should look at the following
- * example control <tt>onProcess</tt> implementation.
+ * The following example shows how to register an ActionListener with a custom
+ * Control:
  *
  * <pre class="prettyprint">
  * public class MyLink extends AbstractControl {
@@ -40,7 +56,7 @@ import org.apache.commons.lang.Validate;
  *         bindRequestValue();
  *
  *         if (isClicked()) {
- *             // Register this controls listener for invocation after
+ *             // Register the control listener for invocation after
  *             // control processing has finished
  *             registerActionEvent();
  *         }
@@ -53,8 +69,48 @@ import org.apache.commons.lang.Validate;
  * {@link org.apache.click.control.AbstractControl#registerActionEvent()}.
  * This method registers the Control's action listener with ControlRegistry.
  * The ClickServlet will subsequently invoke the registered
- * {@link ActionListener#onAction(Control)} methods after all the Page's control
- * <tt>onProcess()</tt> methods have been invoked.
+ * {@link ActionListener#onAction(Control)} method after all the Page controls
+ * <tt>onProcess()</tt> method have been invoked.
+ * <p/>
+ * On rare occasions one need to manipulate a Control's state right before it
+ * is rendered. The {@link #POST_ON_RENDER_EVENT} callback can be used for this
+ * situation. For example:
+ *
+ * <pre class="prettyprint">
+ * public class MyForm extends Form {
+ *
+ *     public MyForm() {
+ *         init();
+ *     }
+ *
+ *     public MyForm(String name) {
+ *         super(name);
+ *         init();
+ *     }
+ *
+ *     private void init() {
+ *         ActionListener listener = new ActionListener() {
+ *             public boolean onAction(Control source {
+ *                 // Add a hidden field to hold state for MyForm
+ *                 add(new HiddenField("my-form-name", getName() + '_' + "myform"));
+ *                 return true;
+ *             }
+ *         };
+ *
+ *         ControlRegistry.registerActionEvent(this, listener, ControlRegistry.POST_ON_RENDER_EVENT);
+ *     }
+ *
+ *     ...
+ *
+ * } </pre>
+ *
+ * The above example fires the ActionListener <tt>after</tt> the <tt>onRender</tt>
+ * event. This ensures a HiddenField is added right before the MyForm is
+ * streamed to the browser.
+ * <p/>
+ * Registering the listener in MyForm constructor guarantees that the
+ * listener will be registered even if MyForm is subclassed because the compiler
+ * forces subclasses to invoke their super constructor.
  *
  * @author Bob Schellink
  * @author Malcolm Edgar
@@ -66,82 +122,90 @@ public class ControlRegistry {
     /** The thread local registry holder. */
     private static final ThreadLocal THREAD_LOCAL_REGISTRY = new ThreadLocal();
 
+    /**
+     * Indicates the listener should fire <tt>AFTER</tt> the onProcess event.
+     * The <tt>POST_ON_PROCESS_EVENT</tt> is the event during which control
+     * listeners will fire.
+     */
+    public static final int POST_ON_PROCESS_EVENT = 1;
+
+    /**
+     * Indicates the listener should fire <tt>AFTER</tt> the onRender event.
+     * Listeners fired in the <tt>POST_ON_RENDER_EVENT</tT> are
+     * <tt>guaranteed</tt> to trigger, even when redirecting, forwarding or if
+     * page processing is cancelled.
+     */
+    public static final int POST_ON_RENDER_EVENT = 2;
+
     // -------------------------------------------------------------- Variables
 
-    /** The list of registered event sources. */
-    private List eventSourceList;
+    /** The POST_PROCESS events holder. */
+    private EventHolder postProcessEventHolder;
 
-    /** The list of registered event listeners. */
-    private List eventListenerList;
+    /** The POST_RENDER events holder. */
+    private EventHolder postRenderEventHolder;
 
     // --------------------------------------------------------- Public Methods
 
     /**
      * Register the event source and event ActionListener to be fired by the
      * ClickServlet once all the controls have been processed.
+     * <p/>
+     * Listeners registered by this method will be fired in the
+     * {@link #POST_ON_PROCESS_EVENT}.
+     *
+     * @see #registerActionEvent(org.apache.click.Control, org.apache.click.ActionListener, int)
      *
      * @param source the action event source
      * @param listener the event action listener
      */
     public static void registerActionEvent(Control source, ActionListener listener) {
+        registerActionEvent(source, listener, POST_ON_PROCESS_EVENT);
+    }
+
+    /**
+     * Register the event source and event ActionListener to be fired by the
+     * ClickServlet in the specified event.
+     *
+     * @param source the action event source
+     * @param listener the event action listener
+     * @param event the specific event to trigger the action event
+     */
+    public static void registerActionEvent(Control source,
+        ActionListener listener, int event) {
+
         Validate.notNull(source, "Null source parameter");
         Validate.notNull(listener, "Null listener parameter");
 
         ControlRegistry instance = getThreadLocalRegistry();
-        List eventSourceList = (List) instance.getEventSourceList();
-        List eventListenerList = (List) instance.getEventListenerList();
-        eventSourceList.add(source);
-        eventListenerList.add(listener);
+        EventHolder eventHolder = instance.getEventHolder(event);
+        eventHolder.registerActionEvent(source, listener);
     }
 
     // ------------------------------------------------ Package Private Methods
 
     /**
-     * Checks if any Action Events have been registered.
-     */
-    boolean hasActionEvents() {
-        if (eventListenerList == null || eventListenerList.isEmpty()) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Return the list of event listeners.
+     * Fire the actions for the given listener list and event source list which
+     * return true if the page should continue processing.
+     * <p/>
+     * This method will be passed the listener list and event source list
+     * of a specific event e.g. {@link #POST_ON_PROCESS_EVENT} or
+     * {@link #POST_ON_RENDER_EVENT}.
+     * event.
+     * <p/>
+     * This method can be overridden if you need to customize the way events
+     * are fired.
      *
-     * @return list of event listeners
-     */
-    List getEventListenerList() {
-        if (eventListenerList == null) {
-            eventListenerList = new ArrayList();
-        }
-        return eventListenerList;
-    }
-
-    /**
-     * Return the list of event sources.
-     *
-     * @return list of event sources
-     */
-    List getEventSourceList() {
-        if (eventSourceList == null) {
-            eventSourceList = new ArrayList();
-        }
-        return eventSourceList;
-    }
-
-    /**
-     * Fire all the registered action events and return true if the page should
-     * continue processing.
+     * @param context the request context
+     * @param eventSourceList the list of source controls
+     * @param eventListenerList the list of listeners to fire
      *
      * @return true if the page should continue processing or false otherwise
      */
-    boolean fireActionEvents(Context context) {
-        boolean continueProcessing = true;
+    boolean fireActionEvents(Context context, List eventSourceList,
+        List eventListenerList) {
 
-        if (!hasActionEvents()) {
-            return true;
-        }
+        boolean continueProcessing = true;
 
         for (int i = 0, size = eventSourceList.size(); i < size; i++) {
             Control source = (Control) eventSourceList.get(i);
@@ -156,13 +220,66 @@ public class ControlRegistry {
     }
 
     /**
+     * Fire all the registered action events for the specified event and return
+     * true if the page should continue processing.
+     *
+     * @param context the request context
+     * @param event the specific event which events to fire
+     *
+     * @return true if the page should continue processing or false otherwise
+     */
+    boolean fireActionEvents(Context context, int event) {
+        EventHolder eventHolder = getEventHolder(event);
+        return eventHolder.fireActionEvents(context);
+    }
+
+    /**
+     * Return the EventHolder for the specified event.
+     *
+     * @param event the event which EventHolder to retrieve
+     *
+     * @return the EventHolder for the specified event
+     */
+    EventHolder getEventHolder(int event) {
+        if (event == POST_ON_RENDER_EVENT) {
+            return getPostRenderEventHolder();
+        } else if (event == POST_ON_PROCESS_EVENT) {
+            return getPostProcessEventHolder();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Return the {@link #POST_ON_PROCESS_EVENT} {@link EventHolder}.
+     *
+     * @return the {@link #POST_ON_PROCESS_EVENT} {@link EventHolder}
+     */
+    EventHolder getPostProcessEventHolder() {
+        if (postProcessEventHolder == null) {
+            postProcessEventHolder = new EventHolder();
+        }
+        return postProcessEventHolder;
+    }
+
+    /**
+     * Return the {@link #POST_ON_RENDER_EVENT} {@link EventHolder}.
+     *
+     * @return the {@link #POST_ON_RENDER_EVENT} {@link EventHolder}
+     */
+    EventHolder getPostRenderEventHolder() {
+        if (postRenderEventHolder == null) {
+            postRenderEventHolder = new EventHolder();
+        }
+        return postRenderEventHolder;
+    }
+
+    /**
      * Clear the registry.
      */
     void clearRegistry() {
-        if (hasActionEvents()) {
-            eventListenerList.clear();
-            eventSourceList.clear();
-        }
+        getPostProcessEventHolder().clear();
+        getPostRenderEventHolder().clear();
     }
 
     /**
@@ -277,6 +394,94 @@ public class ControlRegistry {
             }
 
             return (ControlRegistry) get(length - 1);
+        }
+    }
+
+    /**
+     * Holds the list of listeners and event sources.
+     */
+    class EventHolder {
+
+        /** The list of registered event sources. */
+        private List eventSourceList;
+
+        /** The list of registered event listeners. */
+        private List eventListenerList;
+
+        /**
+         * Register the event source and event ActionListener to be fired in the
+         * specified event.
+         *
+         * @param source the action event source
+         * @param listener the event action listener
+         * @param event the specific event to trigger the action event
+         */
+        void registerActionEvent(Control source, ActionListener listener) {
+            Validate.notNull(source, "Null source parameter");
+            Validate.notNull(listener, "Null listener parameter");
+
+            getEventSourceList().add(source);
+            getEventListenerList().add(listener);
+        }
+
+        /**
+         * Checks if any Action Events have been registered.
+         */
+        boolean hasActionEvents() {
+            if (eventListenerList == null || eventListenerList.isEmpty()) {
+                return false;
+            }
+            return true;
+        }
+
+        /**
+         * Return the list of event listeners.
+         *
+         * @return list of event listeners
+         */
+        List getEventListenerList() {
+            if (eventListenerList == null) {
+                eventListenerList = new ArrayList();
+            }
+            return eventListenerList;
+        }
+
+        /**
+         * Return the list of event sources.
+         *
+         * @return list of event sources
+         */
+        List getEventSourceList() {
+            if (eventSourceList == null) {
+                eventSourceList = new ArrayList();
+            }
+            return eventSourceList;
+        }
+
+        /**
+         * Clear the events.
+         */
+        void clear() {
+            if (hasActionEvents()) {
+                getEventSourceList().clear();
+                getEventListenerList().clear();
+            }
+        }
+
+        /**
+         * Fire all the registered action events and return true if the page should
+         * continue processing.
+         *
+         * @return true if the page should continue processing or false otherwise
+         */
+        boolean fireActionEvents(Context context) {
+
+            if (!hasActionEvents()) {
+                return true;
+            }
+
+            return ControlRegistry.this.fireActionEvents(context,
+                getEventSourceList(), getEventListenerList());
         }
     }
 }
