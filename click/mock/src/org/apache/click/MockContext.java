@@ -297,7 +297,9 @@ public class MockContext extends Context {
      */
     public boolean fireActionEventsAndClearRegistry() {
         ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
-        boolean continueProcessing = controlRegistry.fireActionEvents(this);
+        boolean continueProcessing = controlRegistry.fireActionEvents(this,
+            ControlRegistry.POST_ON_PROCESS_EVENT);
+
         controlRegistry.clearRegistry();
         return continueProcessing;
     }
