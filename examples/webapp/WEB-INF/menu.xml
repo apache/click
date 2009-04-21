@@ -78,6 +78,7 @@
     <menu label="FileField" path="control/file-upload.htm"/>
     <menu label="ImageSubmit" path="control/image-demo.htm"/>
     <menu label="Link Controls" path="control/link-demo.htm"/>
+    <menu label="SubmitLink Control" path="control/submit-link-demo.htm"/>
     <menu label="Select" path="control/select-demo.htm"/>
     <menu label="Populate on select" path="control/populate-on-select.htm"/>
     <menu separator="true"/>
