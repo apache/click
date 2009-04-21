@@ -153,15 +153,6 @@ public class Button extends Field {
     }
 
     /**
-     * This method does nothing. Subclasses may override this method to perform
-     * pre rendering logic.
-     *
-     * @see org.apache.click.Control#onRender()
-     */
-    public void onRender() {
-    }
-
-    /**
      * @see AbstractControl#getControlSizeEst()
      *
      * @return the estimated rendered control size in characters
