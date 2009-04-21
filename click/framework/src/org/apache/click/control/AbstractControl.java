@@ -533,7 +533,6 @@ public abstract class AbstractControl implements Control {
      * @param servletContext the servlet context
      */
     public void onDeploy(ServletContext servletContext) {
-
     }
 
    /**
