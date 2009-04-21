@@ -220,6 +220,20 @@ public class ControlRegistry {
     }
 
     /**
+     * Fire all the registered action events after the Page Controls have been
+     * processed and return true if the page should continue processing.
+     * <p/>
+     * @see #fireActionEvents(org.apache.click.Context, int)
+     *
+     * @param context the request context
+     *
+     * @return true if the page should continue processing or false otherwise
+     */
+    boolean fireActionEvents(Context context) {
+        return fireActionEvents(context, ControlRegistry.POST_ON_PROCESS_EVENT);
+    }
+
+    /**
      * Fire all the registered action events for the specified event and return
      * true if the page should continue processing.
      *
