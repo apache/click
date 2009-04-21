@@ -1483,8 +1483,7 @@ public class ClickServlet extends HttpServlet {
 
             if (continueProcessing) {
                 // Fire registered action events for the POST_PROCSESS phase
-                continueProcessing = controlRegistry.fireActionEvents(context,
-                    ControlRegistry.POST_ON_PROCESS_EVENT);
+                continueProcessing = controlRegistry.fireActionEvents(context);
 
                 if (logger.isTraceEnabled()) {
                     String msg = "   invoked: Control listeners : "
