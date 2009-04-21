@@ -256,6 +256,8 @@ function pickListMoveItem(from, to, values, hidden, isSelected){
 /**
  * Define the SubmitLink action. This function creates hidden fields for
  * each SubmitLink parameter and submits the form.
+ *
+ * @return false to prevent the link default action
  */
 Click.submitLinkAction = function(link, formName) {
   var params=Click.getUrlParams(link.href);
