@@ -1482,7 +1482,8 @@ public class ClickServlet extends HttpServlet {
             }
 
             if (continueProcessing) {
-                // Fire registered action events for the POST_PROCSESS phase
+                // Fire registered action events for the POST_ON_PROCSESS event,
+                // which is also the default event
                 continueProcessing = controlRegistry.fireActionEvents(context);
 
                 if (logger.isTraceEnabled()) {
