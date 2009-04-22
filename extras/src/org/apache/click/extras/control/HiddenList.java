@@ -142,14 +142,13 @@ public class HiddenList extends Field {
     }
 
     /**
-     * Return the HTML rendered Hidden Fields string.
+     * Render the HTML representation of the HiddenField.
      *
-     * @see Object#toString()
+     * @see org.apache.click.Control#render(org.apache.click.util.HtmlStringBuffer)
      *
-     * @return the HTML rendered Hidden Fields string
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
+    public void render(HtmlStringBuffer buffer) {
         List values = getValues();
 
         for (int i = 0; i < values.size(); i++) {
@@ -160,8 +159,6 @@ public class HiddenList extends Field {
             buffer.appendAttribute("value", values.get(i));
             buffer.elementEnd();
         }
-
-        return buffer.toString();
     }
 
 }
