@@ -17,13 +17,14 @@
    under the License.*#
 -->
 
+This page demonstrates some usage patterns of the SubmitLink control.
+
 <h3>Demo1</h3>
 
 In this first demo is shown how the Form is submitted when the SubmitLink is
-clicked. Note that the SubmitLink parameters will be sent as part of the Form
-submission.
+clicked.
 
-$form
+$demo1
 
 #if ($demo1Msg)
 <p class="infoMsg"> $demo1Msg</p>
@@ -31,16 +32,48 @@ $form
 
 <h3>Demo2</h3>
 
-This demo shows how the SubmitLink can be used outside a Form. When a SubmitLink
-is not inside a Form it behaves like a normal ActionLink.
+In this second demo is shown how the SubmitLink's parameters are
+submitted together with the Form.
 
-<p/>
-
-Click <a href="$standaloneLink.href">here</a> to invoke the SubmitLink.
+$demo2
 
 #if ($demo2Msg)
 <p class="infoMsg"> $demo2Msg</p>
 #end
 
+<h3>Demo3</h3>
 
-$dForm
+This demo shows how the SubmitLink can be used outside of a Form. When a SubmitLink
+is not inside a Form it behaves like a normal ActionLink.
+
+<p/>
+
+Click $standaloneLink to demonstrate.
+
+#if ($demo3Msg)
+<p class="infoMsg"> $demo3Msg</p>
+#end
+
+<h3>Demo4</h3>
+
+<script type="text/javascript">
+    function confirmSubmit(link, formName, msg) {
+        var confirm = window.confirm(msg);
+        if (confirm) {
+            return Click.submitLinkAction(link, formName);
+        } else {
+            return false;
+        }
+    }
+</script>
+
+This demo shows how a confirmation message can be displayed before the
+SubmitLink submits the Form.
+
+<p/>
+
+$demo4
+
+#if ($demo4Msg)
+<p class="infoMsg"> $demo4Msg</p>
+#end

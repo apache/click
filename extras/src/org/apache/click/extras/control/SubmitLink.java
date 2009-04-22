@@ -42,7 +42,8 @@ import org.apache.commons.lang.StringUtils;
  * <b>Please note:</b> SubmitLink uses a <tt>JavaScript</tt> function to submit
  * the Form. This JavaScript function also creates <tt>hidden fields</tt>
  * for each SubmitLink parameter, to ensure the link's parameters are
- * submitted.
+ * submitted. See {@link #getSubmitScript(java.lang.String)} for more details on
+ * the JavaScript used to submit the Form.
  * <p/>
  * <b>Also note:</b> if SubmitLink is <tt>not</tt> added to a Form, it behaves
  * like an {@link org.apache.click.control.ActionLink ActionLink} control.
@@ -60,6 +61,34 @@ import org.apache.commons.lang.StringUtils;
  *         // Add a SubmitLink to the Form
  *         SubmitLink link = new SubmitLink("link");
  *         form.add(link);
+ *     }
+ * } </pre>
+ *
+ * <h3>Custom Popup Message</h3>
+ *
+ * The SubmitLink uses the <tt>"onclick"</tt> event handler to submit the Form.
+ * <p/>
+ * If you would like to customize the <tt>"onclick"</tt> event handler, for
+ * example to show a confirmation popup message, you can retrieve the link's
+ * submit script through the {@link #getSubmitScript(java.lang.String)} method.
+ * <p/>
+ * Here is an example of providing a confirmation popup message before submitting
+ * the Form:
+ *
+ * <pre class="prettyprint">
+ * public MyPage extends Page {
+ *
+ *     public void onInit() {
+ *         Form form = new Form("form");
+ *         SubmitLink link = new SubmitLink("link", "Delete");
+ *         form.add(link);
+ *
+ *         // Get the submit script for the given form name
+ *         String submitScript = submitLink.getSubmitScript(form.getName());
+ *
+ *         // Add a confirmation popup message
+ *         scriptLink.setOnClick("var confirm = window.confirm('Are you sure?'); if (confirm) "
+ *             + submitScript + " else return false;");
  *     }
  * } </pre>
  *
@@ -334,6 +363,36 @@ public class SubmitLink extends ActionLink {
         return getForm() != null;
     }
 
+    /**
+     * Return the JavaScript that submits the Form with the given formName.
+     * <p/>
+     * The script returned by this method is:
+     *
+     * <pre class="prettyprint">
+     * "return Click.submitLinkAction(this, 'formName');" </pre>
+     *
+     * The <tt>Click.submitLinkAction</tt> function takes as parameters a reference
+     * to the SubmitLink and the name of the Form to submit. (The
+     * Click.submitLinkAction is defined in <tt>/click/extras-control.js</tt>)
+     *
+     * @param formName the name of the Form to submit
+     *
+     * @return the JavaScript that submits the Form with the given formName
+     *
+     * @throws IllegalStateException if the form name is null
+     */
+    public String getSubmitScript(String formName) {
+        if (formName == null) {
+            throw new IllegalStateException("formName cannot be null.");
+        }
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer(60);
+        buffer.append("return Click.submitLinkAction(this, '");
+        buffer.append(formName);
+        buffer.append("');");
+        return buffer.toString();
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -472,7 +531,7 @@ public class SubmitLink extends ActionLink {
         // has not been set
         Form form = getForm();
         if (form != null && getOnClick() == null) {
-            setOnClick("return Click.submitLinkAction(this, '" + form.getName() + "');");
+            setOnClick(getSubmitScript(form.getName()));
         }
 
         super.render(buffer);
