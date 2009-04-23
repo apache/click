@@ -916,7 +916,7 @@ public class ContainerUtils {
     * Populate the given map from the values of the specified fieldList. The
     * map's key/value pairs are populated from the fields name/value. The keys
     * of the map are matched against each field name. If a key matches a field
-    * name will the value of the field be copied to the map.
+    * name, the value of the field will be copied to the map.
     *
     * @param fieldList the forms list of fields to obtain field values from
     * @param map the map to populate with field values
