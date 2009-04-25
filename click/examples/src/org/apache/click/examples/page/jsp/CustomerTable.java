@@ -20,7 +20,11 @@ package org.apache.click.examples.page.jsp;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides JSP Page example where a JSP page and JSP border template is used to
@@ -28,15 +32,20 @@ import org.apache.click.examples.page.BorderPage;
  *
  * @author Malcolm Edgar
  */
+@Component
 public class CustomerTable extends BorderPage {
 
     public List customers = null;
 
+    @Resource(name="customerService")
+    private CustomerService customerService;
+
     /**
      * @see org.apache.click.Page#onRender()
      */
+    @Override
     public void onRender() {
-        customers = getCustomerService().getCustomersSortedByName(10);
+        customers = customerService.getCustomersSortedByName(10);
     }
 
     /**

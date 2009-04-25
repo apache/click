@@ -21,6 +21,9 @@ package org.apache.click.examples.page.table;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.apache.cayenne.access.DataContext;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Column;
@@ -32,6 +35,7 @@ import org.apache.click.control.TextField;
 import org.apache.click.examples.control.InvestmentSelect;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.EmailField;
@@ -39,6 +43,7 @@ import org.apache.click.extras.control.FieldColumn;
 import org.apache.click.extras.control.FormTable;
 import org.apache.click.extras.control.LinkDecorator;
 import org.apache.click.extras.control.NumberField;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a CRUD demonstration using Form and FormTable.
@@ -57,6 +62,7 @@ import org.apache.click.extras.control.NumberField;
  * @author Malcolm Edgar
  * @author Bob Schellink
  */
+@Component
 public class EditFormTablePage extends BorderPage {
 
     private static final int NUM_ROWS = 20;
@@ -86,6 +92,9 @@ public class EditFormTablePage extends BorderPage {
             }
         }
     };
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // ------------------------------------------------------------ Constructor
 
@@ -192,7 +201,7 @@ public class EditFormTablePage extends BorderPage {
         if (form.isValid()) {
             // Please note with Cayenne ORM this will persist any changes
             // to data objects submitted by the form.
-            getDataContext().commitChanges();
+            DataContext.getThreadDataContext().commitChanges();
         }
         return true;
     }
@@ -200,7 +209,7 @@ public class EditFormTablePage extends BorderPage {
     public boolean onCancelClick() {
         // Rollback any changes made to the customers, which are stored in
         // the data context
-        getDataContext().rollbackChanges();
+        DataContext.getThreadDataContext().rollbackChanges();
 
         refreshTableCustomers();
 
@@ -213,7 +222,7 @@ public class EditFormTablePage extends BorderPage {
 
     public boolean onDeleteClick() {
         Integer id = deleteCustomer.getValueInteger();
-        getCustomerService().deleteCustomer(id);
+        customerService.deleteCustomer(id);
 
         // The FormTable customer were already set in the onInit phase. Because
         // a customer was deleted we refresh the FormTable row list
@@ -226,7 +235,7 @@ public class EditFormTablePage extends BorderPage {
         Customer customer = new Customer();
         customer.setName("Alpha");
         customer.setDateJoined(new Date());
-        getCustomerService().saveCustomer(customer);
+        customerService.saveCustomer(customer);
 
         // The FormTable customer were already set in the onInit phase. Because
         // a customer was deleted we refresh the FormTable row list
@@ -239,7 +248,7 @@ public class EditFormTablePage extends BorderPage {
         if (customerForm.isValid()) {
             Customer customer = new Customer();
             customerForm.copyTo(customer);
-            getCustomerService().saveCustomer(customer);
+            customerService.saveCustomer(customer);
 
             // The FormTable customer was set in the onInit phase. Since we just
             // added a new customer we refresh the FormTable row list
@@ -249,8 +258,8 @@ public class EditFormTablePage extends BorderPage {
     }
 
     private void refreshTableCustomers() {
-        List allCustomers = getCustomerService().getCustomersSortedBy(Customer.DATE_JOINED_PROPERTY, false);
-        List customers = allCustomers.subList(0, NUM_ROWS);
+        List<Customer> allCustomers = customerService.getCustomersSortedBy(Customer.DATE_JOINED_PROPERTY, false);
+        List<Customer> customers = allCustomers.subList(0, NUM_ROWS);
         table.setRowList(customers);
     }
 }

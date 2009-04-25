@@ -19,6 +19,7 @@
 package org.apache.click.service;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -248,6 +249,13 @@ public interface ConfigService {
      * found
      */
     public Class getPageClass(String path);
+
+    /**
+     * Return the list of configured page classes.
+     *
+     * @return the list of configured page classes
+     */
+    public List getPageClassList();
 
     /**
      * Return Map of public fields for the given page class.

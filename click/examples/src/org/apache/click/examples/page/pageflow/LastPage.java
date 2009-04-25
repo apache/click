@@ -18,17 +18,30 @@
  */
 package org.apache.click.examples.page.pageflow;
 
+import javax.annotation.Resource;
+
 import org.apache.click.examples.domain.CourseBooking;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.BookingService;
+import org.apache.click.examples.service.CustomerService;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides the last page of a multi page work flow.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class LastPage extends BorderPage {
 
+    @Resource(name="bookingService")
+    private BookingService bookingService;
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
+
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -37,13 +50,13 @@ public class LastPage extends BorderPage {
         if (bookingId != null) {
             Integer id = new Integer(bookingId);
             CourseBooking courseBooking =
-                getBookingService().findCourseBookingByID(id);
+                bookingService.findCourseBookingByID(id);
 
             if (courseBooking != null) {
                 addModel("courseBooking", courseBooking);
 
                 Customer customer =
-                    getCustomerService().findCustomerByID(courseBooking.getCustomerId());
+                    customerService.findCustomerByID(courseBooking.getCustomerId());
                 addModel("customer", customer);
             }
         }

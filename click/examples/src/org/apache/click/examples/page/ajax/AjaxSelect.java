@@ -21,30 +21,38 @@ package org.apache.click.examples.page.ajax;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an Ajax select example Page.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class AjaxSelect extends BorderPage {
 
     public String jsInclude = "ajax/ajax-select-include.htm";
 
     public Select customerSelect = new Select("customerSelect");
 
+    @Resource(name="customerService")
+    private CustomerService customerService;
+
+    @Override
     public void onInit() {
         super.onInit();
 
         customerSelect.setAttribute("onchange", "onCustomerChange(this);");
 
-        List customerList = getCustomerService().getCustomersSortedByName(8);
-        for (Iterator i = customerList.iterator(); i.hasNext();) {
-            Customer customer = (Customer) i.next();
+        List<Customer> customerList = customerService.getCustomersSortedByName(8);
+        for (Customer customer : customerList) {
             customerSelect.add(new Option(customer.getId(), customer.getName()));
         }
 

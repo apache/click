@@ -21,20 +21,28 @@ package org.apache.click.examples.page.table;
 import java.text.MessageFormat;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Column;
 import org.apache.click.control.Table;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
 import org.apache.click.util.HtmlStringBuffer;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table control paging.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class TableFooter extends BorderPage {
 
     public Table table;
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     public TableFooter() {
         table = new Table() {
@@ -70,8 +78,9 @@ public class TableFooter extends BorderPage {
     /**
      * @see org.apache.click.Page#onRender()
      */
+    @Override
     public void onRender() {
-        List customers = getCustomerService().getCustomersSortedByName(17);
+        List<Customer> customers = customerService.getCustomersSortedByName(17);
         table.setRowList(customers);
     }
 

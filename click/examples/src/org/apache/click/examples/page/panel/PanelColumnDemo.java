@@ -20,20 +20,25 @@ package org.apache.click.examples.page.panel;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Form;
 import org.apache.click.control.Panel;
 import org.apache.click.control.Submit;
 import org.apache.click.control.Table;
 import org.apache.click.control.TextField;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
-
+import org.apache.click.examples.service.CustomerService;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Component;
 
 /**
  * Demonstrates usage of the Panel Column Control.
  *
  * @author rlecheta
  */
+@Component
 public class PanelColumnDemo extends BorderPage {
 
     public Panel panel = new Panel("panel", "/panel/customerDetailsPanel.htm");
@@ -42,6 +47,9 @@ public class PanelColumnDemo extends BorderPage {
     public Table table = new Table("table");
 
     private TextField textName = new TextField("name", true);
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // ------------------------------------------------------------ Constructor
 
@@ -76,6 +84,7 @@ public class PanelColumnDemo extends BorderPage {
     /**
      * @see org.apache.click.Page#onGet()
      */
+    @Override
     public void onGet() {
         if (StringUtils.isNotEmpty(nameSearch)) {
 
@@ -96,7 +105,7 @@ public class PanelColumnDemo extends BorderPage {
      */
     private void processSearch(String value) {
         // Search for user entered value
-        List list = getCustomerService().getCustomersForName(value);
+        List<Customer> list = customerService.getCustomersForName(value);
 
         table.setRowList(list);
 

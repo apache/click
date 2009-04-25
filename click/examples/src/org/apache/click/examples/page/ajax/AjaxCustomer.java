@@ -18,9 +18,12 @@
  */
 package org.apache.click.examples.page.ajax;
 
+import javax.annotation.Resource;
+
 import org.apache.click.Page;
 import org.apache.click.examples.domain.Customer;
-import org.apache.click.examples.page.SpringPage;
+import org.apache.click.examples.service.CustomerService;
+import org.springframework.stereotype.Component;
 
 /**
  * Retrieves the Customer details using the given customerId parameter and
@@ -37,9 +40,13 @@ import org.apache.click.examples.page.SpringPage;
  *
  * @author Malcolm Edgar
  */
-public class AjaxCustomer extends SpringPage {
+@Component
+public class AjaxCustomer extends Page {
 
     public Customer customer;
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     /**
      * Process the AJAX request and return XML customer table.
@@ -49,7 +56,7 @@ public class AjaxCustomer extends SpringPage {
     public void onGet() {
         String customerId = getContext().getRequest().getParameter("customerId");
 
-        customer = getCustomerService().findCustomerByID(customerId);
+        customer = customerService.findCustomerByID(customerId);
     }
 
     /**

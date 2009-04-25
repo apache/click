@@ -18,6 +18,8 @@
  */
 package org.apache.click.examples.page.introduction;
 
+import javax.annotation.Resource;
+
 import org.apache.click.Page;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.FieldSet;
@@ -32,18 +34,23 @@ import org.apache.click.examples.page.HomePage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.EmailField;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an advanced form example.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class AdvancedForm extends BorderPage {
 
     public Form form = new Form();
     public String msg;
 
     private Select investmentSelect = new Select("investment");
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // ------------------------------------------------------------ Constructor
 
@@ -72,10 +79,10 @@ public class AdvancedForm extends BorderPage {
     /**
      * @see Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
-        CustomerService customerService = getCustomerService();
         investmentSelect.add(Option.EMPTY_OPTION);
         investmentSelect.addAll(customerService.getInvestmentCatetories());
     }
@@ -90,7 +97,7 @@ public class AdvancedForm extends BorderPage {
             Customer customer = new Customer();
             form.copyTo(customer);
 
-            getCustomerService().saveCustomer(customer);
+            customerService.saveCustomer(customer);
 
             form.clearValues();
 

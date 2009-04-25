@@ -20,12 +20,16 @@ package org.apache.click.examples.page.velocity;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.Page;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.PageLink;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.EditCustomer;
+import org.apache.click.examples.service.CustomerService;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a dynamic ActionLink and PageLink example in a HTML table.
@@ -36,6 +40,7 @@ import org.apache.click.examples.page.EditCustomer;
  *
  * @author Malcolm Edgar
  */
+@Component
 public class ActionTable extends BorderPage {
 
     public List customers;
@@ -44,6 +49,10 @@ public class ActionTable extends BorderPage {
     public PageLink editLink = new PageLink(EditCustomer.class);
     public ActionLink deleteLink = new ActionLink(this, "onDeleteClick");
 
+    @Resource(name="customerService")
+    private CustomerService customerService;
+
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -53,14 +62,14 @@ public class ActionTable extends BorderPage {
 
     public boolean onViewClick() {
         Integer id = viewLink.getValueInteger();
-        customerDetail = getCustomerService().getCustomerForID(id);
+        customerDetail = customerService.getCustomerForID(id);
 
         return true;
     }
 
     public boolean onDeleteClick() {
         Integer id = deleteLink.getValueInteger();
-        getCustomerService().deleteCustomer(id);
+        customerService.deleteCustomer(id);
 
         return true;
     }
@@ -71,8 +80,9 @@ public class ActionTable extends BorderPage {
      *
      * @see Page#onRender()
      */
+    @Override
     public void onRender() {
-        customers = getCustomerService().getCustomersSortedByName(7);
+        customers = customerService.getCustomersSortedByName(7);
         getFormat().setEmptyString("&nbsp;");
     }
 

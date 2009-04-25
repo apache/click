@@ -18,6 +18,8 @@
  */
 package org.apache.click.examples.page;
 
+import javax.annotation.Resource;
+
 import org.apache.click.Page;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.FieldSet;
@@ -27,10 +29,12 @@ import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.control.InvestmentSelect;
 import org.apache.click.examples.domain.Customer;
+import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.IntegerField;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an edit Customer Form example. The Customer business object
@@ -42,6 +46,7 @@ import org.apache.click.extras.control.IntegerField;
  *
  * @author Malcolm Edgar
  */
+@Component
 public class EditCustomer extends BorderPage {
 
     // Public controls are automatically added to the page
@@ -52,6 +57,9 @@ public class EditCustomer extends BorderPage {
     public Integer id;
 
     private HiddenField idField = new HiddenField("id", Integer.class);
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     public EditCustomer() {
         form.add(referrerField);
@@ -93,7 +101,7 @@ public class EditCustomer extends BorderPage {
      */
     public void onGet() {
         if (id != null) {
-            Customer customer = getCustomerService().getCustomerForID(id);
+            Customer customer = customerService.getCustomerForID(id);
 
             if (customer != null) {
                 form.copyFrom(customer);
@@ -104,14 +112,14 @@ public class EditCustomer extends BorderPage {
     public boolean onOkClick() {
         if (form.isValid()) {
             Integer id = (Integer) idField.getValueObject();
-            Customer customer = getCustomerService().getCustomerForID(id);
+            Customer customer = customerService.getCustomerForID(id);
 
             if (customer == null) {
                 customer = new Customer();
             }
             form.copyTo(customer);
 
-            getCustomerService().saveCustomer(customer);
+            customerService.saveCustomer(customer);
 
             String referrer = referrerField.getValue();
             if (referrer != null) {

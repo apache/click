@@ -26,6 +26,7 @@
     <menu label="Javadoc API" path="javadoc/index.html" title="Examples HTML Javadoc API" target="_blank" />
     <menu separator="true"/>
     <menu label="click.xml" path="source-viewer.htm?filename=WEB-INF/click.xml" title="Click application descriptor" target="_blank" />
+    <menu label="spring-beans.xml" path="source-viewer.htm?filename=WEB-INF/spring-beans.xml" title="Spring beans descriptor" target="_blank" />
     <menu label="web.xml" path="source-viewer.htm?filename=WEB-INF/web.xml" title="Web application descriptor" target="_blank" />
   </menu>
 

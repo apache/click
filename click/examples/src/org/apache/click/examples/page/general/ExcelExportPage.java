@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.click.ActionListener;
@@ -29,6 +30,7 @@ import org.apache.click.Control;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
 import org.apache.click.util.ClickUtils;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -38,16 +40,22 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a Excel Export page example using the Apache POI library.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class ExcelExportPage extends BorderPage {
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // -------------------------------------------------------- Event Handlers
 
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -159,7 +167,7 @@ public class ExcelExportPage extends BorderPage {
 
         int rowIndex = 4;
 
-        List customers = getCustomerService().getCustomers();
+        List<Customer> customers = customerService.getCustomers();
         for (int i = 0; i < customers.size(); i++) {
             Customer customer = (Customer) customers.get(i);
 

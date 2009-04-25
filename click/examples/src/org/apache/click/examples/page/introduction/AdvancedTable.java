@@ -20,6 +20,8 @@ package org.apache.click.examples.page.introduction;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.Page;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.ActionLink;
@@ -28,18 +30,24 @@ import org.apache.click.control.PageLink;
 import org.apache.click.control.Table;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.EditCustomer;
+import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.LinkDecorator;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an advanced Table usage example Page.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class AdvancedTable extends BorderPage {
 
     public Table table = new Table();
     public PageLink editLink = new PageLink("Edit", EditCustomer.class);
     public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // ------------------------------------------------------------ Constructor
 
@@ -80,7 +88,7 @@ public class AdvancedTable extends BorderPage {
 
     public boolean onDeleteClick() {
         Integer id = deleteLink.getValueInteger();
-        getCustomerService().deleteCustomer(id);
+        customerService.deleteCustomer(id);
         return true;
     }
 
@@ -88,7 +96,7 @@ public class AdvancedTable extends BorderPage {
      * @see Page#onRender()
      */
     public void onRender() {
-        List list = getCustomerService().getCustomers();
+        List list = customerService.getCustomers();
         table.setRowList(list);
     }
 }

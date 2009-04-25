@@ -24,6 +24,14 @@
     version="2.4">
     
 	<display-name>Click Examples</display-name>
+	
+	<!-- 
+	Spring configuration location. 
+	-->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>WEB-INF/spring-beans.xml</param-value>
+	</context-param>
 
 	<!-- 
 	Provides an in memory databae initialization filter. In a production 
@@ -52,7 +60,7 @@
 	and sets the Expires header on selected static resources. 
 	The "cachable-paths" init parameter tells the filter resources can have 
 	their Expires header set so the browser will cache them.
-  The "excludes-path" init parameter tells the filter which requests should
+	The "excludes-path" init parameter tells the filter which requests should
 	be ignored by the filter.
 	-->
 	<filter>
@@ -62,7 +70,7 @@
 			<param-name>cachable-paths</param-name>
  			<param-value>/assets/*</param-value>
 		</init-param>
-    <init-param>
+		<init-param>
 			<param-name>exclude-paths</param-name>
  			<param-value>*/excel-export.htm</param-value>
 		</init-param>
@@ -102,24 +110,25 @@
 		<filter-name>PerformanceFilter</filter-name>
 		<url-pattern>*.png</url-pattern>
 	</filter-mapping>
+	
+	<!-- 
+	The Spring Context Loader which initializes the Spring runtime. 
+	-->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 
 	<!--
-	The Spring Click Servlet which handles *.htm requests. The "spring-path"
-	init parameter tells the servlet where to find the Spring application
-	context file on the classpath.
+	The Spring Click Servlet which handles *.htm requests.
 	-->
 	<servlet>
-		<servlet-name>ClickServlet</servlet-name>
+		<servlet-name>SpringClickServlet</servlet-name>
 		<servlet-class>org.apache.click.extras.spring.SpringClickServlet</servlet-class>
-		<init-param>
-			<param-name>spring-path</param-name>
-			<param-value>/applicationContext.xml</param-value>
-		</init-param>
 		<load-on-startup>0</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>ClickServlet</servlet-name>
+		<servlet-name>SpringClickServlet</servlet-name>
 		<url-pattern>*.htm</url-pattern>
 	</servlet-mapping>
 

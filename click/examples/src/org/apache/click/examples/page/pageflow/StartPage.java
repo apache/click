@@ -18,8 +18,9 @@
  */
 package org.apache.click.examples.page.pageflow;
 
-import java.util.Iterator;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 import org.apache.click.control.Form;
 import org.apache.click.control.Option;
@@ -31,13 +32,16 @@ import org.apache.click.examples.domain.CourseBooking;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
+import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.DateField;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides the start page of a multi page work flow.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class StartPage extends BorderPage {
 
     public String jsInclude = "ajax/ajax-select-include.htm";
@@ -50,6 +54,9 @@ public class StartPage extends BorderPage {
     private TextArea notesField;
 
     private CourseBooking courseBooking;
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // ------------------------------------------------------------ Constructor
 
@@ -89,13 +96,13 @@ public class StartPage extends BorderPage {
     /**
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
-        List customerList = getCustomerService().getCustomers();
-        customerSelect.add(new Option(""));
-        for (Iterator i = customerList.iterator(); i.hasNext();) {
-            Customer customer = (Customer) i.next();
+        List<Customer> customerList = customerService.getCustomers();
+        customerSelect.add(Option.EMPTY_OPTION);
+        for (Customer customer : customerList) {
             customerSelect.add(new Option(customer.getId(), customer.getName()));
         }
 

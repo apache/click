@@ -20,18 +20,21 @@ package org.apache.click.examples.page.cayenne;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.apache.cayenne.DataObject;
 import org.apache.click.control.Column;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.domain.Client;
+import org.apache.click.examples.service.ClientService;
 import org.apache.click.extras.cayenne.CayenneForm;
 import org.apache.click.extras.cayenne.QuerySelect;
 import org.apache.click.extras.cayenne.TabbedCayenneForm;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.IntegerField;
-
-import org.apache.cayenne.DataObject;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a TabbedCayenneForm and QuerySelect control demonstration.
@@ -40,7 +43,11 @@ import org.apache.cayenne.DataObject;
  *
  * @author Malcolm Edgar
  */
+@Component
 public class TabbedCayenneFormPage extends FormTablePage {
+
+    @Resource(name="clientService")
+    private ClientService clientService;
 
     /**
      * Create a TabbedCayenneFormPage object.
@@ -104,12 +111,13 @@ public class TabbedCayenneFormPage extends FormTablePage {
      * @see FormTablePage#getDataObject(Object)
      */
     public DataObject getDataObject(Object id) {
-        return getClientService().getClient(id);
+        return clientService.getClient(id);
     }
 
     /**
      * @see FormTablePage#getDataObjectClass()
      */
+    @SuppressWarnings("unchecked")
     public Class getDataObjectClass() {
         return Client.class;
     }
@@ -117,8 +125,9 @@ public class TabbedCayenneFormPage extends FormTablePage {
     /**
      * @see FormTablePage#getRowList()
      */
+    @SuppressWarnings("unchecked")
     public List getRowList() {
-        return getClientService().getClients();
+        return clientService.getClients();
     }
 
 }

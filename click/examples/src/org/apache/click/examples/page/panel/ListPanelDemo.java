@@ -20,9 +20,13 @@ package org.apache.click.examples.page.panel;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Panel;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.panel.ListPanel;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an ListPanel demonstration.
@@ -32,10 +36,14 @@ import org.apache.click.extras.panel.ListPanel;
  *
  * @author Phil Barnes
  */
+@Component
 public class ListPanelDemo extends BorderPage {
 
     public ListPanel listPanel = new ListPanel();
     public List customers;
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     public ListPanelDemo() {
         listPanel.add(new Panel("panel1", "/panel/customersPanel1.htm"));
@@ -46,8 +54,9 @@ public class ListPanelDemo extends BorderPage {
     /**
      * @see org.apache.click.Page#onRender()
      */
+    @Override
     public void onRender() {
-        customers = getCustomerService().getCustomersSortedByName(12);
+        customers = customerService.getCustomersSortedByName(12);
     }
 
 }

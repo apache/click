@@ -18,6 +18,7 @@
  */
 package org.apache.click.examples.page;
 
+import org.apache.click.Page;
 import org.apache.click.extras.control.Menu;
 import org.apache.click.util.ClickUtils;
 
@@ -32,7 +33,7 @@ import org.apache.click.util.ClickUtils;
  *
  * @author Malcolm Edgar
  */
-public class BorderPage extends SpringPage {
+public class BorderPage extends Page {
 
     /**
      * The root menu. Note this transient variable is reinitialized in onInit()
@@ -89,6 +90,7 @@ public class BorderPage extends SpringPage {
 
     // ------------------------------------------------------ Protected Methods
 
+    @SuppressWarnings("unchecked")
     protected Object getSessionObject(Class aClass) {
         if (aClass == null) {
             throw new IllegalArgumentException("Null class parameter.");
@@ -110,6 +112,7 @@ public class BorderPage extends SpringPage {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected void removeSessionObject(Class aClass) {
         if (getContext().hasSession() && aClass != null) {
             getContext().getSession().removeAttribute(aClass.getName());

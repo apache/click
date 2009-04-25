@@ -17,19 +17,14 @@
    specific language governing permissions and limitations
    under the License.
 -->
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" 
-	"http://www.springframework.org/dtd/spring-beans.dtd">
-    
-<beans>
-    
-    <bean id="bookingService" class="org.apache.click.examples.service.BookingService"/>
-    
-    <bean id="clientService" class="org.apache.click.examples.service.ClientService"/>
-    
-    <bean id="customerService" class="org.apache.click.examples.service.CustomerService"/>
-    
-    <bean id="postCodeService" class="org.apache.click.examples.service.PostCodeService"/>
-        
-    <bean id="userService" class="org.apache.click.examples.service.UserService"/>
 
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+		
+ 	<context:component-scan base-package="org.apache.click.examples" scope-resolver="org.apache.click.extras.spring.PageScopeResolver"/>
+    
 </beans>

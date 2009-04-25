@@ -20,6 +20,9 @@ package org.apache.click.examples.page.table;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.apache.cayenne.access.DataContext;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Column;
 import org.apache.click.control.FieldSet;
@@ -29,11 +32,13 @@ import org.apache.click.control.Table;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.cayenne.CayenneForm;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.LinkDecorator;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table and Form editor pattern, and the use
@@ -41,12 +46,16 @@ import org.apache.click.extras.control.LinkDecorator;
  *
  * @author Malcolm Edgar
  */
+@Component
 public class EditTable extends BorderPage {
 
     public CayenneForm form = new CayenneForm("form", Customer.class);
     public Table table = new Table();
     public ActionLink editLink = new ActionLink("edit", "Edit", this, "onEditClick");
     public ActionLink deleteLink = new ActionLink("delete", "Delete", this, "onDeleteClick");
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // ------------------------------------------------------------ Constructor
 
@@ -101,7 +110,7 @@ public class EditTable extends BorderPage {
 
     public boolean onEditClick() {
         Integer id = editLink.getValueInteger();
-        Customer customer = getCustomerService().getCustomerForID(id);
+        Customer customer = customerService.getCustomerForID(id);
         if (customer != null) {
             form.setDataObject(customer);
         }
@@ -110,7 +119,7 @@ public class EditTable extends BorderPage {
 
     public boolean onDeleteClick() {
         Integer id = deleteLink.getValueInteger();
-        getCustomerService().deleteCustomer(id);
+        customerService.deleteCustomer(id);
         return true;
     }
 
@@ -119,14 +128,14 @@ public class EditTable extends BorderPage {
             // Please note with Cayenne ORM this will persist any changes
             // to data objects submitted by the form.
             form.getDataObject();
-            getDataContext().commitChanges();
+            DataContext.getThreadDataContext().commitChanges();
             form.setDataObject(null);
         }
         return true;
     }
 
     public boolean onCancelClick() {
-        getDataContext().rollbackChanges();
+        DataContext.getThreadDataContext().rollbackChanges();
         form.setDataObject(null);
         form.clearErrors();
         return true;
@@ -152,8 +161,9 @@ public class EditTable extends BorderPage {
     /**
      * @see org.apache.click.Page#onRender()
      */
+    @Override
     public void onRender() {
-        List customers = getCustomerService().getCustomers();
+        List<Customer> customers = customerService.getCustomers();
         table.setRowList(customers);
     }
 

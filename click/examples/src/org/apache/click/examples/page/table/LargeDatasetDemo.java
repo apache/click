@@ -21,9 +21,14 @@ package org.apache.click.examples.page.table;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Column;
 import org.apache.click.control.Table;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a demonstration of a Table with a huge number of rows and how to
@@ -31,9 +36,13 @@ import org.apache.click.examples.page.BorderPage;
  *
  * @author Bob Schellink
  */
+@Component
 public class LargeDatasetDemo extends BorderPage {
 
     public Table table;
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     public LargeDatasetDemo() {
         table = new Table();
@@ -138,14 +147,14 @@ public class LargeDatasetDemo extends BorderPage {
     // -------------------------------------------------------- Private Methods
 
     private int getCustomerCount() {
-        return getCustomerService().getNumberOfCustomers();
+        return customerService.getNumberOfCustomers();
     }
 
-    private List getCustomers(int from, int to, int pageSize) {
+    private List<Customer> getCustomers(int from, int to, int pageSize) {
         // Below we retrieve only those customers between the from and to
         // args. In a real application one would use an ORM or JDBC to only
         // retrieve the needed rows
-        return getCustomerService().getCustomersForPage(from, pageSize);
+        return customerService.getCustomersForPage(from, pageSize);
     }
 
 }
