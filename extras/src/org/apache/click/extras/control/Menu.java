@@ -25,9 +25,12 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.click.Context;
 import org.apache.click.control.AbstractControl;
+import org.apache.click.extras.security.AccessController;
+import org.apache.click.extras.security.RoleAccessController;
 import org.apache.click.service.ConfigService;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -197,6 +200,9 @@ public class Menu extends AbstractControl {
 
     // ----------------------------------------------------- Instance Variables
 
+    /** The menu security access controller. */
+    protected AccessController accessController;
+
     /** The list of submenu items. */
     protected List children = new ArrayList();
 
@@ -242,7 +248,7 @@ public class Menu extends AbstractControl {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a root Menu instance.
+     * Create a new Menu instance.
      */
     public Menu() {
     }
@@ -259,12 +265,18 @@ public class Menu extends AbstractControl {
     /**
      * Create a Menu from the given menu-item XML Element.
      *
-     * @param menuElement the menu-item XML Element.
+     * @param menuElement the menu-item XML Element
+     * @param accessController the menu access controller
      */
-    protected Menu(Element menuElement) {
+    protected Menu(Element menuElement, AccessController accessController) {
         if (menuElement == null) {
             throw new IllegalArgumentException("Null menuElement parameter");
         }
+        if (accessController == null) {
+            throw new IllegalArgumentException("Null accessController parameter");
+        }
+
+        setAccessController(accessController);
 
         setLabel(menuElement.getAttribute("label"));
 
@@ -314,7 +326,8 @@ public class Menu extends AbstractControl {
         for (int i = 0, size = childElements.getLength(); i < size; i++) {
             Node node = childElements.item(i);
             if (node instanceof Element) {
-                getChildren().add(new Menu((Element) node));
+                Menu childMenu = new Menu((Element) node, accessController);
+                getChildren().add(childMenu);
             }
         }
     }
@@ -322,19 +335,37 @@ public class Menu extends AbstractControl {
     // ---------------------------------------------------- Constructor Methods
 
     /**
-     * Return root menu item defined in the WEB-INF/menu.xml file or menu.xml in
-     * the root classpath.
+     * Return root menu item defined in the WEB-INF/menu.xml or classpath
+     * menu.xml, and which uses JEE Role Based Access Control (RBAController).
+     *
+     * @see RoleAccessController
      *
      * @return the root menu item defined in the WEB-INF/menu.xml file or menu.xml
      * in the root classpath
      */
     public static Menu getRootMenu() {
+        return getRootMenu(new RoleAccessController());
+    }
+
+    /**
+     * Return root menu item defined in the WEB-INF/menu.xml or classpath
+     * menu.xml, and which uses the provided AccessController.
+     *
+     * @param accessController the menu access controller
+     * @return the root menu item defined in the WEB-INF/menu.xml file or menu.xml
+     * in the root classpath
+     */
+    public static Menu getRootMenu(AccessController accessController) {
+        if (accessController == null) {
+            throw new IllegalArgumentException("Null accessController parameter");
+        }
+
         // If menu is cached return it
         if (rootMenu != null) {
             return rootMenu;
         }
 
-        Menu loadedMenu = loadRootMenu();
+        Menu loadedMenu = loadRootMenu(accessController);
 
         ServletContext servletContext = Context.getThreadLocalContext().getServletContext();
         ConfigService configService = ClickUtils.getConfigService(servletContext);
@@ -348,6 +379,24 @@ public class Menu extends AbstractControl {
     }
 
     // ------------------------------------------------------ Public Attributes
+
+    /**
+     * Return the menu access controller.
+     *
+     * @return the menu access controller
+     */
+    public AccessController getAccessController() {
+        return accessController;
+    }
+
+    /**
+     * Set the menu access controller.
+     *
+     * @param accessController the menu access controller
+     */
+    public void setAccessController(AccessController accessController) {
+        this.accessController = accessController;
+    }
 
     /**
      * Return list of of submenu items.
@@ -541,10 +590,11 @@ public class Menu extends AbstractControl {
      * @return true if the user is in one of the menu roles, or false otherwise
      */
     public boolean isUserInRoles() {
-        Context context = getContext();
+        HttpServletRequest request = getContext().getRequest();
+
         for (Iterator i = getRoles().iterator(); i.hasNext();) {
             String rolename = (String) i.next();
-            if (context.getRequest().isUserInRole(rolename)) {
+            if (getAccessController().hasAccess(request, rolename)) {
                 return true;
             }
         }
@@ -809,12 +859,18 @@ public class Menu extends AbstractControl {
      * <p/>
      * The returned root menu is always selected.
      *
+     * @param accessController the menu access controller
      * @return a copy of the application's root Menu
      */
-    protected static Menu loadRootMenu() {
+    protected static Menu loadRootMenu(AccessController accessController) {
+        if (accessController == null) {
+            throw new IllegalArgumentException("Null accessController parameter");
+        }
+
         Context context = Context.getThreadLocalContext();
 
         Menu menu = new Menu("rootMenu");
+        menu.setAccessController(accessController);
 
         ServletContext servletContext = context.getServletContext();
         InputStream inputStream =
@@ -837,7 +893,8 @@ public class Menu extends AbstractControl {
         for (int i = 0; i < list.getLength(); i++) {
             Node node = list.item(i);
             if (node instanceof Element) {
-                menu.getChildren().add(new Menu((Element) node));
+                Menu childMenu = new Menu((Element) node, accessController);
+                menu.getChildren().add(childMenu);
             }
         }
 
