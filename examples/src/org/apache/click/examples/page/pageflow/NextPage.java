@@ -18,23 +18,35 @@
  */
 package org.apache.click.examples.page.pageflow;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.Submit;
 import org.apache.click.examples.domain.CourseBooking;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.BookingService;
+import org.apache.click.examples.service.CustomerService;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides the next page of a multi page work flow.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class NextPage extends BorderPage {
 
     private Form form = new Form("form");
     private HiddenField courseField;
     private CourseBooking courseBooking;
+
+    @Resource(name="bookingService")
+    private BookingService bookingService;
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // ------------------------------------------------------------ Constructor
 
@@ -53,6 +65,7 @@ public class NextPage extends BorderPage {
     /**
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -60,7 +73,7 @@ public class NextPage extends BorderPage {
             courseField.setValueObject(courseBooking);
 
             Customer customer =
-                getCustomerService().findCustomerByID(courseBooking.getCustomerId());
+                customerService.findCustomerByID(courseBooking.getCustomerId());
 
             addModel("customer", customer);
             addModel("courseBooking", courseBooking);
@@ -81,7 +94,7 @@ public class NextPage extends BorderPage {
     public boolean onConfirmClick() {
         CourseBooking booking = (CourseBooking) courseField.getValueObject();
         Integer bookingId =
-            getBookingService().insertCourseBooking(booking);
+            bookingService.insertCourseBooking(booking);
 
         String path = getContext().getPagePath(LastPage.class);
         setRedirect(path + "?bookingId=" + bookingId);

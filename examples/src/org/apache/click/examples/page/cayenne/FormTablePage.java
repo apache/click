@@ -20,6 +20,8 @@ package org.apache.click.examples.page.cayenne;
 
 import java.util.List;
 
+import org.apache.cayenne.DataObject;
+import org.apache.cayenne.access.DataContext;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Column;
 import org.apache.click.control.Form;
@@ -28,8 +30,6 @@ import org.apache.click.control.Table;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.cayenne.CayenneForm;
 import org.apache.click.extras.control.LinkDecorator;
-
-import org.apache.cayenne.DataObject;
 
 /**
  * Provides an abstract CayenneForm and Table Page for creating and editing
@@ -158,6 +158,7 @@ public abstract class FormTablePage extends BorderPage {
     /**
      * @see org.apache.click.Page#onRender()
      */
+    @Override
     public void onRender() {
         List list = getRowList();
         table.setRowList(list);
@@ -183,6 +184,7 @@ public abstract class FormTablePage extends BorderPage {
      *
      * @return the DataObject class to edit and display
      */
+    @SuppressWarnings("unchecked")
     public abstract Class getDataObjectClass();
 
     /**
@@ -190,6 +192,7 @@ public abstract class FormTablePage extends BorderPage {
      *
      * @return the
      */
+    @SuppressWarnings("unchecked")
     public abstract List getRowList();
 
     // --------------------------------------------------------- Public Methods
@@ -211,7 +214,7 @@ public abstract class FormTablePage extends BorderPage {
      */
     public void saveDataObject(DataObject dataObject) {
         if (dataObject != null) {
-            getDataContext().commitChanges();
+            DataContext.getThreadDataContext().commitChanges();
         }
     }
 
@@ -222,8 +225,8 @@ public abstract class FormTablePage extends BorderPage {
      */
     public void deleteDataObject(DataObject dataObject) {
         if (dataObject != null) {
-            getDataContext().deleteObject(dataObject);
-            getDataContext().commitChanges();
+            DataContext.getThreadDataContext().deleteObject(dataObject);
+            DataContext.getThreadDataContext().commitChanges();
         }
     }
 

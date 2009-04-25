@@ -20,12 +20,16 @@ package org.apache.click.examples.page.form;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Form;
 import org.apache.click.control.Select;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a search form example demonstrating how to layout a form manually
@@ -33,12 +37,16 @@ import org.apache.click.examples.page.BorderPage;
  *
  * @author Malcolm Edgar
  */
+@Component
 public class SearchForm extends BorderPage {
 
     public Form form = new Form();
 
     private TextField textField;
     private Select typeSelect;
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     public SearchForm() {
         textField = new TextField("search");
@@ -56,22 +64,23 @@ public class SearchForm extends BorderPage {
     /**
      * @see org.apache.click.Page#onPost()
      */
+    @Override
     public void onPost() {
         Customer customer = null;
         String value = textField.getValue().trim();
         String type = typeSelect.getValue().toLowerCase();
 
         if (type.equals("id")) {
-            customer = getCustomerService().findCustomerByID(value);
+            customer = customerService.findCustomerByID(value);
         }
         else if (type.equals("name")) {
-            List list = getCustomerService().getCustomersForName(value);
+            List<Customer> list = customerService.getCustomersForName(value);
             if (!list.isEmpty()) {
                 customer = (Customer) list.get(0);
             }
         }
         else if (type.equals("age")) {
-            List list = getCustomerService().getCustomersForAge(value);
+            List<Customer> list = customerService.getCustomersForAge(value);
             if (!list.isEmpty()) {
                 customer = (Customer) list.get(0);
             }

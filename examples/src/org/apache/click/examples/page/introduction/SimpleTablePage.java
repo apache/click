@@ -20,19 +20,28 @@ package org.apache.click.examples.page.introduction;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.Page;
 import org.apache.click.control.Column;
 import org.apache.click.control.Table;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an simple Table usage example Page.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class SimpleTablePage extends BorderPage {
 
     public Table table = new Table();
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // ------------------------------------------------------------ Constructor
 
@@ -50,8 +59,9 @@ public class SimpleTablePage extends BorderPage {
     /**
      * @see Page#onRender()
      */
+    @Override
     public void onRender() {
-        List list = getCustomerService().getCustomersSortedByName(10);
+        List<Customer> list = customerService.getCustomersSortedByName(10);
         table.setRowList(list);
     }
 }

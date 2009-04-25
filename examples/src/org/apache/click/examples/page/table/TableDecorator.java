@@ -20,6 +20,8 @@ package org.apache.click.examples.page.table;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.Context;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Column;
@@ -29,12 +31,15 @@ import org.apache.click.control.Table;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.EditCustomer;
+import org.apache.click.examples.service.CustomerService;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table control paging.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class TableDecorator extends BorderPage {
 
     public Table table = new Table();
@@ -43,6 +48,9 @@ public class TableDecorator extends BorderPage {
     public ActionLink viewLink = new ActionLink("view", this, "onViewClick");
     public PageLink editLink = new PageLink("edit", EditCustomer.class);
     public ActionLink deleteLink = new ActionLink("delete", this, "onDeleteClick");
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // ------------------------------------------------------------ Constructor
 
@@ -102,21 +110,22 @@ public class TableDecorator extends BorderPage {
 
     public boolean onViewClick() {
         Integer id = viewLink.getValueInteger();
-        customerDetail = getCustomerService().getCustomerForID(id);
+        customerDetail = customerService.getCustomerForID(id);
         return true;
     }
 
     public boolean onDeleteClick() {
         Integer id = deleteLink.getValueInteger();
-        getCustomerService().deleteCustomer(id);
+        customerService.deleteCustomer(id);
         return true;
     }
 
     /**
      * @see org.apache.click.Page#onRender()
      */
+    @Override
     public void onRender() {
-        List customers = getCustomerService().getCustomersSortedByName(12);
+        List customers = customerService.getCustomersSortedByName(12);
         table.setRowList(customers);
     }
 

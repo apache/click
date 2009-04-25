@@ -20,6 +20,7 @@ package org.apache.click.examples.service;
 
 import org.apache.click.examples.domain.User;
 import org.apache.click.extras.cayenne.CayenneTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a User Service.
@@ -28,6 +29,7 @@ import org.apache.click.extras.cayenne.CayenneTemplate;
  *
  * @author Malcolm Edgar
  */
+@Component
 public class UserService extends CayenneTemplate {
 
     public boolean isAuthenticatedUser(User user) {

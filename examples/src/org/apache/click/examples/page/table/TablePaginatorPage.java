@@ -20,22 +20,31 @@ package org.apache.click.examples.page.table;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Column;
-import org.apache.click.extras.control.TableInlinePaginator;
 import org.apache.click.control.Table;
 import org.apache.click.control.TablePaginator;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
+import org.apache.click.extras.control.TableInlinePaginator;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table pagination options.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class TablePaginatorPage extends BorderPage {
 
     public Table table1 = new Table();
     public Table table2 = new Table();
     public Table table3 = new Table();
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     public TablePaginatorPage() {
         // Table 1
@@ -58,7 +67,7 @@ public class TablePaginatorPage extends BorderPage {
      * @see org.apache.click.Page#onRender()
      */
     public void onRender() {
-        List customers = getCustomerService().getCustomers();
+        List<Customer> customers = customerService.getCustomers();
         table1.setRowList(customers);
         table2.setRowList(customers);
         table3.setRowList(customers);

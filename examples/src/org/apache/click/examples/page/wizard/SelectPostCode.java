@@ -19,6 +19,9 @@
 package org.apache.click.examples.page.wizard;
 
 import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.apache.click.Context;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.Column;
@@ -26,8 +29,10 @@ import org.apache.click.control.PageLink;
 import org.apache.click.control.Table;
 import org.apache.click.examples.domain.PostCode;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.PostCodeService;
 import org.apache.click.extras.control.LinkDecorator;
 import org.apache.click.util.HtmlStringBuffer;
+import org.springframework.stereotype.Component;
 
 /**
  * This Page provides a table to select the postal code from.
@@ -38,10 +43,14 @@ import org.apache.click.util.HtmlStringBuffer;
  *
  * @author Bob Schellink
  */
+@Component
 public class SelectPostCode extends BorderPage {
 
     /** Reference to the table. */
     private Table table = new Table("table");
+
+    @Resource(name="postCodeService")
+    private PostCodeService postCodeService;
 
     /**
      * Default constructor.
@@ -81,7 +90,7 @@ public class SelectPostCode extends BorderPage {
      * Override onRender to populate the table row data.
      */
     public void onRender() {
-        List states = getPostCodeService().getPostCodes();
+        List<PostCode> states = postCodeService.getPostCodes();
         table.setRowList(states);
     }
 }

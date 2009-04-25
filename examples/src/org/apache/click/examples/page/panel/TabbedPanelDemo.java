@@ -20,19 +20,27 @@ package org.apache.click.examples.page.panel;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Panel;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.panel.TabbedPanel;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an TabbedPanel demonstration.
  *
  * @author Phil Barnes
  */
+@Component
 public class TabbedPanelDemo extends BorderPage {
 
     public TabbedPanel tabbedPanel = new TabbedPanel();
     public List customers;
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     public TabbedPanelDemo() {
         Panel panel1 = new Panel("panel1", "panel/customersPanel1.htm");
@@ -59,8 +67,9 @@ public class TabbedPanelDemo extends BorderPage {
     /**
      * @see org.apache.click.Page#onRender()
      */
+    @Override
     public void onRender() {
-        customers = getCustomerService().getCustomersSortedByName(12);
+        customers = customerService.getCustomersSortedByName(12);
     }
 
 }

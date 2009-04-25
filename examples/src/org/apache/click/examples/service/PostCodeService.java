@@ -25,6 +25,7 @@ import org.apache.cayenne.query.SelectQuery;
 
 import org.apache.click.examples.domain.PostCode;
 import org.apache.click.extras.cayenne.CayenneTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a Postcode Service.
@@ -33,9 +34,11 @@ import org.apache.click.extras.cayenne.CayenneTemplate;
  *
  * @author Malcolm Edgar
  */
+@Component
 public class PostCodeService extends CayenneTemplate {
 
-    public List getPostCodeLocations(String location) {
+    @SuppressWarnings("unchecked")
+    public List<PostCode> getPostCodeLocations(String location) {
         SelectQuery query = new SelectQuery(PostCode.class);
 
         query.andQualifier(ExpressionFactory.likeIgnoreCaseExp(PostCode.LOCALITY_PROPERTY, location + "%"));
@@ -55,7 +58,8 @@ public class PostCodeService extends CayenneTemplate {
         return list;
     }
 
-    public List getPostCodes() {
+    @SuppressWarnings("unchecked")
+    public List<PostCode> getPostCodes() {
         SelectQuery query = new SelectQuery(PostCode.class);
 
         query.setFetchLimit(10);

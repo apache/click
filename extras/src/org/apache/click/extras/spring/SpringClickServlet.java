@@ -18,6 +18,14 @@
  */
 package org.apache.click.extras.spring;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -25,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.click.ClickServlet;
 import org.apache.click.Page;
+import org.apache.click.util.HtmlStringBuffer;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -32,50 +41,137 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
- * Provides an example Spring framework integration <tt>SpringClickServlet</tt>.
- *
- * <h3>Page Creation</h3>
- *
- * This specialized Click Servlet can inject Spring dependencies into
- * defined spring Page beans. If a requested Page is not configured as a Spring
- * bean, then a plain new Page instance is created.
+ * Provides an Spring framework integration <tt>SpringClickServlet</tt>.
  * <p/>
- * The SpringClickServlet overrides the ClickServlet method <tt>newPageInstance()</tt>
- * to provide new Page instances:
+ * This Spring integration servlet provides a number of integration options
+ * using Spring with Click pages. These options detailed below.
+ *
+ * <h3>Spring instantiated Pages with &#64;Component configuration</h3>
+ *
+ * With this option Page classes are configured with Spring using the
+ * &#64;Component annotation. When the SpringClickServlet receives a page
+ * request converts the auto-mapped page class to the equivalent Spring
+ * bean name and gets a new instance from the Spring ApplicationContext.
+ *
+ * <pre class="codeConfig">
+ * customer-list.htm  ->  com.mycorp.page.CustomerListPage  -> customerListPage
+ * HTML Request           Click Page Class                     Spring Bean Name </pre>
+ *
+ * When using this strategy use the PageScopeResolver class to ensure new Page
+ * instances are created with each request, rather than Spring's default
+ * "singleton" creation policy. Please see the {@link PageScopeResolver} Javadoc
+ * for more information on configuring this option.
+ * <p/>
+ * An example Page class is provided below which uses the Spring &#64;Component annotation.
+ * Note in this example page the customerService with the &#64;Resource
+ * annotation is injected by Spring after the page instance has been instantiated.
  *
  * <pre class="codeJava">
- * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass, HttpServletRequest request)
- *     <span class="kw">throws</span> Exception {
+ * <span class="kw">package</span> com.mycorp.page;
  *
- *     Page page = <span class="kw">null</span>;
+ * <span class="kw">import</span> javax.annotation.Resource;
+ * <span class="kw">import</span> org.apache.click.Page;
+ * <span class="kw">import</span> org.springframework.stereotype.Component;
  *
- *     String beanName = pageClass.getName();
+ * <span class="kw">import</span> com.mycorp.service.CustomerService;
  *
- *     <span class="kw">if</span> (applicationContext.containsBean(beanName)) {
- *         Page page = (Page) applicationContext.getBean(beanName);
+ * <span class="green">&#64;Component</span>
+ * <span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> Page {
  *
- *     } <span class="kw">else</span> {
- *         page = (Page) pageClass.newIntance();
- *     }
+ *     <span class="green">&#64;Resource</span>(name=<span class="st">"customerService"</span>)
+ *     <span class="kw">private</span> CustomerService customerService;
  *
- *     <span class="kw">return</span> page;
+ *     ..
  * } </pre>
  *
- * The SpringClickServlet support Spring Page injection in two ways.
+ * This is the most powerful and convenient Spring integration option, but does
+ * require Spring 2.5.x and Java 1.5 or latter.
  *
- * <h4>Click Instantiated Pages</h4>
+ * <h3>Spring instantiated Pages with Spring XML configuration</h3>
  *
- * With Click instantiated pages you have your Page classes implement the Spring
- * {@link org.springframework.context.ApplicationContextAware} interface.
- * The SpringClickServlet then create the Page instance an inject the Spring
- * <tt>ApplicationContext</tt> instance.
+ * With this option Page classes are configured using Spring XML configuration.
+ * When the SpringClickServlet receives a page request converts the auto-mapped
+ * page class to the equivalent Spring bean name and gets a new instance from the
+ * Spring ApplicationContext.
+ *
+ * <pre class="codeConfig">
+ * customer-list.htm  ->  com.mycorp.page.CustomerListPage  -> customerListPage
+ * HTML Request           Click Page Class                     Spring Bean Name </pre>
+ *
+ * If the page bean is not found in the ApplicationContxt then the full Page
+ * class name is used.
+ *
+ * <pre class="codeConfig">
+ * customer-list.htm  ->  com.mycorp.page.CustomerListPage  -> com.mycorp.page.CustomerListPage
+ * HTML Request           Click Page Class                     Spring Bean Name </pre>
+ *
+ * This integration option requires you to configure all your Spring Page beans
+ * in your Spring XML configuration. While this may be quite laborious, it does
+ * support Spring 1.x and Java 1.4. An example page bean configuration is
+ * provided below:
+ *
+ * <pre class="codeConfig">
+ * &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ * &lt;beans&gt;
+ *
+ *    &lt;bean id="customerListPage" class="com.mycorp.page.CustomerListPage" scope="prototype"/&gt;
+ *
+ * &lt;/beans&gt; </pre>
+ *
+ * <b>Please Note</b> ensure the page beans scope is set to "prototype" so a new \
+ * page instance will be created with every HTTP request. Otherwise Spring will
+ * default to using singletons and your code will not be thread safe.
+ *
+ * <h3>Click instantiated Pages with injected Spring beans and/or ApplicationContext</h3>
+ *
+ * With this integration option Click will instantiate page instances and
+ * automatically inject any page properties which match Spring beans defined in
+ * the ApplicationContext.
  * <p/>
- * The advantage of using this technique is that you don't need to
- * define your Pages as beans in Spring configuration files. However you will
- * need hard code acessor methods in you Click pages. For example:
+ * While this option is not as powerful as &#64;Component configured pages it is
+ * much more convenient than Spring XML configured pages and supports Spring 1.x and Java 1.4.
+ * <p/>
+ * An example Page class is provided below which has the customerService property
+ * automatically injected by the SpringClickServlet. Note the customerService
+ * property will need to be defined in a Spring XML configuration.
  *
  * <pre class="codeJava">
- * <span class="kw">public class</span> SpringPage <span class="kw">extends</span> Page <span class="kw">implements</span> ApplicationContextAware {
+ * <span class="kw">package</span> com.mycorp.page;
+ *
+ * <span class="kw">import</span> org.apache.click.Page;
+ *
+ * <span class="kw">import</span> com.mycorp.service.CustomerService;
+ *
+ * <span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> Page {
+ *
+ *     <span class="kw">private</span> CustomerService customerService;
+ *
+ *     <span class="kw">public void </span> setCustomerService(CustomerService customerService) {
+ *         <span class="kw">this</span>.customerService = customerService;
+ *     }
+ *
+ *     ..
+ * } </pre>
+ *
+ * Page property bean name must match the bean name defined in the Spring XML
+ * configuration. Continuing our example the Spring XML configuration is provided
+ * below:
+ *
+ * <pre class="codeConfig">
+ * &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ * &lt;beans&gt;
+ *
+ *    &lt;bean id="customerService" class="com.mycorp.service.CustomerService"/&gt;
+ *
+ * &lt;/beans&gt; </pre>
+ *
+ * This option will also automatically inject the ApplicationContext into new
+ * page instances which implement the {@link org.springframework.context.ApplicationContextAware}
+ * interface. Using the applicationContext you can lookup Spring beans manually
+ * in your pages. For example:
+ *
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> Page <span class="kw">implements</span> ApplicationContextAware {
  *
  *     <span class="kw">protected</span> ApplicationContext applicationContext;
  *
@@ -83,172 +179,131 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *         <span class="kw">this</span>.applicationContext = applicationContext;
  *     }
  *
- *     <span class="kw">public</span> Object getBean(String beanName) {
- *         <span class="kw">return</span> applicationContext.getBean(beanName);
- *     }
- *
- *     <span class="kw">public</span> UserService getUserService() {
- *         <span class="kw">return</span> (UserService) getBean(<span class="st">"userService"</span>);
+ *     <span class="kw">public</span> CustomerService getCustomerService() {
+ *         <span class="kw">return</span> (CustomerService) applicationContext.getBean(<span class="st">"customerService"</span>);
  *     }
  * } </pre>
  *
- * <h4>Spring Instantiated Pages</h4>
+ * This last strategy is probably the least convenient integration option.
  *
- * With Spring instantiated pages you define your Pages as beans in a Spring
- * appliction context XML file. For example in this file the Page bean id maps
- * to the page class name:
+ * <h3>Servlet Configuration</h3>
  *
- * <pre class="codeConfig">
- * &lt;beans&gt;
- *
- *    &lt;bean id="com.mycorp.pages.CustomerEdit" class="com.mycorp.pages.CustomerEdit"
- *         singleton="false"&gt;
- *       &lt;property name="userService" ref="userService"/&gt;
- *    &lt;/bean&gt;
- *
- * &lt;/beans&gt; </pre>
- *
- * <b>Please Note</b> ensure that your Page bean is not a singleton, otherwise
- * the page instance will not be thread safe.
- *<p/>
- * Using this technique the SpringClickServlet will look up the Page bean and
- * have Spring create the page instance and inject all its dependencies.
- *
- * <h4>Developing Page Classes</h4>
- *
- * When developing Click page classes please ensure you place any code which
- * relies upon Spring or Click injected dependencies in the pages
- * <tt>onInit()</tt> method and not in the pages constructor. Any dependencies
- * will not be available in when the pages no-args constructor is invoked.
- *
- * <h3>Application Context Configuration</h3>
- *
- * By convention Spring beans are defined in an <tt>applicationContext.xml</tt>
- * file. The Spring runtime needs to be initialized with location of this
- * file so that it can build up the configured Spring beans. There are two
- * typical location options for the <tt>applicationContext.xml</tt> file.
- *
- * <h4>WEB-INF Directory</h4>
- *
- * You can place the file under your WEB-INF directory, adjacent to your web.xml
- * file.
+ * The SpringClickServlet can obtain the ApplicationContext either from
+ * {@link WebApplicationContextUtils} which is configured with a
+ * {@link ContextLoaderListener}. For example:
  *
  * <pre class="codeConfig">
- * /WEB-INF/applicationContext.xml </pre>
- *
- * To use this option configure a Spring
- * {@link org.springframework.web.context.ContextLoaderListener} in your
- * <tt>web.xml</tt> file. For example:
- *
- * <pre class="codeConfig">
+ * &lt;?xml version="1.0" encoding="UTF-8"?&gt;
  * &lt;web-app&gt;
  *
  *    &lt;listener&gt;
  *       &lt;listener-class&gt;
- *          <font color="blue">org.springframework.web.context.ContextLoaderListener</font>
+ *          <span class="blue">org.springframework.web.context.ContextLoaderListener</span>
  *       &lt;/listener-class&gt;
  *    &lt;/listener&gt;
  *
  *    &lt;servlet&gt;
- *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+ *       &lt;servlet-name&gt;SpringClickServlet&lt;/servlet-name&gt;
  *       &lt;servlet-class&gt;org.apache.click.extras.spring.SpringClickServlet&lt;/servlet-class&gt;
  *       &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
  *    &lt;/servlet&gt;
  *
- *    &lt;servlet-mapping&gt;
- *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
- *       &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
- *    &lt;/servlet-mapping&gt;
+ *    ..
  *
  * &lt;/web-app&gt; </pre>
  *
- * The advantage of this configuration option is that any changes made to the
- * <tt>applicationContext.xml</tt> file during development will be
- * automatically loaded by the Spring runtime.
- *
- * <h4>Class Path</h4>
- *
- * The second configuration option is to locate the <tt>applicationContext.xml</tt>
- * file on the class path.
+ * Alternatively you can specify the path to the ApplicationContext as a
+ * servlet init parameter. For example:
  *
  * <pre class="codeConfig">
- * /WEB-INF/classes/applicationContext.xml </pre>
- *
- * To use this configration option add a
- * <tt class="blue">spring-path</tt> servlet initialization parameter which
- * specifies the files class path location to the <tt>SpringClickServlet</tt>
- * servlet config. For example:
- *
- * <pre class="codeConfig">
+ * &lt;?xml version="1.0" encoding="UTF-8"?&gt;
  * &lt;web-app&gt;
  *
  *    &lt;servlet&gt;
- *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+ *       &lt;servlet-name&gt;SpringClickServlet&lt;/servlet-name&gt;
  *       &lt;servlet-class&gt;org.apache.click.extras.spring.SpringClickServlet&lt;/servlet-class&gt;
  *       &lt;init-param&gt;
- *         &lt;param-name&gt;<font color="blue">spring-path</font>&lt;/param-name&gt;
- *         &lt;param-value&gt;<font color="red">/applicationContext.xml</font>&lt;/param-value&gt;
+ *         &lt;param-name&gt;<span class="blue">spring-path</span>&lt;/param-name&gt;
+ *         &lt;param-value&gt;<span class="red">/applicationContext.xml</span>&lt;/param-value&gt;
  *       &lt;/init-param&gt;
  *       &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
  *    &lt;/servlet&gt;
  *
- *    &lt;servlet-mapping&gt;
- *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
- *       &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
- *    &lt;/servlet-mapping&gt;
+ *    ..
  *
  * &lt;/web-app&gt; </pre>
  *
- * The advantage of this confirguration option is that you can locate your
- * <tt>applicationContext.xml</tt> file in any classpath location. For instance
- * you may package your Spring business tier objects in a separate JAR file
- * which you include with your web application.
+ * To configure page Spring bean injection you need to configure the
+ * <span class="blue">inject-page-beans</span> servlet init parameter. For
+ * example:
  *
- * <h3>Servlet Intialization</h3>
+ * <pre class="codeConfig">
+ * &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ * &lt;web-app&gt;
  *
- * Now that we have discussed the configuration options, below you see how the
- * <tt>ClickSpringServlet</tt> loads the
- * {@link org.springframework.context.ApplicationContext} at
- * startup:
+ *    ..
  *
- * <pre class="codeJava">
- * <span class="kw">public void</span> init() <span class="kw">throws</span>ServletException {
- *     <span class="kw">super</span>.init();
+ *    &lt;servlet&gt;
+ *       &lt;servlet-name&gt;SpringClickServlet&lt;/servlet-name&gt;
+ *       &lt;servlet-class&gt;org.apache.click.extras.spring.SpringClickServlet&lt;/servlet-class&gt;
+ *       &lt;init-param&gt;
+ *         &lt;param-name&gt;<span class="blue">inject-page-beans</span>&lt;/param-name&gt;
+ *         &lt;param-value&gt;<span class="red">true</span>&lt;/param-value&gt;
+ *       &lt;/init-param&gt;
+ *       &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
+ *    &lt;/servlet&gt;
  *
- *     ServletContext servletContext = getServletContext();
- *     applicationContext =
- *         WebApplicationContextUtils.getWebApplicationContext(servletContext);
+ *    ..
  *
- *     <span class="kw">if</span> (applicationContext == <span class="kw">null</span>) {
- *         String springPath = getInitParameter(SPRING_PATH);
- *         <span class="kw">if</span> (springPath == <span class="kw">null</span>) {
- *             String msg = SPRING_PATH + <span class="st">" servlet init parameter not defined"</span>;
- *             <span class="kw">throw new</span> UnavailableException(msg);
- *         }
- *         applicationContext = <span class="kw">new</span> ClassPathXmlApplicationContext(springPath);
- *     }
- * } </pre>
+ * &lt;/web-app&gt; </pre>
  *
- * <h3>Examples</h3>
+ * @see PageScopeResolver
  *
- * Please see the Click Examples application for a demonstration of Spring integration.
- *
- * @author Phil Barnes
- * @author Paul Rule
  * @author Malcolm Edgar
+ * @author Paul Rule
+ * @author Phil Barnes
  */
 public class SpringClickServlet extends ClickServlet {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * The path to the Spring XML appliation context definition file:
-     * &nbsp; <tt>"spring-path"</tt>.
+     * The Servlet initialization parameter name for the option to have the
+     * SpringClickServlet inject Spring beans into page instances: &nbsp;
+     * <tt>"inject-page-beans"</tt>.
+     */
+    public static final String INJECT_PAGE_BEANS = "inject-page-beans";
+
+    /**
+     * The Servlet initialization parameter name for the path to the Spring XML
+     * appliation context definition file: &nbsp; <tt>"spring-path"</tt>.
      */
     public static final String SPRING_PATH = "spring-path";
 
+    /** The set of setter methods to ignore. */
+    static final Set SETTER_METHODS_IGNORE_SET = new HashSet();
+
+    // Initialize the setter method ignore set
+    static {
+        SETTER_METHODS_IGNORE_SET.add("setApplicationContext");
+        SETTER_METHODS_IGNORE_SET.add("setFormat");
+        SETTER_METHODS_IGNORE_SET.add("setForward");
+        SETTER_METHODS_IGNORE_SET.add("setHeader");
+        SETTER_METHODS_IGNORE_SET.add("setHeaders");
+        SETTER_METHODS_IGNORE_SET.add("setPageImports");
+        SETTER_METHODS_IGNORE_SET.add("setPath");
+        SETTER_METHODS_IGNORE_SET.add("setStateful");
+        SETTER_METHODS_IGNORE_SET.add("setRedirect");
+        SETTER_METHODS_IGNORE_SET.add("setTemplate");
+    }
+
     /** Spring application context bean factory. */
     protected ApplicationContext applicationContext;
+
+    /** The list of page injectable Spring beans, keyed on page class name. */
+    protected Map pageSetterBeansMap = new HashMap();
+
+    // Public Methods ----------------------------------------------------------
 
     /**
      * Initialize the SpringClickServlet and the Spring application context
@@ -277,15 +332,55 @@ public class SpringClickServlet extends ClickServlet {
 
             applicationContext = new ClassPathXmlApplicationContext(springPath);
         }
+
+        String injectPageBeans = getInitParameter(INJECT_PAGE_BEANS);
+        if ("true".equalsIgnoreCase(injectPageBeans)) {
+
+            // Process page classes looking for setter methods which match beans
+            // available in the applicationContext
+            List pageClassList = getConfigService().getPageClassList();
+            for (int i = 0; i < pageClassList.size(); i++) {
+                Class pageClass = (Class) pageClassList.get(i);
+
+                Method[] methods = pageClass.getMethods();
+                for (int j = 0; j < methods.length; j++) {
+                    Method method = methods[j];
+                    String methodName = method.getName();
+
+                    if (methodName.startsWith("set")
+                        && !SETTER_METHODS_IGNORE_SET.contains(methodName)
+                        && method.getParameterTypes().length == 1) {
+
+                        // Get the bean name from the setter method name
+                        HtmlStringBuffer buffer = new HtmlStringBuffer();
+                        buffer.append(Character.toLowerCase(methodName.charAt(3)));
+                        buffer.append(methodName.substring(4));
+                        String beanName = buffer.toString();
+
+                        // If Spring contains the bean then cache in map list
+                        if (getApplicationContext().containsBean(beanName)) {
+                            List beanList = (List) pageSetterBeansMap.get(pageClass);
+                            if (beanList == null) {
+                                beanList = new ArrayList();
+                                pageSetterBeansMap.put(pageClass, beanList);
+                            }
+
+                            beanList.add(new BeanNameAndMethod(beanName, method));
+                        }
+                    }
+                }
+            }
+        }
     }
+
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Create a new Spring Page bean if defined in the application context, or
-     * a new Page instance otherwise. The bean name used is the full class name
-     * of the given pageClass.
+     * a new Page instance otherwise.
      * <p/>
-     * If the Page implements the <tt>ApplicationContextAware</tt> interface
-     * this method will set the application context in the newly created page.
+     * If the "inject-paget-beans" option is enable this method will inject
+     * any Spring beans matching the Page's properties.
      *
      * @see ClickServlet#newPageInstance(String, Class, HttpServletRequest)
      *
@@ -300,16 +395,47 @@ public class SpringClickServlet extends ClickServlet {
 
         Page page = null;
 
-        String beanName = pageClass.getName();
+        String beanName = toBeanName(pageClass);
 
-        if (applicationContext.containsBean(beanName)) {
-            page = (Page) applicationContext.getBean(beanName);
+        if (getApplicationContext().containsBean(beanName)) {
+            page = (Page) getApplicationContext().getBean(beanName);
+
+        } else if (getApplicationContext().containsBean(pageClass.getName())) {
+            page = (Page) getApplicationContext().getBean(pageClass.getName());
 
         } else {
             page = (Page) pageClass.newInstance();
+
+            // Inject any Spring beans into the page instance
+            if (!pageSetterBeansMap.isEmpty()) {
+                List beanList = (List) pageSetterBeansMap.get(page.getClass());
+                if (beanList != null) {
+                    for (int i = 0; i < beanList.size(); i++) {
+                        BeanNameAndMethod bnam = (BeanNameAndMethod) beanList.get(i);
+                        Object bean = getApplicationContext().getBean(bnam.beanName);
+
+                        try {
+                            Object[] args = { bean };
+                            bnam.method.invoke(page, args);
+
+                        } catch (Exception error) {
+                            throw new RuntimeException(error);
+                        }
+                    }
+                }
+            }
         }
 
         return page;
+    }
+
+    /**
+     * Return the configured Spring application context.
+     *
+     * @return the configured Spring application context.
+     */
+    protected ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 
     /**
@@ -325,7 +451,46 @@ public class SpringClickServlet extends ClickServlet {
         if (page instanceof ApplicationContextAware) {
             ApplicationContextAware aware =
                 (ApplicationContextAware) page;
-            aware.setApplicationContext(applicationContext);
+            aware.setApplicationContext(getApplicationContext());
+        }
+    }
+
+    /**
+     * Return the Spring beanName for the given class.
+     *
+     * @param aClass the class to get the Spring bean name from
+     * @return the class bean name
+     */
+    protected String toBeanName(Class aClass) {
+        String className = aClass.getName();
+        String beanName = className.substring(className.lastIndexOf(".") + 1);
+        return Character.toLowerCase(beanName.charAt(0)) + beanName.substring(1);
+    }
+
+    // Package Private Inner Classes ------------------------------------------
+
+    /**
+     * Provides a Spring bean name and page bean property setter method holder.
+     *
+     * @author Malcolm Edgar
+     */
+    static class BeanNameAndMethod {
+
+        /** The Spring bean name. */
+        protected final String beanName;
+
+        /** The page bean property setter method. */
+        protected final Method method;
+
+        /**
+         * Create a new String bean name and page setter method object.
+         *
+         * @param beanName the spring bean name
+         * @param method the page setter method for the bean
+         */
+        protected BeanNameAndMethod(String beanName, Method method) {
+            this.beanName = beanName;
+            this.method = method;
         }
     }
 

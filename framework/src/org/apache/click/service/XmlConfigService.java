@@ -488,6 +488,23 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
+     * @see ConfigService#getPageClassList()
+     *
+     * @return the list of configured page classes
+     */
+    public List getPageClassList() {
+        List classList = new ArrayList(pageByClassMap.size());
+
+        Iterator i = pageByClassMap.keySet().iterator();
+        while (i.hasNext()) {
+            Class pageClass = (Class) i.next();
+            classList.add(pageClass);
+        }
+
+        return classList;
+    }
+
+    /**
      * @see ConfigService#getPageHeaders(String)
      *
      * @param path the path of the page

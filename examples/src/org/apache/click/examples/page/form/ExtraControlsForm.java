@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
@@ -29,14 +31,30 @@ import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
-import org.apache.click.extras.control.*;
+import org.apache.click.examples.service.CustomerService;
+import org.apache.click.extras.control.CheckList;
+import org.apache.click.extras.control.ColorPicker;
+import org.apache.click.extras.control.CountrySelect;
+import org.apache.click.extras.control.CreditCardField;
+import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.control.DoubleField;
+import org.apache.click.extras.control.EmailField;
+import org.apache.click.extras.control.IntegerField;
+import org.apache.click.extras.control.LongField;
+import org.apache.click.extras.control.NumberField;
+import org.apache.click.extras.control.PageSubmit;
+import org.apache.click.extras.control.RegexField;
+import org.apache.click.extras.control.TelephoneField;
+import org.apache.click.extras.control.VirtualKeyboard;
 import org.apache.click.util.ClickUtils;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a form containing all the Click Extras Controls.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class ExtraControlsForm extends BorderPage {
 
     /** Form options holder. */
@@ -52,6 +70,9 @@ public class ExtraControlsForm extends BorderPage {
     private CheckList checkList = new CheckList("checkList");
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");
     private Checkbox jsValidate = new Checkbox("jsValidate", "JavaScript Validate");
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // ------------------------------------------------------------ Constructor
 
@@ -92,10 +113,11 @@ public class ExtraControlsForm extends BorderPage {
     /**
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
-        List customers = getCustomerService().getCustomers();
+        List customers = customerService.getCustomers();
         checkList.addAll(customers, "id", "name");
         applyOptions();
     }

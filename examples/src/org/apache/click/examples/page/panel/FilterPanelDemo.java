@@ -21,20 +21,29 @@ package org.apache.click.examples.page.panel;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Column;
 import org.apache.click.control.Table;
 import org.apache.click.examples.control.FilterPanel;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides example usage of a custom date range FilterPanel control.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class FilterPanelDemo extends BorderPage {
 
     public FilterPanel filterPanel = new FilterPanel();
     public Table table = new Table();
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     public FilterPanelDemo() {
         // Setup customers table
@@ -64,11 +73,12 @@ public class FilterPanelDemo extends BorderPage {
     /**
      * @see org.apache.click.Page#onRender()
      */
+    @Override
     public void onRender() {
         Date from = filterPanel.getStartDate();
         Date to = filterPanel.getEndDate();
 
-        List customers = getCustomerService().getCustomers(from, to);
+        List<Customer> customers = customerService.getCustomers(from, to);
 
         table.setRowList(customers);
     }

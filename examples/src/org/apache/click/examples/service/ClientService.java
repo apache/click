@@ -24,6 +24,7 @@ import org.apache.click.examples.domain.Client;
 import org.apache.click.extras.cayenne.CayenneTemplate;
 
 import org.apache.cayenne.query.SelectQuery;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a Client Service.
@@ -32,9 +33,11 @@ import org.apache.cayenne.query.SelectQuery;
  *
  * @author Malcolm Edgar
  */
+@Component
 public class ClientService extends CayenneTemplate {
 
-    public List getClients() {
+    @SuppressWarnings("unchecked")
+    public List<Client> getClients() {
         SelectQuery query = new SelectQuery(Client.class);
         query.addOrdering("db:id", true);
         return performQuery(query);

@@ -22,6 +22,7 @@ import java.util.Date;
 
 import org.apache.click.examples.domain.CourseBooking;
 import org.apache.click.extras.cayenne.CayenneTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a CourseBooking Service.
@@ -30,6 +31,7 @@ import org.apache.click.extras.cayenne.CayenneTemplate;
  *
  * @author Malcolm Edgar
  */
+@Component
 public class BookingService extends CayenneTemplate {
 
     public CourseBooking findCourseBookingByID(Integer id) {

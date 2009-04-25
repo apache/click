@@ -20,20 +20,26 @@ package org.apache.click.examples.page.table;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Column;
 import org.apache.click.control.Form;
-import org.apache.click.extras.control.TableInlinePaginator;
 import org.apache.click.control.Label;
 import org.apache.click.control.Select;
 import org.apache.click.control.Table;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
+import org.apache.click.extras.control.TableInlinePaginator;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table control styles.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class TableStyles extends BorderPage {
 
     public Form form = new Form();
@@ -41,6 +47,9 @@ public class TableStyles extends BorderPage {
 
     private Select styleSelect = new Select("style", "Table Style:");
     private Checkbox hoverCheckbox = new Checkbox("hover", "Hover Rows:");
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // ----------------------------------------------------------- Constructor
 
@@ -101,11 +110,12 @@ public class TableStyles extends BorderPage {
     /**
      * @see org.apache.click.Page#onRender()
      */
+    @Override
     public void onRender() {
         table.setClass(styleSelect.getValue());
         table.setHoverRows(hoverCheckbox.isChecked());
 
-        List customers = getCustomerService().getCustomers();
+        List<Customer> customers = customerService.getCustomers();
         table.setRowList(customers);
     }
 

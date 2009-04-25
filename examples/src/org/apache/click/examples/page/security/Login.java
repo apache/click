@@ -18,6 +18,8 @@
  */
 package org.apache.click.examples.page.security;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.PasswordField;
@@ -26,15 +28,17 @@ import org.apache.click.control.TextField;
 import org.apache.click.examples.domain.User;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
+import org.apache.click.examples.service.UserService;
 import org.apache.click.extras.control.PageSubmit;
-
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a user authentication login Page.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class Login extends BorderPage {
 
     public Form form = new Form();
@@ -42,6 +46,9 @@ public class Login extends BorderPage {
 
     private TextField usernameField = new TextField("username", true);
     private PasswordField passwordField = new PasswordField("password", true);
+
+    @Resource(name="userService")
+    private UserService userService;
 
     // ------------------------------------------------------------ Constructor
 
@@ -63,6 +70,7 @@ public class Login extends BorderPage {
 
     // --------------------------------------------------------- Event Handlers
 
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -86,9 +94,9 @@ public class Login extends BorderPage {
             User user = new User();
             form.copyTo(user);
 
-            if (getUserService().isAuthenticatedUser(user)) {
+            if (userService.isAuthenticatedUser(user)) {
 
-                user = getUserService().getUser(user.getUsername());
+                user = userService.getUser(user.getUsername());
                 getContext().setSessionAttribute("user", user);
 
                 getContext().setCookie("username",

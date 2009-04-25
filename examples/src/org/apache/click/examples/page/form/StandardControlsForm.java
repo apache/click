@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.click.control.Button;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Field;
@@ -40,14 +42,18 @@ import org.apache.click.control.Select;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextArea;
 import org.apache.click.control.TextField;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
 import org.apache.click.util.ClickUtils;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides a form containing all the Standard Click Controls.
  *
  * @author Malcolm Edgar
  */
+@Component
 public class StandardControlsForm extends BorderPage {
 
     /** Form options holder. */
@@ -63,6 +69,9 @@ public class StandardControlsForm extends BorderPage {
     private Select select = new Select("select");
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");
     private Checkbox jsValidate = new Checkbox("jsValidate", "JavaScript Validate");
+
+    @Resource(name="customerService")
+    private CustomerService customerService;
 
     // ------------------------------------------------------------ Constructor
 
@@ -113,10 +122,11 @@ public class StandardControlsForm extends BorderPage {
     /**
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
-        List customers = getCustomerService().getCustomers();
+        List<Customer> customers = customerService.getCustomers();
         select.add(new Option("[Select]"));
         select.addAll(customers, "id", "name");
         applyOptions();

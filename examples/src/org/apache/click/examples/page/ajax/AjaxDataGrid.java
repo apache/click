@@ -20,21 +20,31 @@ package org.apache.click.examples.page.ajax;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.service.CustomerService;
+import org.springframework.stereotype.Component;
 
 /**
  * Provides an Ajax demo of Rico's LiveGrid.
  *
  * @author Phil Barnes
  */
+@Component
 public class AjaxDataGrid extends BorderPage {
 
     public String headInclude = "ajax/ajax-data-grid-include.htm";
 
+    @Resource(name="customerService")
+    private CustomerService customerService;
+
+    @Override
     public void onInit() {
         super.onInit();
 
-        List customerList = getCustomerService().getCustomers();
+        List<Customer> customerList = customerService.getCustomers();
         addModel("customers", customerList);
 
         addModel("totalRows", new Integer(customerList.size()));
