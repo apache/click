@@ -65,7 +65,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * @author Malcolm Edgar
  */
 public class DateField extends TextField {
-    
+
     private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
