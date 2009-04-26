@@ -122,13 +122,22 @@ public class CayenneTemplate {
     }
 
     /**
-     * Return the thread local DataContext.
+     * Return the thread local DataContext. If a DataContext not not bound to
+     * the current thread, this method will create a new DataContext and bind
+     * it to the thread.
      *
      * @return the thread local DataContext
      * @throws IllegalStateException if there is no DataContext bound to the current thread
      */
     protected DataContext getDataContext() {
-        return DataContext.getThreadDataContext();
+        try {
+            return DataContext.getThreadDataContext();
+
+        } catch (IllegalStateException ise) {
+            DataContext dataContext = DataContext.createDataContext();
+            DataContext.bindThreadDataContext(dataContext);
+            return dataContext;
+        }
     }
 
     /**
