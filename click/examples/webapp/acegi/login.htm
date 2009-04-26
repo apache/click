@@ -1,0 +1,79 @@
+<!--
+#* Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.*#
+-->
+
+<center>
+
+<div class="dialogForm" style="width:305px;">
+
+<form method="post" action="$context/j_acegi_security_check" name="form">
+<table class="login" border="0" width="100%">
+ <tr>
+#if ($request.getParameter("auth-error"))
+   <td colspan="3" style="color:red">
+	Invalid Username or Password, please try again.<br/>Please ensure Caps Lock is off.
+   </td>
+#else
+   <td colspan="3" style="font-weight:bold;font-size:10pt;">Please login</td>
+#end
+   <td width="100%">&nbsp;</td>
+ </tr>
+ <tr>
+   <td colspan="4">&nbsp;</td>
+ </tr>
+ <tr>
+   <td><label>Username</label></td>
+   <td><input type="text" name="j_username" style="width:200px;"/></td>
+   <td>&nbsp;</td>
+   <td width="100%">&nbsp;</td>
+ </tr>
+ <tr>
+   <td style="vertical-align:middle;"><label>Password</label></td>
+   <td style="vertical-align:middle;"><input type="password" name="j_password" style="width:200px;"/></td>
+   <td style="vertical-align:middle;"><input type="image" src="$context/assets/images/intro.png" title="Click to Login"/></td>
+   <td width="100%">&nbsp;</td>
+ </tr>
+</table>
+</form>
+
+<script type="text/javascript">
+  document.form.j_username.focus(); 
+</script>
+
+</div>
+
+
+<div class="dialogForm" style="width:305px;margin-top:40px;">
+
+<table class="login" border="0" width="100%">
+ <tr>
+   <td colspan="4" style="white-space:nowrap;color:#404040;">
+    New to Click Examples? It's free and easy.
+   </td>
+ </tr>
+ <tr>
+   <td colspan="4" style="padding-top:15px;">
+   	<input type="button" style="font-weight:bold;" value="Create an account &#187;" onclick="javascript:document.location.href='${context}/acegi/create-account.htm';"/>
+   </td>
+  </tr>
+</table>
+
+</div>
+
+
+</center>

@@ -45,4 +45,18 @@ public class UserService extends CayenneTemplate {
     public User getUser(String username) {
         return (User) findObject(User.class, "username", username);
     }
+
+    public User createUser(String fullName, String email, String username, String password) {
+        User user = new User();
+        getDataContext().registerNewObject(user);
+
+        user.setEmail(email);
+        user.setFullname(fullName);
+        user.setUsername(username);
+        user.setPassword(password);
+
+        commitChanges();
+
+        return user;
+    }
 }

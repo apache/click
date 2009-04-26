@@ -16,12 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.click.examples.domain;
+package org.apache.click.examples.page.acegi;
 
-import org.apache.click.examples.domain.auto._PostCode;
+import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.page.acegi.secure.SecurePage;
 
-public class PostCode extends _PostCode {
+/**
+ * Provides a ACEGI Security logout page.
+ *
+ * @author Malcolm Edgar
+ */
+public class LogoutPage extends BorderPage {
 
-    private static final long serialVersionUID = 1L;
+    // Event Handlers ---------------------------------------------------------
+
+    @Override
+    public boolean onSecurityCheck() {
+        getContext().getSession().invalidate();
+        setRedirect(SecurePage.class);
+        return false;
+    }
 
 }
