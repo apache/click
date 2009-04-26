@@ -26,6 +26,7 @@
    <property file="../build/build.properties"/>
       
    <property name="name" value="click-examples"/>
+   <property name="jar.acegi" value="acegi-security-1.0.7.jar"/>
    <property name="jar.annotation" value="geronimo-annotation_1.0_spec-1.1.1.jar"/>
    <property name="jar.ashwood" value="ashwood-1.1.jar"/>
    <property name="jar.cayenne" value="cayenne-nodeps-2.0.4.jar"/>
@@ -162,6 +163,10 @@
     	   dest="${dir.weblib}/${jar.cayenne}"
 	       verbose="true"
 	       usetimestamp="true"/> 
+   	  <get src="http://mirrors.ibiblio.org/pub/mirrors/maven2/org/acegisecurity/acegi-security/1.0.7/${jar.acegi}"
+   	       dest="${dir.weblib}/${jar.acegi}"
+   		   verbose="true"
+   	       usetimestamp="true"/>
    	  <get src="http://mirrors.ibiblio.org/pub/mirrors/maven2/org/apache/geronimo/specs/geronimo-annotation_1.0_spec/1.1.1/${jar.annotation}"
    	       dest="${dir.weblib}/${jar.annotation}"
    		   verbose="true"

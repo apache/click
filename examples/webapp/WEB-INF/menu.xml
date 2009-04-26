@@ -43,7 +43,6 @@
 
   <menu label="General" path="#" imageSrc="/assets/images/general.png">
     <menu label="Direct Page" path="general/direct-page.htm"/>
-    <menu label="Excel Export Page" path="general/excel-export.htm"/>
     <menu label="Exception Demo" path="general/exception.htm"/>
     <menu label="Flash Attribute" path="general/flash.htm"/>
     <menu label="Page Imports" path="general/page-imports-example.htm"/>
@@ -135,9 +134,13 @@
     <menu label="Reusable Panel" path="panel/reusable-panel-demo.htm"/>
   </menu>
 
-  <menu label=" Cayenne" path="#" imageSrc="/assets/images/cayenne.png">
-    <menu label="CayenneForm" path="cayenne/cayenne-form-page.htm"/>
-    <menu label="TabbedCayenneForm" path="cayenne/tabbed-cayenne-form-page.htm"/>
+  <menu label=" Integration" path="#" imageSrc="/assets/images/cayenne.png">
+    <menu label="ACEGI Security" path="acegi/secure/secure.htm"/>
+    <menu separator="true"/>
+    <menu label="Apache Cayenne Form" path="cayenne/cayenne-form-page.htm"/>
+    <menu label="Cayenne Tabbed Form" path="cayenne/tabbed-cayenne-form-page.htm"/>
+    <menu separator="true"/>
+    <menu label="Apache POI Excel Export" path="general/excel-export.htm"/>
   </menu>
 
 </menu>
