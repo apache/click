@@ -113,6 +113,11 @@ public abstract class FormTablePage extends BorderPage {
         removeLink.setAttribute("onclick", "return window.confirm('Are you sure you want to delete this record?');");
     }
 
+    /**
+     * The save event handler.
+     *
+     * @return true if processing should continue, false otherwise
+     */
     public boolean onSaveClick() {
         if (form.isValid()) {
             DataObject dataObject = form.getDataObject();
@@ -124,11 +129,21 @@ public abstract class FormTablePage extends BorderPage {
         return true;
     }
 
+    /**
+     * The cancel event handler.
+     *
+     * @return true if processing should continue, false otherwise
+     */
     public boolean onCancelClick() {
         clear();
         return true;
     }
 
+    /**
+     * The edit event handler.
+     *
+     * @return true if processing should continue, false otherwise
+     */
     public boolean onEditClick() {
         Integer id = editLink.getValueInteger();
         if (id != null) {
@@ -138,6 +153,11 @@ public abstract class FormTablePage extends BorderPage {
         return true;
     }
 
+    /**
+     * The remove event handler.
+     *
+     * @return true if processing should continue, false otherwise
+     */
     public boolean onRemoveClick() {
         Integer id = removeLink.getValueInteger();
         if (id != null) {
@@ -150,6 +170,9 @@ public abstract class FormTablePage extends BorderPage {
         return true;
     }
 
+    /**
+     * Clear the form dataObject and any errors it might have.
+     */
     public void clear() {
         form.setDataObject(null);
         form.clearErrors();
@@ -190,7 +213,7 @@ public abstract class FormTablePage extends BorderPage {
     /**
      * Return the list of DataObjects to display in the table.
      *
-     * @return the
+     * @return the list of DataObject to display in the table
      */
     @SuppressWarnings("unchecked")
     public abstract List getRowList();
