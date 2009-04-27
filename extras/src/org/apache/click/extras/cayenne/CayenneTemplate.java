@@ -127,7 +127,6 @@ public class CayenneTemplate {
      * it to the thread.
      *
      * @return the thread local DataContext
-     * @throws IllegalStateException if there is no DataContext bound to the current thread
      */
     protected DataContext getDataContext() {
         try {
