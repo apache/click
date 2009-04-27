@@ -18,6 +18,9 @@
  */
 package org.apache.click.extras.control;
 
+import java.util.HashMap;
+import java.util.Map;
+import ognl.Ognl;
 import org.apache.click.Context;
 import org.apache.click.control.Column;
 import org.apache.click.control.Field;
@@ -63,6 +66,9 @@ public class FieldColumn extends Column {
 
     /** The columns field to process and render. */
     protected Field field;
+
+    /** The ognl context map. */
+    private transient Map ognlContext;
 
     // ----------------------------------------------------------- Constructors
 
@@ -145,6 +151,51 @@ public class FieldColumn extends Column {
         this.field = field;
     }
 
+    /**
+     * Set a row value based on the given property name and value. The given row
+     * can either be a Java Object or a Map instance.
+     * <p/>
+     * If the row is a Java Object this method uses OGNL to set the value of the
+     * row based on the property name. Property names can be specified using a
+     * path expression e.g: "person.address.city".
+     * <p/>
+     * If the row object is a <tt>Map</tt> this method will attempt to set the
+     * map's key/value pair based on the property name and value. The key
+     * of the map is matched against the property name. If a key matches the
+     * property name, the value will be copied to the map.
+     * <p/>
+     * <b>Note:</b> you can access the underlying Field using {@link #getField()}.
+     *
+     * @param row the row object to obtain the property from
+     * @param propertyName the name of the property
+     * @param the row object property value
+     *
+     * @return the named row object property value
+     * @throws RuntimeException if an error occurred obtaining the property
+     */
+    public void setProperty(Object row, String propertyName, Object value) {
+        if (row instanceof Map) {
+            Map map = (Map) row;
+            if (map.containsKey(propertyName)) {
+                map.put(propertyName, value);
+            }
+        } else {
+            if (ognlContext == null) {
+                ognlContext = new HashMap();
+            }
+
+            try {
+                Ognl.setValue(propertyName,
+                              ognlContext,
+                              row,
+                              value);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     // ------------------------------------------------------ Protected Methods
 
     /**
@@ -177,6 +228,7 @@ public class FieldColumn extends Column {
             Form form = formTable.getForm();
 
             if (formTable.getRenderSubmittedValues()
+                && !formTable.getControlLink().isClicked()
                 && form.isFormSubmission()) {
 
                 field.onProcess();

@@ -469,22 +469,16 @@ public class FormTable extends Table {
                     Column column = (Column) columnList.get(j);
 
                     if (column instanceof FieldColumn) {
-                        Field field = ((FieldColumn) column).getField();
+                        FieldColumn fieldColumn = (FieldColumn) column;
+                        Field field = fieldColumn.getField();
 
                         field.setName(column.getName() + "_" + i);
 
                         field.onProcess();
 
                         if (field.isValid()) {
-                            try {
-                                Ognl.setValue(column.getName(),
-                                              ognlContext,
-                                              row,
-                                              field.getValueObject());
-
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
+                            fieldColumn.setProperty(row, column.getName(),
+                                field.getValueObject());
                         } else {
                             getForm().setError(getMessage("formtable-error"));
                         }
