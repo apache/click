@@ -51,6 +51,8 @@ import org.apache.cayenne.conf.Configuration;
 import org.apache.cayenne.conf.ServletUtil;
 import org.apache.cayenne.map.DataMap;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.click.examples.domain.Course;
+import org.apache.click.examples.domain.StudentHouse;
 import org.apache.commons.lang.WordUtils;
 
 /**
@@ -157,6 +159,12 @@ public class DatabaseInitFilter implements Filter {
 
         // Load post codes data file
         loadPostCodes(dataContext);
+
+        // Load course data file
+        loadCourses(dataContext);
+
+        // Load student houses data file
+        loadStudentHouses(dataContext);
 
         dataContext.commitChanges();
     }
@@ -271,6 +279,34 @@ public class DatabaseInitFilter implements Filter {
 
                     dataContext.registerNewObject(postCode);
                 }
+            }
+        });
+    }
+
+    private void loadCourses(final DataContext dataContext) throws IOException {
+        loadFile("courses.txt", dataContext, new LineProcessor() {
+            public void processLine(String line, DataContext context) {
+                StringTokenizer tokenizer = new StringTokenizer(line, ",");
+
+                Course course = new Course();
+
+                course.setName(next(tokenizer));
+
+                context.registerNewObject(course);
+            }
+        });
+    }
+
+    private void loadStudentHouses(final DataContext dataContext) throws IOException {
+        loadFile("student-houses.txt", dataContext, new LineProcessor() {
+            public void processLine(String line, DataContext context) {
+                StringTokenizer tokenizer = new StringTokenizer(line, ",");
+
+                StudentHouse studentHouse = new StudentHouse();
+
+                studentHouse.setName(next(tokenizer));
+
+                context.registerNewObject(studentHouse);
             }
         });
     }

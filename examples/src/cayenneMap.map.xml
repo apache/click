@@ -20,6 +20,10 @@
 		<db-attribute name="last_name" type="VARCHAR" isMandatory="true" length="64"/>
 		<db-attribute name="title" type="VARCHAR" length="8"/>
 	</db-entity>
+	<db-entity name="COURSE">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" length="50"/>
+	</db-entity>
 	<db-entity name="COURSE_BOOKING">
 		<db-attribute name="bookingDate" type="DATE" isMandatory="true"/>
 		<db-attribute name="bookingNotes" type="LONGVARCHAR" isMandatory="true" length="1024"/>
@@ -38,11 +42,24 @@
 		<db-attribute name="investments" type="VARCHAR" length="32"/>
 		<db-attribute name="name" type="VARCHAR" isMandatory="true" length="32"/>
 	</db-entity>
+	<db-entity name="ENROLLMENT">
+		<db-attribute name="courseId" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="studentId" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+	</db-entity>
 	<db-entity name="POST_CODE">
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="locality" type="VARCHAR" isMandatory="true" length="50"/>
 		<db-attribute name="postCode" type="VARCHAR" isMandatory="true" length="5"/>
 		<db-attribute name="state" type="VARCHAR" isMandatory="true" length="5"/>
+	</db-entity>
+	<db-entity name="STUDENT">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" length="50"/>
+		<db-attribute name="studentHouseId" type="INTEGER"/>
+	</db-entity>
+	<db-entity name="STUDENT_HOUSE">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" length="50"/>
 	</db-entity>
 	<db-entity name="SYSTEM_CODE">
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
@@ -73,6 +90,9 @@
 		<obj-attribute name="lastName" type="java.lang.String" db-attribute-path="last_name"/>
 		<obj-attribute name="title" type="java.lang.String" db-attribute-path="title"/>
 	</obj-entity>
+	<obj-entity name="Course" className="org.apache.click.examples.domain.Course" dbEntityName="COURSE" superClassName="org.apache.click.examples.domain.BaseEntity">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
 	<obj-entity name="CourseBooking" className="org.apache.click.examples.domain.CourseBooking" dbEntityName="COURSE_BOOKING" superClassName="org.apache.click.examples.domain.BaseEntity">
 		<obj-attribute name="bookingDate" type="java.util.Date" db-attribute-path="bookingDate"/>
 		<obj-attribute name="bookingNotes" type="java.lang.String" db-attribute-path="bookingNotes"/>
@@ -94,6 +114,12 @@
 		<obj-attribute name="postCode" type="java.lang.String" db-attribute-path="postCode"/>
 		<obj-attribute name="state" type="java.lang.String" db-attribute-path="state"/>
 	</obj-entity>
+	<obj-entity name="Student" className="org.apache.click.examples.domain.Student" dbEntityName="STUDENT" superClassName="org.apache.click.examples.domain.BaseEntity">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
+	<obj-entity name="StudentHouse" className="org.apache.click.examples.domain.StudentHouse" dbEntityName="STUDENT_HOUSE" superClassName="org.apache.click.examples.domain.BaseEntity">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
 	<obj-entity name="SystemCode" className="org.apache.click.examples.domain.SystemCode" dbEntityName="SYSTEM_CODE" superClassName="org.apache.click.examples.domain.BaseEntity">
 		<obj-attribute name="label" type="java.lang.String" db-attribute-path="label"/>
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
@@ -112,8 +138,30 @@
 	<db-relationship name="address" source="CLIENT" target="ADDRESS" toMany="false">
 		<db-attribute-pair source="address_id" target="id"/>
 	</db-relationship>
+	<db-relationship name="ENROLLMENT" source="COURSE" target="ENROLLMENT" toMany="true">
+		<db-attribute-pair source="id" target="courseId"/>
+	</db-relationship>
+	<db-relationship name="COURSE" source="ENROLLMENT" target="COURSE" toMany="false">
+		<db-attribute-pair source="courseId" target="id"/>
+	</db-relationship>
+	<db-relationship name="STUDENT" source="ENROLLMENT" target="STUDENT" toDependentPK="true" toMany="false">
+		<db-attribute-pair source="studentId" target="id"/>
+	</db-relationship>
+	<db-relationship name="ENROLLMENT" source="STUDENT" target="ENROLLMENT" toMany="true">
+		<db-attribute-pair source="id" target="studentId"/>
+	</db-relationship>
+	<db-relationship name="STUDENT_HOUSE" source="STUDENT" target="STUDENT_HOUSE" toMany="false">
+		<db-attribute-pair source="studentHouseId" target="id"/>
+	</db-relationship>
+	<db-relationship name="STUDENT" source="STUDENT_HOUSE" target="STUDENT" toMany="true">
+		<db-attribute-pair source="id" target="studentHouseId"/>
+	</db-relationship>
 	<obj-relationship name="client" source="Address" target="Client" db-relationship-path="client"/>
 	<obj-relationship name="address" source="Client" target="Address" db-relationship-path="address"/>
+	<obj-relationship name="students" source="Course" target="Student" db-relationship-path="ENROLLMENT.STUDENT"/>
+	<obj-relationship name="courses" source="Student" target="Course" db-relationship-path="ENROLLMENT.COURSE"/>
+	<obj-relationship name="studentHouse" source="Student" target="StudentHouse" db-relationship-path="STUDENT_HOUSE"/>
+	<obj-relationship name="student" source="StudentHouse" target="Student" db-relationship-path="STUDENT"/>
 	<query name="states" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="SystemCode">
 		<property name="cayenne.GenericSelectQuery.refreshingObjects" value="false"/>
 		<property name="cayenne.GenericSelectQuery.cachePolicy" value="sharedcache"/>
