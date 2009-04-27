@@ -83,6 +83,13 @@ The feature roadmap for the next major release of Click is being determined.
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li class="change">
+          Added FormTable sort methods <a href="extras-api/org/apache/click/extras/control/FormTable.html#setSortedColumn(java.lang.String)">setSortedColumn</a>,
+          <a href="extras-api/org/apache/click/extras/control/FormTable.html#setSortedAscending(boolean)">setSortedAscending</a>,
+          <a href="extras-api/org/apache/click/extras/control/FormTable.html#setPageNumber(int)">setPageNumber</a>
+          for programmatic sorting. This issue was raised and fixed by Ben Warner
+          [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-527">527</a>].
+      </li>
+      <li class="change">
           Improved performance in situations where many controls are added to
           a page by decreasing the buffer size used for including HTML imports.
       </li>
