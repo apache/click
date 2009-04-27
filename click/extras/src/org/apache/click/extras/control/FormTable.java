@@ -375,6 +375,47 @@ public class FormTable extends Table {
         renderSubmittedValues = render;
     }
 
+    /**
+     * @see org.apache.click.control.Table#setSortedColumn(java.lang.String)
+     *
+     * @param value the the name of the sorted column
+     */
+    public void setSortedColumn(String columnName) {
+        Field field = (Field) getForm().getFields().get(COLUMN);
+        if(field != null){
+            field.setValue(columnName);
+        }
+        setSorted(false);
+        super.setSortedColumn(columnName);
+    }
+
+    /**
+     * @see org.apache.click.control.Table#setSortedAscending(boolean)
+     *
+     * @param value the ascending sort order status
+     */
+    public void setSortedAscending(boolean ascending) {
+        Field field = (Field) getForm().getFields().get(ASCENDING);
+        if(field != null){
+            field.setValue(Boolean.toString(ascending));
+        }
+        setSorted(false);
+        super.setSortedAscending(ascending);
+    }
+
+    /**
+     * @see org.apache.click.control.Table#setPageNumber(int)
+     *
+     * @param pageNumber set the currently displayed page number
+     */
+    public void setPageNumber(int pageNumber) {
+        Field field = (Field) getForm().getFields().get(PAGE);
+        if(field != null){
+            field.setValue(Integer.toString(pageNumber));
+        }
+        super.setPageNumber(pageNumber);
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
