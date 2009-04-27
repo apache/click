@@ -21,7 +21,6 @@ package org.apache.click.examples.page.form;
 import java.io.Serializable;
 
 import java.util.HashMap;
-import org.apache.click.Context;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
@@ -35,7 +34,6 @@ import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.PageSubmit;
-import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * Provides a example Page to demonstrate Form properties and layout options.
