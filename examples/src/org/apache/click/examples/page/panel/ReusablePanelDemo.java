@@ -29,13 +29,13 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class ReusablePanelDemo extends BorderPage {
 
-    private ClientPanel customerPanel = new ClientPanel("panel");
+    private ClientPanel clientPanel = new ClientPanel("panel");
 
     public void onInit() {
         // Invoke super onInit implementation
         super.onInit();
 
         // Add customer panel to Page
-        addControl(customerPanel);
+        addControl(clientPanel);
     }
 }
