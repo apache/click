@@ -20,18 +20,22 @@ package org.apache.click.examples.page.form;
 
 import java.io.Serializable;
 
+import java.util.HashMap;
+import org.apache.click.Context;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.Select;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
+import org.apache.click.element.JsScript;
 import org.apache.click.examples.control.InvestmentSelect;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.PageSubmit;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * Provides a example Page to demonstrate Form properties and layout options.
@@ -217,10 +221,14 @@ public class FormProperties extends BorderPage {
 
         addControl(optionsForm);
 
-        // Setup showBorders checkbox Javascript using HTML head include and
-        // setting the body onload function.
-        addModel("headInclude", "form-head.htm");
-        addModel("addLoadEvent", "function() { toggleBorders(document.optionsForm.showBorders) }");
+        // Setup showBorders checkbox Javascript using a JsScript HEAD element
+
+        // First create a JsScript instance for the JavaScript template
+        // '/form-head.htm'
+        JsScript jsScript = new JsScript("/form-head.htm", new HashMap());
+
+        // Then add a JsScript element to the Page HEAD elements
+        getHeadElements().add(jsScript);
     }
 
     // ---------------------------------------------------------- Event Handlers

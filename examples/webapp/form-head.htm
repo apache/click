@@ -17,7 +17,6 @@
    under the License.*#
 -->
 
-<script type="text/javascript">
 function toggleBorders(checkbox) {
   var formTable = document.getElementById("form-form");
   var fieldsTable = document.getElementById("form-fields");
@@ -41,4 +40,5 @@ function toggleBorders(checkbox) {
   }
   document.optionsForm.showBorders.value = checkbox.checked;
 }
-</script>
+
+toggleBorders(document.optionsForm.showBorders);
