@@ -36,9 +36,9 @@ public interface TreeListener {
      * @param tree tree the operation was made on
      * @param node node that was selected
      * @param context provides access to {@link org.apache.click.Context}
-     * @param oldValue contains the previous value of selected state
+     * @param previousState contains the previous selected state
      */
-    public void nodeSelected(Tree tree, TreeNode node, Context context, boolean oldValue);
+    public void nodeSelected(Tree tree, TreeNode node, Context context, boolean previousState);
 
     /**
      * Invoked when user deselected the specified node.
@@ -46,9 +46,9 @@ public interface TreeListener {
      * @param tree tree the operation was made on
      * @param node node that was deselected
      * @param context provides access to {@link org.apache.click.Context}
-     * @param oldValue contains the previous value of selected state
+     * @param previousState contains the previous selected state
      */
-    public void nodeDeselected(Tree tree, TreeNode node, Context context, boolean oldValue);
+    public void nodeDeselected(Tree tree, TreeNode node, Context context, boolean previousState);
 
     /**
      * Invoked when user expanded the specified node.
@@ -56,9 +56,9 @@ public interface TreeListener {
      * @param tree tree the operation was made on
      * @param node node that was expanded
      * @param context provides access to {@link org.apache.click.Context}
-     * @param oldValue contains the previous value of expanded state
+     * @param previousState contains the previous expanded state
      */
-    public void nodeExpanded(Tree tree, TreeNode node, Context context, boolean oldValue);
+    public void nodeExpanded(Tree tree, TreeNode node, Context context, boolean previousState);
 
     /**
      * Invoked when user collapsed the specified node.
@@ -66,7 +66,7 @@ public interface TreeListener {
      * @param tree tree the operation was made on
      * @param node node that was collapsed
      * @param context provides access to {@link org.apache.click.Context}
-     * @param oldValue contains the previous value of selected state
+     * @param previousState contains the previous expanded state
      */
-    public void nodeCollapsed(Tree tree, TreeNode node, Context context, boolean oldValue);
+    public void nodeCollapsed(Tree tree, TreeNode node, Context context, boolean previousState);
 }
