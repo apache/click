@@ -20,12 +20,15 @@ package org.apache.click.extras.control;
 
 import java.util.HashMap;
 import java.util.Map;
-import ognl.Ognl;
+
+import ognl.OgnlException;
+
 import org.apache.click.Context;
 import org.apache.click.control.Column;
 import org.apache.click.control.Field;
 import org.apache.click.control.Form;
 import org.apache.click.util.HtmlStringBuffer;
+import org.apache.click.util.PropertyUtils;
 
 /**
  * Provides a FieldColumn for rendering table data cells.
@@ -168,9 +171,7 @@ public class FieldColumn extends Column {
      *
      * @param row the row object to obtain the property from
      * @param propertyName the name of the property
-     * @param the row object property value
-     *
-     * @return the named row object property value
+     * @param value the row object property value
      * @throws RuntimeException if an error occurred obtaining the property
      */
     public void setProperty(Object row, String propertyName, Object value) {
@@ -179,19 +180,20 @@ public class FieldColumn extends Column {
             if (map.containsKey(propertyName)) {
                 map.put(propertyName, value);
             }
+
         } else {
             if (ognlContext == null) {
                 ognlContext = new HashMap();
             }
 
             try {
-                Ognl.setValue(propertyName,
-                              ognlContext,
-                              row,
-                              value);
+                PropertyUtils.setValueOgnl(row,
+                                           propertyName,
+                                           value,
+                                           ognlContext);
 
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            } catch (OgnlException oe) {
+                throw new RuntimeException(oe);
             }
         }
     }
