@@ -1062,10 +1062,10 @@ public class Table extends AbstractControl {
     /**
      * Set the ascending sort order status.
      *
-     * @param value the ascending sort order status
+     * @param ascending the ascending sort order status
      */
-    public void setSortedAscending(boolean value) {
-        sortedAscending = value;
+    public void setSortedAscending(boolean ascending) {
+        sortedAscending = ascending;
     }
 
     /**
@@ -1080,10 +1080,10 @@ public class Table extends AbstractControl {
     /**
      * Set the name of the sorted column, or null if not defined.
      *
-     * @param value the the name of the sorted column
+     * @param columnName the name of the sorted column
      */
-    public void setSortedColumn(String value) {
-        sortedColumn = value;
+    public void setSortedColumn(String columnName) {
+        sortedColumn = columnName;
     }
 
     /**
