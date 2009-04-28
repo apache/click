@@ -781,10 +781,10 @@ public class Format implements Serializable {
             return getEmptyString();
         }
     }
-    
+
     /**
      * Return an encoded URL value for the given object.
-     * 
+     *
      * @param object the object value to encode as a URL string
      * @return an encoded URL string
      */
