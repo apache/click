@@ -139,13 +139,13 @@
 	The Spring Click Servlet which handles *.htm requests.
 	-->
 	<servlet>
-		<servlet-name>SpringClickServlet</servlet-name>
+		<servlet-name>ClickServlet</servlet-name>
 		<servlet-class>org.apache.click.extras.spring.SpringClickServlet</servlet-class>
 		<load-on-startup>0</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>SpringClickServlet</servlet-name>
+		<servlet-name>ClickServlet</servlet-name>
 		<url-pattern>*.htm</url-pattern>
 	</servlet-mapping>
 
