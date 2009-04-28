@@ -30,7 +30,6 @@ import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.Table;
 import org.apache.click.util.HtmlStringBuffer;
-import ognl.Ognl;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -378,11 +377,11 @@ public class FormTable extends Table {
     /**
      * @see org.apache.click.control.Table#setSortedColumn(java.lang.String)
      *
-     * @param value the the name of the sorted column
+     * @param columnName the name of the sorted column
      */
     public void setSortedColumn(String columnName) {
         Field field = (Field) getForm().getFields().get(COLUMN);
-        if(field != null){
+        if (field != null) {
             field.setValue(columnName);
         }
         setSorted(false);
@@ -392,11 +391,11 @@ public class FormTable extends Table {
     /**
      * @see org.apache.click.control.Table#setSortedAscending(boolean)
      *
-     * @param value the ascending sort order status
+     * @param ascending the ascending sort order status
      */
     public void setSortedAscending(boolean ascending) {
         Field field = (Field) getForm().getFields().get(ASCENDING);
-        if(field != null){
+        if (field != null) {
             field.setValue(Boolean.toString(ascending));
         }
         setSorted(false);
@@ -410,7 +409,7 @@ public class FormTable extends Table {
      */
     public void setPageNumber(int pageNumber) {
         Field field = (Field) getForm().getFields().get(PAGE);
-        if(field != null){
+        if (field != null) {
             field.setValue(Integer.toString(pageNumber));
         }
         super.setPageNumber(pageNumber);
