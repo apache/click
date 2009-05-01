@@ -296,6 +296,9 @@ public class ContainerUtils {
     /**
      * Find and return the first control with a matching name in the specified
      * container.
+     * <p/>
+     * If no matching control is found in the specified container, child
+     * containers will be recursively scanned for a match.
      *
      * @param container the container that is searched for a control with a
      * matching name
