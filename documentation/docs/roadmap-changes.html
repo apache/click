@@ -238,6 +238,12 @@ The feature roadmap for the next major release of Click is being determined.
           [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-499">499</a>].
       </li>
       <li class="change">
+          Fixed a bug in AutoCompleteTextField where if the field was removed
+          from a Form, its JavaScript resources would still be rendered.
+          This issue was raised by Paul Zammit
+          [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-546">546</a>].
+      </li>
+      <li class="change">
           Fixed a bug in control.js which caused the addLoadEvent event queue to
           be reset if multiple control.js scripts are imported in the same page.
           This issue was raised by Adrian
