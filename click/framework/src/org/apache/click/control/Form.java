@@ -858,7 +858,7 @@ public class Form extends AbstractContainer {
      * @return true if the named field was removed or false otherwise
      */
     public boolean removeField(String name) {
-        Control control = ContainerUtils.findControlByName(this, name);
+        Control control = getControl(name);
 
         if (control != null) {
             return remove(control);
