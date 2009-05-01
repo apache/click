@@ -27,6 +27,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.click.Context;
+import org.apache.click.Page;
 import org.apache.click.control.TextField;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
