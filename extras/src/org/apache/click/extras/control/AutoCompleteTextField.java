@@ -221,6 +221,27 @@ public abstract class AutoCompleteTextField extends TextField {
     }
 
     /**
+     * @see org.apache.click.control.Field#setParent(Object)
+     *
+     * @param parent the parent of the Control
+     * @throws IllegalStateException if {@link #name} is not defined
+     * @throws IllegalArgumentException if the given parent instance is
+     * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
+     */
+    public void setParent(Object parent) {
+        if (parent == null) {
+            // If the field parent control is set to null (indicating the field
+            // is being removed), also remove the field from its parent page
+            Page page = getPage();
+            if (page != null) {
+                page.getControls().remove(this);
+                page.getModel().remove(getName());
+            }
+        }
+        super.setParent(parent);
+    }
+
+    /**
      * Return the HTML CSS and JavaScript includes.
      *
      * @see org.apache.click.Control#getHtmlImports()
@@ -266,12 +287,22 @@ public abstract class AutoCompleteTextField extends TextField {
      */
     public void onInit() {
         super.onInit();
+
+        Page page = getPage();
+        if (page == null) {
+            // If parent page is not reachable, exit early
+            return;
+        }
+
         // See whether control has been registered at Page level.
-        Object control = getPage().getModel().get(getName());
+        Object control = page.getModel().get(getName());
 
         // If not registered, then register control
         if (control == null) {
-            getPage().addControl(this);
+            // Ensure current parent control does not change
+            Object parent = getParent();
+            page.addControl(this);
+            setParent(parent);
 
         } else if (!(control instanceof AutoCompleteTextField)) {
             String message =
