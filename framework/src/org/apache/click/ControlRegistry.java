@@ -182,7 +182,26 @@ public class ControlRegistry {
         eventHolder.registerActionEvent(source, listener);
     }
 
-    // ------------------------------------------------ Package Private Methods
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Clear the registry.
+     */
+    protected void clearRegistry() {
+        getPostProcessEventHolder().clear();
+        getPostRenderEventHolder().clear();
+    }
+
+    /**
+     * Return the thread local registry instance.
+     *
+     * @return the thread local registry instance.
+     * @throws RuntimeException if a ControlRegistry is not available on the
+     * thread.
+     */
+    protected static ControlRegistry getThreadLocalRegistry() {
+        return getRegistryStack().peek();
+    }
 
     /**
      * Fire the actions for the given listener list and event source list which
@@ -202,7 +221,7 @@ public class ControlRegistry {
      *
      * @return true if the page should continue processing or false otherwise
      */
-    boolean fireActionEvents(Context context, List eventSourceList,
+    protected boolean fireActionEvents(Context context, List eventSourceList,
         List eventListenerList) {
 
         boolean continueProcessing = true;
@@ -229,7 +248,7 @@ public class ControlRegistry {
      *
      * @return true if the page should continue processing or false otherwise
      */
-    boolean fireActionEvents(Context context) {
+    protected boolean fireActionEvents(Context context) {
         return fireActionEvents(context, ControlRegistry.POST_ON_PROCESS_EVENT);
     }
 
@@ -242,7 +261,7 @@ public class ControlRegistry {
      *
      * @return true if the page should continue processing or false otherwise
      */
-    boolean fireActionEvents(Context context, int event) {
+    protected boolean fireActionEvents(Context context, int event) {
         EventHolder eventHolder = getEventHolder(event);
         return eventHolder.fireActionEvents(context);
     }
@@ -254,7 +273,7 @@ public class ControlRegistry {
      *
      * @return the EventHolder for the specified event
      */
-    EventHolder getEventHolder(int event) {
+    protected EventHolder getEventHolder(int event) {
         if (event == POST_ON_RENDER_EVENT) {
             return getPostRenderEventHolder();
         } else if (event == POST_ON_PROCESS_EVENT) {
@@ -263,6 +282,8 @@ public class ControlRegistry {
             return null;
         }
     }
+
+    // ------------------------------------------------ Package Private Methods
 
     /**
      * Return the {@link #POST_ON_PROCESS_EVENT} {@link EventHolder}.
@@ -286,25 +307,6 @@ public class ControlRegistry {
             postRenderEventHolder = new EventHolder();
         }
         return postRenderEventHolder;
-    }
-
-    /**
-     * Clear the registry.
-     */
-    void clearRegistry() {
-        getPostProcessEventHolder().clear();
-        getPostRenderEventHolder().clear();
-    }
-
-    /**
-     * Return the thread local registry instance.
-     *
-     * @return the thread local registry instance.
-     * @throws RuntimeException if a ControlRegistry is not available on the
-     * thread.
-     */
-    static ControlRegistry getThreadLocalRegistry() {
-        return getRegistryStack().peek();
     }
 
     /**
@@ -350,6 +352,94 @@ public class ControlRegistry {
     }
 
     // ---------------------------------------------------------- Inner Classes
+
+    /**
+     * Holds the list of listeners and event sources.
+     */
+    public class EventHolder {
+
+        /** The list of registered event sources. */
+        private List eventSourceList;
+
+        /** The list of registered event listeners. */
+        private List eventListenerList;
+
+        /**
+         * Register the event source and event ActionListener to be fired in the
+         * specified event.
+         *
+         * @param source the action event source
+         * @param listener the event action listener
+         * @param event the specific event to trigger the action event
+         */
+        public void registerActionEvent(Control source, ActionListener listener) {
+            Validate.notNull(source, "Null source parameter");
+            Validate.notNull(listener, "Null listener parameter");
+
+            getEventSourceList().add(source);
+            getEventListenerList().add(listener);
+        }
+
+        /**
+         * Checks if any Action Events have been registered.
+         */
+        public boolean hasActionEvents() {
+            if (eventListenerList == null || eventListenerList.isEmpty()) {
+                return false;
+            }
+            return true;
+        }
+
+        /**
+         * Return the list of event listeners.
+         *
+         * @return list of event listeners
+         */
+        public List getEventListenerList() {
+            if (eventListenerList == null) {
+                eventListenerList = new ArrayList();
+            }
+            return eventListenerList;
+        }
+
+        /**
+         * Return the list of event sources.
+         *
+         * @return list of event sources
+         */
+        public List getEventSourceList() {
+            if (eventSourceList == null) {
+                eventSourceList = new ArrayList();
+            }
+            return eventSourceList;
+        }
+
+        /**
+         * Clear the events.
+         */
+        public void clear() {
+            if (hasActionEvents()) {
+                getEventSourceList().clear();
+                getEventListenerList().clear();
+            }
+        }
+
+        /**
+         * Fire all the registered action events and return true if the page should
+         * continue processing.
+         *
+         * @return true if the page should continue processing or false otherwise
+         */
+        public boolean fireActionEvents(Context context) {
+
+            if (!hasActionEvents()) {
+                return true;
+            }
+
+            return ControlRegistry.this.fireActionEvents(context,
+                getEventSourceList(), getEventListenerList());
+        }
+    }
 
     /**
      * Provides an unsynchronized Stack.
@@ -408,94 +498,6 @@ public class ControlRegistry {
             }
 
             return (ControlRegistry) get(length - 1);
-        }
-    }
-
-    /**
-     * Holds the list of listeners and event sources.
-     */
-    class EventHolder {
-
-        /** The list of registered event sources. */
-        private List eventSourceList;
-
-        /** The list of registered event listeners. */
-        private List eventListenerList;
-
-        /**
-         * Register the event source and event ActionListener to be fired in the
-         * specified event.
-         *
-         * @param source the action event source
-         * @param listener the event action listener
-         * @param event the specific event to trigger the action event
-         */
-        void registerActionEvent(Control source, ActionListener listener) {
-            Validate.notNull(source, "Null source parameter");
-            Validate.notNull(listener, "Null listener parameter");
-
-            getEventSourceList().add(source);
-            getEventListenerList().add(listener);
-        }
-
-        /**
-         * Checks if any Action Events have been registered.
-         */
-        boolean hasActionEvents() {
-            if (eventListenerList == null || eventListenerList.isEmpty()) {
-                return false;
-            }
-            return true;
-        }
-
-        /**
-         * Return the list of event listeners.
-         *
-         * @return list of event listeners
-         */
-        List getEventListenerList() {
-            if (eventListenerList == null) {
-                eventListenerList = new ArrayList();
-            }
-            return eventListenerList;
-        }
-
-        /**
-         * Return the list of event sources.
-         *
-         * @return list of event sources
-         */
-        List getEventSourceList() {
-            if (eventSourceList == null) {
-                eventSourceList = new ArrayList();
-            }
-            return eventSourceList;
-        }
-
-        /**
-         * Clear the events.
-         */
-        void clear() {
-            if (hasActionEvents()) {
-                getEventSourceList().clear();
-                getEventListenerList().clear();
-            }
-        }
-
-        /**
-         * Fire all the registered action events and return true if the page should
-         * continue processing.
-         *
-         * @return true if the page should continue processing or false otherwise
-         */
-        boolean fireActionEvents(Context context) {
-
-            if (!hasActionEvents()) {
-                return true;
-            }
-
-            return ControlRegistry.this.fireActionEvents(context,
-                getEventSourceList(), getEventListenerList());
         }
     }
 }
