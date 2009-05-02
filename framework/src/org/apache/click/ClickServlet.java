@@ -483,6 +483,8 @@ public class ClickServlet extends HttpServlet {
         PageImports pageImports = createPageImports(page);
         page.setPageImports(pageImports);
 
+        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
+
         // Support direct access of click-error.htm
         if (page instanceof ErrorPage) {
             ErrorPage errorPage = (ErrorPage) page;
@@ -490,13 +492,11 @@ public class ClickServlet extends HttpServlet {
 
             // Clear the POST_ON_PROCESS_EVENT control listeners from the registry
             // Registered listeners from other phases must still be invoked
-            ControlRegistry.getThreadLocalRegistry().getEventHolder(
+            controlRegistry.getEventHolder(
                 ControlRegistry.POST_ON_PROCESS_EVENT).clear();
         }
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
-
-        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
 
         if (continueProcessing) {
             performOnInit(page, context);
@@ -513,6 +513,243 @@ public class ClickServlet extends HttpServlet {
         controlRegistry.fireActionEvents(context, ControlRegistry.POST_ON_RENDER_EVENT);
 
         performRender(page, context);
+    }
+
+    /**
+     * Perform the onSecurityCheck event callback for the specified page,
+     * returning true if processing should continue, false otherwise.
+     *
+     * @param page the page to perform the security check on
+     * @param context the request context
+     * @return true if processing should continue, false otherwise
+     */
+    protected boolean performOnSecurityCheck(Page page, Context context) {
+        boolean continueProcessing = page.onSecurityCheck();
+
+        if (logger.isTraceEnabled()) {
+            logger.trace("   invoked: "
+                + ClassUtils.getShortClassName(page.getClass())
+                + ".onSecurityCheck() : " + continueProcessing);
+        }
+        return continueProcessing;
+    }
+
+    /**
+     * Perform the onInit event callback for the specified page.
+     *
+     * @param page the page to initialize
+     * @param context the request context
+     */
+    protected void performOnInit(Page page, Context context) {
+        page.onInit();
+
+        if (logger.isTraceEnabled()) {
+            logger.trace("   invoked: "
+                + ClassUtils.getShortClassName(page.getClass()) + ".onInit()");
+        }
+
+        if (page.hasControls()) {
+            List controls = page.getControls();
+
+            for (int i = 0, size = controls.size(); i < size; i++) {
+                Control control = (Control) controls.get(i);
+                control.onInit();
+
+                if (logger.isTraceEnabled()) {
+                    String controlClassName = control.getClass().getName();
+                    controlClassName = controlClassName.substring(
+                        controlClassName.lastIndexOf('.') + 1);
+                    String msg = "   invoked: '" + control.getName() + "' "
+                        + controlClassName + ".onInit()";
+                    logger.trace(msg);
+                }
+            }
+        }
+    }
+
+    /**
+     * Perform onProcess event callback for the specified page, returning true
+     * if processing should continue, false otherwise.
+     *
+     * @param page the page to process
+     * @param context the request context
+     * @param controlRegistry the control registry
+     * @return true if processing should continue, false otherwise
+     */
+    protected boolean performOnProcess(Page page, Context context,
+        ControlRegistry controlRegistry) {
+
+        boolean continueProcessing = true;
+
+        // Make sure dont process a forwarded request
+        if (page.hasControls() && !context.isForward()) {
+            List controls = page.getControls();
+
+            for (int i = 0, size = controls.size(); i < size; i++) {
+                Control control = (Control) controls.get(i);
+
+                boolean onProcessResult = control.onProcess();
+                if (!onProcessResult) {
+                    continueProcessing = false;
+                }
+
+                if (logger.isTraceEnabled()) {
+                    String controlClassName = control.getClass().getName();
+                    controlClassName = controlClassName.substring(
+                        controlClassName.lastIndexOf('.') + 1);
+
+                    String msg = "   invoked: '" + control.getName() + "' "
+                        + controlClassName + ".onProcess() : " + onProcessResult;
+                    logger.trace(msg);
+                }
+            }
+
+            if (continueProcessing) {
+                // Fire registered action events for the POST_ON_PROCSESS event,
+                // which is also the default event
+                continueProcessing = controlRegistry.fireActionEvents(context);
+
+                if (logger.isTraceEnabled()) {
+                    String msg = "   invoked: Control listeners : "
+                        + continueProcessing;
+                    logger.trace(msg);
+                }
+            }
+        }
+
+        return continueProcessing;
+    }
+
+    /**
+     * Perform onPost or onGet event callback for the specified page.
+     *
+     * @param page the page for which the onGet or onPost is performed
+     * @param context the request context
+     * @param isPost specifies whether the request is a post or a get
+     */
+    protected void performOnPostOrGet(Page page, Context context, boolean isPost) {
+        if (isPost) {
+            page.onPost();
+
+            if (logger.isTraceEnabled()) {
+                logger.trace("   invoked: "
+                    + ClassUtils.getShortClassName(page.getClass()) + ".onPost()");
+            }
+
+        } else {
+            page.onGet();
+
+            if (logger.isTraceEnabled()) {
+                logger.trace("   invoked: "
+                    + ClassUtils.getShortClassName(page.getClass()) + ".onGet()");
+            }
+        }
+    }
+
+    /**
+     * Perform onRender event callback for the specified page.
+     *
+     * @param page page to render
+     * @param context the request context
+     */
+    protected void performOnRender(Page page, Context context) {
+        page.onRender();
+
+        if (logger.isTraceEnabled()) {
+            logger.trace("   invoked: "
+                + ClassUtils.getShortClassName(page.getClass()) + ".onRender()");
+        }
+
+        if (page.hasControls()) {
+            List controls = page.getControls();
+
+            for (int i = 0, size = controls.size(); i < size; i++) {
+                Control control = (Control) controls.get(i);
+                control.onRender();
+
+                if (logger.isTraceEnabled()) {
+                    String controlClassName = control.getClass().getName();
+                    controlClassName = controlClassName.substring(controlClassName.
+                        lastIndexOf('.') + 1);
+                    String msg = "   invoked: '" + control.getName() + "' "
+                        + controlClassName + ".onRender()";
+                    logger.trace(msg);
+                }
+            }
+        }
+    }
+
+    /**
+     * Performs rendering of the specified page.
+     *
+     * @param page page to render
+     * @param context the request context
+     * @throws java.lang.Exception if error occurs
+     */
+    protected void performRender(Page page, Context context) throws Exception {
+
+        final HttpServletRequest request = context.getRequest();
+        final HttpServletResponse response = context.getResponse();
+
+        if (StringUtils.isNotBlank(page.getRedirect())) {
+            String url = page.getRedirect();
+
+            url = response.encodeRedirectURL(url);
+
+            if (logger.isTraceEnabled()) {
+                logger.debug("   redirect: " + url);
+
+            } else if (logger.isDebugEnabled()) {
+                logger.debug("redirect: " + url);
+            }
+
+            response.sendRedirect(url);
+
+        } else if (StringUtils.isNotBlank(page.getForward())) {
+            // Indicates the request is forwarded
+            request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
+
+            if (logger.isTraceEnabled()) {
+                logger.debug("   forward: " + page.getForward());
+
+            } else if (logger.isDebugEnabled()) {
+                logger.debug("forward: " + page.getForward());
+            }
+
+            if (page.getForward().endsWith(".jsp")) {
+                renderJSP(page);
+
+            } else {
+                RequestDispatcher dispatcher =
+                    request.getRequestDispatcher(page.getForward());
+
+                dispatcher.forward(request, response);
+            }
+
+        } else if (page.getPath() != null) {
+            String pagePath = page.getPath();
+
+            // Check if request is a JSP page
+            if (pagePath.endsWith(".jsp") || configService.isJspPage(pagePath)) {
+                // CLK-141. Set pagePath as the forward value.
+                page.setForward(StringUtils.replace(pagePath, ".htm", ".jsp"));
+
+                // Indicates the request is forwarded
+                request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
+                renderJSP(page);
+
+            } else {
+                renderTemplate(page);
+            }
+
+        } else {
+            if (logger.isTraceEnabled()) {
+                logger.debug("   path not defined for " + page.getClass().getName());
+
+            } else if (logger.isDebugEnabled()) {
+                logger.debug("path not defined for " + page.getClass().getName());
+            }
+        }
     }
 
     /**
@@ -1388,243 +1625,6 @@ public class ClickServlet extends HttpServlet {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            }
-        }
-    }
-
-    /**
-     * Perform the onSecurityCheck event callback for the specified page,
-     * returning true if processing should continue, false otherwise.
-     *
-     * @param page the page to perform the security check on
-     * @param context the request context
-     * @return true if processing should continue, false otherwise
-     */
-    boolean performOnSecurityCheck(Page page, Context context) {
-        boolean continueProcessing = page.onSecurityCheck();
-
-        if (logger.isTraceEnabled()) {
-            logger.trace("   invoked: "
-                + ClassUtils.getShortClassName(page.getClass())
-                + ".onSecurityCheck() : " + continueProcessing);
-        }
-        return continueProcessing;
-    }
-
-    /**
-     * Perform the onInit event callback for the specified page.
-     *
-     * @param page the page to initialize
-     * @param context the request context
-     */
-    void performOnInit(Page page, Context context) {
-        page.onInit();
-
-        if (logger.isTraceEnabled()) {
-            logger.trace("   invoked: "
-                + ClassUtils.getShortClassName(page.getClass()) + ".onInit()");
-        }
-
-        if (page.hasControls()) {
-            List controls = page.getControls();
-
-            for (int i = 0, size = controls.size(); i < size; i++) {
-                Control control = (Control) controls.get(i);
-                control.onInit();
-
-                if (logger.isTraceEnabled()) {
-                    String controlClassName = control.getClass().getName();
-                    controlClassName = controlClassName.substring(
-                        controlClassName.lastIndexOf('.') + 1);
-                    String msg = "   invoked: '" + control.getName() + "' "
-                        + controlClassName + ".onInit()";
-                    logger.trace(msg);
-                }
-            }
-        }
-    }
-
-    /**
-     * Perform onProcess event callback for the specified page, returning true
-     * if processing should continue, false otherwise.
-     *
-     * @param page the page to process
-     * @param context the request context
-     * @param controlRegistry the control registry
-     * @return true if processing should continue, false otherwise
-     */
-    boolean performOnProcess(Page page, Context context,
-        ControlRegistry controlRegistry) {
-
-        boolean continueProcessing = true;
-
-        // Make sure dont process a forwarded request
-        if (page.hasControls() && !context.isForward()) {
-            List controls = page.getControls();
-
-            for (int i = 0, size = controls.size(); i < size; i++) {
-                Control control = (Control) controls.get(i);
-
-                boolean onProcessResult = control.onProcess();
-                if (!onProcessResult) {
-                    continueProcessing = false;
-                }
-
-                if (logger.isTraceEnabled()) {
-                    String controlClassName = control.getClass().getName();
-                    controlClassName = controlClassName.substring(
-                        controlClassName.lastIndexOf('.') + 1);
-
-                    String msg = "   invoked: '" + control.getName() + "' "
-                        + controlClassName + ".onProcess() : " + onProcessResult;
-                    logger.trace(msg);
-                }
-            }
-
-            if (continueProcessing) {
-                // Fire registered action events for the POST_ON_PROCSESS event,
-                // which is also the default event
-                continueProcessing = controlRegistry.fireActionEvents(context);
-
-                if (logger.isTraceEnabled()) {
-                    String msg = "   invoked: Control listeners : "
-                        + continueProcessing;
-                    logger.trace(msg);
-                }
-            }
-        }
-
-        return continueProcessing;
-    }
-
-    /**
-     * Perform onPost or onGet event callback for the specified page.
-     *
-     * @param page the page for which the onGet or onPost is performed
-     * @param context the request context
-     * @param isPost specifies whether the request is a post or a get
-     */
-    void performOnPostOrGet(Page page, Context context, boolean isPost) {
-        if (isPost) {
-            page.onPost();
-
-            if (logger.isTraceEnabled()) {
-                logger.trace("   invoked: "
-                    + ClassUtils.getShortClassName(page.getClass()) + ".onPost()");
-            }
-
-        } else {
-            page.onGet();
-
-            if (logger.isTraceEnabled()) {
-                logger.trace("   invoked: "
-                    + ClassUtils.getShortClassName(page.getClass()) + ".onGet()");
-            }
-        }
-    }
-
-    /**
-     * Perform onRender event callback for the specified page.
-     *
-     * @param page page to render
-     * @param context the request context
-     */
-    void performOnRender(Page page, Context context) {
-        page.onRender();
-
-        if (logger.isTraceEnabled()) {
-            logger.trace("   invoked: "
-                + ClassUtils.getShortClassName(page.getClass()) + ".onRender()");
-        }
-
-        if (page.hasControls()) {
-            List controls = page.getControls();
-
-            for (int i = 0, size = controls.size(); i < size; i++) {
-                Control control = (Control) controls.get(i);
-                control.onRender();
-
-                if (logger.isTraceEnabled()) {
-                    String controlClassName = control.getClass().getName();
-                    controlClassName = controlClassName.substring(controlClassName.
-                        lastIndexOf('.') + 1);
-                    String msg = "   invoked: '" + control.getName() + "' "
-                        + controlClassName + ".onRender()";
-                    logger.trace(msg);
-                }
-            }
-        }
-    }
-
-    /**
-     * Performs rendering of the specified page.
-     *
-     * @param page page to render
-     * @param context the request context
-     * @throws java.lang.Exception if error occurs
-     */
-    void performRender(Page page, Context context) throws Exception {
-
-        final HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
-
-        if (StringUtils.isNotBlank(page.getRedirect())) {
-            String url = page.getRedirect();
-
-            url = response.encodeRedirectURL(url);
-
-            if (logger.isTraceEnabled()) {
-                logger.debug("   redirect: " + url);
-
-            } else if (logger.isDebugEnabled()) {
-                logger.debug("redirect: " + url);
-            }
-
-            response.sendRedirect(url);
-
-        } else if (StringUtils.isNotBlank(page.getForward())) {
-            // Indicates the request is forwarded
-            request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
-
-            if (logger.isTraceEnabled()) {
-                logger.debug("   forward: " + page.getForward());
-
-            } else if (logger.isDebugEnabled()) {
-                logger.debug("forward: " + page.getForward());
-            }
-
-            if (page.getForward().endsWith(".jsp")) {
-                renderJSP(page);
-
-            } else {
-                RequestDispatcher dispatcher =
-                    request.getRequestDispatcher(page.getForward());
-
-                dispatcher.forward(request, response);
-            }
-
-        } else if (page.getPath() != null) {
-            String pagePath = page.getPath();
-
-            // Check if request is a JSP page
-            if (pagePath.endsWith(".jsp") || configService.isJspPage(pagePath)) {
-                // CLK-141. Set pagePath as the forward value.
-                page.setForward(StringUtils.replace(pagePath, ".htm", ".jsp"));
-
-                // Indicates the request is forwarded
-                request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
-                renderJSP(page);
-
-            } else {
-                renderTemplate(page);
-            }
-
-        } else {
-            if (logger.isTraceEnabled()) {
-                logger.debug("   path not defined for " + page.getClass().getName());
-
-            } else if (logger.isDebugEnabled()) {
-                logger.debug("path not defined for " + page.getClass().getName());
             }
         }
     }
