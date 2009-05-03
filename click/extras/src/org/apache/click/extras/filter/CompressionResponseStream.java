@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Dmitri Valdin
  * @version Revision: 1.3 , Date: 2004/03/18 16:40:28
  */
-class CompressionResponseStream extends ServletOutputStream {
+public class CompressionResponseStream extends ServletOutputStream {
 
     // ----------------------------------------------------------- Constructors
 
@@ -41,6 +41,7 @@ class CompressionResponseStream extends ServletOutputStream {
      * Construct a servlet output stream associated with the specified Response.
      *
      * @param response The associated response
+     * @throws IOException if an IO error occurs reading the response stream
      */
     public CompressionResponseStream(HttpServletResponse response)
         throws IOException {
@@ -49,7 +50,6 @@ class CompressionResponseStream extends ServletOutputStream {
         closed = false;
         this.response = response;
         this.output = response.getOutputStream();
-
     }
 
     // ----------------------------------------------------- Instance Variables
@@ -60,9 +60,7 @@ class CompressionResponseStream extends ServletOutputStream {
      */
     protected int compressionThreshold = 0;
 
-    /**
-     * Debug level.
-     */
+    /** Debug level. */
     private int debug = 0;
 
     /**
@@ -70,9 +68,7 @@ class CompressionResponseStream extends ServletOutputStream {
      */
     protected byte[] buffer = null;
 
-    /**
-     * The number of data bytes currently in the buffer.
-     */
+    /** The number of data bytes currently in the buffer. */
     protected int bufferCount = 0;
 
     /**
@@ -80,9 +76,7 @@ class CompressionResponseStream extends ServletOutputStream {
      */
     protected GZIPOutputStream gzipstream = null;
 
-    /**
-     * Has this stream been closed?
-     */
+    /** Has this stream been closed? */
     protected boolean closed = false;
 
     /**
@@ -105,6 +99,8 @@ class CompressionResponseStream extends ServletOutputStream {
 
     /**
      * Set the compressionThreshold number and create buffer for this size.
+     *
+     * @param threshold the compression threshold in bytes
      */
     protected void setBuffer(int threshold) {
         compressionThreshold = threshold;
@@ -114,6 +110,8 @@ class CompressionResponseStream extends ServletOutputStream {
     /**
      * Close this output stream, causing any buffered data to be flushed and
      * any further output data to throw an IOException.
+     *
+     * @throws IOException if an error occurs closing the response
      */
     public void close() throws IOException {
 
@@ -139,12 +137,13 @@ class CompressionResponseStream extends ServletOutputStream {
 
         output.close();
         closed = true;
-
     }
 
     /**
      * Flush any buffered data for this output stream, which also causes the
      * response to be committed.
+     *
+     * @throws IOException if an error occurs flushing the gzip stream
      */
     public void flush() throws IOException {
 
@@ -155,16 +154,19 @@ class CompressionResponseStream extends ServletOutputStream {
         if (gzipstream != null) {
             gzipstream.flush();
         }
-
     }
 
+    /**
+     * Flush the buffer to the gzip stream.
+     *
+     * @throws IOException if an error occurs flushing the buffer
+     */
     public void flushToGZip() throws IOException {
 
         if (bufferCount > 0) {
             writeToGZip(buffer, 0, bufferCount);
             bufferCount = 0;
         }
-
     }
 
     /**
@@ -185,7 +187,6 @@ class CompressionResponseStream extends ServletOutputStream {
         }
 
         buffer[bufferCount++] = (byte) b;
-
     }
 
     /**
@@ -193,7 +194,6 @@ class CompressionResponseStream extends ServletOutputStream {
      * to our output stream.
      *
      * @param b The byte array to be written
-     *
      * @exception IOException if an input/output error occurs
      */
     public void write(byte b[]) throws IOException {
@@ -207,7 +207,6 @@ class CompressionResponseStream extends ServletOutputStream {
      * @param b The byte array containing the bytes to be written
      * @param off Zero-relative starting offset of the bytes to be written
      * @param len The number of bytes to be written
-     *
      * @exception IOException if an input/output error occurs
      */
     public void write(byte b[], int off, int len) throws IOException {
@@ -241,20 +240,32 @@ class CompressionResponseStream extends ServletOutputStream {
         writeToGZip(b, off, len);
     }
 
+
+    /**
+     * Writes array of bytes to the compressed output stream. This method
+     * will block until all the bytes are written.
+     *
+     * @param b the data to be written
+     * @param off the start offset of the data
+     * @param len the length of the data
+     * @exception IOException If an I/O error has occurred.
+     */
     public void writeToGZip(byte b[], int off, int len) throws IOException {
 
         if (gzipstream == null) {
             response.addHeader("Content-Encoding", "gzip");
             gzipstream = new GZIPOutputStream(output);
         }
-        gzipstream.write(b, off, len);
 
+        gzipstream.write(b, off, len);
     }
 
     // -------------------------------------------------------- Package Methods
 
     /**
      * Has this response stream been closed?
+     *
+     * @return true if the response stream has been closed
      */
     public boolean closed() {
         return (this.closed);
