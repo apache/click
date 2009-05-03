@@ -370,7 +370,6 @@ public class ControlRegistry {
          *
          * @param source the action event source
          * @param listener the event action listener
-         * @param event the specific event to trigger the action event
          */
         public void registerActionEvent(Control source, ActionListener listener) {
             Validate.notNull(source, "Null source parameter");
@@ -382,6 +381,8 @@ public class ControlRegistry {
 
         /**
          * Checks if any Action Events have been registered.
+         *
+         * @return true if the registry has any Action Events registered
          */
         public boolean hasActionEvents() {
             if (eventListenerList == null || eventListenerList.isEmpty()) {
@@ -428,6 +429,7 @@ public class ControlRegistry {
          * Fire all the registered action events and return true if the page should
          * continue processing.
          *
+         * @param context the page request context
          * @return true if the page should continue processing or false otherwise
          */
         public boolean fireActionEvents(Context context) {
