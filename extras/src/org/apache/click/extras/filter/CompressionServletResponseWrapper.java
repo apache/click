@@ -35,15 +35,16 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * @author Dmitri Valdin
  * @version Revision: 1.3, Date: 2004/03/18 16:40:28
  */
-class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
+public class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
 
     // ----------------------------------------------------- Constructor
 
     /**
      * Calls the parent constructor which creates a ServletResponse adaptor
      * wrapping the given response object.
+     *
+     * @param response the servlet response to wrap
      */
-
     public CompressionServletResponseWrapper(HttpServletResponse response) {
         super(response);
         origResponse = response;
@@ -51,14 +52,10 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
 
     // ----------------------------------------------------- Instance Variables
 
-    /**
-     * Original response.
-     */
+    /** Original response. */
     protected HttpServletResponse origResponse = null;
 
-    /**
-     * Descriptive information about this Response implementation.
-     */
+    /** Descriptive information about this Response implementation. */
     protected static final String INFO = "CompressionServletResponseWrapper";
 
     /**
@@ -73,44 +70,41 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
      */
     protected PrintWriter writer = null;
 
-    /**
-     * The threshold number to compress.
-     */
+    /** The threshold number to compress. */
     protected int threshold = 0;
 
-    /**
-     * Debug level.
-     */
+    /** Debug level. */
     private int debug = 0;
 
-    /**
-     * Content type.
-     */
+    /** Content type. */
     protected String contentType = null;
 
     // --------------------------------------------------------- Public Methods
 
     /**
      * Set content type.
+     *
+     * @param contentType the response content type
      */
     public void setContentType(String contentType) {
         this.contentType = contentType;
         origResponse.setContentType(contentType);
     }
 
-
     /**
-     * Set threshold number.
+     * Set threshold the compression threshold in bytes.
+     *
+     * @param threshold the compression threshold in bytes
      */
     public void setCompressionThreshold(int threshold) {
         this.threshold = threshold;
     }
 
-
     /**
      * Create and return a ServletOutputStream to write the content
      * associated with this Response.
      *
+     * @return a new compressed servlet output stream
      * @exception IOException if an input/output error occurs
      */
     public ServletOutputStream createOutputStream() throws IOException {
@@ -157,6 +151,7 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
     /**
      * Return the servlet output stream associated with this Response.
      *
+     * @return the servlet output stream associated with this response
      * @exception IllegalStateException if <code>getWriter</code> has
      *  already been called for this response
      * @exception IOException if an input/output error occurs
@@ -174,12 +169,12 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
         }
 
         return (stream);
-
     }
 
     /**
      * Return the writer associated with this Response.
      *
+     * @return the servlet print writer
      * @exception IllegalStateException if <code>getOutputStream</code> has
      *  already been called for this response
      * @exception IOException if an input/output error occurs
@@ -212,21 +207,38 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
         }
 
         return (writer);
-
     }
 
+    /**
+     * Set the content length. This method does nothing.
+     *
+     * @param length the content length
+     */
     public void setContentLength(int length) {
     }
 
+    /**
+     * Set the int value in the header.
+     *
+     * @param header the response header
+     * @param value the int value
+     */
     public void setIntHeader(String header, int value) {
         if (!"Content-Length".equals(header)) {
             super.setIntHeader(header, value);
         }
     }
 
+    /**
+     * Set the string value in the header.
+     *
+     * @param header the response header
+     * @param value the string value
+     */
     public void setHeader(String header, String value) {
         if (!"Content-Length".equals(header)) {
             super.setHeader(header, value);
         }
     }
+
 }
