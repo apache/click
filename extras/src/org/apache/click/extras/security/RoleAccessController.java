@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
  * Provides a Role based access controller class. This access controller uses the
  * JEE servlet container to determine whether an authenticated user has access
  * to a specified role.
+ * <p/>
+ * This class is used as the default AccessController by the Menu class.
  *
  * @author Malcolm Edgar
  */
