@@ -72,17 +72,6 @@ public abstract class AbstractLink extends AbstractControl {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Return the links html tag: <tt>a</tt>.
-     *
-     * @see AbstractControl#getTag()
-     *
-     * @return this controls html tag
-     */
-    public String getTag() {
-        return "a";
-    }
-
-    /**
      * Create an AbstractLink for the given name.
      *
      * @param name the page link name
@@ -101,6 +90,17 @@ public abstract class AbstractLink extends AbstractControl {
     }
 
     // ------------------------------------------------------ Public Attributes
+
+    /**
+     * Return the link html tag: <tt>a</tt>.
+     *
+     * @see AbstractControl#getTag()
+     *
+     * @return this controls html tag
+     */
+    public String getTag() {
+        return "a";
+    }
 
     /**
      * Return true if the AbstractLink is a disabled.  If the link is disabled

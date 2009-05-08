@@ -348,12 +348,16 @@ public class JsScript extends ResourceElement {
 
         buffer.closeTag();
 
+        buffer.append("\n");
+
         // Render CDATA tag if necessary
         renderCharacterDataPrefix(buffer);
 
         renderContent(buffer);
 
         renderCharacterDataSuffix(buffer);
+
+        buffer.append("\n");
 
         buffer.elementEnd(getTag());
 
