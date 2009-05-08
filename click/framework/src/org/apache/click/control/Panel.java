@@ -289,13 +289,13 @@ public class Panel extends AbstractContainer {
      * Create a Panel with the given name, id attribute and template path.
      *
      * @param name the name of the panel
-     * @param template the template path
      * @param id the id HTML attribute value
+     * @param template the template path
      */
     public Panel(String name, String id, String template) {
         setName(name);
-        setTemplate(template);
         setId(id);
+        setTemplate(template);
     }
 
     /**
