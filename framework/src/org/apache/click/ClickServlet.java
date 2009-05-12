@@ -490,10 +490,8 @@ public class ClickServlet extends HttpServlet {
             ErrorPage errorPage = (ErrorPage) page;
             errorPage.setMode(configService.getApplicationMode());
 
-            // Clear the POST_ON_PROCESS_EVENT control listeners from the registry
-            // Registered listeners from other phases must still be invoked
-            controlRegistry.getEventHolder(
-                ControlRegistry.POST_ON_PROCESS_EVENT).clear();
+            // Notify the registry of the error
+            controlRegistry.errorOccurred(errorPage.getError());
         }
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
