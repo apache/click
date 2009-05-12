@@ -127,7 +127,7 @@ public class ControlRegistry {
      * The <tt>POST_ON_PROCESS_EVENT</tt> is the event during which control
      * listeners will fire.
      */
-    public static final int POST_ON_PROCESS_EVENT = 1;
+    public static final int POST_ON_PROCESS_EVENT = 300;
 
     /**
      * Indicates the listener should fire <tt>AFTER</tt> the onRender event.
@@ -135,7 +135,7 @@ public class ControlRegistry {
      * <tt>guaranteed</tt> to trigger, even when redirecting, forwarding or if
      * page processing is cancelled.
      */
-    public static final int POST_ON_RENDER_EVENT = 2;
+    public static final int POST_ON_RENDER_EVENT = 400;
 
     // -------------------------------------------------------------- Variables
 
@@ -185,6 +185,15 @@ public class ControlRegistry {
     // ------------------------------------------------------ Protected Methods
 
     /**
+     * Allow the Registry to handle the error that occurred.
+     */
+    protected void errorOccurred(Throwable throwable) {
+        // Clear the POST_ON_PROCESS_EVENT control listeners from the registry
+        // Registered listeners from other phases must still be invoked
+        getEventHolder(ControlRegistry.POST_ON_PROCESS_EVENT).clear();
+    }
+
+    /**
      * Clear the registry.
      */
     protected void clearRegistry() {
@@ -218,11 +227,12 @@ public class ControlRegistry {
      * @param context the request context
      * @param eventSourceList the list of source controls
      * @param eventListenerList the list of listeners to fire
+     * @param event the specific event which events to fire
      *
      * @return true if the page should continue processing or false otherwise
      */
     protected boolean fireActionEvents(Context context, List eventSourceList,
-        List eventListenerList) {
+        List eventListenerList, int event) {
 
         boolean continueProcessing = true;
 
@@ -230,7 +240,7 @@ public class ControlRegistry {
             Control source = (Control) eventSourceList.get(i);
             ActionListener listener = (ActionListener) eventListenerList.get(i);
 
-            if (!listener.onAction(source)) {
+            if(!fireActionEvent(context, source, listener, event)) {
                 continueProcessing = false;
             }
         }
@@ -257,13 +267,36 @@ public class ControlRegistry {
      * true if the page should continue processing.
      *
      * @param context the request context
-     * @param event the specific event which events to fire
+     * @param event the event which listeners to fire
      *
      * @return true if the page should continue processing or false otherwise
      */
     protected boolean fireActionEvents(Context context, int event) {
         EventHolder eventHolder = getEventHolder(event);
         return eventHolder.fireActionEvents(context);
+    }
+
+    /**
+     * Fire the action for the given listener and event source which
+     * return true if the page should continue processing.
+     * <p/>
+     * This method will be passed a listener and source of a specific event
+     * e.g. {@link #POST_ON_PROCESS_EVENT} or {@link #POST_ON_RENDER_EVENT}.
+     * event.
+     * <p/>
+     * This method can be overridden if you need to customize the way events
+     * are fired.
+     *
+     * @param context the request context
+     * @param source the source control
+     * @param listener the listener to fire
+     * @param event the specific event which events to fire
+     *
+     * @return true if the page should continue processing or false otherwise
+     */
+    protected boolean fireActionEvent(Context context, Control source,
+        ActionListener listener, int event) {
+        return listener.onAction(source);
     }
 
     /**
@@ -283,6 +316,16 @@ public class ControlRegistry {
         }
     }
 
+    /**
+     * Create a new EventHolder instance.
+     *
+     * @param event the EventHolder's event
+     * @return new EventHolder instance
+     */
+    protected EventHolder createEventHolder(int event) {
+        return new EventHolder(event);
+    }
+
     // ------------------------------------------------ Package Private Methods
 
     /**
@@ -292,7 +335,7 @@ public class ControlRegistry {
      */
     EventHolder getPostProcessEventHolder() {
         if (postProcessEventHolder == null) {
-            postProcessEventHolder = new EventHolder();
+            postProcessEventHolder = createEventHolder(POST_ON_PROCESS_EVENT);
         }
         return postProcessEventHolder;
     }
@@ -304,7 +347,7 @@ public class ControlRegistry {
      */
     EventHolder getPostRenderEventHolder() {
         if (postRenderEventHolder == null) {
-            postRenderEventHolder = new EventHolder();
+            postRenderEventHolder = createEventHolder(POST_ON_RENDER_EVENT);
         }
         return postRenderEventHolder;
     }
@@ -358,11 +401,25 @@ public class ControlRegistry {
      */
     public class EventHolder {
 
+        /** The EventHolder's event. */
+        protected int event;
+
         /** The list of registered event sources. */
         private List eventSourceList;
 
         /** The list of registered event listeners. */
         private List eventListenerList;
+
+        // ------------------------------------------------------- Constructors
+
+        /**
+         * Create a new EventHolder for the given event.
+         *
+         * @param event the EventHolder's event 
+         */
+        public EventHolder(int event) {
+            this.event = event;
+        }
 
         /**
          * Register the event source and event ActionListener to be fired in the
@@ -439,7 +496,7 @@ public class ControlRegistry {
             }
 
             return ControlRegistry.this.fireActionEvents(context,
-                getEventSourceList(), getEventListenerList());
+                getEventSourceList(), getEventListenerList(), event);
         }
     }
 
