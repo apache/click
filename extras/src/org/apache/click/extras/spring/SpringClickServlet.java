@@ -189,8 +189,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * <h3>Servlet Configuration</h3>
  *
  * The SpringClickServlet can obtain the ApplicationContext either from
- * {@link WebApplicationContextUtils} which is configured with a
- * {@link ContextLoaderListener}. For example:
+ * {@link org.springframework.web.context.support.WebApplicationContextUtils} which is configured with a
+ * {@link org.springframework.web.context.ContextLoaderListener}. For example:
  *
  * <pre class="codeConfig">
  * &lt;?xml version="1.0" encoding="UTF-8"?&gt;
