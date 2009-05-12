@@ -18,9 +18,7 @@
  */
 package org.apache.click.extras.control;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.click.Context;
 import org.apache.click.control.Button;
@@ -310,6 +308,8 @@ public class FormTable extends Table {
      * Return the HTML head element import string. This method will also include
      * the imports of the form and the contained fields.
      *
+     * @deprecated use the new {@link #getHeadElements()} instead
+     *
      * @see org.apache.click.Control#getHtmlImports()
      *
      * @return the HTML head element import string
@@ -318,6 +318,10 @@ public class FormTable extends Table {
         HtmlStringBuffer buffer = new HtmlStringBuffer(255);
 
         buffer.append(super.getHtmlImports());
+        String htmlImports = getControlLink().getHtmlImports();
+        if (htmlImports != null) {
+            buffer.append(htmlImports);
+        }
 
         int firstRow = getFirstRow();
         int lastRow = getLastRow();
@@ -330,7 +334,7 @@ public class FormTable extends Table {
                 for (int j = firstRow; j < lastRow; j++) {
                     field.setName(column.getName() + "_" + j);
 
-                    String htmlImports = field.getHtmlImports();
+                    htmlImports = field.getHtmlImports();
                     if (htmlImports != null) {
                         buffer.append(htmlImports);
                     }
@@ -339,6 +343,38 @@ public class FormTable extends Table {
         }
 
         return buffer.toString();
+    }
+
+    /**
+     * Return the HEAD elements for the Control. This method will include the
+     * HEAD elements of the contained fields.
+     *
+     * @see org.apache.click.Control#getHtmlImports()
+     *
+     * @return the list of HEAD elements
+     */
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+            headElements.addAll(getControlLink().getHeadElements());
+
+            int firstRow = getFirstRow();
+            int lastRow = getLastRow();
+
+            for (int i = 0; i < getColumnList().size(); i++) {
+                Column column = (Column) getColumnList().get(i);
+                if (column instanceof FieldColumn) {
+                    Field field = ((FieldColumn) column).getField();
+
+                    for (int j = firstRow; j < lastRow; j++) {
+                        field.setName(column.getName() + "_" + j);
+
+                        headElements.addAll(field.getHeadElements());
+                    }
+                }
+            }
+        }
+        return headElements;
     }
 
     /**
@@ -458,8 +494,6 @@ public class FormTable extends Table {
             List rowList = getRowList();
             List columnList = getColumnList();
 
-            Map ognlContext = new HashMap();
-
             for (int i = firstRow; i < lastRow; i++) {
                 Object row = rowList.get(i);
 
@@ -526,14 +560,16 @@ public class FormTable extends Table {
     public void render(HtmlStringBuffer buffer) {
         if (useInternalForm) {
             buffer.append(getForm().startTag());
-        }
 
-        super.render(buffer);
+            // Render the Table
+            super.render(buffer);
 
-        if (useInternalForm) {
             renderButtons(buffer);
 
             buffer.append(getForm().endTag());
+
+        } else {
+            super.render(buffer);
         }
     }
 
