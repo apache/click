@@ -76,7 +76,7 @@ The feature roadmap for the next major release of Click is being determined.
 
 <dl>
   <dt><a name="2.1.0"></a>
-  <div class="release-header">Latest Development Release - Version 2.1.0 - ??? March 2009</div></dt>
+  <div class="release-header">Latest Development Release - Version 2.1.0 - ??? June 2009</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       IMPORTANT be sure to read the <a href="upgrade-path.html#1.5">1.5 upgrade path</a>
@@ -126,8 +126,8 @@ The feature roadmap for the next major release of Click is being determined.
       <li>
         Added documentation describing the new HEAD element support.
         Please see the new section on Page HEAD elements
-        <a target="blank" class="external" href="user-guide/html/ch02s12.html">here</a>
-        the section on Control HEAD elements <a target="blank" class="external" href="user-guide/html/ch03s05.html">here</a>.
+        <a href="user-guide/html/ch02s12.html">here</a>
+        the section on Control HEAD elements <a href="user-guide/html/ch03s05.html">here</a>.
       </li>
     </ul>
 
@@ -135,6 +135,17 @@ The feature roadmap for the next major release of Click is being determined.
       New features and issues resolved:
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change">
+          Added new popup CalendarField that can be used in place of the old DateField
+          from Click 1.5. The new CalendarField popup uses the
+          <a target="_blank" class="external" href="http://code.google.com/p/calendardateselect/">Calendar Date Select</a>
+          which is built on top of the Prototype JavaScript library.
+          <p/>
+          Please note if you don't want a dependency on the Prototype library
+          you can use the third-party
+          <a class="external" target="_blank" href="http://code.google.com/p/click-calendar/">Click Calendar</a>
+          control instead.
+      </li>
       <li class="change">
           Added first class support for HEAD elements such as JavaScript and Css.
           The following classes were added:
@@ -214,7 +225,7 @@ The feature roadmap for the next major release of Click is being determined.
   </dd>
 
   <dt><a name="2.0.2"></a><a name="1.5.2"></a>
-  <a name="stable-release"></a><div class="release-header">Latest Stable Releases - Version 1.5.2 and Version 2.0.2 - ??? March 2009</div></dt>
+  <a name="stable-release"></a><div class="release-header">Latest Stable Releases - Version 1.5.2 and Version 2.0.2 - ??? May 2009</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       IMPORTANT be sure to read the <a href="upgrade-path.html#1.5">1.5 upgrade path</a>

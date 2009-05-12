@@ -32,11 +32,11 @@ import org.apache.click.control.TextField;
 import org.apache.click.examples.control.InvestmentSelect;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.FieldColumn;
 import org.apache.click.extras.control.FormTable;
 import org.apache.click.extras.control.NumberField;
+import org.apache.click.extras.prototype.CalendarField;
 import org.springframework.stereotype.Component;
 
 /**
@@ -85,7 +85,8 @@ public class FormTablePage extends BorderPage {
         column.setTextAlign("right");
         table.addColumn(column);
 
-        column = new FieldColumn("dateJoined", new DateField());
+        CalendarField field = new CalendarField();
+        column = new FieldColumn("dateJoined", field);
         column.setDataStyle("white-space", "nowrap");
         table.addColumn(column);
 

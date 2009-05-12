@@ -75,6 +75,18 @@ http://jquery.com/
 
 ======================================================================
 
+This product includes the Calendar Date Select JavaScript library,
+developed by Tim Charper, distributed under the terms of the MIT license.
+http://code.google.com/p/calendardateselect/
+
+======================================================================
+
+This product includes the Date Functions Select JavaScript library,
+developed by Matt Kruse, distributed under the terms of the MIT license.
+http://javascripttoolbox.com/lib/date/
+
+======================================================================
+
 This product includes the JQuery Star Rating plugin, developed by
 Fyneworks.com, distributed under the terms of the MIT license.
 http://www.fyneworks.com/jquery/star-rating/
