@@ -217,6 +217,9 @@
             <exclude name="**/WEB-INF/lib/**"/>
             <exclude name="examples/webapp/javadoc/**"/>
             <exclude name="**/EDU/oswego/cs/dl/util/concurrent/*.java"/>
+            <exclude name="documentation/xdocs/lib/**"/>
+            <exclude name="documentation/xdocs/target/**"/>
+            <exclude name="documentation/xdocs/click-docbook/**"/>
          </fileset>
       </copy>
 
