@@ -31,5 +31,6 @@
 	<classpathentry kind="lib" path="lib/velocity-1.6.2.jar"/>
 	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/geronimo-annotation_1.0_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/acegi-security-1.0.7.jar"/>
+	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/quartz-all-1.6.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

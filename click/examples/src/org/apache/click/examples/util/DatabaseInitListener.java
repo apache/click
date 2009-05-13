@@ -30,18 +30,9 @@ import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-
-import org.apache.click.examples.domain.Customer;
-import org.apache.click.examples.domain.PostCode;
-import org.apache.click.examples.domain.SystemCode;
-import org.apache.click.examples.domain.User;
-import org.apache.click.util.ClickUtils;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.access.DataDomain;
@@ -52,20 +43,31 @@ import org.apache.cayenne.conf.ServletUtil;
 import org.apache.cayenne.map.DataMap;
 import org.apache.cayenne.query.SelectQuery;
 import org.apache.click.examples.domain.Course;
+import org.apache.click.examples.domain.Customer;
+import org.apache.click.examples.domain.PostCode;
 import org.apache.click.examples.domain.StudentHouse;
+import org.apache.click.examples.domain.SystemCode;
+import org.apache.click.examples.domain.User;
+import org.apache.click.examples.quartz.ExampleJob;
+import org.apache.click.examples.quartz.SchedulerService;
+import org.apache.click.util.ClickUtils;
 import org.apache.commons.lang.WordUtils;
+import org.quartz.JobDetail;
+import org.quartz.ee.servlet.QuartzInitializerListener;
+import org.quartz.impl.StdSchedulerFactory;
 
 /**
- * Provides a database initialization filter. This servlet filter creates a
- * examples database schema using the Cayenne {@link DbGenerator} utility class,
- * and loads data files into the database.
+ * Provides a database initialization servlet context listener. This listener
+ * creates a examples database schema using the Cayenne {@link DbGenerator}
+ * utility class, and loads data files into the database. This class also
+ * adds an ExampleJob to the Quartz Scheduler.
  * <p/>
- * This filter also provides a customer reloading task which runs every 15
+ * This listener also provides a customer reloading task which runs every 15
  * minutes.
  *
  * @author Malcolm Edgar
  */
-public class DatabaseInitFilter implements Filter {
+public class DatabaseInitListener implements ServletContextListener {
 
     private static final long RELOAD_TIMER_INTERVAL = 1000 * 60 * 5;
 
@@ -76,10 +78,12 @@ public class DatabaseInitFilter implements Filter {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * @see Filter#init(javax.servlet.FilterConfig)
+     * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
-    public void init(FilterConfig config) throws ServletException {
-        ServletUtil.initializeSharedConfiguration(config.getServletContext());
+    public void contextInitialized(ServletContextEvent sce) {
+        ServletContext servletContext = sce.getServletContext();
+
+        ServletUtil.initializeSharedConfiguration(servletContext);
 
         try {
             DataDomain cayenneDomain =
@@ -91,29 +95,26 @@ public class DatabaseInitFilter implements Filter {
 
             loadDatabase();
 
-            reloadTimer.schedule(new ReloadTask(), 10000, RELOAD_TIMER_INTERVAL);
+            StdSchedulerFactory schedulerFactory = (StdSchedulerFactory)
+                servletContext.getAttribute(QuartzInitializerListener.QUARTZ_FACTORY_KEY);
+
+            SchedulerService schedulerService = new SchedulerService(schedulerFactory);
+
+            loadQuartzJobs(schedulerService);
+
+            reloadTimer.schedule(new ReloadTask(schedulerService), 10000, RELOAD_TIMER_INTERVAL);
+
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ServletException("Error creating database", e);
+            throw new RuntimeException("Error creating database", e);
         }
     }
 
- 
     /**
-     * @see Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
+     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      */
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain filterChain) throws IOException, ServletException {
-        filterChain.doFilter(request, response);
-    }
-
-    /**
-     * Cancel the reload timer.
-     *
-     * @see Filter#destroy()
-     */
-    public void destroy() {
+    public void contextDestroyed(ServletContextEvent sce) {
         reloadTimer.cancel();
     }
 
@@ -172,7 +173,7 @@ public class DatabaseInitFilter implements Filter {
     private static void loadFile(String filename, DataContext dataContext,
             LineProcessor lineProcessor) throws IOException {
 
-        InputStream is = ClickUtils.getResourceAsStream(filename, DatabaseInitFilter.class);
+        InputStream is = ClickUtils.getResourceAsStream(filename, DatabaseInitListener.class);
 
         if (is == null) {
             throw new RuntimeException("classpath file not found: " + filename);
@@ -311,10 +312,6 @@ public class DatabaseInitFilter implements Filter {
         });
     }
 
-    private static interface LineProcessor {
-        public void processLine(String line, DataContext dataContext);
-    }
-
     private static String next(StringTokenizer tokenizer) {
         String token = tokenizer.nextToken().trim();
         if (token.startsWith("\"")) {
@@ -334,15 +331,45 @@ public class DatabaseInitFilter implements Filter {
         }
     }
 
+    private static void loadQuartzJobs(SchedulerService schedulerService) {
+
+        // Create Submission Synchronize Job
+        if (!schedulerService.hasJob(ExampleJob.class.getSimpleName())) {
+            JobDetail jobDetail = new JobDetail();
+
+            jobDetail.setName(ExampleJob.class.getSimpleName());
+            jobDetail.setDescription("Demonstration job write Hello World");
+            jobDetail.setJobClass(ExampleJob.class);
+
+            // 5 minute interval
+            final long fiveMinutesInMs = 24 * 60 * 60 * 1000;
+
+            schedulerService.scheduleJob(jobDetail, new Date(), null, -1, fiveMinutesInMs);
+        }
+    }
+
+    // Inner Classes ----------------------------------------------------------
+
+    private static interface LineProcessor {
+        public void processLine(String line, DataContext dataContext);
+    }
+
     private static class ReloadTask extends TimerTask {
 
+        private SchedulerService schedulerService;
+
+        public ReloadTask(SchedulerService schedulerService) {
+            this.schedulerService = schedulerService;
+        }
+
+        @SuppressWarnings("unchecked")
         public void run() {
             DataContext dataContext = null;
             try {
                 dataContext = DataContext.createDataContext();
 
                 SelectQuery query = new SelectQuery(Customer.class);
-                List list = dataContext.performQuery(query);
+                List<Customer> list = dataContext.performQuery(query);
 
                 if (list.size() < 60) {
                     dataContext.deleteObjects(list);
@@ -352,6 +379,8 @@ public class DatabaseInitFilter implements Filter {
                     dataContext.commitChanges();
                 }
 
+                loadQuartzJobs(schedulerService);
+
             } catch (Throwable t) {
                 t.printStackTrace();
 
@@ -360,6 +389,5 @@ public class DatabaseInitFilter implements Filter {
                 }
             }
         }
-
     }
 }
