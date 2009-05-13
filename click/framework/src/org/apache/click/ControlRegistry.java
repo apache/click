@@ -186,6 +186,8 @@ public class ControlRegistry {
 
     /**
      * Allow the Registry to handle the error that occurred.
+     *
+     * @param throwable the error which occurred during processing
      */
     protected void errorOccurred(Throwable throwable) {
         // Clear the POST_ON_PROCESS_EVENT control listeners from the registry
@@ -240,7 +242,7 @@ public class ControlRegistry {
             Control source = (Control) eventSourceList.get(i);
             ActionListener listener = (ActionListener) eventListenerList.get(i);
 
-            if(!fireActionEvent(context, source, listener, event)) {
+            if (!fireActionEvent(context, source, listener, event)) {
                 continueProcessing = false;
             }
         }
@@ -415,7 +417,7 @@ public class ControlRegistry {
         /**
          * Create a new EventHolder for the given event.
          *
-         * @param event the EventHolder's event 
+         * @param event the EventHolder's event
          */
         public EventHolder(int event) {
             this.event = event;
