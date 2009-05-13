@@ -381,7 +381,7 @@ public class CalendarField extends DateField {
      * course):
      *
      * <pre class="prettyprint">
-     * document.observe('dom:loaded', function(){ 
+     * document.observe('dom:loaded', function(){
      *   Event.observe('my-calendar-button', 'click', function(){
      *     Date.first_day_of_week=0;
      *     calendar = new CalendarDateSelect($('my-calendar'), {

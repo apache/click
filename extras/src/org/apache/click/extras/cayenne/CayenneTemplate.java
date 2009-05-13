@@ -18,17 +18,21 @@
  */
 package org.apache.click.extras.cayenne;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.Validate;
 import org.apache.cayenne.CayenneRuntimeException;
 import org.apache.cayenne.DataObject;
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.DeleteDenyException;
 import org.apache.cayenne.ObjectId;
 import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.access.DataDomain;
+import org.apache.cayenne.access.DataNode;
+import org.apache.cayenne.conf.Configuration;
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.map.DbAttribute;
@@ -37,6 +41,7 @@ import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.query.ObjectIdQuery;
 import org.apache.cayenne.query.Query;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.commons.lang.Validate;
 
 /**
  * Provides base Cayenne data access object or service class to extend, following
@@ -119,6 +124,21 @@ public class CayenneTemplate {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Return a pooled Cayenne connection for the shared configuration and the
+     * first configured DataNode.
+     *
+     * @return a pooled SQL connection
+     * @throws SQLException if a database connection could not be obtained
+     */
+    protected Connection getConnection() throws SQLException {
+        DataDomain domain = Configuration.getSharedConfiguration().getDomain();
+
+        DataNode node = (DataNode) domain.getDataNodes().iterator().next();
+
+        return node.getDataSource().getConnection();
     }
 
     /**
