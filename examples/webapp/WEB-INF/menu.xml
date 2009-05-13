@@ -139,10 +139,12 @@
     <menu separator="true"/>
     <menu label="Apache Cayenne Form" path="cayenne/cayenne-form-page.htm"/>
     <menu label="Cayenne Tabbed Form" path="cayenne/tabbed-cayenne-form-page.htm"/>
-    <menu label="Accommodation Demo &lt;br&gt; (one-to-many)" path="cayenne/accommodation-demo.htm"/>
-    <menu label="Enrollment Demo &lt;br&gt; (many-to-many)" path="cayenne/enrollment-demo.htm"/>
+    <menu label="PropertySelect Demo (1-to-*)" path="cayenne/accommodation-demo.htm"/>
+    <menu label="PickList Demo (*-to-*)" path="cayenne/enrollment-demo.htm"/>
     <menu separator="true"/>
     <menu label="Apache POI Excel Export" path="general/excel-export.htm"/>
+    <menu separator="true"/>
+    <menu label="Quartz Scheduler" path="quartz/quartz-job-scheduler.htm"/>
   </menu>
 
 </menu>
