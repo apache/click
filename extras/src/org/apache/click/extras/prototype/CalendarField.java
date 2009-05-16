@@ -411,7 +411,7 @@ public class CalendarField extends DateField {
         // used in a fly-weight pattern such as FormTable.
         if (!headElements.contains(script)) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(150);
-            buffer.append("document.observe('dom:loaded', function(){");
+            buffer.append("addLoadEvent( function(){");
             buffer.append("  Event.observe('").append(imgId).append(
                 "', 'click', function(){");
             buffer.append("  Date.first_day_of_week=").append(getFirstDayOfWeek() - 1);
