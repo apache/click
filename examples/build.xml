@@ -26,22 +26,22 @@
    <property file="../build/build.properties"/>
       
    <property name="name" value="click-examples"/>
-   <property name="jar.acegi" value="acegi-security-1.0.7.jar"/>
-   <property name="jar.annotation" value="geronimo-annotation_1.0_spec-1.1.1.jar"/>
-   <property name="jar.ashwood" value="ashwood-1.1.jar"/>
-   <property name="jar.cayenne" value="cayenne-nodeps-2.0.4.jar"/>
+   <property name="jar.acegi" value="acegi-security-${spring-security.version}.jar"/>
+   <property name="jar.annotation" value="geronimo-annotation_1.0_spec-${geronimo-common-annotations.version}.jar"/>
+   <property name="jar.ashwood" value="ashwood-${ashwood.version}.jar"/>
+   <property name="jar.cayenne" value="cayenne-nodeps-${cayenne.version}.jar"/>
    <property name="jar.click" value="click-${version}-incubating.jar"/>
    <property name="jar.click-extras" value="click-extras-${version}-incubating.jar"/>
-   <property name="jar.hsqldb" value="hsqldb-1.8.0.1.jar"/>
-   <property name="jar.jstl" value="jstl-1.1.2.jar"/>
-   <property name="jar.log4j" value="log4j-1.2.14.jar"/>
-   <property name="jar.logging" value="commons-logging-1.0.4.jar"/>
-   <property name="jar.poi" value="poi-3.0-FINAL.jar"/>
-   <property name="jar.quartz" value="quartz-all-1.6.3.jar"/>
-   <property name="jar.oro" value="oro-2.0.8.jar"/>
-   <property name="jar.servlet" value="servlet-api-2.3.jar"/>
-   <property name="jar.spring" value="spring-2.5.6.jar"/>
-   <property name="jar.standard" value="standard-1.1.2.jar"/>
+   <property name="jar.hsqldb" value="hsqldb-${hsqldb.version}.jar"/>
+   <property name="jar.jstl" value="jstl-${jstl.version}.jar"/>
+   <property name="jar.log4j" value="log4j-${log4j.version}.jar"/>
+   <property name="jar.logging" value="commons-logging-${commons-logging.version}.jar"/>
+   <property name="jar.poi" value="poi-${poi.version}.jar"/>
+   <property name="jar.quartz" value="quartz-all-${quartz.version}.jar"/>
+   <property name="jar.oro" value="oro-${oro.version}.jar"/>
+   <property name="jar.servlet" value="servlet-api-${servlet-api.version}.jar"/>
+   <property name="jar.spring" value="spring-${spring.version}.jar"/>
+   <property name="jar.standard" value="standard-${standard.version}.jar"/>
    <property name="javac.source" value="1.5"/>
      
    <property name="dir.deploy" value="../dist"/>
@@ -56,7 +56,7 @@
         <attribute name="name"/>
         <attribute name="path"/>
         <sequential>
-            <get src="${repository}/maven/@{path}/jars/@{name}" 
+            <get src="${repository}/maven2/@{path}/@{name}" 
                  dest="${dir.weblib}/@{name}"
                  verbose="true"
                  usetimestamp="true"/>            
@@ -151,31 +151,19 @@
    <target name="get-deps" description="download JAR dependencies">
       <mkdir dir="${dir.weblib}"/>
       <property name="repository" value="http://repo1.maven.org"/>
-      <webDownloadMacro name="${jar.ashwood}" path="org.objectstyle.ashwood"/>
-      <webDownloadMacro name="${jar.hsqldb}" path="hsqldb"/>
-      <webDownloadMacro name="${jar.jstl}" path="jstl"/>
-      <webDownloadMacro name="${jar.logging}" path="commons-logging"/>
-      <webDownloadMacro name="${jar.log4j}" path="log4j"/>
-      <webDownloadMacro name="${jar.oro}" path="oro"/>
-      <webDownloadMacro name="${jar.poi}" path="poi"/>
-      <webDownloadMacro name="${jar.spring}" path="org.springframework"/>
-      <webDownloadMacro name="${jar.standard}" path="taglibs"/>
-      <get src="${repository}/maven2/org/apache/cayenne/cayenne-nodeps/2.0.4/${jar.cayenne}"
-    	   dest="${dir.weblib}/${jar.cayenne}"
-	       verbose="true"
-	       usetimestamp="true"/> 
-   	  <get src="http://mirrors.ibiblio.org/pub/mirrors/maven2/org/acegisecurity/acegi-security/1.0.7/${jar.acegi}"
-   	       dest="${dir.weblib}/${jar.acegi}"
-   		   verbose="true"
-   	       usetimestamp="true"/>
-   	  <get src="http://mirrors.ibiblio.org/pub/mirrors/maven2/org/apache/geronimo/specs/geronimo-annotation_1.0_spec/1.1.1/${jar.annotation}"
-   	       dest="${dir.weblib}/${jar.annotation}"
-   		   verbose="true"
-   	       usetimestamp="true"/>
-   	  <get src="http://mirrors.ibiblio.org/pub/mirrors/maven2/opensymphony/quartz-all/1.6.3/${jar.quartz}"
-   	       dest="${dir.weblib}/${jar.quartz}"
-   		   verbose="true"
-   	       usetimestamp="true"/>
+      <webDownloadMacro name="${jar.acegi}" path="org/acegisecurity/acegi-security/${spring-security.version}"/>
+      <webDownloadMacro name="${jar.annotation}" path="org/apache/geronimo/specs/geronimo-annotation_1.0_spec/${geronimo-common-annotations.version}"/>
+      <webDownloadMacro name="${jar.ashwood}" path="org/objectstyle/ashwood/ashwood/${ashwood.version}"/>
+      <webDownloadMacro name="${jar.cayenne}" path="org/apache/cayenne/cayenne-nodeps/${cayenne.version}"/>
+      <webDownloadMacro name="${jar.hsqldb}" path="hsqldb/hsqldb/${hsqldb.version}"/>
+      <webDownloadMacro name="${jar.jstl}" path="jstl/jstl/${jstl.version}"/>
+      <webDownloadMacro name="${jar.logging}" path="commons-logging/commons-logging/${commons-logging.version}"/>
+      <webDownloadMacro name="${jar.log4j}" path="log4j/log4j/${log4j.version}"/>
+      <webDownloadMacro name="${jar.oro}" path="oro/oro/${oro.version}"/>
+      <webDownloadMacro name="${jar.poi}" path="poi/poi/${poi.version}"/>
+      <webDownloadMacro name="${jar.quartz}" path="opensymphony/quartz-all/${quartz.version}"/>
+      <webDownloadMacro name="${jar.spring}" path="org/springframework/spring/${spring.version}"/>
+      <webDownloadMacro name="${jar.standard}" path="taglibs/standard/${standard.version}"/>
    </target>
    
 

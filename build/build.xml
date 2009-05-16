@@ -30,21 +30,21 @@
    <property name="click-nodeps" value="click-nodeps-${version}-incubating"/>
    <property name="click-mock" value="click-mock-${version}-incubating"/>
 
-   <property name="jar.cayenne" value="cayenne-nodeps-2.0.4.jar"/>
-   <property name="jar.checkstyle" value="checkstyle-all-4.4.jar"/>
-   <property name="jar.codec" value="commons-codec-1.3.jar"/>
-   <property name="jar.collections" value="commons-collections-3.1.jar"/>
-   <property name="jar.freemarker" value="freemarker-2.3.12.jar"/>
-   <property name="jar.hibernate" value="hibernate-3.2.6.ga.jar"/>
-   <property name="jar.io" value="commons-io-1.4.jar"/>
-   <property name="jar.junit" value="junit-3.8.1.jar"/>
-   <property name="jar.lang" value="commons-lang-2.4.jar"/>
-   <property name="jar.log4j" value="log4j-1.2.14.jar"/>
-   <property name="jar.ognl" value="ognl-2.6.9.jar"/>
-   <property name="jar.servlet" value="servlet-api-2.3.jar"/>
-   <property name="jar.spring" value="spring-2.5.6.jar"/>
-   <property name="jar.upload" value="commons-fileupload-1.2.1.jar"/>
-   <property name="jar.velocity" value="velocity-1.6.2.jar"/>
+   <property name="jar.cayenne" value="cayenne-nodeps-${cayenne.version}.jar"/>
+   <property name="jar.checkstyle" value="checkstyle-all-${checkstyle.version}.jar"/>
+   <property name="jar.codec" value="commons-codec-${commons-codec.version}.jar"/>
+   <property name="jar.collections" value="commons-collections-${commons-collections.version}.jar"/>
+   <property name="jar.freemarker" value="freemarker-${freemarker.version}.jar"/>
+   <property name="jar.hibernate" value="hibernate-${hibernate.version}.jar"/>
+   <property name="jar.io" value="commons-io-${commons-io.version}.jar"/>
+   <property name="jar.junit" value="junit-${junit.version}.jar"/>
+   <property name="jar.lang" value="commons-lang-${commons-lang.version}.jar"/>
+   <property name="jar.log4j" value="log4j-${log4j.version}.jar"/>
+   <property name="jar.ognl" value="ognl-${ognl.version}.jar"/>
+   <property name="jar.servlet" value="servlet-api-${servlet-api.version}.jar"/>
+   <property name="jar.spring" value="spring-${spring.version}.jar"/>
+   <property name="jar.upload" value="commons-fileupload-${commons-fileupload.version}.jar"/>
+   <property name="jar.velocity" value="velocity-${velocity.version}.jar"/>
    <property name="javac.source" value="1.4"/>
    <property name="repository" value="http://repo1.maven.org"/>
    <property name="maven-bundle" value="../maven-upload"/>
@@ -74,7 +74,7 @@
         <attribute name="name"/>
         <attribute name="path"/>
         <sequential>
-            <get src="${repository}/maven/@{path}/jars/@{name}" 
+            <get src="${repository}/maven2/@{path}/@{name}"
                  dest="lib/@{name}"
                  verbose="true"
                  usetimestamp="true"/>            
@@ -547,28 +547,23 @@
 
  
    <target name="get-deps" description="download JAR dependencies">
-      <downloadMacro name="${jar.codec}" path="commons-codec"/>
-      <downloadMacro name="${jar.collections}" path="commons-collections"/>
-      <downloadMacro name="${jar.io}" path="commons-io"/>
-      <downloadMacro name="${jar.lang}" path="commons-lang"/>
-      <downloadMacro name="${jar.log4j}" path="log4j"/>
-      <downloadMacro name="${jar.ognl}" path="ognl"/>
-      <downloadMacro name="${jar.upload}" path="commons-fileupload"/>
-      <downloadMacro name="${jar.junit}" path="junit"/>
-      <downloadMacro name="${jar.servlet}" path="javax.servlet"/>
-      <downloadMacro name="${jar.spring}" path="org.springframework"/>
-	  <get src="${repository}/maven2/org/apache/velocity/velocity/1.6.2/${jar.velocity}"
- 	       dest="lib/${jar.velocity}"
- 	       verbose="true"
- 	       usetimestamp="true"/> 
-      <get src="${repository}/maven2/org/apache/cayenne/cayenne-nodeps/2.0.4/${jar.cayenne}" 
- 	       dest="lib/${jar.cayenne}"
- 	       verbose="true"
- 	       usetimestamp="true"/>
-      <get src="${repository}/maven2/org/freemarker/freemarker/2.3.12/${jar.freemarker}" 
- 	       dest="lib/${jar.freemarker}"
- 	       verbose="true"
- 	       usetimestamp="true"/>
+       <ant antfile="build.xml"
+           dir="examples"
+           target="get-deps"
+           inheritall="false"/>
+      <downloadMacro name="${jar.codec}" path="commons-codec/commons-codec/${commons-codec.version}"/>
+      <downloadMacro name="${jar.collections}" path="commons-collections/commons-collections/${commons-collections.version}"/>
+      <downloadMacro name="${jar.io}" path="commons-io/commons-io/${commons-io.version}"/>
+      <downloadMacro name="${jar.lang}" path="commons-lang/commons-lang/${commons-lang.version}"/>
+      <downloadMacro name="${jar.log4j}" path="log4j/log4j/${log4j.version}"/>
+      <downloadMacro name="${jar.ognl}" path="ognl/ognl/${ognl.version}"/>
+      <downloadMacro name="${jar.upload}" path="commons-fileupload/commons-fileupload/${commons-fileupload.version}"/>
+      <downloadMacro name="${jar.junit}" path="junit/junit/${junit.version}"/>
+      <downloadMacro name="${jar.servlet}" path="javax/servlet/servlet-api/${servlet-api.version}"/>
+      <downloadMacro name="${jar.spring}" path="org/springframework/spring/${spring.version}"/>
+      <downloadMacro name="${jar.velocity}" path="org/apache/velocity/velocity/${velocity.version}"/>
+      <downloadMacro name="${jar.cayenne}" path="org/apache/cayenne/cayenne-nodeps/${cayenne.version}"/>
+      <downloadMacro name="${jar.freemarker}" path="org/freemarker/freemarker/${freemarker.version}"/>
       <ant antfile="build.xml" 
            dir="examples"
            target="get-deps"
@@ -598,7 +593,7 @@
 
 
    <target name="download-hibernate" if="hibernate.true">
-      <downloadMacro name="${jar.hibernate}" path="org.hibernate"/>
+      <downloadMacro name="${jar.hibernate}" path="org/hibernate/hibernate/${hibernate.version}"/>
    </target>
 
 
