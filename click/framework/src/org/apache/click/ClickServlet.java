@@ -137,6 +137,12 @@ public class ClickServlet extends HttpServlet {
     protected final static String CONFIG_SERVICE_CLASS = "config-service-class";
 
     /**
+     * The custom TypeConverter classname as an init parameter name:
+     * &nbps; "<tt>type-converter-class</tt>".
+     */
+    protected final static String TYPE_CONVERTER_CLASS = "type-converter-class";
+
+    /**
      * The forwarded request marker attribute: &nbsp; "<tt>click-forward</tt>".
      */
     protected final static String CLICK_FORWARD = "click-forward";
@@ -146,7 +152,7 @@ public class ClickServlet extends HttpServlet {
      */
     protected final static String FORWARD_PAGE = "forward-page";
 
-    // ------------------------------------------------------ Instance Varables
+    // ----------------------------------------------------- Instance Variables
 
     /** The click application configuration service. */
     protected ConfigService configService;
@@ -174,7 +180,6 @@ public class ClickServlet extends HttpServlet {
             // Create and initialize the application config service
             configService = createConfigService(getServletContext());
             initConfigService(getServletContext());
-
             logger = configService.getLogService();
 
             if (logger.isInfoEnabled()) {
@@ -1380,14 +1385,30 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Return the request parameters OGNL <tt>TypeConverter</tt>. By default
-     * this method returns a {@link RequestTypeConverter} instance.
+     * Return the request parameters OGNL <tt>TypeConverter</tt>. This method
+     * performs a lazy load of the TypeConverter object, using the classname
+     * defined in the Servlet init parameter <tt>type-converter-class</tt>,
+     * if this parameter is not defined this method will return a
+     * {@link RequestTypeConverter} instance.
      *
      * @return the request parameters OGNL <tt>TypeConverter</tt>
+     * @throws RuntimeException if the TypeConverter instance could not be created
      */
-    protected TypeConverter getTypeConverter() {
+    protected TypeConverter getTypeConverter() throws RuntimeException {
         if (typeConverter == null) {
-            typeConverter = new RequestTypeConverter();
+            Class converter = RequestTypeConverter.class;
+
+            try {
+                String classname = getInitParameter(TYPE_CONVERTER_CLASS);
+                if (StringUtils.isNotBlank(classname)) {
+                    converter = ClickUtils.classForName(classname);
+                }
+
+                typeConverter = (TypeConverter) converter.newInstance();
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return typeConverter;
