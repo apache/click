@@ -275,11 +275,18 @@ public abstract class AutoCompleteTextField extends TextField {
 
         if (headElements == null) {
             headElements = super.getHeadElements();
-            headElements.add(new CssImport("/click/extras-control.css"));
-            headElements.add(new JsImport("/click/control.js"));
-            headElements.add(new JsImport("/click/prototype/prototype.js"));
-            headElements.add(new JsImport("/click/prototype/effects.js"));
-            headElements.add(new JsImport("/click/prototype/controls.js"));
+
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+            headElements.add(new CssImport("/click/extras-control.css",
+                versionIndicator));
+            headElements.add(new JsImport("/click/control.js", versionIndicator));
+            headElements.add(new JsImport("/click/prototype/prototype.js",
+                versionIndicator));
+            headElements.add(new JsImport("/click/prototype/effects.js",
+                versionIndicator));
+            headElements.add(new JsImport("/click/prototype/controls.js",
+                versionIndicator));
         }
 
         // Note the addLoadEvent script is recreated and checked if it

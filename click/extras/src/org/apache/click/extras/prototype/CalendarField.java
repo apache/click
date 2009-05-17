@@ -269,14 +269,21 @@ public class CalendarField extends DateField {
 
         if (headElements == null) {
             headElements = super.getHeadElements();
-            headElements.add(new CssImport("/click/prototype/calendar/" + getStyle() + ".css"));
-            headElements.add(new JsImport("/click/prototype/prototype.js"));
-            headElements.add(new JsImport("/click/prototype/calendar/calendar_date_select.js"));
+
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(getContext());
+
+            headElements.add(new CssImport("/click/prototype/calendar/" + getStyle()
+                + ".css", versionIndicator));
+            headElements.add(new JsImport("/click/prototype/prototype.js",
+                versionIndicator));
+            headElements.add(new JsImport("/click/prototype/calendar/calendar_date_select.js",
+                versionIndicator));
 
             // English is default language, only include language pack if other
             // than English
             if (!"en".equals(language)) {
-                JsImport jsImport = new JsImport("/click/prototype/calendar/" + getLocale().getLanguage() + ".js");
+                JsImport jsImport = new JsImport("/click/prototype/calendar/"
+                    + getLocale().getLanguage() + ".js", versionIndicator);
                 jsImport.setAttribute("charset", "UTF-8");
                 headElements.add(jsImport);
             }

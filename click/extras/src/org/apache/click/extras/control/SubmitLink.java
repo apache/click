@@ -514,7 +514,11 @@ public class SubmitLink extends ActionLink {
 
         if (headElements == null) {
             headElements = super.getHeadElements();
-            JsImport jsImport = new JsImport("/click/extras-control.js");
+
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(getContext());
+
+            JsImport jsImport = new JsImport("/click/extras-control.js",
+                versionIndicator);
             headElements.add(jsImport);
         }
         return headElements;
