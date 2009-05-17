@@ -352,7 +352,7 @@ public class CalendarField extends DateField {
         }
 
         super.render(buffer);
-        renderCalendar(buffer);
+        renderCalendarButton(buffer);
 
         if (help != null) {
             buffer.append(help);
@@ -362,11 +362,12 @@ public class CalendarField extends DateField {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Render the calendar HTML representation to the buffer.
+     * Render the calendar button HTML representation to the buffer.
      *
-     * @param buffer the buffer to render the calendar HTML representation to
+     * @param buffer the buffer to render the calendar button HTML
+     * representation to
      */
-    protected void renderCalendar(HtmlStringBuffer buffer) {
+    protected void renderCalendarButton(HtmlStringBuffer buffer) {
 
         if (!isReadonly() && !isDisabled()) {
             Context context = getContext();
