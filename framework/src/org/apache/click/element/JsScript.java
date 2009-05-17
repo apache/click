@@ -156,6 +156,12 @@ public class JsScript extends ResourceElement {
      */
     private boolean characterData = false;
 
+    /**
+     * Indicates the JsScript content must be executed as soon as the browser
+     * DOM is available, default value is false
+     */
+    private boolean executeOnDomReady = false;
+
     /** The path of the template to render. */
     private String template;
 
@@ -269,6 +275,38 @@ public class JsScript extends ResourceElement {
     }
 
     /**
+     * Return true if the JsScript content must be executed as soon as the
+     * browser DOM is ready, false otherwise. Default value is false.
+     *
+     * @see #setExecuteOnDomReady(boolean)
+     *
+     * @return true if the JsScript content must be executed as soon as the
+     * browser DOM is ready.
+     */
+    public boolean isExecuteOnDomReady() {
+        return executeOnDomReady;
+    }
+
+    /**
+     * Sets whether the JsScript content must be executed as soon as the browser
+     * DOM is ready.
+     * <p/>
+     * If this flag is true, the JsScript content will be registered with
+     * the "<tt>addLoadEvent</tt>" function from the JavaScript file
+     * "<tt>control.js</tt>".
+     * <p/>
+     * <b>Please note:</b> when setting this flag to true, the file JavaScript
+     * file "<tt>control.js</tt>" must already be included in the Page or
+     * Control, it won't be included automatically.
+     *
+     * @param executeOnDomReady indicates whether the JsScript content must be
+     * executed as soon as the browser DOM is ready.
+     */
+    public void setExecuteOnDomReady(boolean executeOnDomReady) {
+        this.executeOnDomReady = executeOnDomReady;
+    }
+
+    /**
      * Return the path of the template to render.
      *
      * @see #setTemplate(java.lang.String)
@@ -353,7 +391,12 @@ public class JsScript extends ResourceElement {
         // Render CDATA tag if necessary
         renderCharacterDataPrefix(buffer);
 
+        // Render the DOM ready function prefix
+        renderDomReadyPrefix(buffer);
+
         renderContent(buffer);
+
+        renderDomReadySuffix(buffer);
 
         renderCharacterDataSuffix(buffer);
 
@@ -434,12 +477,45 @@ public class JsScript extends ResourceElement {
         buffer.append(getContent());
     }
 
+    /**
+     * Render the "<tt>addLoadEvent</tt>" function prefix to ensure the script
+     * is executed as soon as the browser DOM is available. The prefix is
+     * "<tt>addLoadEvent(function(){</tt>".
+     *
+     * @see #renderDomReadySuffix(org.apache.click.util.HtmlStringBuffer)
+     *
+     * @param buffer buffer to append the addLoadEvent function to
+     */
+    protected void renderDomReadyPrefix(HtmlStringBuffer buffer) {
+        // Wrap content in addLoadEvent function
+        if (isExecuteOnDomReady()) {
+            buffer.append("addLoadEvent(function(){\n");
+        }
+    }
+
+    /**
+     * Render the "<tt>addLoadEvent</tt>" function suffix. The suffix is
+     * "<tt>});</tt>".
+     *
+     * @see #renderDomReadyPrefix(org.apache.click.util.HtmlStringBuffer)
+     *
+     * @param buffer buffer to append the conditional comment prefix
+     */
+    protected void renderDomReadySuffix(HtmlStringBuffer buffer) {
+        // Close addLoadEvent function
+        if (isExecuteOnDomReady()) {
+            buffer.append("});");
+        }
+    }
+
     // ------------------------------------------------ Package Private Methods
 
     /**
      * Render the CDATA tag prefix to the specified buffer if
-     * {@link #isCharacterData()} returns true. The default value is
+     * {@link #isCharacterData()} returns true. The prefix is
      * <tt>/&lowast;&lt;![CDATA[&lowast;/</tt>.
+     *
+     * @see #renderCharacterDataSuffix(org.apache.click.util.HtmlStringBuffer)
      *
      * @param buffer buffer to append the conditional comment prefix
      */
@@ -452,8 +528,10 @@ public class JsScript extends ResourceElement {
 
     /**
      * Render the CDATA tag suffix to the specified buffer if
-     * {@link #isCharacterData()} returns true. The default value is
+     * {@link #isCharacterData()} returns true. The prefix is
      * <tt>/&lowast;]]&gt;&lowast;/</tt>.
+     *
+     * @see #renderCharacterDataPrefix(org.apache.click.util.HtmlStringBuffer)
      *
      * @param buffer buffer to append the conditional comment prefix
      */
