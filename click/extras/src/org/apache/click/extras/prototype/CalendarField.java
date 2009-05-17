@@ -352,6 +352,21 @@ public class CalendarField extends DateField {
         }
 
         super.render(buffer);
+        renderCalendar(buffer);
+
+        if (help != null) {
+            buffer.append(help);
+        }
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Render the calendar HTML representation to the buffer.
+     *
+     * @param buffer the buffer to render the calendar HTML representation to
+     */
+    protected void renderCalendar(HtmlStringBuffer buffer) {
 
         if (!isReadonly() && !isDisabled()) {
             Context context = getContext();
@@ -373,13 +388,7 @@ public class CalendarField extends DateField {
             buffer.appendAttribute("title", calendarTitle);
             buffer.elementEnd();
         }
-
-        if (help != null) {
-            buffer.append(help);
-        }
     }
-
-    // ------------------------------------------------------ Protected Methods
 
     /**
      * Add the calendar options as a script to the list of head elements.
