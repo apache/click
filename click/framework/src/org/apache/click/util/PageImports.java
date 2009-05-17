@@ -697,7 +697,13 @@ public class PageImports {
     private JsScript asJsScript(String line) {
         JsScript jsScript = new JsScript();
         copyAttributes(jsScript, line);
-        jsScript.append(extractJsContent(line));
+        jsScript.append(extractJsContent(line, jsScript));
+
+        // If the script must be executed on dom ready, set the domready
+        // attribute to true.
+        if (jsScript.getContent().toString().indexOf("addLoadEvent") >= 0) {
+            jsScript.setExecuteOnDomReady(true);
+        }
         return jsScript;
     }
 
@@ -729,9 +735,9 @@ public class PageImports {
      * Extract the JavaScript content from the given HTML import line.
      *
      * @param line the HTML import line
-     * @return the Javacript content contained in the HTML import line
+     * @param jsScript the JsScript to replace the line with
      */
-    private String extractJsContent(String line) {
+    private String extractJsContent(String line, JsScript jsScript) {
         if (line.endsWith("/>")) {
             // If tag has no content, exit early
             return "";
@@ -746,7 +752,19 @@ public class PageImports {
         if (end == -1) {
             return "";
         }
-        return line.substring(start + 1, end);
+        line = line.substring(start + 1, end).trim();
+
+        // Strip addLoadEvent function
+        int addLoadEventStart = line.indexOf("addLoadEvent");
+        if (addLoadEventStart == 0) {
+            start = line.indexOf("{", addLoadEventStart);
+            line = line.substring(start + 1);
+            end = line.lastIndexOf("});");
+            line = line.substring(0, end);
+            jsScript.setExecuteOnDomReady(true);
+        }
+
+        return line;
     }
 
     /**

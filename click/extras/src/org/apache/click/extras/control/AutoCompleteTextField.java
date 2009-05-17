@@ -288,14 +288,17 @@ public abstract class AutoCompleteTextField extends TextField {
         JsScript script = new JsScript();
         script.setId(fieldId + "_autocomplete");
         if (!headElements.contains(script)) {
+            // Script must be executed as soon as browser dom is ready
+            script.setExecuteOnDomReady(true);
+
             String contextPath = context.getRequest().getContextPath();
             HtmlStringBuffer buffer = new HtmlStringBuffer(150);
-            buffer.append("addLoadEvent(function() { new Ajax.Autocompleter(");
+            buffer.append("new Ajax.Autocompleter(");
             buffer.append("'").append(fieldId).append("'");
             buffer.append(",'").append(fieldId).append("_auto_complete_div'");
             buffer.append(",'").append(contextPath).append(page.getPath()).append(
                 "'");
-            buffer.append(",").append(getAutoCompleteOptions()).append(");})");
+            buffer.append(",").append(getAutoCompleteOptions()).append(");");
             script.setContent(buffer);
             headElements.add(script);
         }
