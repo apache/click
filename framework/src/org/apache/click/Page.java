@@ -21,10 +21,12 @@ package org.apache.click;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.click.util.Format;
+import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.MessagesMap;
 import org.apache.click.util.PageImports;
 import org.apache.commons.lang.StringUtils;
@@ -1095,18 +1097,7 @@ public class Page {
      * @param location the path to redirect the request to
      */
     public void setRedirect(String location) {
-        if (StringUtils.isNotBlank(location)) {
-            if (location.charAt(0) == '/') {
-                Context context = getContext();
-                String contextPath = context.getRequest().getContextPath();
-
-                // Guard against adding duplicate context path
-                if (!location.startsWith(contextPath + '/')) {
-                    location = contextPath + location;
-                }
-            }
-        }
-        redirect = location;
+        setRedirect(location, null);
     }
 
     /**
@@ -1119,6 +1110,45 @@ public class Page {
      * with a unique path
      */
     public void setRedirect(Class pageClass) {
+        setRedirect(pageClass, null);
+    }
+
+    public void setRedirect(String location, Map params){
+        if (StringUtils.isNotBlank(location)) {
+            if (location.charAt(0) == '/') {
+                Context context = getContext();
+                String contextPath = context.getRequest().getContextPath();
+
+                // Guard against adding duplicate context path
+                if (!location.startsWith(contextPath + '/')) {
+                    location = contextPath + location;
+                }
+            }
+        }
+
+        if (params != null && !params.isEmpty()) {
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+
+            for (Iterator i = params.keySet().iterator(); i.hasNext();) {
+                String paramName = i.next().toString();
+                Object paramValue = params.get(paramName);
+                if (paramValue != null) {
+                    buffer.append("&");
+                    buffer.append(paramName);
+                    buffer.append("=");
+                    buffer.append(paramValue);
+                }
+            }
+
+            if (buffer.length() > 0) {
+                location += "?" + buffer.toString();
+            }
+        }
+
+        redirect = location;
+    }
+
+    public void setRedirect(Class pageClass, Map params) {
         String target = getContext().getPagePath(pageClass);
 
         // If page class maps to a jsp, convert to htm which allows ClickServlet
@@ -1126,7 +1156,8 @@ public class Page {
         if (target != null && target.endsWith(".jsp")) {
             target = StringUtils.replaceOnce(target, ".jsp", ".htm");
         }
-        setRedirect(target);
+
+        setRedirect(target, params);
     }
 
     /**
