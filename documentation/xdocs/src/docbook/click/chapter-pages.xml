@@ -356,8 +356,7 @@ public class CustomerDetails extends Page {
       </para>
 
       <para>If you need to add support for additional types, you would write your
-      own type converter class and subclass the ClickSerlvet to use your custom
-      converter.
+      own type converter class and specify it as a ClickSerlvet init parameter.
       </para>
 
       <para>For example if we wanted to automatically load a
@@ -402,22 +401,27 @@ public class CustomerDetails extends Page {
 }</programlisting>
 
       <para>To make your custom type converter available you will need to
-      subclass ClickServlet and override the
-      <methodname>getTypeConverter()</methodname> method. For example:
+      add an init parameter to ClickServlet in <methodname>web.xml</methodname>. For example:
       </para>
 
-      <programlisting language="java">public class CustomClickServlet extends ClickServlet {
+    <programlisting language="xml">&lt;web-app&gt;
+  ...
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.apache.click.ClickServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+       &lt;param-name&gt;type-converter-class&lt;/param-name&gt;
+       &lt;param-value&gt;com.mycorp.util.CustomTypeConverter&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
+  &lt;/servlet&gt;
 
-    /**
-     * @see ClickServlet#getTypeConverter()
-     */
-    protected TypeConverter getTypeConverter() {
-        if (typeConverter == null) {
-            typeConverter = new CustomTypeConverter();
-        }
-        return typeConverter;
-    }
-}</programlisting>
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+  ...
+&lt;/web-app&gt;</programlisting>
 
     </sect2>
   </sect1>

@@ -619,14 +619,14 @@ Main targets:
 	build-framework       build click framework JAR file
 	build-maven-bundles   build Maven repository upload bundles
 	build-sources         build source ZIP files for use with IDEs
-  test-all              run all unit tests
+	test-all              run all unit tests
 	checkstyle            run checkstyle report on Java source
 	deploy-examples       copy click-examples WAR file to app server
 	get-deps              download JAR dependencies
 	get-deps-proxy        download JAR dependencies via proxy
 	help                  display the Help message
 	javadoc               create Javadoc HTML files
-  project-quick-start   build application template
+	project-quick-start   build application template
 
 Environment:
 
