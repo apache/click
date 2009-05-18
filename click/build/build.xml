@@ -30,7 +30,7 @@
    <property name="click-nodeps" value="click-nodeps-${version}-incubating"/>
    <property name="click-mock" value="click-mock-${version}-incubating"/>
 
-   <property name="jar.cayenne" value="cayenne-nodeps-${cayenne.version}.jar"/>
+   <property name="jar.cayenne" value="cayenne-server-${cayenne.version}.jar"/>
    <property name="jar.checkstyle" value="checkstyle-all-${checkstyle.version}.jar"/>
    <property name="jar.codec" value="commons-codec-${commons-codec.version}.jar"/>
    <property name="jar.collections" value="commons-collections-${commons-collections.version}.jar"/>
@@ -562,7 +562,7 @@
       <downloadMacro name="${jar.servlet}" path="javax/servlet/servlet-api/${servlet-api.version}"/>
       <downloadMacro name="${jar.spring}" path="org/springframework/spring/${spring.version}"/>
       <downloadMacro name="${jar.velocity}" path="org/apache/velocity/velocity/${velocity.version}"/>
-      <downloadMacro name="${jar.cayenne}" path="org/apache/cayenne/cayenne-nodeps/${cayenne.version}"/>
+      <downloadMacro name="${jar.cayenne}" path="org/apache/cayenne/cayenne-server/${cayenne.version}"/>
       <downloadMacro name="${jar.freemarker}" path="org/freemarker/freemarker/${freemarker.version}"/>
       <ant antfile="build.xml" 
            dir="examples"

@@ -29,7 +29,7 @@
    <property name="jar.acegi" value="acegi-security-${spring-security.version}.jar"/>
    <property name="jar.annotation" value="geronimo-annotation_1.0_spec-${geronimo-common-annotations.version}.jar"/>
    <property name="jar.ashwood" value="ashwood-${ashwood.version}.jar"/>
-   <property name="jar.cayenne" value="cayenne-nodeps-${cayenne.version}.jar"/>
+   <property name="jar.cayenne" value="cayenne-server-${cayenne.version}.jar"/>
    <property name="jar.click" value="click-${version}-incubating.jar"/>
    <property name="jar.click-extras" value="click-extras-${version}-incubating.jar"/>
    <property name="jar.hsqldb" value="hsqldb-${hsqldb.version}.jar"/>
@@ -154,7 +154,7 @@
       <webDownloadMacro name="${jar.acegi}" path="org/acegisecurity/acegi-security/${spring-security.version}"/>
       <webDownloadMacro name="${jar.annotation}" path="org/apache/geronimo/specs/geronimo-annotation_1.0_spec/${geronimo-common-annotations.version}"/>
       <webDownloadMacro name="${jar.ashwood}" path="org/objectstyle/ashwood/ashwood/${ashwood.version}"/>
-      <webDownloadMacro name="${jar.cayenne}" path="org/apache/cayenne/cayenne-nodeps/${cayenne.version}"/>
+      <webDownloadMacro name="${jar.cayenne}" path="org/apache/cayenne/cayenne-server/${cayenne.version}"/>
       <webDownloadMacro name="${jar.hsqldb}" path="hsqldb/hsqldb/${hsqldb.version}"/>
       <webDownloadMacro name="${jar.jstl}" path="jstl/jstl/${jstl.version}"/>
       <webDownloadMacro name="${jar.logging}" path="commons-logging/commons-logging/${commons-logging.version}"/>
