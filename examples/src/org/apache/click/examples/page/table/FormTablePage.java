@@ -36,7 +36,7 @@ import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.FieldColumn;
 import org.apache.click.extras.control.FormTable;
 import org.apache.click.extras.control.NumberField;
-import org.apache.click.extras.prototype.CalendarField;
+import org.apache.click.extras.control.DateField;
 import org.springframework.stereotype.Component;
 
 /**
@@ -85,7 +85,7 @@ public class FormTablePage extends BorderPage {
         column.setTextAlign("right");
         table.addColumn(column);
 
-        CalendarField field = new CalendarField();
+        DateField field = new DateField();
         column = new FieldColumn("dateJoined", field);
         column.setDataStyle("white-space", "nowrap");
         table.addColumn(column);

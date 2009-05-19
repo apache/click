@@ -46,7 +46,6 @@ import org.apache.click.extras.control.PageSubmit;
 import org.apache.click.extras.control.RegexField;
 import org.apache.click.extras.control.TelephoneField;
 import org.apache.click.extras.control.VirtualKeyboard;
-import org.apache.click.extras.prototype.CalendarField;
 import org.apache.click.util.ClickUtils;
 import org.springframework.stereotype.Component;
 
@@ -86,7 +85,6 @@ public class ExtraControlsForm extends BorderPage {
         form.add(new CreditCardField("creditCardField"));
         form.add(new ColorPicker("colorPicker"));
         form.add(new DateField("dateField"));
-        form.add(new CalendarField("calendarField"));
         form.add(new DoubleField("doubleField"));
         form.add(new EmailField("emailField"));
         form.add(new IntegerField("integerField"));
