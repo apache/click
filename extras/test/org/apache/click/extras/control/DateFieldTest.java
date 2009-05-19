@@ -91,4 +91,40 @@ public class DateFieldTest extends TestCase {
         
         assertEquals(requestParam, dateField.getValue());
     }
+
+    /**
+     * Test Calendar format pattern.
+     *
+     * @throws java.lang.Exception
+     */
+    public void testFormatPattern() {
+        DateField calendarField = new DateField("Delivery date");
+        assertEquals("dd MMM yyyy", calendarField.getFormatPattern());
+        assertEquals("dd NNN yyyy", calendarField.getCalendarPattern());
+
+        calendarField = new DateField("Delivery date");
+        calendarField.setFormatPattern(" dd MMM yyyy ");
+        assertEquals(" dd MMM yyyy ", calendarField.getFormatPattern());
+        assertEquals(" dd NNN yyyy ", calendarField.getCalendarPattern());
+
+        calendarField = new DateField("Delivery date");
+        calendarField.setFormatPattern("dd/MMM/yyyy");
+        assertEquals("dd/MMM/yyyy", calendarField.getFormatPattern());
+        assertEquals("dd/NNN/yyyy", calendarField.getCalendarPattern());
+
+        calendarField = new DateField("Delivery date");
+        calendarField.setFormatPattern("dd.MMM.yyyy");
+        assertEquals("dd.MMM.yyyy", calendarField.getFormatPattern());
+        assertEquals("dd.NNN.yyyy", calendarField.getCalendarPattern());
+
+        calendarField = new DateField("Delivery date");
+        calendarField.setFormatPattern("dd.MM.yy");
+        assertEquals("dd.MM.yy", calendarField.getFormatPattern());
+        assertEquals("dd.MM.yy", calendarField.getCalendarPattern());
+
+        calendarField = new DateField("Delivery date");
+        calendarField.setFormatPattern("d/M/yy");
+        assertEquals("d/M/yy", calendarField.getFormatPattern());
+        assertEquals("d/M/yy", calendarField.getCalendarPattern());
+    }
 }
