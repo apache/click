@@ -1115,10 +1115,10 @@ public class Page {
 
     /**
      * Set the request to redirect to the given <code>location</code> and append
-     * the map of request parameter to the location URL.
+     * the map of request parameters to the location URL.
      * <p/>
      * The map keys will be used as the request parameter names and the map
-     * values will be used as the request parameter names.
+     * values will be used as the request parameter values.
      *
      * @see #setRedirect(java.lang.String)
      *
@@ -1145,10 +1145,12 @@ public class Page {
                 String paramName = i.next().toString();
                 Object paramValue = params.get(paramName);
                 if (paramValue != null) {
-                    buffer.append("&");
                     buffer.append(paramName);
                     buffer.append("=");
                     buffer.append(paramValue);
+                    if (i.hasNext()) {
+                        buffer.append("&");
+                    }
                 }
             }
 
@@ -1165,11 +1167,11 @@ public class Page {
     }
 
     /**
-     * Set the request to redirect to the give page class and and append
-     * the map of request parameter to the location URL.
+     * Set the request to redirect to the given page class and and append
+     * the map of request parameters to the page URL.
      * <p/>
      * The map keys will be used as the request parameter names and the map
-     * values will be used as the request parameter names.
+     * values will be used as the request parameter values.
      *
      * @see #setRedirect(java.lang.String)
      * @param pageClass the class of the Page to redirect the request to
