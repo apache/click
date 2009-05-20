@@ -1113,7 +1113,19 @@ public class Page {
         setRedirect(pageClass, null);
     }
 
-    public void setRedirect(String location, Map params){
+    /**
+     * Set the request to redirect to the given <code>location</code> and append
+     * the map of request parameter to the location URL.
+     * <p/>
+     * The map keys will be used as the request parameter names and the map
+     * values will be used as the request parameter names.
+     *
+     * @see #setRedirect(java.lang.String)
+     *
+     * @param location the path to redirect the request to
+     * @param params the map of request parameter name and value pairs
+     */
+    public void setRedirect(String location, Map params) {
         if (StringUtils.isNotBlank(location)) {
             if (location.charAt(0) == '/') {
                 Context context = getContext();
@@ -1141,13 +1153,30 @@ public class Page {
             }
 
             if (buffer.length() > 0) {
-                location += "?" + buffer.toString();
+                if (location.contains("?")) {
+                    location += "&" + buffer.toString();
+                } else {
+                    location += "?" + buffer.toString();
+                }
             }
         }
 
         redirect = location;
     }
 
+    /**
+     * Set the request to redirect to the give page class and and append
+     * the map of request parameter to the location URL.
+     * <p/>
+     * The map keys will be used as the request parameter names and the map
+     * values will be used as the request parameter names.
+     *
+     * @see #setRedirect(java.lang.String)
+     * @param pageClass the class of the Page to redirect the request to
+     * @param params the map of request parameter name and value pairs
+     * @throws IllegalArgumentException if the Page Class is not configured
+     * with a unique path
+     */
     public void setRedirect(Class pageClass, Map params) {
         String target = getContext().getPagePath(pageClass);
 
