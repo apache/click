@@ -687,6 +687,8 @@ Please ensure you have configured build.properties</echo>
             todir="documentation/docs/click-api/org/apache/click/service/"/>
       <copy file="documentation/images/service-package.png"
             todir="documentation/docs/extras-api/org/apache/click/extras/service/"/>
+      <copy file="documentation/images/calendar.gif"
+            todir="documentation/docs/extras-api/org/apache/click/extras/control"/>
       <copy file="documentation/images/form-table.png"
             todir="documentation/docs/extras-api/org/apache/click/extras/control"/>
       <copy file="documentation/images/menu.png"
