@@ -66,12 +66,11 @@
     </para>
 
     <figure id="page-class-diagram">
-      <title>Page Class Diagram &nbsp;-&nbsp; created with Enterprise Architect
-      courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink>
+      <title>Page Class Diagram
       </title>
       <inlinemediaobject>
         <imageobject>
-          <imagedata fileref="images/pages/click-class-diagram.png" format="PNG" scale="85"/>
+          <imagedata fileref="images/pages/click-class-diagram.png" format="PNG" scale="65"/>
         </imageobject>
       </inlinemediaobject>
     </figure>
@@ -140,12 +139,11 @@
     </para>
 
     <figure id="get-sequence-diagram">
-      <title>GET Request Sequence Diagram &nbsp;-&nbsp; created with Enterprise
-      Architect courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink>
+      <title>GET Request Sequence Diagram
       </title>
       <inlinemediaobject>
         <imageobject>
-          <imagedata fileref="images/pages/get-sequence-diagram.png" format="PNG" scale="85"/>
+          <imagedata fileref="images/pages/get-sequence-diagram.png" format="PNG" scale="65"/>
         </imageobject>
       </inlinemediaobject>
     </figure>
@@ -275,12 +273,11 @@
     </para>
 
     <figure id="activity-diagram">
-      <title>Page Execution Activity Diagram &nbsp;-&nbsp; created with Enterprise
-      Architect courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink>
+      <title>Page Execution Activity Diagram
       </title>
       <inlinemediaobject>
         <imageobject>
-          <imagedata fileref="images/pages/activity-diagram-small.png" format="PNG" scale="85"/>
+          <imagedata fileref="images/pages/activity-diagram-small.png" format="PNG" scale="65"/>
         </imageobject>
       </inlinemediaobject>
     </figure>
@@ -401,7 +398,7 @@ public class CustomerDetails extends Page {
 }</programlisting>
 
       <para>To make your custom type converter available you will need to
-      add an init parameter to ClickServlet in <methodname>web.xml</methodname>. For example:
+      add an init parameter to ClickServlet in <filename>web.xml</filename>. For example:
       </para>
 
     <programlisting language="xml">&lt;web-app&gt;
@@ -938,7 +935,7 @@ public void onPost() {
       <title>Home Page</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/pages/home-page-screenshot.png" format="PNG" scale="85"/>
+          <imagedata fileref="images/pages/home-page-screenshot.png" format="PNG" scale="65"/>
         </imageobject>
       </mediaobject>
     </figure>
