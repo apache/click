@@ -25,6 +25,9 @@
                 exclude-result-prefixes="xslthl"
                 version='1.0'>
 
+  <xsl:import href="file:///@dbf.xsl@/highlighting/common.xsl"/>
+  <xsl:import href="file:///@dbf.xsl@/html/highlight.xsl"/>
+
   <xsl:param name="ulink.target">_blank</xsl:param>
 
   <!-- Activate Graphics -->

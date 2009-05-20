@@ -47,12 +47,11 @@
     </para>
 
     <figure id="control-post-sequence-diagram">
-      <title>Post Sequence Diagram &nbsp;-&nbsp; created with Enterprise Architect
-      courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink>
+      <title>Post Sequence Diagram
       </title>
       <inlinemediaobject>
         <imageobject>
-          <imagedata fileref="images/controls/control-post-sequence-diagram.png" format="PNG" scale="85"/>
+          <imagedata fileref="images/controls/control-post-sequence-diagram.png" format="PNG" scale="65"/>
         </imageobject>
       </inlinemediaobject>
     </figure>
@@ -63,12 +62,11 @@
     </para>
 
     <figure id="control-class-diagram">
-      <title>Control Interface Diagram &nbsp;-&nbsp; created with Enterprise Architect
-      courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink>
+      <title>Control Interface Diagram
       </title>
       <inlinemediaobject>
         <imageobject>
-          <imagedata fileref="images/controls/control-class-diagram.png" format="PNG" scale="85"/>
+          <imagedata fileref="images/controls/control-class-diagram.png" format="PNG" scale="65"/>
         </imageobject>
       </inlinemediaobject>
     </figure>
@@ -227,12 +225,11 @@
     </para>
 
     <figure id="control-package-class-diagram">
-      <title>Package Class Diagram &nbsp;-&nbsp; created with Enterprise Architect
-      courtesy <ulink url="http://www.sparxsystems.com.au">Sparx Systems</ulink>
+      <title>Package Class Diagram
       </title>
       <inlinemediaobject>
         <imageobject>
-          <imagedata fileref="images/controls/control-package-class-diagram.png" format="PNG" scale="75"/>
+          <imagedata fileref="images/controls/control-package-class-diagram.png" format="PNG" scale="65"/>
         </imageobject>
       </inlinemediaobject>
     </figure>
@@ -612,7 +609,7 @@ production-error-message=
       <title>Container Class Diagram</title>
       <inlinemediaobject>
         <imageobject>
-          <imagedata fileref="images/controls/container-package-class-diagram.png" format="PNG" scale="70"/>
+          <imagedata fileref="images/controls/container-package-class-diagram.png" format="PNG" scale="65"/>
         </imageobject>
       </inlinemediaobject>
     </figure>

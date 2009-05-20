@@ -361,7 +361,7 @@
       <title>Example project structure</title>
       <inlinemediaobject>
         <imageobject>
-          <imagedata fileref="images/best-practices/packages-classes.png" format="PNG" scale="85"/>
+          <imagedata fileref="images/best-practices/packages-classes.png" format="PNG" scale="65"/>
         </imageobject>
       </inlinemediaobject>
     </figure>

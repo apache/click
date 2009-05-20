@@ -137,7 +137,7 @@ public HelloWorld extends Page {
       <title>Hello World Screenshot</title>
       <inlinemediaobject>
         <imageobject>
-          <imagedata fileref="images/introduction/hello-world-screenshot.png" format="PNG" scale="85"/>
+          <imagedata fileref="images/introduction/hello-world-screenshot.png" format="PNG" scale="65"/>
         </imageobject>
       </inlinemediaobject>
     </figure>
@@ -317,7 +317,7 @@ public HelloWorld extends Page {
       <title>Simple Table</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/introduction/simple-table.png" scale="85"/>
+          <imagedata fileref="images/introduction/simple-table.png" scale="65"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -445,7 +445,7 @@ public HelloWorld extends Page {
       <title>Advanced Table</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/introduction/advanced-table.png" scale="85"/>
+          <imagedata fileref="images/introduction/advanced-table.png" scale="65"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -535,7 +535,7 @@ public HelloWorld extends Page {
       <title>Simple Form</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/introduction/simple-form.png" scale="85"/>
+          <imagedata fileref="images/introduction/simple-form.png" scale="65"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -555,7 +555,7 @@ public HelloWorld extends Page {
       <title>Form after an invalid request</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/introduction/simple-form-error.png" scale="85"/>
+          <imagedata fileref="images/introduction/simple-form-error.png" scale="65"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -573,7 +573,7 @@ public HelloWorld extends Page {
       <title>Form after a valid request</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/introduction/simple-form-success.png" scale="85"/>
+          <imagedata fileref="images/introduction/simple-form-success.png" scale="65"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -702,7 +702,7 @@ public HelloWorld extends Page {
       <title>Advanced Form</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/introduction/advanced-form.png" scale="85"/>
+          <imagedata fileref="images/introduction/advanced-form.png" scale="65"/>
         </imageobject>
       </mediaobject>
     </figure>

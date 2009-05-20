@@ -25,6 +25,9 @@
                 exclude-result-prefixes="xslthl"
                 version='1.0'>
 
+  <xsl:import href="file:///@dbf.xsl@/highlighting/common.xsl"/>
+  <xsl:import href="file:///@dbf.xsl@/fo/highlight.xsl"/>
+
   <!-- Use nice graphics for admonitions -->
   <xsl:param name="admon.graphics">'1'</xsl:param>
   <xsl:param name="admon.graphics.path">@file.prefix@@dbf.xsl@/images/</xsl:param>
