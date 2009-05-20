@@ -158,7 +158,7 @@ public class JsScript extends ResourceElement {
 
     /**
      * Indicates the JsScript content must be executed as soon as the browser
-     * DOM is available, default value is false
+     * DOM is available, default value is false.
      */
     private boolean executeOnDomReady = false;
 
