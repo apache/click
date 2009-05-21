@@ -54,6 +54,8 @@ iframe.ie6_blocker {
 
 .calendar_date_select .cds_header {
   text-align:center;
+  padding-top: 1px;
+  height:19px;
 }
 
 .calendar_date_select .cds_header * {
