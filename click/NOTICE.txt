@@ -12,6 +12,26 @@ http://www.ognl.org/
 
 ======================================================================
 
+This product includes the compiled classes
+framework/src/EDU/oswego/cs/dl/util/concurrent/ConcurrentReaderHashMap*.class,
+from the Concurrent utilities library, developed by Doug Lea.
+
+EDU.oswego.cs.dl.util.concurrent.ConcurrentReaderHashMap[1] is taken
+from [2], which states the following:
+
+      "All classes are released to the public domain and may be used for
+      any purpose whatsoever without permission or acknowledgment.
+      Portions of the CopyOnWriteArrayList and ConcurrentReaderHashMap
+      classes are adapted from Sun JDK source code. These are copyright
+      of Sun Microsystems, Inc, and are used with their kind permission,
+      as described in this license[3]."
+
+[1]: http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/ConcurrentReaderHashMap.java
+[2]: http://g.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html
+[3]: http://g.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/sun-u.c.license.pdf
+
+======================================================================
+
 This product includes contributions by Ahmed Mohombe and Christian Essl,
 released under the Apache 2.0 license.
 
