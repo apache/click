@@ -20,7 +20,8 @@ package org.apache.click.util;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
+import EDU.oswego.cs.dl.util.concurrent.ConcurrentReaderHashMap;
 
 import ognl.Ognl;
 import ognl.OgnlException;
@@ -33,10 +34,10 @@ import ognl.OgnlException;
 public class PropertyUtils {
 
     /** Provides a synchronized cache of OGNL expressions. */
-    private static final Map OGNL_EXPRESSION_CACHE = new ConcurrentHashMap();
+    private static final Map OGNL_EXPRESSION_CACHE = new ConcurrentReaderHashMap();
 
     /** Provides a synchronized cache of get value reflection methods. */
-    private static final Map GET_METHOD_CACHE = new ConcurrentHashMap();
+    private static final Map GET_METHOD_CACHE = new ConcurrentReaderHashMap();
 
     // -------------------------------------------------------- Public Methods
 
