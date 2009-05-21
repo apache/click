@@ -20,7 +20,6 @@ package org.apache.click.extras.control;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -34,7 +33,6 @@ import org.apache.click.extras.security.RoleAccessController;
 import org.apache.click.service.ConfigService;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
-
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -155,7 +153,14 @@ import org.w3c.dom.NodeList;
  *       &lt;menu label="Home" path="admin/admin.htm" roles="admin"/&gt;
  *    &lt;/menu&gt;
  * &lt;/menu&gt; </pre>
- * 
+ *
+ * The underlying implementation of isUserInRoles() method is provided by an
+ * {@link AccessController} interface. The default AccessController is provided
+ * by the {@link RoleAccessController} which uses the JEE container is user in
+ * role facility. By providing your own AccessController you can have menu
+ * access control using other security frameworks such as JSecurity or Spring
+ * ACEGI.
+ *
  * <h3>Menu Configuration DTD</h3>
  *
  * The Menu config file DTD is provided below:
@@ -172,6 +177,8 @@ import org.w3c.dom.NodeList;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">separator</span> (true|false) "false"&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">roles</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">pages</span> CDATA #IMPLIED&gt; </pre>
+ *
+ * @see org.apache.click.extras.security.AccessController
  *
  * @author Malcolm Edgar
  */
@@ -551,7 +558,7 @@ public class Menu extends AbstractControl {
             }
         }
 
-        for (int i = 0; i < getChildren().size(); i++) {
+        for (int i = 0, size = getChildren().size(); i < size; i++) {
             Menu menu = (Menu) getChildren().get(i);
             if (menu.isSelected()) {
                 selected = true;
@@ -592,8 +599,8 @@ public class Menu extends AbstractControl {
     public boolean isUserInRoles() {
         HttpServletRequest request = getContext().getRequest();
 
-        for (Iterator i = getRoles().iterator(); i.hasNext();) {
-            String rolename = (String) i.next();
+        for (int i = 0, size = getRoles().size(); i < size; i++) {
+            String rolename = (String) getRoles().get(i);
             if (getAccessController().hasAccess(request, rolename)) {
                 return true;
             }
@@ -612,8 +619,8 @@ public class Menu extends AbstractControl {
      * @return true if the user is in one of the child menu roles, or false otherwise
      */
     public boolean isUserInChildMenuRoles() {
-        for (Iterator i = getChildren().iterator(); i.hasNext();) {
-            Menu child = (Menu) i.next();
+         for (int i = 0, size = getChildren().size(); i < size; i++) {
+            Menu child = (Menu) getChildren().get(i);
             if (child.isUserInRoles()) {
                 return true;
             }
@@ -748,7 +755,7 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Render the HTML representation of the Menu.
+     * Render an anchor tag HTML representation of the Menu.
      *
      * @see #toString()
      *
@@ -777,10 +784,6 @@ public class Menu extends AbstractControl {
 
             if (getTitle() != null && getTitle().length() > 0) {
                 buffer.appendAttributeEscaped("title", getTitle());
-            }
-
-            if (isSelected()) {
-                buffer.appendAttribute("class", "selected");
             }
 
             buffer.closeTag();
@@ -844,8 +847,8 @@ public class Menu extends AbstractControl {
      */
     public Menu getSelectedChild() {
         if (isSelected()) {
-            for (Iterator i = getChildren().iterator(); i.hasNext();) {
-                Menu menu = (Menu) i.next();
+            for (int i = 0, size = getChildren().size(); i < size; i++) {
+                Menu menu = (Menu) getChildren().get(i);
                 if (menu.isSelected()) {
                     return menu;
                 }
