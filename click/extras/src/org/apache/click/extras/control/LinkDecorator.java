@@ -176,6 +176,9 @@ public class LinkDecorator implements Decorator, Serializable {
     /** The method cached for rendering column values. */
     protected transient Map methodCache;
 
+    /** The parameter name of the target object identifier property. */
+    protected String targetIdProperty;
+
     /**
      * Create a new AbstractLink table column Decorator with the given actionLink
      * and row object identifier property name.
@@ -260,6 +263,43 @@ public class LinkDecorator implements Decorator, Serializable {
         this.idProperty = idProperty;
 
         table.addControl(new LinkDecorator.PageNumberControl(table));
+    }
+
+    /**
+     * Create a new AbstractLink table column Decorator with the given
+     * AbstractLinks array, row object identifier property name and a target object identifier property.
+     * <p/>
+     * This approach is very useful for tables that have columns from various entities, to be able to point
+     * to those entities directly (since e.g. the ID is already available).
+     *
+     * <pre class="prettyprint">
+     *   // e.g. for a Table that various data, but a column with related users too.
+     *   ...
+     *   Column userName = new Column("toUser.userName");
+     *   userName.setHeaderTitle("User Name");
+     *   table.addColumn(userName);
+     *   ...
+     *
+     *   // to be able to point with the action from the table to that user directly:
+     *   ...
+     *   column.setDecorator(new LinkDecorator(table,links,"toUser.userName","id"));
+     *   // or if a type converter is used:
+     *   column.setDecorator(new LinkDecorator(table,links,"toUser.userName","user"));
+     *   ...
+     * </pre>
+     *
+     * Or in any case where the same entity need to be referenced from two different directions.
+     *
+     * @see LinkDecorator#LinkDecorator(org.apache.click.control.Table, org.apache.click.control.AbstractLink, java.lang.String)
+     *
+     * @param table the table to render the links for
+     * @param links the array of AbstractLinks to render
+     * @param idProperty the row object identifier property name
+     * @param targetIdProperty the parameter name for the target identifier property
+     */
+    public LinkDecorator(Table table, AbstractLink[] links, String idProperty, String targetIdProperty) {
+        this(table, links, idProperty);
+        this.targetIdProperty = targetIdProperty;
     }
 
     /**
@@ -578,7 +618,11 @@ public class LinkDecorator implements Decorator, Serializable {
 
         } else {
             if (value != null) {
-                link.setParameter(idProperty, value.toString());
+                if (targetIdProperty != null) {
+                    link.setParameter(targetIdProperty, value.toString());
+                } else {
+                    link.setParameter(idProperty, value.toString());
+                }
             }
         }
 
