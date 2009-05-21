@@ -129,7 +129,7 @@ import org.w3c.dom.NodeList;
  *
  * <span class="red">#end</span> </pre>
  *
- * This example uses J2EE role path based security to only display the menu items
+ * This example uses role path based security to only display the menu items
  * the user is authorized to see. If you not using this security feature in your
  * application you should remove the macro {@link #isUserInRoles()} checks so
  * the menu items will be rendered.
@@ -140,7 +140,7 @@ import org.w3c.dom.NodeList;
  *
  * <h3>Security</h3>
  *
- * Menus support J2EE role based security via the {@link #isUserInRoles()}
+ * Menus support role based security via the {@link #isUserInRoles()}
  * method. When creating secure menus define the valid roles in the menu items.
  * For example:
  *
@@ -155,7 +155,7 @@ import org.w3c.dom.NodeList;
  *       &lt;menu label="Home" path="admin/admin.htm" roles="admin"/&gt;
  *    &lt;/menu&gt;
  * &lt;/menu&gt; </pre>
- *
+ * 
  * <h3>Menu Configuration DTD</h3>
  *
  * The Menu config file DTD is provided below:
@@ -777,6 +777,10 @@ public class Menu extends AbstractControl {
 
             if (getTitle() != null && getTitle().length() > 0) {
                 buffer.appendAttributeEscaped("title", getTitle());
+            }
+
+            if (isSelected()) {
+                buffer.appendAttribute("class", "selected");
             }
 
             buffer.closeTag();
