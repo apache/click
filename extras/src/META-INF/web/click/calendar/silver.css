@@ -61,6 +61,8 @@ iframe.ie6_blocker {
   background-color: #ccc;
   border-bottom: 2px solid #aaa;
   text-align:center;
+  padding-top: 1px;
+  height:19px;
 }
 
 .calendar_date_select .cds_header span {
