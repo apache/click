@@ -216,18 +216,10 @@
             <exclude name="**/classes/**"/>
             <exclude name="**/WEB-INF/lib/**"/>
             <exclude name="examples/webapp/javadoc/**"/>
-            <exclude name="**/EDU/oswego/cs/dl/util/concurrent/*.java"/>
             <exclude name="documentation/xdocs/lib/**"/>
             <exclude name="documentation/xdocs/target/**"/>
             <exclude name="documentation/xdocs/click-docbook/**"/>
          </fileset>
-      </copy>
-
-      <!-- Copy ConcurrentReaderHashMap class to src folder -->
-      <copy todir="${click}/framework/src">
-          <fileset dir="framework/classes" casesensitive="yes">
-            <include name="EDU/oswego/cs/dl/util/concurrent/*.class"/>
-          </fileset>
       </copy>
 
       <delete file="../${click}.zip"/>
@@ -303,12 +295,6 @@
       <property name="dir.classes" value="framework/classes"/>
       <delete dir="${dir.classes}" quiet="false"/>
       <mkdir dir="${dir.classes}"/>
-      <copy todir="${dir.classes}">
-         <fileset dir="${dir.source}">
-            <exclude name="**/package.html"/>
-            <exclude name="EDU/oswego/cs/dl/util/concurrent/*.java"/>
-         </fileset>
-      </copy>
  	  <copy file="LICENSE.txt" todir="${dir.classes}/META-INF"/>
  	  <copy file="NOTICE.txt" todir="${dir.classes}/META-INF"/>
     <copy file="DISCLAIMER.txt" todir="${dir.classes}/META-INF"/>
