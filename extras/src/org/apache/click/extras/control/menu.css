@@ -62,10 +62,12 @@
     border-bottom: 1px solid #707070; 
     border-right: 1px solid #707070; 
 }
+/* Uncomment to highlight the selecte menu item
 .menustyle .selected {
     font-weight: normal; 
     background: #afaea9 repeat-x left; 
 }
+*/
 .menustyle img.link {
     vertical-align: middle;
 }

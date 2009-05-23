@@ -755,7 +755,9 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Render an anchor tag HTML representation of the Menu.
+     * Render an anchor tag HTML representation of the Menu. If the menu item
+     * is selected the anchor tag will be rendered with class="selected" 
+     * attribute.
      *
      * @see #toString()
      *
@@ -784,6 +786,10 @@ public class Menu extends AbstractControl {
 
             if (getTitle() != null && getTitle().length() > 0) {
                 buffer.appendAttributeEscaped("title", getTitle());
+            }
+            
+            if (isSelected()) {
+            	buffer.appendAttribute("class", "selected");
             }
 
             buffer.closeTag();
@@ -823,7 +829,9 @@ public class Menu extends AbstractControl {
 
     /**
      * Return an HTML anchor tag representation of the menu item. If the menu is
-     * a separator this method will return a HR tag &lt;hr/&gt;.
+     * a separator this method will return a HR tag &lt;hr/&gt;.  If the menu 
+     * item is selected the anchor tag will be rendered with class="selected" 
+     * attribute.
      * <p/>
      * Note for more fine grained rendering control you should use a Velocity
      * #macro to render the menu item.
