@@ -65,7 +65,7 @@ import org.apache.commons.lang.StringUtils;
  * in the table. Field error messages will be rendered as 'title' attribute
  * tooltip values.
  *
- * <h4>IMPORTANT NOTE</h4>
+ * <h3>IMPORTANT NOTE</h3>
  * Do not populate the FormTable rowList in the Page's <tt>onRender()</tt> method.
  * <p/>
  * When using the FormTable control its rowList property
@@ -408,6 +408,23 @@ public class FormTable extends Table {
      */
     public void setRenderSubmittedValues(boolean render) {
         renderSubmittedValues = render;
+    }
+
+    /**
+     * Set the list of form table rows. Each row can either be a value object 
+     * (JavaBean) or an instance of a <tt>Map</tt>.
+     * <p/>
+     * <b>Important</b> ensure you set the rowList before control is processed 
+     * so posted object changes can be applied. Do not invoke this method via 
+     * the Page onRender() method, otherwise object updates will not be applied.
+     * <p/>
+     * Please note the rowList is cleared in table {@link #onDestroy()} method
+     * at the end of each request.
+     *
+     * @param rowList the list of table rows to set
+     */
+    public void setRowList(List rowList) {
+        super.setRowList(rowList);
     }
 
     /**
