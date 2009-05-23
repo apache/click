@@ -98,6 +98,10 @@ To build the extras library, click-extras.x.x.x.jar, run:
 
     ant build-extras
 
+To build the documentation (both PDF and HTML formats) please see:
+
+    documentation/xdocs/README.txt
+
 Further information on building Click is available here:
 
    documentation/docs/developer-guide/building.html
