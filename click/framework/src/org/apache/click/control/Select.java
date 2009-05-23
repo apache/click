@@ -163,6 +163,52 @@ import org.apache.click.util.PropertyUtils;
  * Note in this example the {@link #add(String)} method is used to add an Option
  * item to the Select.
  *
+ * <h3>Required Behaviour</h3>
+ * 
+ * When a Select control's required property is set to true, then the user has
+ * to select a value other than the first value in the option list. The  first
+ * value represents a non-selection by the user. In the example below an
+ * Empty Option as set as the first value in the option list.
+ *
+ * <pre class="prettyprint">
+ * public MyPage extends Page {
+ *     ..
+ *     
+ *     private Select mySelect;
+ *
+ *     public MyPage() {
+ *         mySelect = new Select("mySelect");
+ *         mySelect.setRequired(true);
+ *         
+ *         ..
+ *     }
+ *     
+ *     public void onInit() {
+ *         mySelect.add(Option.EMPTY_OPTION);
+ *         List<Customer> customerList = customerDao.getCustomerList();
+ *         mySelect.addAll(customerList, "id", "name");
+ *     }
+ *     
+ *     ..
+ * }
+ * </pre>
+ *
+ * Remember always populate the Select option list before it is processed. Do
+ * not populate the option list in a Page's onRender() methods.
+ * 
+ * <h3>Readonly Behaviour</h3>
+ *
+ * Note the &lt;select&gt; HTML element does not support the "readonly" attribute.
+ * To provide readonly style behaviour, the Select control will render the
+ * "disabled" attribute when it is readonly to give the appearance of a
+ * readonly field, and will render a hidden field of the same name so that its
+ * value will be submitted with the form.
+ *
+ * <p/>
+ * See also the W3C HTML reference:
+ * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
+ *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.6">SELECT</a>
+ *
  * <h3>Specify a default value</h3>
  *
  * It is often necessary to set a default selected value. This is best done in
@@ -185,19 +231,6 @@ import org.apache.click.util.PropertyUtils;
  *     }
  * }
  * </pre>
- *
- * <h3>Readonly Behaviour</h3>
- *
- * Note the &lt;select&gt; HTML element does not support the "readonly" attribute.
- * To provide readonly style behaviour, the Select control will render the
- * "disabled" attribute when it is readonly to give the appearance of a
- * readonly field, and will render a hidden field of the same name so that its
- * value will be submitted with the form.
- *
- * <p/>
- * See also the W3C HTML reference:
- * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
- *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.6">SELECT</a>
  *
  * @see Option
  * @see OptionGroup
