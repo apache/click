@@ -20,12 +20,9 @@ package org.apache.click.examples.control;
 
 import java.util.Date;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.control.Form;
 import org.apache.click.control.Panel;
 import org.apache.click.extras.control.DateField;
-import org.apache.click.util.ClickUtils;
 
 /**
  * Provides a custom date FilterPanel.
@@ -64,17 +61,4 @@ public class FilterPanel extends Panel {
     public boolean isSelected() {
         return startDate.getDate() != null || endDate.getDate() != null;
     }
-
-    /**
-     * @see org.apache.click.Control#onDeploy(ServletContext)
-     */
-    public void onDeploy(ServletContext servletContext) {
-        String[] files = new String[] {
-            "/org/apache/click/examples/control/twistie-down.png",
-            "/org/apache/click/examples/control/twistie-up.png"
-        };
-
-        ClickUtils.deployFiles(servletContext, files, "images");
-    }
-
 }
