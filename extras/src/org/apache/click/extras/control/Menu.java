@@ -715,17 +715,6 @@ public class Menu extends AbstractControl {
         return null;
     }
 
-    /**
-     * This method does nothing.
-     *
-     * @see org.apache.click.Control#setListener(Object, String)
-     *
-     * @param listener the listener object with the named method to invoke
-     * @param method the name of the method to invoke
-     */
-    public void setListener(Object listener, String method) {
-    }
-
     // --------------------------------------------------------- Public Methods
 
     /**
