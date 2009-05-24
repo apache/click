@@ -26,7 +26,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.click.ActionListener;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
@@ -519,28 +518,6 @@ public class Panel extends AbstractContainer {
      */
     public void setLabel(String label) {
         this.label = label;
-    }
-
-    /**
-     * This method does nothing, since Panel does not support listener callback.
-     *
-     * @see Control#setListener(Object, String)
-     *
-     * @param listener the listener object with the named method to invoke
-     * @param method the name of the method to invoke
-     */
-    public void setListener(Object listener, String method) {
-    }
-
-    /**
-     * This method does nothing, since Panel does not support action listener
-     * callback.
-     *
-     * @see AbstractControl#setActionListener(org.apache.click.ActionListener)
-     *
-     * @param listener the control's action listener
-     */
-    public void setActionListener(ActionListener listener) {
     }
 
     /**
