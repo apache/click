@@ -66,26 +66,26 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * Note in this example page the customerService with the &#64;Resource
  * annotation is injected by Spring after the page instance has been instantiated.
  *
- * <pre class="codeJava">
- * <span class="kw">package</span> com.mycorp.page;
+ * <pre class="prettyprint">
+ * package com.mycorp.page;
  *
- * <span class="kw">import</span> javax.annotation.Resource;
- * <span class="kw">import</span> org.apache.click.Page;
- * <span class="kw">import</span> org.springframework.stereotype.Component;
+ * import javax.annotation.Resource;
+ * import org.apache.click.Page;
+ * import org.springframework.stereotype.Component;
  *
- * <span class="kw">import</span> com.mycorp.service.CustomerService;
+ * import com.mycorp.service.CustomerService;
  *
- * <span class="green">&#64;Component</span>
- * <span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> Page {
+ * &#64;Component
+ * public class CustomerListPage extends Page {
  *
- *     <span class="green">&#64;Resource</span>(name=<span class="st">"customerService"</span>)
- *     <span class="kw">private</span> CustomerService customerService;
+ *     &#64;Resource(name="customerService")
+ *     private CustomerService customerService;
  *
  *     ..
  * } </pre>
  *
  * This is the most powerful and convenient Spring integration option, but does
- * require Spring 2.5.x and Java 1.5 or latter.
+ * require Spring 2.5.x and Java 1.5 or later.
  *
  * <h3>Spring instantiated Pages with Spring XML configuration</h3>
  *
@@ -118,7 +118,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * &lt;/beans&gt; </pre>
  *
- * <b>Please Note</b> ensure the page beans scope is set to "prototype" so a new \
+ * <b>Please Note</b> ensure the page beans scope is set to "prototype" so a new
  * page instance will be created with every HTTP request. Otherwise Spring will
  * default to using singletons and your code will not be thread safe.
  *
@@ -135,19 +135,19 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * automatically injected by the SpringClickServlet. Note the customerService
  * property will need to be defined in a Spring XML configuration.
  *
- * <pre class="codeJava">
- * <span class="kw">package</span> com.mycorp.page;
+ * <pre class="prettyprint">
+ * package com.mycorp.page;
  *
- * <span class="kw">import</span> org.apache.click.Page;
+ * import org.apache.click.Page;
  *
- * <span class="kw">import</span> com.mycorp.service.CustomerService;
+ * import com.mycorp.service.CustomerService;
  *
- * <span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> Page {
+ * public class CustomerListPage extends Page {
  *
- *     <span class="kw">private</span> CustomerService customerService;
+ *     private CustomerService customerService;
  *
- *     <span class="kw">public void </span> setCustomerService(CustomerService customerService) {
- *         <span class="kw">this</span>.customerService = customerService;
+ *     public void setCustomerService(CustomerService customerService) {
+ *         this.customerService = customerService;
  *     }
  *
  *     ..
@@ -170,17 +170,17 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * interface. Using the applicationContext you can lookup Spring beans manually
  * in your pages. For example:
  *
- * <pre class="codeJava">
- * <span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> Page <span class="kw">implements</span> ApplicationContextAware {
+ * <pre class="prettyprint">
+ * public class CustomerListPage extends Page implements ApplicationContextAware {
  *
- *     <span class="kw">protected</span> ApplicationContext applicationContext;
+ *     protected ApplicationContext applicationContext;
  *
- *     <span class="kw">public void</span> setApplicationContext(ApplicationContext applicationContext)  {
- *         <span class="kw">this</span>.applicationContext = applicationContext;
+ *     public void setApplicationContext(ApplicationContext applicationContext)  {
+ *         this.applicationContext = applicationContext;
  *     }
  *
- *     <span class="kw">public</span> CustomerService getCustomerService() {
- *         <span class="kw">return</span> (CustomerService) applicationContext.getBean(<span class="st">"customerService"</span>);
+ *     public CustomerService getCustomerService() {
+ *         return (CustomerService) applicationContext.getBean("customerService");
  *     }
  * } </pre>
  *
