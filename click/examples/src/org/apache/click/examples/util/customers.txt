@@ -24,7 +24,7 @@ Joh Holgate, jholgate@gate.com, 55, Residential Property, 145000, 1998-01-29, tr
 Peter Harold, peterh@easymail.com, 43, Stocks, 10200, 1999-11-02, true
 Angus Robins, arobins@robins.com, 39, Bonds, 40000, 1991-09-10, false
 David Huew, david.huew@city.com, 47, Options, 87600, 2001-02-12, true
-Paula Matthews, paulam@robinson.com, 31, Commerical Property, 348700, 1984-12-23, true
+Paula Matthews, paulam@robinson.com, 31, Commercial Property, 348700, 1984-12-23, true
 Robin Master, robin.master@gmail.com, 32, Bonds, 45000, 2000-08-03, false
 James Master, ron.master@hotcom.com, 34, Options, 65000, 2001-08-03, true
 Sandra Nomi, snomi@gmail.com, 47, Commerial Property, 285000, 2001-09-17, true
@@ -51,7 +51,7 @@ Tom Holgate, tholgate@gate.com, 55, Residential Property, 145000, 1987-01-29, tr
 Ally Emery, allye@easymail.com, 43, Stocks, 10200, 2004-11-02, true
 Marry Robins, mrobins@robins.com, 39, Bonds, 40000, 2000-09-10, false
 Scott Huew, scott.huew@city.com, 47, Options, 87600, 2001-02-12, true
-Simon Matthews, simonm@robinson.com, 31, Commerical Property, 348700, 2001-12-23, true
+Simon Matthews, simonm@robinson.com, 31, Commercial Property, 348700, 2001-12-23, true
 Albert Master, albert.master@gmail.com, 32, Bonds, 45000, 2004-08-03, false
 Ron Master, ron.master@hotcom.com, 34, Options, 65000, 2001-08-03, true
 Petra Nomi, pnomi@gmail.com, 47, Commerial Property, 285000, 2001-09-17, true
