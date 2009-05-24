@@ -25,8 +25,4 @@
 
   <mode value="profile"/>
 
-  <controls>
-    <control classname="org.apache.click.examples.control.FilterPanel"/>
-  </controls>
-
 </click-app>
