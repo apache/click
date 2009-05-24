@@ -49,6 +49,8 @@ import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
 import ognl.Ognl;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.w3c.dom.Document;
@@ -814,7 +816,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
     /**
      * Build the {@link #pageByClassMap} from the {@link #pageByPathMap} and
-     * delegate to {@link #buildClassMap(PageElm)}.
+     * delegate to {@link #addToClassMap(PageElm)}.
      */
     void buildClassMap() {
         // Build pages by class map
@@ -1114,7 +1116,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             deployControls(rootElm);
             deployControlSets(rootElm);
 
-            deployFilesInJars();
+            deployAutoFiles();
         } else {
             String msg = "Could not auto deploy files to 'click' web folder."
                 + " You may need to manually include click resources in your"
@@ -1124,13 +1126,14 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
-     * Deploy from jars, files that are specified in the folder 'META-INF/web'.
+     * Deploy from jars and directories all files that are specified in the
+     * folder 'META-INF/web'.
      * <p/>
-     * Only jars available on the classpath are scanned.
+     * Only jars and folders available on the classpath are scanned.
      *
      * @throws java.lang.Exception if the files cannot be deployed
      */
-    private void deployFilesInJars() throws Exception {
+    private void deployAutoFiles() throws Exception {
 
         // Find all jars under WEB-INF/lib and deploy all resources from these jars
         long startTime = System.currentTimeMillis();
@@ -1154,30 +1157,75 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             String jarPath = null;
 
-            // Extract the jar name from the entry
+            // Check if path represents a jar
             if (path.indexOf('!') > 0) {
                 jarPath = path.substring(0, path.indexOf('!'));
+
+                File jar = new File(jarPath);
+
+                if (jar.exists()) {
+                    deployFilesInJar(jar);
+
+                } else {
+                    logService.error("Could not deploy the jar '" + jarPath +
+                        "'. Please ensure this file exists in the specified" +
+                        " location.");
+                }
             } else {
-                // If jar name cannot be extracted, skip the resource
-                logService.trace("Path does not represent a Jar -> '" + path + "'");
-                continue;
-            }
-
-            File jar = new File(jarPath);
-
-            if (jar.exists()) {
-                deployFilesInJar(jar);
-
-            } else {
-                logService.error("Could not deploy the jar '" + jarPath
-                    + "'. Please ensure this file exists in the specified"
-                    + " location.");
+                File dir = new File(path);
+                deployFilesInDir(dir);
             }
         }
 
         if (logService.isTraceEnabled()) {
-            logService.trace("deployed files from jars - "
+            logService.trace("deployed files from jars and folders - "
                 + (System.currentTimeMillis() - startTime) + " ms");
+        }
+    }
+
+
+    /**
+     * Deploy files from the specified directory.
+     * <p/>
+     * Only files specified in the folder 'META-INF/web' will be deployed.
+     *
+     * @param dir the directory which resources will be deployed
+     * @throws java.lang.Exception if for some reason the files cannot be
+     * deployed
+     */
+    private void deployFilesInDir(File dir) throws Exception {
+        if (dir == null) {
+            throw new IllegalArgumentException("Dir cannot be null");
+        }
+
+        if (!dir.exists()) {
+            logService.trace("There are no files in the folder '"
+                + dir.getAbsolutePath() + "'");
+            return;
+        }
+
+        Iterator files = FileUtils.iterateFiles(dir, TrueFileFilter.INSTANCE,
+            TrueFileFilter.INSTANCE);
+
+        boolean logFeedback = true;
+        while (files.hasNext()) {
+            // file example -> META-INF/web/click/table.css
+            File file = (File) files.next();
+            String fileName = file.getCanonicalPath().replace('\\', '/');
+
+            // Only deploy resources from "META-INF/web/"
+            int pathIndex = fileName.indexOf("META-INF/web/");
+            if (pathIndex != -1) {
+                if (logFeedback && logService.isTraceEnabled()) {
+                    logService.trace("deploy files from folder -> " +
+                        dir.getAbsolutePath());
+
+                    // Only provide feedback once per dir
+                    logFeedback = false;
+                }
+                fileName = fileName.substring(pathIndex);
+                deployFile(fileName, "META-INF/web/");
+            }
         }
     }
 
@@ -1211,7 +1259,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 // jarEntryName example -> META-INF/web/click/table.css
                 String jarEntryName = jarEntry.getName();
 
-                // Deploy all resources under "META-INF/web/"
+                // Only deploy resources from "META-INF/web/"
                 int pathIndex = jarEntryName.indexOf("META-INF/web/");
                 if (pathIndex == 0) {
                     if (logFeedback && logService.isTraceEnabled()) {
@@ -1221,29 +1269,44 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                         // Only provide feedback once per jar
                         logFeedback = false;
                     }
-                    pathIndex += "META-INF/web/".length();
-
-                    // By default deploy to the web root dir
-                    String targetDir = "";
-
-                    // resourceName example -> click/table.css
-                    String resourceName = jarEntryName.substring(pathIndex);
-                    int index = resourceName.lastIndexOf('/');
-
-                    if (index != -1) {
-                        // targetDir example -> click
-                        targetDir = resourceName.substring(0, index);
-                    }
-
-                    // Copy resources to web folder
-                    ClickUtils.deployFile(servletContext,
-                        jarEntryName,
-                        targetDir);
+                    deployFile(jarEntryName, "META-INF/web/");
                 }
             }
         } finally {
             ClickUtils.close(jarInputStream);
             ClickUtils.close(inputStream);
+        }
+    }
+
+    /**
+     * Deploy the specified file.
+     *
+     * @param file the file to deploy
+     * @param prefix the file prefix that must be removed when the file is
+     * deployed
+     */
+    private void deployFile(String file, String prefix) {
+        // Only deploy resources containing the prefix
+        int pathIndex = file.indexOf(prefix);
+        if (pathIndex == 0) {
+            pathIndex += prefix.length();
+
+            // By default deploy to the web root dir
+            String targetDir = "";
+
+            // resourceName example -> click/table.css
+            String resourceName = file.substring(pathIndex);
+            int index = resourceName.lastIndexOf('/');
+
+            if (index != -1) {
+                // targetDir example -> click
+                targetDir = resourceName.substring(0, index);
+            }
+
+            // Copy resources to web folder
+            ClickUtils.deployFile(servletContext,
+                                  file,
+                                  targetDir);
         }
     }
 
