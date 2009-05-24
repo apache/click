@@ -66,7 +66,7 @@
 <h1>Road Map and Changes</h1>
 
 <h2>Road Map</h2>
-The next scheduled Click release will be version 2.1.0.
+The next scheduled Click release will be version 2.1.0 final.
 <p/>
 The feature roadmap for the next major release of Click is being determined.
 
@@ -75,8 +75,8 @@ The feature roadmap for the next major release of Click is being determined.
 <h2>Changes</h2>
 
 <dl>
-  <dt><a name="2.1.0"></a>
-  <div class="release-header">Latest Development Release - Version 2.1.0 - ??? June 2009</div></dt>
+  <dt><a name="2.1.0-RC1"></a>
+  <div class="release-header">Latest Development Release - Version 2.1.0 RC1 - ??? June 2009</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       IMPORTANT be sure to read the <a href="upgrade-path.html#1.5">1.5 upgrade path</a>
@@ -168,6 +168,12 @@ The feature roadmap for the next major release of Click is being determined.
           that can submit a Form [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-519">519</a>].
       </li>
       <li class="change">
+          Added plug-able security access controller (<a href="extras-api/org/apache/click/extras/security/AccessController.html">AccessController</a>) to Menu class.
+          This plubable interface enable use of security frameworks such as ACEGI or JSecurity to control user access to Menu items.
+          This issue was raised by Demetrios Kyriakis
+          [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-406">406</a>].
+      </li>
+      <li class="change">
           Added method,
           <a href="click-api/org/apache/click/util/ClickUtils.html#createTemplateModel(org.apache.click.Page, org.apache.click.Context)">ClickUtils.createTemplateModel</a>,
           which returns a template model containing objects such as the Context
@@ -233,45 +239,32 @@ The feature roadmap for the next major release of Click is being determined.
           Improved Menu control to render attribute class="selected" when the menu item
           is selected. This issue was raised and fixed by Frederic Daoud
           [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-551">551</a>].
-      </li>      
-      <li class="change">
-          Deprecated methods: <a href="click-api/org/apache/click/Control.html#getHtmlImports()">Control.getHtmlImports()</a> and
-          <a href="click-api/org/apache/click/Page.html#getHtmlImports()">Page.getHtmlImports()</a>.
-          These methods have been deprecated in favor of
-          <a href="click-api/org/apache/click/Control.html#getHeadElements()">Control.getHeadElements()</a>
-          and <a href="click-api/org/apache/click/Page.html#getHeadElements()">Page.getHeadElements()</a>.
-      </li>
-    </ul>
-  </dd>
-
-  <dt><a name="2.0.2"></a><a name="1.5.2"></a>
-  <a name="stable-release"></a><div class="release-header">Latest Stable Releases - Version 1.5.2 and Version 2.0.2 - ??? May 2009</div></dt>
-  <dd>
-    <div style="margin-left:-2em;margin-bottom:1em;">
-      IMPORTANT be sure to read the <a href="upgrade-path.html#1.5">1.5 upgrade path</a>
-      and <a href="#2.0.1">2.0.1 upgrade path</a> when upgrading from Click 1.4
-      or 1.5 respectively.
-    </div>
-    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
-      <li class="change">
-          Added FormTable sort methods <a href="extras-api/org/apache/click/extras/control/FormTable.html#setSortedColumn(java.lang.String)">setSortedColumn</a>,
-          <a href="extras-api/org/apache/click/extras/control/FormTable.html#setSortedAscending(boolean)">setSortedAscending</a>,
-          <a href="extras-api/org/apache/click/extras/control/FormTable.html#setPageNumber(int)">setPageNumber</a>
-          for programmatic sorting. This issue was raised and fixed by Ben Warner
-          [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-527">527</a>].
-      </li>
-      <li class="change">
-          Improved performance in situations where many controls are added to
-          a page by decreasing the buffer size used for including HTML imports.
       </li>
       <li class="change">
           Improved PerformanceFilter to implement exclude-paths filtering
- 	 		    [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-498">498</a>].
- 	 		</li>
+          [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-498">498</a>].
+      </li>
       <li class="change">
           <a class="external" target="_blank" href="http://code.google.com/p/click-calendar/">Click Calendar</a>
           version 1.0.1 has been released which fixes a memory leak in the calendar popup
           [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-499">499</a>].
+      </li>
+      <li class="change">
+          Fixed Column sorting to recognize numbers inside strings.
+          This issue was raised by Venkatt Guhesan
+          [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-489">489</a>].
+      </li>
+      <li class="change">
+          Fixed a bug where FieldSet was not set as the parent of its child controls.
+          This issue was raised by James P Brown
+          [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-497">497</a>].
+      </li>
+      <li class="change">
+      	  Fixed FormTable sorting bug. Added FormTable sort methods <a href="extras-api/org/apache/click/extras/control/FormTable.html#setSortedColumn(java.lang.String)">setSortedColumn</a>,
+          <a href="extras-api/org/apache/click/extras/control/FormTable.html#setSortedAscending(boolean)">setSortedAscending</a>,
+          <a href="extras-api/org/apache/click/extras/control/FormTable.html#setPageNumber(int)">setPageNumber</a>
+          for programmatic sorting. This issue was raised and fixed by Ben Warner
+          [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-527">527</a>].
       </li>
       <li class="change">
           Fixed a bug in AutoCompleteTextField where if the field was removed
@@ -280,23 +273,23 @@ The feature roadmap for the next major release of Click is being determined.
           [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-546">546</a>].
       </li>
       <li class="change">
+          Fixed extras <tt>pom.xml</tt> dependencies [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-492">492</a>].
+      </li>
+      <li class="change">
           Fixed a bug in control.js which caused the addLoadEvent event queue to
           be reset if multiple control.js scripts are imported in the same page.
           This issue was raised by Adrian
           [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-503">503</a>].
       </li>
       <li class="change">
-          Fixed a bug where FieldSet was not set as the parent of its child controls.
-          This issue was raised by James P Brown
-          [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-497">497</a>].
+          Deprecated methods: <a href="click-api/org/apache/click/Control.html#getHtmlImports()">Control.getHtmlImports()</a> and
+          <a href="click-api/org/apache/click/Page.html#getHtmlImports()">Page.getHtmlImports()</a>.
+          These methods have been deprecated in favor of
+          <a href="click-api/org/apache/click/Control.html#getHeadElements()">Control.getHeadElements()</a>
+          and <a href="click-api/org/apache/click/Page.html#getHeadElements()">Page.getHeadElements()</a>.
       </li>
       <li class="change">
-          Fixed Column sorting to recognize numbers inside strings.
-          This issue was raised by Venkatt Guhesan
-          [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-489">489</a>].
-      </li>
-      <li class="change">
-          Fixed extras <tt>pom.xml</tt> dependencies [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-492">492</a>].
+          Update Velocity library to version 1.6.2.
       </li>
     </ul>
   </dd>
