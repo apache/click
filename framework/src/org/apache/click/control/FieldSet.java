@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.apache.click.ActionListener;
 import org.apache.click.Control;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ContainerUtils;
@@ -801,31 +800,6 @@ public class FieldSet extends Field implements Container {
                 control.onRender();
             }
         }
-    }
-
-    /**
-     * This method is not supported and will throw a
-     * <tt>UnsupportedOperationException</tt>.
-     *
-     * @see org.apache.click.Control#setListener(Object, String)
-     *
-     * @param listener the listener object with the named method to invoke
-     * @param method the name of the method to invoke
-     */
-    public void setListener(Object listener, String method) {
-        throw new UnsupportedOperationException("setListener not supported");
-    }
-
-    /**
-     * This method is not supported and will throw a
-     * <tt>UnsupportedOperationException</tt>.
-     *
-     * @see org.apache.click.control.AbstractControl#setActionListener(ActionListener)
-     *
-     * @param actionListener the control's action listener
-     */
-    public void setActionListener(ActionListener actionListener) {
-        throw new UnsupportedOperationException("setListener not supported");
     }
 
     /**
