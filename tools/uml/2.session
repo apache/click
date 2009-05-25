@@ -1,0 +1,27 @@
+window_sizes 1920 1115 371 718 800 82
+windows_style
+diagrams
+  sequencediagram_ref 130562 // get-sequence-diagram
+    668 767 120 4 0 0
+  sequencediagram_ref 131714 // control-post-sequence-diagram
+    668 767 120 4 0 0
+  classdiagram_ref 133122 // control-package-class-diagram
+    739 767 100 4 0 0
+  sequencediagram_ref 128002 // post-sequence-diagram
+    760 715 120 4 0 0
+  classdiagram_ref 129154 // click-class-diagram
+    760 715 100 4 0 0
+  classdiagram_ref 132866 // container-package-class-diagram
+    760 715 100 4 0 0
+  classdiagram_ref 132994 // control-class-diagram
+    760 715 100 4 0 0
+  active  activitydiagram_ref 129410 // activity-diagram-small
+    760 715 100 4 0 0
+end
+show_stereotypes
+selected activitydiagram_ref 129410 // activity-diagram-small
+open
+  activity_ref 128386 // Servlet Container
+  classview_ref 130306 // controls
+end
+end

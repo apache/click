@@ -1,0 +1,13 @@
+format 66
+
+activitynodecanvas 128130 activitynode_ref 128002 // initial
+  xyz 316 24 2000
+end
+activitynodecanvas 128898 activitynode_ref 128130 // activity_final
+  xyz 263 771 2000
+end
+textcanvas 129026 "HTTP Request"
+  xyzwh 343 27 2000 72 13
+textcanvas 129154 "HTTP Response"
+  xyzwh 292 777 2000 80 13
+end

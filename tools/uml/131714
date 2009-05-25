@@ -1,0 +1,554 @@
+format 66
+"apache" // org::click::apache
+  revision 1
+  modified_by 2 "bob"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default show_stereotype_properties default
+  
+  classview 128002 "classes"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode class drawing_language java draw_all_relations yes shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    class 130946 "Context"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 128130 "context"
+	protected explicit_type "ServletContext"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130306 "config"
+	protected explicit_type "ServletConfig"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130434 "request"
+	protected explicit_type "HttpServletRequest"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130562 "response"
+	protected explicit_type "HttpServletResponse"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130690 "session"
+	protected explicit_type "HttpSession"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130818 "isPost"
+	protected explicit_type "boolean"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      classrelation 128130 // #context
+	relation_ref 128002 // #context
+      end
+    end
+
+    class 128002 "ClickServlet"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      ncouples 1
+      key "" value "
+"
+      operation 129026 "handleRequest"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 129154 "renderTemplate"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 129922 "doGet"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	
+	
+      end
+    end
+
+    class 129538 "Browser"
+      visibility package stereotype "actor"
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 129666 "Page"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 130050 "addControl"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "control" type class_ref 129794 // Control
+	
+	
+	
+	
+	
+      end
+
+      operation 130178 "addModel"
+	public explicit_return_type ""
+	nparams 2
+	  param in name "name" explicit_type "String"
+	  param in name "object" explicit_type "Object"
+	
+	
+	
+	
+	
+      end
+
+      operation 133250 "getHeadElements"
+	public return_type class_ref 132098 // List
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 129794 "getTemplate"
+	public explicit_return_type "String"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 128002 "onSecurityCheck"
+	preserve_cpp_body_indent public explicit_return_type "boolean"
+	nparams 0
+	
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 128130 "onInit"
+	public explicit_return_type "void"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 128898 "onGet"
+	public explicit_return_type "void"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 128770 "onPost"
+	public explicit_return_type "void"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 128642 "onRender"
+	public explicit_return_type "void"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 129410 "onDestroy"
+	public explicit_return_type "void"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 129666 "getModel"
+	public return_type class_ref 132226 // Map
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      attribute 128002 "context"
+	protected explicit_type "Context"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 129282 "controls"
+	protected explicit_type "List"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 129410 "format"
+	protected explicit_type "Object"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130178 "headElements"
+	protected explicit_type "List"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 129538 "headers"
+	protected explicit_type "Map"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 129666 "messages"
+	protected explicit_type "ResourceBundle"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 129794 "model"
+	protected explicit_type "Map"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 129922 "path"
+	protected explicit_type "String"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130050 "redirect"
+	protected explicit_type "String"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      classrelation 128002 // (#context)
+	relation 128002 o--- name "#context"
+	  a role_name "" multiplicity "1" private
+	    classrelation_ref 128002 // (#context)
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 128130 // #context
+      end
+
+      classrelation 129282 // (#controls)
+	relation 129154 *--- name "#controls"
+	  a role_name "" multiplicity "1" private
+	    classrelation_ref 129282 // (#controls)
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 129410 // #controls
+      end
+
+      classrelation 129538 // (#model)
+	relation 129282 *--- name "#model"
+	  a role_name "" multiplicity "1" private
+	    classrelation_ref 129538 // (#model)
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 129666 // (#model)
+      end
+    end
+
+    class 129794 "Control"
+      abstract visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl "${comment}${visibility}interface ${name} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      operation 131330 "getContext"
+	public return_type class_ref 130946 // Context
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 133122 "getHeadElements"
+	public return_type class_ref 132098 // List
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 132994 "getId"
+	public explicit_return_type "String"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 134530 "getMessages"
+	public return_type class_ref 132226 // Map
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 132738 "getName"
+	public explicit_return_type "String"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 132866 "setName"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "name" explicit_type "String"
+	
+	
+	
+	
+	
+      end
+
+      operation 134658 "getParent"
+	public return_type class_ref 132354 // Object
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 134786 "setParent"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "parent" type class_ref 132354 // Object
+	
+	
+	
+	
+	
+      end
+
+      operation 134914 "onDeploy"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "servletContext" explicit_type "ServletContext"
+	
+	
+	
+	
+	
+      end
+
+      operation 128258 "onInit"
+	public explicit_return_type "void"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 128386 "onProcess"
+	public explicit_return_type "boolean"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 128514 "onRender"
+	public explicit_return_type "void"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 129282 "onDestroy"
+	public explicit_return_type "void"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      classrelation 129922 // <aggregation>
+	relation_ref 129410 // <aggregation>
+      end
+
+      classrelation 130178 // <aggregation>
+	relation_ref 129538 // <aggregation>
+      end
+    end
+  end
+
+  package_ref 131842 // control
+end
