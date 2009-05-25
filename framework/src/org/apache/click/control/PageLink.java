@@ -21,6 +21,7 @@ package org.apache.click.control;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.click.ActionListener;
 import org.apache.click.Context;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -171,6 +172,27 @@ public class PageLink extends AbstractLink {
         return context.getResponse().encodeURL(buffer.toString());
     }
 
+    /**
+     * This method does nothing.
+     *
+     * @see org.apache.click.control.AbstractControl#setActionListener(org.apache.click.ActionListener)
+     *
+     * @param listener the listener to invoke
+     */
+    public void setActionListener(ActionListener listener) {
+    }
+
+    /**
+     * This method does nothing.
+     *
+     * @see org.apache.click.Control#setListener(Object, String)
+     *
+     * @param listener the listener object with the named method to invoke
+     * @param method the name of the method to invoke
+     */
+    public void setListener(Object listener, String method) {
+    }
+ 	
     /**
      * Return the target Page class.
      *
