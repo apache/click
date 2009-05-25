@@ -411,11 +411,11 @@ public class FormTable extends Table {
     }
 
     /**
-     * Set the list of form table rows. Each row can either be a value object 
+     * Set the list of form table rows. Each row can either be a value object
      * (JavaBean) or an instance of a <tt>Map</tt>.
      * <p/>
-     * <b>Important</b> ensure you set the rowList before control is processed 
-     * so posted object changes can be applied. Do not invoke this method via 
+     * <b>Important</b> ensure you set the rowList before control is processed
+     * so posted object changes can be applied. Do not invoke this method via
      * the Page onRender() method, otherwise object updates will not be applied.
      * <p/>
      * Please note the rowList is cleared in table {@link #onDestroy()} method
