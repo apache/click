@@ -108,6 +108,19 @@ import org.apache.commons.lang.StringUtils;
  * Also note that the CayenneForm is not able to determine whether a property
  * is required, so you must set the PropertySelect required status manually.
  *
+ * <h3>OptionList Caching in Stateful Pages</h3>
+ *
+ * Note the PropertySelect will cache its optionList in a stateful page. If you
+ * need the optionList refreshed in each page view you will need to clear the
+ * option list.  For example:
+ *
+ * <pre class="prettyprint">
+ * public void onDestroy() {
+ *     customerSelect.getOptionList().clear();
+ *     super.onDestroy();
+ * }
+ * </pre>
+ *
  * @see CayenneForm
  * @see QuerySelect
  *
