@@ -152,6 +152,12 @@ public class DateField extends TextField {
      */
     protected boolean showCalendar = true;
 
+    /** The minimum year of the calendar, default value is 1930. */
+    protected int minimumYear = 1930;
+
+    /** The maximum year of the calendar, default value is 2050. */
+    protected int maximumYear = 2050;
+
     /**
      * The Calendar CSS style, default value: <tt>default</tt>.
      * Available styles include:
@@ -612,9 +618,43 @@ public class DateField extends TextField {
     }
 
     /**
+     * Return the minimum year of the Calendar, default value is 1930.
+     *
+     * @return the minimum year of the Calendar
+     */
+    public int getMinimumYear() {
+        return minimumYear;
+    }
+
+    /**
+     * Set the minimum year of the Calendar.
+     *
+     * @param minimumYear the minimum year of the Calendar
+     */
+    public void setMinimumYear(int minimumYear) {
+        this.minimumYear = minimumYear;
+    }
+
+    /**
+     * Return the maximum year of the Calendar, default value is 2050.
+     *
+     * @return the minimum year of the Calendar
+     */
+    public int getMaximumYear() {
+        return maximumYear;
+    }
+
+    /**
+     * Set the maximum year of the Calendar.
+     *
+     * @param maximumYear the maximum year of the Calendar
+     */
+    public void setMaximumYear(int maximumYear) {
+        this.maximumYear = maximumYear;
+    }
+
+    /**
      * Return the Calendar CSS style.
-     * <p/>
-     * Available styles include: <tt>[blue, default, plain, red, silver]</tt>.
      *
      * @return the Calendar CSS style
      */
@@ -624,6 +664,8 @@ public class DateField extends TextField {
 
     /**
      * Set the Calendar CSS style.
+     * <p/>
+     * Available styles are: <tt>[blue, default, plain, red, silver]</tt>.
      *
      * @param style the Calendar CSS style
      */
@@ -787,21 +829,18 @@ public class DateField extends TextField {
             script.setExecuteOnDomReady(true);
 
             HtmlStringBuffer buffer = new HtmlStringBuffer(150);
-            buffer.append("  Event.observe('").append(imgId).append(
-                "', 'click', function(){");
-            buffer.append("  Date.first_day_of_week=").append(getFirstDayOfWeek() - 1);
-            buffer.append(";    calendar = new CalendarDateSelect($('").append(
-                fieldId).append("'), {");
 
-            buffer.append("minute_interval: 1, popup_by: '").append(imgId).append(
-                "'");
-            buffer.append(", embedded: false");
-            buffer.append(", time: ").append(isShowTime() ? "'mixed'" : "false");
-            buffer.append(", formatValue: '").append(getCalendarPattern()).append(
-                "'");
-            buffer.append(", year_range: [1930,2050]});");
+            buffer.append("Event.observe('").append(imgId).append("', 'click', function(){");
+            buffer.append(" Date.first_day_of_week=").append(getFirstDayOfWeek() - 1).append(";");
+            buffer.append(" calendar = new CalendarDateSelect($('").append(fieldId).append("'), {");
+            buffer.append("  minute_interval: 1, popup_by: '").append(imgId).append("',");
+            buffer.append("  embedded: false,");
+            buffer.append("  time: ").append(isShowTime() ? "'mixed'," : "false,");
+            buffer.append("  formatValue: '").append(getCalendarPattern()).append("',");
+            buffer.append("  year_range: [").append(getMinimumYear()).append(",").append(getMaximumYear()).append("]");
+            buffer.append(" });");
+            buffer.append("});");
 
-            buffer.append("  });");
             script.setContent(buffer);
             headElements.add(script);
         }
