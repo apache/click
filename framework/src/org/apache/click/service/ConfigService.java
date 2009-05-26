@@ -99,7 +99,7 @@ public interface ConfigService {
     public static final String MODE_TRACE = "trace";
 
     /** The debug application mode. */
-    public static final String MODE_DEBUG = "trace";
+    public static final String MODE_DEBUG = "debug";
 
     /** The development application mode. */
     public static final String MODE_DEVELOPMENT = "development";
