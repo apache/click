@@ -274,22 +274,26 @@ public class SubmitLink extends ActionLink {
      * @return the link request parameter value
      */
     public String getParameter(String name) {
-        Object value = getParameters().get(name);
+        if (hasParameters()) {
+            Object value = getParameters().get(name);
 
-        if (value instanceof String) {
-            return (String) value;
-        }
-
-        if (value instanceof String[]) {
-            String[] array = (String[]) value;
-            if (array.length >= 1) {
-                return array[0];
-            } else {
-                return null;
+            if (value instanceof String) {
+                return (String) value;
             }
-        }
 
-        return (value == null ? null : value.toString());
+            if (value instanceof String[]) {
+                String[] array = (String[]) value;
+                if (array.length >= 1) {
+                    return array[0];
+                } else {
+                    return null;
+                }
+            }
+
+            return (value == null ? null : value.toString());
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -300,25 +304,32 @@ public class SubmitLink extends ActionLink {
      * @return the link request parameter values
      */
     public String[] getParameterValues(String name) {
-        Object values = getParameters().get(name);
-        if (values instanceof String) {
-            return new String[] { values.toString() };
-        }
-        if (values instanceof String[]) {
-            return (String[]) values;
+        if (hasParameters()) {
+            Object values = getParameters().get(name);
+            if (values instanceof String) {
+                return new String[] { values.toString() };
+            }
+            if (values instanceof String[]) {
+                return (String[]) values;
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
     }
 
     /**
+     * Set the link parameter with the given parameter name and values. If the
+     * values are null, the parameter will be removed from the {@link #parameters}.
+     *
      * @see org.apache.click.control.AbstractLink#setParameter(java.lang.String, java.lang.String)
      *
      * @param name the attribute name
      * @param values the attribute values
      * @throws IllegalArgumentException if name parameter is null
      */
-    public void setParameters(String name, String[] values) {
+    public void setParameterValues(String name, String[] values) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
