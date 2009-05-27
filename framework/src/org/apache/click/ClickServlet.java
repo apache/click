@@ -1221,13 +1221,15 @@ public class ClickServlet extends HttpServlet {
      * <ul>
      * <li>any public Page fields using the fields name</li>
      * <li>context - the Servlet context path, e.g. /mycorp</li>
-     * <li>format - the {@link Format} object for formatting the display of objects</li>
-     * <li>imports - the {@link PageImports} object</li>
+     * <li>format - the {@link org.apache.click.util.Format} object for formatting
+     * the display of objects</li>
+     * <li>imports - the {@link org.apache.click.util.PageImports} object</li>
      * <li>messages - the page messages bundle</li>
      * <li>path - the page of the page template to render</li>
      * <li>request - the pages servlet request</li>
      * <li>response - the pages servlet request</li>
-     * <li>session - the {@link SessionMap} adaptor for the users HttpSession</li>
+     * <li>session - the {@link org.apache.click.util.SessionMap} adaptor for the
+     * users HttpSession</li>
      * </ul>
      *
      * @param page the page to create a VelocityContext for
