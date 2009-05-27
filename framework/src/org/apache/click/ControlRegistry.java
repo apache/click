@@ -239,8 +239,12 @@ public class ControlRegistry {
         boolean continueProcessing = true;
 
         for (int i = 0, size = eventSourceList.size(); i < size; i++) {
-            Control source = (Control) eventSourceList.get(i);
-            ActionListener listener = (ActionListener) eventListenerList.get(i);
+            Control source = (Control) eventSourceList.get(0);
+            ActionListener listener = (ActionListener) eventListenerList.get(0);
+
+            // Pop the first entry in the list
+            eventSourceList.remove(0);
+            eventListenerList.remove(0);
 
             if (!fireActionEvent(context, source, listener, event)) {
                 continueProcessing = false;
