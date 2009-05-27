@@ -63,7 +63,7 @@ public class FormTest extends TestCase {
         // Simulate a second submit check.
         valid = form.onSubmitCheck(page, "/invalid-submit.html");
         
-        // Assert the second onSubmitCheck did succeeded as well.
+        // Assert the second onSubmitCheck did succeed as well.
         Assert.assertTrue(valid);
     }
 
@@ -200,15 +200,15 @@ public class FormTest extends TestCase {
         // Add new field
         form.add(nameField);
 
-        // nameField index: #controls=1
-        assertTrue(form.getControls().indexOf(nameField) == 1);
-        // nameField index: #fieldList=1
-        assertTrue(form.getFieldList().indexOf(nameField) == 1);
+        // nameField index: #controls=0
+        assertTrue(form.getControls().indexOf(nameField) == 0);
+        // nameField index: #fieldList=0
+        assertTrue(form.getFieldList().indexOf(nameField) == 0);
         
         // trackField index: #controls=1
-        assertTrue(form.getControls().indexOf(trackField) == 0);
+        assertTrue(form.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=1
-        assertTrue(form.getFieldList().indexOf(trackField) == 0);
+        assertTrue(form.getFieldList().indexOf(trackField) == 1);
     }
 
     /**
@@ -225,13 +225,13 @@ public class FormTest extends TestCase {
 
         // nameField index: #controls=0
         assertTrue(form.getControls().indexOf(nameField) == 0);
-        // nameField index: #fieldList=1
-        assertTrue(form.getFieldList().indexOf(nameField) == 1);
+        // nameField index: #fieldList=0
+        assertTrue(form.getFieldList().indexOf(nameField) == 0);
         
         // trackField index: #controls=1
         assertTrue(form.getControls().indexOf(trackField) == 1);
-        // trackField index: #fieldList=0
-        assertTrue(form.getFieldList().indexOf(trackField) == 0);
+        // trackField index: #fieldList=1
+        assertTrue(form.getFieldList().indexOf(trackField) == 1);
     }
 
     /**
@@ -293,13 +293,13 @@ public class FormTest extends TestCase {
 
         // hidden index: #controls=0
         assertTrue(form.getControls().indexOf(hidden) == 0);
-        // hidden index: #fieldList=1
-        assertTrue(form.getFieldList().indexOf(hidden) == 1);
+        // hidden index: #fieldList=0
+        assertTrue(form.getFieldList().indexOf(hidden) == 0);
         
         // trackField index: #controls=1
         assertTrue(form.getControls().indexOf(trackField) == 1);
-        // trackField index: #fieldList=0
-        assertTrue(form.getFieldList().indexOf(trackField) == 0);
+        // trackField index: #fieldList=1
+        assertTrue(form.getFieldList().indexOf(trackField) == 1);
     }
 
     /**
@@ -312,13 +312,13 @@ public class FormTest extends TestCase {
 
         // field index: #controls=0
         assertTrue(form.getControls().indexOf(field) == 0);
-        // field index: #fieldList=1
-        assertTrue(form.getFieldList().indexOf(field) == 1);
+        // field index: #fieldList=0
+        assertTrue(form.getFieldList().indexOf(field) == 0);
 
         // trackField index: #controls=1
         assertTrue(form.getControls().indexOf(trackField) == 1);
-        // trackField index: #fieldList=0
-        assertTrue(form.getFieldList().indexOf(trackField) == 0);
+        // trackField index: #fieldList=1
+        assertTrue(form.getFieldList().indexOf(trackField) == 1);
         
         int expectedSize = 2;
         // Check the list sizes to be 2
