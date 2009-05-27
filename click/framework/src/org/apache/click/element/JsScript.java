@@ -376,6 +376,9 @@ public class JsScript extends ResourceElement {
      */
     public void render(HtmlStringBuffer buffer) {
 
+        Context context = getContext();
+        boolean isAjaxRequest = context.isAjaxRequest();
+
         // Render IE conditional comment if conditional comment was set
         renderConditionalCommentPrefix(buffer);
 
@@ -391,12 +394,19 @@ public class JsScript extends ResourceElement {
         // Render CDATA tag if necessary
         renderCharacterDataPrefix(buffer);
 
-        // Render the DOM ready function prefix
-        renderDomReadyPrefix(buffer);
+        // Render the DOM ready function prefix for non-ajax requests. Ajax
+        // requests does not trigger DOM ready event so the prefix should not be
+        // rendered
+        if (!isAjaxRequest) {
+            renderDomReadyPrefix(buffer);
+        }
 
-        renderContent(buffer);
+        renderContent(buffer, context);
 
-        renderDomReadySuffix(buffer);
+        // Render the DOM ready function suffic for non-ajax requests
+        if (!isAjaxRequest) {
+            renderDomReadySuffix(buffer);
+        }
 
         renderCharacterDataSuffix(buffer);
 
@@ -462,10 +472,10 @@ public class JsScript extends ResourceElement {
      * to the specified buffer.
      *
      * @param buffer the buffer to append the output to
+     * @param context the request context
      */
-    protected void renderContent(HtmlStringBuffer buffer) {
+    protected void renderContent(HtmlStringBuffer buffer, Context context) {
         if (getTemplate() != null) {
-            Context context = getContext();
 
             Map templateModel = getModel();
             if (templateModel == null) {
