@@ -1303,9 +1303,10 @@ public class ClickServlet extends HttpServlet {
      * <ul>
      * <li>any public Page fields using the fields name</li>
      * <li>context - the Servlet context path, e.g. /mycorp</li>
-     * <li>format - the {@link Format} object for formatting the display of objects</li>
+     * <li>format - the {@link org.apache.click.util.Format} object for
+     * formatting the display of objects</li>
      * <li>forward - the page forward path, if defined</li>
-     * <li>imports - the {@link PageImports} object</li>
+     * <li>imports - the {@link org.apache.click.util.PageImports} object</li>
      * <li>messages - the page messages bundle</li>
      * <li>path - the page of the page template to render</li>
      * </ul>
