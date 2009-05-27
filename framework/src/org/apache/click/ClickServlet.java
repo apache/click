@@ -1232,6 +1232,8 @@ public class ClickServlet extends HttpServlet {
      * users HttpSession</li>
      * </ul>
      *
+     * @see org.apache.click.util.ClickUtils#createTemplateModel(org.apache.click.Page, org.apache.click.Context)
+     *
      * @param page the page to create a VelocityContext for
      * @return a new VelocityContext
      */
