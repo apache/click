@@ -626,6 +626,12 @@ public class Form extends AbstractContainer {
     /** The label &lt;td&gt; "style" attribute value. */
     protected String labelStyle;
 
+    /**
+     * Track the index offset when adding Controls. This ensures HiddenFields
+     * added by Form does not interfere with Controls added by users.
+     */
+    private int insertIndexOffset;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -687,7 +693,10 @@ public class Form extends AbstractContainer {
      */
     public Control insert(Control control, int index) {
 
-        super.insert(control, index);
+        // Adjust index for hidden fields added by Form. CLK-447
+        int realIndex = Math.min(index, getControls().size() - insertIndexOffset);
+
+        super.insert(control, realIndex);
 
         if (control instanceof Field) {
             Field field = (Field) control;
@@ -697,7 +706,9 @@ public class Form extends AbstractContainer {
                 getButtonList().add(field);
 
             } else {
-                getFieldList().add(field);
+                // Adjust index for hidden fields added by Form
+                realIndex = Math.min(index, getFieldList().size() - insertIndexOffset);
+                getFieldList().add(realIndex, field);
             }
 
             field.setForm(this);
@@ -1151,18 +1162,9 @@ public class Form extends AbstractContainer {
 
         HiddenField nameField = (HiddenField) getField(FORM_NAME);
         if (nameField == null) {
-
-            nameField = new HiddenField(FORM_NAME, String.class) {
-
-                // Override setName to ensure name cannot be changed once set
-                public void setName(String name) {
-                    if (this.name != null) {
-                        return;
-                    }
-                    super.setName(name);
-                }
-            };
+            nameField = new ImmutableNameHiddenField(FORM_NAME, String.class);
             add(nameField);
+            insertIndexOffset++;
         }
         nameField.setValue(name);
     }
@@ -2154,18 +2156,9 @@ public class Form extends AbstractContainer {
         // CLK-267: check against adding a duplicate field
         HiddenField field = (HiddenField) getField(submitTokenName);
         if (field == null) {
-
-            field = new HiddenField(submitTokenName, Long.class) {
-
-                // Override setName to ensure name cannot be changed once set
-                public void setName(String name) {
-                    if (this.name != null) {
-                        return;
-                    }
-                    super.setName(name);
-                }
-            };
+            field = new ImmutableNameHiddenField(submitTokenName, Long.class);
             add(field);
+            insertIndexOffset++;
         }
 
         // Save state info to form and session
@@ -2718,6 +2711,36 @@ public class Form extends AbstractContainer {
             return false;
         } else {
             return ((Field) control).isHidden();
+        }
+    }
+
+    // ---------------------------------------------------------- Inner Classes
+
+    /**
+     * Provides a HiddenField which name cannot be changed, once it is set.
+     */
+    private class ImmutableNameHiddenField extends HiddenField {
+
+        /**
+         * Create a field with the given name and value.
+         *
+         * @param name the field name
+         * @param valueClass the Class of the value Object
+         */
+        public ImmutableNameHiddenField(String name, Class valueClass) {
+            super(name, valueClass);
+        }
+
+        /**
+         * Set the field name. The field name cannot be changed once it is set.
+         *
+         * @param name the name of the field
+         */
+        public void setName(String name) {
+            if (this.name != null) {
+                return;
+            }
+            super.setName(name);
         }
     }
 }
