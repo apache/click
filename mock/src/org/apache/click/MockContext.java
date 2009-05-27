@@ -290,16 +290,26 @@ public class MockContext extends Context {
     }
 
     /**
+     * Execute all listeners that was registered by the processed Controls.
+     *
+     * @return true if all listeners returned true, false otherwise
+     */
+    public boolean executeActionListeners() {
+        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
+
+        // Fire POST_ON_PROCESS events
+        return controlRegistry.fireActionEvents(this, ControlRegistry.POST_ON_PROCESS_EVENT);
+    }
+
+    /**
      * Fire all action events that was registered by the processed Controls, and
      * clears all registered listeners from the ControlRegistry.
+     *
+     * @deprecated use {@link #executeActionListeners()} instead
      *
      * @return true if all listeners returned true, false otherwise
      */
     public boolean fireActionEventsAndClearRegistry() {
-        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
-        boolean continueProcessing = controlRegistry.fireActionEvents(this);
-
-        controlRegistry.clearRegistry();
-        return continueProcessing;
+        return executeActionListeners();
     }
 }

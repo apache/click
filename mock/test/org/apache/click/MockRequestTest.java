@@ -54,7 +54,7 @@ public class MockRequestTest extends TestCase {
         assertTrue(textArea.onProcess());
 
         // Fire all action events that was registered in the onProcess method
-        context.fireActionEventsAndClearRegistry();
+        context.executeActionListeners();
 
         assertTrue("TextArea action was not invoked", actionCalled);
         assertTrue(textArea.isValid());

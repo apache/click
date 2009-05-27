@@ -21,6 +21,7 @@ package org.apache.click.extras.tree;
 import junit.framework.*;
 import java.util.List;
 import org.apache.click.MockContext;
+import org.apache.click.control.ActionLink;
 import org.apache.click.servlet.MockRequest;
 
 /**
@@ -52,6 +53,7 @@ public class TreeTest extends TestCase {
     public void testExpandAndCollapse() {
         MockRequest mockRequest = mockContext.getMockRequest();
         mockRequest.setParameter(Tree.EXPAND_TREE_NODE_PARAM, testIds);
+        mockRequest.setParameter(ActionLink.ACTION_LINK, tree.getExpandLink().getName());
 
         assertExpandOrCollapse(tree, testIds, false);//test for expansion
         assertExpandOrCollapse(tree, testIds, true);//should reverse expand and collapse
@@ -63,6 +65,7 @@ public class TreeTest extends TestCase {
     public void testSelectAndDeselect() {
         MockRequest mockRequest = mockContext.getMockRequest();
         mockRequest.setParameter(Tree.SELECT_TREE_NODE_PARAM, testIds);
+        mockRequest.setParameter(ActionLink.ACTION_LINK, tree.getSelectLink().getName());
 
         assertSelectOrDeselect(tree, testIds, false);//test for selection
         assertSelectOrDeselect(tree, testIds, true);//should reverse selection and deselect
@@ -168,7 +171,7 @@ public class TreeTest extends TestCase {
             assertTrue("IsExpanded must be " + expected,node.isExpanded() == expected);
         }
         tree.onProcess();
-        context.fireActionEventsAndClearRegistry();
+        context.executeActionListeners();
         for(int i = 0; i < nodeIds.length; i++) {
             TreeNode node = tree.find(nodeIds[i]);
             assertTrue("IsExpanded must be " + !expected,node.isExpanded() == !expected);
@@ -182,7 +185,7 @@ public class TreeTest extends TestCase {
             assertTrue("IsExpanded must be " + expected,node.isSelected() == expected);
         }
         tree.onProcess();
-        context.fireActionEventsAndClearRegistry();
+        context.executeActionListeners();
         for(int i = 0; i < nodeIds.length; i++) {
             TreeNode node = tree.find(nodeIds[i]);
             assertTrue("IsExpanded must be " + !expected,node.isSelected() == !expected);
