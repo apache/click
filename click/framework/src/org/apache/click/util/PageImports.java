@@ -698,12 +698,6 @@ public class PageImports {
         JsScript jsScript = new JsScript();
         copyAttributes(jsScript, line);
         jsScript.append(extractJsContent(line, jsScript));
-
-        // If the script must be executed on dom ready, set the domready
-        // attribute to true.
-        if (jsScript.getContent().toString().indexOf("addLoadEvent") >= 0) {
-            jsScript.setExecuteOnDomReady(true);
-        }
         return jsScript;
     }
 
