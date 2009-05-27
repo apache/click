@@ -298,6 +298,12 @@ public class JsScript extends ResourceElement {
      * <b>Please note:</b> when setting this flag to true, the file JavaScript
      * file "<tt>control.js</tt>" must already be included in the Page or
      * Control, it won't be included automatically.
+     * <p/>
+     * <b>Also note:</b> for {@link org.apache.click.Context#isAjaxRequest() Ajax}
+     * requests the JsScript content won't be registered with the
+     * "<tt>addLoadEvent</tt>" function because Ajax requests does not trigger
+     * the browser's DOM loaded event. Instead the JsScript content will be
+     * evaluated immediately by the browser.
      *
      * @param executeOnDomReady indicates whether the JsScript content must be
      * executed as soon as the browser DOM is ready.
