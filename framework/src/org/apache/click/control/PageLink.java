@@ -18,12 +18,8 @@
  */
 package org.apache.click.control;
 
-import java.util.Iterator;
-import java.util.Map;
-
 import org.apache.click.ActionListener;
 import org.apache.click.Context;
-import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.StringUtils;
@@ -154,19 +150,7 @@ public class PageLink extends AbstractLink {
         if (hasParameters()) {
             buffer.append("?");
 
-            Iterator i = getParameters().entrySet().iterator();
-            while (i.hasNext()) {
-                Map.Entry entry = (Map.Entry) i.next();
-                String name = entry.getKey().toString();
-                String value = entry.getValue().toString();
-
-                buffer.append(name);
-                buffer.append("=");
-                buffer.append(ClickUtils.encodeUrl(value, context));
-                if (i.hasNext()) {
-                    buffer.append("&amp;");
-                }
-            }
+            renderParameters(buffer, getParameters(), context);
         }
 
         return context.getResponse().encodeURL(buffer.toString());

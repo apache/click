@@ -268,80 +268,6 @@ public class SubmitLink extends ActionLink {
     }
 
     /**
-     * @see org.apache.click.control.AbstractLink#getParameter(java.lang.String)
-     *
-     * @param name the name of request parameter
-     * @return the link request parameter value
-     */
-    public String getParameter(String name) {
-        if (hasParameters()) {
-            Object value = getParameters().get(name);
-
-            if (value instanceof String) {
-                return (String) value;
-            }
-
-            if (value instanceof String[]) {
-                String[] array = (String[]) value;
-                if (array.length >= 1) {
-                    return array[0];
-                } else {
-                    return null;
-                }
-            }
-
-            return (value == null ? null : value.toString());
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Return the link request parameter values for the given name, or null if
-     * the parameter values does not exist.
-     *
-     * @param name the name of request parameter
-     * @return the link request parameter values
-     */
-    public String[] getParameterValues(String name) {
-        if (hasParameters()) {
-            Object values = getParameters().get(name);
-            if (values instanceof String) {
-                return new String[] { values.toString() };
-            }
-            if (values instanceof String[]) {
-                return (String[]) values;
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Set the link parameter with the given parameter name and values. If the
-     * values are null, the parameter will be removed from the {@link #parameters}.
-     *
-     * @see org.apache.click.control.AbstractLink#setParameter(java.lang.String, java.lang.String)
-     *
-     * @param name the attribute name
-     * @param values the attribute values
-     * @throws IllegalArgumentException if name parameter is null
-     */
-    public void setParameterValues(String name, String[] values) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        if (values != null) {
-            getParameters().put(name, values);
-        } else {
-            getParameters().remove(name);
-        }
-    }
-
-    /**
      * Set the paramter prefix that is applied to the SubmitLink parameters.
      *
      * @param prefix the parameter prefix
@@ -578,6 +504,11 @@ public class SubmitLink extends ActionLink {
      */
     private void renderParameter(String name, Object value,
         HtmlStringBuffer buffer, Context context) {
+
+        // Don't render null values
+        if (value == null) {
+            return;
+        }
 
         String encodedValue = ClickUtils.encodeUrl(value, context);
         buffer.append("&amp;");

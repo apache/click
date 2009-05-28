@@ -18,12 +18,8 @@
  */
 package org.apache.click.extras.control;
 
-import java.util.Iterator;
-import java.util.Map;
-
 import org.apache.click.ActionListener;
 import org.apache.click.control.AbstractLink;
-import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
@@ -110,19 +106,7 @@ public class ExternalLink extends AbstractLink {
         if (hasParameters()) {
             buffer.append("?");
 
-            Iterator i = getParameters().entrySet().iterator();
-            while (i.hasNext()) {
-                Map.Entry entry = (Map.Entry) i.next();
-                String name = entry.getKey().toString();
-                String value = entry.getValue().toString();
-
-                buffer.append(name);
-                buffer.append("=");
-                buffer.append(ClickUtils.encodeUrl(value, getContext()));
-                if (i.hasNext()) {
-                    buffer.append("&amp;");
-                }
-            }
+            renderParameters(buffer, getParameters(), getContext());
         }
 
         return buffer.toString();

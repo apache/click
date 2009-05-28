@@ -18,9 +18,13 @@
  */
 package org.apache.click.control;
 
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import org.apache.click.Context;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -274,7 +278,22 @@ public abstract class AbstractLink extends AbstractControl {
      */
     public String getParameter(String name) {
         if (hasParameters()) {
-            return (String) getParameters().get(name);
+            Object value = getParameters().get(name);
+
+            if (value instanceof String) {
+                return (String) value;
+            }
+
+            if (value instanceof String[]) {
+                String[] array = (String[]) value;
+                if (array.length >= 1) {
+                    return array[0];
+                } else {
+                    return null;
+                }
+            }
+
+            return (value == null ? null : value.toString());
         } else {
             return null;
         }
@@ -311,6 +330,51 @@ public abstract class AbstractLink extends AbstractControl {
 
         if (value != null) {
             getParameters().put(name, value);
+        } else {
+            getParameters().remove(name);
+        }
+    }
+
+    /**
+     * Return the link request parameter values for the given name, or null if
+     * the parameter values does not exist.
+     *
+     * @param name the name of request parameter
+     * @return the link request parameter values
+     */
+    public String[] getParameterValues(String name) {
+        if (hasParameters()) {
+            Object values = getParameters().get(name);
+            if (values instanceof String) {
+                return new String[] { values.toString() };
+            }
+            if (values instanceof String[]) {
+                return (String[]) values;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Set the link parameter with the given parameter name and values. If the
+     * values are null, the parameter will be removed from the {@link #parameters}.
+     *
+     * @see #setParameter(java.lang.String, java.lang.String)
+     *
+     * @param name the attribute name
+     * @param values the attribute values
+     * @throws IllegalArgumentException if name parameter is null
+     */
+    public void setParameterValues(String name, String[] values) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        if (values != null) {
+            getParameters().put(name, values);
         } else {
             getParameters().remove(name);
         }
@@ -508,6 +572,78 @@ public abstract class AbstractLink extends AbstractControl {
             }
 
             buffer.elementEnd(getTag());
+        }
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Render the given link parameters to the buffer.
+     * <p/>
+     * The parameters will be rendered as URL key/value pairs e.g:
+     * "<tt>firstname=john&lastname=smith</tt>".
+     * <p/>
+     * Multivalued parameters will be rendered with each value sharing the same
+     * key e.g: "<tt>name=john&name=susan&name=mary</tt>".
+     * <p/>
+     * The parameter value will be encoded through
+     * {@link org.apache.click.util.ClickUtils#encodeUrl(java.lang.Object, org.apache.click.Context)}.
+     *
+     * @param buffer the buffer to render the parameters to
+     * @param parameters the parameters to render
+     * @param context the request context
+     */
+    protected void renderParameters(HtmlStringBuffer buffer, Map parameters,
+        Context context) {
+
+        Iterator i = parameters.keySet().iterator();
+        while (i.hasNext()) {
+            String paramName = i.next().toString();
+            Object paramValue = getParameters().get(paramName);
+
+            // Check for multivalued parameter
+            if (paramValue instanceof String[]) {
+                String[] paramValues = (String[]) paramValue;
+                for (int j = 0; j < paramValues.length; j++) {
+                    buffer.append(paramName);
+                    buffer.append("=");
+                    buffer.append(ClickUtils.encodeUrl(paramValues[j], context));
+                    if (j < paramValues.length - 1) {
+                        buffer.append("&amp;");
+                    }
+                }
+            } else {
+                if (paramValue != null) {
+                    buffer.append(paramName);
+                    buffer.append("=");
+                    buffer.append(ClickUtils.encodeUrl(paramValue, context));
+                }
+            }
+            if (i.hasNext()) {
+                buffer.append("&amp;");
+            }
+        }
+    }
+
+    /**
+     * This method binds the submitted request parameters to the link's
+     * parameters.
+     *
+     * @param context the request context
+     */
+    protected void bindRequestParameters(Context context) {
+        HttpServletRequest request = context.getRequest();
+        Enumeration paramNames = request.getParameterNames();
+
+        while (paramNames.hasMoreElements()) {
+            String param = paramNames.nextElement().toString();
+            String[] values = request.getParameterValues(param);
+
+            if (values != null && values.length == 1) {
+                getParameters().put(param, values[0]);
+            } else {
+                getParameters().put(param, values);
+            }
         }
     }
 }
