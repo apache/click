@@ -192,7 +192,7 @@ public class PageLink extends AbstractLink {
      */
     public void setListener(Object listener, String method) {
     }
- 	
+
     /**
      * Return the target Page class.
      *
