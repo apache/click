@@ -77,7 +77,7 @@
     <itemizedlist>
       <listitem>
         <para>
-          <ulink url="../../click-api/org/apache/click/Control.html#getHtmlImports()">getHtmlImports()</ulink>
+          <ulink url="../../click-api/org/apache/click/Control.html#getHeadElements">getHeadElements()</ulink>
           - defines the controls HTML header imports.
         </para>
       </listitem>
@@ -497,7 +497,7 @@ production-error-message=
     and <ulink url="../../click-api/org/apache/click/element/CssStyle.html">CssStyle</ulink>.
     </para>
 
-    <para>Here is an example of adding new HEAD elements to a custom
+    <para>Here is an example of adding HEAD elements to a custom
     <classname>Control</classname>:
     </para>
 
@@ -509,8 +509,7 @@ production-error-message=
          * Override the default getHeadElements implementation to return
          * MyControl's list of HEAD elements.
          *
-         * Note that the variable <varname>headElements</varname> is defined
-         * in AbstractControl.
+         * Note that the variable headElements is defined in AbstractControl.
          *
          * @return list the list of HEAD elements
          */

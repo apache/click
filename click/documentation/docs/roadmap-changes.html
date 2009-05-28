@@ -204,6 +204,19 @@ The feature roadmap for the next major release of Click is being determined.
           [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-539">539</a>].
       </li>
       <li class="change">
+          Improved Page redirect to support parameters. See the new Page methods
+          <a href="click-api/org/apache/click/Page.html#setRedirect(java.lang.String, java.util.Map)">setRedirect(String, Map)</a>
+          and <a href="click-api/org/apache/click/Page.html#setRedirect(java.lang.Class, java.util.Map)">setRedirect(Class, Map)</a>
+          This issue was raised and fixed by Adrian
+          [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-536">536</a>].
+      </li>
+      <li class="change">
+          Improved Link Controls to support multivalued parameters through the
+          new AbstractLink methods <a href="click-api/org/apache/click/control/AbstractLink.html#getParameterValues(java.lang.String)">getParameterValues()</a>
+          and <a href="click-api/org/apache/click/control/AbstractLink.html#setParameterValues(java.lang.String, java.lang.String[])">setParameterValues()</a>
+          [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-554">554</a>].
+      </li>
+      <li class="change">
           Improved Table to support very large datasets by promoting the methods
           <a href="click-api/org/apache/click/control/Table.html#getFirstRow()">getFirstRow()</a>
           and <a href="click-api/org/apache/click/control/Table.html#getLastRow()">getLastRow()</a>
