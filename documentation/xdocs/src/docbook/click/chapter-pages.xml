@@ -1284,7 +1284,7 @@ public class SearchPage extends Page implements Serializable {
     and <ulink url="../../click-api/org/apache/click/element/CssStyle.html">CssStyle</ulink>.
     </para>
 
-    <para>Here is an example of adding new HEAD elements to the
+    <para>Here is an example of adding HEAD elements to the
     <classname>MyPage</classname> class:
     </para>
 
