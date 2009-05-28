@@ -902,7 +902,7 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Closes the specifies tag.
+     * Closes the specified tag.
      *
      * @param tagName the name of the tag to close
      * @param buffer the buffer to append the output to
