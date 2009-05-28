@@ -1167,9 +1167,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                     deployFilesInJar(jar);
 
                 } else {
-                    logService.error("Could not deploy the jar '" + jarPath +
-                        "'. Please ensure this file exists in the specified" +
-                        " location.");
+                    logService.error("Could not deploy the jar '" + jarPath
+                        + "'. Please ensure this file exists in the specified"
+                        + " location.");
                 }
             } else {
                 File dir = new File(path);
@@ -1217,8 +1217,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             int pathIndex = fileName.indexOf("META-INF/web/");
             if (pathIndex != -1) {
                 if (logFeedback && logService.isTraceEnabled()) {
-                    logService.trace("deploy files from folder -> " +
-                        dir.getAbsolutePath());
+                    logService.trace("deploy files from folder -> "
+                        + dir.getAbsolutePath());
 
                     // Only provide feedback once per dir
                     logFeedback = false;

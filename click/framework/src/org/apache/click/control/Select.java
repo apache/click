@@ -164,7 +164,7 @@ import org.apache.click.util.PropertyUtils;
  * item to the Select.
  *
  * <h3>Required Behaviour</h3>
- * 
+ *
  * When a Select control's required property is set to true, then the user has
  * to select a value other than the first value in the option list. The  first
  * value represents a non-selection by the user. In the example below an
@@ -173,29 +173,29 @@ import org.apache.click.util.PropertyUtils;
  * <pre class="prettyprint">
  * public MyPage extends Page {
  *     ..
- *     
+ *
  *     private Select mySelect;
  *
  *     public MyPage() {
  *         mySelect = new Select("mySelect");
  *         mySelect.setRequired(true);
- *         
+ *
  *         ..
  *     }
- *     
+ *
  *     public void onInit() {
  *         mySelect.add(Option.EMPTY_OPTION);
- *         List<Customer> customerList = customerDao.getCustomerList();
+ *         List&lt;Customer&gt; customerList = customerDao.getCustomerList();
  *         mySelect.addAll(customerList, "id", "name");
  *     }
- *     
+ *
  *     ..
  * }
  * </pre>
  *
  * Remember always populate the Select option list before it is processed. Do
  * not populate the option list in a Page's onRender() methods.
- * 
+ *
  * <h3>Readonly Behaviour</h3>
  *
  * Note the &lt;select&gt; HTML element does not support the "readonly" attribute.
