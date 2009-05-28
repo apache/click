@@ -18,10 +18,7 @@
  */
 package org.apache.click.control;
 
-import java.util.Enumeration;
 import java.util.Iterator;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.click.Context;
 import org.apache.click.util.ClickUtils;
@@ -314,15 +311,29 @@ public class ActionLink extends AbstractLink {
         if (hasParameters()) {
             Iterator i = getParameters().keySet().iterator();
             while (i.hasNext()) {
-                String name = i.next().toString();
-                if (!name.equals(ACTION_LINK) && !name.equals(VALUE)) {
-                    Object paramValue = getParameters().get(name);
-                    String encodedValue =
-                        ClickUtils.encodeUrl(paramValue, context);
-                    buffer.append("&amp;");
-                    buffer.append(name);
-                    buffer.append("=");
-                    buffer.append(encodedValue);
+                String paramName = i.next().toString();
+                if (!paramName.equals(ACTION_LINK) && !paramName.equals(VALUE)) {
+                    Object paramValue = getParameters().get(paramName);
+
+                    // Check for multivalued parameter
+                    if (paramValue instanceof String[]) {
+                        String[] paramValues = (String[]) paramValue;
+                        for (int j = 0; j < paramValues.length; j++) {
+                            buffer.append("&amp;");
+                            buffer.append(paramName);
+                            buffer.append("=");
+                            buffer.append(ClickUtils.encodeUrl(paramValues[j],
+                                context));
+                        }
+                    } else {
+                        if (paramValue != null) {
+                            buffer.append("&amp;");
+                            buffer.append(paramName);
+                            buffer.append("=");
+                            buffer.append(ClickUtils.encodeUrl(paramValue,
+                                                               context));
+                        }
+                    }
                 }
             }
         }
@@ -388,11 +399,7 @@ public class ActionLink extends AbstractLink {
      * @return the ActionLink value if the ActionLink was processed
      */
     public String getValue() {
-        if (hasParameters()) {
-            return (String) getParameters().get(VALUE);
-        } else {
-            return null;
-        }
+        return getParameter(VALUE);
     }
 
     /**
@@ -404,8 +411,9 @@ public class ActionLink extends AbstractLink {
      * @throws NumberFormatException if the value cannot be parsed into a Double
      */
     public Double getValueDouble() {
-        if (getValue() != null) {
-            return Double.valueOf(getValue());
+        String value = getValue();
+        if (value != null) {
+            return Double.valueOf(value);
         } else {
             return null;
         }
@@ -420,8 +428,9 @@ public class ActionLink extends AbstractLink {
      * @throws NumberFormatException if the value cannot be parsed into an Integer
      */
     public Integer getValueInteger() {
-        if (getValue() != null) {
-            return Integer.valueOf(getValue());
+        String value = getValue();
+        if (value != null) {
+            return Integer.valueOf(value);
         } else {
             return null;
         }
@@ -436,8 +445,9 @@ public class ActionLink extends AbstractLink {
      * @throws NumberFormatException if the value cannot be parsed into a Long
      */
     public Long getValueLong() {
-        if (getValue() != null) {
-            return Long.valueOf(getValue());
+        String value = getValue();
+        if (value != null) {
+            return Long.valueOf(value);
         } else {
             return null;
         }
@@ -449,11 +459,7 @@ public class ActionLink extends AbstractLink {
      * @param value the ActionLink value
      */
     public void setValue(String value) {
-        if (value != null) {
-            getParameters().put(VALUE, value);
-        } else {
-            getParameters().remove(VALUE);
-        }
+        setParameter(VALUE, value);
     }
 
     /**
@@ -482,14 +488,7 @@ public class ActionLink extends AbstractLink {
         clicked = getName().equals(context.getRequestParameter(ACTION_LINK));
 
         if (clicked) {
-            HttpServletRequest request = context.getRequest();
-            Enumeration paramNames = request.getParameterNames();
-
-            while (paramNames.hasMoreElements()) {
-                String name = paramNames.nextElement().toString();
-                String value = request.getParameter(name);
-                getParameters().put(name, value);
-            }
+            bindRequestParameters(context);
         }
     }
 

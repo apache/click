@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.click.util.ClickUtils;
 import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.MessagesMap;
@@ -1092,7 +1093,8 @@ public class Page {
      * <b>Please note</b> that Click will url encode the location by invoking
      * <tt>response.encodeRedirectURL(location)</tt> before redirecting.
      * <p/>
-     * See also {@link #setForward(String)}, {@link #setPath(String)}
+     * See also {@link #setRedirect(java.lang.String, java.util.Map)},
+     * {@link #setForward(String)}, {@link #setPath(String)}
      *
      * @param location the path to redirect the request to
      */
@@ -1118,7 +1120,38 @@ public class Page {
      * the map of request parameters to the location URL.
      * <p/>
      * The map keys will be used as the request parameter names and the map
-     * values will be used as the request parameter values.
+     * values will be used as the request parameter values. For example:
+     *
+     * <pre class="prettyprint">
+     * public boolean onSave() {
+     *     // Specify redirect parameters
+     *     Map parameters = new HashMap();
+     *     parameters.put("customerId", getCustomerId());
+     *
+     *     // Set redirect to customer.htm page
+     *     setRedirect("/customer.htm", parameters);
+     *
+     *     return false;
+     * } </pre>
+     *
+     * To render multiple parameter values for the same parameter name, specify
+     * the values as a String[] array. For example:
+     *
+     * <pre class="prettyprint">
+     * public boolean onSave() {
+     *
+     *     // Specify an array of customer IDs
+     *     String[] ids = {"123", "456", "789"};
+     *
+     *     // Specify redirect parameters
+     *     Map parameters = new HashMap();
+     *     parameters.put("customerIds", ids);
+     *
+     *     // Set redirect to customer.htm page
+     *     setRedirect("/customer.htm", parameters);
+     *
+     *     return false;
+     * } </pre>
      *
      * @see #setRedirect(java.lang.String)
      *
@@ -1126,9 +1159,9 @@ public class Page {
      * @param params the map of request parameter name and value pairs
      */
     public void setRedirect(String location, Map params) {
+        Context context = getContext();
         if (StringUtils.isNotBlank(location)) {
             if (location.charAt(0) == '/') {
-                Context context = getContext();
                 String contextPath = context.getRequest().getContextPath();
 
                 // Guard against adding duplicate context path
@@ -1144,13 +1177,27 @@ public class Page {
             for (Iterator i = params.keySet().iterator(); i.hasNext();) {
                 String paramName = i.next().toString();
                 Object paramValue = params.get(paramName);
-                if (paramValue != null) {
-                    buffer.append(paramName);
-                    buffer.append("=");
-                    buffer.append(paramValue);
-                    if (i.hasNext()) {
-                        buffer.append("&");
+
+                // Check for multivalued parameter
+                if (paramValue instanceof String[]) {
+                    String[] paramValues = (String[]) paramValue;
+                    for (int j = 0; j < paramValues.length; j++) {
+                        buffer.append(paramName);
+                        buffer.append("=");
+                        buffer.append(ClickUtils.encodeUrl(paramValues[j], context));
+                        if (j < paramValues.length - 1) {
+                            buffer.append("&");
+                        }
                     }
+                } else {
+                    if (paramValue != null) {
+                        buffer.append(paramName);
+                        buffer.append("=");
+                        buffer.append(ClickUtils.encodeUrl(paramValue, context));
+                    }
+                }
+                if (i.hasNext()) {
+                    buffer.append("&");
                 }
             }
 
@@ -1173,7 +1220,9 @@ public class Page {
      * The map keys will be used as the request parameter names and the map
      * values will be used as the request parameter values.
      *
+     * @see #setRedirect(java.lang.String, java.util.Map)
      * @see #setRedirect(java.lang.String)
+     *
      * @param pageClass the class of the Page to redirect the request to
      * @param params the map of request parameter name and value pairs
      * @throws IllegalArgumentException if the Page Class is not configured
