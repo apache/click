@@ -2054,7 +2054,7 @@ public class Form extends AbstractContainer {
 
         buffer.append("<table class=\"form\" id=\"");
         buffer.append(getId());
-        buffer.append("-form\">\n");
+        buffer.append("-form\"><tbody>\n");
 
         // Render fields, errors and buttons
         if (POSITION_TOP.equals(getErrorsPosition())) {
@@ -2077,7 +2077,7 @@ public class Form extends AbstractContainer {
             throw new IllegalArgumentException(msg);
         }
 
-        buffer.append("</table>\n");
+        buffer.append("</tbody></table>\n");
 
         renderTagEnd(formFields, buffer);
     }
@@ -2267,7 +2267,7 @@ public class Form extends AbstractContainer {
         if (containerId != null) {
             buffer.appendAttribute("id", containerId + "-fields");
         }
-        buffer.append(">\n");
+        buffer.append("><tbody>\n");
 
         int column = 1;
         boolean openTableRow = false;
@@ -2438,7 +2438,7 @@ public class Form extends AbstractContainer {
             buffer.append("</tr>\n");
         }
 
-        buffer.append("</table>\n");
+        buffer.append("</tbody></table>\n");
     }
 
     /**
@@ -2456,7 +2456,7 @@ public class Form extends AbstractContainer {
             buffer.append("\">\n");
             buffer.append("<table class=\"errors\" id=\"");
             buffer.append(getId());
-            buffer.append("-errors\">\n");
+            buffer.append("-errors\"><tbody>\n");
 
             if (getError() != null) {
                 buffer.append("<tr class=\"errors\">");
@@ -2500,7 +2500,7 @@ public class Form extends AbstractContainer {
                 buffer.append("</td></tr>\n");
             }
 
-            buffer.append("</table>\n");
+            buffer.append("</tbody></table>\n");
             buffer.append("</td></tr>\n");
         }
 
@@ -2532,7 +2532,7 @@ public class Form extends AbstractContainer {
 
             buffer.append("<table class=\"buttons\" id=\"");
             buffer.append(getId());
-            buffer.append("-buttons\">\n");
+            buffer.append("-buttons\"><tbody>\n");
             buffer.append("<tr class=\"buttons\">");
 
             for (int i = 0, size = buttonList.size(); i < size; i++) {
@@ -2547,7 +2547,7 @@ public class Form extends AbstractContainer {
             }
 
             buffer.append("</tr>\n");
-            buffer.append("</table>\n");
+            buffer.append("</tbody></table>\n");
             buffer.append("</td></tr>\n");
         }
     }

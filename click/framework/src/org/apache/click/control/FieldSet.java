@@ -927,7 +927,7 @@ public class FieldSet extends Field implements Container {
         buffer.appendAttribute("class", "fields");
         buffer.appendAttribute("id", getId() + "-fields");
         buffer.closeTag();
-        buffer.append("\n");
+        buffer.append("<tbody>\n");
 
         int column = 1;
         boolean openTableRow = false;
@@ -1081,6 +1081,7 @@ public class FieldSet extends Field implements Container {
             buffer.append("</tr>\n");
         }
 
+        buffer.append("</tbody>");
         buffer.elementEnd("table");
         buffer.append("\n");
     }
@@ -1096,7 +1097,7 @@ public class FieldSet extends Field implements Container {
         if (!buttons.isEmpty()) {
             buffer.append("<table class=\"buttons\" id=\"");
             buffer.append(getId());
-            buffer.append("-buttons\">\n");
+            buffer.append("-buttons\"><tbody>\n");
             buffer.append("<tr class=\"buttons\">");
 
             Form form = getForm();
@@ -1112,7 +1113,7 @@ public class FieldSet extends Field implements Container {
             }
 
             buffer.append("</tr>\n");
-            buffer.append("</table>\n");
+            buffer.append("</tbody></table>\n");
         }
     }
 
