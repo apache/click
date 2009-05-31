@@ -42,6 +42,7 @@
    <property name="jar.log4j" value="log4j-${log4j.version}.jar"/>
    <property name="jar.ognl" value="ognl-${ognl.version}.jar"/>
    <property name="jar.servlet" value="servlet-api-${servlet-api.version}.jar"/>
+   <property name="jar.slf4j" value="slf4j-api-${slf4j.version}.jar"/>
    <property name="jar.spring" value="spring-${spring.version}.jar"/>
    <property name="jar.upload" value="commons-fileupload-${commons-fileupload.version}.jar"/>
    <property name="jar.velocity" value="velocity-${velocity.version}.jar"/>
@@ -136,6 +137,7 @@
       <pathelement location="lib/${jar.hibernate}"/>
       <pathelement location="lib/${jar.log4j}"/>
       <pathelement location="lib/${jar.servlet}"/>
+      <pathelement location="lib/${jar.slf4j}"/>
       <pathelement location="lib/${jar.spring}"/>
       <pathelement location="lib/${jar.freemarker}"/>
       <pathelement location="dist/${click}.jar"/>
@@ -208,6 +210,7 @@
             <exclude name="lib/${jar.junit}"/>
             <exclude name="lib/${jar.ognl}"/>
             <exclude name="lib/${jar.servlet}"/>
+            <exclude name="lib/${jar.slf4j}"/>
             <exclude name="lib/${jar.velocity}"/>
             <exclude name="lib/spring-*.jar"/>
             <exclude name="lib/${jar.upload}"/>
@@ -560,6 +563,7 @@
       <downloadMacro name="${jar.upload}" path="commons-fileupload/commons-fileupload/${commons-fileupload.version}"/>
       <downloadMacro name="${jar.junit}" path="junit/junit/${junit.version}"/>
       <downloadMacro name="${jar.servlet}" path="javax/servlet/servlet-api/${servlet-api.version}"/>
+      <downloadMacro name="${jar.slf4j}" path="org/slf4j/slf4j-api/${slf4j.version}"/>
       <downloadMacro name="${jar.spring}" path="org/springframework/spring/${spring.version}"/>
       <downloadMacro name="${jar.velocity}" path="org/apache/velocity/velocity/${velocity.version}"/>
       <downloadMacro name="${jar.cayenne}" path="org/apache/cayenne/cayenne-server/${cayenne.version}"/>
