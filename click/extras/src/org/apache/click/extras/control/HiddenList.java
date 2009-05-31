@@ -25,25 +25,29 @@ import org.apache.click.control.Field;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
- * Provides a list of hidden field.
- * <p>
- * Click provides a {@link org.apache.click.control.HiddenField} to render &lt;input type="hidden"&gt;.
- * However it can not render multiple values as a same name.
- * This control can have multiple values and it renders them as multiple hidden field.
- * </p>
+ * Provides a control for rendering a list of
+ * {@link org.apache.click.control.HiddenField Hidden Fields}:
+ * &nbsp; &lt;input type='hidden'&gt;.
+ * <p/>
+ * Click also provides the {@link org.apache.click.control.HiddenField} to render
+ * &lt;input type="hidden"&gt;, however HiddeField can not render multiple values
+ * under the same name.
+ * <p/>
+ * HiddenList supports multiple values under the same name by rendering
+ * the values as multiple hidden fields.
  *
  * <h3>HiddenList Examples</h3>
  *
- * <pre class="codeJava">
- * HiddenList hiddenList = <span class="kw">new</span> HiddenList(<span class="st">"hiddenList"</span>);
- * hiddenList.addValue(<span class="st">"001"</span>);
- * hiddenList.addValue(<span class="st">"002"</span>); </pre>
+ * <pre class="prettyprint">
+ * HiddenList hiddenList = new HiddenList("customerId");
+ * hiddenList.addValue("123");
+ * hiddenList.addValue("678"); </pre>
  *
  * This <code>HiddenList</code> would generate following HTML:
  *
- * <pre class="codeHtml">
- * &lt;input type="hidden" name="hiddenList" id="form-hiddenList_1" value="001"/&gt;
- * &lt;input type="hidden" name="hiddenList" id="form-hiddenList_2" value="002"/&gt; </pre>
+ * <pre class="prettyprint">
+ * &lt;input type="hidden" name="customerId" id="form-customerId_1" value="123"/&gt;
+ * &lt;input type="hidden" name="customerId" id="form-customerId_2" value="678"/&gt; </pre>
  *
  * @author Naoki Takezoe
  * @since 2.1.0
@@ -68,6 +72,14 @@ public class HiddenList extends Field {
         super(name);
     }
 
+    /**
+     * Create a default HiddenList.
+     * <p/>
+     * <b>Please note</b> the control's name must be defined before it is valid.
+     */
+    public HiddenList() {
+    }
+
     // ------------------------------------------------------ Public Attributes
 
     /**
@@ -77,13 +89,14 @@ public class HiddenList extends Field {
      */
     public void setValueObject(Object valueObject) {
         if (!(valueObject instanceof List)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("the valueObject must be a"
+                + " List.");
         }
         this.valueObject = (List) valueObject;
     }
 
     /**
-     * Returns the list of added values as a <tt>List</tt> of Strings.
+     * Returns the list of added values as a <tt>java.util.List</tt> of Strings.
      *
      * @return a list of Strings
      */
@@ -116,7 +129,7 @@ public class HiddenList extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * This method binds the submitted request value to the Field's value.
+     * This method binds the submitted request values to the HiddenList values.
      */
     public void bindRequestValue() {
         String[] values = getContext().getRequestParameterValues(getName());
