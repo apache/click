@@ -316,10 +316,9 @@ public class FileField extends Field {
     public void validate() {
         setError(null);
 
-        FileItem fileItem = getFileItem();
-
-        if (fileItem != null) {
-            if (isRequired() && StringUtils.isBlank(fileItem.getName())) {
+        if (isRequired()) {
+            FileItem fileItem = getFileItem();
+            if (fileItem == null || StringUtils.isBlank(fileItem.getName())) {
                 setErrorMessage("file-required-error");
             }
         }
