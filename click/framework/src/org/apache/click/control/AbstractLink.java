@@ -476,6 +476,13 @@ public abstract class AbstractLink extends AbstractControl {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * This method does nothing by default since AbstractLink does not bind to
+     * request values.
+     */
+    public void bindRequestValue() {
+    }
+
+    /**
      * Render the HTML representation of the anchor link. This method
      * will render the entire anchor link including the tags, the label and
      * any attributes, see {@link #setAttribute(String, String)} for an
