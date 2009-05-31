@@ -65,7 +65,7 @@ public class Context {
     /** The thread local context. */
     private static final ThreadLocal THREAD_LOCAL_CONTEXT = new ThreadLocal();
 
-    /** Ajax request header. */
+    /** Ajax request header or parameter: "<tt>X-Requested-With</tt>". */
     private static final String X_REQUESTED_WITH = "X-Requested-With";
 
     // -------------------------------------------------------------- Instance Variables
@@ -299,14 +299,22 @@ public class Context {
     /**
      * Return true is this is an Ajax request, false otherwise.
      * <p/>
-     * An Ajax request is identified by the presence of the request header
-     * <tt>"X-Requested-With: XMLHttpRequest"</tt>. This is the de-facto
-     * standard header used by Ajax libraries.
+     * An Ajax request is identified by the presence of the request header or
+     * request parameter: "<tt>X-Requested-With</tt>". This is the de-facto
+     * standard identifier used by Ajax libraries.
+     * <p/>
+     * <b>Note:</b> incoming requests that contains "<tt>X-Requested-With</tt>"
+     * as a request parameter will result in this method returning true. This
+     * allows one to programmatically enable Ajax requests. A common usage of
+     * this feature is when uploading files through an IFrame element. By
+     * specifying "<tt>X-Requested-With</tt>" as a request parameter the IFrame
+     * request will be handled like a normal Ajax request.
      *
      * @return true if this is an Ajax request, false otherwise
      */
     public boolean isAjaxRequest() {
-        return getRequest().getHeader(X_REQUESTED_WITH) != null;
+        return getRequest().getHeader(X_REQUESTED_WITH) != null
+            || getRequest().getParameter(X_REQUESTED_WITH) != null;
     }
 
     /**
