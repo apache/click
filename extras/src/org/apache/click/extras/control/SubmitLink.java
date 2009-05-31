@@ -356,7 +356,7 @@ public class SubmitLink extends ActionLink {
         buffer.append(getName());
         if (value != null) {
             buffer.append("&amp;");
-            if (hasParentForm()) {
+            if (StringUtils.isNotBlank(prefix)) {
                 // Value parameter is prefixed when SubmitLink is included
                 // inside a Form
                 buffer.append(prefix);
@@ -375,10 +375,12 @@ public class SubmitLink extends ActionLink {
                     if (paramValue instanceof String[]) {
                         String[] paramValues = (String[]) paramValue;
                         for (int j = 0; j < paramValues.length; j++) {
-                            renderParameter(name, paramValues[j], buffer, context);
+                            renderParameter(name, paramValues[j], prefix,
+                                buffer, context);
                         }
                     } else {
-                        renderParameter(name, paramValue, buffer, context);
+                        renderParameter(name, paramValue, prefix, buffer,
+                            context);
                     }
                 }
             }
@@ -499,10 +501,11 @@ public class SubmitLink extends ActionLink {
      *
      * @param name the parameter name
      * @param value the parameter value
+     * @param prefix the parameter prefix value
      * @param buffer the buffer to render the parameter to
      * @param context the request context
      */
-    private void renderParameter(String name, Object value,
+    private void renderParameter(String name, Object value, String prefix,
         HtmlStringBuffer buffer, Context context) {
 
         // Don't render null values
@@ -512,10 +515,10 @@ public class SubmitLink extends ActionLink {
 
         String encodedValue = ClickUtils.encodeUrl(value, context);
         buffer.append("&amp;");
-        if (hasParentForm()) {
+        if (StringUtils.isNotBlank(prefix)) {
             // Parameters are prefixed when SubmitLink is included
             // inside a Form
-            buffer.append(getParameterPrefix());
+            buffer.append(prefix);
         }
         buffer.append(name);
         buffer.append("=");
