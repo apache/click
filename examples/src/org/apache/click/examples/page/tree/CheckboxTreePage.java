@@ -59,7 +59,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         // The checkbox tree needs to be placed inside a form so all the
         // checkbox values can be submitted to the server when we submit
         // the form.
-        form = new CheckboxTreeForm("form");
+        form = new Form("form");
 
         //Create the tree and tree model and add it to the page
         tree = buildTree();
@@ -163,31 +163,6 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         storeNodesInSession(root);
 
         return tree;
-    }
-
-    // Custom form that handles the processing of the tree
-    class CheckboxTreeForm extends Form {
-
-        public CheckboxTreeForm(String name) {
-            super(name);
-        }
-
-        /**
-         * PLEASE NOTE: CheckboxTree will only be processed by form if the
-         * Form is submitted. Thus expanding and collapsing Tree nodes
-         * won't work by default because the Tree won't be processed.
-         *
-         * Here we override the default behavior and explicitly process
-         * CheckboxTree so that expanding and collapsing nodes will still work,
-         * even if the Form was not submitted.
-         */
-        public boolean onProcess() {
-            if (form.isFormSubmission()) {
-                return super.onProcess();
-            } else {
-                return tree.onProcess();
-            }
-        }
     }
 
     // -------------------------------------------------- TreeListener Support

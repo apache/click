@@ -23,7 +23,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -40,7 +39,9 @@ import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.ControlRegistry;
 import org.apache.click.control.AbstractControl;
+import org.apache.click.control.ActionLink;
 import org.apache.click.control.Decorator;
+import org.apache.click.extras.control.SubmitLink;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -226,6 +227,12 @@ public class Tree extends AbstractControl {
     /** Array of ids that must be expanded or collapsed. */
     protected String[] expandOrCollapseNodeIds = null;
 
+    /** The Tree node select / deselect link. */
+    protected ActionLink selectLink;
+
+    /** The tree node expand / collapse link. */
+    protected ActionLink expandLink;
+
     /** Callback provider for users to decorate tree nodes. */
     private transient Decorator decorator;
 
@@ -285,6 +292,23 @@ public class Tree extends AbstractControl {
     }
 
     // --------------------------------------------- Public Getters and Setters
+
+    /**
+     * @see Control#setName(String)
+     *
+     * @param name of the control
+     * @throws IllegalArgumentException if the name is null
+     */
+    public void setName(String name) {
+        super.setName(name);
+        getExpandLink().setName(name + "-expandLink");
+        getExpandLink().setLabel("");
+        getExpandLink().setParent(this);
+
+        getSelectLink().setName(name + "-selectLink");
+        getSelectLink().setLabel("");
+        getSelectLink().setParent(this);
+    }
 
     /**
      * Return the tree's root TreeNode. This method will recalculate
@@ -461,6 +485,52 @@ public class Tree extends AbstractControl {
         return buffer.toString();
     }
 
+   /**
+     * @see org.apache.click.Control#getHeadElements()
+     *
+     * @return the list of HEAD elements to be included in the page
+     */
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+            headElements.addAll(getExpandLink().getHeadElements());
+            headElements.addAll(getSelectLink().getHeadElements());
+        }
+        return headElements;
+    }
+
+    /**
+     * Return the tree node expand / collapse link.
+     * <p/>
+     * This method returns a {@link org.apache.click.extras.control.SubmitLink}
+     * so that the Tree can function properly when added to a
+     * {@link org.apache.click.control.Form}.
+     *
+     * @return the tree node expand / collapse link
+     */
+    public ActionLink getExpandLink() {
+        if (expandLink == null) {
+            expandLink = new SubmitLink();
+        }
+        return expandLink;
+    }
+
+    /**
+     * Return the tree node select / deselect link.
+     * <p/>
+     * This method returns a {@link org.apache.click.extras.control.SubmitLink}
+     * so that the Tree can function properly when added to a
+     * {@link org.apache.click.control.Form}.
+     *
+     * @return the tree node select / deselect link.
+     */
+    public ActionLink getSelectLink() {
+        if (selectLink == null) {
+            selectLink = new SubmitLink();
+        }
+        return selectLink;
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -468,14 +538,14 @@ public class Tree extends AbstractControl {
      * the tree's nodes.
      */
     public void bindExpandOrCollapseValues() {
-        expandOrCollapseNodeIds = getRequestValues(EXPAND_TREE_NODE_PARAM);
+        expandOrCollapseNodeIds = getExpandLink().getParameterValues(EXPAND_TREE_NODE_PARAM);
     }
 
     /**
      * This method binds the users request of selected nodes to the tree's nodes.
      */
     public void bindSelectOrDeselectValues() {
-        selectOrDeselectNodeIds = getRequestValues(SELECT_TREE_NODE_PARAM);
+        selectOrDeselectNodeIds = getSelectLink().getParameterValues(SELECT_TREE_NODE_PARAM);
     }
 
     /**
@@ -812,6 +882,8 @@ public class Tree extends AbstractControl {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
+        getExpandLink().onProcess();
+        getSelectLink().onProcess();
         bindRequestValue();
 
         ControlRegistry.registerActionEvent(this, new ActionListener() {
@@ -823,30 +895,38 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * This method does nothing.
+     * This method cleans up the {@link #expandLink} and {@link #selectLink}.
+     * @see org.apache.click.Control#onDestroy()
+     */
+    public void onDestroy() {
+        super.onDestroy();
+        getExpandLink().onDestroy();
+        getSelectLink().onDestroy();
+    }
+
+    /**
+     * Set the controls event listener.
      * <p/>
-     * Please use the {@link #addListener(TreeListener)} method instead.
-     *
-     * @see org.apache.click.Control#setListener(Object, String)
+     * To receive notifications when TreeNodes are selected or expanded please
+     * use {@link #addListener(TreeListener)}.
      *
      * @param listener the listener object with the named method to invoke
      * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method) {
-        // Does nothing
+        super.setListener(listener, method);
     }
 
     /**
-     * This method does nothing.
+     * Set the control's action listener.
      * <p/>
-     * Please use the {@link #addListener(TreeListener)} method instead.
-     *
-     * @see org.apache.click.Control#setListener(Object, String)
+     * To receive notifications when TreeNodes are selected or expanded please
+     * use {@link #addListener(TreeListener)}.
      *
      * @param listener the control's action listener
      */
     public void setActionListener(ActionListener listener) {
-        // Does nothing
+        super.setActionListener(listener);
     }
 
     /**
@@ -876,6 +956,20 @@ public class Tree extends AbstractControl {
      */
     public int getControlSizeEst() {
         return 256;
+    }
+
+    /**
+     * Utility method that force the Tree to remove any entries it made in the
+     * HttpSession.
+     * <p/>
+     * <b>Note</b> Tree only stores a value in the Session when JavaScript
+     * is enabled and set to {@link #JAVASCRIPT_SESSION_POLICY}.
+     */
+    public void cleanupSession() {
+        Context context = getContext();
+        if (context.hasSession()) {
+            context.getSession().removeAttribute(SessionHandler.JS_HANDLER_SESSION_KEY);
+        }
     }
 
     /**
@@ -915,20 +1009,6 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Utility method that force the Tree to remove any entries it made in the
-     * HttpSession.
-     * <p/>
-     * <b>Note</b> Tree only stores a value in the Session when JavaScript
-     * is enabled and set to {@link #JAVASCRIPT_SESSION_POLICY}.
-     */
-    public void cleanupSession() {
-        Context context = getContext();
-        if (context.hasSession()) {
-            context.getSession().removeAttribute(SessionHandler.JS_HANDLER_SESSION_KEY);
-        }
-    }
-
-    /**
      * Return a HTML rendered Tree string of all the tree's nodes.
      *
      * <p/>Note: by default the tree's root node will not be rendered.
@@ -964,7 +1044,12 @@ public class Tree extends AbstractControl {
 
         buffer.elementStart("ul");
 
-        buffer.append(" class=\"level");
+        buffer.append(" class=\"");
+        if (isRootNodeDisplayed() && indentation == 1) {
+            buffer.append("rootLevel level");
+        } else {
+            buffer.append("level");
+        }
         buffer.append(Integer.toString(indentation));
 
         //If javascript is enabled and this is not the first level of <ul> elements,
@@ -1030,10 +1115,13 @@ public class Tree extends AbstractControl {
      */
     protected void renderTreeNodeStart(HtmlStringBuffer buffer, TreeNode treeNode,
             int indentation) {
-        buffer.append("<li><span");
-        StringBuffer sb = new StringBuffer();
-        sb.append(getExpandClass(treeNode));
-        buffer.appendAttribute("class", sb.toString());
+        buffer.append("<li><span class=\"");
+        if (treeNode.isRoot()) {
+            buffer.append("rootNode ");
+        }
+        buffer.append(getExpandClass(treeNode));
+        buffer.append("\"");
+
         if (isJavascriptEnabled()) {
             //hook to insert javascript specific code
             javascriptHandler.getJavascriptRenderer().renderTreeNodeStart(buffer);
@@ -1074,19 +1162,18 @@ public class Tree extends AbstractControl {
      * @param treeNode treeNode to render
      */
     protected void renderExpandAndCollapseAction(HtmlStringBuffer buffer, TreeNode treeNode) {
-        buffer.elementStart("a");
-        Map hrefParameters =
-            Collections.singletonMap(EXPAND_TREE_NODE_PARAM, treeNode.getId());
-        buffer.appendAttribute("href", getHref(hrefParameters));
-
-        buffer.appendAttribute("class", "spacer");
+        getExpandLink().setParameter(EXPAND_TREE_NODE_PARAM, treeNode.getId());
+        if (treeNode.isRoot()) {
+            getExpandLink().setAttribute("class", "root spacer");
+        } else {
+            getExpandLink().setAttribute("class", "spacer");
+        }
         if (isJavascriptEnabled()) {
             //hook to insert javascript specific code
             javascriptHandler.getJavascriptRenderer().renderExpandAndCollapseAction(buffer);
         }
 
-        buffer.closeTag();
-        buffer.elementEnd("a");
+        getExpandLink().render(buffer);
         buffer.append("\n");
     }
 
@@ -1172,17 +1259,11 @@ public class Tree extends AbstractControl {
      * @param treeNode treeNode to render
      */
     protected void renderValue(HtmlStringBuffer buffer, TreeNode treeNode) {
-        buffer.elementStart("a");
-
-        Map hrefParameters =
-            Collections.singletonMap(SELECT_TREE_NODE_PARAM, treeNode.getId());
-        buffer.appendAttribute("href", getHref(hrefParameters));
-
-        buffer.closeTag();
+        getSelectLink().setParameter(SELECT_TREE_NODE_PARAM, treeNode.getId());
         if (treeNode.getValue() != null) {
-            buffer.append(treeNode.getValue());
+            getSelectLink().setLabel(treeNode.getValue().toString());
         }
-        buffer.elementEnd("a");
+        getSelectLink().render(buffer);
     }
 
     /**
@@ -1248,12 +1329,12 @@ public class Tree extends AbstractControl {
      * expand events.
      *
      * @param node specify the TreeNode that was expanded
-     * @param oldValue previous expanded value of the specified node
+     * @param previousState contains the previous expanded state
      */
-    protected void fireNodeExpanded(TreeNode node, boolean oldValue) {
+    protected void fireNodeExpanded(TreeNode node, boolean previousState) {
         for (Iterator it = listeners.iterator(); it.hasNext();) {
             TreeListener l = (TreeListener) it.next();
-            l.nodeExpanded(this, node, getContext(), oldValue);
+            l.nodeExpanded(this, node, getContext(), previousState);
         }
     }
 
@@ -1262,12 +1343,12 @@ public class Tree extends AbstractControl {
      * collapse events.
      *
      * @param node specific the TreeNode that was collapsed
-     * @param oldValue previous collapsed value of the specified node
+     * @param previousState contains the previous expanded state
      */
-    protected void fireNodeCollapsed(TreeNode node, boolean oldValue) {
+    protected void fireNodeCollapsed(TreeNode node, boolean previousState) {
         for (Iterator it = listeners.iterator(); it.hasNext();) {
             TreeListener l = (TreeListener) it.next();
-            l.nodeCollapsed(this, node, getContext(), oldValue);
+            l.nodeCollapsed(this, node, getContext(), previousState);
         }
     }
 
@@ -1276,12 +1357,12 @@ public class Tree extends AbstractControl {
      * selection events.
      *
      * @param node specific the TreeNode that was selected
-     * @param oldValue previous selected value of the specified node
+     * @param previousState contains the previous selected state
      */
-    protected void fireNodeSelected(TreeNode node, boolean oldValue) {
+    protected void fireNodeSelected(TreeNode node, boolean previousState) {
         for (Iterator it = listeners.iterator(); it.hasNext();) {
             TreeListener l = (TreeListener) it.next();
-            l.nodeSelected(this, node, getContext(), oldValue);
+            l.nodeSelected(this, node, getContext(), previousState);
         }
     }
 
@@ -1290,12 +1371,12 @@ public class Tree extends AbstractControl {
      * deselection events.
      *
      * @param node specific the TreeNode that was deselected
-     * @param oldValue previous deselected value of the specified node
+     * @param previousState contains the previous selected state
      */
-    protected void fireNodeDeselected(TreeNode node, boolean oldValue) {
+    protected void fireNodeDeselected(TreeNode node, boolean previousState) {
         for (Iterator it = listeners.iterator(); it.hasNext();) {
             TreeListener l = (TreeListener) it.next();
-            l.nodeDeselected(this, node, getContext(), oldValue);
+            l.nodeDeselected(this, node, getContext(), previousState);
         }
     }
 
@@ -1830,7 +1911,7 @@ public class Tree extends AbstractControl {
         /** holds the id of the icon html element. */
         protected String iconId;
 
-        /** holds the javascript call to expand the node. */
+        /** holds the javascript call to expand or collapse the node. */
         protected String nodeExpansionString;
 
         /**
@@ -1861,7 +1942,7 @@ public class Tree extends AbstractControl {
          * @param buffer string buffer containing the markup
          */
         public void renderExpandAndCollapseAction(HtmlStringBuffer buffer) {
-            buffer.append(nodeExpansionString);
+            getExpandLink().setAttribute("onclick", nodeExpansionString);
         }
 
         /**
@@ -1925,11 +2006,11 @@ public class Tree extends AbstractControl {
         public void init(TreeNode treeNode) {
             super.init(treeNode);
             StringBuffer tmp = new StringBuffer();
-            tmp.append(" onclick=\"handleNodeExpansion(this,event,'").append(expandId).append("','");
+            tmp.append("handleNodeExpansion(this,event,'").append(expandId).append("','");
             tmp.append(iconId).append("'); handleCookie(this,event,'").append(expandId).append("','");
             tmp.append(treeNode.getId()).append("','");
             tmp.append(expandedCookieName).append("','");
-            tmp.append(collapsedCookieName).append("'); return false;\"");
+            tmp.append(collapsedCookieName).append("'); return false;");
             nodeExpansionString = tmp.toString();
         }
     }
@@ -1951,8 +2032,8 @@ public class Tree extends AbstractControl {
          */
         public void init(TreeNode treeNode) {
             super.init(treeNode);
-            String tmp = buildString(" onclick=\"handleNodeExpansion(this,event,'", expandId, "','");
-            nodeExpansionString = buildString(tmp, iconId, "'); return false;\"");
+            String tmp = buildString("handleNodeExpansion(this,event,'", expandId, "','");
+            nodeExpansionString = buildString(tmp, iconId, "'); return false;");
         }
     }
 

@@ -29,7 +29,6 @@ import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 
-import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -826,16 +825,6 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * @see Control#setListener(Object, String)
-     *
-     * @param listener the listener object with the named method to invoke
-     * @param method the name of the method to invoke
-     */
-    public void setListener(Object listener, String method) {
-        // Does nothing
-    }
-
-    /**
      * @see Control#setName(String)
      *
      * @param name of the control
@@ -1206,29 +1195,29 @@ public class Table extends AbstractControl {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        Context context = getContext();
-        getControlLink().onProcess();
+        ActionLink controlLink = getControlLink();
+        controlLink.onProcess();
 
-        if (getControlLink().isClicked()) {
-            String page = context.getRequestParameter(PAGE);
+        if (controlLink.isClicked()) {
+            String page = controlLink.getParameter(PAGE);
             if (NumberUtils.isNumber(page)) {
                 setPageNumber(Integer.parseInt(page));
             } else {
                 setPageNumber(0);
             }
 
-            String column = context.getRequestParameter(COLUMN);
+            String column = controlLink.getParameter(COLUMN);
             if (column != null) {
                 setSortedColumn(column);
             }
 
-            String ascending = context.getRequestParameter(ASCENDING);
+            String ascending =  controlLink.getParameter(ASCENDING);
             if (ascending != null) {
                 setSortedAscending("true".equals(ascending));
             }
 
             // Flip sorting order
-            if ("true".equals(context.getRequestParameter(SORT))) {
+            if ("true".equals( controlLink.getParameter(SORT))) {
                 setSortedAscending(!isSortedAscending());
             }
         }
@@ -1238,11 +1227,12 @@ public class Table extends AbstractControl {
             Control control = (Control) getControls().get(i);
             continueProcessing = control.onProcess();
             if (!continueProcessing) {
-                return false;
+                continueProcessing = false;
             }
         }
 
-        return true;
+        registerActionEvent();
+        return continueProcessing;
     }
 
     /**
@@ -1255,6 +1245,7 @@ public class Table extends AbstractControl {
     public void onDestroy() {
         sorted = false;
 
+        getControlLink().onDestroy();
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
             try {
