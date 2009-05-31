@@ -20,7 +20,6 @@ package org.apache.click.extras.control;
 
 import java.util.List;
 
-import org.apache.click.Context;
 import org.apache.click.control.Button;
 import org.apache.click.control.Column;
 import org.apache.click.control.Field;
@@ -29,6 +28,7 @@ import org.apache.click.control.HiddenField;
 import org.apache.click.control.Table;
 import org.apache.click.util.HtmlStringBuffer;
 
+import org.apache.click.control.ActionLink;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -392,6 +392,27 @@ public class FormTable extends Table {
     }
 
     /**
+     * Set the parent of the FormTable. Also set the parent of the
+     * {@link #getControlLink()} to the {@link #getForm()}.
+     *
+     * @see org.apache.click.Control#setParent(Object)
+     *
+     * @param parent the parent of the FormTable
+     * @throws IllegalStateException if {@link #name} is not defined
+     * @throws IllegalArgumentException if the given parent instance is
+     * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
+     */
+    public void setParent(Object parent) {
+        super.setParent(parent);
+
+        if (!useInternalForm) {
+            // If FormTable is added to external Form, set the control link
+            // parent to the external Form
+            getControlLink().setParent(getForm());
+        }
+    }
+
+    /**
      * Return true if the table will render the submitted form values. By
      * default FormTable renders submitted values.
      *
@@ -480,7 +501,11 @@ public class FormTable extends Table {
      * @return true if further processing should continue or false otherwise
      */
     public boolean onProcess() {
-        if (getForm().isFormSubmission()) {
+        ActionLink controlLink = getControlLink();
+
+        boolean continueProcessing = super.onProcess();
+
+        if (!controlLink.isClicked() && getForm().isFormSubmission()) {
             Field pageField = getForm().getField(PAGE);
             pageField.onProcess();
             if (StringUtils.isNotBlank(pageField.getValue())) {
@@ -536,26 +561,25 @@ public class FormTable extends Table {
                 }
             }
         } else {
-            Context context = getContext();
-            String page = context.getRequestParameter(PAGE);
+            String page = controlLink.getParameter(PAGE);
             getForm().getField(PAGE).setValue(page);
 
-            String column = context.getRequestParameter(COLUMN);
+            String column = controlLink.getParameter(COLUMN);
             getForm().getField(COLUMN).setValue(column);
 
-            String ascending = context.getRequestParameter(ASCENDING);
+            String ascending =  controlLink.getParameter(ASCENDING);
             getForm().getField(ASCENDING).setValue(ascending);
 
-            // Flip sorting order
-            // Table.onProcess() flips the sort order, so we apply a flip here as well so that
-            // the value of ASCENDING field in the form is in sync with the table.
-            String sort = context.getRequestParameter(SORT);
+            // Table.onProcess() flips the sort order, so to ensure the ASCENDING
+            // Field value is in sync with the Table, we flip the field value as
+            // well.
+            String sort = controlLink.getParameter(SORT);
             if ("true".equals(sort) || ascending == null) {
                 getForm().getField(ASCENDING).setValue("true".equals(ascending) ? "false" : "true");
             }
         }
 
-        return super.onProcess();
+        return continueProcessing;
     }
 
     /**
