@@ -116,6 +116,9 @@ public interface ConfigService {
     /** The page not found file path: &nbsp; "<tt>/click/not-found.htm</tt>". */
     public static final String NOT_FOUND_PATH = "/click/not-found.htm";
 
+    /** The page auto binding mode. */
+    public enum AutoBinding { PUBLIC, ANNOTATION, NONE };
+
     /**
      * The servlet context attribute name. The ClickServlet stores the
      * application ConfigService instance in the ServletContext using this
@@ -193,14 +196,14 @@ public interface ConfigService {
     public boolean isJspPage(String path);
 
     /**
-     * Return true if auto binding is enabled. Autobinding will automatically
-     * bind any request parameters to public fields, add any public controls to
-     * the page and add public fields to the page model.
+     * Return the page auto binding mode. If the mode is "PUBLIC" any public
+     * Page fields will be auto bound, if the mode is "ANNOTATION" any Page field
+     * with the "Bindable" annotation will be auto bound and if the mode is
+     * "NONE" no Page fields will be auto bound.
      *
-     * @return true if request parameters should be automatically bound to public
-     * page fields
+     * @return the Page field auto binding mode { PUBLIC, ANNOTATION, NONE }
      */
-    public boolean isPagesAutoBinding();
+    public AutoBinding getAutoBindingMode();
 
     /**
      * Return true if the application is in "production" mode.
@@ -258,20 +261,20 @@ public interface ConfigService {
     public List getPageClassList();
 
     /**
-     * Return Map of public fields for the given page class.
+     * Return Map of bindable fields for the given page class.
      *
      * @param pageClass the page class
-     * @return a Map of public fields for the given page class
+     * @return a Map of bindable fields for the given page class
      */
     public Map getPageFields(Class pageClass);
 
     /**
-     * Return the public field of the given name for the pageClass,
+     * Return the bindable field of the given name for the pageClass,
      * or null if not defined.
      *
      * @param pageClass the page class
      * @param fieldName the name of the field
-     * @return the public field of the pageClass with the given name or null
+     * @return the bindable field of the pageClass with the given name or null
      */
     public Field getPageField(Class pageClass, String fieldName);
 
@@ -284,10 +287,10 @@ public interface ConfigService {
     public Map getPageHeaders(String path);
 
     /**
-     * Return an array public fields for the given page class.
+     * Return an array bindable for the given page class.
      *
      * @param pageClass the page class
-     * @return an array public fields for the given page class
+     * @return an array bindable fields for the given page class
      */
     public Field[] getPageFieldArray(Class pageClass);
 
