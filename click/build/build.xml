@@ -46,7 +46,7 @@
    <property name="jar.spring" value="spring-${spring.version}.jar"/>
    <property name="jar.upload" value="commons-fileupload-${commons-fileupload.version}.jar"/>
    <property name="jar.velocity" value="velocity-${velocity.version}.jar"/>
-   <property name="javac.source" value="1.4"/>
+   <property name="javac.source" value="1.5"/>
    <property name="repository" value="http://repo1.maven.org"/>
    <property name="maven-bundle" value="../maven-upload"/>
 

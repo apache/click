@@ -37,18 +37,19 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
+
 import javax.servlet.ServletContext;
+
+import ognl.Ognl;
 
 import org.apache.click.Control;
 import org.apache.click.Page;
+import org.apache.click.util.Bindable;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
-import ognl.Ognl;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang.StringUtils;
@@ -165,7 +166,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     // -------------------------------------------------------- Private Members
 
     /** The automatically bind controls, request parameters and models flag. */
-    private Boolean autobinding;
+    private AutoBinding autobinding;
 
     /** The Commons FileUpload service class. */
     private FileUploadService fileUploadService;
@@ -343,17 +344,12 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
-     * @see ConfigService#isPagesAutoBinding()
+     * @see ConfigService#getAutoBindingMode()
      *
-     * @return true if request parameters should be automatically bound to public
-     * page fields
+     * @return the Page field auto binding mode { PUBLIC, ANNOTATION, NONE }
      */
-    public boolean isPagesAutoBinding() {
-        if (autobinding != null) {
-            return autobinding.booleanValue();
-        } else {
-            return true;
-        }
+    public AutoBinding getAutoBindingMode() {
+        return autobinding;
     }
 
     /**
@@ -432,7 +428,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                             pageClass = getPageClass(path, pagesPackage);
 
                             if (pageClass != null) {
-                                page = new PageElm(path, pageClass, commonHeaders);
+                                page = new PageElm(path,
+                                                   pageClass,
+                                                   commonHeaders,
+                                                   autobinding);
 
                                 pageByPathMap.put(page.getPath(), page);
                                 addToClassMap(page);
@@ -694,10 +693,19 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 autobindingStr = "true";
             }
 
-            if ("true".equalsIgnoreCase(autobindingStr)) {
-                autobinding = Boolean.TRUE;
+            if ("annotation".equalsIgnoreCase(autobindingStr)) {
+                autobinding = AutoBinding.ANNOTATION;
+
+            // Provided for backward compability
+            } else if ("true".equalsIgnoreCase(autobindingStr)) {
+                autobinding = AutoBinding.PUBLIC;
+
+            } else if ("public".equalsIgnoreCase(autobindingStr)) {
+                autobinding = AutoBinding.PUBLIC;
+
             } else if ("false".equalsIgnoreCase(autobindingStr)) {
-                autobinding = Boolean.FALSE;
+                autobinding = AutoBinding.NONE;
+
             } else {
                 String msg = "Invalid pages autobinding attribute: " + autobindingStr;
                 throw new RuntimeException(msg);
@@ -753,7 +761,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             Element pageElm = (Element) pageList.get(i);
 
             XmlConfigService.PageElm page =
-                new XmlConfigService.PageElm(pageElm, pagesPackage, commonHeaders);
+                new XmlConfigService.PageElm(pageElm,
+                                             pagesPackage,
+                                             commonHeaders,
+                                             autobinding);
 
             pageByPathMap.put(page.getPath(), page);
 
@@ -798,9 +809,11 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 Class pageClass = getPageClass(pagePath, pagesPackage);
 
                 if (pageClass != null) {
-                    XmlConfigService.PageElm page = new XmlConfigService.PageElm(pagePath,
-                            pageClass,
-                            commonHeaders);
+                    XmlConfigService.PageElm page =
+                        new XmlConfigService.PageElm(pagePath,
+                                                     pageClass,
+                                                     commonHeaders,
+                                                     autobinding);
 
                     pageByPathMap.put(page.getPath(), page);
 
@@ -1613,6 +1626,34 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         return null;
     }
 
+    private static Field[] getBindablePageFields(Class pageClass, AutoBinding mode) {
+        if (mode == AutoBinding.PUBLIC) {
+            return pageClass.getFields();
+
+        } else if (mode == AutoBinding.ANNOTATION) {
+
+            List<Field> fieldList = new ArrayList<Field>();
+
+            // Only include bindable fields
+            for (Field field : pageClass.getFields()) {
+                if (field.getAnnotation(Bindable.class) != null) {
+                    fieldList.add(field);
+                }
+            }
+
+            Field[] fieldArray = new Field[fieldList.size()];
+
+            for (int i = 0; i < fieldList.size(); i++) {
+                fieldArray[i] = fieldList.get(i);
+            }
+
+            return fieldArray;
+
+        } else {
+            return new Field[0];
+        }
+    }
+
     // ---------------------------------------------------------- Inner Classes
 
     static class PageElm {
@@ -1627,7 +1668,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
         final String path;
 
-        public PageElm(Element element, String pagesPackage, Map commonHeaders)
+        public PageElm(Element element,
+                       String pagesPackage,
+                       Map commonHeaders,
+                       AutoBinding autobinding)
             throws ClassNotFoundException {
 
             // Set headers
@@ -1664,7 +1708,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
 
 
-            fieldArray = pageClass.getFields();
+            fieldArray = getBindablePageFields(pageClass, autobinding);
 
             fields = new HashMap();
             for (int i = 0; i < fieldArray.length; i++) {
@@ -1673,13 +1717,16 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
         }
 
-        private PageElm(String path, Class pageClass, Map commonHeaders) {
+        private PageElm(String path,
+                        Class pageClass,
+                        Map commonHeaders,
+                        AutoBinding mode) {
 
             headers = Collections.unmodifiableMap(commonHeaders);
             this.pageClass = pageClass;
             this.path = path;
 
-            fieldArray = pageClass.getFields();
+            fieldArray = getBindablePageFields(pageClass, mode);
 
             fields = new HashMap();
             for (int i = 0; i < fieldArray.length; i++) {
@@ -1691,7 +1738,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         public PageElm(String classname, String path)
             throws ClassNotFoundException {
 
-            this.fieldArray = null;
+            this.fieldArray = new Field[0];
             this.fields = Collections.EMPTY_MAP;
             this.headers = Collections.EMPTY_MAP;
             pageClass = ClickUtils.classForName(classname);

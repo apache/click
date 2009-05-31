@@ -44,6 +44,7 @@ import ognl.TypeConverter;
 import org.apache.click.service.ConfigService;
 import org.apache.click.service.LogService;
 import org.apache.click.service.XmlConfigService;
+import org.apache.click.service.ConfigService.AutoBinding;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ErrorPage;
 import org.apache.click.util.HtmlStringBuffer;
@@ -1068,8 +1069,8 @@ public class ClickServlet extends HttpServlet {
             // Bind to final variable to enable callback processing
             final Page page = newPage;
 
-            if (configService.isPagesAutoBinding()) {
-                // Automatically add public controls to the page
+            if (configService.getAutoBindingMode() != AutoBinding.NONE) {
+
                 processPageFields(newPage, new FieldCallback() {
                     public void processField(String fieldName, Object fieldValue) {
                         if (fieldValue instanceof Control) {
@@ -1239,7 +1240,8 @@ public class ClickServlet extends HttpServlet {
      */
     protected Map createTemplateModel(final Page page) {
 
-        if (configService.isPagesAutoBinding()) {
+        if (configService.getAutoBindingMode() != AutoBinding.NONE) {
+
             processPageFields(page, new FieldCallback() {
                 public void processField(String fieldName, Object fieldValue) {
                     if (fieldValue instanceof Control == false) {
