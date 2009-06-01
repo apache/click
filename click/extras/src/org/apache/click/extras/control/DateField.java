@@ -835,6 +835,8 @@ public class DateField extends TextField {
             buffer.append(" calendar = new CalendarDateSelect($('").append(fieldId).append("'), {");
             buffer.append("  minute_interval: 1, popup_by: '").append(imgId).append("',");
             buffer.append("  embedded: false,");
+            buffer.append("  footer: false,");
+            buffer.append("  buttons: ").append(isShowTime()).append(",");
             buffer.append("  time: ").append(isShowTime() ? "'mixed'," : "false,");
             buffer.append("  formatValue: '").append(getCalendarPattern()).append("',");
             buffer.append("  year_range: [").append(getMinimumYear()).append(",").append(getMaximumYear()).append("]");
