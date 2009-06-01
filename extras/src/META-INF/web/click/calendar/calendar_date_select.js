@@ -101,6 +101,7 @@ CalendarDateSelect.prototype = {
       popup: nil,
       formatValue: 'yyyy MMM dd',
       time: false,
+      footer: true,
       buttons: true,
       clear_button: true,
       year_range: 10,
@@ -158,6 +159,7 @@ CalendarDateSelect.prototype = {
     this.initHeaderDiv();
     this.initButtonsDiv();
     this.initCalendarGrid();
+    this.initFooterDiv();
     this.updateFooter("&#160;");
     
     this.refresh();
@@ -264,6 +266,12 @@ CalendarDateSelect.prototype = {
       }
     }
   },
+  initFooterDiv: function(){
+    if (!this.options.get("footer")) {
+      var footer_div = this.footer_div;
+      if(footer_div) footer_div.remove();
+    }
+  },
   refresh: function ()
   {
     this.refreshMonthYear();
@@ -362,7 +370,14 @@ CalendarDateSelect.prototype = {
     this.use_time = /[0-9]:[0-9]{2}/.exec(value) ? true : false;
     this.date.setDate(1);
   },
-  updateFooter:function(text) { if (!text) text = this.dateString(); this.footer_div.purgeChildren(); this.footer_div.build("span", {innerHTML: text }); },
+  updateFooter:function(text) {
+    if (this.options.get("footer")) {
+      if (!text)
+        text = this.dateString();
+      this.footer_div.purgeChildren();
+      this.footer_div.build("span", {innerHTML: text });
+    }
+  },
   clearDate:function() {
     if ((this.target_element.disabled || this.target_element.readOnly) && this.options.get("popup") != "force") return false;
     var last_value = this.target_element.value;
