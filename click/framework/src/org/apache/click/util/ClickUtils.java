@@ -923,9 +923,17 @@ public class ClickUtils {
         } else {
             String msg =
                 "could not find ConfigService in the SerlvetContext under the"
-                + " name '" + ConfigService.CONTEXT_NAME + "'. This can occur"
+                + " name '" + ConfigService.CONTEXT_NAME + "'.\nThis can occur"
                 + " if ClickUtils.getConfigService() is called before"
-                + " ClickServlet is initialized by the servlet container.";
+                + " ClickServlet is initialized by the servlet container.\n"
+                + "To fix ensure that ClickServlet is loaded at startup by"
+                + " editing your web.xml and setting the load-on-startup to 0:\n\n"
+                + " <servlet>\n"
+                + "   <servlet-name>ClickServlet</servlet-name>\n"
+                + "   <servlet-class>org.apache.click.ClickServlet</servlet-class>\n"
+                + "   <load-on-startup>0</load-on-startup>\n"
+                + " </servlet>\n";
+
             throw new RuntimeException(msg);
         }
     }
