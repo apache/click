@@ -636,8 +636,12 @@ public class PerformanceFilter implements Filter {
             return true;
         }
         versionIndicator = getApplicationResourceVersionIndicator(path);
-        if (path.indexOf(versionIndicator) != -1) {
-            return true;
+
+        // Only apply application version if one is defined
+        if (StringUtils.isNotBlank(versionIndicator)) {
+            if (path.indexOf(versionIndicator) != -1) {
+                return true;
+            }
         }
         return false;
     }
