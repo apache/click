@@ -1217,7 +1217,7 @@ public class Table extends AbstractControl {
             }
 
             // Flip sorting order
-            if ("true".equals( controlLink.getParameter(SORT))) {
+            if ("true".equals(controlLink.getParameter(SORT))) {
                 setSortedAscending(!isSortedAscending());
             }
         }
