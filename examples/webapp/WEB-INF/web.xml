@@ -82,7 +82,7 @@
 		
 	<filter-mapping>
 		<filter-name>FilterToBeanProxy</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/acegi/*</url-pattern>
 	</filter-mapping>
 
 	<filter-mapping>
