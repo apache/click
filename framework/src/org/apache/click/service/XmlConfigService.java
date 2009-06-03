@@ -696,13 +696,17 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             if ("annotation".equalsIgnoreCase(autobindingStr)) {
                 autobinding = AutoBinding.ANNOTATION;
 
-            // Provided for backward compability
-            } else if ("true".equalsIgnoreCase(autobindingStr)) {
-                autobinding = AutoBinding.PUBLIC;
-
             } else if ("public".equalsIgnoreCase(autobindingStr)) {
                 autobinding = AutoBinding.PUBLIC;
 
+            } else if ("none".equalsIgnoreCase(autobindingStr)) {
+                autobinding = AutoBinding.NONE;
+
+            // Provided for backward compatibility
+            } else if ("true".equalsIgnoreCase(autobindingStr)) {
+                autobinding = AutoBinding.PUBLIC;
+
+             // Provided for backward compatibility
             } else if ("false".equalsIgnoreCase(autobindingStr)) {
                 autobinding = AutoBinding.NONE;
 
