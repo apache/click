@@ -19,24 +19,30 @@
 package org.apache.click.extras.cayenne;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.click.util.HtmlStringBuffer;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.cayenne.BaseContext;
+import org.apache.cayenne.LifecycleListener;
 import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.access.DataDomain;
+import org.apache.cayenne.conf.Configuration;
 import org.apache.cayenne.conf.ServletUtil;
+import org.apache.cayenne.map.LifecycleEvent;
+import org.apache.cayenne.reflect.LifecycleCallbackRegistry;
+import org.apache.click.service.ConfigService;
+import org.apache.click.service.LogService;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a servlet filter which binds DataContext objects to the request.
@@ -72,6 +78,27 @@ import org.apache.cayenne.conf.ServletUtil;
  * <p/>
  * However when web applications which share a database you should probably
  * disable this option by setting the <tt>shared-cache</tt> init parameter to false.
+ *
+ * <h3>Lifecycle Listener</h3>
+ *
+ * You can register a data domain
+ * <a href="http://cayenne.apache.org/doc/api/org/apache/cayenne/LifecycleListener.html">LifecycleListener</a>
+ * class to listen to persistent object lifecycle events. Please see the
+ * Cayenne <a href="http://cayenne.apache.org/doc/lifecycle-callbacks.html">Lifecycle Callbacks</a>
+ * documentation for more details.
+ * <p/>
+ * To configure a Livecycle Listener simply specify the class name of the listener
+ * class as a filter init parameter. For example:
+ *
+ * <pre class="codeConfig">
+ *   &lt;filter&gt;
+ *     &lt;filter-name&gt;<span class="blue">data-context-filter</span>&lt;/filter-name&gt;
+ *     &lt;filter-class&gt;<span class="red">org.apache.click.extras.cayenne.DataContextFilter</span>&lt;/filter-class&gt;
+ *     &lt;init-param&gt;
+ *       &lt;param-name&gt;<font color="blue">lifecycle-listener</font>&lt;/param-name&gt;
+ *       &lt;param-value&gt;<font color="red">com.mycorp.service.AuditListener</font>&lt;/param-value&gt;
+ *     &lt;/init-param&gt;
+ *   &lt;/filter&gt; </pre>
  *
  * <h3>Configuration Examples</h3>
  *
@@ -157,6 +184,15 @@ public class DataContextFilter implements Filter {
      */
     protected boolean autoRollback = true;
 
+    /** The Cayenne DataDomain. */
+    protected DataDomain dataDomain;
+
+    /**
+     * The filter configuration object we are associated with.  If this value
+     * is null, this filter instance is not currently configured.
+     */
+    protected FilterConfig filterConfig = null;
+
     /**
      * Maintain user HttpSession scope DataContext object, the default value is
      * true. If sessionScope is false then a new DataContext object will be
@@ -167,8 +203,10 @@ public class DataContextFilter implements Filter {
     /** Create DataContext objects using the shared cache. */
     protected boolean sharedCache = true;
 
-    /** The DataContextFilter logger. */
-    protected Logger logger = Logger.getLogger(getClass());
+    /** The Click log service. */
+    protected LogService logger;
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Initialize the shared Cayenne configuration. If the
@@ -177,11 +215,15 @@ public class DataContextFilter implements Filter {
      * @see Filter#init(FilterConfig)
      *
      * @param config the filter configuration
-     * @throws ServletException if an initialization error occurs
+     * @throws RuntimeException if an initialization error occurs
      */
-    public synchronized void init(FilterConfig config) throws ServletException {
+    public synchronized void init(FilterConfig config) {
+
+        filterConfig = config;
 
         ServletUtil.initializeSharedConfiguration(config.getServletContext());
+
+        dataDomain = Configuration.getSharedConfiguration().getDomain();
 
         String value = null;
 
@@ -200,17 +242,41 @@ public class DataContextFilter implements Filter {
             sharedCache = "true".equalsIgnoreCase(value);
         }
 
-        String msg = "DataContextFilter initialized with: auto-rollback="
-            + autoRollback + ", session-scope=" + sessionScope
-            + ", shared-cache=" + sharedCache;
+        String classname = config.getInitParameter("lifecycle-listener");
 
-        logger.info(msg);
+        if (StringUtils.isNotEmpty(classname)) {
+            try {
+                Class listenerClass = ClickUtils.classForName(classname);
+
+                LifecycleCallbackRegistry registry =
+                    dataDomain.getEntityResolver().getCallbackRegistry();
+
+                LifecycleListener lifecycleListener = (LifecycleListener)
+                    listenerClass.newInstance();
+
+                if (registry.isEmpty(LifecycleEvent.POST_LOAD)) {
+                    registry.addDefaultListener(lifecycleListener);
+
+                } else {
+                    String message =
+                        "Could not get LifecycleCallbackRegistry from domain: "
+                        + dataDomain.getName();
+                    throw new RuntimeException(message);
+                }
+
+            } catch (Exception e) {
+                String message =
+                    "Could not configure LifecycleCallbackRegistry: " + classname;
+                throw new RuntimeException(message, e);
+            }
+        }
     }
 
     /**
      * Destroy the DataContextFilter.
      */
     public void destroy() {
+        this.filterConfig = null;
     }
 
     /**
@@ -227,6 +293,12 @@ public class DataContextFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
 
+        if (logger == null) {
+             ServletContext servletContext = getFilterConfig().getServletContext();
+             ConfigService configService = ClickUtils.getConfigService(servletContext);
+             logger = configService.getLogService();
+        }
+
         // Obtain the users DataContext
         DataContext dataContext = getDataContext((HttpServletRequest) request);
 
@@ -235,28 +307,48 @@ public class DataContextFilter implements Filter {
         }
 
         // Bind DataContext to the request thread
-        DataContext.bindThreadDataContext(dataContext);
+        BaseContext.bindThreadObjectContext(dataContext);
 
         try {
             chain.doFilter(request, response);
 
         } finally {
+            BaseContext.bindThreadObjectContext(null);
+
             if (logger.isDebugEnabled() && dataContext.hasChanges()) {
                 logger.debug("Uncommitted data objects:");
 
-                Collection uncommitted = dataContext.uncommittedObjects();
-                for (Iterator i = uncommitted.iterator(); i.hasNext();) {
-                    logger.debug("   " + i.next());
+                for (Object uncommitted : dataContext.uncommittedObjects()) {
+                    logger.debug("   " + uncommitted);
                 }
             }
 
             if (autoRollback) {
                 dataContext.rollbackChanges();
             }
-
-            DataContext.bindThreadDataContext(null);
         }
     }
+
+    /**
+     * Set filter configuration. This function is equivalent to init and is
+     * required by Weblogic 6.1.
+     *
+     * @param filterConfig the filter configuration object
+     */
+    public void setFilterConfig(FilterConfig filterConfig) {
+        init(filterConfig);
+    }
+
+    /**
+     * Return filter config. This is required by Weblogic 6.1
+     *
+     * @return the filter configuration
+     */
+    public FilterConfig getFilterConfig() {
+        return filterConfig;
+    }
+
+    // ------------------------------------------------------ Protected Methods
 
     /**
      * Return a DataContext instance. If the DataContextFilter is configured
@@ -268,46 +360,57 @@ public class DataContextFilter implements Filter {
      * If this filter is configured with <tt>create-each-request</tt> to be true
      * then a new DataContext will be created for each request and the DataContext
      * will not be bound to the session.
-     * <p/>
-     * If this filter is configured with <tt>use-shared-cache</tt> to be true
-     * (which is the default behaviour) this method will create DataContext objects
-     * using the Cayenne shared cache, otherwise they will not use the shared cache.
      *
      * @param request the page request
      * @return the DataContext object
      */
-    protected synchronized DataContext getDataContext(HttpServletRequest request) {
-
-        HttpSession session = null;
-        DataContext dataContext = null;
+    protected DataContext getDataContext(HttpServletRequest request) {
 
         if (sessionScope) {
-            session = request.getSession(true);
-            dataContext = (DataContext) session.getAttribute(ServletUtil.DATA_CONTEXT_KEY);
+            HttpSession session = request.getSession(true);
+
+            DataContext dataContext = (DataContext)
+                session.getAttribute(ServletUtil.DATA_CONTEXT_KEY);
+
+            if (dataContext == null) {
+                synchronized (session) {
+                    dataContext = createDataContext();
+
+                    session.setAttribute(ServletUtil.DATA_CONTEXT_KEY, dataContext);
+                }
+            }
+
+            return dataContext;
+
+        } else {
+            return createDataContext();
         }
+    }
 
-        if (dataContext == null) {
-            dataContext = DataContext.createDataContext(sharedCache);
+    /**
+     * Return a new DataContex instance using a shared cache if the filter is
+     * configured with <tt>use-shared-cache</tt>, otherwise the DataContext
+     * will not use a shared cache.
+     *
+     * @return the DataContext object
+     */
+    protected DataContext createDataContext() {
+        DataContext dataContext = dataDomain.createDataContext(sharedCache);
 
+        if (logger.isTraceEnabled()) {
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            buffer.append("DataContext created with ");
             if (sessionScope) {
-                session.setAttribute(ServletUtil.DATA_CONTEXT_KEY, dataContext);
+                buffer.append("session scope");
+            } else {
+                buffer.append("request scope");
             }
-
-            if (logger.isDebugEnabled()) {
-                HtmlStringBuffer buffer = new HtmlStringBuffer();
-                buffer.append("DataContext created with ");
-                if (sessionScope) {
-                    buffer.append("session scope");
-                } else {
-                    buffer.append("request scope");
-                }
-                if (sharedCache) {
-                    buffer.append(" and shared cache.");
-                } else {
-                    buffer.append(".");
-                }
-                logger.debug(buffer);
+            if (sharedCache) {
+                buffer.append(" and shared cache.");
+            } else {
+                buffer.append(".");
             }
+            logger.trace(buffer);
         }
 
         return dataContext;

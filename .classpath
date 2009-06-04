@@ -15,7 +15,6 @@
 	<classpathentry kind="lib" path="lib/ognl-2.6.9.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="var" path="EXAMPLES/ashwood-1.1.jar"/>
-	<classpathentry kind="var" path="EXAMPLES/cayenne-nodeps-2.0.4.jar"/>
 	<classpathentry kind="var" path="EXAMPLES/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="var" path="EXAMPLES/hsqldb-1.8.0.1.jar"/>
 	<classpathentry kind="var" path="EXAMPLES/jstl-1.1.2.jar"/>
@@ -33,5 +32,6 @@
 	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/acegi-security-1.0.7.jar"/>
 	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/quartz-all-1.6.3.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/cayenne-server-3.0M5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
