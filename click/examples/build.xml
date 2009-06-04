@@ -38,7 +38,6 @@
    <property name="jar.logging" value="commons-logging-${commons-logging.version}.jar"/>
    <property name="jar.poi" value="poi-${poi.version}.jar"/>
    <property name="jar.quartz" value="quartz-all-${quartz.version}.jar"/>
-   <property name="jar.oro" value="oro-${oro.version}.jar"/>
    <property name="jar.servlet" value="servlet-api-${servlet-api.version}.jar"/>
    <property name="jar.spring" value="spring-${spring.version}.jar"/>
    <property name="jar.standard" value="standard-${standard.version}.jar"/>

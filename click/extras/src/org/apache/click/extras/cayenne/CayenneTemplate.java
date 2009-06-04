@@ -20,10 +20,12 @@ package org.apache.click.extras.cayenne;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.CayenneRuntimeException;
 import org.apache.cayenne.DataObject;
 import org.apache.cayenne.DataObjectUtils;
@@ -69,8 +71,19 @@ public class CayenneTemplate {
      * @param dataObjectClass the data object class to create and register
      * @return the new registered data object
      */
+    protected DataObject newObject(Class dataObjectClass) {
+        return (DataObject) getDataContext().newObject(dataObjectClass);
+    }
+
+    /**
+     * Instantiates new object and registers it with itself. Object class must
+     * have a default constructor.
+     *
+     * @param dataObjectClass the data object class to create and register
+     * @return the new registered data object
+     */
     protected DataObject createAndRegisterNewObject(Class dataObjectClass) {
-        return getDataContext().createAndRegisterNewObject(dataObjectClass);
+        return (DataObject) getDataContext().newObject(dataObjectClass);
     }
 
     /**
@@ -150,11 +163,11 @@ public class CayenneTemplate {
      */
     protected DataContext getDataContext() {
         try {
-            return DataContext.getThreadDataContext();
+            return (DataContext) BaseContext.getThreadObjectContext();
 
         } catch (IllegalStateException ise) {
             DataContext dataContext = DataContext.createDataContext();
-            DataContext.bindThreadDataContext(dataContext);
+            BaseContext.bindThreadObjectContext(dataContext);
             return dataContext;
         }
     }
@@ -228,14 +241,14 @@ public class CayenneTemplate {
                     + objEntity.getName());
         }
 
-        List pkAttributes = dbEntity.getPrimaryKey();
+        Collection pkAttributes = dbEntity.getPrimaryKeys();
         if (pkAttributes.size() != 1) {
             throw new CayenneRuntimeException("PK contains "
                     + pkAttributes.size()
                     + " columns, expected 1.");
         }
 
-        DbAttribute attr = (DbAttribute) pkAttributes.get(0);
+        DbAttribute attr = (DbAttribute) pkAttributes.iterator().next();
 
         return attr.getName();
     }
