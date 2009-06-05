@@ -19,34 +19,38 @@
 
 <center>
 
-<div class="dialogForm" style="width:305px;">
+<div class="dialogForm" style="width:315px;">
 
-<form method="post" action="$context/j_acegi_security_check" name="form">
+<form method="post" action="$context/j_spring_security_check" name="form">
 <table class="login" border="0" width="100%">
  <tr>
 #if ($request.getParameter("auth-error"))
-   <td colspan="3" style="color:red">
+   <td colspan="2" style="color:red">
 	Invalid Username or Password, please try again.<br/>Please ensure Caps Lock is off.
    </td>
 #else
-   <td colspan="3" style="font-weight:bold;font-size:10pt;">Please login</td>
+   <td colspan="2" style="font-weight:bold;font-size:10pt;">Please login</td>
 #end
-   <td width="100%">&nbsp;</td>
  </tr>
  <tr>
-   <td colspan="4">&nbsp;</td>
+   <td colspan="2">&nbsp;</td>
  </tr>
  <tr>
    <td><label>Username</label></td>
    <td><input type="text" name="j_username" style="width:200px;"/></td>
-   <td>&nbsp;</td>
-   <td width="100%">&nbsp;</td>
  </tr>
  <tr>
    <td style="vertical-align:middle;"><label>Password</label></td>
    <td style="vertical-align:middle;"><input type="password" name="j_password" style="width:200px;"/></td>
-   <td style="vertical-align:middle;"><input type="image" src="$context/assets/images/intro.png" title="Click to Login"/></td>
-   <td width="100%">&nbsp;</td>
+ </tr>
+ <tr>
+   <td width="100"><label>Remember Me?</label></td>
+   <td><input type="checkbox" name="_spring_security_remember_me"/></td>
+   
+ </tr>
+ <tr>
+     <td width="100">&nbsp;</td>
+     <td style="vertical-align:middle;"><input type="image" src="$context/assets/images/intro.png" title="Click to Login"/></td>
  </tr>
 </table>
 </form>
@@ -58,7 +62,7 @@
 </div>
 
 
-<div class="dialogForm" style="width:305px;margin-top:40px;">
+<div class="dialogForm" style="width:315px;margin-top:40px;">
 
 <table class="login" border="0" width="100%">
  <tr>
@@ -68,7 +72,7 @@
  </tr>
  <tr>
    <td colspan="4" style="padding-top:15px;">
-   	<input type="button" style="font-weight:bold;" value="Create an account &#187;" onclick="javascript:document.location.href='${context}/acegi/create-account.htm';"/>
+   	<input type="button" style="font-weight:bold;" value="Create an account &#187;" onclick="javascript:document.location.href='${context}/springsecurity/create-account.htm';"/>
    </td>
   </tr>
 </table>

@@ -16,15 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.click.examples.page.acegi;
+package org.apache.click.examples.page.springsecurity;
 
 import org.apache.click.examples.page.BorderPage;
 
 /**
- * Provides a ACEGI Security login page.
+ * Provides a Spring Security (Acegi) logout page.
  *
  * @author Malcolm Edgar
  */
-public class LoginPage extends BorderPage {
+public class NotAuthorizedPage extends BorderPage {
 
 }
