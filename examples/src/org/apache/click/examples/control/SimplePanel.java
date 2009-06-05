@@ -81,7 +81,7 @@ public class SimplePanel extends Panel {
             if (hasTemplate) {
                 super.render(buffer);
             } else {
-                ClickUtils.getLogService().info("   No template was found for"
+                ClickUtils.getLogService().trace("   No template was found for"
                     + " panel " + ClassUtils.getShortClassName(getClass())
                     + ". Rendering controls in the order they were added.");
                 renderContainer(buffer);
