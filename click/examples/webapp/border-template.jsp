@@ -85,7 +85,7 @@ ${headElements}
 <%-- Page Content --%>
 <tr>		
 	<td class="content">
-    <jsp:include page='${forward}'/>
+    <jsp:include page='${forward}' flush="true"/>
 	</td>
 </tr>
 <%-- Vertical Spacer --%>
