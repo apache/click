@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.click.examples.acegi;
+package org.apache.click.examples.springsecurity;
 
-import org.acegisecurity.GrantedAuthority;
-import org.acegisecurity.userdetails.UserDetails;
 import org.apache.click.examples.domain.User;
+import org.springframework.security.GrantedAuthority;
+import org.springframework.security.userdetails.UserDetails;
 
 public class UserDetailsAdaptor implements UserDetails {
 

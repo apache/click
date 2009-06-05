@@ -16,16 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.click.examples.page.acegi;
+package org.apache.click.examples.page.springsecurity;
 
 import javax.annotation.Resource;
 
-import org.acegisecurity.Authentication;
-import org.acegisecurity.AuthenticationManager;
-import org.acegisecurity.context.SecurityContext;
-import org.acegisecurity.context.SecurityContextHolder;
-import org.acegisecurity.context.SecurityContextImpl;
-import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.apache.click.ActionListener;
 import org.apache.click.Control;
 import org.apache.click.control.Form;
@@ -35,10 +29,16 @@ import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.domain.User;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.examples.page.acegi.secure.SecurePage;
+import org.apache.click.examples.page.springsecurity.secure.SecurePage;
 import org.apache.click.examples.service.UserService;
 import org.apache.click.extras.control.EmailField;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.security.Authentication;
+import org.springframework.security.AuthenticationManager;
+import org.springframework.security.context.SecurityContext;
+import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.context.SecurityContextImpl;
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 @Component

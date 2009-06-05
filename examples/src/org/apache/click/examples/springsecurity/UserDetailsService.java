@@ -16,25 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.click.examples.acegi;
+package org.apache.click.examples.springsecurity;
 
 import javax.annotation.Resource;
 
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.click.examples.domain.User;
 import org.apache.click.examples.service.UserService;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserDetailsService implements org.acegisecurity.userdetails.UserDetailsService {
+public class UserDetailsService implements org.springframework.security.userdetails.UserDetailsService {
 
     @Resource(name="userService")
     private UserService userService;
 
     /**
-     * @see org.acegisecurity.userdetails.UserDetailsService#loadUserByUsername(String)
+     * @see org.springframework.security.userdetails.UserDetailsService#loadUserByUsername(String)
      */
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
 
