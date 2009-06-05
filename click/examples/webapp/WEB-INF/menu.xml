@@ -135,7 +135,7 @@
   </menu>
 
   <menu label=" Integration" path="#" imageSrc="/assets/images/cayenne.png">
-    <menu label="ACEGI Security" path="acegi/secure/secure.htm"/>
+    <menu label="Spring Security (Acegi)" path="springsecurity/secure/secure.htm"/>
     <menu separator="true"/>
     <menu label="Apache Cayenne Form" path="cayenne/cayenne-form-page.htm"/>
     <menu label="Cayenne Tabbed Form" path="cayenne/tabbed-cayenne-form-page.htm"/>
