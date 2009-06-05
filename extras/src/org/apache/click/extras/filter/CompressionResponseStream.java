@@ -322,6 +322,7 @@ public class CompressionResponseStream extends ServletOutputStream {
      */
     protected boolean setContentEncodingGZip() {
         response.addHeader("Content-Encoding", "gzip");
+        response.addHeader("Vary", "Accept-Encoding");
         return response.containsHeader("Content-Encoding");
     }
 }
