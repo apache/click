@@ -378,10 +378,10 @@ public class PerformanceFilter implements Filter {
         final boolean isVersionedResourcePath = (realPath.length() != path.length());
 
         // Apply response compression
-        if (useGzipCompression(request, path)) {
+        if (useGzipCompression(request, response, path)) {
 
             CompressionServletResponseWrapper wrappedResponse =
-                new CompressionServletResponseWrapper(response);
+                new CompressionServletResponseWrapper(response, request);
 
             wrappedResponse.setCompressionThreshold(compressionThreshold);
 
@@ -679,10 +679,17 @@ public class PerformanceFilter implements Filter {
      * Return true if the response should be GZIP compressed.
      *
      * @param request the request to test
+     * @param response the response to test
      * @param path the request path to test
      * @return true if the response should be GZIP compressed
      */
-    protected boolean useGzipCompression(HttpServletRequest request, String path) {
+    protected boolean useGzipCompression(HttpServletRequest request,
+        HttpServletResponse response, String path) {
+
+        // If Content-Encoding header is already set on response, skip compression
+        if (response.containsHeader("Content-Encoding")) {
+            return false;
+        }
 
         if (compressionThreshold > 0) {
             if (path.endsWith(".gif") || path.endsWith(".png") || path.endsWith(".jpg")) {

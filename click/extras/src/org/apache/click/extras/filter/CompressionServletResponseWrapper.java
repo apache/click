@@ -1,19 +1,18 @@
 /*
-* Copyright 2004 The Apache Software Foundation
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
-
+ * Copyright 2004 The Apache Software Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.apache.click.extras.filter;
 
 import java.io.IOException;
@@ -21,6 +20,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
@@ -44,16 +44,21 @@ public class CompressionServletResponseWrapper extends HttpServletResponseWrappe
      * wrapping the given response object.
      *
      * @param response the servlet response to wrap
+     * @param request The associated request
      */
-    public CompressionServletResponseWrapper(HttpServletResponse response) {
+    public CompressionServletResponseWrapper(HttpServletResponse response, HttpServletRequest request) {
         super(response);
         origResponse = response;
+        origRequest = request;
     }
 
     // ----------------------------------------------------- Instance Variables
 
     /** Original response. */
     protected HttpServletResponse origResponse = null;
+
+    /** The request with which this servlet is associated. */
+    protected HttpServletRequest origRequest;
 
     /** Descriptive information about this Response implementation. */
     protected static final String INFO = "CompressionServletResponseWrapper";
@@ -110,7 +115,7 @@ public class CompressionServletResponseWrapper extends HttpServletResponseWrappe
     public ServletOutputStream createOutputStream() throws IOException {
 
         CompressionResponseStream stream =
-            new CompressionResponseStream(origResponse);
+            new CompressionResponseStream(origResponse, origRequest);
         stream.setBuffer(threshold);
 
         return stream;

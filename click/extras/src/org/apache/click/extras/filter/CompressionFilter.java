@@ -1,18 +1,18 @@
 /*
-* Copyright 2004 The Apache Software Foundation
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright 2004 The Apache Software Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.apache.click.extras.filter;
 
 import java.io.IOException;
@@ -120,13 +120,13 @@ public class CompressionFilter implements Filter {
      * It then invokes the next entity in the chain using the FilterChain object
      * (<code>chain.doFilter()</code>)
      *
-     * @param request the servlet request
-     * @param response the servlet response
+     * @param servletRequest the servlet request
+     * @param servletResponse the servlet response
      * @param chain the filter chain
      * @throws IOException if an I/O error occurs
      * @throws ServletException if a servlet error occurs
      */
-    public void doFilter(ServletRequest request, ServletResponse response,
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
             FilterChain chain) throws IOException, ServletException {
 
         if (!configured) {
@@ -134,7 +134,7 @@ public class CompressionFilter implements Filter {
         }
 
         if (compressionThreshold == 0) {
-            chain.doFilter(request, response);
+            chain.doFilter(servletRequest, servletResponse);
             return;
         }
 
@@ -143,7 +143,7 @@ public class CompressionFilter implements Filter {
         String charset = getConfigService().getCharset();
         if (charset != null) {
             try {
-                request.setCharacterEncoding(charset);
+                servletRequest.setCharacterEncoding(charset);
 
             } catch (UnsupportedEncodingException ex) {
                 String msg =
@@ -152,43 +152,26 @@ public class CompressionFilter implements Filter {
             }
         }
 
-        if (request instanceof HttpServletRequest) {
+        final HttpServletRequest request = (HttpServletRequest) servletRequest;
+        final HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-            // Are we allowed to compress ?
-            String s = ((HttpServletRequest) request).getParameter("gzip");
-            if ("false".equals(s)) {
-                chain.doFilter(request, response);
-                return;
-            }
-
-            Enumeration e =
-                ((HttpServletRequest) request).getHeaders("Accept-Encoding");
-
-            while (e.hasMoreElements()) {
-                String name = (String) e.nextElement();
-                if (name.indexOf("gzip") != -1) {
-                    supportCompression = true;
-                }
-            }
-        }
+        final String path = ClickUtils.getResourcePath((HttpServletRequest) request);
+        supportCompression = useGzipCompression(request, response, path);
 
         if (!supportCompression) {
             chain.doFilter(request, response);
 
         } else {
-            if (response instanceof HttpServletResponse) {
 
-                HttpServletResponse hsr = (HttpServletResponse) response;
-                CompressionServletResponseWrapper wrappedResponse =
-                    new CompressionServletResponseWrapper(hsr);
+            CompressionServletResponseWrapper wrappedResponse =
+                new CompressionServletResponseWrapper(response, request);
 
-                wrappedResponse.setCompressionThreshold(compressionThreshold);
+            wrappedResponse.setCompressionThreshold(compressionThreshold);
 
-                try {
-                    chain.doFilter(request, wrappedResponse);
-                } finally {
-                    wrappedResponse.finishResponse();
-                }
+            try {
+                chain.doFilter(request, wrappedResponse);
+            } finally {
+                wrappedResponse.finishResponse();
             }
         }
     }
@@ -213,6 +196,46 @@ public class CompressionFilter implements Filter {
     }
 
     // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Return true if the response should be GZIP compressed.
+     *
+     * @param request the request to test
+     * @param response the response to test
+     * @param path the request path to test
+     * @return true if the response should be GZIP compressed
+     */
+    protected boolean useGzipCompression(HttpServletRequest request,
+        HttpServletResponse response, String path) {
+
+        // If Content-Encoding header is already set on response, skip compression
+        if (response.containsHeader("Content-Encoding")) {
+            return false;
+        }
+
+        // Are we allowed to compress ?
+        String s = ((HttpServletRequest) request).getParameter("gzip");
+        if ("false".equals(s)) {
+            return false;
+        }
+
+        if (compressionThreshold > 0) {
+            if (path.endsWith(".gif") || path.endsWith(".png") || path.endsWith(".jpg")) {
+                return false;
+            }
+
+            Enumeration e = request.getHeaders("Accept-Encoding");
+
+            while (e.hasMoreElements()) {
+                String name = (String) e.nextElement();
+                if (name.indexOf("gzip") != -1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 
     /**
      * Return the application configuration service.
