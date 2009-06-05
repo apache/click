@@ -159,7 +159,7 @@ import org.w3c.dom.NodeList;
  * by the {@link RoleAccessController} which uses the JEE container is user in
  * role facility. By providing your own AccessController you can have menu
  * access control using other security frameworks such as JSecurity or Spring
- * ACEGI.
+ * Security (Acegi).
  *
  * <h3>Menu Configuration DTD</h3>
  *
