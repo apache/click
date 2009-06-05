@@ -61,8 +61,7 @@
     <!-- Specify a simple property based authentication provider. For production
          systems switch to LDAP or JDBC based providers. -->
 
-    <authentication-provider user-service-ref='userDetailsService'>
-    </authentication-provider>
+    <authentication-provider user-service-ref='userDetailsService'/>
 
 	  <!-- This bean is optional; it isn't used by any other bean as it only listens and logs -->
     <beans:bean id="loggerListener" class="org.springframework.security.event.authentication.LoggerListener" />

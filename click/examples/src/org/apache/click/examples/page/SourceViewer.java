@@ -78,7 +78,9 @@ public class SourceViewer extends BorderPage {
             "ResourceLink", "menu", "?xml", "controls", "control",
             "listener-class", "listener", "beans",  "bean", "context-param",
             "context:component-scan", "property", "constructor-arg",
-            "list", "value", "ref" };
+            "list", "value", "ref", "beans:beans", "beans:bean", "http",
+            "intercept-url", "form-login", "logout", "beans:property",
+            "beans:list", "beans:ref", "authentication-provider"};
 
     private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(",
             "#elseif", "#elseif(", "#else", "#else(", "#end", "#set", "#set(",
