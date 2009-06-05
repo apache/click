@@ -158,7 +158,6 @@
       <webDownloadMacro name="${jar.jstl}" path="jstl/jstl/${jstl.version}"/>
       <webDownloadMacro name="${jar.logging}" path="commons-logging/commons-logging/${commons-logging.version}"/>
       <webDownloadMacro name="${jar.log4j}" path="log4j/log4j/${log4j.version}"/>
-      <webDownloadMacro name="${jar.oro}" path="oro/oro/${oro.version}"/>
       <webDownloadMacro name="${jar.poi}" path="poi/poi/${poi.version}"/>
       <webDownloadMacro name="${jar.quartz}" path="opensymphony/quartz-all/${quartz.version}"/>
       <webDownloadMacro name="${jar.spring}" path="org/springframework/spring/${spring.version}"/>
