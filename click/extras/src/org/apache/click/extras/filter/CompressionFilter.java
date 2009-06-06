@@ -220,6 +220,9 @@ public class CompressionFilter implements Filter {
         }
 
         if (compressionThreshold > 0) {
+
+            path = path.toLowerCase();
+
             if (path.endsWith(".gif") || path.endsWith(".png") || path.endsWith(".jpg")) {
                 return false;
             }
