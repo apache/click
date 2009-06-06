@@ -18,15 +18,22 @@
  */
 package org.apache.click.examples.page.introduction;
 
+import org.apache.click.ActionListener;
+import org.apache.click.Control;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
 
 /**
- * Provides a control listener example Page.
+ * Provides a control listener example Page using the compile time binding of
+ * the control ActionListener.
+ * <p/>
+ * The advantage of this control listener binding style is you get compile
+ * time safety and compiler refactoring support, the disadvantage is that you
+ * have to write more lines of code.
  *
  * @author Malcolm Edgar
  */
-public class ControlListenerPage extends BorderPage {
+public class ControlListenerType2Page extends BorderPage {
 
     /* Public scope controls are automatically added to the page. */
     public ActionLink myLink = new ActionLink();
@@ -34,25 +41,20 @@ public class ControlListenerPage extends BorderPage {
     /* Public scope variable are automatically added to the model. */
     public String msg;
 
-    // ----------------------------------------------------------- Constructors
+    // ------------------------------------------------------------ Constructor
 
     /**
      * Create a new Page instance.
      */
-    public ControlListenerPage() {
-        myLink.setListener(this, "onMyLinkClick");
-    }
+    public ControlListenerType2Page() {
+        myLink.setActionListener(new ActionListener() {
+            public boolean onAction(Control control) {
+                 msg = "ControlListenerPage#" + hashCode()
+                 + " object method <tt>onAction()</tt> invoked.";
 
-    // --------------------------------------------------------- Event Handlers
-
-    /**
-     * Handle the myLink control click event.
-     */
-    public boolean onMyLinkClick() {
-        msg = "ControlListenerPage#" + hashCode()
-            + " object method <tt>onMyLinkClick()</tt> invoked.";
-
-        return true;
+             return true;
+            }
+        });
     }
 
 }

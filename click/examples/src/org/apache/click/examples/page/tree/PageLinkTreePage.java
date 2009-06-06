@@ -22,14 +22,14 @@ import org.apache.click.Page;
 import org.apache.click.control.PageLink;
 import org.apache.click.examples.page.introduction.AdvancedForm;
 import org.apache.click.examples.page.introduction.AdvancedTable;
-import org.apache.click.examples.page.introduction.ControlListenerPage;
+import org.apache.click.examples.page.introduction.ControlListenerType1Page;
+import org.apache.click.examples.page.introduction.ControlListenerType2Page;
 import org.apache.click.examples.page.introduction.HelloWorld;
 import org.apache.click.examples.page.introduction.SimpleForm;
 import org.apache.click.examples.page.velocity.SimpleTable;
 import org.apache.click.extras.tree.Tree;
 import org.apache.click.extras.tree.TreeNode;
 import org.apache.click.util.HtmlStringBuffer;
-
 import org.apache.commons.lang.ClassUtils;
 
 /**
@@ -93,7 +93,8 @@ public class PageLinkTreePage extends PlainTreePage {
         boolean supportsChildNodes = false;
 
         new TreeNode(HelloWorld.class, "1.1", general, supportsChildNodes);
-        new TreeNode(ControlListenerPage.class, "1.2", general, supportsChildNodes);
+        new TreeNode(ControlListenerType1Page.class, "1.2", general, supportsChildNodes);
+        new TreeNode(ControlListenerType2Page.class, "1.3", general, supportsChildNodes);
 
         TreeNode forms = new TreeNode("Forms", "2", root);
         new TreeNode(SimpleForm.class, "2.1", forms, supportsChildNodes);

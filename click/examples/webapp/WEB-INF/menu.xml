@@ -32,7 +32,8 @@
 
   <menu label="Intro Examples" path="#" imageSrc="/assets/images/intro.png">
     <menu label="Hello World" path="introduction/hello-world.htm"/>
-    <menu label="Control Listener" path="introduction/control-listener.htm"/>
+    <menu label="Control Listener Type 1" path="introduction/control-listener-type-1.htm"/>
+    <menu label="Control Listener Type 2" path="introduction/control-listener-type-2.htm"/>
     <menu separator="true"/>
     <menu label="Simple Table" path="introduction/simple-table.htm"/>
     <menu label="Advanced Table" path="introduction/advanced-table.htm"/>
