@@ -33,9 +33,7 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class ControlListenerType1Page extends BorderPage {
 
-    /* 
-     * Set the listener to this object's "onLinkClick" method.
-     */
+    /* Set the listener to this object's "onLinkClick" method. */
     public ActionLink myLink = new ActionLink(this, "onLinkClick");
 
     /* Public scope variable are automatically added to the model. */
