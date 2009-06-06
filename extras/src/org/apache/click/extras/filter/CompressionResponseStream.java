@@ -297,11 +297,12 @@ public class CompressionResponseStream extends ServletOutputStream {
                         + " output stream");
                 }
                 gzipstream = output;
-            }
-            else if (setContentEncodingGZip()) {
+
+            } else if (setContentEncodingGZip()) {
                 // If we can set the Content-Encoding header to gzip, create a
                 // new gzip stream
                 gzipstream = new GZIPOutputStream(response.getOutputStream());
+
             } else {
                 // If we cannot set the Content-Encoding header, use original
                 // output stream
