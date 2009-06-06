@@ -250,7 +250,7 @@
       <literallayout>&lt;!ELEMENT <varname>pages</varname> (<symbol>page</symbol>*)&gt;
    &lt;!ATTLIST pages <varname>package</varname> CDATA #IMPLIED&gt;
    &lt;!ATTLIST pages <varname>automapping</varname> (true|false) "true"&gt;
-   &lt;!ATTLIST pages <varname>autobinding</varname> (true|false) "true"&gt;</literallayout>
+   &lt;!ATTLIST pages <varname>autobinding</varname> (annotation|public|none) "public"&gt;</literallayout>
 
       <para>The pages element can specify a default <varname>package</varname> name
       which is prepended to the classname of any pages defined.
@@ -439,34 +439,66 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
       <sect3 id="application-autobinding" remap="h4">
         <title>Page Autobinding</title>
 
-        <para>By default all pages have autobinding enabled. With autobinding
-        enabled the ClickServlet will automatically:
+		<para>
+		Click provides the capability to automatically bind Page fields. This 
+		feature can reduce the amount of code you have to write, with the
+		ClickServlet automatically:
         </para>
 
         <itemizedlist>
           <listitem>
-            <para> add any public controls to the page, after the page constructor
-            has been invoked
-            </para>
-          </listitem>
-          <listitem>
-            <para> if the public control's name is not defined, its name will be
+            <para> add any bindable controls to the page, after the page constructor
+            has been invoked. If the control's name is not defined, its name will be
             set to the the value its field name
             </para>
           </listitem>
           <listitem>
-            <para> bind any request parameters to public page fields, after page
-            constructor has been invoked. See
-            <ulink url="click-api/org/apache/click/ClickServlet.html#processPageRequestParams(org.apache.click.Page)">ClickServlet.processPageRequestParams(Page)</ulink>
-            for more details
+            <para> binding any request parameters to bindable page fields, after page
+            constructor has been invoked. Type coercion will be performed automatically
+            for you using an OGNL type converter
             </para>
           </listitem>
           <listitem>
-            <para> add any public page fields to the page model, before rendering</para>
+            <para>add any bindable page fields to the page model, before rendering</para>
           </listitem>
         </itemizedlist>
+		
+		<para>
+		There are three autobinding modes which can be configured globally. If
+		you don't define a mode the default value of public will be used.
+		</para>
+		
+		<itemizedlist>
+    		<listitem>
+    			<para>annotation - which will autobind any public scope Page fields with a @Bindable annotation</para>
+    		</listitem>
+    		<listitem>
+    			<para>public - which will autobind any public scope Page fields</para>
+    		</listitem>
+    		<listitem>
+    			<para>none - no autobinding is performed</para>
+    		</listitem>
+		</itemizedlist>
 
-        <para>For example:
+        <para>
+        An "annotation" autobinding example is provided below. In this example
+        page fields which have public scope and the @Bindable annotation are
+        bindable.
+        </para>
+
+        <programlisting language="java">public class EmployeePage extends Page {
+
+    @Bindable
+    public Form employeeForm = new Form();
+
+    @Bindable
+    public Table myTable = new Table();
+
+}</programlisting>
+
+        <para>
+        An "public" autobinding example is provided below. In this example
+        page fields which have public scope are bindable.
         </para>
 
         <programlisting language="java">public class EmployeePage extends Page {
@@ -477,13 +509,8 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
 
 }</programlisting>
 
-        <para>In the example above the <varname>employeeForm</varname> and
-        <varname>myTable</varname> controls were not added to the page. Also note
-        that Form and Table do not have their names defined.
-        </para>
-
         <para>When autobinding is enabled, ClickServlet will create a new Page and
-        add the public controls to the page. In the example above the
+        add the bindable controls to the page. In the example above the
         <varname>employeeForm</varname> and <varname>myTable</varname> will be
         added to the page, as if you had invoked,
         <methodname>addControl(employeeForm)</methodname> and
@@ -496,7 +523,8 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         will set to <varname>myTable</varname>.
         </para>
 
-        <para>The above example is thus a shorthand way of writing the following:
+        <para>
+        The above examples are thus a shorthand way of writing the following:
         </para>
 
         <programlisting language="java">public class EmployeePage extends Page {
@@ -514,12 +542,12 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
     }
 }</programlisting>
 
-        <para>You can turn this behaviour off by setting the <symbol>autobinding</symbol>
-        attribute to false, for example:
+        <para>You can disable autobinding by setting the <symbol>autobinding</symbol>
+        attribute to none, for example:
         </para>
 
         <programlisting language="xml">&lt;click-app&gt;
-  &lt;pages package="com.mycorp.page" <symbol>autobinding</symbol>="<varname>false</varname>"/&gt;
+  &lt;pages package="com.mycorp.page" <symbol>autobinding</symbol>="<varname>none</varname>"/&gt;
 &lt;/click-app&gt;</programlisting>
 
       </sect3>
