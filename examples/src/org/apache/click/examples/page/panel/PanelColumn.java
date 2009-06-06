@@ -53,6 +53,6 @@ public class PanelColumn extends Column {
         // "customer" we can access $customer.name in the "panel.htm" template
         panel.getModel().remove(name);
         panel.addModel(name, row);
-        buffer.append(panel.toString());
+        panel.render(buffer);
     }
 }
