@@ -88,7 +88,9 @@ public class RequestTypeConverter implements TypeConverter {
                     Array.newInstance(componentType, Array.getLength(value));
 
                 for (int i = 0, icount = Array.getLength(value); i < icount; i++) {
-                    Array.set(result, i, convertValue(Array.get(value, i),
+                    Array.set(result,
+                              i,
+                              convertValue(Array.get(value, i),
                               componentType));
                 }
 
