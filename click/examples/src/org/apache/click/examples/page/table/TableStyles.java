@@ -49,7 +49,7 @@ public class TableStyles extends BorderPage {
     private Checkbox hoverCheckbox = new Checkbox("hover", "Hover Rows:");
 
     @Resource(name="customerService")
-    private CustomerService customerService;
+    private transient CustomerService customerService;
 
     // ----------------------------------------------------------- Constructor
 
