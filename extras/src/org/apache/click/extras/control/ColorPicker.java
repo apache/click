@@ -167,20 +167,11 @@ public class ColorPicker extends Field {
 
     // ------------------------------------------------------ Public Attributes
 
-//  TODO: surround picker image with achor tag which is focusable
-
-//    /**
-//     * Return the Field focus JavaScript.
-//     *
-//     * @return the Field focus JavaScript
-//     */
-//    public String getFocusJavaScript() {
-//        return null;
-//    }
-
     /**
-     * Return the HTML head import statements for the JavaScript files
-     * <tt>click/prototype.js</tt>) and <tt>click/colorpicker.js</tt>.
+     * Return the HTML head import statements for the JavaScript and CSS files
+     * <tt>click/colorpicker/colorpicker.css</tt>
+     * <tt>click/prototype/prototype.js</tt>) and
+     * <tt>click/colorpicker/colorpicker.js</tt>.
      *
      * @see org.apache.click.control.Field#getHtmlImports()
      *
