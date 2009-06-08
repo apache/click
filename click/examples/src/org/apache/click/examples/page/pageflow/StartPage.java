@@ -18,8 +18,10 @@
  */
 package org.apache.click.examples.page.pageflow;
 
+import java.util.HashMap;
 import java.util.List;
 
+import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.click.control.Form;
@@ -27,6 +29,8 @@ import org.apache.click.control.Option;
 import org.apache.click.control.Select;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextArea;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 import org.apache.click.examples.control.InvestmentSelect;
 import org.apache.click.examples.domain.CourseBooking;
 import org.apache.click.examples.domain.Customer;
@@ -44,10 +48,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class StartPage extends BorderPage {
 
-    public String jsInclude = "ajax/ajax-select-include.htm";
-    public String bodyOnload = "registerAjax();";
     public Form form = new Form();
-
     private Select customerSelect;
     private DateField dateField;
     private Select courseSelect;
@@ -65,7 +66,6 @@ public class StartPage extends BorderPage {
 
         customerSelect = new Select("Customer");
         customerSelect.setRequired(true);
-        customerSelect.setAttribute("onchange", "onCustomerChange(this);");
         form.add(customerSelect);
 
         dateField = new DateField("Booking Date");
@@ -136,6 +136,41 @@ public class StartPage extends BorderPage {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Return the Page JavaScript resources.
+     *
+     * @see org.apache.click.Page#getHeadElements()
+     */
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            // Include the prototype.js library which is made available under
+            // the web folder "/click/prototype/"
+            headElements.add(new JsImport("/click/prototype/prototype.js"));
+
+            // Create a model to pass to the Page JavaScript template. The
+            // template recognizes three Velocity variables:
+            // $context, $selector and $target
+            Map model = new HashMap();
+
+            // Add the application context path -> "/click-examples"
+            model.put("context", getContext().getRequest().getContextPath());
+
+            // Add a CSS selector, in this case the customerSelect ID attribute
+            model.put("selector", customerSelect.getId());
+
+            // Add the ID of a target element in the Page template to replace
+            // with new data, in this example the target is 'customerDetails'
+            model.put("target", "customerDetails");
+
+            // Include the ajax-select.js template
+            headElements.add(new JsScript("/ajax/ajax-select.js", model));
+        }
+
+        return headElements;
     }
 
     // --------------------------------------------------------- Public Methods

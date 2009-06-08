@@ -18,13 +18,16 @@
  */
 package org.apache.click.examples.page.ajax;
 
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 
+import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
@@ -38,8 +41,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class AjaxSelect extends BorderPage {
 
-    public String jsInclude = "ajax/ajax-select-include.htm";
-
     public Select customerSelect = new Select("customerSelect");
 
     @Resource(name="customerService")
@@ -49,8 +50,6 @@ public class AjaxSelect extends BorderPage {
     public void onInit() {
         super.onInit();
 
-        customerSelect.setAttribute("onchange", "onCustomerChange(this);");
-
         List<Customer> customerList = customerService.getCustomersSortedByName(8);
         for (Customer customer : customerList) {
             customerSelect.add(new Option(customer.getId(), customer.getName()));
@@ -59,4 +58,33 @@ public class AjaxSelect extends BorderPage {
         customerSelect.setSize(customerList.size());
     }
 
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            // Include the prototype.js library which is made available under
+            // the web folder "/click/prototype/"
+            headElements.add(new JsImport("/click/prototype/prototype.js"));
+
+            // Create a model to pass to the Page JavaScript template. The
+            // template recognizes three Velocity variables:
+            // $context, $selector and $target
+            Map model = new HashMap();
+
+            // Add the application context path -> "/click-examples"
+            model.put("context", getContext().getRequest().getContextPath());
+
+            // Add a CSS selector, in this case the customerSelect ID attribute
+            model.put("selector", customerSelect.getId());
+
+            // Add the ID of a target element in the Page template to replace
+            // with new data, in this example the target is 'customerDetails'
+            model.put("target", "customerDetails");
+
+            // Include the Page associated JavaScript template
+            headElements.add(new JsScript("/ajax/ajax-select.js", model));
+        }
+
+        return headElements;
+    }
 }
