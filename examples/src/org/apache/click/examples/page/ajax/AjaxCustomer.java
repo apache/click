@@ -60,12 +60,12 @@ public class AjaxCustomer extends Page {
     }
 
     /**
-     * Ensure the Http response Content-type is "text/xml".
+     * Ensure the Http response Content-type is "text/html; charset=UTF-8".
      *
      * @see Page#getContentType()
      */
     public String getContentType() {
-        return "text/xml; charset=UTF-8";
+        return "text/html; charset=UTF-8";
     }
 
 }
