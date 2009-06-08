@@ -1,0 +1,69 @@
+/*
+ * jquery.tools 1.0.0 - The missing UI library
+ *
+ * [tools.tabs-1.0.0, tools.tooltip-1.0.0, tools.scrollable-1.0.3, tools.overlay-1.0.2, tools.expose-1.0.2]
+ *
+ * Copyright (c) 2009 Tero Piirainen
+ * http://flowplayer.org/tools/
+ *
+ * Dual licensed under MIT and GPL 2+ licenses
+ * http://www.opensource.org/licenses
+ *
+ * -----
+ *
+ * Build: Wed Jun 03 08:30:25 GMT+00:00 2009
+ */
+
+/* root element for accordion. */
+#accordion {
+	background-color:#F0F0F0;
+	border:1px solid #333;
+}
+
+/* accordion header */
+#accordion h2 {
+	background-color:#D0D0D0;
+	margin:0;
+  color: #000000;
+	padding:5px 15px;
+	font-size:14px;
+	font-weight:normal;
+  border-color: #F0F0F0 #707070 #707070 #F0F0F0;
+  border-width: 1px;
+  border-style: solid;
+	cursor:pointer;
+}
+
+/* The h2.hover caters for IE which doesn't support :hover */
+#accordion h2:hover, #accordion h2.hover {
+  background-color:#909090;
+  color: #FFFFFF;
+}
+
+/* currently active header */
+#accordion h2.current {
+	cursor:default;
+	background-color:#707070;
+  border-color: #F0F0F0 #303030 #303030 #F0F0F0;
+  border-width: 1px;
+  border-style: solid;
+  color: #FFFFFF;
+}
+
+/* accordion pane */
+#accordion div.pane {
+	border:1px solid #fff;
+	border-width:0 2px;
+	display:none;
+	height:250px;
+	padding:15px;
+	font-size:12px;
+}
+
+/* a title inside pane */
+#accordion div.pane h3 {
+	font-weight:normal;
+	margin:0 0 -5px 0;
+	font-size:16px;
+	color:#999;
+}
