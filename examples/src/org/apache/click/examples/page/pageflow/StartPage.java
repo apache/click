@@ -18,12 +18,12 @@
  */
 package org.apache.click.examples.page.pageflow;
 
-import java.util.HashMap;
 import java.util.List;
 
 import java.util.Map;
 import javax.annotation.Resource;
 
+import org.apache.click.Context;
 import org.apache.click.control.Form;
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
@@ -36,8 +36,10 @@ import org.apache.click.examples.domain.CourseBooking;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
+import org.apache.click.examples.page.ajax.AjaxCustomer;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.DateField;
+import org.apache.click.util.ClickUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -151,13 +153,15 @@ public class StartPage extends BorderPage {
             // the web folder "/click/prototype/"
             headElements.add(new JsImport("/click/prototype/prototype.js"));
 
-            // Create a model to pass to the Page JavaScript template. The
-            // template recognizes three Velocity variables:
-            // $context, $selector and $target
-            Map model = new HashMap();
+            Context context = getContext();
 
-            // Add the application context path -> "/click-examples"
-            model.put("context", getContext().getRequest().getContextPath());
+            // Create a model to pass to the Page JavaScript template. The
+            // template recognizes the following Velocity variables:
+            // $context, $path, $selector and $target
+            Map model = ClickUtils.createTemplateModel(this, context);
+
+            // Set path to the AjaxCustomer Page path
+            model.put("path", context.getPagePath(AjaxCustomer.class));
 
             // Add a CSS selector, in this case the customerSelect ID attribute
             model.put("selector", customerSelect.getId());
