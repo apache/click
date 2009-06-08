@@ -16,32 +16,24 @@
 // under the License.
 
 /**
- * The ajax-select Page JavaScript.
+ * The ajax-select JavaScript template.
  */
 
 // Wait until browser DOM is loaded
 document.observe("dom:loaded", function() {
 
-    // Observe the selected element's "change" event, which triggers the given function
+    // Observe the selected element's "change" event, which triggers the given function.
+    // Note that $selector is a Velocity variable passed in from the AjaxSelect.java Page
     $('$selector').observe('change', function(event){
-        var select = Event.element(event);
-        onCustomerChange(select);
-    });
 
-    // This function uses an Ajax request to retrieve customer details that matches
-    // the ID value of a select element
-    function onCustomerChange(select) {
-        // The Ajax url points to the AjaxCustomer Click Page
-        new Ajax.Request('${context}/ajax/ajax-customer.htm', {
+        // Retrieve the source of the event, in this case the Select control
+        var select = Event.element(event);
+
+        // $target, $context and $path are Velocity variables that are passed in
+        // from the AjaxSelect.java Page
+        new Ajax.Updater('$target', '$context$path', {
             method: 'get',
-            parameters: {customerId : select.value},
-            onSuccess: function(transport){
-                // On a successful request, update the given target with the server response
-                $('$target').update(transport.responseText);
-            },
-            onFailure: function(){
-                alert('An error occurred.')
-            }
+            parameters: {customerId : select.value}
         });
-    }
+    });
 });
