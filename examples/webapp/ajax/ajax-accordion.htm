@@ -1,0 +1,101 @@
+<!--
+#* Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.*#
+-->
+
+Demonstration of the <a href="http://flowplayer.org/tools/demos/tabs/accordion.html">jQuery Tools</a>
+Accordion. Please note the accordion CSS styles are defined in the <tt>/assets/css/tabs-accordion.css</tt> file.
+
+<div style="margin-top:2em;" id="accordion">
+	
+    <h2>Overview</h2>
+
+    <div class="pane">
+		<br/>
+		This example illustrates how to use the jQuery Tools Accordion to
+    transform a set of divs into a first class accordion component.
+		<br/><br/>
+		The jQuery Tools Tabs provides an effect that simultaneously grows the height
+    of one element while shrinking the height of another.  The Accordion behavior
+    adds the necessary event handlers on the respective divs to handle the
+    visual aspects of expanding, collapsing and hovering.
+	  </div>
+
+
+    <h2>HTML Code</h2>
+
+	  <div class="pane">
+		<br/>
+		The HTML structure is an outer div that holds all of the panels.  Then, each
+    panel consists of an H2 element for the header and a DIV for the content.
+<pre style="font-size:8pt;">
+&lt;div id="accordion"&gt;
+
+  &lt;h2&gt;Overview&lt;/h2&gt;
+  &lt;div id="pane"&gt;
+    ... content text ...
+  &lt;/div&gt;
+
+  &lt;h2&gt;Chapter 1&lt;/h2&gt;
+  &lt;div id="pane"&gt;
+    ... content text ...
+  &lt;/div&gt;
+
+&lt;/div&gt;
+</pre>
+	  </div>
+
+
+    <h2>jQuery Code</h2>
+
+    <div class="pane">
+		<br/>To attach the accordion behavior to the accordion container div,
+    select the target accordion div, and specify the tabs and header. Lastly
+    we provide an effect to show/hide panels.  Thats it!
+<pre style="font-size:8pt;">
+  $("#accordion").tabs("#accordion div.pane", {
+    tabs: 'h2',
+    effect: 'slide'
+  }); </pre>
+
+	  </div>
+
+    <h2>CSS Code</h2>
+
+    <div class="pane">
+		The Accordion is styled through a normal CSS stylesheet. Visual aspects such
+    as height, width, color can easily be specied via CSS.
+<pre style="font-size:8pt;">
+/* root element for accordion. */
+#accordion {
+  background-color:#F0F0F0;
+  width: 500px;
+}
+/* accordion header */
+#accordion h2 {
+  border: #F0F0F0 1px solid;
+  cursor:pointer;
+}
+/* accordion pane */
+#accordion div.pane {
+  border:1px solid #fff;
+  display:none;
+  height:250px;
+} </pre>
+	  </div>
+
+</div>

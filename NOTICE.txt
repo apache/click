@@ -87,6 +87,12 @@ http://javascripttoolbox.com/lib/date/
 
 ======================================================================
 
+This product includes the JQuery Tools JavaScript library, developed by
+Tero Piirainen, distributed under the terms of the MIT license.
+http://flowplayer.org/tools/index.html
+
+======================================================================
+
 This product includes the JQuery Star Rating plugin, developed by
 Fyneworks.com, distributed under the terms of the MIT license.
 http://www.fyneworks.com/jquery/star-rating/
