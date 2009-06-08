@@ -59,7 +59,7 @@ public class SearchTablePage extends BorderPage implements Serializable {
     private DateField dateField = new DateField(Customer.DATE_JOINED_PROPERTY, "Start Date");
 
     @Resource(name="customerService")
-    private CustomerService customerService;
+    private transient CustomerService customerService;
 
     // ----------------------------------------------------------- Constructors
 
