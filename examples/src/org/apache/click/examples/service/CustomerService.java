@@ -217,6 +217,25 @@ public class CustomerService extends CayenneTemplate {
     }
 
     @SuppressWarnings("unchecked")
+    public List<Customer> getTopCustomersForPage(int offset, int pageSize) {
+        List list = getCustomersSortedBy(Customer.HOLDINGS_PROPERTY, false);
+
+        List pageList = new ArrayList(pageSize);
+        for (int i = 0; i < pageSize; i++) {
+            // Increment row index with the offset
+            int rowIndex = offset + i;
+
+            // Guard against rowIndex that moves past the end of the list
+            if (rowIndex >= list.size()) {
+                break;
+            }
+            pageList.add(list.get(rowIndex));
+        }
+
+        return pageList;
+    }
+
+    @SuppressWarnings("unchecked")
     public List<Customer> getInvestmentCatetories() {
         List categories = new ArrayList();
 
