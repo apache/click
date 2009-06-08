@@ -31,18 +31,17 @@ import org.apache.commons.lang.Validate;
  * <p/>
  * When registering an ActionListener you can specify the callback to occur for
  * a specific event. For example ActionListeners can be registered to fire
- * <tt>after</tt> the <tt>onProcess</tt> or <tt>onRender</tt> events. By default
- * ActionListeners will be fired <tt>after</tt> the <tt>onProcess</tt> event.
+ * <tt>after</tt> the <tt>onProcess</tt> event. This event can be specified
+ * through the constant {@link #POST_ON_PROCESS_EVENT}.
  * <p/>
  * The ClickServlet will notify the ControlRegistry which ActionListeners
  * to fire. For example, after the <tt>onProcess</tt> event, the ClickServlet
  * will notify the registry to fire ActionListeners registered for the
- * {@link #POST_ON_PROCESS_EVENT} (this is the default event when listeners are fired).
- * Similarly, after the <tt>onRender</tt> event, ClickServlet will notify the
- * registry to fire ActionListeners registered for the {@link #POST_ON_RENDER_EVENT}.
+ * {@link #POST_ON_PROCESS_EVENT} (this is the default event when listeners are
+ * fired).
  * <p/>
- * Out of the box ControlRegistry supports the events {@link #POST_ON_PROCESS_EVENT}
- * (the default) and {@link #POST_ON_RENDER_EVENT}.
+ * Out of the box ControlRegistry only supports the event
+ * {@link #POST_ON_PROCESS_EVENT} (the default).
  *
  * <h4>Example Usage</h4>
  * The following example shows how to register an ActionListener with a custom
@@ -71,46 +70,6 @@ import org.apache.commons.lang.Validate;
  * The ClickServlet will subsequently invoke the registered
  * {@link ActionListener#onAction(Control)} method after all the Page controls
  * <tt>onProcess()</tt> method have been invoked.
- * <p/>
- * On rare occasions one need to manipulate a Control's state right before it
- * is rendered. The {@link #POST_ON_RENDER_EVENT} callback can be used for this
- * situation. For example:
- *
- * <pre class="prettyprint">
- * public class MyForm extends Form {
- *
- *     public MyForm() {
- *         init();
- *     }
- *
- *     public MyForm(String name) {
- *         super(name);
- *         init();
- *     }
- *
- *     private void init() {
- *         ActionListener listener = new ActionListener() {
- *             public boolean onAction(Control source {
- *                 // Add a hidden field to hold state for MyForm
- *                 add(new HiddenField("my-form-name", getName() + '_' + "myform"));
- *                 return true;
- *             }
- *         };
- *
- *         ControlRegistry.registerActionEvent(this, listener, ControlRegistry.POST_ON_RENDER_EVENT);
- *     }
- *
- *     ...
- *
- * } </pre>
- *
- * The above example fires the ActionListener <tt>after</tt> the <tt>onRender</tt>
- * event. This ensures a HiddenField is added right before the MyForm is
- * streamed to the browser.
- * <p/>
- * Registering the listener in MyForm constructor guarantees that the
- * listener will be registered even if MyForm is subclassed because the compiler
- * forces subclasses to invoke their super constructor.
  *
  * @author Bob Schellink
  * @author Malcolm Edgar
@@ -129,21 +88,10 @@ public class ControlRegistry {
      */
     public static final int POST_ON_PROCESS_EVENT = 300;
 
-    /**
-     * Indicates the listener should fire <tt>AFTER</tt> the onRender event.
-     * Listeners fired in the <tt>POST_ON_RENDER_EVENT</tT> are
-     * <tt>guaranteed</tt> to trigger, even when redirecting, forwarding or if
-     * page processing is cancelled.
-     */
-    public static final int POST_ON_RENDER_EVENT = 400;
-
     // -------------------------------------------------------------- Variables
 
     /** The POST_PROCESS events holder. */
     private EventHolder postProcessEventHolder;
-
-    /** The POST_RENDER events holder. */
-    private EventHolder postRenderEventHolder;
 
     // --------------------------------------------------------- Public Methods
 
@@ -200,7 +148,6 @@ public class ControlRegistry {
      */
     protected void clearRegistry() {
         getPostProcessEventHolder().clear();
-        getPostRenderEventHolder().clear();
     }
 
     /**
@@ -219,8 +166,7 @@ public class ControlRegistry {
      * return true if the page should continue processing.
      * <p/>
      * This method will be passed the listener list and event source list
-     * of a specific event e.g. {@link #POST_ON_PROCESS_EVENT} or
-     * {@link #POST_ON_RENDER_EVENT}.
+     * of a specific event e.g. {@link #POST_ON_PROCESS_EVENT}.
      * event.
      * <p/>
      * This method can be overridden if you need to customize the way events
@@ -287,8 +233,7 @@ public class ControlRegistry {
      * return true if the page should continue processing.
      * <p/>
      * This method will be passed a listener and source of a specific event
-     * e.g. {@link #POST_ON_PROCESS_EVENT} or {@link #POST_ON_RENDER_EVENT}.
-     * event.
+     * e.g. {@link #POST_ON_PROCESS_EVENT}.
      * <p/>
      * This method can be overridden if you need to customize the way events
      * are fired.
@@ -313,9 +258,7 @@ public class ControlRegistry {
      * @return the EventHolder for the specified event
      */
     protected EventHolder getEventHolder(int event) {
-        if (event == POST_ON_RENDER_EVENT) {
-            return getPostRenderEventHolder();
-        } else if (event == POST_ON_PROCESS_EVENT) {
+        if (event == POST_ON_PROCESS_EVENT) {
             return getPostProcessEventHolder();
         } else {
             return null;
@@ -344,18 +287,6 @@ public class ControlRegistry {
             postProcessEventHolder = createEventHolder(POST_ON_PROCESS_EVENT);
         }
         return postProcessEventHolder;
-    }
-
-    /**
-     * Return the {@link #POST_ON_RENDER_EVENT} {@link EventHolder}.
-     *
-     * @return the {@link #POST_ON_RENDER_EVENT} {@link EventHolder}
-     */
-    EventHolder getPostRenderEventHolder() {
-        if (postRenderEventHolder == null) {
-            postRenderEventHolder = createEventHolder(POST_ON_RENDER_EVENT);
-        }
-        return postRenderEventHolder;
     }
 
     /**

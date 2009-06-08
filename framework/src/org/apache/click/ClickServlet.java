@@ -514,8 +514,6 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
-        controlRegistry.fireActionEvents(context, ControlRegistry.POST_ON_RENDER_EVENT);
-
         performRender(page, context);
     }
 
