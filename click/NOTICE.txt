@@ -99,12 +99,6 @@ http://www.fyneworks.com/jquery/star-rating/
 
 ======================================================================
 
-This product includes the rico JavaScript library, developed by 
-Sabre Airline Solutions and released under the Apache 2.0 license.
-http://openrico.org
-
-======================================================================
-
 This product includes the YUI JavaScript library, developed by Yahoo
 and released under the BSD License.
 http://developer.yahoo.com/yui/
