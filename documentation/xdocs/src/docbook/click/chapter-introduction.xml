@@ -162,7 +162,7 @@ public HelloWorld extends Page {
     /* Set the listener to this object's "onLinkClick" method. */
     public ActionLink myLink = new ActionLink(this, "onLinkClick");
 
-    /* Public scope variable are automatically added to the model. */
+    /* Public scope variables are automatically added to the model. */
     public String msg;
 
     // --------------------------------------------------------- Event Handlers
@@ -199,7 +199,7 @@ public HelloWorld extends Page {
     out on the compiler refactoring capabilities provided with modern IDEs.
     </para>
 
-    <para>Back to our example, in the page template we define a HTML link and
+    <para>Back to our example, in the page template we define an HTML link and
     have the <varname>myLink</varname> control render the link's href attribute:
     </para>
 
@@ -223,7 +223,7 @@ public HelloWorld extends Page {
     <literallayout>Click myLink control <varname>here</varname>.</literallayout>
 
     <para>When a user clicks on the link the <methodname>onLinkClick()</methodname>
-    method is invoked. This method then creates <varname>msg</varname> model
+    method is invoked. This method then creates the <varname>msg</varname> model
     value, which is rendered in the page as:
     </para>
 
@@ -247,7 +247,7 @@ public HelloWorld extends Page {
     /* Public scope controls are automatically added to the page. */
     public ActionLink myLink = new ActionLink();
 
-    /* Public scope variable are automatically added to the model. */
+    /* Public scope variables are automatically added to the model. */
     public String msg;
 
     // ------------------------------------------------------------ Constructor
@@ -300,7 +300,7 @@ public HelloWorld extends Page {
     <literallayout>Click myLink control <varname>here</varname>.</literallayout>
 
     <para>When a user clicks on the link the <methodname>onAction()</methodname>
-    method is invoked. This method then creates <varname>msg</varname> model
+    method is invoked. This method then creates the <varname>msg</varname> model
     value, which is rendered in the page as:
     </para>
 
