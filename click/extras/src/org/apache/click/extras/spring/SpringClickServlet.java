@@ -46,7 +46,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * This Spring integration servlet provides a number of integration options
  * using Spring with Click pages. These options detailed below.
  *
- * <h3>Spring instantiated Pages with &#64;Component configuration</h3>
+ * <h3>1. Spring instantiated Pages with &#64;Component configuration</h3>
  *
  * With this option Page classes are configured with Spring using the
  * &#64;Component annotation. When the SpringClickServlet receives a page
@@ -87,7 +87,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * This is the most powerful and convenient Spring integration option, but does
  * require Spring 2.5.x and Java 1.5 or later.
  *
- * <h3>Spring instantiated Pages with Spring XML configuration</h3>
+ * <h3>2. Spring instantiated Pages with Spring XML configuration</h3>
  *
  * With this option Page classes are configured using Spring XML configuration.
  * When the SpringClickServlet receives a page request it converts the auto-mapped
@@ -122,7 +122,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * page instance will be created with every HTTP request. Otherwise Spring will
  * default to using singletons and your code will not be thread safe.
  *
- * <h3>Click instantiated Pages with injected Spring beans and/or ApplicationContext</h3>
+ * <h3>3. Click instantiated Pages with injected Spring beans and/or ApplicationContext</h3>
  *
  * With this integration option Click will instantiate page instances and
  * automatically inject any page properties which match Spring beans defined in
@@ -233,8 +233,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * &lt;/web-app&gt; </pre>
  *
- * To configure page Spring bean injection you need to configure the
- * <span class="blue">inject-page-beans</span> servlet init parameter. For
+ * To configure page Spring bean injection (option 3 above), you need to configure
+ * the <span class="blue">inject-page-beans</span> servlet init parameter. For
  * example:
  *
  * <pre class="codeConfig">
