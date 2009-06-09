@@ -117,15 +117,14 @@
     <sect2 id="type-converter-class" remap="h3">
       <title>Type Converter Class</title>
 
-      <para>
-      The ClickServlet uses the OGNL library for type coercion when binding
+      <para>The ClickServlet uses the OGNL library for type coercion when binding
       request parameters to bindable fields. The default type converter class 
-      use is <ulink url="click-api/org/apache/click/util/RequestTypeConverter.html">RequestTypeConverter</ulink>.
+      used is <ulink url="click-api/org/apache/click/util/RequestTypeConverter.html">RequestTypeConverter</ulink>.
       To specify your own type converter configure a <literal>type-converter-class</literal>
       init parameter with the ClickServlet. For example:
       </para>
       
-        <programlisting language="xml">
+      <programlisting language="xml">
   &lt;servlet&gt;
     &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
     &lt;servlet-class&gt;org.apache.click.ClickServlet&lt;/servlet-class&gt;
@@ -141,26 +140,23 @@
     <sect2 id="config-service-class" remap="h3">
       <title>Config Service Class</title>
 
-      <para>
-      Click uses a single application configuration service which is
+      <para>Click uses a single application configuration service which is
       instantiated by the ClickServlet at startup. This service defines the 
-      applications configuration and is used the ClickServlet to map request
+      application configuration and is used by the ClickServlet to map requests
       to pages amongst other things.
       </para>
  		
- 	  <para>
-      Once the ConfigService has been initialized it is stored in the
+ 	    <para>Once the ConfigService has been initialized it is stored in the
       ServletContext using the key  <ulink url="click-api/org/apache/click/service/ConfigService.html">ConfigService</ulink>
       The default ConfigService is <ulink url="click-api/org/apache/click/service/XmlConfigService.html">XmlConfigService</ulink>,
-      who's configuration is discussed in detail in the next section.     
- 	  </para>
+      which configuration is discussed in detail in the next section.
+ 	    </para>
 
- 	  <para>
-      To use an alternative configuration service specify a <literal>config-service-class</literal> 
-      context parameter. For example:
- 	  </para>
+ 	    <para>To use an alternative configuration service specify a
+      <literal>config-service-class</literal> context parameter. For example:
+ 	    </para>
       
-        <programlisting language="xml">
+      <programlisting language="xml">
 &lt;web-app xmlns="http://java.sun.com/xml/ns/j2ee"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
