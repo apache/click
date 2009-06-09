@@ -696,6 +696,10 @@ public class Page {
      *     }
      * } </pre>
      *
+     * The above approach can safely be used with <tt>stateful</tt> pages since
+     * the HEAD elements are only added to the list once, when the method is
+     * invoked the first time.
+     * <p/>
      * Alternatively one can add the HEAD elements in the Page constructor:
      *
      * <pre class="prettyprint">
@@ -714,10 +718,10 @@ public class Page {
      * {@link #onInit()}, {@link #onGet()}, {@link #onPost()}, {@link #onRender()}
      * etc.
      * <p/>
-     * <b>Please note:</b> when using {@link #stateful Stateful} pages, you
-     * will need to set the HEAD elements list to <tt>null</tt> in the
-     * {@link #onDestroy()} event handler, otherwise the HEAD elements list will
-     * continue to grow with each request:
+     * <b>Please note:</b> when adding HEAD elements from event handlers on
+     * {@link #stateful Stateful} pages, you will need to set the HEAD elements
+     * list to <tt>null</tt> in the {@link #onDestroy()} event handler,
+     * otherwise the HEAD elements list will continue to grow with each request:
      *
      * <pre class="prettyprint">
      * public MyPage extends Page {
