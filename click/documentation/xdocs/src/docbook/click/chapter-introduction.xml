@@ -172,7 +172,7 @@ public HelloWorld extends Page {
      */
     public boolean onLinkClick() {
         msg = "ControlListenerPage#" + hashCode()
-            + " object method <tt>onLinkClick()</tt> invoked.";
+            + " object method &lt;tt&gt;onLinkClick()&lt;/tt&gt; invoked.";
 
         return true;
     }
@@ -259,7 +259,7 @@ public HelloWorld extends Page {
         myLink.setActionListener(new ActionListener() {
             public boolean onAction(Control control) {
                  msg = "ControlListenerPage#" + hashCode()
-                 + " object method <tt>onAction()</tt> invoked.";
+                 + " object method &lt;tt&gt;onAction()&lt;/tt&gt; invoked.";
 
              return true;
             }
