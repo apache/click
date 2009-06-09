@@ -50,7 +50,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * With this option Page classes are configured with Spring using the
  * &#64;Component annotation. When the SpringClickServlet receives a page
- * request converts the auto-mapped page class to the equivalent Spring
+ * request it converts the auto-mapped page class to the equivalent Spring
  * bean name and gets a new instance from the Spring ApplicationContext.
  *
  * <pre class="codeConfig">
@@ -90,7 +90,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * <h3>Spring instantiated Pages with Spring XML configuration</h3>
  *
  * With this option Page classes are configured using Spring XML configuration.
- * When the SpringClickServlet receives a page request converts the auto-mapped
+ * When the SpringClickServlet receives a page request it converts the auto-mapped
  * page class to the equivalent Spring bean name and gets a new instance from the
  * Spring ApplicationContext.
  *

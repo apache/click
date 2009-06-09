@@ -73,8 +73,8 @@ import org.springframework.context.annotation.ScopeMetadataResolver;
  *
  * &lt;/beans&gt; </pre>
  *
- * In this example any page class under the base package "com.mycorp" which is
- * includes &#64;Component annotation will have "prototype" scope.
+ * In this example any page class under the base package "com.mycorp" which
+ * includes the &#64;Component annotation will have "prototype" scope.
  *
  * @see SpringClickServlet
  *
