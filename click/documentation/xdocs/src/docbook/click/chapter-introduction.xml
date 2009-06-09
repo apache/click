@@ -144,8 +144,8 @@ public HelloWorld extends Page {
 
   </sect1>
 
-  <sect1 id="control-listener">
-    <title>Control Listener Example</title>
+  <sect1 id="control-listener-type-1">
+    <title>Control Listener Type 1 Example</title>
 
     <para>Click includes a library of <link linkend="chapter-controls">Controls</link>
     which provide user interface functionality.
@@ -157,39 +157,33 @@ public HelloWorld extends Page {
     For example:
     </para>
 
-    <programlisting language="java">public class ControlListenerPage extends Page {
+    <programlisting language="java">public class ControlListenerType1Page extends Page {
 
-    public ActionLink myLink = new ActionLink();
+    /* Set the listener to this object's "onLinkClick" method. */
+    public ActionLink myLink = new ActionLink(this, "onLinkClick");
 
+    /* Public scope variable are automatically added to the model. */
     public String msg;
-    
-    // ------------------------------------------------------- Constructors
+
+    // --------------------------------------------------------- Event Handlers
 
     /**
-     * Create a new Page instance.
+     * Handle the ActionLink control click event.
      */
-    public ControlListenerPage() {
-        myLink.setListener(this, "onMyLinkClick");
-    }
-    
-    // ----------------------------------------------------- Event Handlers
-
-    /**
-     * Handle the myLink control click event.
-     */
-    public boolean onMyLinkClick() {
+    public boolean onLinkClick() {
         msg = "ControlListenerPage#" + hashCode()
-            + " object method &lt;tt&gt;onMyLinkClick()&lt;/tt&gt; invoked.";
+            + " object method <tt>onLinkClick()</tt> invoked.";
 
         return true;
     }
+    
 }</programlisting>
 
     <para>In the Page class we create an ActionLink called
     <varname>myLink</varname> and define the control's listener to be the page
-    method <methodname>onMyLinkClick()</methodname>. When a user clicks on
+    method <methodname>onLinkClick()</methodname>. When a user clicks on
     <varname>myLink</varname> control it will invoke the listener method
-    <methodname>onMyLinkClick()</methodname>.
+    <methodname>onLinkClick()</methodname>.
     </para>
 
     <para>In Click a control listener method can have any name but it must
@@ -197,6 +191,12 @@ public HelloWorld extends Page {
     processing of page events should continue. This control listener pattern
     provides a short hand way for wiring up action listener methods without
     having to define anonymous inner classes.
+    </para>
+    
+    <para>The advantage of this style of control listener binding is that you
+    have to write fewer lines of code. The disadvantage of this type of control
+    listener binding is that no compile time safety is provided, and you miss
+    out on the compiler refactoring capabilities provided with modern IDEs.
     </para>
 
     <para>Back to our example, in the page template we define a HTML link and
@@ -222,16 +222,94 @@ public HelloWorld extends Page {
 
     <literallayout>Click myLink control <varname>here</varname>.</literallayout>
 
-    <para>When a user clicks on the link the <methodname>onMyLinkClick()</methodname>
+    <para>When a user clicks on the link the <methodname>onLinkClick()</methodname>
     method is invoked. This method then creates <varname>msg</varname> model
     value, which is rendered in the page as:
     </para>
 
     <literallayout>Click myLink control <varname>here</varname>.
 
-<computeroutput>ControlListenerPage#12767107 object method onMyLinkClick() invoked.</computeroutput></literallayout>
+<computeroutput>ControlListenerPage#12767107 object method onLinkClick() invoked.</computeroutput></literallayout>
 
   </sect1>
+
+  <sect1 id="control-listener-type-2">
+    <title>Control Listener Type 2 Example</title>
+
+    <para>The second type of control listener binding uses the 
+    <ulink url="../../click-api/org/apache/click/control/ActionListener.html">ActionListener</ulink>
+    interface to provide compile time safety. This compile time binding also 
+    supports code refactoring using modern IDE tools.
+    </para>
+
+    <programlisting language="java">public class ControlListenerType2Page extends Page {
+
+    /* Public scope controls are automatically added to the page. */
+    public ActionLink myLink = new ActionLink();
+
+    /* Public scope variable are automatically added to the model. */
+    public String msg;
+
+    // ------------------------------------------------------------ Constructor
+
+    /**
+     * Create a new Page instance.
+     */
+    public ControlListenerType2Page() {
+        myLink.setActionListener(new ActionListener() {
+            public boolean onAction(Control control) {
+                 msg = "ControlListenerPage#" + hashCode()
+                 + " object method <tt>onAction()</tt> invoked.";
+
+             return true;
+            }
+        });
+    }
+    
+}</programlisting>
+
+    <para>In the Page class we create an ActionLink called
+    <varname>myLink</varname>. In the Page constructor we set the control's
+    action listener to an annonymous inner class which implements the 
+    <methodname>onAction()</methodname>. When a user clicks on
+    <varname>myLink</varname> control it will invoke the action listener method
+    <methodname>onAction()</methodname>.
+    </para>
+
+    <para>As with our previous example, in the page template we define a HTML link and
+    have the <varname>myLink</varname> control render the link's href attribute:
+    </para>
+
+    <programlisting language="xml">&lt;html&gt;
+  &lt;head&gt;
+    &lt;link type="text/css" rel="stylesheet" href="style.css"&gt;&lt;/link&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+  
+  Click myLink control &lt;a href="<varname>$myLink.href</varname>"&gt;here&lt;/a&gt;.
+
+  <command>#if</command> (<varname>$msg</varname>)
+    &lt;div id="msgDiv"&gt; <varname>$msg</varname> &lt;/div&gt;
+  <command>#end</command>
+
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+    <para>At runtime this page would be rendered as:</para>
+
+    <literallayout>Click myLink control <varname>here</varname>.</literallayout>
+
+    <para>When a user clicks on the link the <methodname>onAction()</methodname>
+    method is invoked. This method then creates <varname>msg</varname> model
+    value, which is rendered in the page as:
+    </para>
+
+    <literallayout>Click myLink control <varname>here</varname>.
+
+<computeroutput>ControlListenerPage#12767107 object method onAction() invoked.</computeroutput></literallayout>
+
+  </sect1>
+
 
   <sect1 id="simple-table">
     <title>Simple Table Example</title>
