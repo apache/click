@@ -59,5 +59,5 @@ public class ExampleUtils {
     private static Context getContext() {
         return Context.getThreadLocalContext();
     }
-    
+
 }
