@@ -160,10 +160,9 @@ public HelloWorld extends Page {
     <programlisting language="java">public class ControlListenerType1Page extends Page {
 
     /* Set the listener to this object's "onLinkClick" method. */
-    public ActionLink myLink = new ActionLink(this, "onLinkClick");
+    @Bindable public ActionLink myLink = new ActionLink(this, "onLinkClick");
 
-    /* Public scope variables are automatically added to the model. */
-    public String msg;
+    @Bindable public String msg;
 
     // --------------------------------------------------------- Event Handlers
 
@@ -245,10 +244,9 @@ public HelloWorld extends Page {
     <programlisting language="java">public class ControlListenerType2Page extends Page {
 
     /* Public scope controls are automatically added to the page. */
-    public ActionLink myLink = new ActionLink();
+    @Bindable public ActionLink myLink = new ActionLink();
 
-    /* Public scope variables are automatically added to the model. */
-    public String msg;
+    @Bindable public String msg;
 
     // ------------------------------------------------------------ Constructor
 
@@ -325,7 +323,7 @@ public HelloWorld extends Page {
 
     <programlisting language="java">public class SimpleTablePage extends Page {
 
-    public Table table = new Table();
+    @Bindable public Table table = new Table();
 
     // -------------------------------------------------------- Constructor
      
@@ -343,6 +341,7 @@ public HelloWorld extends Page {
     /**
      * @see Page#onRender()
      */
+    @Override
     public void onRender() {
         List list = getCustomerService().getCustomersSortedByName(10);
         table.setRowList(list); 
@@ -429,9 +428,9 @@ public HelloWorld extends Page {
 
     <programlisting language="java">public class CustomerPage extends Page {
 
-    public Table table = new Table();
-    public PageLink editLink = new PageLink("Edit", EditCustomer.class);
-    public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
+    @Bindable public Table table = new Table();
+    @Bindable public PageLink editLink = new PageLink("Edit", EditCustomer.class);
+    @Bindable public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
     // ------------------------------------- Constructor
      
@@ -483,6 +482,7 @@ public HelloWorld extends Page {
     /**
      * @see Page#onRender()
      */
+    @Override
     public void onRender() {
         List list = getCustomerService().getCustomersByName();
         table.setRowList(list);
@@ -557,8 +557,8 @@ public HelloWorld extends Page {
 
     <programlisting language="java">public class SimpleForm extends Page {
 
-    public Form form = new Form();
-    public String msg;
+    @Bindable public Form form = new Form();
+    @Bindable public String msg;
 
     // -------------------------------------------------------- Constructor
 
@@ -681,8 +681,8 @@ public HelloWorld extends Page {
 
     <programlisting language="java">public class AdvancedForm extends Page {
 
-    public Form form = new Form();
-    public String msg;
+    @Bindable public Form form = new Form();
+    @Bindable public String msg;
 
     private Select investmentSelect = new Select("investment");
 
@@ -713,6 +713,7 @@ public HelloWorld extends Page {
     /**
      * @see Page#onInit()
      */
+    @Override
     public void onInit() {
         CustomerService customerService = getCustomerService();
         investmentSelect.add(Option.EMPTY_OPTION);
