@@ -148,8 +148,8 @@ public class JsScript extends ResourceElement {
 
     // -------------------------------------------------------------- Variables
 
-    /** A buffer holding the inline JavaScript content. */
-    private HtmlStringBuffer content = new HtmlStringBuffer();
+    /** The inline JavaScript content. */
+    private String content;
 
     /**
      * Indicates if the JsScript's content should be wrapped in a CDATA tag.
@@ -184,7 +184,7 @@ public class JsScript extends ResourceElement {
      */
     public JsScript(String content) {
         if (content != null) {
-            this.content.append(content);
+            this.content = content;
         }
         setAttribute("type", "text/javascript");
     }
@@ -236,20 +236,20 @@ public class JsScript extends ResourceElement {
     }
 
     /**
-     * Return the JavaScript content buffer.
+     * Return the JsScript content.
      *
-     * @return the JavaScript content buffer
+     * @return the JsScript content
      */
-    public HtmlStringBuffer getContent() {
+    public String getContent() {
         return content;
     }
 
     /**
-     * Set the JavaScript content buffer.
+     * Set the JsScript content.
      *
-     * @param content the new content buffer
+     * @param content the JsScript content
      */
-    public void setContent(HtmlStringBuffer content) {
+    public void setContent(String content) {
         this.content = content;
     }
 
@@ -362,17 +362,6 @@ public class JsScript extends ResourceElement {
     }
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * Append the given JavaScript string to the content buffer.
-     *
-     * @param content the JavaScript string to append to the content
-     * buffer
-     * @return the JavaScript content buffer
-     */
-    public HtmlStringBuffer append(String content) {
-        return this.content.append(content);
-    }
 
     /**
      * Render the HTML representation of the JsScript element to the specified

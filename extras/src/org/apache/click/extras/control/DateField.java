@@ -843,7 +843,7 @@ public class DateField extends TextField {
             buffer.append(" });");
             buffer.append("});");
 
-            script.setContent(buffer);
+            script.setContent(buffer.toString());
             headElements.add(script);
         }
     }

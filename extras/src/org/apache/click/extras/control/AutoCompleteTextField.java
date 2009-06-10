@@ -306,7 +306,7 @@ public abstract class AutoCompleteTextField extends TextField {
             buffer.append(",'").append(contextPath).append(page.getPath()).append(
                 "'");
             buffer.append(",").append(getAutoCompleteOptions()).append(");");
-            script.setContent(buffer);
+            script.setContent(buffer.toString());
             headElements.add(script);
         }
         return headElements;

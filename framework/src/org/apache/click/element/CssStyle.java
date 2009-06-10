@@ -147,8 +147,8 @@ public class CssStyle extends ResourceElement {
 
      // -------------------------------------------------------------- Variables
 
-    /** A buffer holding the inline Css content. */
-    private HtmlStringBuffer content = new HtmlStringBuffer();
+    /** The inline Css content. */
+    private String content;
 
     /**
      * Indicates if the HeadElement's content should be wrapped in a CDATA tag.
@@ -177,7 +177,7 @@ public class CssStyle extends ResourceElement {
      */
     public CssStyle(String content) {
         if (content != null) {
-            this.content.append(content);
+            this.content = content;
         }
         setAttribute("type", "text/css");
         setAttribute("rel", "stylesheet");
@@ -230,20 +230,20 @@ public class CssStyle extends ResourceElement {
     }
 
     /**
-     * Return the Css content buffer.
+     * Return the CssStyle content.
      *
-     * @return the Css content buffer
+     * @return the CssStyle content
      */
-    public HtmlStringBuffer getContent() {
+    public String getContent() {
         return content;
     }
 
     /**
-     * Set the Css content buffer.
+     * Set the CssStyle content.
      *
-     * @param content the new content buffer
+     * @param content the CssStyle content
      */
-    public void setContent(HtmlStringBuffer content) {
+    public void setContent(String content) {
         this.content = content;
     }
 
@@ -319,16 +319,6 @@ public class CssStyle extends ResourceElement {
     }
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * Append the given Css string to the content buffer.
-     *
-     * @param content the CSS string to append to the content buffer
-     * @return the Css content buffer
-     */
-    public HtmlStringBuffer append(String content) {
-        return this.content.append(content);
-    }
 
     /**
      * Render the HTML representation of the CssStyle element to the specified
