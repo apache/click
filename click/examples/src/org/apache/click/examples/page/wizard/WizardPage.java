@@ -139,8 +139,10 @@ public class WizardPage extends BorderPage {
      *
      * @return the page stylesheet
      */
+    @Override
     public String getHtmlImports() {
         String contextPath = getContext().getRequest().getContextPath();
         return "<link type=\"text/css\" rel=\"stylesheet\" href=\"" + contextPath + "/wizard/wizard.css\"/>";
     }
+
 }

@@ -32,6 +32,7 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.EditCustomer;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.LinkDecorator;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -42,9 +43,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdvancedTable extends BorderPage {
 
-    public Table table = new Table();
-    public PageLink editLink = new PageLink("Edit", EditCustomer.class);
-    public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
+    @Bindable public Table table = new Table();
+    @Bindable public PageLink editLink = new PageLink("Edit", EditCustomer.class);
+    @Bindable public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -95,6 +96,7 @@ public class AdvancedTable extends BorderPage {
     /**
      * @see Page#onRender()
      */
+    @Override
     public void onRender() {
         List list = customerService.getCustomers();
         table.setRowList(list);

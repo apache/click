@@ -115,4 +115,5 @@ public class PageLinkTreePage extends PlainTreePage {
     protected String getSessionKey() {
         return TREE_NODES_SESSION_KEY;
     }
+
 }

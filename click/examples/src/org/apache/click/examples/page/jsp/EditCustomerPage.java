@@ -26,6 +26,7 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.EmailField;
+import org.apache.click.util.Bindable;
 
 /**
  * Demo a form submit using JSP as template.
@@ -34,7 +35,7 @@ import org.apache.click.extras.control.EmailField;
  */
 public class EditCustomerPage extends BorderPage {
 
-    public Form form = new Form("form");
+    @Bindable public Form form = new Form("form");
 
     public EditCustomerPage() {
         // Setup customers form
@@ -48,6 +49,7 @@ public class EditCustomerPage extends BorderPage {
         form.add(new Submit("cancel", this, "onCancelClick"));
     }
 
+    @Override
     public boolean onSecurityCheck() {
         return form.onSubmitCheck(this, EditCustomerPage.class);
     }
@@ -57,6 +59,7 @@ public class EditCustomerPage extends BorderPage {
      *
      * @see org.apache.click.Page#getTemplate()
      */
+    @Override
     public String getTemplate() {
         return "/border-template.jsp";
     }

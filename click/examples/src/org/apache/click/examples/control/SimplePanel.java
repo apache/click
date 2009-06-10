@@ -44,6 +44,8 @@ import org.apache.commons.lang.ClassUtils;
  */
 public class SimplePanel extends Panel {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Default empty constructor.
      */
@@ -71,6 +73,7 @@ public class SimplePanel extends Panel {
      *
      * @param buffer the specified buffer to render the Panel's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         if (getTemplate() != null) {

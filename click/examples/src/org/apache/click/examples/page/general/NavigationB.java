@@ -26,6 +26,7 @@ package org.apache.click.examples.page.general;
  */
 public class NavigationB extends NavigationA {
 
+    @Override
     public String getTarget() {
         return "/general/navigation-a.htm";
     }

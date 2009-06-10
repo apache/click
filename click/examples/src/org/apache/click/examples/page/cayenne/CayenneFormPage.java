@@ -101,6 +101,7 @@ public class CayenneFormPage extends FormTablePage {
     /**
      * @see FormTablePage#getDataObject(Object)
      */
+    @Override
     public DataObject getDataObject(Object id) {
         return clientService.getClient(id);
     }
@@ -108,7 +109,7 @@ public class CayenneFormPage extends FormTablePage {
     /**
      * @see FormTablePage#getDataObjectClass()
      */
-    @SuppressWarnings("unchecked")
+    @Override
     public Class getDataObjectClass() {
         return Client.class;
     }
@@ -116,7 +117,7 @@ public class CayenneFormPage extends FormTablePage {
     /**
      * @see FormTablePage#getRowList()
      */
-    @SuppressWarnings("unchecked")
+    @Override
     public List getRowList() {
         return clientService.getClients();
     }

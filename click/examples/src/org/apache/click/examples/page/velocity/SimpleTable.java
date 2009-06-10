@@ -33,6 +33,7 @@ public class SimpleTable extends BorderPage {
     /**
      * @see Page#onRender()
      */
+    @Override
     public void onRender() {
         addModel("properties", new TreeMap(System.getProperties()));
     }

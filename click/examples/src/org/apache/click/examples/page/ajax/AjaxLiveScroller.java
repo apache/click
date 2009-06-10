@@ -44,6 +44,7 @@ public class AjaxLiveScroller extends BorderPage {
     // Specifies the number of customers to retrieve at a time
     private int pageSize = 10;
 
+    @Override
     public void onGet() {
         // Check if the offset parameter was received.
         int offset = NumberUtils.toInt(getContext().getRequest().getParameter("offset"));
@@ -61,6 +62,7 @@ public class AjaxLiveScroller extends BorderPage {
         addModel("customers", customerService.getTopCustomersForPage(offset, pageSize));
     }
 
+    @Override
     public List getHeadElements() {
         // Lazily load head elements and ensure they are only loaded once
         if (headElements == null) {
@@ -81,6 +83,7 @@ public class AjaxLiveScroller extends BorderPage {
         return headElements;
     }
 
+    @Override
     public String getTemplate() {
         // For Ajax requests we want to render the Page template only as there is
         // no need to include the Border template in the response

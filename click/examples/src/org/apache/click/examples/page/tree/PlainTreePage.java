@@ -38,6 +38,7 @@ public class PlainTreePage extends BorderPage {
     /**
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -49,6 +50,7 @@ public class PlainTreePage extends BorderPage {
     /**
      * @see org.apache.click.Page#onGet()
      */
+    @Override
     public void onGet() {
         String selectId = getContext().getRequestParameter(Tree.SELECT_TREE_NODE_PARAM);
         String expandId = getContext().getRequestParameter(Tree.EXPAND_TREE_NODE_PARAM);

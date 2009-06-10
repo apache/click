@@ -39,6 +39,7 @@ import org.apache.click.examples.page.HomePage;
 import org.apache.click.examples.page.ajax.AjaxCustomer;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.DateField;
+import org.apache.click.util.Bindable;
 import org.apache.click.util.ClickUtils;
 import org.springframework.stereotype.Component;
 
@@ -50,7 +51,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class StartPage extends BorderPage {
 
-    public Form form = new Form();
+    @Bindable public Form form = new Form();
+    
     private Select customerSelect;
     private DateField dateField;
     private Select courseSelect;
@@ -91,6 +93,7 @@ public class StartPage extends BorderPage {
     /**
      * @see org.apache.click.Page#onSecurityCheck()
      */
+    @Override
     public boolean onSecurityCheck() {
         return form.onSubmitCheck(this, "/pageflow/invalid-submit.html");
     }
@@ -145,6 +148,7 @@ public class StartPage extends BorderPage {
      *
      * @see org.apache.click.Page#getHeadElements()
      */
+    @Override
     public List getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();

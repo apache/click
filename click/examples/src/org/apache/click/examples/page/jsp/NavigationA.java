@@ -20,6 +20,7 @@ package org.apache.click.examples.page.jsp;
 
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides an navigation example Page demonstrating forward and redirect
@@ -29,16 +30,17 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class NavigationA extends BorderPage {
 
-    public ActionLink forwardLink = new ActionLink("forwardLink", this, "onForwardClick");
-    public ActionLink forwardParamLink = new ActionLink("forwardParamLink", this, "onForwardParamClick");
-    public ActionLink redirectLink = new ActionLink("redirectLink", this, "onRedirectClick");
-    public ActionLink redirectParamLink = new ActionLink("redirectParamLink", this, "onRedirectParamClick");
+    @Bindable public ActionLink forwardLink = new ActionLink("forwardLink", this, "onForwardClick");
+    @Bindable public ActionLink forwardParamLink = new ActionLink("forwardParamLink", this, "onForwardParamClick");
+    @Bindable public ActionLink redirectLink = new ActionLink("redirectLink", this, "onRedirectClick");
+    @Bindable public ActionLink redirectParamLink = new ActionLink("redirectParamLink", this, "onRedirectParamClick");
 
     // --------------------------------------------------------- Event Handlers
 
     /**
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -103,19 +105,11 @@ public class NavigationA extends BorderPage {
     }
 
     /**
-     * Note one can also forward and redirect using the Page class instead of
-     * the path as seen below.
-     */
-    /*
-    public Class getTargetPageClass() {
-        return NavigationB.class;
-    }*/
-
-    /**
      * Returns the name of the border template: &nbsp; <tt>"/border-template.jsp"</tt>
      *
      * @see org.apache.click.Page#getTemplate()
      */
+    @Override
     public String getTemplate() {
         return "/border-template.jsp";
     }

@@ -29,6 +29,7 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.TableInlinePaginator;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,9 +40,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class TablePaginatorPage extends BorderPage {
 
-    public Table table1 = new Table();
-    public Table table2 = new Table();
-    public Table table3 = new Table();
+    @Bindable public Table table1 = new Table();
+    @Bindable public Table table2 = new Table();
+    @Bindable public Table table3 = new Table();
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -66,6 +67,7 @@ public class TablePaginatorPage extends BorderPage {
     /**
      * @see org.apache.click.Page#onRender()
      */
+    @Override
     public void onRender() {
         List<Customer> customers = customerService.getCustomers();
         table1.setRowList(customers);

@@ -32,6 +32,7 @@ import org.apache.click.control.Submit;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.examples.service.CustomerService;
+import org.apache.click.examples.util.ExampleUtils;
 import org.apache.click.extras.control.CheckList;
 import org.apache.click.extras.control.ColorPicker;
 import org.apache.click.extras.control.CountrySelect;
@@ -46,6 +47,7 @@ import org.apache.click.extras.control.PageSubmit;
 import org.apache.click.extras.control.RegexField;
 import org.apache.click.extras.control.TelephoneField;
 import org.apache.click.extras.control.VirtualKeyboard;
+import org.apache.click.util.Bindable;
 import org.apache.click.util.ClickUtils;
 import org.springframework.stereotype.Component;
 
@@ -64,8 +66,8 @@ public class ExtraControlsForm extends BorderPage {
         boolean javaScriptValidate = false;
     }
 
-    public Form form = new Form();
-    public Form optionsForm = new Form();
+    @Bindable public Form form = new Form();
+    @Bindable public Form optionsForm = new Form();
 
     private CheckList checkList = new CheckList("checkList");
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");
@@ -126,7 +128,7 @@ public class ExtraControlsForm extends BorderPage {
         Options options = new Options();
         options.allFieldsRequired = allFieldsRequired.isChecked();
         options.javaScriptValidate = jsValidate.isChecked();
-        setSessionObject(options);
+        ExampleUtils.setSessionObject(options);
         applyOptions();
         return true;
     }
@@ -134,7 +136,7 @@ public class ExtraControlsForm extends BorderPage {
     // -------------------------------------------------------- Private Methods
 
     private void applyOptions() {
-        Options options = (Options) getSessionObject(Options.class);
+        Options options = (Options) ExampleUtils.getSessionObject(Options.class);
 
         form.setJavaScriptValidation(options.javaScriptValidate);
         List formFiels = ClickUtils.getFormFields(form);

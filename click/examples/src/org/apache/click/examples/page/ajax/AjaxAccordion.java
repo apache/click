@@ -33,6 +33,7 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class AjaxAccordion extends BorderPage {
 
+    @Override
     public List getHeadElements() {
 
         // Lazily load head elements

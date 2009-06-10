@@ -55,6 +55,7 @@ public class AccommodationDemo extends FormTablePage {
     /**
      * @see FormTablePage#onInit()
      */
+    @Override
     public void onInit() {
         form.add(new TextField("name")).setRequired(true);
 
@@ -88,6 +89,7 @@ public class AccommodationDemo extends FormTablePage {
     /**
      * @see FormTablePage#getDataObject(Object)
      */
+    @Override
     public DataObject getDataObject(Object id) {
         return studentService.getStudent(id);
     }
@@ -95,6 +97,7 @@ public class AccommodationDemo extends FormTablePage {
     /**
      * @see FormTablePage#getDataObjectClass()
      */
+    @Override
     public Class getDataObjectClass() {
         return Student.class;
     }
@@ -102,6 +105,7 @@ public class AccommodationDemo extends FormTablePage {
     /**
      * @see FormTablePage#getRowList()
      */
+    @Override
     public List getRowList() {
         return studentService.getStudentsByHouse();
     }

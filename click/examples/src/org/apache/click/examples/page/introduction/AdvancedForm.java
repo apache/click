@@ -34,6 +34,7 @@ import org.apache.click.examples.page.HomePage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.EmailField;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -44,8 +45,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdvancedForm extends BorderPage {
 
-    public Form form = new Form();
-    public String msg;
+    @Bindable public Form form = new Form();
+    @Bindable public String msg;
 
     private Select investmentSelect = new Select("investment");
 

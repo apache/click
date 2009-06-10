@@ -22,6 +22,7 @@ import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides a simple Form example Page.
@@ -37,8 +38,8 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class SimpleForm extends BorderPage {
 
-    public Form form = new Form();
-    public String msg;
+    @Bindable public Form form = new Form();
+    @Bindable public String msg;
 
     // ------------------------------------------------------------ Constructor
 

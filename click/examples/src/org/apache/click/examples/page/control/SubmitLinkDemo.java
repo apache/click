@@ -27,6 +27,7 @@ import org.apache.click.control.Form;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.control.SubmitLink;
+import org.apache.click.util.Bindable;
 
 /**
  * This example demonstrates how to use a SubmitLink control together with the
@@ -36,13 +37,13 @@ import org.apache.click.extras.control.SubmitLink;
  */
 public class SubmitLinkDemo extends BorderPage {
 
-    public String demo1Msg;
+    @Bindable public String demo1Msg;
 
-    public String demo2Msg;
+    @Bindable public String demo2Msg;
 
-    public String demo3Msg;
+    @Bindable public String demo3Msg;
 
-    public String demo4Msg;
+    @Bindable public String demo4Msg;
 
     public SubmitLinkDemo() {
         demo1();

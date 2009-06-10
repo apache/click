@@ -39,6 +39,7 @@ public class MultipleFormsDemo extends BorderPage {
     /**
      * @see org.apache.click.Page#onSecurityCheck()
      */
+    @Override
     public boolean onSecurityCheck() {
         String pagePath = getContext().getPagePath(getClass());
 
@@ -65,6 +66,7 @@ public class MultipleFormsDemo extends BorderPage {
     /**
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 

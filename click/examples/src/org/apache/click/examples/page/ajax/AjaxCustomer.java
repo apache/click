@@ -23,6 +23,7 @@ import javax.annotation.Resource;
 import org.apache.click.Page;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.service.CustomerService;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -43,7 +44,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AjaxCustomer extends Page {
 
-    public Customer customer;
+    @Bindable public Customer customer;
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -53,6 +54,7 @@ public class AjaxCustomer extends Page {
      *
      * @see Page#onGet()
      */
+    @Override
     public void onGet() {
         String customerId = getContext().getRequest().getParameter("customerId");
 
@@ -64,6 +66,7 @@ public class AjaxCustomer extends Page {
      *
      * @see Page#getContentType()
      */
+    @Override
     public String getContentType() {
         return "text/html; charset=UTF-8";
     }

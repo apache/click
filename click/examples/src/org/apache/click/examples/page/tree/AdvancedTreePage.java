@@ -28,6 +28,7 @@ import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.util.ExampleUtils;
 import org.apache.click.extras.tree.Tree;
 import org.apache.click.extras.tree.TreeListener;
 import org.apache.click.extras.tree.TreeNode;
@@ -48,6 +49,7 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
     /**
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -80,7 +82,7 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
         TreeOptions options = new TreeOptions();
         options.javascriptEnabled = jsEnabled.isChecked();
         options.rootNodeDisplayed = rootNodeDisplayed.isChecked();
-        setSessionObject(options);
+        ExampleUtils.setSessionObject(options);
 
         //Apply users new options
         applyOptions();
@@ -308,7 +310,9 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
     private void applyOptions() {
 
         //We retrieve our stored options from the session and set the controls state
-        TreeOptions options = (TreeOptions) getSessionObject(TreeOptions.class);
+        TreeOptions options = (TreeOptions)
+            ExampleUtils.getSessionObject(TreeOptions.class);
+
         jsEnabled.setChecked(options.javascriptEnabled);
         rootNodeDisplayed.setChecked(options.rootNodeDisplayed);
 
@@ -331,4 +335,5 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
         //Enable notification to any tree listeners again
         tree.setNotifyListeners(true);
     }
+
 }

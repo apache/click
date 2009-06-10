@@ -21,6 +21,7 @@ package org.apache.click.examples.page.security;
 import org.apache.click.Page;
 import org.apache.click.examples.domain.User;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides an user session logout Page.
@@ -29,11 +30,12 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class Logout extends BorderPage {
 
-    public User user;
+    @Bindable public User user;
 
     /**
      * @see Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -42,4 +44,5 @@ public class Logout extends BorderPage {
             getContext().removeSessionAttribute("user");
         }
     }
+    
 }

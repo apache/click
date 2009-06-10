@@ -20,6 +20,7 @@ package org.apache.click.examples.page.introduction;
 
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides a control listener example Page using the runtime binding of the
@@ -34,10 +35,9 @@ import org.apache.click.examples.page.BorderPage;
 public class ControlListenerType1Page extends BorderPage {
 
     /* Set the listener to this object's "onLinkClick" method. */
-    public ActionLink myLink = new ActionLink(this, "onLinkClick");
+    @Bindable public ActionLink myLink = new ActionLink(this, "onLinkClick");
 
-    /* Public scope variable are automatically added to the model. */
-    public String msg;
+    @Bindable public String msg;
 
     // --------------------------------------------------------- Event Handlers
 

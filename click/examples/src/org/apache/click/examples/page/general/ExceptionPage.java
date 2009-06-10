@@ -21,6 +21,7 @@ package org.apache.click.examples.page.general;
 import org.apache.click.Page;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides examples of the Click Exception handling.
@@ -29,12 +30,12 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class ExceptionPage extends BorderPage {
 
-    public ActionLink nullPointerLink = new ActionLink(this, "onNullPointerClick");
-    public ActionLink illegalArgumentLink = new ActionLink(this, "onIllegalArgumentExceptionClick");
-    public ActionLink missingMethodLink = new ActionLink(this, "onMissingMethodClick");
-    public ActionLink brokenRendererLink = new ActionLink(this, "onBrokenRendererClick");
-    public ActionLink brokenBorderLink = new ActionLink(this, "onBrokenBorderClick");
-    public ActionLink brokenContentLink = new ActionLink(this, "onBrokenContentClick");
+    @Bindable public ActionLink nullPointerLink = new ActionLink(this, "onNullPointerClick");
+    @Bindable public ActionLink illegalArgumentLink = new ActionLink(this, "onIllegalArgumentExceptionClick");
+    @Bindable public ActionLink missingMethodLink = new ActionLink(this, "onMissingMethodClick");
+    @Bindable public ActionLink brokenRendererLink = new ActionLink(this, "onBrokenRendererClick");
+    @Bindable public ActionLink brokenBorderLink = new ActionLink(this, "onBrokenBorderClick");
+    @Bindable public ActionLink brokenContentLink = new ActionLink(this, "onBrokenContentClick");
 
     private String template;
 
@@ -71,6 +72,7 @@ public class ExceptionPage extends BorderPage {
      *
      * @see Page#getTemplate()
      */
+    @Override
     public String getTemplate() {
         return (template != null) ? template : super.getTemplate();
     }

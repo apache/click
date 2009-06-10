@@ -26,6 +26,7 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.PageSubmit;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides an example page using the custom RichTextArea control.
@@ -36,7 +37,7 @@ import org.apache.click.extras.control.PageSubmit;
  */
 public class EmailForm extends BorderPage {
 
-    public Form form = new Form();
+    @Bindable public Form form = new Form();
 
     public EmailForm() {
         form.setLabelsPosition(Form.POSITION_TOP);

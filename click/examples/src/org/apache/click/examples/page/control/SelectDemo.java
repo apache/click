@@ -30,6 +30,7 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.CountrySelect;
 import org.apache.click.extras.control.PageSubmit;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides an Select example Page.
@@ -38,7 +39,7 @@ import org.apache.click.extras.control.PageSubmit;
  */
 public class SelectDemo extends BorderPage {
 
-    public Form form = new Form();
+    @Bindable public Form form = new Form();
 
     private Select genderSelect;
     private Select investmentSelect;
@@ -98,6 +99,7 @@ public class SelectDemo extends BorderPage {
     /**
      * @see org.apache.click.Page#onPost()
      */
+    @Override
     public void onPost() {
         if (form.isValid()) {
             addModel("gender", genderSelect.getValue());

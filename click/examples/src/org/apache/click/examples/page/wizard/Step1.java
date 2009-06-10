@@ -32,6 +32,8 @@ import org.apache.click.extras.control.EmailField;
  */
 public class Step1 extends Step {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Construct Step1 with the specified name, label, description and page.
      *

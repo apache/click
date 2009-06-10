@@ -35,6 +35,7 @@ import org.apache.click.extras.control.CreditCardField;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.IntegerField;
 import org.apache.click.extras.control.PageSubmit;
+import org.apache.click.util.Bindable;
 import org.apache.click.util.ClickUtils;
 
 /**
@@ -44,7 +45,7 @@ import org.apache.click.util.ClickUtils;
  */
 public class FieldSetDemo extends BorderPage {
 
-    public Form form = new Form();
+    @Bindable public Form form = new Form();
 
     public FieldSetDemo() {
         form.setLabelAlign(Form.ALIGN_RIGHT);

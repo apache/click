@@ -26,6 +26,7 @@ import org.apache.click.control.TextField;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.PageSubmit;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides File Upload example using the FileField control.
@@ -34,7 +35,7 @@ import org.apache.click.extras.control.PageSubmit;
  */
 public class FileUpload extends BorderPage {
 
-    public Form form = new Form();
+    @Bindable public Form form = new Form();
 
     private FileField fileField1;
     private TextField descField1;

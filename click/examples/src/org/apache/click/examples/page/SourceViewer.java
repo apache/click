@@ -100,6 +100,7 @@ public class SourceViewer extends BorderPage {
     /**
      * @see Page#onGet()
      */
+    @Override
     public void onGet() {
         HttpServletRequest request = getContext().getRequest();
 

@@ -20,6 +20,7 @@ package org.apache.click.examples.page;
 
 import org.apache.click.Page;
 import org.apache.click.extras.control.Menu;
+import org.apache.click.util.Bindable;
 import org.apache.click.util.ClickUtils;
 
 /**
@@ -39,7 +40,7 @@ public class BorderPage extends Page {
      * The root menu. Note this transient variable is reinitialized in onInit()
      * to support serialized stateful pages.
      */
-    public transient Menu rootMenu;
+    @Bindable public transient Menu rootMenu;
 
     // ------------------------------------------------------------ Constructor
 
@@ -67,6 +68,7 @@ public class BorderPage extends Page {
     /**
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -84,39 +86,9 @@ public class BorderPage extends Page {
      *
      * @see org.apache.click.Page#getTemplate()
      */
+    @Override
     public String getTemplate() {
         return "/border-template.htm";
-    }
-
-    // ------------------------------------------------------ Protected Methods
-
-    @SuppressWarnings("unchecked")
-    protected Object getSessionObject(Class aClass) {
-        if (aClass == null) {
-            throw new IllegalArgumentException("Null class parameter.");
-        }
-        Object object = getContext().getSessionAttribute(aClass.getName());
-        if (object == null) {
-            try {
-                object = aClass.newInstance();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return object;
-    }
-
-    protected void setSessionObject(Object object) {
-        if (object != null) {
-            getContext().setSessionAttribute(object.getClass().getName(), object);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    protected void removeSessionObject(Class aClass) {
-        if (getContext().hasSession() && aClass != null) {
-            getContext().getSession().removeAttribute(aClass.getName());
-        }
     }
 
 }

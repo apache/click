@@ -89,8 +89,10 @@ public class SelectPostCode extends BorderPage {
     /**
      * Override onRender to populate the table row data.
      */
+    @Override
     public void onRender() {
         List<PostCode> states = postCodeService.getPostCodes();
         table.setRowList(states);
     }
+
 }

@@ -24,6 +24,7 @@ import javax.annotation.Resource;
 
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,7 +36,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomerTable extends BorderPage {
 
-    public List customers = null;
+    @Bindable public List customers = null;
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -53,6 +54,7 @@ public class CustomerTable extends BorderPage {
      *
      * @see org.apache.click.Page#getTemplate()
      */
+    @Override
     public String getTemplate() {
         return "/border-template.jsp";
     }

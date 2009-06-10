@@ -24,6 +24,7 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.PageSubmit;
 import org.apache.click.extras.control.RegexField;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides a form RegexField example.
@@ -32,7 +33,7 @@ import org.apache.click.extras.control.RegexField;
  */
 public class RegexDemo extends BorderPage {
 
-    public Form form = new Form();
+    @Bindable public Form form = new Form();
 
     public RegexDemo() {
         RegexField versionField = new RegexField("version", "Version", 10);
