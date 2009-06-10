@@ -52,7 +52,7 @@ import org.springframework.stereotype.Component;
 public class StartPage extends BorderPage {
 
     @Bindable public Form form = new Form();
-    
+
     private Select customerSelect;
     private DateField dateField;
     private Select courseSelect;

@@ -44,5 +44,5 @@ public class Logout extends BorderPage {
             getContext().removeSessionAttribute("user");
         }
     }
-    
+
 }
