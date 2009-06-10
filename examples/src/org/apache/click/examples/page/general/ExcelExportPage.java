@@ -18,6 +18,7 @@
  */
 package org.apache.click.examples.page.general;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -61,7 +62,6 @@ public class ExcelExportPage extends BorderPage {
 
         ActionLink link = new ActionLink("export");
         link.setActionListener(new ActionListener() {
-
             public boolean onAction(Control source) {
                 export();
                 return false;
@@ -86,12 +86,21 @@ public class ExcelExportPage extends BorderPage {
         response.setContentType(mimeType);
         response.setHeader("Pragma", "no-cache");
 
+
         OutputStream outputStream = null;
         try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            wb.write(baos);
+
+            byte[] bytes = baos.toByteArray();
+
+            response.setContentLength(bytes.length);
+
             outputStream = response.getOutputStream();
 
             // Write out Excel Workbook to response stream
-            wb.write(outputStream);
+            outputStream.write(bytes);
+            outputStream.flush();
 
             // Specify no further rendering required
             setPath(null);
