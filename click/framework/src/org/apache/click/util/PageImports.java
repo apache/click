@@ -672,7 +672,7 @@ public class PageImports {
     private CssStyle asCssStyle(String line) {
         CssStyle cssStyle = new CssStyle();
         copyAttributes(cssStyle, line);
-        cssStyle.append(extractCssContent(line));
+        cssStyle.setContent(extractCssContent(line));
         return cssStyle;
     }
 
@@ -697,7 +697,7 @@ public class PageImports {
     private JsScript asJsScript(String line) {
         JsScript jsScript = new JsScript();
         copyAttributes(jsScript, line);
-        jsScript.append(extractJsContent(line, jsScript));
+        jsScript.setContent(extractJsContent(line, jsScript));
         return jsScript;
     }
 
