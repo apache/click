@@ -21,6 +21,7 @@ package org.apache.click.examples.page.jsp;
 import java.util.Date;
 
 import org.apache.click.Page;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides HelloWorld world example Page. Possibly the simplest dynamic example
@@ -33,6 +34,6 @@ import org.apache.click.Page;
  */
 public class HelloWorld extends Page {
 
-    public Date time = new Date();
+    @Bindable public Date time = new Date();
 
 }

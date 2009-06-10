@@ -22,6 +22,7 @@ import org.apache.click.ActionListener;
 import org.apache.click.Control;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides a control listener example Page using the compile time binding of
@@ -35,11 +36,9 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class ControlListenerType2Page extends BorderPage {
 
-    /* Public scope controls are automatically added to the page. */
-    public ActionLink myLink = new ActionLink();
+    @Bindable public ActionLink myLink = new ActionLink();
 
-    /* Public scope variable are automatically added to the model. */
-    public String msg;
+    @Bindable public String msg;
 
     // ------------------------------------------------------------ Constructor
 

@@ -32,6 +32,7 @@ public class Secure extends BorderPage {
     /**
      * @see Page#onSecurityCheck()
      */
+    @Override
     public boolean onSecurityCheck() {
         if (getContext().hasSessionAttribute("user")) {
             return true;

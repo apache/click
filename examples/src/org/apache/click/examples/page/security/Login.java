@@ -30,6 +30,7 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.examples.service.UserService;
 import org.apache.click.extras.control.PageSubmit;
+import org.apache.click.util.Bindable;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -41,8 +42,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Login extends BorderPage {
 
-    public Form form = new Form();
-    public HiddenField redirectField = new HiddenField("redirect", String.class);
+    @Bindable public Form form = new Form();
+    @Bindable public HiddenField redirectField = new HiddenField("redirect", String.class);
 
     private TextField usernameField = new TextField("username", true);
     private PasswordField passwordField = new PasswordField("password", true);

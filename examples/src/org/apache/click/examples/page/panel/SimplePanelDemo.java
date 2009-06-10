@@ -20,6 +20,7 @@ package org.apache.click.examples.page.panel;
 
 import org.apache.click.control.Panel;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides a simple Panel demonstration.
@@ -28,6 +29,6 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class SimplePanelDemo extends BorderPage {
 
-    public Panel panel = new Panel("panel", "/panel/simple-panel.htm");
+    @Bindable public Panel panel = new Panel("panel", "/panel/simple-panel.htm");
 
 }

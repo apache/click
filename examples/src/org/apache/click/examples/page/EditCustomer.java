@@ -34,6 +34,7 @@ import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.IntegerField;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -50,11 +51,11 @@ import org.springframework.stereotype.Component;
 public class EditCustomer extends BorderPage {
 
     // Public controls are automatically added to the page
-    public Form form = new Form("form");
-    public HiddenField referrerField = new HiddenField("referrer", String.class);
+    @Bindable public Form form = new Form("form");
+    @Bindable public HiddenField referrerField = new HiddenField("referrer", String.class);
 
     // Public variables can automatically have their value set by request parameters
-    public Integer id;
+    @Bindable public Integer id;
 
     private HiddenField idField = new HiddenField("id", Integer.class);
 
@@ -99,6 +100,7 @@ public class EditCustomer extends BorderPage {
      *
      * @see Page#onGet()
      */
+    @Override
     public void onGet() {
         if (id != null) {
             Customer customer = customerService.getCustomerForID(id);

@@ -25,6 +25,7 @@ import org.apache.click.control.Option;
 import org.apache.click.control.Submit;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.control.PickList;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides an Select example Page.
@@ -33,8 +34,8 @@ import org.apache.click.extras.control.PickList;
  */
 public class PickListDemo extends BorderPage {
 
-    public Form form = new Form();
-    public List selectedValues;
+    @Bindable public Form form = new Form();
+    @Bindable public List selectedValues;
 
     private PickList pickList = new PickList("languages");
 

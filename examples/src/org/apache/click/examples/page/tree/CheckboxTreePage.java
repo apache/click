@@ -29,6 +29,7 @@ import org.apache.click.control.Form;
 import org.apache.click.control.Reset;
 import org.apache.click.control.Submit;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.examples.util.ExampleUtils;
 import org.apache.click.extras.tree.CheckboxTree;
 import org.apache.click.extras.tree.Tree;
 import org.apache.click.extras.tree.TreeListener;
@@ -53,6 +54,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
     /**
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -233,7 +235,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         options.javascriptEnabled = jsEnabled.isChecked();
         options.rootNodeDisplayed = rootNodeDisplayed.isChecked();
         options.selectChildNodes = selectChildNodes.isChecked();
-        setSessionObject(options);
+        ExampleUtils.setSessionObject(options);
 
         //Apply users new options
         applyOptions();
@@ -327,7 +329,9 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
     private void applyOptions() {
 
         //We retrieve our stored options from the session and set the controls state
-        CheckboxTreeOptions options = (CheckboxTreeOptions) getSessionObject(CheckboxTreeOptions.class);
+        CheckboxTreeOptions options = (CheckboxTreeOptions)
+            ExampleUtils.getSessionObject(CheckboxTreeOptions.class);
+
         jsEnabled.setChecked(options.javascriptEnabled);
         rootNodeDisplayed.setChecked(options.rootNodeDisplayed);
         selectChildNodes.setChecked(options.selectChildNodes);

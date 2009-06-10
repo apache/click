@@ -30,6 +30,7 @@ import org.apache.click.control.TextField;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
+import org.apache.click.util.Bindable;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -41,10 +42,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class PanelColumnDemo extends BorderPage {
 
-    public Panel panel = new Panel("panel", "/panel/customerDetailsPanel.htm");
-    public Form form = new Form();
-    public String nameSearch;
-    public Table table = new Table("table");
+    @Bindable public Panel panel = new Panel("panel", "/panel/customerDetailsPanel.htm");
+    @Bindable public Form form = new Form();
+    @Bindable public String nameSearch;
+    @Bindable public Table table = new Table("table");
 
     private TextField textName = new TextField("name", true);
 

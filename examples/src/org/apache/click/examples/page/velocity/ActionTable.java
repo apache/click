@@ -29,6 +29,7 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.EditCustomer;
 import org.apache.click.examples.service.CustomerService;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -43,11 +44,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ActionTable extends BorderPage {
 
-    public List customers;
-    public Customer customerDetail;
-    public ActionLink viewLink = new ActionLink(this, "onViewClick");
-    public PageLink editLink = new PageLink(EditCustomer.class);
-    public ActionLink deleteLink = new ActionLink(this, "onDeleteClick");
+    @Bindable public List customers;
+    @Bindable public Customer customerDetail;
+    @Bindable public ActionLink viewLink = new ActionLink(this, "onViewClick");
+    @Bindable public PageLink editLink = new PageLink(EditCustomer.class);
+    @Bindable public ActionLink deleteLink = new ActionLink(this, "onDeleteClick");
 
     @Resource(name="customerService")
     private CustomerService customerService;

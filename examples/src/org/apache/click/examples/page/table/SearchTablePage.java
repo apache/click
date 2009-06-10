@@ -38,6 +38,8 @@ import org.apache.click.examples.page.EditCustomer;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.LinkDecorator;
+import org.apache.click.extras.control.TableInlinePaginator;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -50,10 +52,10 @@ public class SearchTablePage extends BorderPage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Form form = new Form();
-    public Table table = new Table();
-    public PageLink editLink = new PageLink("Edit", EditCustomer.class);
-    public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
+    @Bindable public Form form = new Form();
+    @Bindable public Table table = new Table();
+    @Bindable public PageLink editLink = new PageLink("Edit", EditCustomer.class);
+    @Bindable public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
     private TextField nameField = new TextField(Customer.NAME_PROPERTY);
     private DateField dateField = new DateField(Customer.DATE_JOINED_PROPERTY, "Start Date");
@@ -80,6 +82,8 @@ public class SearchTablePage extends BorderPage implements Serializable {
         table.setPageSize(10);
         table.setShowBanner(true);
         table.setSortable(true);
+        table.setPaginator(new TableInlinePaginator(table));
+        table.setPaginatorAttachment(Table.PAGINATOR_INLINE);
 
         Column column = new Column(Customer.NAME_PROPERTY);
         column.setWidth("140px;");

@@ -31,6 +31,7 @@ public class ReusablePanelDemo extends BorderPage {
 
     private ClientPanel clientPanel = new ClientPanel("panel");
 
+    @Override
     public void onInit() {
         // Invoke super onInit implementation
         super.onInit();
@@ -38,4 +39,5 @@ public class ReusablePanelDemo extends BorderPage {
         // Add customer panel to Page
         addControl(clientPanel);
     }
+
 }

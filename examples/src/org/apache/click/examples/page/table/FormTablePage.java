@@ -37,6 +37,7 @@ import org.apache.click.extras.control.FieldColumn;
 import org.apache.click.extras.control.FormTable;
 import org.apache.click.extras.control.NumberField;
 import org.apache.click.extras.control.DateField;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -49,7 +50,7 @@ public class FormTablePage extends BorderPage {
 
     private static final int NUM_ROWS = 20;
 
-    public FormTable table = new FormTable();
+    @Bindable public FormTable table = new FormTable();
 
     @Resource(name="customerService")
     private CustomerService customerService;

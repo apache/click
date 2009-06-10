@@ -42,6 +42,7 @@ public class ContactDetailsPage extends BorderPage {
 
     private CssForm form;
 
+    @Override
     public void onInit() {
         // Ensure the super implementation executes
         super.onInit();

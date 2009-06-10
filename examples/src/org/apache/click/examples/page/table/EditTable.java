@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.BaseContext;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Column;
 import org.apache.click.control.FieldSet;
@@ -38,6 +38,7 @@ import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.LinkDecorator;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -49,10 +50,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class EditTable extends BorderPage {
 
-    public CayenneForm form = new CayenneForm("form", Customer.class);
-    public Table table = new Table();
-    public ActionLink editLink = new ActionLink("edit", "Edit", this, "onEditClick");
-    public ActionLink deleteLink = new ActionLink("delete", "Delete", this, "onDeleteClick");
+    @Bindable public CayenneForm form = new CayenneForm("form", Customer.class);
+    @Bindable public Table table = new Table();
+    @Bindable public ActionLink editLink = new ActionLink("edit", "Edit", this, "onEditClick");
+    @Bindable public ActionLink deleteLink = new ActionLink("delete", "Delete", this, "onDeleteClick");
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -128,14 +129,14 @@ public class EditTable extends BorderPage {
             // Please note with Cayenne ORM this will persist any changes
             // to data objects submitted by the form.
             form.getDataObject();
-            DataContext.getThreadDataContext().commitChanges();
+            BaseContext.getThreadObjectContext().commitChanges();
             form.setDataObject(null);
         }
         return true;
     }
 
     public boolean onCancelClick() {
-        DataContext.getThreadDataContext().rollbackChanges();
+        BaseContext.getThreadObjectContext().rollbackChanges();
         form.setDataObject(null);
         form.clearErrors();
         return true;
@@ -144,6 +145,7 @@ public class EditTable extends BorderPage {
     /**
      * @see org.apache.click.Page#onGet()
      */
+    @Override
     public void onGet() {
         form.getField(Table.PAGE).setValue("" + table.getPageNumber());
         form.getField(Table.COLUMN).setValue(table.getSortedColumn());
@@ -152,6 +154,7 @@ public class EditTable extends BorderPage {
     /**
      * @see org.apache.click.Page#onPost()
      */
+    @Override
     public void onPost() {
         String pageNumber = form.getField(Table.PAGE).getValue();
         table.setPageNumber(Integer.parseInt(pageNumber));

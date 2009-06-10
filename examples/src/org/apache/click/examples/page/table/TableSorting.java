@@ -27,6 +27,7 @@ import org.apache.click.control.Table;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,7 +38,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TableSorting extends BorderPage {
 
-    public Table table = new Table();
+    @Bindable public Table table = new Table();
 
     @Resource(name="customerService")
     private CustomerService customerService;

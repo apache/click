@@ -21,6 +21,7 @@ package org.apache.click.examples.page.jsp;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.PageLink;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.util.Bindable;
 
 /**
  *
@@ -28,15 +29,16 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class MultiPathDemo extends BorderPage {
 
-    public ActionLink changePath = new ActionLink("changePath", this, "changePath");
+    @Bindable public ActionLink changePath = new ActionLink("changePath", this, "changePath");
 
-    public PageLink defaultPath = new PageLink("defaultPath", MultiPathDemo.class);
+    @Bindable public PageLink defaultPath = new PageLink("defaultPath", MultiPathDemo.class);
 
     public boolean changePath() {
         setPath("/jsp/dummy.jsp");
         return true;
     }
 
+    @Override
     public String getTemplate() {
         return "/border-template.jsp";
     }

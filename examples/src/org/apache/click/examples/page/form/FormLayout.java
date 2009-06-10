@@ -22,7 +22,6 @@ import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.Label;
-import org.apache.click.control.Reset;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextArea;
 import org.apache.click.control.TextField;
@@ -31,6 +30,7 @@ import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.PageSubmit;
 import org.apache.click.extras.control.TelephoneField;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides Form layout examples using the Form and FieldSet controls.
@@ -39,8 +39,8 @@ import org.apache.click.extras.control.TelephoneField;
  */
 public class FormLayout extends BorderPage {
 
-    public Form form1 = new Form();
-    public Form form2 = new Form();
+    @Bindable public Form form1 = new Form();
+    @Bindable public Form form2 = new Form();
 
     public FormLayout() {
         // ------

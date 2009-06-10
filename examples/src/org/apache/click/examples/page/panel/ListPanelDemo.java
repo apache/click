@@ -26,6 +26,7 @@ import org.apache.click.control.Panel;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.panel.ListPanel;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,8 +40,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ListPanelDemo extends BorderPage {
 
-    public ListPanel listPanel = new ListPanel();
-    public List customers;
+    @Bindable public ListPanel listPanel = new ListPanel();
+    @Bindable public List customers;
 
     @Resource(name="customerService")
     private CustomerService customerService;

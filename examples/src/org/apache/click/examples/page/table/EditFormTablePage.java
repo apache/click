@@ -176,6 +176,7 @@ public class EditFormTablePage extends BorderPage {
 
     // --------------------------------------------------------- Event Handlers
 
+    @Override
     public boolean onSecurityCheck() {
         String pagePath = getContext().getPagePath(getClass());
 
@@ -191,6 +192,7 @@ public class EditFormTablePage extends BorderPage {
     /**
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 

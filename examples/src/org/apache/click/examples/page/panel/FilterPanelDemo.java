@@ -29,6 +29,7 @@ import org.apache.click.examples.control.FilterPanel;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,8 +40,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class FilterPanelDemo extends BorderPage {
 
-    public FilterPanel filterPanel = new FilterPanel();
-    public Table table = new Table();
+    @Bindable public FilterPanel filterPanel = new FilterPanel();
+    @Bindable public Table table = new Table();
 
     @Resource(name="customerService")
     private CustomerService customerService;

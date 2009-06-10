@@ -34,25 +34,19 @@ public class NavigationB extends NavigationA {
      * After the Page NavigationA.java is processed, Click will forward to the
      * underlying template /jsp/navigation-a.jsp.
      */
+    @Override
     public String getTarget() {
         return "/jsp/navigation-a.htm";
     }
-
-    /**
-     * Note one can also forward and redirect using the Page class instead of
-     * the path as seen below.
-     */
-    /*
-    public Class getTargetPageClass() {
-        return NavigationA.class;
-    }*/
 
     /**
      * Returns the name of the border template: &nbsp; <tt>"/border-template.jsp"</tt>
      *
      * @see org.apache.click.Page#getTemplate()
      */
+    @Override
     public String getTemplate() {
         return "/border-template.jsp";
     }
+
 }

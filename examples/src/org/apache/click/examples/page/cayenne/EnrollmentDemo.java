@@ -19,9 +19,10 @@
 package org.apache.click.examples.page.cayenne;
 
 import java.util.List;
-import javax.annotation.Resource;
-import org.apache.cayenne.DataObject;
 
+import javax.annotation.Resource;
+
+import org.apache.cayenne.DataObject;
 import org.apache.click.control.Column;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.domain.Course;
@@ -107,6 +108,7 @@ public class EnrollmentDemo extends FormTablePage {
     /**
      * @see FormTablePage#clear()
      */
+    @Override
     public void clear() {
         pickList.setSelectedValues(null);
         super.clear();
@@ -115,6 +117,7 @@ public class EnrollmentDemo extends FormTablePage {
     /**
      * @see FormTablePage#getDataObject(Object)
      */
+    @Override
     public DataObject getDataObject(Object id) {
         return studentService.getStudent(id);
     }
@@ -122,6 +125,7 @@ public class EnrollmentDemo extends FormTablePage {
     /**
      * @see FormTablePage#getDataObjectClass()
      */
+    @Override
     public Class getDataObjectClass() {
         return Student.class;
     }
@@ -129,6 +133,7 @@ public class EnrollmentDemo extends FormTablePage {
     /**
      * @see FormTablePage#getRowList()
      */
+    @Override
     public List getRowList() {
         return studentService.getStudents();
     }

@@ -25,6 +25,7 @@ import org.apache.click.Control;
 import org.apache.click.control.ActionButton;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides an ActionLink and ActionButton demonstration Page.
@@ -37,9 +38,9 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class ActionDemo extends BorderPage {
 
-    public ActionLink link = new ActionLink();
-    public ActionButton button = new ActionButton();
-    public String clicked;
+    @Bindable public ActionLink link = new ActionLink();
+    @Bindable public ActionButton button = new ActionButton();
+    @Bindable public String clicked;
 
     public ActionDemo() {
 

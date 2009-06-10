@@ -22,6 +22,7 @@ import org.apache.click.control.Form;
 import org.apache.click.control.ImageSubmit;
 import org.apache.click.control.Label;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides an ImageSubmit control example.
@@ -32,8 +33,8 @@ public class ImageDemo extends BorderPage {
 
     private ImageSubmit colorSubmit;
 
-    public Form buttonsForm = new Form();
-    public Form form = new Form();
+    @Bindable public Form buttonsForm = new Form();
+    @Bindable public Form form = new Form();
 
     public ImageDemo() {
         // Buttons Form

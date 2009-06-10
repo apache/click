@@ -26,6 +26,7 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.ExternalLink;
 import org.apache.click.extras.control.PageButton;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides an ActionLink, ExternalLink and PageLink control examples Page.
@@ -34,12 +35,12 @@ import org.apache.click.extras.control.PageButton;
  */
 public class LinkDemo extends BorderPage {
 
-    public ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
-    public ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
-    public PageLink pageLink = new PageLink("PageLink", HomePage.class);
-    public PageButton pageButton = new PageButton("PageButton", HomePage.class);
+    @Bindable public ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
+    @Bindable public ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
+    @Bindable public PageLink pageLink = new PageLink("PageLink", HomePage.class);
+    @Bindable public PageButton pageButton = new PageButton("PageButton", HomePage.class);
 
-    public String clicked;
+    @Bindable public String clicked;
 
     public LinkDemo() {
         externalLink.setParameter("q", "Click Framework");

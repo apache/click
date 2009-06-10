@@ -23,6 +23,7 @@ import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides an example of a flash session attribute.
@@ -31,7 +32,7 @@ import org.apache.click.examples.page.HomePage;
  */
 public class FlashPage extends BorderPage {
 
-    public Form form = new Form();
+    @Bindable public Form form = new Form();
 
     private TextField valueField = new TextField("value", "Value:", true);
 

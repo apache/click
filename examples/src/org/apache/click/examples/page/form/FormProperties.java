@@ -31,6 +31,7 @@ import org.apache.click.element.JsScript;
 import org.apache.click.examples.control.InvestmentSelect;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
+import org.apache.click.examples.util.ExampleUtils;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.PageSubmit;
@@ -234,23 +235,24 @@ public class FormProperties extends BorderPage {
     /**
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
         // Apply saved options to the demo form and the optionsForm
-        Options options = (Options) getSessionObject(Options.class);
+        Options options = (Options) ExampleUtils.getSessionObject(Options.class);
         applyOptions(options);
     }
 
     public boolean onOkClick() {
-        Values values = (Values) getSessionObject(Values.class);
+        Values values = (Values) ExampleUtils.getSessionObject(Values.class);
 
         values.name = nameField.getValue();
         values.email = emailField.getValue();
         values.investments = investmentsField.getValue();
         values.dateJoined = dateJoinedField.getValue();
 
-        setSessionObject(values);
+        ExampleUtils.setSessionObject(values);
 
         return true;
     }
@@ -276,10 +278,10 @@ public class FormProperties extends BorderPage {
 
         applyOptions(options);
 
-        setSessionObject(options);
+        ExampleUtils.setSessionObject(options);
 
         // Apply any saved form values to demo form.
-        Values values = (Values) getSessionObject(Values.class);
+        Values values = (Values) ExampleUtils.getSessionObject(Values.class);
 
         nameField.setValue(values.name);
         emailField.setValue(values.email);
@@ -290,8 +292,8 @@ public class FormProperties extends BorderPage {
     }
 
     public boolean onRestoreDefaults() {
-        removeSessionObject(Options.class);
-        removeSessionObject(Values.class);
+        ExampleUtils.removeSessionObject(Options.class);
+        ExampleUtils.removeSessionObject(Values.class);
 
         applyOptions(new Options());
 

@@ -25,6 +25,7 @@ import org.apache.click.control.FieldSet;
 import org.apache.click.control.Select;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.control.TabbedForm;
+import org.apache.click.util.Bindable;
 import org.apache.commons.lang.StringUtils;
 
 public class PopulateOnSelect extends BorderPage {
@@ -34,7 +35,7 @@ public class PopulateOnSelect extends BorderPage {
     private static final String GAUTENG_PROVINCE = "GP";
     private static final String WESTERN_CAPE = "WC";
 
-    public TabbedForm form = new TabbedForm("form");
+    @Bindable public TabbedForm form = new TabbedForm("form");
 
     private Select state = new Select("state");
     private Select city = new Select("city");
@@ -96,6 +97,7 @@ public class PopulateOnSelect extends BorderPage {
         populateSuburbData(city.getValue());
     }
 
+    @Override
     public String getHtmlImports() {
         Map model = new HashMap();
         model.put("stateId", state.getId());

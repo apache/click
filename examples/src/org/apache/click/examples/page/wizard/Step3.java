@@ -31,6 +31,8 @@ package org.apache.click.examples.page.wizard;
  */
 public class Step3 extends Step {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Construct Step3 with the specified name, label, description and page.
      *

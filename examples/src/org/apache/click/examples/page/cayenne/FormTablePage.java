@@ -30,6 +30,7 @@ import org.apache.click.control.Table;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.cayenne.CayenneForm;
 import org.apache.click.extras.control.LinkDecorator;
+import org.apache.click.util.Bindable;
 
 /**
  * Provides an abstract CayenneForm and Table Page for creating and editing
@@ -46,10 +47,10 @@ import org.apache.click.extras.control.LinkDecorator;
  */
 public abstract class FormTablePage extends BorderPage {
 
-    public CayenneForm form;
-    public Table table = new Table();
-    public ActionLink editLink = new ActionLink("edit", this, "onEditClick");
-    public ActionLink removeLink = new ActionLink("remove", this, "onRemoveClick");
+    @Bindable public CayenneForm form;
+    @Bindable public Table table = new Table();
+    @Bindable public ActionLink editLink = new ActionLink("edit", this, "onEditClick");
+    @Bindable public ActionLink removeLink = new ActionLink("remove", this, "onRemoveClick");
 
     // ------------------------------------------------------------ Constructor
 

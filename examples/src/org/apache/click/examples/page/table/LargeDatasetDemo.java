@@ -28,6 +28,7 @@ import org.apache.click.control.Table;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,7 +40,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LargeDatasetDemo extends BorderPage {
 
-    public Table table;
+    @Bindable public Table table;
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -76,6 +77,7 @@ public class LargeDatasetDemo extends BorderPage {
     /**
      * @see org.apache.click.Page#onRender()
      */
+    @Override
     public void onRender() {
         // Create DataProvider for the specified table and total number of customers
         DataProvider dataProvider = new DataProvider(table, getCustomerCount());

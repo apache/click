@@ -103,6 +103,7 @@ public class TabbedCayenneFormPage extends FormTablePage {
     /**
      * @see FormTablePage#createForm()
      */
+    @Override
     public CayenneForm createForm() {
         return new TabbedCayenneForm();
     }
@@ -110,6 +111,7 @@ public class TabbedCayenneFormPage extends FormTablePage {
     /**
      * @see FormTablePage#getDataObject(Object)
      */
+    @Override
     public DataObject getDataObject(Object id) {
         return clientService.getClient(id);
     }
@@ -117,7 +119,7 @@ public class TabbedCayenneFormPage extends FormTablePage {
     /**
      * @see FormTablePage#getDataObjectClass()
      */
-    @SuppressWarnings("unchecked")
+    @Override
     public Class getDataObjectClass() {
         return Client.class;
     }
@@ -125,7 +127,7 @@ public class TabbedCayenneFormPage extends FormTablePage {
     /**
      * @see FormTablePage#getRowList()
      */
-    @SuppressWarnings("unchecked")
+       @Override
     public List getRowList() {
         return clientService.getClients();
     }

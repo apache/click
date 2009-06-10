@@ -34,6 +34,8 @@ import org.apache.click.extras.control.IntegerField;
  */
 public class Step2 extends Step {
 
+    private static final long serialVersionUID = 1L;
+
     /** Reference to the postCode field. */
     private IntegerField postCodeField;
 

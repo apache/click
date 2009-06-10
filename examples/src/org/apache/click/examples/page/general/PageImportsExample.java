@@ -34,6 +34,7 @@ public class PageImportsExample extends BorderPage {
      *
      * @see org.apache.click.Page#getPageImports()
      */
+    @Override
     public PageImports getPageImports() {
         PageImports pageImports = super.getPageImports();
 
@@ -48,6 +49,7 @@ public class PageImportsExample extends BorderPage {
     /**
      * @see org.apache.click.Page#getTemplate()
      */
+    @Override
     public String getTemplate() {
         return getPath();
     }

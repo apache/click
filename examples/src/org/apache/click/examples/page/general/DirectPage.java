@@ -42,6 +42,7 @@ public class DirectPage extends Page {
      *
      * @see Page#onGet()
      */
+    @Override
     public void onGet() {
         String filename = getClass().getName().replace('.', '/');
         filename = "/WEB-INF/classes/" + filename + ".java";
@@ -69,21 +70,16 @@ public class DirectPage extends Page {
                 line = reader.readLine();
             }
 
+            // Set page path to null to signal to ClickServlet that rendering
+            // has been completed
+            setPath(null);
+
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            throw new RuntimeException(ioe);
 
         } finally {
             ClickUtils.close(inputStream);
         }
-    }
-
-    /**
-     * Return null to specify no further rendering required.
-     *
-     * @see Page#getPath()
-     */
-    public String getPath() {
-        return null;
     }
 
 }

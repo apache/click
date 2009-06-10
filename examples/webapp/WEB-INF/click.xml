@@ -20,7 +20,7 @@
 
 <click-app charset="UTF-8">
 
-  <pages package="org.apache.click.examples.page" autobinding="public"/>
+  <pages package="org.apache.click.examples.page" autobinding="annotation"/>
 
   <mode value="profile"/>
 

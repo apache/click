@@ -29,6 +29,7 @@ import org.apache.click.control.TextField;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
+import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -40,7 +41,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SearchForm extends BorderPage {
 
-    public Form form = new Form();
+    @Bindable public Form form = new Form();
 
     private TextField textField;
     private Select typeSelect;
@@ -93,4 +94,5 @@ public class SearchForm extends BorderPage {
             addModel("message", "Customer not found");
         }
     }
+
 }
