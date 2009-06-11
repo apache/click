@@ -1756,7 +1756,7 @@ public class Form extends AbstractContainer {
                 }
             }
 
-            registerActionEvent();
+            dispatchActionEvent();
         }
 
         return continueProcessing;

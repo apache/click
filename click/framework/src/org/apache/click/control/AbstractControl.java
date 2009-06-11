@@ -35,7 +35,7 @@ import javax.servlet.ServletContext;
 import org.apache.click.ActionListener;
 import org.apache.click.Context;
 import org.apache.click.Control;
-import org.apache.click.ControlRegistry;
+import org.apache.click.ActionEventDispatcher;
 import org.apache.click.Page;
 import org.apache.click.util.ActionListenerAdaptor;
 import org.apache.click.util.ClickUtils;
@@ -84,7 +84,7 @@ import org.apache.click.util.MessagesMap;
  * By overriding {@link #getTag()} one can specify the html tag to render.
  * <p/>
  * Overriding {@link #onProcess()} allows one to bind the servlet request
- * parameter to MyField value. The {@link #registerActionEvent()} method
+ * parameter to MyField value. The {@link #dispatchActionEvent()} method
  * registers the listener for this control on the Context. Once the onProcess
  * event has finished, all registered listeners will be fired.
  * <p/>
@@ -477,7 +477,7 @@ public abstract class AbstractControl implements Control {
     * @return true to continue Page event processing or false otherwise
     */
     public boolean onProcess() {
-        registerActionEvent();
+        dispatchActionEvent();
         return true;
     }
 
@@ -837,14 +837,13 @@ public abstract class AbstractControl implements Control {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Register this control's listener with the {@link org.apache.click.ControlRegistry}
-     * registry.
+     * Dispatch an ActionListener event with the {@link org.apache.click.ActionEventDispatcher}.
      *
-     * @see org.apache.click.ControlRegistry#registerActionEvent(org.apache.click.Control, org.apache.click.ActionListener)
+     * @see org.apache.click.ActionEventDispatcher#dispatchActionEvent(org.apache.click.Control, org.apache.click.ActionListener)
      */
-    protected void registerActionEvent() {
+    protected void dispatchActionEvent() {
         if (getActionListener() != null) {
-            ControlRegistry.registerActionEvent(this, getActionListener());
+            ActionEventDispatcher.dispatchActionEvent(this, getActionListener());
         }
     }
 

@@ -316,7 +316,7 @@ public class Radio extends Field {
         bindRequestValue();
 
         if (isChecked()) {
-            registerActionEvent();
+            dispatchActionEvent();
         }
         return true;
     }

@@ -1231,7 +1231,7 @@ public class Table extends AbstractControl {
             }
         }
 
-        registerActionEvent();
+        dispatchActionEvent();
         return continueProcessing;
     }
 

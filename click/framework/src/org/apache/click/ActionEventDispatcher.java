@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 
 /**
- * Provides a thread local register for ActionListener callbacks.
+ * Provides an control ActionListener event dispatcher.
  * <p/>
  * <b>Please note:</b> this class is meant for component development and can be
  * ignored otherwise.
@@ -34,13 +34,13 @@ import org.apache.commons.lang.Validate;
  * <tt>after</tt> the <tt>onProcess</tt> event. This event can be specified
  * through the constant {@link #POST_ON_PROCESS_EVENT}.
  * <p/>
- * The ClickServlet will notify the ControlRegistry which ActionListeners
+ * The ClickServlet will notify the ActionEventDispatcher which ActionListeners
  * to fire. For example, after the <tt>onProcess</tt> event, the ClickServlet
- * will notify the registry to fire ActionListeners registered for the
+ * will notify the dispatcher to fire ActionListeners registered for the
  * {@link #POST_ON_PROCESS_EVENT} (this is the default event when listeners are
  * fired).
  * <p/>
- * Out of the box ControlRegistry only supports the event
+ * Out of the box ActionEventDispatcher only supports the event
  * {@link #POST_ON_PROCESS_EVENT} (the default).
  *
  * <h4>Example Usage</h4>
@@ -55,9 +55,9 @@ import org.apache.commons.lang.Validate;
  *         bindRequestValue();
  *
  *         if (isClicked()) {
- *             // Register the control listener for invocation after
+ *             // Dispatch an action listener event for invocation after
  *             // control processing has finished
- *             registerActionEvent();
+ *             dispatchActionEvent();
  *         }
  *
  *         return true;
@@ -65,8 +65,8 @@ import org.apache.commons.lang.Validate;
  * } </pre>
  *
  * In this example if the link is clicked, it then calls
- * {@link org.apache.click.control.AbstractControl#registerActionEvent()}.
- * This method registers the Control's action listener with ControlRegistry.
+ * {@link org.apache.click.control.AbstractControl#dispatchActionEvent()}.
+ * This method registers the Control's action listener with ActionEventDispatcher.
  * The ClickServlet will subsequently invoke the registered
  * {@link ActionListener#onAction(Control)} method after all the Page controls
  * <tt>onProcess()</tt> method have been invoked.
@@ -74,12 +74,12 @@ import org.apache.commons.lang.Validate;
  * @author Bob Schellink
  * @author Malcolm Edgar
  */
-public class ControlRegistry {
+public class ActionEventDispatcher {
 
     // -------------------------------------------------------------- Constants
 
-    /** The thread local registry holder. */
-    private static final ThreadLocal THREAD_LOCAL_REGISTRY = new ThreadLocal();
+    /** The thread local dispatcher holder. */
+    private static final ThreadLocal THREAD_LOCAL_DISPATCHER = new ThreadLocal();
 
     /**
      * Indicates the listener should fire <tt>AFTER</tt> the onProcess event.
@@ -102,13 +102,13 @@ public class ControlRegistry {
      * Listeners registered by this method will be fired in the
      * {@link #POST_ON_PROCESS_EVENT}.
      *
-     * @see #registerActionEvent(org.apache.click.Control, org.apache.click.ActionListener, int)
+     * @see #dispatchActionEvent(org.apache.click.Control, org.apache.click.ActionListener, int)
      *
      * @param source the action event source
      * @param listener the event action listener
      */
-    public static void registerActionEvent(Control source, ActionListener listener) {
-        registerActionEvent(source, listener, POST_ON_PROCESS_EVENT);
+    public static void dispatchActionEvent(Control source, ActionListener listener) {
+        dispatchActionEvent(source, listener, POST_ON_PROCESS_EVENT);
     }
 
     /**
@@ -119,13 +119,13 @@ public class ControlRegistry {
      * @param listener the event action listener
      * @param event the specific event to trigger the action event
      */
-    public static void registerActionEvent(Control source,
+    public static void dispatchActionEvent(Control source,
         ActionListener listener, int event) {
 
         Validate.notNull(source, "Null source parameter");
         Validate.notNull(listener, "Null listener parameter");
 
-        ControlRegistry instance = getThreadLocalRegistry();
+        ActionEventDispatcher instance = getThreadLocalDispatcher();
         EventHolder eventHolder = instance.getEventHolder(event);
         eventHolder.registerActionEvent(source, listener);
     }
@@ -133,32 +133,32 @@ public class ControlRegistry {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Allow the Registry to handle the error that occurred.
+     * Allow the dispatcher to handle the error that occurred.
      *
      * @param throwable the error which occurred during processing
      */
     protected void errorOccurred(Throwable throwable) {
-        // Clear the POST_ON_PROCESS_EVENT control listeners from the registry
+        // Clear the POST_ON_PROCESS_EVENT control listeners from the dispatcher
         // Registered listeners from other phases must still be invoked
-        getEventHolder(ControlRegistry.POST_ON_PROCESS_EVENT).clear();
+        getEventHolder(ActionEventDispatcher.POST_ON_PROCESS_EVENT).clear();
     }
 
     /**
-     * Clear the registry.
+     * Clear the event list.
      */
-    protected void clearRegistry() {
+    protected void clearEvents() {
         getPostProcessEventHolder().clear();
     }
 
     /**
-     * Return the thread local registry instance.
+     * Return the thread local dispatcher instance.
      *
-     * @return the thread local registry instance.
-     * @throws RuntimeException if a ControlRegistry is not available on the
+     * @return the thread local dispatcher instance.
+     * @throws RuntimeException if a ActionEventDispatcher is not available on the
      * thread.
      */
-    protected static ControlRegistry getThreadLocalRegistry() {
-        return getRegistryStack().peek();
+    protected static ActionEventDispatcher getThreadLocalDispatcher() {
+        return getDispatcherStack().peek();
     }
 
     /**
@@ -211,7 +211,7 @@ public class ControlRegistry {
      * @return true if the page should continue processing or false otherwise
      */
     protected boolean fireActionEvents(Context context) {
-        return fireActionEvents(context, ControlRegistry.POST_ON_PROCESS_EVENT);
+        return fireActionEvents(context, ActionEventDispatcher.POST_ON_PROCESS_EVENT);
     }
 
     /**
@@ -290,29 +290,29 @@ public class ControlRegistry {
     }
 
     /**
-     * Adds the specified ControlRegistry on top of the Registry stack.
+     * Adds the specified ActionEventDispatcher on top of the dispatcher stack.
      *
-     * @param controlRegistry the ControlRegistry to add
+     * @param actionEventDispatcher the ActionEventDispatcher to add
      */
-    static void pushThreadLocalRegistry(ControlRegistry controlRegistry) {
-        getRegistryStack().push(controlRegistry);
+    static void pushThreadLocalDispatcher(ActionEventDispatcher actionEventDispatcher) {
+        getDispatcherStack().push(actionEventDispatcher);
     }
 
     /**
-     * Remove and return the controlRegistry instance on top of the
-     * registry stack.
+     * Remove and return the actionEventDispatcher instance on top of the
+     * dispatcher stack.
      *
-     * @return the controlRegistry instance on top of the registry stack
+     * @return the actionEventDispatcher instance on top of the dispatcher stack
      */
-    static ControlRegistry popThreadLocalRegistry() {
-        RegistryStack registryStack = getRegistryStack();
-        ControlRegistry controlRegistry = registryStack.pop();
+    static ActionEventDispatcher popThreadLocalDispatcher() {
+        DispatcherStack dispatcherStack = getDispatcherStack();
+        ActionEventDispatcher actionEventDispatcher = dispatcherStack.pop();
 
-        if (registryStack.isEmpty()) {
-            THREAD_LOCAL_REGISTRY.set(null);
+        if (dispatcherStack.isEmpty()) {
+            THREAD_LOCAL_DISPATCHER.set(null);
         }
 
-        return controlRegistry;
+        return actionEventDispatcher;
     }
 
     /**
@@ -320,15 +320,15 @@ public class ControlRegistry {
      *
      * @return stack data structure where Context's are stored
      */
-    static RegistryStack getRegistryStack() {
-        RegistryStack registryStack = (RegistryStack) THREAD_LOCAL_REGISTRY.get();
+    static DispatcherStack getDispatcherStack() {
+        DispatcherStack dispatcherStack = (DispatcherStack) THREAD_LOCAL_DISPATCHER.get();
 
-        if (registryStack == null) {
-            registryStack = new RegistryStack(2);
-            THREAD_LOCAL_REGISTRY.set(registryStack);
+        if (dispatcherStack == null) {
+            dispatcherStack = new DispatcherStack(2);
+            THREAD_LOCAL_DISPATCHER.set(dispatcherStack);
         }
 
-        return registryStack;
+        return dispatcherStack;
     }
 
     // ---------------------------------------------------------- Inner Classes
@@ -376,7 +376,7 @@ public class ControlRegistry {
         /**
          * Checks if any Action Events have been registered.
          *
-         * @return true if the registry has any Action Events registered
+         * @return true if the dispatcher has any Action Events registered
          */
         public boolean hasActionEvents() {
             if (eventListenerList == null || eventListenerList.isEmpty()) {
@@ -432,7 +432,7 @@ public class ControlRegistry {
                 return true;
             }
 
-            return ControlRegistry.this.fireActionEvents(context,
+            return ActionEventDispatcher.this.fireActionEvents(context,
                 getEventSourceList(), getEventListenerList(), event);
         }
     }
@@ -440,60 +440,60 @@ public class ControlRegistry {
     /**
      * Provides an unsynchronized Stack.
      */
-    static class RegistryStack extends ArrayList {
+    static class DispatcherStack extends ArrayList {
 
         /** Serialization version indicator. */
         private static final long serialVersionUID = 1L;
 
         /**
-         * Create a new RegistryStack with the given initial capacity.
+         * Create a new DispatcherStack with the given initial capacity.
          *
          * @param initialCapacity specify initial capacity of this stack
          */
-        private RegistryStack(int initialCapacity) {
+        private DispatcherStack(int initialCapacity) {
             super(initialCapacity);
         }
 
         /**
-         * Pushes the ControlRegistry onto the top of this stack.
+         * Pushes the ActionEventDispatcher onto the top of this stack.
          *
-         * @param controlRegistry the ControlRegistry to push onto this stack
-         * @return the ControlRegistry pushed on this stack
+         * @param actionEventDispatcher the ActionEventDispatcher to push onto this stack
+         * @return the ActionEventDispatcher pushed on this stack
          */
-        private ControlRegistry push(ControlRegistry controlRegistry) {
-            add(controlRegistry);
+        private ActionEventDispatcher push(ActionEventDispatcher actionEventDispatcher) {
+            add(actionEventDispatcher);
 
-            return controlRegistry;
+            return actionEventDispatcher;
         }
 
         /**
-         * Removes and return the ControlRegistry at the top of this stack.
+         * Removes and return the ActionEventDispatcher at the top of this stack.
          *
-         * @return the ControlRegistry at the top of this stack
+         * @return the ActionEventDispatcher at the top of this stack
          */
-        private ControlRegistry pop() {
-            ControlRegistry controlRegistry = peek();
+        private ActionEventDispatcher pop() {
+            ActionEventDispatcher actionEventDispatcher = peek();
 
             remove(size() - 1);
 
-            return controlRegistry;
+            return actionEventDispatcher;
         }
 
         /**
-         * Looks at the ControlRegistry at the top of this stack without
+         * Looks at the ActionEventDispatcher at the top of this stack without
          * removing it.
          *
-         * @return the ControlRegistry at the top of this stack
+         * @return the ActionEventDispatcher at the top of this stack
          */
-        private ControlRegistry peek() {
+        private ActionEventDispatcher peek() {
             int length = size();
 
             if (length == 0) {
-                String msg = "No ControlRegistry available on ThreadLocal Registry Stack";
+                String msg = "No ActionEventDispatcher available on ThreadLocal Dispatcher Stack";
                 throw new RuntimeException(msg);
             }
 
-            return (ControlRegistry) get(length - 1);
+            return (ActionEventDispatcher) get(length - 1);
         }
     }
 }

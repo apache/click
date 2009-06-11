@@ -758,7 +758,7 @@ public class FieldSet extends Field implements Container {
                 }
             }
         }
-        registerActionEvent();
+        dispatchActionEvent();
         return true;
     }
 

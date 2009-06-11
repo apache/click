@@ -493,7 +493,7 @@ public class ActionButton extends Button {
         bindRequestValue();
 
         if (isClicked()) {
-            registerActionEvent();
+            dispatchActionEvent();
         }
         return true;
     }

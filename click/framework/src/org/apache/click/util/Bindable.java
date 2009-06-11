@@ -26,6 +26,32 @@ import java.lang.annotation.Target;
 /**
  * Provides a Page field auto binding annotation.
  *
+ * <h3>Bindable Example</h3>
+ *
+ * <pre class="prettyprint">
+ * public class BindableDemo extends Page {
+ *
+ *     // ActionLink automatically added to Page control list
+ *     &#64;Bindable public ActionLink link = new ActionLink();
+ *
+ *     // Message string is automatically added to Page model
+ *     &#64;Bindable public String message;
+ *
+ *     public BindableDemo() {
+ *
+ *         // Listener method invoked when link clicked
+ *         link.setActionListener(new ActionListener() {
+ *
+ *             public boolean onAction(Control source) {
+ *                 // message added to page mode and rendered in template
+ *                 message = "I was clicked";
+ *                 return true;
+ *             }
+ *         });
+ *     }
+ *
+ * } </pre>
+ *
  * @author Malcolm Edgar
  */
 @Target(ElementType.FIELD)

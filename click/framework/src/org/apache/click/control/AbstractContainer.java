@@ -228,7 +228,7 @@ public abstract class AbstractContainer extends AbstractControl implements
             }
         }
 
-        registerActionEvent();
+        dispatchActionEvent();
 
         return continueProcessing;
     }

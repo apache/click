@@ -37,7 +37,7 @@ import javax.servlet.ServletContext;
 import org.apache.click.ActionListener;
 import org.apache.click.Context;
 import org.apache.click.Control;
-import org.apache.click.ControlRegistry;
+import org.apache.click.ActionEventDispatcher;
 import org.apache.click.control.AbstractControl;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Decorator;
@@ -886,7 +886,7 @@ public class Tree extends AbstractControl {
         getSelectLink().onProcess();
         bindRequestValue();
 
-        ControlRegistry.registerActionEvent(this, new ActionListener() {
+        ActionEventDispatcher.dispatchActionEvent(this, new ActionListener() {
             public boolean onAction(Control source) {
                 return postProcess();
             }

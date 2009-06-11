@@ -507,7 +507,7 @@ public class ActionLink extends AbstractLink {
         bindRequestValue();
 
         if (isClicked()) {
-            registerActionEvent();
+            dispatchActionEvent();
         }
         return true;
     }
