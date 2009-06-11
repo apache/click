@@ -222,7 +222,7 @@ public class MockContext extends Context {
      */
     public static MockContext initContext(MockServletConfig servletConfig,
         MockRequest request, MockResponse response, ClickServlet clickServlet) {
-        ControlRegistry controlRegistry = new ControlRegistry();
+        ActionEventDispatcher controlRegistry = new ActionEventDispatcher();
         return initContext(servletConfig, request, response, clickServlet,
             controlRegistry);
     }
@@ -241,7 +241,7 @@ public class MockContext extends Context {
      */
     public static MockContext initContext(MockServletConfig servletConfig,
         MockRequest request, MockResponse response, ClickServlet clickServlet,
-        ControlRegistry controlRegistry) {
+        ActionEventDispatcher controlRegistry) {
 
         try {
             //Sanity checks
@@ -278,7 +278,7 @@ public class MockContext extends Context {
             MockContext mockContext = new MockContext(servletConfig, request,
                 response, isPost, clickServlet);
 
-            ControlRegistry.pushThreadLocalRegistry(controlRegistry);
+            ActionEventDispatcher.pushThreadLocalDispatcher(controlRegistry);
             Context.pushThreadLocalContext(mockContext);
 
             ConsoleLogService logService = (ConsoleLogService) ClickUtils.getLogService();
@@ -295,10 +295,10 @@ public class MockContext extends Context {
      * @return true if all listeners returned true, false otherwise
      */
     public boolean executeActionListeners() {
-        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
+        ActionEventDispatcher controlRegistry = ActionEventDispatcher.getThreadLocalDispatcher();
 
         // Fire POST_ON_PROCESS events
-        return controlRegistry.fireActionEvents(this, ControlRegistry.POST_ON_PROCESS_EVENT);
+        return controlRegistry.fireActionEvents(this, ActionEventDispatcher.POST_ON_PROCESS_EVENT);
     }
 
     /**
