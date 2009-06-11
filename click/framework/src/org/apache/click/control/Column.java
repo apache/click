@@ -1450,7 +1450,9 @@ public class Column implements Serializable {
      *
      * @author Malcolm Edgar
      */
-    static class ColumnComparator implements Comparator {
+    static class ColumnComparator implements Comparator, Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         /** The sort ascending flag. */
         protected int ascendingSort;

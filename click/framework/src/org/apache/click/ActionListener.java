@@ -18,6 +18,8 @@
  */
 package org.apache.click;
 
+import java.io.Serializable;
+
 /**
  * Provides a listener interface for receiving control action events.
  * The usage model is similar to the <tt>java.awt.event.ActionListener</tt>
@@ -57,7 +59,7 @@ package org.apache.click;
  * @author Malcolm Edgar
  * @author Bob Schellink
  */
-public interface ActionListener {
+public interface ActionListener extends Serializable {
 
     /**
      * Return true if the control and page processing should continue, or false
