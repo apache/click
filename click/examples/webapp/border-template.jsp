@@ -21,7 +21,7 @@
 
 <html>
 <head>
-<title>Click Examples</title>
+<title>${title} : Click Examples</title>
 <link type="text/css" rel="stylesheet" href="${context}/assets/css/style.css" title="Style"/>
 ${headElements}
 <link rel="Click icon" href="$context/favicon.ico" type="image/ico"/>
@@ -39,7 +39,7 @@ ${headElements}
 					<a target="blank" href="http://incubator.apache.org/click/"><img src="${context}/assets/images/click-icon-blue-32.png" border="0" alt="Click"/></a>
 				</td>
 				<td class="title-left" width="100%">
-					${title}
+					Click Examples
 				</td>
 				<td class="title-hosted">
 					<p>${messages.version}</p>
@@ -85,6 +85,8 @@ ${headElements}
 <%-- Page Content --%>
 <tr>		
 	<td class="content">
+	   <h2>${title}</h2>
+				
     <jsp:include page='${forward}' flush="true"/>
 	</td>
 </tr>
