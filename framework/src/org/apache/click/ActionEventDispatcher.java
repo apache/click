@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 
 /**
- * Provides an control ActionListener event dispatcher.
+ * Provides a control ActionListener event dispatcher.
  * <p/>
  * <b>Please note:</b> this class is meant for component development and can be
  * ignored otherwise.
