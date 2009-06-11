@@ -109,6 +109,8 @@ public class SourceViewer extends BorderPage {
         if (filename != null) {
             loadFilename(filename);
 
+            getModel().put("title", "Source Viewer : " + filename);
+
         } else {
             addModel("error", "filename not defined");
         }

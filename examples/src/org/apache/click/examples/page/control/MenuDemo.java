@@ -25,6 +25,6 @@ import org.apache.click.examples.page.BorderPage;
  *
  * @author Malcolm Edgar
  */
-public class MenuDocumentation extends BorderPage {
+public class MenuDemo extends BorderPage {
 
 }

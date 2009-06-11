@@ -83,7 +83,7 @@
     <menu label="Select" path="control/select-demo.htm"/>
     <menu label="Populate on select" path="control/populate-on-select.htm"/>
     <menu separator="true"/>
-    <menu label="Menu" path="control/menu-documentation.htm"/>
+    <menu label="Menu" path="control/menu-demo.htm"/>
     <menu label="PickList" path="control/pick-list-demo.htm"/>
     <menu label="RegexField" path="control/regex-demo.htm"/>
     <menu label="RichTextArea" path="control/email-form.htm"/>
