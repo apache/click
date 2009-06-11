@@ -320,9 +320,9 @@ public class ClickServlet extends HttpServlet {
                 throw exception;
             }
 
-            ControlRegistry controlRegistry = createControlRegistry();
-            // Bind ControlRegistry to current thread
-            ControlRegistry.pushThreadLocalRegistry(controlRegistry);
+            ActionEventDispatcher eventDispatcher = createActionEventDispatcher();
+            // Bind ActionEventDispatcher to current thread
+            ActionEventDispatcher.pushThreadLocalDispatcher(eventDispatcher);
 
             page = createPage(request);
 
@@ -372,7 +372,7 @@ public class ClickServlet extends HttpServlet {
                 if (request.getAttribute(MOCK_MODE_ENABLED) == null) {
                     Context.popThreadLocalContext();
                 }
-                ControlRegistry.popThreadLocalRegistry();
+                ActionEventDispatcher.popThreadLocalDispatcher();
             }
         }
     }
@@ -489,15 +489,15 @@ public class ClickServlet extends HttpServlet {
         PageImports pageImports = createPageImports(page);
         page.setPageImports(pageImports);
 
-        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
+        ActionEventDispatcher eventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
 
         // Support direct access of click-error.htm
         if (page instanceof ErrorPage) {
             ErrorPage errorPage = (ErrorPage) page;
             errorPage.setMode(configService.getApplicationMode());
 
-            // Notify the registry of the error
-            controlRegistry.errorOccurred(errorPage.getError());
+            // Notify the dispatcher of the error
+            eventDispatcher.errorOccurred(errorPage.getError());
         }
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
@@ -505,7 +505,7 @@ public class ClickServlet extends HttpServlet {
         if (continueProcessing) {
             performOnInit(page, context);
 
-            continueProcessing = performOnProcess(page, context, controlRegistry);
+            continueProcessing = performOnProcess(page, context, eventDispatcher);
 
             if (continueProcessing) {
                 performOnPostOrGet(page, context, isPost);
@@ -575,11 +575,11 @@ public class ClickServlet extends HttpServlet {
      *
      * @param page the page to process
      * @param context the request context
-     * @param controlRegistry the control registry
+     * @param eventDispatcher the action event dispatcher
      * @return true if processing should continue, false otherwise
      */
     protected boolean performOnProcess(Page page, Context context,
-        ControlRegistry controlRegistry) {
+        ActionEventDispatcher eventDispatcher) {
 
         boolean continueProcessing = true;
 
@@ -609,7 +609,7 @@ public class ClickServlet extends HttpServlet {
             if (continueProcessing) {
                 // Fire registered action events for the POST_ON_PROCSESS event,
                 // which is also the default event
-                continueProcessing = controlRegistry.fireActionEvents(context);
+                continueProcessing = eventDispatcher.fireActionEvents(context);
 
                 if (logger.isTraceEnabled()) {
                     String msg = "   invoked: Control listeners : "
@@ -1446,12 +1446,12 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Creates and returns a new ControlRegistry instance.
+     * Creates and returns a new ActionEventDispatcher instance.
      *
-     * @return the new ControlRegistry instance
+     * @return the new ActionEventDispatcher instance
      */
-    protected ControlRegistry createControlRegistry() {
-        return new ControlRegistry();
+    protected ActionEventDispatcher createActionEventDispatcher() {
+        return new ActionEventDispatcher();
     }
 
     /**

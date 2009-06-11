@@ -19,7 +19,7 @@
 package org.apache.click;
 
 /**
- * Provides a listener interface for receiving Control action events.
+ * Provides a listener interface for receiving control action events.
  * The usage model is similar to the <tt>java.awt.event.ActionListener</tt>
  * interface.
  * <p/>

@@ -205,7 +205,7 @@ public class Submit extends Button {
         bindRequestValue();
 
         if (isClicked()) {
-            registerActionEvent();
+            dispatchActionEvent();
         }
 
         return true;

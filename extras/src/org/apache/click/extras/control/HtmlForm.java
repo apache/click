@@ -135,7 +135,7 @@ public class HtmlForm extends Form {
                 }
             }
 
-            registerActionEvent();
+            dispatchActionEvent();
         }
 
         return continueProcessing;

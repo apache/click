@@ -42,13 +42,13 @@ less lines of code, but has no compile time safety.
 Examples of these two action listener styles are provided below:
 
 <pre class="prettyprint">
-public class ActionDemo extends BorderPage {
+public class ActionDemo extends Page {
 
     // Uses listener style 1
-    public ActionLink link = new ActionLink();
+    @Bindable public ActionLink link = new ActionLink();
 
     // Uses listener style 2
-    public ActionButton button = new ActionButton();
+    @Bindable public ActionButton button = new ActionButton();
 
     public ActionDemo() {
 

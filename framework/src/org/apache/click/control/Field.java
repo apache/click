@@ -74,7 +74,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * value is not valid this method should set the Field {@link #error} property,
  * which can be rendered by the Form.
  * </dd>
- * <dt>{@link #registerActionEvent()}</dt>
+ * <dt>{@link #dispatchActionEvent()}</dt>
  * <dd>This method will register any Control action listener method which has be
  * defined for the Field.
  * </dd>
@@ -901,7 +901,7 @@ public abstract class Field extends AbstractControl {
             validate();
         }
 
-        registerActionEvent();
+        dispatchActionEvent();
 
         return true;
     }

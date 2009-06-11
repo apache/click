@@ -416,7 +416,7 @@ public class TabbedPanel extends Panel {
             }
         }
         if (tabLink.isClicked()) {
-            registerActionEvent();
+            dispatchActionEvent();
         }
         return true;
     }
