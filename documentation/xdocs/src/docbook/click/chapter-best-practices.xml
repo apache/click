@@ -650,17 +650,35 @@
 
   <sect1 id="logging" remap="h2">
     <title>Logging</title>
-
-    <para> For page logging you should use
-    <ulink url="http://logging.apache.org/log4j/">Log4j</ulink> library. An
-    alternative library is the
-    <ulink url="http://jakarta.apache.org/commons/logging/">Commons Logging</ulink>.
-    If you are using Commons Logging please be aware that there have been class
-    loader issues with this library on some application servers. If you are using
+    
+    <para> 
+    For application logging you should use one of the well established 
+    logging libraries such as Java Util Logging (JUL) or Log4J.
+    </para>
+    
+    <para>
+    The library you use will largely depend upon the application server you are targeting.
+    For Apache Tomcat or RedHat JBoss the  
+    <ulink url="http://logging.apache.org/log4j/">Log4j</ulink> library is a good 
+    choice. While for the IBM WebSphere or Oracle WebLogic application servers Java Util
+    Logging is better choice as this library is better supported.
+    </para>
+    
+    <para>
+    If you have to target multiple application servers you should consider using the
+    <ulink url="http://www.slf4j.org/">SLF4J</ulink> library which uses compile time bindings
+    to an underlying logging implementation. 
+    </para>
+    
+    <para>
+    As a general principle you should
+    probably avoid <ulink url="http://jakarta.apache.org/commons/logging/">Commons Logging</ulink> 
+    because of the class loading issues associated with it. If you are using
     Commons Logging please make sure you have the latest version.
     </para>
 
-    <para>The best place to define your logger is in a common base page, for example:
+    <para>
+    It is a best place to define a logger method in a common base page, for example:
     </para>
 
     <programlisting language="java">public class BasePage extends Page {
@@ -709,9 +727,19 @@
     }
 }</programlisting>
 
-    <para>Please note the Click logging facility is not designed for application use,
+    <para>
+    Please note the Click logging facility is not designed for application use,
     and is for Click internal use only. When Click is running in
     <literal>production</literal> mode it will not produce any logging output.
+    By default Click logs to the console using
+    <ulink url="../../click-api/org/apache/click/service/ConsoleLogService.html">ConsoleLogService</ulink>. 
+    </para>
+
+    <para>
+    If you need to configure Click to log to an alternative destination please configure a LogService such as
+    <ulink url="../../extras-api/org/apache/click/extras/service/JdkLogService.html">JdkLogService</ulink>,
+    <ulink url="../../extras-api/org/apache/click/extras/service/Log4JLogService.html">Log4JLogService</ulink> or
+    <ulink url="../../extras-api/org/apache/click/extras/service/Slf4jLogService.html">Slf4jLogService</ulink>.
     </para>
 
   </sect1>
@@ -726,7 +754,7 @@
     For example:
     </para>
 
-    <programlisting language="xml">&lt;pages package="com.mycorp.page" automapping="true"/&gt;
+    <programlisting language="xml">&lt;pages package="com.mycorp.page" automapping="annotation"/&gt;
   &lt;page path="click/error.htm" classname="ErrorPage"/&gt;
 &lt;/pages&gt;</programlisting>
 
@@ -870,7 +898,7 @@ public class ErrorPage extends org.apache.click.util.ErrorPage {
         addControl(form);
     }
 
-    public void getPageImports () {
+    public PageImports getPageImports () {
         PageImports pageImports = super.getPageImports();
 
         // Add the Page Css to the PageImports
@@ -882,6 +910,8 @@ public class ErrorPage extends org.apache.click.util.ErrorPage {
         // Set pageImports to initialized so that no other Css and JavaScript
         // files will be included.
         pageImports.setInitialized(true);
+        
+        return pageImports;
     }
 }</programlisting>
 
