@@ -208,7 +208,7 @@ public class Menu extends AbstractControl {
     // ----------------------------------------------------- Instance Variables
 
     /** The menu security access controller. */
-    protected AccessController accessController;
+    protected transient AccessController accessController;
 
     /** The list of submenu items. */
     protected List children = new ArrayList();

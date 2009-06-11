@@ -18,6 +18,7 @@
  */
 package org.apache.click.extras.tree;
 
+import java.io.Serializable;
 import org.apache.click.Context;
 
 /**
@@ -28,7 +29,7 @@ import org.apache.click.Context;
  *
  * @author Bob Schellink
  */
-public interface TreeListener {
+public interface TreeListener extends Serializable {
 
     /**
      * Invoked when user selected the specified node.

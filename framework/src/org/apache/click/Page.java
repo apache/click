@@ -18,6 +18,7 @@
  */
 package org.apache.click;
 
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -141,7 +142,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class Page {
+public class Page implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

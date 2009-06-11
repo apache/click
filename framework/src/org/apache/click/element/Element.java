@@ -18,6 +18,7 @@
  */
 package org.apache.click.element;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.click.Context;
@@ -32,7 +33,9 @@ import org.apache.click.util.HtmlStringBuffer;
  *
  * @author Bob Schellink
  */
-public class Element {
+public class Element implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     // -------------------------------------------------------------- Variables
 
