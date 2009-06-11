@@ -48,12 +48,6 @@ style programming model. &nbsp; Key features of Click include:
 Click is designed to be simple to learn so that new developers can get up and running in a day.  This is very important 
 with commercial development teams where you have a wide range of skill levels and motivation.
 <p/>
-My experience introducing Tapestry (2.3) to development teams was that it is too complex and difficult to learn for the
-average developer. The two development teams I introduced to Tapestry eventually dropped it and reverted to Struts.
-<p/>
-Click is also significantly easier to learn than Struts. The Struts framework, while essentially a simple command 
-pattern design, has quite a convoluted and confusing design. 
-<p/>
 To support ease of adoption Click has some of the best documentation available for an open source framework and 
 includes many working examples.
 <p/>
@@ -109,7 +103,7 @@ To see this concept in action take a simple Click page where we have an ActionLi
 <pre class="codeJava">
 <span class="kw">public class</span> ExamplePage <span class="kw">extends</span> Page {
 
-    <span class="kw">public</span> ActionLink myLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, "<span class="st">onClick</span>");
+    @Bindable <span class="kw">public</span> ActionLink myLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, "<span class="st">onClick</span>");
     
     <span class="kw">public boolean</span> onClick() {
         System.out.println("<span class="st">onClick invoked</span>");
