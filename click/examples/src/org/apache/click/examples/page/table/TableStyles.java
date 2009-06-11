@@ -18,9 +18,8 @@
  */
 package org.apache.click.examples.page.table;
 
+import java.io.Serializable;
 import java.util.List;
-
-import javax.annotation.Resource;
 
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Column;
@@ -33,6 +32,9 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.TableInlinePaginator;
 import org.apache.click.util.Bindable;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 /**
@@ -41,7 +43,10 @@ import org.springframework.stereotype.Component;
  * @author Malcolm Edgar
  */
 @Component
-public class TableStyles extends BorderPage {
+public class TableStyles extends BorderPage implements Serializable,
+    ApplicationContextAware {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable public Form form = new Form();
     @Bindable public Table table = new Table();
@@ -49,8 +54,7 @@ public class TableStyles extends BorderPage {
     private Select styleSelect = new Select("style", "Table Style:");
     private Checkbox hoverCheckbox = new Checkbox("hover", "Hover Rows:");
 
-    @Resource(name="customerService")
-    private transient CustomerService customerService;
+    private transient ApplicationContext applicationContext;
 
     // ----------------------------------------------------------- Constructor
 
@@ -116,8 +120,27 @@ public class TableStyles extends BorderPage {
         table.setClass(styleSelect.getValue());
         table.setHoverRows(hoverCheckbox.isChecked());
 
-        List<Customer> customers = customerService.getCustomers();
+        List<Customer> customers = getCustomerService().getCustomers();
         table.setRowList(customers);
     }
 
+    /**
+     * Return CustomerService instance from Spring application context.
+     *
+     * @return CustomerService instance
+     */
+    public CustomerService getCustomerService() {
+        return (CustomerService) applicationContext.getBean("customerService");
+    }
+
+    /**
+     * Set Spring application context as defined by
+     * {@link org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)}.
+     *
+     * @param applicationContext set Spring application context
+     */
+    public void setApplicationContext(ApplicationContext applicationContext)
+        throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 }

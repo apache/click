@@ -21,7 +21,6 @@ package org.apache.click.examples.page.table;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.annotation.Resource;
 
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.ActionLink;
@@ -40,6 +39,9 @@ import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.LinkDecorator;
 import org.apache.click.extras.control.TableInlinePaginator;
 import org.apache.click.util.Bindable;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 /**
@@ -48,7 +50,8 @@ import org.springframework.stereotype.Component;
  * @author Malcolm Edgar
  */
 @Component
-public class SearchTablePage extends BorderPage implements Serializable {
+public class SearchTablePage extends BorderPage implements Serializable,
+    ApplicationContextAware {
 
     private static final long serialVersionUID = 1L;
 
@@ -60,8 +63,7 @@ public class SearchTablePage extends BorderPage implements Serializable {
     private TextField nameField = new TextField(Customer.NAME_PROPERTY);
     private DateField dateField = new DateField(Customer.DATE_JOINED_PROPERTY, "Start Date");
 
-    @Resource(name="customerService")
-    private transient CustomerService customerService;
+    private transient ApplicationContext applicationContext;
 
     // ----------------------------------------------------------- Constructors
 
@@ -153,7 +155,7 @@ public class SearchTablePage extends BorderPage implements Serializable {
      */
     public boolean onDeleteClick() {
         Integer id = deleteLink.getValueInteger();
-        customerService.deleteCustomer(id);
+        getCustomerService().deleteCustomer(id);
         return true;
     }
 
@@ -163,8 +165,28 @@ public class SearchTablePage extends BorderPage implements Serializable {
     @Override
     public void onRender() {
         List customers =
-            customerService.getCustomers(nameField.getValue(), dateField.getDate());
+            getCustomerService().getCustomers(nameField.getValue(), dateField.getDate());
 
         table.setRowList(customers);
+    }
+
+    /**
+     * Return CustomerService instance from Spring application context.
+     *
+     * @return CustomerService instance
+     */
+    public CustomerService getCustomerService() {
+        return (CustomerService) applicationContext.getBean("customerService");
+    }
+
+    /**
+     * Set Spring application context as defined by
+     * {@link org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)}.
+     *
+     * @param applicationContext set Spring application context
+     */
+    public void setApplicationContext(ApplicationContext applicationContext)
+        throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }
