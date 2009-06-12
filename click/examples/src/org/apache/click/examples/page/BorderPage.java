@@ -20,7 +20,6 @@ package org.apache.click.examples.page;
 
 import org.apache.click.Page;
 import org.apache.click.extras.control.Menu;
-import org.apache.click.util.Bindable;
 import org.apache.click.util.ClickUtils;
 
 /**
@@ -40,7 +39,7 @@ public class BorderPage extends Page {
      * The root menu. Note this transient variable is reinitialized in onInit()
      * to support serialized stateful pages.
      */
-    @Bindable public transient Menu rootMenu;
+    private transient Menu rootMenu;
 
     // ------------------------------------------------------------ Constructor
 
@@ -73,6 +72,15 @@ public class BorderPage extends Page {
         super.onInit();
 
         rootMenu = Menu.getRootMenu();
+
+        // Add rootMenu to Page control list. Note: rootMenu is removed in Page
+        // onDestroy() to ensure rootMenu is not Serialized to disk
+        addControl(rootMenu);
+    }
+
+    public void onDestroy() {
+        // Remove menu for when BorderPage is Serialized to disk
+        removeControl(rootMenu);
     }
 
     // --------------------------------------------------------- Public Methods
