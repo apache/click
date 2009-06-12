@@ -50,10 +50,7 @@ import org.springframework.stereotype.Component;
  * @author Malcolm Edgar
  */
 @Component
-public class SearchTablePage extends BorderPage implements Serializable,
-    ApplicationContextAware {
-
-    private static final long serialVersionUID = 1L;
+public class SearchTablePage extends BorderPage implements ApplicationContextAware {
 
     @Bindable public Form form = new Form();
     @Bindable public Table table = new Table();
