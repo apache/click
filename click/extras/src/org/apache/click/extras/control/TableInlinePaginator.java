@@ -104,13 +104,22 @@ public class TableInlinePaginator extends TablePaginator {
             controlLink.setImageSrc(paginatorMessages.getMessage("table-inline-first-image"));
             controlLink.setParameter(Table.PAGE, String.valueOf(0));
             controlLink.setTitle(table.getMessage("table-first-title"));
-            controlLink.setId("control-first");
+            String styleClass = controlLink.getAttribute("class");
+            if (styleClass == null) {
+                controlLink.setAttribute("class", "control-first");
+            } else {
+                controlLink.setAttribute("class", styleClass + " control-first");
+            }
             firstLabel = controlLink.toString();
 
             controlLink.setImageSrc(paginatorMessages.getMessage("table-inline-previous-image"));
             controlLink.setParameter(Table.PAGE, String.valueOf(table.getPageNumber() - 1));
             controlLink.setTitle(table.getMessage("table-previous-title"));
-            controlLink.setId("control-previous");
+            if (styleClass == null) {
+                controlLink.setAttribute("class", "control-previous");
+            } else {
+                controlLink.setAttribute("class", styleClass + " control-previous");
+            }
             previousLabel = controlLink.toString();
 
         } else {
@@ -119,13 +128,22 @@ public class TableInlinePaginator extends TablePaginator {
             controlLink.setImageSrc(paginatorMessages.getMessage("table-inline-first-disabled-image"));
             controlLink.setParameter(Table.PAGE, null);
             controlLink.setTitle(null);
-            controlLink.setId("control-first");
+            String styleClass = controlLink.getAttribute("class");
+            if (styleClass == null) {
+                controlLink.setAttribute("class", "control-first");
+            } else {
+                controlLink.setAttribute("class", styleClass + " control-first");
+            }
             firstLabel = controlLink.toString();
 
             controlLink.setImageSrc(paginatorMessages.getMessage("table-inline-previous-disabled-image"));
             controlLink.setParameter(Table.PAGE, null);
             controlLink.setTitle(null);
-            controlLink.setId("control-previous");
+            if (styleClass == null) {
+                controlLink.setAttribute("class", "control-previous");
+            } else {
+                controlLink.setAttribute("class", styleClass + " control-previous");
+            }
             previousLabel = controlLink.toString();
         }
 
@@ -152,7 +170,12 @@ public class TableInlinePaginator extends TablePaginator {
                 controlLink.setLabel(pageNumber);
                 controlLink.setParameter(Table.PAGE, String.valueOf(i));
                 controlLink.setTitle(gotoTitle + " " + pageNumber);
-                controlLink.setId("control-" + pageNumber);
+                String styleClass = controlLink.getAttribute("class");
+                if (styleClass == null) {
+                   controlLink.setAttribute("class", "control-page");
+                } else {
+                    controlLink.setAttribute("class", styleClass + " control-page");
+                }
                 pagesBuffer.append(controlLink.toString());
             }
 
@@ -169,13 +192,22 @@ public class TableInlinePaginator extends TablePaginator {
             controlLink.setImageSrc(paginatorMessages.getMessage("table-inline-next-image"));
             controlLink.setParameter(Table.PAGE, String.valueOf(table.getPageNumber() + 1));
             controlLink.setTitle(table.getMessage("table-next-title"));
-            controlLink.setId("control-next");
+            String styleClass = controlLink.getAttribute("class");
+            if (styleClass == null) {
+               controlLink.setAttribute("class", "control-next");
+            } else {
+                controlLink.setAttribute("class", styleClass + " control-next");
+            }
             nextLabel = controlLink.toString();
 
             controlLink.setImageSrc(paginatorMessages.getMessage("table-inline-last-image"));
             controlLink.setParameter(Table.PAGE, String.valueOf(table.getNumberPages() - 1));
             controlLink.setTitle(table.getMessage("table-last-title"));
-            controlLink.setId("control-last");
+            if (styleClass == null) {
+               controlLink.setAttribute("class", "control-last");
+            } else {
+                controlLink.setAttribute("class", styleClass + " control-last");
+            }
             lastLabel = controlLink.toString();
 
         } else {
@@ -184,18 +216,26 @@ public class TableInlinePaginator extends TablePaginator {
             controlLink.setImageSrc(paginatorMessages.getMessage("table-inline-next-disabled-image"));
             controlLink.setParameter(Table.PAGE, null);
             controlLink.setTitle(null);
-            controlLink.setId("control-next");
+            String styleClass = controlLink.getAttribute("class");
+            if (styleClass == null) {
+               controlLink.setAttribute("class", "control-next");
+            } else {
+                controlLink.setAttribute("class", styleClass + " control-next");
+            }
             nextLabel = controlLink.toString();
 
             controlLink.setImageSrc(paginatorMessages.getMessage("table-inline-last-disabled-image"));
             controlLink.setParameter(Table.PAGE, null);
             controlLink.setTitle(null);
-            controlLink.setId("control-last");
+            if (styleClass == null) {
+               controlLink.setAttribute("class", "control-last");
+            } else {
+                controlLink.setAttribute("class", styleClass + " control-last");
+            }
             lastLabel = controlLink.toString();
         }
 
         controlLink.setDisabled(false);
-        controlLink.setId(null);
         controlLink.setImageSrc(null);
         controlLink.setTitle(null);
 
