@@ -1707,11 +1707,22 @@ public class Table extends AbstractControl {
                 link.setLabel(firstLabel);
                 link.setParameter(PAGE, String.valueOf(0));
                 link.setAttribute("title", firstTitle);
+                String styleClass = link.getAttribute("class");
+                if (styleClass == null) {
+                    link.setAttribute("class", "control-first");
+                } else {
+                    link.setAttribute("class", styleClass + " control-first");
+                }
                 firstLabel = link.toString();
 
                 link.setLabel(previousLabel);
                 link.setParameter(PAGE, String.valueOf(getPageNumber() - 1));
                 link.setAttribute("title", previousTitle);
+                if (styleClass == null) {
+                    link.setAttribute("class", "control-previous");
+                } else {
+                    link.setAttribute("class", styleClass + " control-previous");
+                }
                 previousLabel = link.toString();
             }
 
@@ -1734,6 +1745,12 @@ public class Table extends AbstractControl {
                     link.setLabel(pageNumber);
                     link.setParameter(PAGE, String.valueOf(i));
                     link.setAttribute("title", gotoTitle + " " + pageNumber);
+                    String styleClass = link.getAttribute("class");
+                    if (styleClass == null) {
+                       link.setAttribute("class", "control-page");
+                    } else {
+                        link.setAttribute("class", styleClass + " control-page");
+                    }
                     pagesBuffer.append(link.toString());
                 }
 
@@ -1747,11 +1764,22 @@ public class Table extends AbstractControl {
                 link.setLabel(nextLabel);
                 link.setParameter(PAGE, String.valueOf(getPageNumber() + 1));
                 link.setAttribute("title", nextTitle);
+                String styleClass = link.getAttribute("class");
+                if (styleClass == null) {
+                   link.setAttribute("class", "control-next");
+                } else {
+                    link.setAttribute("class", styleClass + " control-next");
+                }
                 nextLabel = link.toString();
 
                 link.setLabel(lastLabel);
                 link.setParameter(PAGE, String.valueOf(getNumberPages() - 1));
                 link.setAttribute("title", lastTitle);
+                if (styleClass == null) {
+                   link.setAttribute("class", "control-last");
+                } else {
+                    link.setAttribute("class", styleClass + " control-last");
+                }
                 lastLabel = link.toString();
             }
 
