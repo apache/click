@@ -356,7 +356,6 @@ public class FormTable extends Table {
     public List getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
-            headElements.addAll(getControlLink().getHeadElements());
 
             int firstRow = getFirstRow();
             int lastRow = getLastRow();

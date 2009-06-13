@@ -825,6 +825,22 @@ public class Table extends AbstractControl {
     }
 
     /**
+     * Return the HEAD elements for the Table. The HEAD elements of the
+     * {@link #getControlLink()} will also be included.
+     *
+     * @see org.apache.click.Control#getHtmlImports()
+     *
+     * @return the list of HEAD elements for the Table
+     */
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+            headElements.addAll(getControlLink().getHeadElements());
+        }
+        return headElements;
+    }
+
+    /**
      * @see Control#setName(String)
      *
      * @param name of the control
@@ -1168,6 +1184,7 @@ public class Table extends AbstractControl {
      */
     public void onInit() {
         super.onInit();
+        getControlLink().onInit();
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
             control.onInit();
@@ -1180,6 +1197,7 @@ public class Table extends AbstractControl {
      * @see org.apache.click.Control#onRender()
      */
     public void onRender() {
+        getControlLink().onRender();
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
             control.onRender();
@@ -1689,12 +1707,10 @@ public class Table extends AbstractControl {
                 link.setLabel(firstLabel);
                 link.setParameter(PAGE, String.valueOf(0));
                 link.setAttribute("title", firstTitle);
-                link.setId("control-first");
                 firstLabel = link.toString();
 
                 link.setLabel(previousLabel);
                 link.setParameter(PAGE, String.valueOf(getPageNumber() - 1));
-                link.setId("control-previous");
                 link.setAttribute("title", previousTitle);
                 previousLabel = link.toString();
             }
@@ -1718,7 +1734,6 @@ public class Table extends AbstractControl {
                     link.setLabel(pageNumber);
                     link.setParameter(PAGE, String.valueOf(i));
                     link.setAttribute("title", gotoTitle + " " + pageNumber);
-                    link.setId("control-" + pageNumber);
                     pagesBuffer.append(link.toString());
                 }
 
@@ -1732,13 +1747,11 @@ public class Table extends AbstractControl {
                 link.setLabel(nextLabel);
                 link.setParameter(PAGE, String.valueOf(getPageNumber() + 1));
                 link.setAttribute("title", nextTitle);
-                link.setId("control-next");
                 nextLabel = link.toString();
 
                 link.setLabel(lastLabel);
                 link.setParameter(PAGE, String.valueOf(getNumberPages() - 1));
                 link.setAttribute("title", lastTitle);
-                link.setId("control-last");
                 lastLabel = link.toString();
             }
 
