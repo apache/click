@@ -137,13 +137,11 @@ public class TablePaginator implements Renderable {
                 controlLink.setLabel(firstLabel);
                 controlLink.setParameter(Table.PAGE, String.valueOf(0));
                 controlLink.setTitle(firstTitle);
-                controlLink.setId("control-first");
                 firstLabel = controlLink.toString();
 
                 controlLink.setLabel(previousLabel);
                 controlLink.setParameter(Table.PAGE, String.valueOf(table.getPageNumber() - 1));
                 controlLink.setTitle(previousTitle);
-                controlLink.setId("control-previous");
                 previousLabel = controlLink.toString();
             }
 
@@ -166,7 +164,6 @@ public class TablePaginator implements Renderable {
                     controlLink.setLabel(pageNumber);
                     controlLink.setParameter(Table.PAGE, String.valueOf(i));
                     controlLink.setTitle(gotoTitle + " " + pageNumber);
-                    controlLink.setId("control-" + pageNumber);
                     controlLink.render(pagesBuffer);
                 }
 
@@ -180,13 +177,11 @@ public class TablePaginator implements Renderable {
                 controlLink.setLabel(nextLabel);
                 controlLink.setParameter(Table.PAGE, String.valueOf(table.getPageNumber() + 1));
                 controlLink.setTitle(nextTitle);
-                controlLink.setId("control-next");
                 nextLabel = controlLink.toString();
 
                 controlLink.setLabel(lastLabel);
                 controlLink.setParameter(Table.PAGE, String.valueOf(table.getNumberPages() - 1));
                 controlLink.setTitle(lastTitle);
-                controlLink.setId("control-last");
                 lastLabel = controlLink.toString();
             }
 
