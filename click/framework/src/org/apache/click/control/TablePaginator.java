@@ -137,22 +137,11 @@ public class TablePaginator implements Renderable {
                 controlLink.setLabel(firstLabel);
                 controlLink.setParameter(Table.PAGE, String.valueOf(0));
                 controlLink.setTitle(firstTitle);
-                String styleClass = controlLink.getAttribute("class");
-                if (styleClass == null) {
-                   controlLink.setAttribute("class", "control-first");
-                } else {
-                    controlLink.setAttribute("class", styleClass + " control-first");
-                }
                 firstLabel = controlLink.toString();
 
                 controlLink.setLabel(previousLabel);
                 controlLink.setParameter(Table.PAGE, String.valueOf(table.getPageNumber() - 1));
                 controlLink.setTitle(previousTitle);
-                if (styleClass == null) {
-                   controlLink.setAttribute("class", "control-previous");
-                } else {
-                    controlLink.setAttribute("class", styleClass + " control-previous");
-                }
                 previousLabel = controlLink.toString();
             }
 
@@ -175,12 +164,6 @@ public class TablePaginator implements Renderable {
                     controlLink.setLabel(pageNumber);
                     controlLink.setParameter(Table.PAGE, String.valueOf(i));
                     controlLink.setTitle(gotoTitle + " " + pageNumber);
-                    String styleClass = controlLink.getAttribute("class");
-                    if (styleClass == null) {
-                        controlLink.setAttribute("class", "control-page");
-                    } else {
-                        controlLink.setAttribute("class", styleClass + " control-page");
-                    }
                     controlLink.render(pagesBuffer);
                 }
 
@@ -194,22 +177,11 @@ public class TablePaginator implements Renderable {
                 controlLink.setLabel(nextLabel);
                 controlLink.setParameter(Table.PAGE, String.valueOf(table.getPageNumber() + 1));
                 controlLink.setTitle(nextTitle);
-                String styleClass = controlLink.getAttribute("class");
-                if (styleClass == null) {
-                   controlLink.setAttribute("class", "control-next");
-                } else {
-                    controlLink.setAttribute("class", styleClass + " control-next");
-                }
                 nextLabel = controlLink.toString();
 
                 controlLink.setLabel(lastLabel);
                 controlLink.setParameter(Table.PAGE, String.valueOf(table.getNumberPages() - 1));
                 controlLink.setTitle(lastTitle);
-                if (styleClass == null) {
-                   controlLink.setAttribute("class", "control-last");
-                } else {
-                    controlLink.setAttribute("class", styleClass + " control-last");
-                }
                 lastLabel = controlLink.toString();
             }
 
