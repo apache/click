@@ -31,7 +31,7 @@ import org.quartz.JobExecutionException;
 public class ExampleJob implements Job {
 
     /**
-     * {@link org.quartz.Job#execute(JobExecutionContext)
+     * {@link org.quartz.Job#execute(JobExecutionContext)}
      */
     public void execute(JobExecutionContext context) throws JobExecutionException {
         System.out.println("Hello World from " + getClass().getSimpleName() + "@" + hashCode());
