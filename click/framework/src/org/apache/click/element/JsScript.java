@@ -195,7 +195,7 @@ public class JsScript extends ResourceElement {
      * <p/>
      * When the JsScript is rendered the template and model will be merged and
      * the result will be rendered together with any JsScript
-     * {@link #setContent(org.apache.click.util.HtmlStringBuffer) content}.
+     * {@link #setContent(java.lang.String) content}.
      * <p/>
      *
      * For example:
@@ -328,7 +328,7 @@ public class JsScript extends ResourceElement {
      * <p/>
      * If the {@link #template} property is set, the template and {@link #model}
      * will be merged and the result will be rendered together with any JsScript
-     * {@link #setContent(org.apache.click.util.HtmlStringBuffer) content}.
+     * {@link #setContent(java.lang.String) content}.
      *
      * @param template the path of the template to render
      */
@@ -353,7 +353,7 @@ public class JsScript extends ResourceElement {
      * <p/>
      * If the {@link #template} property is set, the template and {@link #model}
      * will be merged and the result will be rendered together with any JsScript
-     * {@link #setContent(org.apache.click.util.HtmlStringBuffer) content}.
+     * {@link #setContent(java.lang.String) content}.
      *
      * @param model the model of the template to render
      */
@@ -456,14 +456,14 @@ public class JsScript extends ResourceElement {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Render the JsScript {@link #setContent(org.apache.click.util.HtmlStringBuffer) content}
+     * Render the JsScript {@link #setContent(java.lang.String) content}
      * to the specified buffer.
      * <p/>
      * <b>Please note:</b> if the {@link #setTemplate(java.lang.String) template}
      * property is set, this method will merge the {@link #setTemplate(java.lang.String) template}
      * and {@link #setModel(java.util.Map) model} and the result will be
      * rendered, together with the JsScript
-     * {@link #setContent(org.apache.click.util.HtmlStringBuffer) content},
+     * {@link #setContent(java.lang.String) content},
      * to the specified buffer.
      *
      * @param buffer the buffer to append the output to
