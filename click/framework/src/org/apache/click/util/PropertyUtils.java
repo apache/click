@@ -195,27 +195,27 @@ public class PropertyUtils {
 
             if (method == null) {
 
-                method = source.getClass().getMethod(ClickUtils.toGetterName(name), null);
+                method = source.getClass().getMethod(ClickUtils.toGetterName(name));
                 cache.put(methodNameKey, method);
             }
 
-            return method.invoke(source, null);
+            return method.invoke(source);
 
         } catch (NoSuchMethodException nsme) {
 
             try {
-                method = source.getClass().getMethod(ClickUtils.toIsGetterName(name), null);
+                method = source.getClass().getMethod(ClickUtils.toIsGetterName(name));
                 cache.put(methodNameKey, method);
 
-                return method.invoke(source, null);
+                return method.invoke(source);
 
             } catch (NoSuchMethodException nsme2) {
 
                 try {
-                    method = source.getClass().getMethod(name, null);
+                    method = source.getClass().getMethod(name);
                     cache.put(methodNameKey, method);
 
-                    return method.invoke(source, null);
+                    return method.invoke(source);
 
                 } catch (NoSuchMethodException nsme3) {
                     String msg = "No matching getter method found for property '"

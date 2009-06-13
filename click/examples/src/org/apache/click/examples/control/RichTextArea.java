@@ -116,7 +116,7 @@ public class RichTextArea extends TextArea {
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        String[] args = { getContext().getRequest().getContextPath() };
+        Object[] args = { getContext().getRequest().getContextPath() };
         buffer.append(MessageFormat.format(HTML_IMPORTS, args));
 
         args = new String[] { getId(), getConfig() };
