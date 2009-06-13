@@ -444,7 +444,7 @@ public class PropertySelect extends Select {
             String getterName = ClickUtils.toGetterName(getName());
 
             try {
-                Method method = doClass.getMethod(getterName, null);
+                Method method = doClass.getMethod(getterName);
 
                 DataContext dataContext = form.getDataContext();
 
@@ -495,10 +495,10 @@ public class PropertySelect extends Select {
                 String getterName = ClickUtils.toGetterName(getName());
 
                 try {
-                    Method method = doClass.getMethod(getterName, null);
+                    Method method = doClass.getMethod(getterName);
 
                     DataObject property =
-                        (DataObject) method.invoke(dataObject, null);
+                        (DataObject) method.invoke(dataObject);
 
                     if (property != null) {
                         Object propPk = DataObjectUtils.pkForObject(property);
@@ -584,7 +584,7 @@ public class PropertySelect extends Select {
             } else {
                 Class doClass = form.getDataObjectClass();
                 String getterName = ClickUtils.toGetterName(getName());
-                Method method = doClass.getMethod(getterName, null);
+                Method method = doClass.getMethod(getterName);
                 Class propertyClass = method.getReturnType();
 
                 SelectQuery query = new SelectQuery(propertyClass);

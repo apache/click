@@ -634,7 +634,7 @@ public class ClickUtils {
      * @return the formatted HTML import statement
      */
     public static String createHtmlImport(String pattern, Context context) {
-        String[] args = {
+        Object[] args = {
             context.getRequest().getContextPath(),
             getResourceVersionIndicator(context)
         };
@@ -1728,7 +1728,7 @@ public class ClickUtils {
         boolean isAccessible = true;
         try {
             Class listenerClass = listener.getClass();
-            targetMethod = listenerClass.getMethod(method, null);
+            targetMethod = listenerClass.getMethod(method);
 
             // Change accessible for annonymous inner classes public methods
             // only. Conditional checks:
@@ -1748,7 +1748,7 @@ public class ClickUtils {
             }
 
 
-            Object result = targetMethod.invoke(listener, null);
+            Object result = targetMethod.invoke(listener);
 
             if (result instanceof Boolean) {
                 return ((Boolean) result).booleanValue();
@@ -2493,7 +2493,7 @@ public class ClickUtils {
                 throw new RuntimeException(msg);
             }
 
-            Object result = foundMethod.invoke(object, null);
+            Object result = foundMethod.invoke(object);
 
             if (result == null) {
                 result = foundMethod.getReturnType().newInstance();
