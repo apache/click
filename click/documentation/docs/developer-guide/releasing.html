@@ -69,9 +69,9 @@
                 <ul>
                     <li>
                         Ensure these files have the correct version:
-                        documentation/header.html,
-                        framework/src/click-control.properties, build/build.properties
-                        and examples/src/click-page.properties.
+                        documentation/header.html, framework/src/click-control.properties,
+                        build/build.properties, examples/src/click-page.properties
+                        and documentation/xdocs/src/docbook/click/click-book.xml.
                     </li>
                     <li>
                         Ensure third-party library versions are correct. Check the following
@@ -83,11 +83,40 @@
                 </ul>
             </li>
             <li>
-                Finalize Roadmap and Changes and ensure that the release date is correct.
-                Also ensure the release date in the <tt>downloads.html</tt> page is correct.
+                Finalize website:
+                <p/>
+                <ul>
+                    <li>
+                        Finalize <tt>documentation/docs/click.html</tt> and add
+                        news about the upcoming release.
+                    </li>
+                    <li>
+                        Finalize <tt>documentation/docs/roadmap-changes.html</tt>
+                        and ensure that the release date is correct.
+                    </li>
+                    <li>
+                        Update <tt>downloads.html</tt> and ensure the release date is correct.
+                    </li>
+                </ul>
             </li>
             <li>
-                Download the list of third-party library dependencies:
+                Build documentation:
+                <p/>
+                <ul>
+                    <li>
+                        Navigate to the folder <tt>/documentation/xdocs</tt> and
+                        download the list of third-party documentation dependencies:
+                        <pre class="codeConfig">ant get-deps</pre>
+                    </li>
+                    <li>
+                        Build the documentation in PDF and HTML formats:
+                        <pre class="codeConfig">ant all</pre>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                Navigate to the <tt>/build</tt> folder and download the list of
+                third-party library dependencies:
                 <pre class="codeConfig">ant get-deps</pre>
             </li>
             <li>
@@ -366,7 +395,8 @@ find . -type f | xargs chmod 664</pre>
             <li>
                 Upgrade Click to the next version. The following files must be updated:
                 documentation/header.html, framework/src/click-control.properties,
-                build/build.properties, examples/src/click-page.properties.
+                build/build.properties, examples/src/click-page.properties and
+                documentation/xdocs/src/docbook/click/click-book.xml.
             </li>
         </ul>
 
