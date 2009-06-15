@@ -27,7 +27,7 @@ This project has the following dependencies:
 
 # Velocity Docbook Framework (DBF) version 1.0: http://velocity.apache.org/docbook/
 # Apache FOP (at least version 0.95): http://xmlgraphics.apache.org/fop/0.95/index.html
-# Docbook XLS project version 1.75.0: http://docbook.sourceforge.net/snapshots/
+# Docbook XLS project version 1.75.0: https://sourceforge.net/project/showfiles.php?group_id=21935&package_id=16608&release_id=680922
 # XSLTHL syntax highlighter version 2.0.1: http://sourceforge.net/projects/xslthl
 
 A separate project, called 'Click Docbook', was created to distributes the
