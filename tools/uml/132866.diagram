@@ -17,7 +17,7 @@ classcanvas 128642 class_ref 133890 // FieldSet
   xyz 279 144 2000
 end
 relationcanvas 128770 relation_ref 130818 // <realization>
-  from ref 128386 z 2001 stereotype "<<realize>>" xyz 24 102.5 3000 to ref 128002
+  from ref 128386 z 2001 stereotype "<<realize>>" xyz 24 102 3000 to ref 128002
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end

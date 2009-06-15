@@ -1,6 +1,6 @@
 format 66
 "apache" // org::click::apache
-  revision 1
+  revision 2
   modified_by 2 "bob"
   // class settings
   //class diagram settings
@@ -388,7 +388,7 @@ format 66
 	  a role_name "" multiplicity "1" private
 	    classrelation_ref 129538 // (#model)
 	  b role_name "" multiplicity "1" private
-	    classrelation_ref 129666 // (#model)
+	    classrelation_ref 129666 // #model
       end
     end
 
@@ -551,4 +551,6 @@ ${members}};
   end
 
   package_ref 131842 // control
+
+  package_ref 133122 // service
 end

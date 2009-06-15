@@ -1,57 +1,57 @@
 format 66
 
 classinstance 128002 class_ref 128002 // ClickServlet
- write_horizontally no  name ""   xyz 90.2321 5.6 2000 life_line_z 2000
+ write_horizontally no  name ""   xyz 89.2321 6 2000 life_line_z 2000
 classinstance 128898 class_ref 129538 // Browser
-  drawing_mode actor  name ""   xyz 17.0902 5.3 2005 life_line_z 2000
+  drawing_mode actor  name ""   xyz 16.8902 5.9 2005 life_line_z 2000
 classinstance 129666 class_ref 129666 // Page
- color orange write_horizontally yes  name ""   mortal  xyz 258.8 92.8436 2000 life_line_z 2000
+ color orange write_horizontally yes  name ""   mortal  xyz 259.4 91.6436 2000 life_line_z 2000
 classinstance 129794 class_ref 129794 // Control
-  name ""   mortal  xyz 406.172 91.3274 2000 life_line_z 2000
+  name ""   mortal  xyz 406.172 91.9274 2000 life_line_z 2000
 durationcanvas 129026 classinstance_ref 128898 // :Browser
-  xyzwh 34 53.6 2010 11 480
+  xyzwh 33 53.4 2010 11 480
 end
 durationcanvas 129154 classinstance_ref 128002 // :ClickServlet
-  xyzwh 120 56.6 2010 11 485
+  xyzwh 119 56.6 2010 11 485
   overlappingdurationcanvas 135682
-    xyzwh 126 70 2020 11 401
+    xyzwh 125 70 2020 11 401
     overlappingdurationcanvas 135810
-      xyzwh 132 345.2 2030 11 114
+      xyzwh 131 345.2 2030 11 114
     end
   end
 end
 durationcanvas 129922 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 277 141.6 2010 11 24
+  xyzwh 278 141.4 2010 11 24
 end
 durationcanvas 130178 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 277 171.6 2010 11 24
+  xyzwh 278 171.4 2010 11 24
 end
 durationcanvas 131202 classinstance_ref 129794 // :Control
-  xyzwh 425 201.6 2010 11 24
+  xyzwh 425 201.4 2010 11 24
 end
 durationcanvas 132482 classinstance_ref 129794 // :Control
   xyzwh 425 231.4 2010 11 24
 end
 durationcanvas 132994 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 277 259 2010 11 24
+  xyzwh 278 259 2010 11 24
 end
 durationcanvas 133250 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 277 291.4 2010 11 24
+  xyzwh 278 291.4 2010 11 24
 end
 durationcanvas 133506 classinstance_ref 129794 // :Control
   xyzwh 425 319 2010 11 24
 end
 durationcanvas 134018 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 277 369 2010 11 24
+  xyzwh 278 369 2010 11 24
 end
 durationcanvas 134274 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 277 401.6 2010 11 24
+  xyzwh 278 401.4 2010 11 24
 end
 durationcanvas 134530 classinstance_ref 129794 // :Control
   xyzwh 425 436.4 2010 11 24
@@ -61,7 +61,7 @@ durationcanvas 135938 classinstance_ref 129794 // :Control
 end
 durationcanvas 136194 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 277 496.4 2010 11 24
+  xyzwh 278 496.4 2010 11 24
 end
 msg 129282 synchronous
   from durationcanvas_ref 129026

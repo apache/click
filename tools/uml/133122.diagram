@@ -73,7 +73,7 @@ classcanvas 131586 class_ref 136066 // PasswordField
   xyz 545 431 2000
 end
 relationcanvas 128514 relation_ref 131586 // <realization>
-  from ref 128386 z 2001 stereotype "<<realize>>" xyz 178.5 102 3000 to ref 128002
+  from ref 128386 z 2001 stereotype "<<realize>>" xyz 178 102 3000 to ref 128002
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
@@ -98,18 +98,18 @@ relationcanvas 129410 relation_ref 132098 // <generalisation>
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 129538 relation_ref 132226 // <realization>
-  from ref 128898 z 2001 stereotype "<<realize>>" xyz 121.5 227.5 3000 to ref 128258
+  from ref 128898 z 2001 stereotype "<<realize>>" xyz 121 227 3000 to ref 128258
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 129922 relation_ref 132354 // <realization>
-  decenter_end 212
-  from ref 129666 z 2001 stereotype "<<realize>>" xyz 197 228.5 3000 to ref 128258
+  decenter_end 211
+  from ref 129666 z 2001 stereotype "<<realize>>" xyz 197 228 3000 to ref 128258
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 130050 relation_ref 132482 // <realization>
-  from ref 129794 z 2001 stereotype "<<realize>>" xyz 264.5 228 3000 to ref 128258
+  from ref 129794 z 2001 stereotype "<<realize>>" xyz 264 228 3000 to ref 128258
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
@@ -120,7 +120,7 @@ relationcanvas 130562 relation_ref 132610 // <realization>
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 130690 relation_ref 132738 // <realization>
-  from ref 130306 z 2001 stereotype "<<realize>>" xyz 394 228.5 3000 to ref 128258
+  from ref 130306 z 2001 stereotype "<<realize>>" xyz 394 228 3000 to ref 128258
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end

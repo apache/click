@@ -15,13 +15,18 @@ diagrams
     760 715 100 4 0 0
   classdiagram_ref 132994 // control-class-diagram
     760 715 100 4 0 0
-  active  activitydiagram_ref 129410 // activity-diagram-small
-    760 715 100 4 0 0
+  activitydiagram_ref 129410 // activity-diagram-small
+    1543 959 100 4 0 0
+  active  classdiagram_ref 134274 // service-package
+    1543 959 100 4 0 0
 end
 show_stereotypes
-selected activitydiagram_ref 129410 // activity-diagram-small
+marked
+  class_ref 137346 // ConfigService
+end
+selected classdiagram_ref 134274 // service-package
 open
-  activity_ref 128386 // Servlet Container
-  classview_ref 130306 // controls
+  classview_ref 132994 // services
+  classview_ref 133122 // classes
 end
 end
