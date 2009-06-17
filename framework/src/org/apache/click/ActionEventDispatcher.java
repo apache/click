@@ -316,9 +316,9 @@ public class ActionEventDispatcher {
     }
 
     /**
-     * Return the stack data structure where Context's are stored.
+     * Return the stack data structure where ActionEventDispatchers are stored.
      *
-     * @return stack data structure where Context's are stored
+     * @return stack data structure where ActionEventDispatcher are stored
      */
     static DispatcherStack getDispatcherStack() {
         DispatcherStack dispatcherStack = (DispatcherStack) THREAD_LOCAL_DISPATCHER.get();
