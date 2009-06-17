@@ -307,22 +307,30 @@ public class ClickServlet extends HttpServlet {
         Page page = null;
         try {
 
+            ActionEventDispatcher eventDispatcher = createActionEventDispatcher();
+            // Bind ActionEventDispatcher to current thread
+            ActionEventDispatcher.pushThreadLocalDispatcher(eventDispatcher);
+
             Context context = createContext(request, response, isPost);
             // Bind context to current thread
             Context.pushThreadLocalContext(context);
 
-            // Check for fatal exception that occurred while creating Context
-            Exception exception = (Exception)
-                request.getAttribute(Context.CONTEXT_FATAL_EXCEPTION);
+            // Check for fatal error that occurred while creating Context
+            Throwable error = (Throwable) request.getAttribute(Context.CONTEXT_FATAL_ERROR);
 
-            if (exception != null) {
+            if (error != null) {
                 // Process exception through Click's exception handler.
-                throw exception;
+                if (error instanceof Exception) {
+                    throw (Exception) error;
+                }
+                // Errors are not handled by Click, let the server handle it
+                if (error instanceof Error) {
+                    throw (Error) error;
+                } else {
+                    // Throwables are not handled by Click, let the server handle it
+                    throw new RuntimeException(error);
+                }
             }
-
-            ActionEventDispatcher eventDispatcher = createActionEventDispatcher();
-            // Bind ActionEventDispatcher to current thread
-            ActionEventDispatcher.pushThreadLocalDispatcher(eventDispatcher);
 
             page = createPage(request);
 

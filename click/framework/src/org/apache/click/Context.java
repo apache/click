@@ -57,10 +57,10 @@ public class Context {
     public static final String LOCALE = "locale";
 
     /**
-     * The attribute key used for storing a fatal exception that occurred while
+     * The attribute key used for storing any error that occurred while
      * Context is created.
      */
-    static final String CONTEXT_FATAL_EXCEPTION = "_context_fatal_exception";
+    static final String CONTEXT_FATAL_ERROR = "_context_fatal_error";
 
     /** The thread local context. */
     private static final ThreadLocal THREAD_LOCAL_CONTEXT = new ThreadLocal();
