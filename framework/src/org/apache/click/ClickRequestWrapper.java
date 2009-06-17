@@ -120,9 +120,9 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
 
             } catch (Throwable t) {
 
-                // Don't throw exception here as it will break Context creation.
-                // Instead add the exception as a request attribute.
-                request.setAttribute(Context.CONTEXT_FATAL_EXCEPTION, t);
+                // Don't throw error here as it will break Context creation.
+                // Instead add the error as a request attribute.
+                request.setAttribute(Context.CONTEXT_FATAL_ERROR, t);
 
             } finally {
                 fileItemMap = Collections.unmodifiableMap(fileItems);
