@@ -275,6 +275,7 @@ public class MockRequest implements HttpServletRequest {
         UploadedFile uf = new UploadedFile(fieldName, file, contentType);
 
         uploadedFiles.put(fieldName, uf);
+        setUseMultiPartContentType(true);
     }
 
     /**
