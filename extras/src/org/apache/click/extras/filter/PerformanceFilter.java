@@ -94,8 +94,20 @@ import org.apache.commons.lang.StringUtils;
  * <p/>
  * The PerformanceFilter provides the ability to add <tt>versioning</tt>
  * to application specific resources through the
- * <tt>init-param</tt> <span class="blue">"application-version"</span>.
- * <p/>
+ * <tt>init-param</tt> <span class="blue">"application-version"</span>. For example
+ * to set the <span class="blue">"application-version"</span> to <span class="red">1.0</span>
+ * you can define the filter as follows:
+ *
+ * <pre class="codeConfig">
+ * &lt;filter&gt;
+ *  &lt;filter-name&gt;<span class="blue">PerformanceFilter</span>&lt;/filter-name&gt;
+ *  &lt;filter-class&gt;<span class="red">org.apache.click.extras.filter.PerformanceFilter</span>&lt;/filter-class&gt;
+ *   &lt;init-param&gt;
+ *     &lt;param-name&gt;<font color="blue">application-version</font>&lt;/param-name&gt;
+ *     &lt;param-value&gt;<font color="red">1.0</font>&lt;/param-value&gt;
+ *  &lt;/init-param&gt;
+ * &lt;/filter&gt; </pre>
+ *
  * Application versioning is supported by {@link org.apache.click.element.ResourceElement resource elements}
  * such as {@link org.apache.click.element.JsImport JsImport} and
  * {@link org.apache.click.element.CssImport CssImport}. When the
