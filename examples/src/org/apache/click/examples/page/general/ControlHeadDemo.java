@@ -98,6 +98,7 @@ public class ControlHeadDemo extends BorderPage {
                 if (strValue.equals(getValue())) {
                     buffer.appendAttribute("checked", "checked");
                 }
+                buffer.elementEnd();
                 buffer.append("\n");
             }
         }
