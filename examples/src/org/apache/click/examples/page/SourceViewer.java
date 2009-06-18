@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.click.Page;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
-
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -45,7 +44,7 @@ public class SourceViewer extends BorderPage {
             "catch", "throws", "throw", "static", "final", "break", "continue",
             "super", "finally", "true", "false", "true;", "false;", "null",
             "boolean", "int", "char", "long", "float", "double", "short",
-            "this," };
+            "super", "this," };
 
     private static final String[] JAVASCRIPT_KEYWORDS = { "break", "continue",
             "do", "else", "for", "if", "return", "while", "auto", "case",

@@ -43,7 +43,7 @@
   </menu>
 
   <menu label="General" path="#" imageSrc="/assets/images/general.png">
-    <menu label="Direct Page" path="general/direct-page.htm"/>
+    <menu label="Direct Page" path="general/direct-page.htm" target="_blank"/>
     <menu label="Exception Demo" path="general/exception.htm"/>
     <menu label="Flash Attribute" path="general/flash.htm"/>
     <menu label="Page Imports" path="general/page-imports-example.htm"/>
