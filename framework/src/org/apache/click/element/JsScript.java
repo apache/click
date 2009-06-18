@@ -479,7 +479,10 @@ public class JsScript extends ResourceElement {
             buffer.append(context.renderTemplate(getTemplate(), templateModel));
 
         }
-        buffer.append(getContent());
+
+        if (getContent() != null) {
+            buffer.append(getContent());
+        }
     }
 
     /**
