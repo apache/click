@@ -130,7 +130,7 @@ public HelloWorld extends Page {
 
     <para>The page model is then merged with the template which substitutes
     the <varname>$time</varname> reference with the <emphasis>Date</emphasis>
-    object. Velocity then renders the merged template which looks something like:
+    object. Velocity then renders the merged template as:
     </para>
 
     <figure id="hello-world-screenshot">
@@ -196,6 +196,15 @@ public HelloWorld extends Page {
     have to write fewer lines of code. The disadvantage of this type of control
     listener binding is that no compile time safety is provided, and you miss
     out on the compiler refactoring capabilities provided with modern IDEs.
+    </para>
+
+    <para>If you're wondering about why the <varname>myLink</varname> and
+    <varname>msg</varname> variables are declared as <literal>@Bindable</literal>
+    <literal>public</literal>, this is a short-hand way instructing Click to
+    automatically bind request parameters to Page variables. Additionally
+    these variables will be automatically added to the Page model. For more
+    information please see the section
+    <link linkend="request-param-auto-binding">Request Parameter Auto Binding</link>.
     </para>
 
     <para>Back to our example, in the page template we define an HTML link and
