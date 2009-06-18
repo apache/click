@@ -52,7 +52,7 @@ Example pre-built web appliation include:
 Build Information
 =================
 
-Click is built using the J2SE 1.4.2 and Ant 1.6.5. 
+Click is built using the J2SE 1.5.0 and Apache Ant
 
 The Ant build.xml and build.properties files are located in 
 the build directory. 
