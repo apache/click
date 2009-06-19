@@ -59,20 +59,21 @@ import org.apache.click.util.ClickUtils;
  * <p/>
  * The NumberField uses a JavaScript onkeypress() doubleFilter() method to prevent
  * users from entering invalid characters.  To enable number key filtering
- * reference <tt class="blue">$jsImports</tt> and <tt class="blue">$cssImports</tt> in your page
- * template. For example:
+ * reference the variables <tt class="blue">$jsElements</tt> and
+ * <tt class="blue">$headElements</tt> in your page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
  * &lt;head&gt;
- * <span class="blue">$cssImports</span>
+ * <span class="blue">$headElements</span>
  * &lt;/head&gt;
  * &lt;body&gt;
- * <span class="red">$form</span>
- * &lt;/body&gt;
- * &lt;/html&gt;
- * <span class="blue">$jsImports</span> </pre>
  *
+ * <span class="red">$form</span>
+ *
+ * <span class="blue">$jsElements</span>
+ * &lt;/body&gt;
+ * &lt;/html&gt; </pre>
  *
  * The NumberField has right justified horizontal text alignment,
  * {@link #setTextAlign(String)}.

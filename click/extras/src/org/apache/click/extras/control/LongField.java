@@ -33,19 +33,21 @@ package org.apache.click.extras.control;
  * <p/>
  * The LongField uses a JavaScript onkeypress() integerFilter() method to prevent
  * users from entering invalid characters.  To enable number key filtering
- * reference <tt class="blue">$jsImports</tt> and <tt class="blue">$cssImports</tt> in your page
- * template. For example:
+ * reference the variables <tt class="blue">$jsElements</tt> and
+ * <tt class="blue">$headElements</tt> in your page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
  * &lt;head&gt;
- * <span class="blue">$cssImports</span>
+ * <span class="blue">$headElements</span>
  * &lt;/head&gt;
  * &lt;body&gt;
+ *
  * <span class="red">$form</span>
+ *
+ * <span class="blue">$jsElements</span>
  * &lt;/body&gt;
- * &lt;/html&gt;
- * <span class="blue">$jsImports</span> </pre>
+ * &lt;/html&gt; </pre>
  *
  * The LongField has left justified horizontal text alignment,
  * {@link #setTextAlign(String)}.

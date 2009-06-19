@@ -47,19 +47,21 @@ import org.apache.click.util.HtmlStringBuffer;
  * <p/>
  * The color picker popup is based on JS script code from
  * <a target="_blank" href="http://www.dhtmlgoodies.com/index.html?whichScript=submitted-color-picker">www.dhtmlgoodies.com</a>.
- * To enable the color popup, reference the <span class="blue">$cssImports</span>
- * and <span class="blue">$jsImports</span> in the page template. For example:
+ * To enable the color popup, reference the variables <span class="blue">$headElements</span>
+ * and <span class="blue">$jsElements</span> in the page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
  * &lt;head&gt;
- * <span class="blue">$cssImports</span>
+ * <span class="blue">$headElements</span>
  * &lt;/head&gt;
  * &lt;body&gt;
+ *
  * <span class="red">$form</span>
+ *
+ * <span class="blue">$jsElements</span>
  * &lt;/body&gt;
- * &lt;/html&gt;
- * <span class="blue">$jsImports</span> </pre>
+ * &lt;/html&gt; </pre>
  *
  * @author Christian Essl
  */
