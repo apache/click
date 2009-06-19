@@ -152,10 +152,11 @@ public class JsImport extends ResourceElement {
     }
 
     /**
-     * Sets the <tt>src</tt> attribute.
+     * Sets the <tt>src</tt> attribute. If the given src argument is
+     * <tt>null</tt>, the <tt>src</tt> attribute will be removed.
      * <p/>
      * If the given <tt>src</tt> begins with a <tt class="wr">"/"</tt> character
-     * the sr will be prefixed with the web application <tt>context path</tt>.
+     * the src will be prefixed with the web application <tt>context path</tt>.
      * Note if the given src is already prefixed with the <tt>context path</tt>,
      * Click won't add it a second time.
      *
@@ -200,15 +201,22 @@ public class JsImport extends ResourceElement {
      * @param buffer the buffer to render output to
      */
     public void render(HtmlStringBuffer buffer) {
-        // Add version indicator to the href
-        setSrc(addVersionIndicator(getSrc()));
-
         renderConditionalCommentPrefix(buffer);
 
         buffer.elementStart(getTag());
 
         buffer.appendAttribute("id", getId());
+
+        String src = getSrc();
+        renderResourcePath(buffer, "src", src);
+
+        // Temporarily remove src attribute while other attributes are rendered
+        setAttribute("src", null);
+
         appendAttributes(buffer);
+
+        // Restore src attribute
+        setAttribute("src", src);
 
         buffer.closeTag();
 
