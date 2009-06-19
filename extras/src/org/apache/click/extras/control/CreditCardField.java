@@ -49,7 +49,8 @@ import org.apache.click.util.HtmlStringBuffer;
  * <p/>
  * The CreditCardField uses a JavaScript onkeypress() integerFilter() method to
  * prevent users from entering invalid characters. To enable number key filtering
- * reference the {@link org.apache.click.util.PageImports} object in the page template.
+ * reference the variables <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template.
  *
  * <h3>CreditCardField Example</h3>
  *
@@ -58,13 +59,15 @@ import org.apache.click.util.HtmlStringBuffer;
  * <pre class="codeHtml">
  * &lt;html&gt;
  * &lt;head&gt;
- * <span class="blue">$cssImports</span>
+ * <span class="blue">$headElements</span>
  * &lt;/head&gt;
  * &lt;body&gt;
+ *
  * <span class="red">$form</span>
+ *
+ * <span class="blue">$jsElements</span>
  * &lt;/body&gt;
- * &lt;/html&gt;
- * <span class="blue">$jsImports</span> </pre>
+ * &lt;/html&gt; </pre>
  *
  * An example page using CreditCardField is provided below:
  *
