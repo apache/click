@@ -425,9 +425,7 @@ import org.apache.commons.lang.StringUtils;
  *   Create a custom named macro file and reference it in a
  *   <span class="st"><tt>WEB-INF/velocity.properties</tt></span>
  *   file under the property named
- *   <tt>velocimacro.library</tt>. See configuration topic
- *   <a target="topic" href="../../../../../configuration.html#velocity-properties">Velocity Properties</a>
- *   for more info.
+ *   <tt>velocimacro.library</tt>.
  *  </li>
  * </ul>
  *
