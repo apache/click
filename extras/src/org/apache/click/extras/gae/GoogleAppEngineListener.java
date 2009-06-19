@@ -58,7 +58,7 @@ import ognl.OgnlRuntime;
  *     &lt;application>myapp&lt;/application&gt;
  *     &lt;version&gt;1&lt;/version&gt;
  *
- *	   &lt;!-- Configure java.util.logging --&gt;
+ *       &lt;!-- Configure java.util.logging --&gt;
  *     &lt;system-properties&gt;
  *         &lt;property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/&gt;
  *     &lt;/system-properties&gt;
