@@ -35,6 +35,7 @@ import org.apache.click.element.CssStyle;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
+import org.apache.click.element.ResourceElement;
 import org.apache.click.service.LogService;
 
 import org.apache.commons.lang.StringUtils;
@@ -197,6 +198,10 @@ public class PageImports {
             String line = lines[i].trim().toLowerCase();
             if (line.startsWith("<link") && line.indexOf("text/css") != -1) {
                 CssImport cssImport = asCssImport(lines[i]);
+
+                // Remove Click's version indicator from src attribute
+                removeVersionIndicator(cssImport, "href");
+
                 add(cssImport);
 
             } else if (line.startsWith("<style") && line.indexOf("text/css") != -1) {
@@ -207,6 +212,9 @@ public class PageImports {
             } else if (line.startsWith("<script")) {
                 if (line.indexOf(" src=") != -1) {
                     JsImport jsImport = asJsImport(lines[i]);
+
+                    // Remove Click's version indicator from src attribute
+                    removeVersionIndicator(jsImport, "src");
                     add(jsImport);
 
                 } else {
@@ -812,6 +820,50 @@ public class PageImports {
         if (StringUtils.isBlank(id) && content.length() > 0) {
             int hash = Math.abs(content.hashCode());
             element.setId(Integer.toString(hash));
+        }
+    }
+
+    /**
+     * Removes all occurrences of a substring from within the source string.
+     *
+     * @deprecated use {@link org.apache.click.element.Element)} instead
+     *
+     * @param source the source String to search
+     * @param remove the string to remove
+     * @return the substring with the string removed if found
+     */
+    private String remove(String source, String remove) {
+        int start = source.lastIndexOf(remove);
+        if (start == -1) {
+            return source;
+        }
+        int end = start + remove.length();
+        HtmlStringBuffer buffer = new HtmlStringBuffer(source.length());
+        buffer.append(source.substring(0, start));
+        buffer.append(source.substring(end));
+        return buffer.toString();
+    }
+
+    /**
+     * Remove Click's version indicator from the attribute of the given element.
+     *
+     * @deprecated use {@link org.apache.click.element.Element)} instead
+     *
+     * @param element the element
+     * @param attribute the attribute to remove the version indicator from
+     */
+    private void removeVersionIndicator(ResourceElement element, String attribute) {
+        String value = element.getAttribute(attribute);
+
+        // Store current length of value before removing version indicator
+        int length = value.length();
+
+        value = remove(value, ClickUtils.RESOURCE_VERSION_INDICATOR);
+
+        // Check if Click version indicator was removed from value
+        if (value.length() != length) {
+            element.setAttribute(attribute, value);
+            element.setVersionIndicator(ClickUtils.RESOURCE_VERSION_INDICATOR);
         }
     }
 }
