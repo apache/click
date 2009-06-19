@@ -153,7 +153,8 @@ public class CssImport extends ResourceElement {
     }
 
     /**
-     * Sets the <tt>href</tt> attribute.
+     * Sets the <tt>href</tt> attribute. If the given href argument is
+     * <tt>null</tt>, the <tt>href</tt> attribute will be removed.
      * <p/>
      * If the given <tt>href</tt> begins with a <tt class="wr">"/"</tt> character
      * the href will be prefixed with the web applications <tt>context path</tt>.
@@ -201,15 +202,22 @@ public class CssImport extends ResourceElement {
      * @param buffer the buffer to render output to
      */
     public void render(HtmlStringBuffer buffer) {
-        // Add version indicator to the href
-        setHref(addVersionIndicator(getHref()));
-
         renderConditionalCommentPrefix(buffer);
 
         buffer.elementStart(getTag());
 
         buffer.appendAttribute("id", getId());
+
+        String href = getHref();
+        renderResourcePath(buffer, "href", href);
+
+        // Temporarily remove href attribute while other attributes are rendered
+        setAttribute("href", null);
+
         appendAttributes(buffer);
+
+        // Restore href attribute
+        setAttribute("href", href);
 
         buffer.elementEnd();
 

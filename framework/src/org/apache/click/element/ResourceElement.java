@@ -297,31 +297,44 @@ public class ResourceElement extends Element {
     // ------------------------------------------------ Package Private Methods
 
     /**
-     * Add the {@link #getApplicationResourceVersionIndicator(org.apache.click.Context)}
-     * to the specified resourcePath. If the version indicator is not defined
-     * this method will return the resourcePath unchanged.
+     * Render the given attribute and resourcePath and append the
+     * {@link #getVersionIndicator()} to the resourcePath, if it was set.
+     * If the version indicator is not defined this method will only render the
+     * resourcePath.
      *
-     * @param resourcePath the resource path to add the version indicator to
+     * @param buffer the buffer to render to
+     * @param attribute the attribute name to render
+     * @param resourcePath the resource path to render
      */
-    String addVersionIndicator(String resourcePath) {
+    void renderResourcePath(HtmlStringBuffer buffer, String attribute,
+        String resourcePath) {
         String versionIndicator = getVersionIndicator();
 
-        // If no resourcePath or version indicator is defined, exit early
-        if (resourcePath == null || StringUtils.isBlank(versionIndicator)) {
-            return resourcePath;
+        // If resourcePath is null exit early
+        if (resourcePath == null) {
+            return;
         }
 
+        // If version indicator is not defined render resource path only
+        if (StringUtils.isBlank(versionIndicator)) {
+            buffer.appendAttribute(attribute, resourcePath);
+            return;
+        }
+
+        // If the resourcePath has no extension render the resource path only
         int start = resourcePath.lastIndexOf(".");
-        // Exit early if extension is not found
         if (start < 0) {
-            return resourcePath;
+            buffer.appendAttribute(attribute, resourcePath);
+            return;
         }
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        buffer.append(" ");
+        buffer.append(attribute);
+        buffer.append("=\"");
         buffer.append(resourcePath.substring(0, start));
         buffer.append(versionIndicator);
         buffer.append(resourcePath.substring(start));
-        return buffer.toString();
+        buffer.append("\"");
     }
 
     /**
