@@ -114,7 +114,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * Click also supports an alternative deployment strategy which relies on
  * packaging resource (stylesheets, JavaScript, images etc.) following a
  * specific convention. See the section
- * <a href="../../../../configuration.html#deploying-custom-resources">Deploying Custom Resources</a>
+ * <a href="../../../../user-guide/html/ch04s03.html#deploying-custom-resources">Deploying Custom Resources</a>
  * for further details.
  *
  * <p/>
@@ -373,7 +373,7 @@ public interface Control extends Serializable {
      * Click also supports an alternative deployment strategy which relies on
      * packaging resource (stylesheets, JavaScript, images etc.) following a
      * specific convention. See the section
-     * <a href="../../../../configuration.html#deploying-custom-resources">Deploying Custom Resources</a>
+     * <a href="../../../../user-guide/html/ch04s03.html#deploying-custom-resources">Deploying Custom Resources</a>
      * for further details.
      *
      * @param servletContext the servlet context
