@@ -38,7 +38,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * This allows developers to provide a more flexible and CSS friendly layout.
  * <p/>
  * You can read more about programmatic layout
- * <a href="../../../../../../controls.html#programmatic-layout">here</a>.
+ * <a href="../../../../../../user-guide/html/ch03s07.html#programmatic-layout">here</a>.
  * <p/>
  * Also see this <a href="http://www.avoka.com/click-examples/form/contact-details.htm">example</a>
  * of how HtmlForm is used to provide a custom layout.
