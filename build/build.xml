@@ -654,9 +654,6 @@ Please ensure you have configured build.properties</echo>
       	            overview="documentation/docs/core-overview.html"
                     excludes=""/>
 
-      <copy file="framework/src/org/apache/click/control/image-submit.gif"
-            todir="documentation/docs/click-api/org/apache/click/control"/>
-   	
       <!-- Extras -->
       <delete quiet="false" failonerror="false">
           <fileset dir="documentation/docs/extras-api" includes="**/*"/>
@@ -683,6 +680,8 @@ Please ensure you have configured build.properties</echo>
                     overview="documentation/docs/mock-overview.html"
                     excludes=""/>
 
+      <copy file="documentation/images/image-submit.gif"
+            todir="documentation/docs/click-api/org/apache/click/control"/>
       <copy file="documentation/images/post-sequence-diagram.png"
             todir="documentation/docs/click-api/org/apache/click/"/>
       <copy file="documentation/xdocs/src/images/controls/control-post-sequence-diagram.png"
