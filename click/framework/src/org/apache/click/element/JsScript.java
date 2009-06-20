@@ -146,6 +146,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class JsScript extends ResourceElement {
 
+    private static final long serialVersionUID = 1L;
+
     // -------------------------------------------------------------- Variables
 
     /** The inline JavaScript content. */

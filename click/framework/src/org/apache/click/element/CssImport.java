@@ -54,6 +54,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class CssImport extends ResourceElement {
 
+    private static final long serialVersionUID = 1L;
+
     // ----------------------------------------------------------- Constructors
 
     /**

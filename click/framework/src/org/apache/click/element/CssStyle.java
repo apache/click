@@ -145,6 +145,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class CssStyle extends ResourceElement {
 
+    private static final long serialVersionUID = 1L;
+
      // -------------------------------------------------------------- Variables
 
     /** The inline Css content. */
