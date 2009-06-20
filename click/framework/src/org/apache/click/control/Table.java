@@ -27,8 +27,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.Control;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -95,26 +93,39 @@ import org.apache.commons.lang.math.NumberUtils;
  *     }
  * } </pre>
  *
- * <h4>Table Styles</h4>
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
  *
- * The Table control automatically deploys the table CSS style sheet
- * (<tt>table.css</tt>) to the application directory <tt>/click</tt>.
- * To import the Table CSS styles and any control JavaScript simply reference <span class="blue">$cssImports</span>
- * and <span class="blue">$jsImports</span> in the page template. For example:
+ * The Table control makes use of the following resources (which Click automatically
+ * deploys to the application directory, <tt>/click</tt>):
+ *
+ * <ul>
+ * <li><tt>click/table.css</tt></li>
+ * </ul>
+ *
+ * To import the Table CSS styles and any control JavaScript simply reference
+ * the variables <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
  * &lt;head&gt;
- * <span class="blue">$cssImports</span>
+ * <span class="blue">$headElements</span>
  * &lt;/head&gt;
  * &lt;body&gt;
+ *
  * <span class="red">$table</span>
+ *
+ * <span class="blue">$jsElements</span>
  * &lt;/body&gt;
- * &lt;/html&gt;
- * <span class="blue">$jsImports</span></pre>
+ * &lt;/html&gt; </pre>
+ *
+ * <a name="styles"></a>
+ * <h4>Table Styles</h4>
  *
  * The table CSS style sheet is adapted from the DisplayTag <tt>screen.css</tt>
  * style sheet and includes the styles:
+ *
  * <ul style="margin-top:0.5em;">
  *  <li>blue1</li>
  *  <li>blue2</li>
@@ -780,8 +791,14 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Return the HTML head import statements for the CSS stylesheet file:
-     * <tt>click/table.css</tt>.
+     * Return the Table HTML head import statements for the following resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/table.css</tt></li>
+     * </ul>
+     * <p/>
+     * Additionally all {@link #getControls() controls} import statements are
+     * also returned.
      *
      * @return the HTML head import statements for the control stylesheet
      */
@@ -1149,32 +1166,6 @@ public class Table extends AbstractControl {
             lastRow = Math.min(lastRow, numbRows);
         }
         return lastRow;
-    }
-
-    /**
-     * Deploy the <tt>table.css</tt> and column sorting icon files to the
-     * <tt>click</tt> web directory when the application is initialized.
-     *
-     * @see Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        String[] files = new String[] {
-                "/org/apache/click/control/column-sortable-dark.gif",
-                "/org/apache/click/control/column-sortable-light.gif",
-                "/org/apache/click/control/column-ascending-dark.gif",
-                "/org/apache/click/control/column-ascending-light.gif",
-                "/org/apache/click/control/column-descending-dark.gif",
-                "/org/apache/click/control/column-descending-light.gif",
-                "/org/apache/click/control/table.css"
-            };
-
-        for (int i = 0; i < files.length; i++) {
-            ClickUtils.deployFile(servletContext,
-                                  files[i],
-                                  "click");
-        }
     }
 
     /**

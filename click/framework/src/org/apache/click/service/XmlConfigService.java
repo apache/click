@@ -1118,16 +1118,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         boolean resourcesDeployable = (servletContext.getRealPath("/") != null);
 
         if (resourcesDeployable) {
-            String[] resources = {
-                "/org/apache/click/control/control.css",
-                "/org/apache/click/control/control.js",
-                "/org/apache/click/util/error.htm",
-                "/org/apache/click/not-found.htm",
-                "/org/apache/click/control/VM_global_library.vm"
-            };
-
-            ClickUtils.deployFiles(servletContext, resources, "click");
-
             deployControls(getResourceRootElement("/click-controls.xml"));
             deployControls(getResourceRootElement("/extras-controls.xml"));
             deployControls(rootElm);

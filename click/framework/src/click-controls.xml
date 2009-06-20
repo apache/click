@@ -20,7 +20,6 @@
 <click-app>
 
   <controls>
-    <control classname="org.apache.click.control.Table"/>
   </controls>
 
 </click-app>

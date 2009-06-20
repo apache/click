@@ -211,25 +211,33 @@ import org.apache.commons.lang.StringUtils;
  * prevents JavaScript form validation being performed when the cancel button is
  * clicked.
  *
- * <h3>CSS and JavaScript Imports</h3>
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
  *
- * The Form control automatically deploys the control CSS style sheet
- * (<tt>control.css</tt>) and JavaScript file (<tt>control.js</tt>) to
- * the application directory <tt>/click</tt>.
+ * The Form control makes use of the following resources (which Click automatically
+ * deploys to the application directory, <tt>/click</tt>):
+ *
+ * <ul>
+ * <li><tt>click/control.css</tt></li>
+ * <li><tt>click/control.js</tt></li>
+ * </ul>
+ *
  * To import these files and any form control imports simply reference
- * <span class="blue">$cssImports</span> and <span class="blue">$jsImports</span>
- * in the page template. For example:
+ * the variables <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
  * &lt;head&gt;
- * <span class="blue">$cssImports</span>
+ * <span class="blue">$headElements</span>
  * &lt;/head&gt;
  * &lt;body&gt;
+ *
  * <span class="red">$form</span>
+ *
+ * <span class="blue">$jsElements</span>
  * &lt;/body&gt;
- * &lt;/html&gt;
- * <span class="blue">$jsImports</span></pre>
+ * &lt;/html&gt; </pre>
  *
  * <a name="form-layout"></a>
  * <h3>Form Layout</h3>
@@ -1073,9 +1081,15 @@ public class Form extends AbstractContainer {
     }
 
     /**
-     * Return the HTML head import statements for the CSS stylesheet
-     * (<tt>click/control.css</tt>) and JavaScript
-     * (<tt>click/control.js</tt>) files.
+     * Return the Form HTML head imports statements for the following resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/control.css</tt></li>
+     * <li><tt>click/control.js</tt></li>
+     * </ul>
+     * <p/>
+     * Additionally all {@link #getControls() controls} import statements are
+     * also returned.
      *
      * @see org.apache.click.Control#getHtmlImports()
      *
