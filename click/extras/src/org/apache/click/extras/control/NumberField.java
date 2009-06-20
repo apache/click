@@ -19,8 +19,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.control.TextField;
 import org.apache.click.util.ClickUtils;
 
@@ -56,7 +54,17 @@ import org.apache.click.util.ClickUtils;
  * is also set to the formated number. The number returned from
  * {@link #getNumber()} is then the formatted number. It is not the orginal Number
  * passed in. To circumvent formatting use setValue().
- * <p/>
+ *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * The NumberField control makes use of the following resources
+ * (which Click automatically deploys to the application directory, <tt>/click</tt>):
+ *
+ * <ul>
+ * <li><tt>click/extras-control.js</tt></li>
+ * </ul>
+ *
  * The NumberField uses a JavaScript onkeypress() doubleFilter() method to prevent
  * users from entering invalid characters.  To enable number key filtering
  * reference the variables <tt class="blue">$jsElements</tt> and
@@ -115,7 +123,7 @@ public class NumberField extends TextField {
         + "   '}'\n"
         + "'}'\n";
 
-    /** The NumberField.js imports statement. */
+    /** The NumberField imports statement. */
     public static final String HTML_IMPORTS =
         "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n";
 
@@ -393,12 +401,16 @@ public class NumberField extends TextField {
     }
 
     /**
-     * Return the HTML head import statements for the JavaScript
-     * (<tt>click/extras-control.js</tt>) file.
+     * Return the NumberField HTML head imports statements for the following
+     * resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/extras-control.js</tt></li>
+     * </ul>
      *
      * @see org.apache.click.Control#getHtmlImports()
      *
-     * @return the HTML head import statements for the JavaScript file
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
@@ -429,20 +441,6 @@ public class NumberField extends TextField {
     }
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * Deploy the <tt>extras-control.js</tt> file to the <tt>click</tt> web
-     * directory when the application is initialized.
-     *
-     * @see org.apache.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext,
-                              "/org/apache/click/extras/control/extras-control.js",
-                              "click");
-    }
 
     /**
      * Validates the NumberField request submission. If the value entered

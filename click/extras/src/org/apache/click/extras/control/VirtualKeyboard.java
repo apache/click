@@ -13,8 +13,6 @@
  */
 package org.apache.click.extras.control;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.control.TextField;
 import org.apache.click.util.ClickUtils;
 
@@ -24,7 +22,7 @@ import org.apache.click.util.ClickUtils;
  * <table class='htmlHeader' cellspacing='10'>
  * <tr>
  * <td>
- * <img align='middle' hspace='2'src='virtual-keyboard.gif' title='Virtual Keyboard'/>
+ * <img align='middle' hspace='2' src='virtual-keyboard.gif' title='Virtual Keyboard'/>
  * </td>
  * </tr>
  * </table>
@@ -35,7 +33,7 @@ import org.apache.click.util.ClickUtils;
  * <b>Virtual keyboard interfaces</b> are generally used in websites where the highest
  * level of security is a must like online banking applications.
  * Virtual keyboards help to prevent any keylogging activies and/or provide
- * users a special keyboard which they don�t already have (like a keyboard of
+ * users a special keyboard which they don't already have (like a keyboard of
  * another language).
  *
  * <h3>Keyboard Layout Support</h3>
@@ -44,6 +42,22 @@ import org.apache.click.util.ClickUtils;
  * Polish Programmers, Portuguese, Russian, Slovenian, Spanish (Spain),
  * Turkish-F, Turkish-QWERTY, UK, US Standard and US International keyboard layouts,
  * dynamically selectable.
+ *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * The VirtualKeyboard control makes use of the following resources
+ * (which Click automatically deploys to the application directory, <tt>/click</tt>):
+ *
+ * <ul>
+ * <li><tt>click/keyboard.css</tt></li>
+ * <li><tt>click/keyboard.js</tt></li>
+ * <li><tt>click/keyboard.png</tt></li>
+ * </ul>
+ *
+ * To import these VirtualKeyboard files simply reference the variables
+ * <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template.
  *
  * <h4>Credits</h4>
  * This control based on the <a href="http://www.greywyvern.com/code/js/keyboard.html">Greywyvern</a> JavaScript library.
@@ -56,7 +70,7 @@ public class VirtualKeyboard extends TextField {
 
     private static final long serialVersionUID = 1L;
 
-     /** The HTML import statements. */
+     /** The VirtualKeyboard imports statement. */
     public static final String HTML_IMPORTS =
           "<script type=\"text/javascript\">var keyboard_png_path=\"{0}/click/keyboard{1}.png\";</script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/keyboard{1}.js\" charset=\"UTF-8\"></script>\n"
@@ -98,30 +112,20 @@ public class VirtualKeyboard extends TextField {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Returns the HTML head import statements for the JavaScript
-     * (<tt>click/keyboard.js</tt>) and CSS (<tt>click/keyboard.css</tt>) files.
+     * Return the VirtualKeyboard HTML head imports statements for the following
+     * resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/keyboard.css</tt></li>
+     * <li><tt>click/keyboard.js</tt></li>
+     * <li><tt>click/keyboard.png</tt></li>
+     * </ul>
      *
      * @see org.apache.click.Control#getHtmlImports()
      *
-     * @return the HTML head import statements for the JavaScript and CSS files
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
-    }
-
-    /**
-     * Deploy the static resource files in the VirtualKeyboard control.
-     *
-     * @see org.apache.click.control.Field#onDeploy(javax.servlet.ServletContext)
-     *
-     * @param servletContext the ServletContext
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFiles(servletContext,
-                new String[]{
-                        "/org/apache/click/extras/control/keyboard.css",
-                        "/org/apache/click/extras/control/keyboard.js",
-                        "/org/apache/click/extras/control/keyboard.png"},
-                "click");
     }
 }

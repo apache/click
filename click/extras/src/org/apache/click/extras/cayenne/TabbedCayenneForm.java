@@ -23,8 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.extras.control.TabbedForm;
@@ -34,12 +32,27 @@ import org.apache.click.util.HtmlStringBuffer;
 /**
  * Provides Cayenne data aware tabbed Form control: &nbsp; &lt;form method='POST'&gt;.
  * <p/>
- * This control provides t form capabilities to the standard CayenneForm.
+ * This control provides tab capabilities to the standard CayenneForm.
  * For more information and examples please see:
  * <ul>
  * <li>{@link CayenneForm}</li>
  * <li>{@link org.apache.click.extras.control.TabbedForm}</li>
  * </ul>
+ *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * In addition to <a href="../../../../../../click-api/org/apache/click/control/Form.html#resources">Form's resources</a>,
+ * the TabbedCayenneForm control makes use of the following resources (which Click
+ * automatically deploys to the application directory, <tt>/click</tt>):
+ *
+ * <ul>
+ * <li><tt>click/extras-control.css</tt></li>
+ * </ul>
+ *
+ * To import these TabbedCayenneForm files simply reference the variables
+ * <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template.
  *
  * <p>&nbsp;</p>
  *
@@ -159,13 +172,21 @@ public class TabbedCayenneForm extends CayenneForm {
     }
 
     /**
-     * Return the HTML head import statements for the CSS stylesheet file:
-     * <tt>click/TabbedForm.css</tt>.
+     * Return the TabbedCayenneForm HTML head imports statements for the
+     * following resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/extras-control.css</tt></li>
+     * </ul>
+     * <p/>
+     * Additionally all the {@link org.apache.click.control.Form#getHtmlImports()
+     * Form import statements} are also returned.
      *
-     * @return the HTML head import statements for the control stylesheet and
-     * JavaScript files
+     * @see org.apache.click.Control#getHtmlImports()
+     *
+     * @return the HTML head import statements for the control
      */
-    public String getHtmlImports() {
+     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(512);
         buffer.append(super.getHtmlImports());
         buffer.append(ClickUtils.createHtmlImport(TabbedForm.HTML_IMPORTS, getContext()));
@@ -262,20 +283,6 @@ public class TabbedCayenneForm extends CayenneForm {
     }
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * Deploy the <tt>table.css</tt> file to the <tt>click</tt> web
-     * directory when the application is initialized.
-     *
-     * @see org.apache.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext,
-                              "/org/apache/click/extras/control/TabbedForm.css",
-                              "click");
-    }
 
     /**
      * Process the Form request. In addition to the normal Form

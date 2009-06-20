@@ -44,11 +44,26 @@ import org.apache.click.util.HtmlStringBuffer;
  * The ColorPicker control will validate wheter the entered color is present (if required) and that it
  * is a valid hex color either in 3-digit presentation (ie #EEE) or 6-digit presentation (ie #EEEEEE).
  * If the color is not required the color-picker popup will show a button for 'no-color' on the top-left.
+ *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * ColorPicker depends on the <a class="external" target="_blank" href="http://www.prototypejs.org">Prototype</a>
+ * JavaScript library.
  * <p/>
- * The color picker popup is based on JS script code from
- * <a target="_blank" href="http://www.dhtmlgoodies.com/index.html?whichScript=submitted-color-picker">www.dhtmlgoodies.com</a>.
- * To enable the color popup, reference the variables <span class="blue">$headElements</span>
- * and <span class="blue">$jsElements</span> in the page template. For example:
+ * The ColorPicker control makes use of the following resources
+ * (which Click automatically deploys to the application directories,
+ * <tt>/click/colorpicker</tt> and <tt>/click/prototype</tt>):
+ *
+ * <ul>
+ * <li><tt>click/colorpicker/colorpicker.css</tt></li>
+ * <li><tt>click/prototype/prototype.js</tt></li>
+ * <li><tt>click/colorpicker/colorpicker.js</tt></li>
+ * </ul>
+ *
+ * To import these ColorPicker files simply reference the variables
+ * <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
@@ -63,6 +78,11 @@ import org.apache.click.util.HtmlStringBuffer;
  * &lt;/body&gt;
  * &lt;/html&gt; </pre>
  *
+ * <h4>Credits</h4>
+ *
+ * The color picker popup is based on JS script code from
+ * <a target="_blank" href="http://www.dhtmlgoodies.com/index.html?whichScript=submitted-color-picker">www.dhtmlgoodies.com</a>.
+ *
  * @author Christian Essl
  */
 public class ColorPicker extends Field {
@@ -71,7 +91,7 @@ public class ColorPicker extends Field {
 
     private static final long serialVersionUID = 1L;
 
-    /** The HTML imports statements. */
+    /** The ColorPicker imports statements. */
     static final String HTML_IMPORTS =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/colorpicker/colorpicker{1}.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype{1}.js\"></script>\n"
@@ -170,14 +190,18 @@ public class ColorPicker extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the HTML head import statements for the JavaScript and CSS files
-     * <tt>click/colorpicker/colorpicker.css</tt>
-     * <tt>click/prototype/prototype.js</tt>) and
-     * <tt>click/colorpicker/colorpicker.js</tt>.
+     * Return the ColorPicker HTML head imports statements for the following
+     * resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/colorpicker/colorpicker.css</tt></li>
+     * <li><tt>click/prototype/prototype.js</tt></li>
+     * <li><tt>click/colorpicker/colorpicker.js</tt></li>
+     * </ul>
      *
-     * @see org.apache.click.control.Field#getHtmlImports()
+     * @see org.apache.click.Control#getHtmlImports()
      *
-     * @return the HTML head import statements for prototype.js and colorpicker.js
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());

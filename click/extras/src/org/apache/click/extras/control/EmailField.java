@@ -20,8 +20,6 @@ package org.apache.click.extras.control;
 
 import java.text.MessageFormat;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.control.TextField;
 import org.apache.click.util.ClickUtils;
 
@@ -37,7 +35,22 @@ import org.apache.click.util.ClickUtils;
  *
  * EmailField will validate the email when the control is processed and invoke
  * the control listener if defined.
+ *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * The EmailField control makes use of the following resources
+ * (which Click automatically deploys to the application directory, <tt>/click</tt>):
+ *
+ * <ul>
+ * <li><tt>click/extras-control.js</tt></li>
+ * </ul>
+ *
+ * To import this EmailField file simply reference the variables
+ * <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template.
  * <p/>
+ *
  * See also W3C HTML reference
  * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
  *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.4">INPUT</a>
@@ -167,12 +180,16 @@ public class EmailField extends TextField {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the HTML head import statements for the JavaScript
-     * (<tt>click/extras-control.js</tt>) file.
+     * Return the EmailField HTML head imports statements for the following
+     * resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/extras-control.js</tt></li>
+     * </ul>
      *
      * @see org.apache.click.Control#getHtmlImports()
      *
-     * @return the HTML head import statements for the JavaScript file
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
@@ -204,20 +221,6 @@ public class EmailField extends TextField {
     }
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * Deploy the <tt>extras-control.js</tt> file to the <tt>click</tt> web
-     * directory when the application is initialized.
-     *
-     * @see org.apache.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext,
-                              "/org/apache/click/extras/control/extras-control.js",
-                              "click");
-    }
 
     /**
      * Process the EmailField request submission.

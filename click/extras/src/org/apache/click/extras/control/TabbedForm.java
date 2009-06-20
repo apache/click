@@ -23,8 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
@@ -55,50 +53,50 @@ import org.apache.click.util.HtmlStringBuffer;
  * and "Payment Details" tab sheets, is provided below. Note how tabsheets
  * are created with {@link FieldSet} control which are added to the form.
  *
- * <pre class="codeJava">
- * <span class="kw">public</span> DeliveryDetailsEditor() {
+ * <pre class="prettyprint">
+ * public DeliveryDetailsEditor() {
  *
- *     form.setBackgroundColor(<span class="st">"#F7FFAF"</span>);
- *     form.setTabHeight(<span class="st">"210px"</span>);
- *     form.setTabWidth(<span class="st">"420px"</span>);
+ *     form.setBackgroundColor("#F7FFAF");
+ *     form.setTabHeight("210px");
+ *     form.setTabWidth("420px");
  *
- *     <span class="green">// Contact tab sheet</span>
+ *     // Contact tab sheet
  *
- *     FieldSet contactTabSheet = <span class="kw">new</span> FieldSet(<span class="st">"contactDetails"</span>);
+ *     FieldSet contactTabSheet = new FieldSet("contactDetails");
  *     form.addTabSheet(contactTabSheet);
  *
- *     contactTabSheet.add(<span class="kw">new</span> TitleSelect(<span class="st">"title"</span>));
- *     contactTabSheet.add(<span class="kw">new</span> TextField(<span class="st">"firstName"</span>));
- *     contactTabSheet.add(<span class="kw">new</span> TextField(<span class="st">"middleNames"</span>));
- *     contactTabSheet.add(<span class="kw">new</span> TextField(<span class="st">"surname"</span>, <span class="kw">true</span>));
+ *     contactTabSheet.add(new TitleSelect("title"));
+ *     contactTabSheet.add(new TextField("firstName"));
+ *     contactTabSheet.add(new TextField("middleNames"));
+ *     contactTabSheet.add(new TextField("surname", true));
  *     contactTabSheet.add(contactNumber);
- *     contactTabSheet.add(<span class="kw">new</span> EmailField(<span class="st">"email"</span>));
+ *     contactTabSheet.add(new EmailField("email"));
  *
- *     <span class="green">// Delivery tab sheet</span>
+ *     // Delivery tab sheet
  *
- *     FieldSet deliveryTabSheet = <span class="kw">new</span> FieldSet("deliveryDetails");
+ *     FieldSet deliveryTabSheet = new FieldSet("deliveryDetails");
  *     form.addTabSheet(deliveryTabSheet);
  *
- *     TextArea textArea = <span class="kw">new</span> TextArea(<span class="st">"deliveryAddress"</span>, <span class="kw">true</span>);
+ *     TextArea textArea = new TextArea("deliveryAddress", true);
  *     textArea.setCols(30);
  *     textArea.setRows(3);
  *     deliveryTabSheet.add(textArea);
  *
- *     deliveryTabSheet.add(<span class="kw">new</span> DateField(<span class="st">"deliveryDate"</span>));
+ *     deliveryTabSheet.add(new DateField("deliveryDate"));
  *
- *     PackagingRadioGroup packaging = <span class="kw">new</span> PackagingRadioGroup(<span class="st">"packaging"</span>);
- *     packaging.setValue(<span class="st">"STD"</span>);
+ *     PackagingRadioGroup packaging = new PackagingRadioGroup("packaging");
+ *     packaging.setValue("STD");
  *     deliveryTabSheet.add(packaging);
  *
  *     deliveryTabSheet.add(telephoneOnDelivery);
  *
- *     <span class="green">// Payment tab sheet</span>
+ *     // Payment tab sheet
  *
- *     FieldSet paymentTabSheet = <span class="kw">new</span> FieldSet(<span class="st">"paymentDetails"</span>);
+ *     FieldSet paymentTabSheet = new FieldSet("paymentDetails");
  *     form.addTabSheet(paymentTabSheet);
  *
- *     paymentGroup.add(<span class="kw">new</span> Radio(<span class="st">"cod"</span>, <span class="st">"Cash On Delivery"</span>));
- *     paymentGroup.add(<span class="kw">new</span> Radio(<span class="st">"credit"</span>, <span class="st">"Credit Card"</span>));
+ *     paymentGroup.add(new Radio("cod", "Cash On Delivery"));
+ *     paymentGroup.add(new Radio("credit", "Credit Card"));
  *     paymentGroup.setVerticalLayout(false);
  *     paymentTabSheet.add(paymentGroup);
  *
@@ -108,13 +106,28 @@ import org.apache.click.util.HtmlStringBuffer;
  *     expiry.setSize(4);
  *     expiry.setMaxLength(4);
  *
- *     <span class="green">// Buttons</span>
+ *     // Buttons
  *
- *     form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>,  <span class="kw">this</span>, <span class="st">"onOkClick"</span>));
- *     form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClick"</span>));
+ *     form.add(new Submit("ok", "   OK   ",  this, "onOkClick"));
+ *     form.add(new Submit("cancel", this, "onCancelClick"));
  *
  *     addControl(form);
  * } </pre>
+ *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * In addition to <a href="../../../../../../click-api/org/apache/click/control/Form.html#resources">Form's resources</a>,
+ * the TabbedForm control makes use of the following resources (which Click
+ * automatically deploys to the application directory, <tt>/click</tt>):
+ *
+ * <ul>
+ * <li><tt>click/extras-control.css</tt></li>
+ * </ul>
+ *
+ * To import these TabbedForm files simply reference the variables
+ * <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template.
  *
  * @author Malcolm Edgar
  */
@@ -124,7 +137,7 @@ public class TabbedForm extends Form {
 
     private static final long serialVersionUID = 1L;
 
-    /** The TabbedForm.css style sheet import link. */
+    /** The TabbedForm imports statement. */
     public static final String HTML_IMPORTS = Form.HTML_IMPORTS
         + "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/extras-control{1}.css\"/>\n";
 
@@ -233,11 +246,19 @@ public class TabbedForm extends Form {
     }
 
     /**
-     * Return the HTML head import statements for the CSS stylesheet file:
-     * <tt>click/TabbedForm.css</tt>.
+     * Return the TabbedForm HTML head imports statements for the following
+     * resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/extras-control.css</tt></li>
+     * </ul>
+     * <p/>
+     * Additionally all the {@link org.apache.click.control.Form#getHtmlImports()
+     * Form import statements} are also returned.
      *
-     * @return the HTML head import statements for the control stylesheet and
-     * JavaScript files
+     * @see org.apache.click.Control#getHtmlImports()
+     *
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(512);
@@ -327,20 +348,6 @@ public class TabbedForm extends Form {
     }
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * Deploy the <tt>table.css</tt> file to the <tt>click</tt> web
-     * directory when the application is initialized.
-     *
-     * @see org.apache.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext,
-                              "/org/apache/click/extras/control/extras-control.css",
-                              "click");
-    }
 
     /**
      * Process the Form request. In addition to the normal Form

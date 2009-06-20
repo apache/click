@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.Context;
 import org.apache.click.control.Decorator;
 import org.apache.click.control.Form;
@@ -65,12 +63,15 @@ import org.apache.commons.lang.ArrayUtils;
  *     protected Form form;
  *
  *     public PlainTreePage() {
- *         Tree tree = createTree();
- *         form = createForm();
- *         form.add(tree);
+ *         form = new Form("form");
  *         addControl(form);
+ *
+ *         Tree tree = createTree();
+ *         form.add(tree);
+ *
  *         submit = new Submit("submit", this, "onSubmitClick");
  *         cancel = new Submit("cancel", this, "onCancelClick");
+ *
  *         form.add(submit);
  *         form.add(cancel);
  *     }
@@ -103,28 +104,22 @@ import org.apache.commons.lang.ArrayUtils;
  *         tree.setRootNode(root);
  *         return tree;
  *     }
- *
- *     public Form createForm() {
- *         Form form = new Form("form") {
- *             // PLEASE NOTE: CheckboxTree will only be processed by form if the
- *             // Form is submitted. Thus expanding and collapsing Tree nodes
- *             // won't work by default because the Tree won't be processed.
- *
- *             // Here we override the default behavior and explicitly process
- *             // CheckboxTree so that expanding and collapsing nodes will still work,
- *             // even if the Form was not submitted.
- *             public boolean onProcess() {
- *                 if (form.isFormSubmission()) {
- *                     return super.onProcess();
- *                 } else {
- *                     return tree.onProcess();
- *                 }
- *             }
- *         };
- *
- *         return form;
- *     }
  * } </pre>
+ *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * In addition to <a href="Tree.html#resources">Tree's resources</a>,
+ * the CheckboxTree control makes use of the following resources
+ * (which Click automatically deploys to the application directory, <tt>/click/tree</tt>):
+ *
+ * <ul>
+ * <li><tt>click/tree/checkbox-tree.js</tt></li>
+ * </ul>
+ *
+ * To import these Tree files simply reference the variables
+ * <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template.
  *
  * @see Tree
  *
@@ -137,11 +132,6 @@ public class CheckboxTree extends Tree {
     /** Client side javascript import. This extends on the functions available in {@link Tree}. */
     public static final String HTML_IMPORTS =
             "<script type=\"text/javascript\" src=\"{0}/click/tree/checkbox-tree{1}.js\"></script>\n";
-
-    /** The Tree resource file names. */
-    protected static final String[] TREE_RESOURCES = {
-        "/org/apache/click/extras/tree/checkbox-tree.js"
-    };
 
     /** default serial version id. */
     private static final long serialVersionUID = 1L;
@@ -212,13 +202,19 @@ public class CheckboxTree extends Tree {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Return the HTML head import statements for the CSS stylesheet file:
-     * <tt>click/tree/checkbox-tree.js</tt>.
+     * Return the CheckboxTree HTML head imports statements for the following
+     * resources:
      * <p/>
-     * This method calls super.getHtmlImports() to retrieve any imports defined in the
-     * super class.
+     * <ul>
+     * <li><tt>click/tree/checkbox-tree.js</tt></li>
+     * </ul>
+     * <p/>
+     * Additionally all the {@link Tree#getHtmlImports() Tree import statements}
+     * are also returned.
      *
-     * @return the HTML head import statements for the control stylesheet
+     * @see org.apache.click.Control#getHtmlImports()
+     *
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(256);
@@ -228,23 +224,6 @@ public class CheckboxTree extends Tree {
         }
         buffer.append(super.getHtmlImports());
         return buffer.toString();
-    }
-
-    /**
-     * Deploy all files defined in the constant <tt>{@link #TREE_RESOURCES}</tt>
-     * to the <tt>click/tree</tt> web directory when the application is initialized.
-     * <p/>
-     * This method calls super.onDeploy() to copy any files defined in the
-     * super class.
-     *
-     * @param servletContext the servlet context
-     * @see org.apache.click.Control#onDeploy(ServletContext)
-     */
-    public void onDeploy(ServletContext servletContext) {
-        super.onDeploy(servletContext);
-        ClickUtils.deployFiles(servletContext,
-                               TREE_RESOURCES,
-                               "click/tree");
     }
 
     /**
