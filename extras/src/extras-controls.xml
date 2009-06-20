@@ -20,20 +20,6 @@
 <click-app>
 
   <controls>
-    <control classname="org.apache.click.extras.control.CheckList"/>
-    <control classname="org.apache.click.extras.control.CreditCardField"/>
-    <control classname="org.apache.click.extras.control.EmailField"/>
-    <control classname="org.apache.click.extras.control.IntegerField"/>
-    <control classname="org.apache.click.extras.control.PickList"/>
-    <control classname="org.apache.click.extras.control.Menu"/>
-    <control classname="org.apache.click.extras.control.RegexField"/>
-    <control classname="org.apache.click.extras.control.SubmitLink"/>
-    <control classname="org.apache.click.extras.control.TabbedForm"/>
-    <control classname="org.apache.click.extras.control.VirtualKeyboard"/>
-    <control classname="org.apache.click.extras.panel.ListPanel"/>
-    <control classname="org.apache.click.extras.panel.TabbedPanel"/>
-    <control classname="org.apache.click.extras.tree.CheckboxTree"/>
-    <control classname="org.apache.click.extras.tree.Tree"/>
   </controls>
 
 </click-app>

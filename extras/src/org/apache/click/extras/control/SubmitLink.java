@@ -21,7 +21,6 @@ package org.apache.click.extras.control;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.click.Context;
 import org.apache.click.control.ActionLink;
@@ -92,9 +91,12 @@ import org.apache.commons.lang.StringUtils;
  *     }
  * } </pre>
  *
- * <h3>JavaScript and CSS Dependencies</h3>
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
  *
- * When SubmitLink is added to a Form it will include the following resources:
+ * When SubmitLink is added to a Form it makes use of the following resources
+ * (which Click automatically deploys to the application directory, <tt>/click</tt>):
+ *
  * <ul>
  * <li>/click/extras-control.js</li>
  * </ul>
@@ -437,11 +439,10 @@ public class SubmitLink extends ActionLink {
 
     /**
      * Return the list of HEAD {@link org.apache.click.element.Element elements}
-     * to be included in the page.
+     * to be included in the page. The list of resources are:
      * <p/>
-     * The list of resources returned are:
      * <ul>
-     * <li>the template "/click/extras-control.js"</li>
+     * <li>click/extras-control.js</li>
      * </ul>
      *
      * @return the list of HEAD elements to be included in the page
@@ -478,20 +479,6 @@ public class SubmitLink extends ActionLink {
         }
 
         super.render(buffer);
-    }
-
-    /**
-     * Deploy the <tt>extras-control.js</tt> file to the <tt>click</tt> web
-     * directory when the application is initialized.
-     *
-     * @see org.apache.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext,
-                              "/org/apache/click/extras/control/extras-control.js",
-                              "click");
     }
 
     // -------------------------------------------------------- Private Methods

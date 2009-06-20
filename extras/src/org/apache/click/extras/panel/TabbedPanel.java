@@ -18,8 +18,6 @@
  */
 package org.apache.click.extras.panel;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.ActionListener;
 import org.apache.click.Control;
 import org.apache.click.control.ActionLink;
@@ -108,6 +106,33 @@ import org.apache.commons.lang.math.NumberUtils;
  *   background: #efefef;
  * } </pre>
  *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * The TabbedPanel makes use of the following resources
+ * (which Click automatically deploys to the application directory, <tt>/click/</tt>):
+ *
+ * <ul>
+ * <li><tt>click/TabbedPanel.css</tt></li>
+ * </ul>
+ *
+ * To import these TabbedPanel files simply reference the variables
+ * <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template. For example:
+ *
+ * <pre class="codeHtml">
+ * &lt;html&gt;
+ * &lt;head&gt;
+ * <span class="blue">$headElements</span>
+ * &lt;/head&gt;
+ * &lt;body&gt;
+ *
+ * <span class="red">$panel</span>
+ *
+ * <span class="blue">$jsElements</span>
+ * &lt;/body&gt;
+ * &lt;/html&gt; </pre>
+ *
  * @author Phil Barnes
  * @author Malcolm Edgar
  */
@@ -115,7 +140,7 @@ public class TabbedPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    /** The TabbedPanel.css style sheet import link. */
+    /** The TabbedPanel imports statements. */
     public static final String HTML_IMPORTS =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/TabbedPanel{1}.css\"/>\n";
 
@@ -229,10 +254,19 @@ public class TabbedPanel extends Panel {
     }
 
     /**
-     * Return the HTML head import statements for the CSS stylesheet file:
-     * <tt>click/TabbedPanel.css</tt>.
+     * Return the TabbedPanel HTML head imports statements for the following
+     * resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/TabbedPanel.css</tt></li>
+     * </ul>
+     * <p/>
+     * Additionally all {@link #getControls() controls} import statements are
+     * also returned.
      *
-     * @return the HTML head import statements for the control stylesheet
+     * @see org.apache.click.Control#getHtmlImports()
+     *
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(512);
@@ -352,20 +386,6 @@ public class TabbedPanel extends Panel {
     }
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * Deploy the <tt>TabbedPanel.css</tt> file to the <tt>click</tt> web
-     * directory when the application is initialized.
-     *
-     * @see org.apache.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext,
-                              "/org/apache/click/extras/panel/TabbedPanel.css",
-                              "click");
-    }
 
     /**
      * Initialize the child controls contained in the panel. Note with the child

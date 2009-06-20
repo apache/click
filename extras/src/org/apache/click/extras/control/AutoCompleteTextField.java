@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.click.Context;
@@ -58,9 +57,25 @@ import org.apache.click.util.HtmlStringBuffer;
  * };
  * form.add(nameField); </pre>
  *
- * <p>
- * This control uses the JavaScript 'script.aculo.us' <tt>Ajax.Autocompleter</tt> class.
- * </p>
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * AutoCompleteTextField depends on the <a class="external" target="_blank" href="http://www.prototypejs.org">Prototype</a>
+ * and <a class="external" target="_blank" href="http://script.aculo.us/">Scriptaculous/</a>
+ * JavaScript libraries to handle the auto-complete functionality. See
+ * <a class="external" target="_blank" href="http://wiki.github.com/madrobby/scriptaculous/ajax-autocompleter">Ajax.Autocompleter</a>
+ * for more details.
+ * <p/>
+ * The AutoCompleteTextField control makes use of the following resources
+ * (which Click automatically deploys to the application directory, <tt>/click</tt>):
+ *
+ * <ul>
+ * <li><tt>click/extras-control.css</tt></li>
+ * <li><tt>click/control.js</tt></li>
+ * <li><tt>click/prototype/prototype.js</tt></li>
+ * <li><tt>click/prototype/effects.js</tt></li>
+ * <li><tt>click/prototype/controls.js</tt></li>
+ * </ul>
  *
  * See also the W3C HTML reference:
  * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
@@ -73,13 +88,6 @@ public abstract class AutoCompleteTextField extends TextField {
     // -------------------------------------------------------------- Constants
 
     private static final long serialVersionUID = 1L;
-
-    /** The Prototype resource file names. */
-    static final String[] PROTOTYPE_RESOURCES = {
-        "/org/apache/click/extras/control/prototype/controls.js",
-        "/org/apache/click/extras/control/prototype/effects.js",
-        "/org/apache/click/extras/control/prototype/prototype.js",
-    };
 
     // ----------------------------------------------------- Instance Variables
 
@@ -236,9 +244,9 @@ public abstract class AutoCompleteTextField extends TextField {
     }
 
     /**
-     * Return the list of HEAD elements to be included in the page.
+     * Return the list of HEAD {@link org.apache.click.element.Element elements}
+     * (resources) to be included in the page. The resources are:
      * <p/>
-     * This list of resources returned are:
      * <ul>
      * <li>/click/extras-control.css</li>
      * <li>/click/control.js</li>
@@ -390,22 +398,6 @@ public abstract class AutoCompleteTextField extends TextField {
             }
         }
         return true;
-    }
-
-    /**
-     * Deploys the controls static CSS and JavaScript resources.
-     *
-     * @see org.apache.click.control.Field#onDeploy(javax.servlet.ServletContext)
-     *
-     * @param servletContext the context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext, "click/control.js", "click");
-        ClickUtils.deployFile(servletContext, "click/extras-control.css", "click");
-
-        ClickUtils.deployFiles(servletContext,
-                               PROTOTYPE_RESOURCES,
-                               "click/prototype");
     }
 
     // ------------------------------------------------------ Protected Methods

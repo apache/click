@@ -22,8 +22,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
 import org.apache.click.control.TextField;
@@ -46,7 +44,17 @@ import org.apache.click.util.HtmlStringBuffer;
  * when the control is processed.
  * <p/>
  * Supported card include VISA, MASTER, AMEX, DINERS and DISCOVER.
- * <p/>
+ *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * The CreditCardField control makes use of the following resources
+ * (which Click automatically deploys to the application directory, <tt>/click</tt>):
+ *
+ * <ul>
+ * <li><tt>click/extras-control.js</tt></li>
+ * </ul>
+ *
  * The CreditCardField uses a JavaScript onkeypress() integerFilter() method to
  * prevent users from entering invalid characters. To enable number key filtering
  * reference the variables <span class="blue">$headElements</span> and
@@ -286,9 +294,16 @@ public class CreditCardField extends TextField {
     }
 
     /**
-     * Return the HTML head import statements for the CreditCardField.js.
+     * Return the CreditCardField HTML head imports statements for the following
+     * resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/extras-control.js</tt></li>
+     * </ul>
      *
-     * @return the HTML head import statements for the CreditCardField.js
+     * @see org.apache.click.Control#getHtmlImports()
+     *
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
@@ -444,19 +459,4 @@ public class CreditCardField extends TextField {
             }
         }
     }
-
-    /**
-     * Deploy the <tt>extras-control.js</tt> file to the <tt>click</tt> web
-     * directory when the application is initialized.
-     *
-     * @see org.apache.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext,
-                              "/org/apache/click/extras/control/extras-control.js",
-                              "click");
-    }
-
 }

@@ -22,8 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.Context;
 import org.apache.click.control.Field;
 import org.apache.click.control.Option;
@@ -76,7 +74,7 @@ import org.apache.commons.lang.StringUtils;
  * The selected values can be retrieved from {@link #getSelectedValues()}. The
  * get/setValue() property is not supported.
  * <p/>
- * The select uses the /click/checklist.css style. By providing a style which
+ * The select uses the /click/checklist/checklist.css style. By providing a style which
  * extends this style the appearance of the list can be changed.
  * <p/>
  * To set the additional style class use {@link #addStyleClass(String)}.
@@ -85,6 +83,28 @@ import org.apache.commons.lang.StringUtils;
  * of the outer div.
  * <p/>
  * For an example please look at the click-examples and the at the above blog.
+ *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * The CheckList control makes use of the following resources
+ * (which Click automatically deploys to the application directories,
+ * <tt>/click/checklist</tt> and <tt>/click/prototype</tt>):
+ *
+ * <ul>
+ * <li><tt>click/checklist/checklist.css</tt></li>
+ * <li><tt>click/checklist/checklist.js</tt></li>
+ * <li><tt>click/prototype/builder.js</tt></li>
+ * <li><tt>click/prototype/controls.js</tt></li>
+ * <li><tt>click/prototype/dragdrop.js</tt></li>
+ * <li><tt>click/prototype/effects.js</tt></li>
+ * <li><tt>click/prototype/prototype.js</tt></li>
+ * <li><tt>click/prototype/slider.js</tt></li>
+ * </ul>
+ *
+ * To import these CheckList files simply reference the variables
+ * <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template.
  *
  * @see org.apache.click.control.Option
  *
@@ -96,23 +116,7 @@ public class CheckList extends Field {
 
     private static final long serialVersionUID = 1L;
 
-    /** The Checklist resource file names. */
-    static final String[] CHECKLIST_RESOURCES = {
-        "/org/apache/click/extras/control/checklist/checklist.css",
-        "/org/apache/click/extras/control/checklist/checklist.js"
-    };
-
-    /** The Prototype resource file names. */
-    static final String[] PROTOTYPE_RESOURCES = {
-        "/org/apache/click/extras/control/prototype/builder.js",
-        "/org/apache/click/extras/control/prototype/controls.js",
-        "/org/apache/click/extras/control/prototype/dragdrop.js",
-        "/org/apache/click/extras/control/prototype/effects.js",
-        "/org/apache/click/extras/control/prototype/prototype.js",
-        "/org/apache/click/extras/control/prototype/slider.js"
-    };
-
-    /** The HTML import statements. */
+    /** The CheckList import statements. */
     public static final String HTML_IMPORTS =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/checklist/checklist{1}.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/checklist/checklist{1}.js\"></script>\n";
@@ -472,12 +476,23 @@ public class CheckList extends Field {
     }
 
     /**
-     * Returns the CSS and JavaScript imports and adds the script the checklist
-     * onload event.
+     * Return the CheckList HTML head imports statements for the following
+     * resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/checklist/checklist.css</tt></li>
+     * <li><tt>click/checklist/checklist.js</tt></li>
+     * <li><tt>click/prototype/builder.js</tt></li>
+     * <li><tt>click/prototype/controls.js</tt></li>
+     * <li><tt>click/prototype/dragdrop.js</tt></li>
+     * <li><tt>click/prototype/effects.js</tt></li>
+     * <li><tt>click/prototype/prototype.js</tt></li>
+     * <li><tt>click/prototype/slider.js</tt></li>
+     * </ul>
      *
-     * @see org.apache.click.control.Field#getHtmlImports()
+     * @see org.apache.click.Control#getHtmlImports()
      *
-     * @return the two import tags
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         Context context = getContext();
@@ -760,23 +775,6 @@ public class CheckList extends Field {
             }
         }
         options.addAll(0, orderList);
-    }
-
-    /**
-     * Deploys the style-sheet 'checklist.css' to the /click directory.
-     *
-     * @see org.apache.click.control.Field#onDeploy(javax.servlet.ServletContext)
-     *
-     * @param servletContext the context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFiles(servletContext,
-                               CHECKLIST_RESOURCES,
-                               "click/checklist");
-
-        ClickUtils.deployFiles(servletContext,
-                               PROTOTYPE_RESOURCES,
-                               "click/prototype");
     }
 
     /**

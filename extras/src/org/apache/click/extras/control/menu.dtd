@@ -23,10 +23,10 @@
 <!ELEMENT menu (menu*)>
     <!ATTLIST menu label CDATA #IMPLIED>
     <!ATTLIST menu path CDATA #IMPLIED>
+    <!ATTLIST menu target CDATA #IMPLIED>
     <!ATTLIST menu title CDATA #IMPLIED>
+    <!ATTLIST menu imageSrc CDATA #IMPLIED>
+    <!ATTLIST menu external (true|false) "false">
+    <!ATTLIST menu separator (true|false) "false">
     <!ATTLIST menu roles CDATA #IMPLIED>
     <!ATTLIST menu pages CDATA #IMPLIED>
-
-  
-  
-  

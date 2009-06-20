@@ -21,8 +21,6 @@ package org.apache.click.extras.control;
 import java.text.MessageFormat;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.control.TextField;
 import org.apache.click.util.ClickUtils;
 
@@ -61,7 +59,22 @@ import org.apache.click.util.ClickUtils;
  * expression pattern a
  * <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/PatternSyntaxException.html">PatternSyntaxException</a>
  * will be thrown by the {@link #onProcess()} method.
- * <p>
+ *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * The RegexField control makes use of the following resources
+ * (which Click automatically deploys to the application directory, <tt>/click</tt>):
+ *
+ * <ul>
+ * <li><tt>click/extras-control.js</tt></li>
+ * </ul>
+ *
+ * To import these RegexField files simply reference the variables
+ * <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template.
+ * <p/>
+ *
  * See also the W3C HTML reference:
  * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
  *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.4">INPUT</a>
@@ -99,7 +112,7 @@ public class RegexField extends TextField {
         + "   '}'\n"
         + "'}'\n";
 
-    /** The RegexField.js imports statement. */
+    /** The RegexField imports statement. */
     public static final String HTML_IMPORTS =
         "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n";
 
@@ -209,12 +222,15 @@ public class RegexField extends TextField {
     }
 
     /**
-     * Return the HTML head import statements for the JavaScript
-     * (<tt>click/extras-control.js</tt>) file.
+     * Return the RegexField HTML head imports statements for the following
+     * resources:
+     * <ul>
+     * <li><tt>click/extras-control.js</tt></li>
+     * </ul>
      *
      * @see org.apache.click.Control#getHtmlImports()
      *
-     * @return the HTML head import statements for the JavaScript file
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
@@ -284,20 +300,6 @@ public class RegexField extends TextField {
                 setErrorMessage("field-pattern-error", pattern);
             }
         }
-    }
-
-    /**
-     * Deploy the <tt>extras-control.js</tt> file to the <tt>click</tt> web
-     * directory when the application is initialized.
-     *
-     * @see org.apache.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext,
-                              "/org/apache/click/extras/control/extras-control.js",
-                              "click");
     }
 
     // ------------------------------------------------------ Private Methods

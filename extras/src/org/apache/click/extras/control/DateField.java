@@ -69,7 +69,9 @@ import org.apache.click.util.HtmlStringBuffer;
  *     }
  * } </pre>
  *
- * <p/>
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
  * The Calendar popup is provided by the <a target="_blank" class="external" href="http//www.prototypejs.org">Prototype</a>
  * based <a target="_blank" class="external" href="http://code.google.com/p/calendardateselect/">CalendarDateSelect</a>
  * library.
@@ -84,6 +86,17 @@ import org.apache.click.util.HtmlStringBuffer;
  * {@link #setShowCalendar(boolean)} to false. No JavaScript and CSS will be
  * included when this option is false.
  * <p/>
+ * The DateFielld control makes use of the following resources
+ * (which Click automatically deploys to the application directories,
+ * <tt>/click/calendar</tt> and <tt>/click/prototype</tt>):
+ *
+ * <ul>
+ * <li><tt>click/calendar/{style}.css</tt> - where {style} is a specific Calendar style e.g. <tt>default</tt>, <tt>red</tt>, <tt>blue</tt> etc.</li>
+ * <li><tt>click/prototype/prototype.js</tt></li>
+ * <li><tt>click/calendar/calendar_date_select.js</tt></li>
+ * <li><tt>click/calendar/{lang}.js</tt> - where {lang} is the language specified by the browser e.g. <tt>fr</tt> (French), <tt>de</tt> (German) etc.</li>
+ * </ul>
+ *
  * The Calendar popup is created as a &lt;div&gt; element using JavaScript.
  * To enable the Calendar popup, reference <span class="blue">$headElements</span>
  * and <span class="blue">$jsElements</span> in the page template. For example:
@@ -94,10 +107,15 @@ import org.apache.click.util.HtmlStringBuffer;
  * <span class="blue">$headElements</span>
  * &lt;/head&gt;
  * &lt;body&gt;
+ *
  * <span class="red">$form</span>
+ *
+ * <span class="blue">$jsElements</span>
  * &lt;/body&gt;
- * &lt;/html&gt;
- * <span class="blue">$jsElements</span> </pre>
+ * &lt;/html&gt; </pre>
+ *
+ * <a name="styles"></a>
+ * <h3>Calendar Styles</h3>
  *
  * The default Calendar style is 'default' which has a gray theme.
  * The Calendar styles include:
@@ -108,9 +126,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * <li>red</li>
  * <li>silver</li>
  * </ul>
- *
- * The DateField JavaScript, CSS and image resources are automatically deployed
- * to the <tt>click/calendar</tt> web directory on application startup.
  *
  * See also W3C HTML reference
  * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
@@ -513,26 +528,33 @@ public class DateField extends TextField {
     }
 
     /**
-     * Return the DateField <tt>calendar.js</tt> and <tt>calendar-{lang}.js</tt>
-     * includes.
+     * This method returns null.
      *
-     * @return the HTML head import statements for the control stylesheet and
-     * JavaScript files
+     * @see #getHeadElements()
+     *
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         return null;
     }
 
     /**
-     * Return the CalendarField <tt>prototype.js</tt>,
-     * <tt>calendar_date_select.js</tt>, <tt>{lang}.js</tt>
-     * and <tt>{style}.css</tt> includes.
-     * <p/>
+     * Return the DateField HTML head imports statements for the following
+     * resources:
+     *
+     * <ul>
+     * <li><tt>click/calendar/{style}.css</tt> - where {style} is a specific Calendar style e.g. <tt>default</tt>, <tt>red</tt>, <tt>blue</tt> etc.</li>
+     * <li><tt>click/prototype/prototype.js</tt></li>
+     * <li><tt>click/calendar/calendar_date_select.js</tt></li>
+     * <li><tt>click/calendar/{lang}.js</tt> - where {lang} is the language specified by the browser e.g. <tt>fr</tt> (French), <tt>de</tt> (German) etc.</li>
+     * </ul>
+     *
      * This method delegates to {@link #addCalendarOptions(java.util.List)} to
      * include the Calendar Options script.
      *
-     * @return the HTML head import statements for the control stylesheet and
-     * JavaScript files
+     * @see org.apache.click.Control#getHtmlImports()
+     *
+     * @return the HTML head import statements for the control
      */
     public List getHeadElements() {
         // CLK-309. Skip imports if dateField is disabled, readonly or calendar

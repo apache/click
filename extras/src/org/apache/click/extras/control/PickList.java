@@ -26,8 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import org.apache.click.control.Field;
 import org.apache.click.control.Option;
 import org.apache.click.util.ClickUtils;
@@ -95,6 +93,20 @@ import org.apache.click.util.PropertyUtils;
  *     ...
  * } </pre>
  *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * The PickList control makes use of the following resources
+ * (which Click automatically deploys to the application directory, <tt>/click</tt>):
+ *
+ * <ul>
+ * <li><tt>click/extras-control.js</tt></li>
+ * </ul>
+ *
+ * To import these CheckList files simply reference the variables
+ * <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template.
+ *
  * @author Naoki Takezoe
  */
 public class PickList extends Field {
@@ -103,7 +115,7 @@ public class PickList extends Field {
 
     // -------------------------------------------------------------- Constants
 
-    /** The <tt>Palette.js</tt> imports statement. */
+    /** The PickList imports statement. */
     public static final String HTML_IMPORTS =
         "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n";
 
@@ -368,12 +380,16 @@ public class PickList extends Field {
     }
 
     /**
-     * Return the HTML head import statements for the JavaScript
-     * (<tt>click/extras-control.js</tt>) file.
+     * Return the PickList HTML head imports statements for the following
+     * resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/extras-control.js</tt></li>
+     * </ul>
      *
      * @see org.apache.click.Control#getHtmlImports()
      *
-     * @return the HTML head import statements for the JavaScript file
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
@@ -582,20 +598,6 @@ public class PickList extends Field {
                 selectedValues.add(values[i]);
             }
         }
-    }
-
-    /**
-     * Deploy the <tt>extras-control.js</tt> file to the <tt>click</tt> web
-     * directory when the application is initialized.
-     *
-     * @see org.apache.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext,
-                              "/org/apache/click/extras/control/extras-control.js",
-                              "click");
     }
 
     /**

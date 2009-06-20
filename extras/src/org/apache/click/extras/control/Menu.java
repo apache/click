@@ -178,6 +178,21 @@ import org.w3c.dom.NodeList;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">roles</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">pages</span> CDATA #IMPLIED&gt; </pre>
  *
+ * <a name="resources"></a>
+ * <h3>CSS and JavaScript resources</h3>
+ *
+ * The Menu control makes use of the following resources
+ * (which Click automatically deploys to the application directory, <tt>/click</tt>):
+ *
+ * <ul>
+ * <li><tt>click/menu.css</tt></li>
+ * <li><tt>click/extras-control.js</tt></li>
+ * </ul>
+ *
+ * To import these Menu files simply reference the variables
+ * <span class="blue">$headElements</span> and
+ * <span class="blue">$jsElements</span> in the page template.
+ *
  * @see org.apache.click.extras.security.AccessController
  *
  * @author Malcolm Edgar
@@ -193,7 +208,7 @@ public class Menu extends AbstractControl {
      */
     protected static final String DEFAULT_CONFIG_FILE = "/WEB-INF/menu.xml";
 
-    /** The HTML imports statements. */
+    /** The Menu imports statements. */
     public static final String HTML_IMPORTS =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/menu{1}.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n"
@@ -666,13 +681,17 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Return the HTML head import statements for the CSS stylesheet
-     * (<tt>click/menu.css</tt>) and JavaScript (<tt>click/extras-control.js</tt>) files.
+     * Return the Menu HTML head imports statements for the following
+     * resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/menu.css</tt></li>
+     * <li><tt>click/extras-control.js</tt></li>
+     * </ul>
      *
      * @see org.apache.click.Control#getHtmlImports()
      *
-     * @return the HTML head import statements for the control stylesheet and
-     * JavaScript files
+     * @return the HTML head import statements for the control
      */
     public String getHtmlImports() {
         return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
@@ -716,23 +735,6 @@ public class Menu extends AbstractControl {
     }
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * Deploy the <tt>menu.css</tt> and <tt>menu.js</tt> files to the
-     * <tt>click</tt> web directory when the application is initialized.
-     *
-     * @see org.apache.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        String[] files = new String[] {
-                "/org/apache/click/extras/control/menu.css",
-                "/org/apache/click/extras/control/extras-control.js"
-            };
-
-        ClickUtils.deployFiles(servletContext, files, "click");
-    }
 
     /**
      * This sets the parent to be null.
