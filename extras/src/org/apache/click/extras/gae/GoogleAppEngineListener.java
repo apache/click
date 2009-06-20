@@ -126,6 +126,23 @@ import ognl.OgnlRuntime;
  *
  * &lt;/appengine-web-app&gt; </pre>
  *
+ * <h3>Deployment issues</h3>
+ *
+ * On application startup, Click automatically deploys all its JavaScript and
+ * CSS resources to the "<tt>/click</tt>" folder. Since GAE doesn't allow
+ * writing to disk, Click cannot automatically deploy its resources.
+ * <p/>
+ * Instead you will have to manually add Click's resources in your GAE
+ * application's "<tt>/war</tt>" folder. To do this create a <tt>click</tt>
+ * folder under your <tt>/war</tt> directory -> "<tt>/war/click</tt>".
+ * <p/>
+ * Next you need to copy the resources from the click-core.X.X.X.jar and
+ * click-extras.X.X.X.jar. Use your favorite IDE or ZIP utility to open the
+ * jars and navigate to "<tt>META-INF/web/</tt>" where you will find the
+ * "<tt>/click</tt>" folder with all the resources packaged for that jar. Simple
+ * copy the content of the "<tt>/click</tt>" folder to your GAE folder:
+ * "<tt>/war/click</tt>".
+ *
  * @author Bob Schellink
  */
 public class GoogleAppEngineListener implements ServletContextListener {
