@@ -137,17 +137,6 @@ public abstract class AbstractLink extends AbstractControl {
     public abstract String getHref();
 
     /**
-     * This method returns null.
-     *
-     * @see org.apache.click.Control#getHtmlImports()
-     *
-     * @return null
-     */
-    public String getHtmlImports() {
-        return null;
-    }
-
-    /**
      * Return the image src path attribute. If the image src is defined then a
      * <tt>&lt;img/&gt;</tt> element will rendered inside the anchor link when
      * using the AbstractLink {@link #toString()} method, and the label will
