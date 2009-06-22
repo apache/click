@@ -144,8 +144,13 @@ public class PageImports {
      * Add the given Element to the Page HEAD elements.
      *
      * @param element the Element to add
+     * @throws IllegalArgumentException if the Element is null
      */
     public void add(Element element) {
+        if (element == null) {
+            throw new IllegalArgumentException("Null element parameter");
+        }
+
         if (element instanceof JsImport) {
             if (jsImports.contains(element)) {
                 return;
@@ -176,6 +181,22 @@ public class PageImports {
 
         } else {
             headElements.add(element);
+        }
+    }
+
+    /**
+     * Add the given list of Elements to the Page HEAD elements.
+     *
+     * @param elements the list of Elements to add to the Page HEAD elements
+     * @throws IllegalArgumentException is the list of Elements are null
+     */
+    public void addAll(List<Element> elements) {
+        if (elements == null) {
+            throw new IllegalArgumentException("Null elements parameter");
+        }
+
+        for (Element element : elements) {
+            add(element);
         }
     }
 
