@@ -17,32 +17,47 @@
  * under the License.
  */
 
-/* 
- * Border template specific styles. 
- */
+html, body {
+  height: 95%;
+}
+
 body {
 	background: #585858;
 	color: #000000;
 	font-family: Arial, Helvetica, "Sans Serif";
-	margin: 12px 12px 12px 12px;
+	margin: 12px 0px;
+  padding: 0;
 }
 
-table.page {
-	border: 1px solid #202020;
-	border-collapse: collapse;
+/** Use IE6 specific syntax to set 'div.page' height, since min-height is not recognized by IE6. */
+* html div.page {
+  height: 100%;
+}
+
+div.page {
+  border: 1px solid #202020;
+  margin: 0 auto; /* Center align for other browsers,  */
+  text-align: left;
 	background: #ffffff;
 	width: 990px;
+  min-height: 100%; /* IE6 doesn't recognize min-height. */
 }
 
-td.title-icon {
-	vertical-align: bottom;
-	padding-left: 14px;
-	padding-right: 12px;
-	padding-top: 10px;
-	padding-bottom: 6px;
+div.header {
+  position: relative;
+  height: 95px;
 }
 
-td.title-left {
+div.title-icon {
+  position:absolute;
+  top: 12px;
+  left: 15px;
+}
+
+div.title-left {
+  position: absolute;
+  top: 6px;
+  left: 56px;
 	color: navy;
 	font-size: 24pt;
 	font-weight: bolder;
@@ -50,25 +65,43 @@ td.title-left {
 	white-space: nowrap;
 }
 
-td.title-hosted p, td.title-hosted a {
+div.title-hosted {
+  position: absolute;
+  right: 0px;
+}
+
+div.title-hosted p, div.title-hosted a {
 	color: navy;
 	font-size: 8pt;
-	margin: 1em;
+	margin: 0.8em;
 	text-align:right;
 	text-decoration: none;
 	vertical-align: middle;
 	white-space: nowrap;
 }
 
-td.header-color {
+div.header-color {
+  position: absolute;
+  top: 50px;
 	background-color: #334ECF;
 	font-size: 9pt;
+  height: 15px;
+  width: 100%;
 }
 
-td.content {
+#menuTable {
+    position: absolute;
+    bottom: 0px;
+}
+
+div.content {
 	font-size: 10pt;
 	padding: 15px;
 	border-collapse: separate;
+}
+
+div.content h2 {
+  margin: 0;
 }
 
 #msgDiv {
@@ -156,7 +189,7 @@ a.tb_label {
 	white-space: pre;
 }
 
-.codeHtml 
+.codeHtml
 {
 	border: 1px solid #97A9FF;
 	background-color: white;
@@ -201,11 +234,13 @@ a.tb_label {
 
 /*
  * Spring Security (Acegi) example style.
- */ 
+ */
 div.dialogForm {
 	background-color: #f0f0f0;
 	width: 305px;
 	margin-top: 100px;
+  margin-right: auto;
+  margin-left: auto;
 	padding: 20px 20px 20px 20px;
 	border-top: 1px solid #e0e0e0;
 	border-left: 1px solid #e0e0e0;
