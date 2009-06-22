@@ -18,16 +18,20 @@
  */
 package org.apache.click.examples.page.general;
 
+import java.util.List;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.util.ClickUtils;
 import org.apache.click.util.PageImports;
 
+/**
+ * This page provides an example of how to programatically optimize your
+ * PageImports for high traffic pages. You optimize your Page by combinding
+ * multiple CSS and JavaScript import files into a single file, which reduces
+ * the number of HTTP requests required to serve the page.
+ */
 public class PageImportsExample extends BorderPage {
-
-    private static final String IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/assets/css/imports.css\" title=\"Style\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/assets/js/imports.js\"></script>\n"
-        + "<script type=\"text/javascript\">addLoadEvent(function() '{' initMenu(); '}');</script>";
 
     /**
      * Provides an optimized home page imports.
@@ -38,20 +42,26 @@ public class PageImportsExample extends BorderPage {
     public PageImports getPageImports() {
         PageImports pageImports = super.getPageImports();
 
-        String imports = ClickUtils.createHtmlImport(IMPORTS, getContext());
-
-        pageImports.addImport(imports);
+        pageImports.addAll(getHeadElements());
         pageImports.setInitialized(true);
 
         return pageImports;
     }
 
     /**
-     * @see org.apache.click.Page#getTemplate()
+     * Return the list of the Page HEAD elements.
+     *
+     * @return the list of Page HEAD elements
      */
     @Override
-    public String getTemplate() {
-        return getPath();
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+            
+            headElements.add(new CssImport("/assets/css/imports.css"));
+            headElements.add(new JsImport("/assets/js/imports.js"));
+            headElements.add(new JsScript("addLoadEvent(function() { initMenu(); });"));
+        }
+        return headElements;
     }
-
 }
