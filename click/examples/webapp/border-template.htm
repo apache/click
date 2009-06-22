@@ -1,3 +1,5 @@
+<!doctype html>
+
 <!--
    Licensed to the Apache Software Foundation (ASF) under one
    or more contributor license agreements.  See the NOTICE file
@@ -27,52 +29,38 @@ ${headElements}
 <link rel="Click icon" href="$context/favicon.ico" type="image/ico"/>
 </head>
 <body>
-<center>
-<table height="100%" border="0" cellpadding="0" cellspacing="4" class="page">
-## Title Header
-<tr>
-	<td width="100%">			
-		<table cellpadding="0" cellspacing="0" width="100%" border="0" style="border-collapse:collapse;">
-			<tr>
-				<td class="title-icon">
-					<a target="blank" href="http://incubator.apache.org/click/"><img src="${context}/assets/images/click-icon-blue-32.png" border="0" alt="Click"/></a>
-				</td>
-				<td class="title-left" width="100%">
-					Click Examples
-				</td>
-				<td class="title-hosted">
-					<p>Version ${messages.version}</p>
-					<a target="blank" href="http://www.avoka.com">Hosted by Avoka Technologies</a>
-				</td>
-			</tr>
-			<tr>
-				<td class="header-color" colspan="3">&nbsp;</td>
-			</tr>
-		</table>
-	</td>
-</tr>
-## Menu
-<tr>		
-	<td>
-#if (${rootMenu})
-#writeMenu(${rootMenu})
-#end
-	</td>
-</tr>
-## Page Content
-<tr>		
-	<td class="content">
-		<h2>$title</h2>
-		
-#parse(${path})
-	</td>
-</tr>
-## Vertical Spacer
-<tr>		
-	<td height="100%">&nbsp;</td>
-</tr>
-</table>
-</center>
+
+<div class="page">
+  <div class="header">
+    ## Title Header
+
+    <div class="title-icon">
+      <a target="blank" href="http://incubator.apache.org/click/"><img src="${context}/assets/images/click-icon-blue-32.png" border="0" alt="Click"/></a>
+    </div>
+		<div class="title-left">
+      Click Examples
+    </div>
+    <div class="title-hosted">
+      <p>Version ${messages.version}</p>
+      <a target="blank" href="http://www.avoka.com">Hosted by Avoka Technologies</a>
+    </div>
+    <div class="header-color">
+    </div>
+
+    ## Menu
+    #if (${rootMenu})
+      #writeMenu(${rootMenu})
+    #end
+  </div>
+
+  <div class="content">
+    ## Page Content
+    <h2>$title</h2>
+    <p/>
+    #parse(${path})
+
+  </div>
+</div>
 
 ${jsElements}
 

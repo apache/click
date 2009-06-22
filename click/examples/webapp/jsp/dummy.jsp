@@ -1,3 +1,5 @@
+<!doctype html>
+
 <!--
    Licensed to the Apache Software Foundation (ASF) under one
    or more contributor license agreements.  See the NOTICE file
@@ -26,9 +28,10 @@
 </head>
 <body>
 
-<h2>Dummy.jsp</h2>.
-   
+<b>${path}</b>
+<p>
 Click <a href=${defaultPath.href}>here</a> to go back.
+</p>
 
 </body>
 </html>
