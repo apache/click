@@ -17,48 +17,7 @@
    under the License.*#
 -->
 
-<html>
-<head>
-<title>Click Examples</title>
-${headElements}
-<link rel="Click icon" href="$context/favicon.ico" type="image/ico"/>
-</head>
-<body>
-<center>
-<table height="100%" border="0" cellpadding="0" cellspacing="4" class="page">
-## Title Header
-<tr>
-	<td width="100%">			
-		<table cellpadding="0" cellspacing="0" width="100%" border="0" style="border-collapse:collapse;">
-			<tr>
-				<td class="title-icon">
-					<a target="blank" href="http://incubator.apache.org/click/"><img src="${context}/assets/images/click-icon-blue-32.png" border="0" alt="Click"/></a>
-				</td>
-				<td class="title-left" width="100%">
-					$title
-				</td>
-				<td class="title-hosted">
-					<p>Version ${messages.version}</p>
-					<a target="blank" href="http://www.avoka.com">Hosted by Avoka Technologies</a>
-				</td>
-			</tr>
-			<tr>
-				<td class="header-color" colspan="3">&nbsp;</td>
-			</tr>
-		</table>
-	</td>
-</tr>
-## Menu
-<tr>		
-	<td>
-#if (${rootMenu})
-#writeMenu(${rootMenu})
-#end
-	</td>
-</tr>
-## Page Content
-<tr>		
-	<td class="content">
+<p/>
 
 This page provides an example of how to programatically optimize your PageImports for
 high traffic pages. By optimizing your PageImports you can combine CSS and JavaScript
@@ -72,15 +31,3 @@ Please view the
 and
 <a target="_blank" href="$context/source-viewer.htm?filename=$path" title="Page Content source"><img border="0" class="link" alt="" src="/click-examples/assets/images/lightbulb2.png"/> Page HTML</a>
 for more details.
-
-	</td>
-</tr>
-## Vertical Spacer
-<tr>		
-	<td height="100%">&nbsp;</td>
-</tr>
-</table>
-</center>
-${jsElements}
-</body>
-</html>
