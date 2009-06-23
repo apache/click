@@ -27,7 +27,7 @@
   #end
 <tr>
 <td width="50%">
-  <select id="${id}_unselected" size="$height" style="width:100%;" multiple
+  <select id="${id}_unselected" size="$height" style="width:100%;" multiple="multiple"
     #if($readOnly || $disabled)
       disabled="disabled"
     #end
@@ -45,28 +45,28 @@
     #if($readOnly || $disabled)
       disabled="disabled"
     #end
-  /><br>
+  /><br/>
   <input type="button" value="&lt;" style="width:60px;" 
          onclick="pickListMove($id, ${id}_unselected, ${id}_hidden, false)"
     #if($readOnly || $disabled)
       disabled="disabled"
     #end
-  /><br>
+  /><br/>
   <input type="button" value="&gt;&gt;" style="width:60px;" 
          onclick="pickListMoveAll(${id}_unselected, $id, ${id}_hidden, true)"
     #if($readOnly || $disabled)
       disabled="disabled"
     #end
-  /><br>
+  /><br/>
   <input type="button" value="&lt;&lt;" style="width:60px;" 
          onclick="pickListMoveAll($id, ${id}_unselected, ${id}_hidden, false)"
     #if($readOnly || $disabled)
       disabled="disabled"
     #end
-  /><br>
+  /><br/>
 </td>
 <td width="50%">
-  <select id="$id" size="$height" style="width:100%;" multiple
+  <select id="$id" size="$height" style="width:100%;" multiple="multiple"
     #if(!$valid)
       class="error"
     #end
@@ -81,13 +81,14 @@
     #end
   </select>
 </td>
+</tr>
 </table>
 
-<select id="${id}_hidden" name="$name" style="display: none;" multiple>
+<select id="${id}_hidden" name="$name" style="display: none;" multiple="multiple">
   #foreach($item in $options)
     <option value="$format.html($item.get("option").value)"
       #if($item.get("selected"))
-        selected
+        selected="selected"
       #end
     >$format.html($item.option.label)</option>
   #end
