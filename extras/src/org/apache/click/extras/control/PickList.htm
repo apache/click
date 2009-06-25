@@ -18,13 +18,16 @@
 -->
 
 <table width="$size" class="picklist">
-  #if($unselectedLabel || $selectedLabel)
+#if($unselectedLabel || $selectedLabel)
+<thead>
   <tr>
     <th>$unselectedLabel</th>
-    <td>&#160;</td>
+    <th>&#160;</th>
     <th>$selectedLabel</th>
   </tr>
-  #end
+</thead>
+#end
+<tbody>
 <tr>
 <td width="50%">
   <select id="${id}_unselected" size="$height" style="width:100%;" multiple="multiple"
@@ -39,7 +42,7 @@
     #end
   </select>
 </td>
-<td valign="middle" width="0%">
+<td valign="middle">
   <input type="button" value="&gt;" style="width:60px;" 
          onclick="pickListMove(${id}_unselected, $id, ${id}_hidden, true)"
     #if($readOnly || $disabled)
@@ -82,6 +85,7 @@
   </select>
 </td>
 </tr>
+</tbody>
 </table>
 
 <select id="${id}_hidden" name="$name" style="display: none;" multiple="multiple">
