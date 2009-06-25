@@ -645,9 +645,38 @@ public class PickList extends Field {
             options.add(map);
         }
 
+        // Add all attributes to buffer
+        HtmlStringBuffer attributesBuffer = new HtmlStringBuffer();
+
+        // Add the CSS class 'picklist' to buffer
+        String cssClass = null;
+        if (hasAttribute("class")) {
+            cssClass = getAttribute("class");
+            attributesBuffer.append("class=\"");
+            if (cssClass != null) {
+                // If class attribute exists, temporarily remove it
+                setAttribute("class", null);
+
+                attributesBuffer.append(cssClass).append(" ");
+            }
+            attributesBuffer.append("picklist\"");
+        } else {
+            attributesBuffer.appendAttribute("class", "picklist");
+        }
+
+        if (hasAttributes()) {
+            attributesBuffer.appendAttributes(getAttributes());
+        }
+
+        // Restore class attribute
+        if (cssClass != null) {
+            setAttribute("class", cssClass);
+        }
+
         Map model = new HashMap();
 
         model.put("id", getId());
+        model.put("attributes", attributesBuffer.toString());
         model.put("name", getName());
         model.put("options", options);
         model.put("selectedLabel", selectedLabel);
