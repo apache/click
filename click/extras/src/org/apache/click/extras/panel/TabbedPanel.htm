@@ -19,6 +19,7 @@
 
 <div id='$this.id'>
     <table class="tp_tab">
+      <tbody>
         <tr class="tp_tab">
         #foreach ($panel in $this.panels)
           #if ($panel.id == $this.activePanel.id)
@@ -40,12 +41,15 @@
           #end
         #end
         </tr>
+      </tbody>
     </table>
     <table class="tp_content" #if(${width})width="${width}"#end>
+      <tbody>
         <tr class="tp_content">
             <td class="tp_content" #if(${width})width="${width}"#end>
                 $this.activePanel
             </td>
         </tr>
+      </tbody>
     </table>
 </div>

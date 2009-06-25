@@ -632,12 +632,12 @@ public class FormTable extends Table {
             if (getAttribute("width") != null) {
                 buffer.appendAttribute("width", getAttribute("width"));
             }
-            buffer.append("><tr><td");
+            buffer.append("><tbody><tr><td");
             buffer.appendAttribute("align", form.getButtonAlign());
             buffer.append(">\n");
             buffer.append("<table class=\"buttons\" id=\"");
             buffer.append(getId());
-            buffer.append("-buttons\">\n");
+            buffer.append("-buttons\"><tbody>\n");
             buffer.append("<tr class=\"buttons\">");
             for (int i = 0, size = buttonList.size(); i < size; i++) {
                 buffer.append("<td class=\"buttons\"");
@@ -650,8 +650,8 @@ public class FormTable extends Table {
                 buffer.append("</td>");
             }
             buffer.append("</tr>\n");
-            buffer.append("</table>\n");
-            buffer.append("</td></tr></table>\n");
+            buffer.append("</tbody></table>\n");
+            buffer.append("</td></tr></tbody></table>\n");
         }
     }
 

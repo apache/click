@@ -41,7 +41,7 @@ function onShowTab(index) {
 
 $form.startTag()
 <table border="0" cellpadding="0" cellspacing="0">
-
+<tbody>
 	#* Render form errors at the top position *#
 #if ($form.errorsPosition == "top")
 	#if ($form.error)
@@ -68,6 +68,7 @@ $form.startTag()
 	<tr>
     	<td> 
 			<table border="0" cellspacing="0" cellpadding="0">
+       <tbody>
 				<tr>
 					<td class="tf_separator"> &#160;&#160; </td>
 					#foreach ($tabSheet in $form.tabSheets)
@@ -86,6 +87,7 @@ $form.startTag()
 					#end
 					<td class="tf_separator" style="width:100%"> &#160; </td>
 				</tr>
+       </tbody>
 			</table>
 		</td>
    	</tr>
@@ -159,6 +161,6 @@ $form.startTag()
 	</tr>		
 	#end
 #end	
-
+</tbody>
 </table>
 $form.endTag()
