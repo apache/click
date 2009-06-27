@@ -523,7 +523,7 @@ public class RadioGroup extends Field {
      * <pre>org.apache.click.control.MessageProperties</pre></blockquote>
      * <p/>
      * Error message bundle key names include: <blockquote><ul>
-     * <li>field-required-error</li>
+     * <li>select-error</li>
      * </ul></blockquote>
      */
     public void validate() {
