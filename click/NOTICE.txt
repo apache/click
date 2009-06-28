@@ -117,7 +117,7 @@ http://code.google.com/p/google-code-prettify/
 
 ======================================================================
 
-This project include the FamFamFam icons by Mark James, distributed
+This project includes the FamFamFam icons by Mark James, distributed
 under the terms of the Creative Commons Attribution 2.5 License.
 http://www.famfamfam.com/lab/icons
 
