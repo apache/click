@@ -17,12 +17,14 @@
    under the License.*#
 -->
 
+<h2 style="margin-top: 1em">Customer List 3</h2>
+
 <div style="width:400px;">
-<h2>Customer List 3</h2>
 #foreach( $customer in $customers )
-    #set( $top = $velocityCount * 10 )
-    #set( $left = $velocityCount * 10 )
-<div id="customer-$customer.id" style="width: 220px; position: relative;top: $top;left: $left;border:1px solid black;background:white;">
+
+    <!-- Alter background for odd/even panels -->
+    #set( $background = "#if ($velocityCount % 2 == 0)DDDDDD #{else}FFFFFF #end")
+<div id="customer-$customer.id" style="width: 220px; position: relative;margin-top: 5px; border:1px solid black;background:#$background">
     $customer.name
     <br/>$customer.email
     <br/>$customer.age
