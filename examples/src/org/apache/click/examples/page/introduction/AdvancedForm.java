@@ -48,7 +48,7 @@ public class AdvancedForm extends BorderPage {
     @Bindable public Form form = new Form();
     @Bindable public String msg;
 
-    private Select investmentSelect = new Select("investment");
+    private Select investmentSelect = new Select("investments");
 
     @Resource(name="customerService")
     private CustomerService customerService;
