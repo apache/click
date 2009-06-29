@@ -18,14 +18,18 @@
  */
 package org.apache.click.examples.page;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.click.Page;
+import org.apache.click.control.ActionLink;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.Submit;
+import org.apache.click.control.Table;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.control.InvestmentSelect;
 import org.apache.click.examples.domain.Customer;
@@ -56,6 +60,11 @@ public class EditCustomer extends BorderPage {
 
     // Public variables can automatically have their value set by request parameters
     @Bindable public Integer id;
+    @Bindable public String actionLink;
+    @Bindable public int page;
+    @Bindable public String column;
+    @Bindable public boolean ascending;
+    @Bindable public boolean sort;
 
     private HiddenField idField = new HiddenField("id", Integer.class);
 
@@ -102,6 +111,13 @@ public class EditCustomer extends BorderPage {
      */
     @Override
     public void onGet() {
+        // Store the Page public properties state in hidden fields
+        form.add(new HiddenField(Table.PAGE, page));
+        form.add(new HiddenField(Table.COLUMN, column));
+        form.add(new HiddenField(Table.ASCENDING, ascending));
+        form.add(new HiddenField(Table.SORT, sort));
+        form.add(new HiddenField(ActionLink.ACTION_LINK, actionLink));
+
         if (id != null) {
             Customer customer = customerService.getCustomerForID(id);
 
@@ -125,7 +141,14 @@ public class EditCustomer extends BorderPage {
 
             String referrer = referrerField.getValue();
             if (referrer != null) {
-                setRedirect(referrer);
+                // Pass the Page public properties to the referring page
+                Map params = new HashMap();
+                params.put(Table.PAGE, page);
+                params.put(Table.COLUMN, column);
+                params.put(Table.SORT, sort);
+                params.put(Table.ASCENDING, ascending);
+                params.put(ActionLink.ACTION_LINK, actionLink);
+                setRedirect(referrer, params);
             } else {
                 setRedirect(HomePage.class);
             }

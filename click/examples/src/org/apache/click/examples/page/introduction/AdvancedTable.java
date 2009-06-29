@@ -100,5 +100,13 @@ public class AdvancedTable extends BorderPage {
     public void onRender() {
         List list = customerService.getCustomers();
         table.setRowList(list);
+
+        // Pass the Table paging and sorting parameters to the link's target
+        // page: 'EditCustomer'
+        editLink.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
+        editLink.setParameter(Table.COLUMN, table.getSortedColumn());
+        editLink.setParameter(Table.SORT, Boolean.toString(table.isSorted()));
+        editLink.setParameter(Table.ASCENDING, Boolean.toString(table.isSortedAscending()));
+        editLink.setParameter(ActionLink.ACTION_LINK, table.getControlLink().getName());
     }
 }
