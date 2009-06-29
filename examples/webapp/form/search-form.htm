@@ -21,6 +21,12 @@ This example demonstrates manually laying out a form in the page template.
 <p>
 
 $form.startTag()
+
+<!-- Show validation errors -->
+#if (!$form.fields.search.valid)
+<div style="color: red;margin-bottom: 1em"> $form.fields.search.error</div>
+#end
+
  <b>Customer</b> ${form.fields.search}${form.fields.type}${form.fields.go}
 $form.endTag()
 
