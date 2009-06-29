@@ -30,6 +30,8 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.util.Bindable;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -72,7 +74,11 @@ public class SearchForm extends BorderPage {
         String type = typeSelect.getValue().toLowerCase();
 
         if (type.equals("id")) {
-            customer = customerService.findCustomerByID(value);
+            if (NumberUtils.isDigits(value)) {
+                customer = customerService.findCustomerByID(value);
+            } else {
+                textField.setError("ID must be a number");
+            }
         }
         else if (type.equals("name")) {
             List<Customer> list = customerService.getCustomersForName(value);
