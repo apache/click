@@ -19,15 +19,11 @@
 
 $(document).ready(function(){
     // Dynamically create a fixed scroll indicator at the bottom right corner of the screen
-    jQuery("<div id='scroll-indicator' style='border: 1px solid white;"
-        + "background: #EEEEEE; padding: 10px; position: fixed; display: none;"
-        + "right: 25; bottom: 25; width: 100px;"
-
-        // IE6 doesn't support fixed positioning. Workaround below
-        + "_position:absolute;_top:expression(-25 + document.body.scrollTop+document.body.clientHeight-this.clientHeight);"
-
+    jQuery("<div id='scroll-indicator' style='border: 1px solid navy;"
+        + "background: #334ECF; color: #FFFFFF; padding: 10px; position: fixed; display: none;"
+        + "right: 25px; bottom: 25px; width: 75px;"
         + "'>Loading...</div>")
-        .insertAfter(jQuery('table.page')); // Insert the indicator after the table defined in border-template.htm
+        .insertAfter(jQuery('div.page')); // Insert the indicator after the main div defined in border-template.htm
 
     // Current number of records loaded from server
     var offset = 0;
