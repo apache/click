@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
 public class PostCodeService extends CayenneTemplate {
 
     @SuppressWarnings("unchecked")
-    public List<PostCode> getPostCodeLocations(String location) {
+    public List<String> getPostCodeLocations(String location) {
         SelectQuery query = new SelectQuery(PostCode.class);
 
         query.andQualifier(ExpressionFactory.likeIgnoreCaseExp(PostCode.LOCALITY_PROPERTY, location + "%"));
