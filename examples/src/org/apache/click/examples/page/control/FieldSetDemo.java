@@ -25,6 +25,8 @@ import org.apache.click.control.Checkbox;
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
+import org.apache.click.control.Radio;
+import org.apache.click.control.RadioGroup;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextArea;
 import org.apache.click.control.TextField;
@@ -46,6 +48,12 @@ import org.apache.click.util.ClickUtils;
 public class FieldSetDemo extends BorderPage {
 
     @Bindable public Form form = new Form();
+
+    // Payment options
+    private RadioGroup paymentGroup;
+    private TextField cardHolder;
+    private CreditCardField cardNumber;
+    private IntegerField cardExpiry;
 
     public FieldSetDemo() {
         form.setLabelAlign(Form.ALIGN_RIGHT);
@@ -81,19 +89,27 @@ public class FieldSetDemo extends BorderPage {
         FieldSet paymentFieldSet = new FieldSet("paymentDetails");
         form.add(paymentFieldSet);
 
-        paymentFieldSet.add(new TextField("cardName"));
-        paymentFieldSet.add(new CreditCardField("cardNumber"));
-        IntegerField expiryField = new IntegerField("expiry");
-        expiryField.setSize(4);
-        expiryField.setMaxLength(4);
-        paymentFieldSet.add(expiryField);
+        paymentGroup = new RadioGroup("paymentOption", true);
+        paymentGroup.add(new Radio("cod", "Cash On Delivery "));
+        paymentGroup.add(new Radio("credit", "Credit Card "));
+        paymentGroup.setVerticalLayout(false);
+        paymentFieldSet.add(paymentGroup);
+
+        cardHolder = new TextField("cardHolderName");
+        paymentFieldSet.add(cardHolder);
+        cardNumber = new CreditCardField("cardNumber");
+        paymentFieldSet.add(cardNumber);
+        cardExpiry = new IntegerField("expiry");
+        cardExpiry.setSize(4);
+        cardExpiry.setMaxLength(4);
+        paymentFieldSet.add(cardExpiry);
 
         form.add(new Submit("ok", "  OK  ",  this, "onOkClick"));
         form.add(new PageSubmit("cancel", HomePage.class));
     }
 
     public boolean onOkClick() {
-        if (form.isValid()) {
+        if (isFormValid()) {
             List fieldList = ClickUtils.getFormFields(form);
             for (Iterator i = fieldList.iterator(); i.hasNext(); ) {
                 Field field = (Field) i.next();
@@ -101,5 +117,24 @@ public class FieldSetDemo extends BorderPage {
             }
         }
         return true;
+    }
+
+    /**
+     * Perform additional form cross field validation returning true if valid.
+     *
+     * @return true if form is valid after cross field validation
+     */
+    protected boolean isFormValid() {
+        // If credit payment option is specified, ensure credit criteria is provided
+        if (paymentGroup.getValue().equals("credit")) {
+            cardHolder.setRequired(true);
+            cardHolder.validate();
+            cardNumber.setRequired(true);
+            cardNumber.validate();
+            cardExpiry.setRequired(true);
+            cardExpiry.validate();
+        }
+
+        return form.isValid();
     }
 }
