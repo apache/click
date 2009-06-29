@@ -48,9 +48,16 @@ import org.apache.click.util.MessagesMap;
  * <p/>
  * Subclasses are expected to at least override {@link #getTag()}
  * to differentiate the control. However some controls does not map cleanly
- * to a html <em>tag</em>, in which case you can override
+ * to an html <em>tag</em>, in which case you can override
  * {@link #render(org.apache.click.util.HtmlStringBuffer)} for complete control
  * over the output.
+ * <p/>
+ * Subclasses are also expected to provide a default no-arg constructor <tt>if</tt>
+ * the control deploys its JavaScript and CSS resources through Click's
+ * {@link org.apache.click.Control#onDeploy(javax.servlet.ServletContext)} mechanism.
+ * However if JavaScript and CSS resources are deployed through Click's
+ * <a href="../../../../user-guide/html/ch04s03.html#deploying-custom-resources">convention based</a>
+ * mechanism, a default constructor is <tt>not</tt> needed.
  * <p/>
  * Below is an example of creating a new control called MyField:
  * <pre class="prettyprint">
