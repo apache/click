@@ -160,7 +160,7 @@ public HelloWorld extends Page {
     <programlisting language="java">public class ControlListenerType1Page extends Page {
 
     /* Set the listener to this object's "onLinkClick" method. */
-    @Bindable public ActionLink myLink = new ActionLink(this, "onLinkClick");
+    @Bindable public ActionLink myLink = new ActionLink(this, "onLinkClick"); <co id="co-bindable" linkends="ca-bindable"/>
 
     @Bindable public String msg;
 
@@ -175,8 +175,19 @@ public HelloWorld extends Page {
 
         return true;
     }
-    
+
 }</programlisting>
+
+    <calloutlist>
+      <callout arearefs="co-bindable" id="ca-bindable">
+        <para>Variables declared as <literal>@Bindable public</literal>
+        is a short-hand way of instructing Click to automatically bind request
+        parameters to Page variables. Additionally these variables will be
+        automatically added to the Page model. For more information please see the
+        section <link linkend="request-param-auto-binding">Request Parameter Auto Binding</link>.
+        </para>
+      </callout>
+    </calloutlist>
 
     <para>In the Page class we create an ActionLink called
     <varname>myLink</varname> and define the control's listener to be the page
@@ -196,15 +207,6 @@ public HelloWorld extends Page {
     have to write fewer lines of code. The disadvantage of this type of control
     listener binding is that no compile time safety is provided, and you miss
     out on the compiler refactoring capabilities provided with modern IDEs.
-    </para>
-
-    <para>If you're wondering about why the <varname>myLink</varname> and
-    <varname>msg</varname> variables are declared as <literal>@Bindable</literal>
-    <literal>public</literal>, this is a short-hand way instructing Click to
-    automatically bind request parameters to Page variables. Additionally
-    these variables will be automatically added to the Page model. For more
-    information please see the section
-    <link linkend="request-param-auto-binding">Request Parameter Auto Binding</link>.
     </para>
 
     <para>Back to our example, in the page template we define an HTML link and
@@ -444,7 +446,8 @@ public HelloWorld extends Page {
     // ------------------------------------- Constructor
 
     public CustomersPage() {
-        // Set Page to stateful to preserve Table sort and paging state while editing customers
+        // Setting Page to stateful to preserve Table sort and paging state while
+        // editing customers
         setStateful(true); <co id="co-stateful-table" linkends="ca-stateful-table"/>
 
         table.setClass(Table.CLASS_ITS);
