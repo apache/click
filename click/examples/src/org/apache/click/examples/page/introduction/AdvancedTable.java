@@ -20,8 +20,6 @@ package org.apache.click.examples.page.introduction;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.apache.click.Page;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.ActionLink;
@@ -33,26 +31,38 @@ import org.apache.click.examples.page.EditCustomer;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.LinkDecorator;
 import org.apache.click.util.Bindable;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 /**
  * Provides an advanced Table usage example Page.
+ * <p/>
+ * This example also demonstrates how a stateful Page can be used to preserve
+ * the Table sort and paging state while editing customers.
  *
  * @author Malcolm Edgar
  */
-@Component
-public class AdvancedTable extends BorderPage {
+public class AdvancedTable extends BorderPage implements ApplicationContextAware {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable public Table table = new Table();
     @Bindable public PageLink editLink = new PageLink("Edit", EditCustomer.class);
     @Bindable public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
-    @Resource(name="customerService")
-    private CustomerService customerService;
+    /**
+     * Spring's application context from where a CustomerService instance can be
+     * retrieved.
+     */
+    private transient ApplicationContext applicationContext;
 
     // ------------------------------------------------------------ Constructor
 
     public AdvancedTable() {
+        // Set Page to stateful to preserve Table sort and paging state while editing customers
+        setStateful(true);
+
         table.setClass(Table.CLASS_ITS);
         table.setPageSize(10);
         table.setShowBanner(true);
@@ -89,7 +99,7 @@ public class AdvancedTable extends BorderPage {
 
     public boolean onDeleteClick() {
         Integer id = deleteLink.getValueInteger();
-        customerService.deleteCustomer(id);
+        getCustomerService().deleteCustomer(id);
         return true;
     }
 
@@ -98,15 +108,27 @@ public class AdvancedTable extends BorderPage {
      */
     @Override
     public void onRender() {
-        List list = customerService.getCustomers();
+        List list = getCustomerService().getCustomers();
         table.setRowList(list);
+    }
 
-        // Pass the Table paging and sorting parameters to the link's target
-        // page: 'EditCustomer'
-        editLink.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
-        editLink.setParameter(Table.COLUMN, table.getSortedColumn());
-        editLink.setParameter(Table.SORT, Boolean.toString(table.isSorted()));
-        editLink.setParameter(Table.ASCENDING, Boolean.toString(table.isSortedAscending()));
-        editLink.setParameter(ActionLink.ACTION_LINK, table.getControlLink().getName());
+    /**
+     * Return CustomerService instance from Spring application context.
+     *
+     * @return CustomerService instance
+     */
+    public CustomerService getCustomerService() {
+        return (CustomerService) applicationContext.getBean("customerService");
+    }
+
+    /**
+     * Set Spring application context as defined by
+     * {@link org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)}.
+     *
+     * @param applicationContext set Spring application context
+     */
+    public void setApplicationContext(ApplicationContext applicationContext)
+        throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }
