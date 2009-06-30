@@ -50,22 +50,18 @@ public class FileUpload extends BorderPage {
         form.add(fieldSet1);
 
         fileField1 = new FileField("selectFile1", "Select File 1", 40);
-        fileField1.setRequired(true);
         fieldSet1.add(fileField1);
 
         descField1 = new TextField("description1", "File Description 1", 30);
-        descField1.setRequired(true);
         fieldSet1.add(descField1);
 
         FieldSet fieldSet2 = new FieldSet("upload2", "<b>Upload File 2</b>");
         form.add(fieldSet2);
 
         fileField2 = new FileField("selectFile2", "Select File 2", 40);
-        fileField2.setRequired(true);
         fieldSet2.add(fileField2);
 
         descField2 = new TextField("description2", "File Description 2", 30);
-        descField2.setRequired(true);
         fieldSet2.add(descField2);
 
         form.add(new Submit("ok", "  OK  ", this, "onOkClick"));
