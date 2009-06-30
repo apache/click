@@ -30,6 +30,8 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class WizardPage extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     /** Current step in the process. */
     private Step currentStep;
 
