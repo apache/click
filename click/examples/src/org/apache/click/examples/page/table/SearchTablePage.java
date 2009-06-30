@@ -18,9 +18,7 @@
  */
 package org.apache.click.examples.page.table;
 
-import java.io.Serializable;
 import java.util.List;
-
 
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.ActionLink;
@@ -42,15 +40,15 @@ import org.apache.click.util.Bindable;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table control paging.
  *
  * @author Malcolm Edgar
  */
-@Component
 public class SearchTablePage extends BorderPage implements ApplicationContextAware {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable public Form form = new Form();
     @Bindable public Table table = new Table();

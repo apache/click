@@ -18,7 +18,6 @@
  */
 package org.apache.click.examples.page.table;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.apache.click.control.Checkbox;
@@ -35,15 +34,15 @@ import org.apache.click.util.Bindable;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table control styles.
  *
  * @author Malcolm Edgar
  */
-@Component
 public class TableStyles extends BorderPage implements ApplicationContextAware {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable public Form form = new Form();
     @Bindable public Table table = new Table();
