@@ -442,8 +442,11 @@ public HelloWorld extends Page {
     @Bindable public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
     // ------------------------------------- Constructor
-     
+
     public CustomersPage() {
+        // Set Page to stateful to preserve Table sort and paging state while editing customers
+        setStateful(true); <co id="co-stateful-table" linkends="ca-stateful-table"/>
+
         table.setClass(Table.CLASS_ITS);
         table.setPageSize(10);
         table.setShowBanner(true);
@@ -498,11 +501,25 @@ public HelloWorld extends Page {
     }
 }</programlisting>
 
+    <calloutlist>
+      <callout arearefs="co-stateful-table" id="ca-stateful-table">
+        <para>Setting Page to stateful instructs Click to store the Page in the
+        <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</ulink>.
+        This ensures the Table's sort and paging state is preserved while editing
+        customers. See the <link linkend="stateful-pages">Stateful Page</link>
+        section for more details.
+        </para>
+      </callout>
+    </calloutlist>
+
     <para>In this Page code example a Table control is declared and a number of
     <ulink url="../../click-api/org/apache/click/control/Column.html">Column</ulink>
-    objects are added. A deleteLink
+    objects are added. An editLink
+    <ulink url="../../click-api/org/apache/click/control/PageLink.html">PageLink</ulink>
+    control is used as decorator for the "Action" column. This control navigates
+    to the <classname>EditCustomer</classname> page. A deleteLink
     <ulink url="../../click-api/org/apache/click/control/ActionLink.html">ActionLink</ulink>
-    control is used as a decorator for the "Action" column. This control will
+    control is also used as a decorator for the "Action" column. This control will
     invoke the Page <methodname>onDeleteClick()</methodname> method when it is
     clicked. Finally we have the Page <methodname>onRender()</methodname> method
     which is used to populate the Table control with rows before it is rendered.
@@ -537,7 +554,9 @@ public HelloWorld extends Page {
       </mediaobject>
     </figure>
 
-    <para>In this example if a user click on the Delete link, the
+    <para>In this example, clicking on the Edit link will navigate the user to
+    the <classname>EditCustomer</classname> page where the selected customer
+    can be edited. When the user click on the Delete link, the
     <methodname>onDeleteClick()</methodname> method will be called on the Page
     deleting the customer record.
     </para>
