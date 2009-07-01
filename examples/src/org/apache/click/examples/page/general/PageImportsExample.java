@@ -57,7 +57,7 @@ public class PageImportsExample extends BorderPage {
     public List getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
-            
+
             headElements.add(new CssImport("/assets/css/imports.css"));
             headElements.add(new JsImport("/assets/js/imports.js"));
             headElements.add(new JsScript("addLoadEvent(function() { initMenu(); });"));
