@@ -472,8 +472,6 @@ import org.apache.commons.lang.StringUtils;
  *
  * @see Field
  * @see Submit
- *
- * @author Malcolm Edgar
  */
 public class Form extends AbstractContainer {
 

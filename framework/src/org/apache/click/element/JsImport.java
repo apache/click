@@ -49,8 +49,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * path is <tt>myApp</tt>):
  * <pre class="prettyprint">
  * &lt;script type="text/javascript" href="/myApp/js/js-library.js"&gt;&lt;/script&gt; </pre>
- *
- * @author Bob Schellink
  */
 public class JsImport extends ResourceElement {
 

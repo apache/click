@@ -76,8 +76,6 @@ import org.apache.click.util.ClickUtils;
  *     Assert.assertEquals(requestValue, nameField.getValueObject());
  * }
  * </pre>
- *
- * @author Bob Schellink
  */
 public class MockContext extends Context {
 

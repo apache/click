@@ -178,9 +178,6 @@ import org.apache.commons.lang.StringUtils;
  * <p/>
  * <b>Alternatively</b> use the {@link DataContextFilter} which will
  * automatically rollback any uncommitted changes at the end of each request.
- *
- * @author Malcolm Edgar
- * @author Andrus Adamchik
  */
 public class CayenneForm extends Form {
 

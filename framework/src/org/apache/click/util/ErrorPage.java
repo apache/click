@@ -77,8 +77,6 @@ import org.apache.click.Page;
  * <li>{@link #mode} - the Click application mode</li>
  * <li>{@link #pageClass} - the Page class which cause the error</li>
  * </ul>
- *
- * @author Malcolm Edgar
  */
 public class ErrorPage extends Page {
 

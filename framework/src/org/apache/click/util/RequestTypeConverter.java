@@ -38,8 +38,6 @@ import ognl.TypeConverter;
  * This class is adapted from the OGNL <tt>DefaultTypeConverter</tt>, by
  * Luke Blanshard and Drew Davidson, and provides additional Date conversion
  * capabilities.
- *
- * @author Malcolm Edgar
  */
 public class RequestTypeConverter implements TypeConverter {
 

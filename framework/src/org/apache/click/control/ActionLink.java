@@ -142,8 +142,6 @@ import org.apache.commons.lang.StringUtils;
  *
  * @see AbstractLink
  * @see Submit
- *
- * @author Malcolm Edgar
  */
 public class ActionLink extends AbstractLink {
 

@@ -89,8 +89,6 @@ import org.apache.click.util.PropertyUtils;
  *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.4">INPUT</a>
  *
  * @see Radio
- *
- * @author Malcolm Edgar
  */
 public class RadioGroup extends Field {
 

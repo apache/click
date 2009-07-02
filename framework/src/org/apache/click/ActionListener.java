@@ -55,9 +55,6 @@ import java.io.Serializable;
  *    }
  * }
  * </pre>
- *
- * @author Malcolm Edgar
- * @author Bob Schellink
  */
 public interface ActionListener extends Serializable {
 

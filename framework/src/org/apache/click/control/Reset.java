@@ -51,8 +51,6 @@ package org.apache.click.control;
  *
  * @see Button
  * @see Submit
- *
- * @author Malcolm Edgar
  */
 public class Reset extends Button {
 

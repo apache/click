@@ -39,8 +39,6 @@ import org.apache.click.util.HtmlStringBuffer;
  *
  * @see Select
  * @see Option
- *
- * @author Malcolm Edgar
  */
 public class OptionGroup implements Serializable {
 

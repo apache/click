@@ -58,8 +58,6 @@ import org.apache.click.util.PropertyUtils;
  *
  * @see Column
  * @see FormTable
- *
- * @author Malcolm Edgar
  */
 public class FieldColumn extends Column {
 

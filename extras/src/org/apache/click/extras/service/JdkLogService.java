@@ -43,8 +43,6 @@ import org.apache.click.service.LogService;
  *     &lt;<span class="red">log-service</span> classname="<span class="blue">org.apache.click.extras.service.JdkLogService</span>"/&gt;
  *
  * &lt;/click-app&gt; </pre>
- *
- * @author Malcolm Edgar
  */
 public class JdkLogService implements LogService {
 

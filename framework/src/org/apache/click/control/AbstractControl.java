@@ -118,9 +118,6 @@ import org.apache.click.util.MessagesMap;
  *
  * Also see {@link org.apache.click.Control} javadoc for an explanation of the
  * Control execution sequence.
- *
- * @author Bob Schellink
- * @author Malcolm Edgar
  */
 public abstract class AbstractControl implements Control {
 

@@ -55,8 +55,6 @@ import org.apache.click.util.HtmlStringBuffer;
  *
  * @see Reset
  * @see Submit
- *
- * @author Malcolm Edgar
  */
 public class Button extends Field {
 

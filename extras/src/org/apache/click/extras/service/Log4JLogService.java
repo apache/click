@@ -41,8 +41,6 @@ import org.apache.log4j.Logger;
  *     &lt;<span class="red">log-service</span> classname="<span class="blue">org.apache.click.extras.service.Log4JLogService</span>"/&gt;
  *
  * &lt;/click-app&gt; </pre>
- *
- * @author Malcolm Edgar
  */
 public class Log4JLogService implements LogService {
 

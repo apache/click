@@ -57,9 +57,6 @@ import org.apache.commons.lang.Validate;
  * &lt;file-upload-service classname="com.mycorp.util.CustomFileUploadService"&gt;
  *     &lt;property name="customProperty" value="customValue"/&gt;
  * &lt;/file-upload-service&gt; </pre>
- *
- * @author Bob Schellink
- * @author Malcolm Edgar
  */
 public class CommonsFileUploadService implements FileUploadService {
 

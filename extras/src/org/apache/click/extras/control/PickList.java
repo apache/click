@@ -106,8 +106,6 @@ import org.apache.click.util.PropertyUtils;
  * To import these CheckList files simply reference the variables
  * <span class="blue">$headElements</span> and
  * <span class="blue">$jsElements</span> in the page template.
- *
- * @author Naoki Takezoe
  */
 public class PickList extends Field {
 

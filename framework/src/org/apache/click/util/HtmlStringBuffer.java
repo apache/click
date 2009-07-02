@@ -50,8 +50,6 @@ import java.util.Map;
  * To improve performance in Click's thread safe environment this
  * class does not synchronize append operations. Internally this class uses
  * a character buffer adapted from the JDK 1.5 <tt>AbstractStringBuilder</tt>.
- *
- * @author Malcolm Edgar
  */
 public class HtmlStringBuffer {
 

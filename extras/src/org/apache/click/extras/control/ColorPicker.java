@@ -82,8 +82,6 @@ import org.apache.click.util.HtmlStringBuffer;
  *
  * The color picker popup is based on JS script code from
  * <a target="_blank" href="http://www.dhtmlgoodies.com/index.html?whichScript=submitted-color-picker">www.dhtmlgoodies.com</a>.
- *
- * @author Christian Essl
  */
 public class ColorPicker extends Field {
 

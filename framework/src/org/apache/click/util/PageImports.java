@@ -101,8 +101,6 @@ import org.apache.commons.lang.StringUtils;
  *
  * Please also see {@link org.apache.click.Page#getHeadElements()},
  * {@link org.apache.click.Control#getHeadElements()}.
- *
- * @author Malcolm Edgar
  */
 public class PageImports {
 

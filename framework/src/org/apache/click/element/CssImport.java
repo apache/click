@@ -49,8 +49,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * context path is <tt>myApp</tt>):
  * <pre class="prettyprint">
  * &lt;link type="text/css" rel="stylesheet" href="/myApp/css/style.css"/&gt; </pre>
- *
- * @author Bob Schellink
  */
 public class CssImport extends ResourceElement {
 

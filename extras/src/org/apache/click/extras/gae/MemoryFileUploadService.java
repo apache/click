@@ -50,8 +50,6 @@ import org.apache.commons.fileupload.FileItemFactory;
  * <p/>
  * <b>Please note:</b> Google App Engine further restricts the size of file
  * uploads as well. Currently the limit is 10MB.
- *
- * @author Bob Schellink
  */
 public class MemoryFileUploadService extends CommonsFileUploadService {
 

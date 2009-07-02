@@ -30,8 +30,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * (&lt;link&gt; / &lt;style&gt;).
  * <p/>
  * Subclasses should override {@link #getTag()} to return a specific HTML tag.
- *
- * @author Bob Schellink
  */
 public class Element implements Serializable {
 

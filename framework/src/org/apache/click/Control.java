@@ -123,8 +123,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * developers to create their own controls.
  *
  * @see org.apache.click.util.PageImports
- *
- * @author Malcolm Edgar
  */
 public interface Control extends Serializable {
  

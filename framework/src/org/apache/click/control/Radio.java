@@ -41,8 +41,6 @@ import org.apache.click.util.HtmlStringBuffer;
  *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.4">INPUT</a>
  *
  * @see RadioGroup
- *
- * @author Malcolm Edgar
  */
 public class Radio extends Field {
 

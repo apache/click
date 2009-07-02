@@ -64,8 +64,6 @@ import org.apache.commons.lang.StringUtils;
  * <li><a target="blank" href="http://www.cs.tut.fi/~jkorpela/forms/file.html">Jukka Korpela - File input (or "upload") in HTML forms</a></li>
  * <li><a target="blank" href="https://www.sdn.sap.com/sdn/weblogs.sdn?blog=/pub/wlg/684">SDN - INPUT TYPE="FILE" and your options...</a></li>
  * </ul>
- *
- * @author Malcolm Edgar
  */
 public class FileField extends Field {
 

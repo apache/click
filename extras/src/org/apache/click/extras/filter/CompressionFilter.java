@@ -61,10 +61,6 @@ import org.apache.click.util.ClickUtils;
  * This package is derived from the Jakarta
  * <a href="http://jakarta.apache.org/tomcat">Tomcat</a>
  * examples compression filter and is distributed in Click Extras for convenience.
- *
- * @author Amy Roh
- * @author Dmitri Valdin
- * @author Malcolm Edgar
  */
 public class CompressionFilter implements Filter {
 

@@ -84,8 +84,6 @@ import org.apache.commons.lang.StringUtils;
  *   &lt;mode value="trace"/&gt;
  * &lt;/click-app&gt;
  * </pre>
- *
- * @author Bob Schellink
  */
 public class MockContainer {
 

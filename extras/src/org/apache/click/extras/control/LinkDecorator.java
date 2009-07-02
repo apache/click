@@ -151,8 +151,6 @@ import org.apache.commons.lang.StringUtils;
  *
  * @see org.apache.click.control.ActionLink
  * @see org.apache.click.control.PageLink
- *
- * @author Malcolm Edgar
  */
 public class LinkDecorator implements Decorator, Serializable {
 

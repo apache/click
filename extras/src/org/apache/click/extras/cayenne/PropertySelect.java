@@ -123,8 +123,6 @@ import org.apache.commons.lang.StringUtils;
  *
  * @see CayenneForm
  * @see QuerySelect
- *
- * @author Malcolm Edgar
  */
 public class PropertySelect extends Select {
 

@@ -50,8 +50,6 @@ import org.apache.click.util.ClickUtils;
  * See also the W3C HTML reference
  * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
  *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.4">INPUT</a>
- *
- * @author Malcolm Edgar
  */
 public class PageSubmit extends Submit {
 

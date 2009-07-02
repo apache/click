@@ -24,8 +24,6 @@ import javax.servlet.http.HttpServletRequest;
  * Provides an interface for controlling request access to security
  * resources. A security resource is an abstract term which may refer to a
  * role, permission or authority.
- *
- * @author Malcolm Edgar
  */
 public interface AccessController {
 

@@ -46,8 +46,6 @@ import org.apache.commons.fileupload.FileItem;
  * A new Context object is created for each Page request. The request Context
  * object can be obtained from the thread local variable via the
  * {@link Context#getThreadLocalContext()} method.
- *
- * @author Malcolm Edgar
  */
 public class Context {
 

@@ -46,8 +46,6 @@ import org.hibernate.cfg.Configuration;
  *
  * @see SessionFilter
  * @see HibernateForm
- *
- * @author Malcolm Edgar
  */
 public class SessionContext {
 

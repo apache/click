@@ -168,8 +168,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * properties, not just the ones you want to override.
  * </dd>
  * </dl>
- *
- * @author Malcolm Edgar
  */
 public abstract class Field extends AbstractControl {
 

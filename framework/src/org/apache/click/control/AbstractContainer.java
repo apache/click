@@ -46,8 +46,6 @@ import org.apache.click.util.HtmlStringBuffer;
  *     }
  * }
  * </pre>
- *
- * @author Bob Schellink
  */
 public abstract class AbstractContainer extends AbstractControl implements
     Container {

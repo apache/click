@@ -43,8 +43,6 @@ import org.apache.click.Page;
  *     &lt;<span class="red">template-service</span> classname="<span class="blue">org.apache.click.extras.service.FreemarkerTemplateService</span>"&gt;
  *
  * &lt;/click-app&gt; </pre>
- *
- * @author Malcolm Edgar
  */
 public interface TemplateService {
 

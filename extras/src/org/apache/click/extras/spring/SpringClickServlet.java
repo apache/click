@@ -258,10 +258,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * &lt;/web-app&gt; </pre>
  *
  * @see PageScopeResolver
- *
- * @author Malcolm Edgar
- * @author Paul Rule
- * @author Phil Barnes
  */
 public class SpringClickServlet extends ClickServlet {
 

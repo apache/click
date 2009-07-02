@@ -253,10 +253,6 @@ import org.apache.commons.lang.StringUtils;
  * <h3>Acknowledgments</h3>
  * This class is adapted from the Jakarta CompressionFilter from
  * <a href="http://jakarta.apache.org/tomcat">Tomcat</a>.
- * <p/>
- *
- * @author Malcolm Edgar
- * @author Bob Schellink
  */
 public class PerformanceFilter implements Filter {
 

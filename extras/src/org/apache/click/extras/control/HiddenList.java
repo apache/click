@@ -49,7 +49,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * &lt;input type="hidden" name="customerId" id="form-customerId_1" value="123"/&gt;
  * &lt;input type="hidden" name="customerId" id="form-customerId_2" value="678"/&gt; </pre>
  *
- * @author Naoki Takezoe
  * @since 2.1.0
  */
 public class HiddenList extends Field {

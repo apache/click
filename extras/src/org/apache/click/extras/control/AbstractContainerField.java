@@ -55,8 +55,6 @@ import org.apache.click.util.HtmlStringBuffer;
  *         return getContainer().addControl(button);
  *     }
  * } </pre>
- *
- * @author Bob Schellink
  */
 public abstract class AbstractContainerField extends Field implements Container {
 

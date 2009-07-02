@@ -24,8 +24,6 @@ import org.apache.commons.fileupload.FileItemFactory;
 /**
  * Provides a FileItemFactory implementation that creates {@link MemoryFileItem}
  * instances which always keep their content in memory.
- *
- * @author Bob Schellink
  */
 public class MemoryFileItemFactory implements FileItemFactory {
 

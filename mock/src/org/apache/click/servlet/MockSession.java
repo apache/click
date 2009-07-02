@@ -34,8 +34,6 @@ import org.apache.commons.lang.StringUtils;
  * <p/>
  * Implements all of the methods from the standard HttpSession class plus
  * helper methods to aid setting up a session.
- *
- * @author Bob Schellink
  */
 public class MockSession implements HttpSession {
 

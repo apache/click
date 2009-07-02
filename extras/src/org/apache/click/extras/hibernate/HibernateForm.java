@@ -121,8 +121,6 @@ import org.hibernate.type.Type;
  *
  * @see SessionContext
  * @see SessionFilter
- *
- * @author Malcolm Edgar
  */
 public class HibernateForm extends Form {
 

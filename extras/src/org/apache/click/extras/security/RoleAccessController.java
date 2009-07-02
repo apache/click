@@ -26,8 +26,6 @@ import javax.servlet.http.HttpServletRequest;
  * to a specified role.
  * <p/>
  * This class is used as the default AccessController by the Menu class.
- *
- * @author Malcolm Edgar
  */
 public class RoleAccessController implements AccessController {
 

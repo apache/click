@@ -44,9 +44,6 @@ import org.apache.click.util.HtmlStringBuffer;
  *
  * @see Submit
  * @see Button
- *
- * @author Phil Barnes
- * @author Malcolm Edgar
  */
 public class ImageSubmit extends Submit {
 

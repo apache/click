@@ -56,8 +56,6 @@ import java.io.IOException;
  *
  * @see SessionContext
  * @see HibernateForm
- *
- * @author Malcolm Edgar
  */
 public class SessionFilter implements Filter {
 

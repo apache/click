@@ -53,10 +53,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * To import these TabbedCayenneForm files simply reference the variables
  * <span class="blue">$headElements</span> and
  * <span class="blue">$jsElements</span> in the page template.
- *
- * <p>&nbsp;</p>
- *
- * @author Malcolm Edgar
  */
 public class TabbedCayenneForm extends CayenneForm {
 

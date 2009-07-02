@@ -180,8 +180,6 @@ import org.apache.velocity.util.SimplePool;
  * If you are using LogServices other than {@link ConsoleLogService} you will
  * probably configure that service to filter out Velocity's verbose <tt>INFO</tt>
  * level messages.
- *
- * @author Malcolm Edgar
  */
 public class VelocityTemplateService implements TemplateService {
 

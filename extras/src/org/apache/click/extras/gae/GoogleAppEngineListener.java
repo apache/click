@@ -142,8 +142,6 @@ import ognl.OgnlRuntime;
  * "<tt>/click</tt>" folder with all the resources packaged for that jar. Simple
  * copy the content of the "<tt>/click</tt>" folder to your GAE folder:
  * "<tt>/war/click</tt>".
- *
- * @author Bob Schellink
  */
 public class GoogleAppEngineListener implements ServletContextListener {
 

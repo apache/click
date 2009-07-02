@@ -30,8 +30,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * </td>
  * </tr>
  * </table>
- *
- * @author Malcolm Edgar
  */
 public class TablePaginator implements Renderable {
 
