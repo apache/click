@@ -100,8 +100,6 @@ import org.apache.commons.lang.StringUtils;
  * <ul>
  * <li>/click/extras-control.js</li>
  * </ul>
- *
- * @author Bob Schellink
  */
 public class SubmitLink extends ActionLink {
 

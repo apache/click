@@ -44,8 +44,6 @@ import org.apache.click.Context;
  *
  * @see Column
  * @see Table
- *
- * @author Malcolm Edgar
  */
 public interface Decorator {
 

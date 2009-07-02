@@ -103,8 +103,6 @@ import org.apache.cayenne.query.SelectQuery;
  *
  * @see CayenneForm
  * @see PropertySelect
- *
- * @author Malcolm Edgar
  */
 public class QuerySelect extends Select {
 

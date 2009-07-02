@@ -113,8 +113,6 @@ import org.apache.commons.lang.Validate;
  *   &lt;/body&gt;
  * &lt;/html&gt;
  * </pre>
- *
- * @author Malcolm Edgar
  */
 public class FreemarkerTemplateService implements TemplateService {
 

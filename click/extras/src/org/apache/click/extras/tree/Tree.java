@@ -161,8 +161,6 @@ import org.apache.commons.lang.StringUtils;
  *      <li>images/folder-open.png</li>
  *      <li>images/item.png</li>
  * </ul>
- *
- * @author Bob Schellink
  */
 public class Tree extends AbstractControl {
 

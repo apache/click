@@ -34,8 +34,6 @@ import org.apache.click.MockContainer;
  * <p/>
  * The resourcePath can later be retrieved by calling
  * {@link MockRequest#getForward()} or {@link MockRequest#getIncludes()}.
- *
- * @author Bob Schellink
  */
 public class MockRequestDispatcher implements RequestDispatcher {
 

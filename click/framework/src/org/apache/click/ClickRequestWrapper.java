@@ -39,9 +39,6 @@ import org.apache.commons.fileupload.FileUploadException;
  * Provides a custom HttpServletRequest class for shielding users from
  * multipart request parameters. Thus calling request.getParameter(String)
  * will still work properly.
- *
- * @author Bob Schellink
- * @author Malcolm Edgar
  */
 class ClickRequestWrapper extends HttpServletRequestWrapper {
 

@@ -29,10 +29,6 @@ import javax.servlet.http.HttpServletResponse;
  * <p/>
  * Note this Jakarta Tomcat examples Filter is packaged in Click Extras for
  * convenience.
- *
- * @author Amy Roh
- * @author Dmitri Valdin
- * @version Revision: 1.3 , Date: 2004/03/18 16:40:28
  */
 public class CompressionResponseStream extends ServletOutputStream {
 

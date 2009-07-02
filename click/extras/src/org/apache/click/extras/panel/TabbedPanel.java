@@ -132,9 +132,6 @@ import org.apache.commons.lang.math.NumberUtils;
  * <span class="blue">$jsElements</span>
  * &lt;/body&gt;
  * &lt;/html&gt; </pre>
- *
- * @author Phil Barnes
- * @author Malcolm Edgar
  */
 public class TabbedPanel extends Panel {
 

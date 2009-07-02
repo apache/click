@@ -39,8 +39,6 @@ import org.apache.commons.lang.StringUtils;
  *
  * @see ActionLink
  * @see Submit
- *
- * @author Malcolm Edgar
  */
 public abstract class AbstractLink extends AbstractControl {
 

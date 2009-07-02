@@ -234,9 +234,6 @@ import org.apache.click.util.SessionMap;
  * <li>response - the servlet request</li>
  * <li>session - the {@link SessionMap} adaptor for the users HttpSession</li>
  * </ul>
- *
- * @author Phil Barnes
- * @author Malcolm Edgar
  */
 public class Panel extends AbstractContainer {
 

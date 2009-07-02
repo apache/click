@@ -30,8 +30,6 @@ import javax.servlet.ServletContext;
  * <p/>
  * Implements all of the methods from the standard ServletConfig class plus
  * helper methods to aid setting up a config.
- *
- * @author Bob Schellink
  */
 public class MockServletConfig implements ServletConfig {
 

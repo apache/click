@@ -166,8 +166,6 @@ import org.apache.commons.lang.StringUtils;
  *
  * ResourceElement contains some predefined Conditional Comments namely
  * {@link #IF_IE}, {@link #IF_LESS_THAN_IE7} and {@link #IF_IE7}.
- *
- * @author Bob Schellink
  */
 public class ResourceElement extends Element {
 

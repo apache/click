@@ -23,11 +23,9 @@ import org.apache.click.Context;
 
 /**
  * The listener interface for receiving tree events.
- *
- * <p/>A common use case for this interface is to lazily load
+ * <p/>
+ * A common use case for this interface is to lazily load
  * the tree as the user is expanding node's, while traversing the tree.
- *
- * @author Bob Schellink
  */
 public interface TreeListener extends Serializable {
 

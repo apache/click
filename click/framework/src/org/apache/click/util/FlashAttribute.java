@@ -58,8 +58,6 @@ import java.io.Serializable;
  *
  * @see org.apache.click.Context
  * @see SessionMap
- *
- * @author Malcolm Edgar
  */
 public class FlashAttribute implements Serializable {
 

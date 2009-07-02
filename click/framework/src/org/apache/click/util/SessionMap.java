@@ -48,8 +48,6 @@ import javax.servlet.http.HttpSession;
  * <p/>
  * The SessionMap supports {@link FlashAttribute} which when accessed via
  * {@link #get(Object)} are removed from the session.
- *
- * @author Malcolm.Edgar
  */
 public class SessionMap implements Map {
 

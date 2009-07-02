@@ -171,8 +171,6 @@ import org.apache.commons.lang.StringUtils;
  * <p/>
  * This class is adapted from the Cayenne
  * {@link org.apache.cayenne.conf.WebApplicationContextFilter}.
- *
- * @author Malcolm Edgar
  */
 public class DataContextFilter implements Filter {
 

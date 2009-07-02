@@ -258,8 +258,6 @@ import org.apache.commons.lang.math.NumberUtils;
  *
  * @see Column
  * @see Decorator
- *
- * @author Malcolm Edgar
  */
 public class Table extends AbstractControl {
 

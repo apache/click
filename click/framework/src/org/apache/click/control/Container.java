@@ -34,8 +34,6 @@ import org.apache.click.Control;
  * developers to create their own containers.
  *
  * @see org.apache.click.util.ContainerUtils
- *
- * @author Bob Schellink
  */
 public interface Container extends Control {
 

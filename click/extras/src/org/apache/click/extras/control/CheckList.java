@@ -107,8 +107,6 @@ import org.apache.commons.lang.StringUtils;
  * <span class="blue">$jsElements</span> in the page template.
  *
  * @see org.apache.click.control.Option
- *
- * @author Christian Essl
  */
 public class CheckList extends Field {
 

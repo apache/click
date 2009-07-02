@@ -128,8 +128,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * To import these TabbedForm files simply reference the variables
  * <span class="blue">$headElements</span> and
  * <span class="blue">$jsElements</span> in the page template.
- *
- * @author Malcolm Edgar
  */
 public class TabbedForm extends Form {
 

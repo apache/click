@@ -45,8 +45,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * <p/>
  * <b>Please note</b>, for most cases {@link Form} is the better option as
  * it provides automatic layout and error reporting.
- *
- * @author Bob Schellink
  */
 public class HtmlForm extends Form {
 

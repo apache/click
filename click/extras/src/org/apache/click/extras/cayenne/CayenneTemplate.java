@@ -56,9 +56,6 @@ import org.apache.commons.lang.Validate;
  * <p/>
  * CayenneTemplate provides many convience DataContext methods using the
  * DataContext object bound to the current thread.
- *
- * @author Malcolm Edgar
- * @author Andrei Adamchik
  */
 public class CayenneTemplate {
 

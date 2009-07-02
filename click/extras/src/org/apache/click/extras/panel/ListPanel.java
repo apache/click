@@ -33,9 +33,6 @@ import org.apache.click.control.Panel;
  *     &lt;/div&gt;
  *   <span class="red">#end</span>
  * &lt;/div&gt; </pre>
- *
- * @author Phil Barnes
- * @author Malcolm Edgar
  */
 public class ListPanel extends Panel {
 

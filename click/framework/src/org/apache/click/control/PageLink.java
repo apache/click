@@ -42,8 +42,6 @@ import org.apache.commons.lang.StringUtils;
  *
  * @see org.apache.click.control.AbstractLink
  * @see org.apache.click.control.ActionLink
- *
- * @author Malcolm Edgar
  */
 public class PageLink extends AbstractLink {
 

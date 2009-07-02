@@ -234,8 +234,6 @@ import org.apache.click.util.PropertyUtils;
  *
  * @see Option
  * @see OptionGroup
- *
- * @author Malcolm Edgar
  */
 public class Select extends Field {
 

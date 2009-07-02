@@ -27,9 +27,6 @@ import org.apache.commons.fileupload.FileUploadException;
 
 /**
  * Provides a file upload service interface.
- *
- * @author Bob Schellink
- * @author Malcolm Edgar
  */
 public interface FileUploadService {
 

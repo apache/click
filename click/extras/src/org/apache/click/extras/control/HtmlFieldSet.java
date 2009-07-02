@@ -38,8 +38,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * <p/>
  * Also see this <a href="http://www.avoka.com/click-examples/form/contact-details.htm">example</a>
  * of how HtmlFieldSet is used to provide a custom layout.
- *
- * @author Bob Schellink
  */
 public class HtmlFieldSet extends FieldSet {
 

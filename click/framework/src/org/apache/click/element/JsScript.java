@@ -141,8 +141,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * <p/>
  * For an overview of XHTML validation and CDATA tags please see
  * <a target="_blank" href="http://javascript.about.com/library/blxhtml.htm">http://javascript.about.com/library/blxhtml.htm</a>.
- *
- * @author Bob Schellink
  */
 public class JsScript extends ResourceElement {
 

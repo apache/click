@@ -25,8 +25,6 @@ import org.apache.click.Control;
 
 /**
  * Provides an ActionListener adaptor instance.
- *
- * @author Malcolm Edgar
  */
 public class ActionListenerAdaptor implements ActionListener, Serializable {
 

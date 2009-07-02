@@ -36,8 +36,6 @@ import org.apache.click.util.MessagesMap;
  * </td>
  * </tr>
  * </table>
- *
- * @author Malcolm Edgar
  */
 public class TableInlinePaginator extends TablePaginator {
 

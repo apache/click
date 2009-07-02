@@ -39,8 +39,6 @@ import org.apache.commons.lang.ClassUtils;
 
 /**
  * Provides Container access and copy utilities.
- *
- * @author Bob Schellink
  */
 public class ContainerUtils {
 

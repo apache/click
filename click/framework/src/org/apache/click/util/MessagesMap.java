@@ -65,8 +65,6 @@ import org.apache.click.service.ConfigService;
  * <p/>
  * The ClickServlet adds a MessagesMap instance to the Velocity Context before
  * it is merged with the page template.
- *
- * @author Malcolm.Edgar
  */
 public class MessagesMap implements Map {
 

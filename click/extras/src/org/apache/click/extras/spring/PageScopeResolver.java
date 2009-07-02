@@ -77,8 +77,6 @@ import org.springframework.context.annotation.ScopeMetadataResolver;
  * includes the &#64;Component annotation will have "prototype" scope.
  *
  * @see SpringClickServlet
- *
- * @author Malcolm Edgar
  */
 public class PageScopeResolver implements ScopeMetadataResolver {
 

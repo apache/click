@@ -39,8 +39,6 @@ import org.apache.commons.lang.Validate;
  * primary key.
  * <p/>
  * This class was derived from the Cayenne <tt>DataObjectUtils</tt> class.
- *
- * @author Malcolm Edgar
  */
 public final class CayenneUtils {
 

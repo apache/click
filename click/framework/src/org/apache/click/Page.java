@@ -139,8 +139,6 @@ import org.apache.commons.lang.StringUtils;
  * </ul>
  *
  * These Page properties are also used when rendering JSP pages.
- *
- * @author Malcolm Edgar
  */
 public class Page implements Serializable {
 

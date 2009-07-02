@@ -43,8 +43,6 @@ import org.apache.commons.fileupload.ParameterParser;
  * The MemoryFileItem is based on the
  * <a class="external" target="_blank" href="http://commons.apache.org/fileupload/">Commons FileUpload</a>
  * project.
- *
- * @author Bob Schellink
  */
 public class MemoryFileItem implements FileItem, FileItemHeadersSupport {
 

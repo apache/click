@@ -28,8 +28,6 @@ import ognl.OgnlException;
 
 /**
  * Provide property getter and setter utility methods.
- *
- * @author Malcolm Edgar
  */
 public class PropertyUtils {
 

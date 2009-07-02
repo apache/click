@@ -55,8 +55,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * </ul>
  * <p/>
  * <b>Note:</b> this control is related to {@link PageLink} and not to {@link org.apache.click.extras.control.PageSubmit}.
- *
- * @author Ahmed Mohombe
  */
 public class PageButton extends PageLink {
 

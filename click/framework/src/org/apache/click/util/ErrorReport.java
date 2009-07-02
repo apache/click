@@ -47,8 +47,6 @@ import org.apache.velocity.exception.ParseErrorException;
  * Provides an HTML &lt;div&gt; error report for the display of page error
  * information. This class is used by ErrorPage and ClickServlet for the
  * display of error information.
- *
- * @author Malcolm Edgar
  */
 public class ErrorReport {
 

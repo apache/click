@@ -194,8 +194,6 @@ import org.w3c.dom.NodeList;
  * <span class="blue">$jsElements</span> in the page template.
  *
  * @see org.apache.click.extras.security.AccessController
- *
- * @author Malcolm Edgar
  */
 public class Menu extends AbstractControl {
 

@@ -50,8 +50,6 @@ import org.apache.commons.lang.StringUtils;
  * <i>Note:</i> Newer versions of the JDK seems to support more <code>Locale</code>s.
  * <p/>
  * <i>Obs.:</i> Especially practial for registration forms.
- *
- * @author Ahmed Mohombe
  */
 public class CountrySelect extends Select {
 

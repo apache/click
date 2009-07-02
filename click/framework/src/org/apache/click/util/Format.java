@@ -76,8 +76,6 @@ import org.apache.commons.lang.StringUtils;
  * object will be created for every new Page.
  *
  * @see PageImports
- *
- * @author Malcolm Edgar
  */
 public class Format implements Serializable {
 

@@ -51,8 +51,6 @@ import java.lang.annotation.Target;
  *     }
  *
  * } </pre>
- *
- * @author Malcolm Edgar
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

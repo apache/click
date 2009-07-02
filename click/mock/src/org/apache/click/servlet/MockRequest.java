@@ -59,9 +59,6 @@ import org.apache.commons.lang.StringUtils;
  * plus helper methods to aid setting up a request.
  * <p/>
  * This class was adapted from <a href="http://wicket.apache.org">Apache Wicket</a>.
- *
- * @author Chris Turner
- * @author Bob Schellink
  */
 public class MockRequest implements HttpServletRequest {
 

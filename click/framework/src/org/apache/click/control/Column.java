@@ -195,8 +195,6 @@ import org.apache.commons.lang.math.NumberUtils;
  *
  * @see Decorator
  * @see Table
- *
- * @author Malcolm Edgar
  */
 public class Column implements Serializable {
 

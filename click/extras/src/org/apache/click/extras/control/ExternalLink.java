@@ -37,8 +37,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * See also the W3C HTML reference:
  * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
  *    href="http://www.w3.org/TR/html401/struct/links.html#h-12.2">A Links</a>
- *
- * @author Malcolm Edgar
  */
 public class ExternalLink extends AbstractLink {
 

@@ -38,8 +38,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * HTML output:
  * <pre class="codeHtml">
  * &lt;tr&gt;&lt;td colspan='2' align='left'&gt;&lt;hr/&gt;&lt;/td&gt;&lt;/tr&gt; </pre>
- *
- * @author Malcolm Edgar
  */
 public class Label extends Field {
 

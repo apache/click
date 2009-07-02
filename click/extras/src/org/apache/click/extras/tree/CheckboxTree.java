@@ -122,8 +122,6 @@ import org.apache.commons.lang.ArrayUtils;
  * <span class="blue">$jsElements</span> in the page template.
  *
  * @see Tree
- *
- * @author Bob Schellink
  */
 public class CheckboxTree extends Tree {
 

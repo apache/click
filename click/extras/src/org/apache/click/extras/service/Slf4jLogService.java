@@ -43,8 +43,6 @@ import org.slf4j.LoggerFactory;
  *     &lt;<span class="red">log-service</span> classname="<span class="blue">org.apache.click.extras.service.Slf4jLogService</span>"/&gt;
  *
  * &lt;/click-app&gt; </pre>
- *
- * @author Malcolm Edgar
  */
 public class Slf4jLogService implements LogService {
 

@@ -60,8 +60,6 @@ import org.apache.commons.lang.StringUtils;
  * the Form will not invoke the ActionButton's <tt>onProcess()</tt> method.
  *
  * @see org.apache.click.control.ActionLink
- *
- * @author Malcolm Edgar
  */
 public class ActionButton extends Button {
 
