@@ -19,6 +19,34 @@
    under the License.
 -->
 
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<html>
+<head>
+<title>${title} : Click Examples</title>
+<link type="text/css" rel="stylesheet" href="${context}/assets/css/style.css" title="Style"/>
+${headElements}
+<link rel="Click icon" href="$context/favicon.ico" type="image/ico"/>
+</head>
+<body>
+
+<div class="page">
+  <div class="header">
+
+    <%-- Title Header --%>
+    <div class="title-icon">
+      <a target="blank" href="http://incubator.apache.org/click/"><img src="${context}/assets/images/click-icon-blue-32.png" border="0" alt="Click"/></a>
+    </div>
+		<div class="title-left">
+      Click Examples
+    </div>
+    <div class="title-hosted">
+      <p>Version ${messages.version}</p>
+      <a target="blank" href="http://www.avoka.com">Hosted by Avoka Technologies</a>
+    </div>
+    <div class="header-color">
+    </div>
 
     <%-- Menu --%>
     <table id="menuTable" border="0" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 2px;">
