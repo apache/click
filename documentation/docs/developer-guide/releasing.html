@@ -233,7 +233,7 @@ gpg --verify click-X.X.X-incubating.zip.asc click-X.X.X-incubating.zip
                 <tt>/public_html</tt> account to the apache distribution folder,
                 for example:
                 <pre class="codeConfig">
-cp -r ~/public_html/click/click/X.X.X/dist/click/ /www/www.apache.org/dist/incubator/click/click/X.X.X
+cp -r ~/public_html/click/click/X.X.X/dist/ /www/www.apache.org/dist/incubator/click/click/X.X.X
 </pre>
             </li>
         </ol>
@@ -309,6 +309,14 @@ mvn gpg:sign-and-deploy-file -DpomFile=click/click-X.X.X-incubating.pom -Dfile=c
 mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-X.X.X-incubating.pom -Dfile=click-extras/click-extras-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
 mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-X.X.X-incubating.pom -Dfile=click-nodeps/click-nodeps-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
 mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X-incubating.pom -Dfile=click-mock/click-mock-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+</pre>
+                    </li>
+                    <li>The <tt>sign-and-deploy-file</tt> command creates a number
+                    of unnecessary artifacts that can be deleted. The artifacts
+                    that can be deleted are:
+                    <pre class="codeConfig">
+click-X.X.X-incubating.jar.asc.md5
+click-X.X.X-incubating.jar.asc.sha1
 </pre>
                     </li>
                 </ul>
