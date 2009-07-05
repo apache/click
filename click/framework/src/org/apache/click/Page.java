@@ -192,7 +192,7 @@ public class Page implements Serializable {
     protected String redirect;
 
     /**
-     * The page is stateful and should be save to the users HttpSession
+     * The page is stateful and should be saved to the users HttpSession
      * between requests.
      */
     protected boolean stateful;
@@ -1025,7 +1025,8 @@ public class Page implements Serializable {
      * Return true if the page is stateful and should be saved in the users
      * HttpSession between requests.
      *
-     * @return true if the page is stateful and should be save in the users session
+     * @return true if the page is stateful and should be saved in the users
+     * session
      */
     public boolean isStateful() {
         return stateful;
