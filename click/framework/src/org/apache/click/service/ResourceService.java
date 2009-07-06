@@ -1,0 +1,71 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package org.apache.click.service;
+
+import java.io.IOException;
+
+import javax.servlet.ServletContext;
+
+/**
+ * Provides a static resource service interface.
+ *
+ * <h3>Configuration</h3>
+ * The default ResourceService is {@link ClickResourceService}.
+ * <p/>
+ * However you can instruct Click to use a different implementation by adding
+ * the following element to your <tt>click.xml</tt> configuration file.
+ *
+ * <pre class="codeConfig">
+ * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+ * &lt;click-app charset="UTF-8"&gt;
+ *
+ *     &lt;pages package="com.mycorp.page"/&gt;
+ *
+ *     &lt;<span class="red">resource-service</span> classname="<span class="blue">com.mycorp.service.DynamicResourceService</span>"&gt;
+ *
+ * &lt;/click-app&gt; </pre>
+ */
+public interface ResourceService {
+
+    /**
+     * Initialize the ResourceService with the given application configuration
+     * service instance.
+     * <p/>
+     * This method is invoked after the ResourceService has been constructed.
+     *
+     * @param servletContext the application servlet context
+     * @throws IOException if an IO error occurs initializing the service
+     */
+    public void onInit(ServletContext servletContext) throws IOException;
+
+    /**
+     * Destroy the ResourceService.
+     */
+    public void onDestroy();
+
+    /**
+     * Return the resource data byte array for the given resource path or null
+     * if not resource was found.
+     *
+     * @param resourcePath the path of the resource to lookup
+     * @return the resource data byte array if found or null otherwise
+     */
+    public byte[] getResourceData(String resourcePath);
+
+}

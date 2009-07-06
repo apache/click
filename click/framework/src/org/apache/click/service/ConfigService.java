@@ -90,8 +90,6 @@ import org.apache.click.util.Format;
  * ...
  *
  * &lt;/web-app&gt; </pre>
- *
- * @author Malcolm Edgar
  */
 public interface ConfigService {
 
@@ -138,8 +136,9 @@ public interface ConfigService {
 
     /**
      * Destroy the ConfigurationService. This method will also invoke the
-     * <tt>onDestory()</tt> methods on the <tt>FileUploadService</tt> and the
-     * <tt>TemplateService</tt>.
+     * <tt>onDestory()</tt> methods on the <tt>FileUploadService</tt>,
+     * <tt>TemplateService</tt>, <tt>ResourceService</tt> and the
+     * <tt>LogService</tt> in that order.
      */
     public void onDestroy();
 
@@ -150,6 +149,20 @@ public interface ConfigService {
      * @return the application file upload service
      */
     public FileUploadService getFileUploadService();
+
+    /**
+     * Return the application log service.
+     *
+     * @return the application log service.
+     */
+    public LogService getLogService();
+
+    /**
+     * Return the application resource service.
+     *
+     * @return the application resource service.
+     */
+    public ResourceService getResourceService();
 
     /**
      * Return the application templating service.
@@ -225,13 +238,6 @@ public interface ConfigService {
      * @return the application locale value
      */
     public Locale getLocale();
-
-    /**
-     * Return the Click application log service.
-     *
-     * @return the application log service.
-     */
-    public LogService getLogService();
 
     /**
      * Return the path for the given page Class.

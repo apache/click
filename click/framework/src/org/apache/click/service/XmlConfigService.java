@@ -73,8 +73,6 @@ import org.xml.sax.SAXException;
  * <p/>
  * However you can instruct Click to use a different service implementation.
  * Please see {@link ConfigService} for more details.
- *
- * @author Malcolm Edgar
  */
 public class XmlConfigService implements ConfigService, EntityResolver {
 
@@ -192,6 +190,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /** The ServletContext instance. */
     private ServletContext servletContext;
 
+    /** The application ResourceService. */
+    private ResourceService resourceService;
+
     /** The application TemplateService. */
     private TemplateService templateService;
 
@@ -252,6 +253,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             // Load the Templating service
             loadTemplateService(rootElm);
 
+            // Load the Resource service
+            loadResourceService(rootElm);
+
         } finally {
             ClickUtils.close(inputStream);
         }
@@ -266,6 +270,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
         if (getTemplateService() != null) {
             getTemplateService().onDestroy();
+        }
+        if (getResourceService() != null) {
+            getResourceService().onDestroy();
         }
         if (getLogService() != null) {
             getLogService().onDestroy();
@@ -303,9 +310,27 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
+     * @see ConfigService#getLogService()
+     *
+     * @return the application log service.
+     */
+    public LogService getLogService() {
+        return logService;
+    }
+
+    /**
+     * @see ConfigService#getResourceService()
+     *
+     * @return the resource service
+     */
+    public ResourceService getResourceService() {
+        return resourceService;
+    }
+
+    /**
      * @see ConfigService#getTemplateService()
      *
-     * @return the FileUpload service
+     * @return the template service
      */
     public TemplateService getTemplateService() {
         return templateService;
@@ -332,15 +357,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     public Locale getLocale() {
         return locale;
-    }
-
-    /**
-     * @see ConfigService#getLogService()
-     *
-     * @return the application log service.
-     */
-    public LogService getLogService() {
-        return logService;
     }
 
     /**
@@ -1190,7 +1206,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
     }
 
-
     /**
      * Deploy files from the specified directory.
      * <p/>
@@ -1484,6 +1499,43 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 + logService.getClass().getName();
             getLogService().debug(msg);
         }
+    }
+
+    private void loadResourceService(Element rootElm) throws Exception {
+
+        Element resourceServiceElm = ClickUtils.getChild(rootElm, "resource-service");
+
+        if (resourceServiceElm != null) {
+            Class resourceServiceClass = CommonsFileUploadService.class;
+
+            String classname = resourceServiceElm.getAttribute("classname");
+
+            if (StringUtils.isNotBlank(classname)) {
+                resourceServiceClass = ClickUtils.classForName(classname);
+            }
+
+            resourceService = (ResourceService) resourceServiceClass.newInstance();
+
+            Map propertyMap = loadPropertyMap(resourceServiceElm);
+
+            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
+                String name = i.next().toString();
+                String value = propertyMap.get(name).toString();
+
+                Ognl.setValue(name, resourceService, value);
+            }
+
+        } else {
+            resourceService = new ClickResourceService();
+        }
+
+        if (getLogService().isDebugEnabled()) {
+            String msg = "initializing ResourceService: "
+                + resourceService.getClass().getName();
+            getLogService().debug(msg);
+        }
+
+        resourceService.onInit(servletContext);
     }
 
     private void loadTemplateService(Element rootElm) throws Exception {
