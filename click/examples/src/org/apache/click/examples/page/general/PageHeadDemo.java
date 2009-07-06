@@ -18,6 +18,7 @@
  */
 package org.apache.click.examples.page.general;
 
+import java.util.List;
 import java.util.Map;
 import org.apache.click.Context;
 import org.apache.click.control.ActionLink;
@@ -48,33 +49,41 @@ public class PageHeadDemo extends BorderPage {
          // Create a new TextField and add it the Page controls
         field = new TextField("field");
 
-        // Add JavaScript and Css imports
-        setHeadElements();
-
         addControl(link);
         addControl(field);
     }
 
-    private void setHeadElements() {
-        // Add a Css import to the Page
-        getHeadElements().add(new CssImport("/general/page-head-demo.css"));
+    /**
+     * Return the Page list of HEAD elements.
+     *
+     * @return the Page list of HEAD elements
+     */
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
 
-        // Add inline Css content to the Page that increases the field font-size
-        getHeadElements().add(new CssStyle("#" + field.getId() + " { font-size: 18px; }"));
+            // Add a Css import to the Page
+            headElements.add(new CssImport("/general/page-head-demo.css"));
 
-        // Add the JQuery library to the Page
-        getHeadElements().add(new JsImport("/assets/js/jquery-1.3.2.js"));
+            // Add inline Css content to the Page that increases the field font-size
+            headElements.add(new CssStyle("#" + field.getId() + " { font-size: 18px; }"));
 
-        // Add a JQuery template which adds a 'click' listener to the link
-        // that will show/hide the field
-        Context context = getContext();
+            // Add the JQuery library to the Page
+            headElements.add(new JsImport("/assets/js/jquery-1.3.2.js"));
 
-        // Create a template model and pass in the linkId
-        Map jsModel = ClickUtils.createTemplateModel(this, context);
-        jsModel.put("linkId", '#' + link.getId());
+            // Add a JQuery template which adds a 'click' listener to the link
+            // that will show/hide the field
+            Context context = getContext();
 
-        String content = context.renderTemplate("/general/page-head-demo.js", jsModel);
+            // Create a template model and pass in the linkId
+            Map jsModel = ClickUtils.createTemplateModel(this, context);
+            jsModel.put("linkId", '#' + link.getId());
 
-        getHeadElements().add(new JsScript(content));
+            String content =
+                context.renderTemplate("/general/page-head-demo.js", jsModel);
+
+            headElements.add(new JsScript(content));
+        }
+        return headElements;
     }
 }
