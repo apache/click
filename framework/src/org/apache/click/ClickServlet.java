@@ -19,6 +19,7 @@
 package org.apache.click;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -43,6 +44,7 @@ import ognl.TypeConverter;
 
 import org.apache.click.service.ConfigService;
 import org.apache.click.service.LogService;
+import org.apache.click.service.ResourceService;
 import org.apache.click.service.XmlConfigService;
 import org.apache.click.service.ConfigService.AutoBinding;
 import org.apache.click.util.ClickUtils;
@@ -102,8 +104,6 @@ import org.apache.velocity.exception.ParseErrorException;
  * A single application {@link ConfigService} instance is created by the ClickServlet at
  * startup. Once the ConfigService has been initialized it is stored in the
  * ServletContext using the key "<tt>org.apache.click.service.ConfigService</tt>".
- *
- * @author Malcolm Edgar
  */
 public class ClickServlet extends HttpServlet {
 
@@ -286,9 +286,16 @@ public class ClickServlet extends HttpServlet {
      * @param request the servlet request to process
      * @param response the servlet response to render the results to
      * @param isPost determines whether the request is a POST
+     * @throws IOException if resource request could not be served
      */
     protected void handleRequest(HttpServletRequest request,
-        HttpServletResponse response, boolean isPost) {
+        HttpServletResponse response, boolean isPost) throws IOException {
+
+        // Handle requests for static click resources
+        if (isResourceRequest(request)) {
+            handleResourceRequest(request, response);
+            return;
+        }
 
         long startTime = System.currentTimeMillis();
 
@@ -304,6 +311,7 @@ public class ClickServlet extends HttpServlet {
             logger.debug(buffer);
         }
 
+        // Handle click page requests
         Page page = null;
         try {
 
@@ -382,6 +390,26 @@ public class ClickServlet extends HttpServlet {
                 }
                 ActionEventDispatcher.popThreadLocalDispatcher();
             }
+        }
+    }
+
+    /**
+     * Return true if the request is for a static click resource
+     *
+     * @param request the servlet request
+     * @return true if the request is for a static click resource
+     */
+    protected boolean isResourceRequest(HttpServletRequest request) {
+        String resourcePath = ClickUtils.getResourcePath(request);
+        if (resourcePath.startsWith("/click/")) {
+
+            // If not a click page and not JSP and not a directory
+            return !resourcePath.endsWith(".htm")
+                && !resourcePath.endsWith(".jsp")
+                && !resourcePath.endsWith("/");
+
+        } else {
+            return false;
         }
     }
 
@@ -477,6 +505,46 @@ public class ClickServlet extends HttpServlet {
                     processPageOnDestroy(finalizeRef, 0);
                 }
             }
+        }
+    }
+
+    /**
+     * Handle the given static /click/ resource servlet request and render the
+     * results to the servlet response.
+     *
+     * @param request the servlet request
+     * @param response the servlet response to render the results to
+     * @throws IOException if the response data could not be rendered
+     */
+    protected void handleResourceRequest(HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
+
+        String resourcePath = ClickUtils.getResourcePath(request);
+
+        ResourceService resourceService = getConfigService().getResourceService();
+
+        byte[] resourceData = resourceService.getResourceData(resourcePath);
+
+        if (resourceData != null) {
+            String mimeType = ClickUtils.getMimeType(resourcePath);
+
+            OutputStream outputStream = null;
+            try {
+                if (mimeType != null) {
+                    response.setContentType(mimeType);
+                }
+                response.setContentLength(resourceData.length);
+
+                outputStream = response.getOutputStream();
+                outputStream.write(resourceData);
+                outputStream.flush();
+
+            } finally {
+                ClickUtils.close(outputStream);
+            }
+
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
