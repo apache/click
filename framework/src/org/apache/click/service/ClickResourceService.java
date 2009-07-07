@@ -156,6 +156,12 @@ public class ClickResourceService implements ResourceService {
             // from jar
             boolean logFeedback = true;
             while ((jarEntry = jarInputStream.getNextJarEntry()) != null) {
+
+                // Guard against loading folders -> META-INF/web/click/
+                if (jarEntry.isDirectory()) {
+                    continue;
+                }
+
                 // jarEntryName example -> META-INF/web/click/table.css
                 String jarEntryName = jarEntry.getName();
 
@@ -198,6 +204,12 @@ public class ClickResourceService implements ResourceService {
         while (files.hasNext()) {
             // file example -> META-INF/web/click/table.css
             File file = (File) files.next();
+
+            // Guard against loading folders -> META-INF/web/click/
+            if (file.isDirectory()) {
+                continue;
+            }
+
             String fileName = file.getCanonicalPath().replace('\\', '/');
 
             // Only deploy resources from "META-INF/web/"
@@ -259,24 +271,26 @@ public class ClickResourceService implements ResourceService {
 
         Set resources = servletContext.getResourcePaths("/click/");
 
-        // Add all resources withtin web application
-        for (Iterator i = resources.iterator(); i.hasNext();) {
-            String resource = (String) i.next();
+        if (resources != null) {
+            // Add all resources withtin web application
+            for (Iterator i = resources.iterator(); i.hasNext();) {
+                String resource = (String) i.next();
 
-            if (!resource.endsWith(".htm")
-                && !resource.endsWith(".jsp")
-                && !resource.endsWith("/")) {
+                if (!resource.endsWith(".htm") && !resource.endsWith(".jsp")
+                    && !resource.endsWith("/")) {
 
-                InputStream inputStream = null;
-                try {
-                    inputStream = servletContext.getResourceAsStream(resource);
+                    InputStream inputStream = null;
+                    try {
+                        inputStream = servletContext.getResourceAsStream(
+                            resource);
 
-                    byte[] resourceData = IOUtils.toByteArray(inputStream);
+                        byte[] resourceData = IOUtils.toByteArray(inputStream);
 
-                     resourceCache.put(resource, resourceData);
+                        resourceCache.put(resource, resourceData);
 
-                } finally {
-                    ClickUtils.close(inputStream);
+                    } finally {
+                        ClickUtils.close(inputStream);
+                    }
                 }
             }
         }
