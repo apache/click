@@ -207,6 +207,7 @@
 
     <programlisting language="xml">&lt;click-app&gt;
 
+  &lt;!-- Specify the Java package where Page classes can be found --&gt;
   &lt;pages package="com.mycorp.page"/&gt;
 
   &lt;mode value="profile"/&gt;
@@ -218,10 +219,12 @@
 
     <programlisting language="xml">&lt;click-app charset="UTF-8" locale="de"&gt;
 
+  &lt;!-- Specify the Java package where Page classes can be found --&gt;
   &lt;pages package="com.mycorp.banking.page"&gt;
-    &lt;page path="index.htm" classname="com.mycorp.page.Home"/&gt;
+    &lt;page path="index.htm" classname="Home"/&gt;
   &lt;/pages&gt;
 
+  &lt;!-- Specify a second Java package where Page classes can be found --&gt;
   &lt;pages package="com.mycorp.common.page"/&gt;
 
   &lt;format classname="com.mycorp.util.Format"/&gt;
@@ -270,7 +273,7 @@
       Locale. If this value is defined it will override Locale returned by the request.
       Please see the Context
       <ulink url="../../click-api/org/apache/click/Context.html#getLocale()">getLocale()</ulink>
-      for details. For example the folliwing configuration sets the application
+      for details. For example the following configuration sets the application
       character set to UTF-8 and the default Locale as German (de):
       </para>
 
@@ -618,19 +621,23 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         be a long number value:
         </para>
 
-        <programlisting language="xml">&lt;page path="login.htm" classname="com.mycorp.page.Login"&gt;
-  &lt;header name="Pragma" value="no-cache"/&gt;
-  &lt;header name="Expires" value="1" type="Date"/&gt;
-&lt;/page&gt;</programlisting>
+        <programlisting language="xml">&lt;pages package="com.mycorp.page"&gt;
+  &lt;page path="login.htm" classname="Login"&gt;
+    &lt;header name="Pragma" value="no-cache"/&gt;
+    &lt;header name="Expires" value="1" type="Date"/&gt;
+  &lt;/page&gt;
+&lt;/pages&gt;</programlisting>
 
         <para>If you wanted to enable caching for a particular page you could set
         the following page cache control header. This will mark the page as cachable
         for a period of 1 hour after which it should be reloaded.
         </para>
 
-        <programlisting language="xml">&lt;page path="home.htm" classname="com.mycorp.page.Home"&gt;
-  &lt;header name="Cache-Control" value="max-age=3600, public, must-revalidate"/&gt;
-&lt;/page&gt;</programlisting>
+        <programlisting language="xml">&lt;pages package="com.mycorp.page"&gt;
+  &lt;page path="home.htm" classname="Home"&gt;
+    &lt;header name="Cache-Control" value="max-age=3600, public, must-revalidate"/&gt;
+  &lt;/page&gt;
+&lt;/pages&gt;</programlisting>
 
         <para>To apply header values globally define header values in the headers
         element. For example:
