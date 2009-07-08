@@ -20,7 +20,8 @@
 <chapter id="chapter-configuration" remap="h1">
   <title>Configuration</title>
 
-  <para>This section discusses how to setup and configure a Click web application.
+  <para>This section discusses how to setup and configure an Apache Click web
+  application.
   </para>
 
   <para>The Click configuration files include:

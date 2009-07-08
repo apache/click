@@ -18,13 +18,13 @@
  under the License.
 -->
 <chapter id="chapter-introduction">
-  <title>Introduction to Click</title>
+  <title>Introduction to Apache Click</title>
 
-  <para>Click is a simple JEE web application framework for commercial
+  <para>Apache Click is a simple JEE web application framework for commercial
   Java developers.
   </para>
 
-  <para>Click is an open source project, licensed under the
+  <para>Apache Click is an open source project, licensed under the
   <ulink url="../../LICENSE.txt"><citetitle>Apache license</citetitle>
   </ulink>.
   </para>

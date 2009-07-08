@@ -20,7 +20,7 @@
 <chapter id="chapter-controls" remap="h1">
   <title>Controls</title>
 
-  <para> Click provides a rich set of Controls which support client side
+  <para>Apache Click provides a rich set of Controls which support client side
   rendering and server side processing. Please see the
   <ulink url="../../click-api/org/apache/click/control/package-summary.html">Javadoc</ulink>,
   which provides extensive information and examples of the core Controls.

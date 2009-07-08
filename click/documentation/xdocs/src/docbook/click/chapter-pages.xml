@@ -20,7 +20,7 @@
 <chapter id="chapter-pages" remap="h1">
   <title>Pages</title>
 
-  <para>Pages are the heart of web applications. In Click, Pages encapsulate
+  <para>Pages are the heart of web applications. In Apache Click, Pages encapsulate
   the processing of HTML requests and the rendering of HTML responses.
   This chapter discusses Click pages in detail.
   </para>
