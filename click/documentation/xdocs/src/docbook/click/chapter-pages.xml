@@ -22,7 +22,7 @@
 
   <para>Pages are the heart of web applications. In Apache Click, Pages encapsulate
   the processing of HTML requests and the rendering of HTML responses.
-  This chapter discusses Click pages in detail.
+  This chapter discusses Apache Click pages in detail.
   </para>
 
   <para>In Click, a logical page is composed of a Java class and a Velocity
