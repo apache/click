@@ -614,6 +614,7 @@ public class Menu extends AbstractControl {
      * where the rolenames are derived from the {@link #getRoles()} property.
      *
      * @return true if the user is in one of the menu roles, or false otherwise
+     * @throws IllegalStateException if the menu accessController is not defined
      */
     public boolean isUserInRoles() {
         if (getAccessController() == null) {
