@@ -20,14 +20,14 @@
 <chapter id="chapter-best-practices" remap="h1">
   <title>Best Practices</title>
 
-  <para>This chapter discusses Best Practices for designing and building Click
-  applications.
+  <para>This chapter discusses Best Practices for designing and building Apache
+  Click applications.
   </para>
 
   <sect1 id="security" remap="h2">
     <title>Security</title>
 
-    <para> For application security it is highly recommended that you use the
+    <para>For application security it is highly recommended that you use the
     declarative JEE Servlet path role based security model. While Click pages
     provide an <methodname>onSecurityCheck()</methodname> method for rolling your own
     programatic security model, the declarative JEE model provides numerous
