@@ -269,12 +269,18 @@ public class Menu extends AbstractControl {
 
     /**
      * Create a new Menu instance.
+     * <p/>
+     * Please ensure you have defined a menu {@link #accessController} if the
+     * menu's {@link #isUserInRoles()} method is going to be called.
      */
     public Menu() {
     }
 
     /**
      * Create a new Menu instance with the given name.
+     * <p/>
+     * Please ensure you have defined a menu {@link #accessController} if the
+     * menu's {@link #isUserInRoles()} method is going to be called.
      *
      * @param name the name of the menu
      */
@@ -610,6 +616,11 @@ public class Menu extends AbstractControl {
      * @return true if the user is in one of the menu roles, or false otherwise
      */
     public boolean isUserInRoles() {
+        if (getAccessController() == null) {
+            String msg = "Menu accessController has not been defined";
+            throw new IllegalStateException(msg);
+        }
+
         HttpServletRequest request = getContext().getRequest();
 
         for (int i = 0, size = getRoles().size(); i < size; i++) {
