@@ -272,6 +272,8 @@ public class Menu extends AbstractControl {
      * <p/>
      * Please ensure you have defined a menu {@link #accessController} if the
      * menu's {@link #isUserInRoles()} method is going to be called.
+     *
+     * @see #Menu(java.lang.String)
      */
     public Menu() {
     }
@@ -280,7 +282,35 @@ public class Menu extends AbstractControl {
      * Create a new Menu instance with the given name.
      * <p/>
      * Please ensure you have defined a menu {@link #accessController} if the
-     * menu's {@link #isUserInRoles()} method is going to be called.
+     * menu's {@link #isUserInRoles()} method is going to be called. For example:
+     *
+     * <pre class="prettyprint">
+     * public class BorderPage extends Page {
+     *
+     *     ...
+     *
+     *     public void defineMenus() {
+     *
+     *         // Define an accessController
+     *         AccessController accessController = new RoleAccessController();
+     *
+     *         // Retrieve some user roles
+     *         List roles = securityService.getRoles();
+     *
+     *         Menu menu = new Menu("root");
+     *         menu.setAccessController(accessController);
+     *         menu.setRoles(roles);
+     *
+     *         Menu subMenu = new Menu("products");
+     *         subMenu.setLabel("Products");
+     *         subMenu.setAccessController(accessController);
+     *         subMenu.setRoles(roles);
+     *
+     *         menu.getChildren().add(subMenu);
+     *
+     *         ...
+     *     }
+     * } </pre>
      *
      * @param name the name of the menu
      */
