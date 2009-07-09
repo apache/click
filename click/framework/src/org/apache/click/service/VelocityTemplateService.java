@@ -34,11 +34,11 @@ import org.apache.click.Context;
 import org.apache.click.Page;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ErrorReport;
-
 import org.apache.commons.lang.Validate;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.io.VelocityWriter;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeServices;
@@ -199,10 +199,16 @@ public class VelocityTemplateService implements TemplateService {
      */
     protected static final String DEFAULT_TEMPLATE_PROPS = "/WEB-INF/velocity.properties";
 
+    /** The click error page template path. */
+    protected static final String ERROR_PAGE_PATH = "/click/error.htm";
+
     /**
      * The user supplied macro file name: &nbsp; "<tt>macro.vm</tt>".
      */
     protected static final String MACRO_VM_FILE_NAME = "macro.vm";
+
+    /** The click not found page template path. */
+    protected static final String NOT_FOUND_PAGE_PATH = "/click/not-found.htm";
 
     /**
      * The global Velocity macro file path: &nbsp;
@@ -217,6 +223,12 @@ public class VelocityTemplateService implements TemplateService {
 
     /** The application configuration service. */
     protected ConfigService configService;
+
+    /** The /click/error.htm page template has been deployed. */
+    protected boolean deployedErrorTemplate;
+
+    /** The /click/not-found.htm page template has been deployed. */
+    protected boolean deployedNotFoundTemplate;
 
     /** The VelocityEngine instance. */
     protected VelocityEngine velocityEngine = new VelocityEngine();
@@ -265,6 +277,20 @@ public class VelocityTemplateService implements TemplateService {
                 logChuteAdapter.logLevel = LogChute.WARN_ID;
             }
         }
+
+        // Attempt to load click error page and not found templates from the
+        // web click directory
+        try {
+            velocityEngine.getTemplate(ERROR_PAGE_PATH);
+            deployedErrorTemplate = true;
+        } catch (ResourceNotFoundException rnfe) {
+        }
+
+        try {
+            velocityEngine.getTemplate(NOT_FOUND_PAGE_PATH);
+            deployedNotFoundTemplate = true;
+        } catch (ResourceNotFoundException rnfe) {
+        }
     }
 
     /**
@@ -289,14 +315,23 @@ public class VelocityTemplateService implements TemplateService {
 
         final VelocityContext context = new VelocityContext(model);
 
+        String templatePath = page.getTemplate();
+
+        if (!deployedErrorTemplate && templatePath.equals(ERROR_PAGE_PATH)) {
+            templatePath = "META-INF/web" + ERROR_PAGE_PATH;
+        }
+        if (!deployedErrorTemplate && templatePath.equals(NOT_FOUND_PAGE_PATH)) {
+            templatePath = "META-INF/web" + NOT_FOUND_PAGE_PATH;
+        }
+
         // May throw parsing error if template could not be obtained
         Template template = null;
         String charset = configService.getCharset();
         if (charset != null) {
-            template = velocityEngine.getTemplate(page.getTemplate(), charset);
+            template = velocityEngine.getTemplate(templatePath, charset);
 
         } else {
-            template = velocityEngine.getTemplate(page.getTemplate());
+            template = velocityEngine.getTemplate(templatePath);
         }
 
         VelocityWriter velocityWriter = null;
