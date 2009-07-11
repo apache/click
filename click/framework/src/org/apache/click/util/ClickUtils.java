@@ -2280,7 +2280,15 @@ public class ClickUtils {
                     if (Character.isLowerCase(aChar)
                         && (Character.isUpperCase(nextChar)
                             || Character.isDigit(nextChar))) {
-                       buffer.append(" ");
+
+                        // Add space before digits or uppercase letters
+                        buffer.append(" ");
+
+                    } else if (Character.isDigit(aChar)
+                        && (!Character.isDigit(nextChar))) {
+
+                        // Add space after digits
+                        buffer.append(" ");
                     }
                 }
             }
