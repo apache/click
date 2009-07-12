@@ -76,7 +76,7 @@ http://jquery.com/
 ======================================================================
 
 This product includes the Calendar Date Select JavaScript library,
-developed by Tim Charper, distributed under the terms of the MIT license.
+developed by Tim Harper, distributed under the terms of the MIT license.
 http://code.google.com/p/calendardateselect/
 
 ======================================================================

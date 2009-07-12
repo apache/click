@@ -1,4 +1,4 @@
-// Copyright 2009 Tim Charper (http://code.google.com/p/calendardateselect/)
+// Copyright 2009 Tim Harper (http://code.google.com/p/calendardateselect/)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
