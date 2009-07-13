@@ -18,10 +18,7 @@
  */
 package org.apache.click.extras.service;
 
-import freemarker.cache.ClassTemplateLoader;
-import freemarker.cache.MultiTemplateLoader;
-import freemarker.cache.TemplateLoader;
-import freemarker.cache.WebappTemplateLoader;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
@@ -32,12 +29,17 @@ import org.apache.click.service.ConfigService;
 import org.apache.click.service.LogService;
 import org.apache.click.service.TemplateService;
 import org.apache.click.util.ClickUtils;
+import org.apache.commons.lang.Validate;
+
+import freemarker.cache.ClassTemplateLoader;
+import freemarker.cache.MultiTemplateLoader;
+import freemarker.cache.TemplateLoader;
+import freemarker.cache.WebappTemplateLoader;
 import freemarker.log.Logger;
 import freemarker.template.Configuration;
 import freemarker.template.ObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
-import org.apache.commons.lang.Validate;
 
 /**
  * Provides a <a target="_blank" href="http://www.freemarker.org/">Freemarker</a> TemplateService class.
@@ -116,6 +118,12 @@ import org.apache.commons.lang.Validate;
  */
 public class FreemarkerTemplateService implements TemplateService {
 
+    /** The click error page template path. */
+    protected static final String ERROR_PAGE_PATH = "/click/error.htm";
+
+    /** The click not found page template path. */
+    protected static final String NOT_FOUND_PAGE_PATH = "/click/not-found.htm";
+
     // -------------------------------------------------------------- Variables
 
     /** The Freemarker engine configuration. */
@@ -129,6 +137,12 @@ public class FreemarkerTemplateService implements TemplateService {
 
     /** The application configuration service. */
     protected ConfigService configService;
+
+    /** The /click/error.htm page template has been deployed. */
+    protected boolean deployedErrorTemplate;
+
+    /** The /click/not-found.htm page template has been deployed. */
+    protected boolean deployedNotFoundTemplate;
 
     // --------------------------------------------------------- Public Methods
 
@@ -196,6 +210,20 @@ public class FreemarkerTemplateService implements TemplateService {
         if (configService.getLocale() != null) {
             configuration.setLocale(configService.getLocale());
         }
+
+        // Attempt to load click error page and not found templates from the
+        // web click directory
+        try {
+            configuration.getTemplate(ERROR_PAGE_PATH);
+            deployedErrorTemplate = true;
+        } catch (IOException ioe) {
+        }
+
+        try {
+            configuration.getTemplate(NOT_FOUND_PAGE_PATH);
+            deployedNotFoundTemplate = true;
+        } catch (IOException ioe) {
+        }
     }
 
     /**
@@ -215,8 +243,17 @@ public class FreemarkerTemplateService implements TemplateService {
     public void renderTemplate(Page page, Map model, Writer writer)
             throws Exception {
 
+        String templatePath = page.getTemplate();
+
+        if (!deployedErrorTemplate && templatePath.equals(ERROR_PAGE_PATH)) {
+            templatePath = "META-INF/web" + ERROR_PAGE_PATH;
+        }
+        if (!deployedErrorTemplate && templatePath.equals(NOT_FOUND_PAGE_PATH)) {
+            templatePath = "META-INF/web" + NOT_FOUND_PAGE_PATH;
+        }
+
         // Get the template object
-        Template template = configuration.getTemplate(page.getTemplate());
+        Template template = configuration.getTemplate(templatePath);
 
         // Merge the data-model and the template
         template.process(model, writer);
