@@ -1130,10 +1130,11 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     private void deployFiles(Element rootElm) throws Exception {
 
         // Deploy application files if they are not already present.
-        // Only deploy if servletContext.getRealPath() returns a valid path.
-        boolean resourcesDeployable = (servletContext.getRealPath("/") != null);
+        // Only deploy if writes are allowed
+        boolean isResourcesDeployable =
+            ClickUtils.isResourcesDeployable(servletContext);
 
-        if (resourcesDeployable) {
+        if (isResourcesDeployable) {
             deployControls(getResourceRootElement("/click-controls.xml"));
             deployControls(getResourceRootElement("/extras-controls.xml"));
             deployControls(rootElm);

@@ -2405,6 +2405,37 @@ public class ClickUtils {
         return buffer.toString();
     }
 
+    /**
+     * Returns true if Click resources (JavaScript, CSS, images etc) packaged
+     * in jars can be deployed to the web application folder, false otherwise.
+     * <p/>
+     * This method will return false in restricted environments where write
+     * access to the underlying file system is disallowed. Examples where
+     * write access is not allowed include the WebLogic JEE server (this can be
+     * changed though) and Google App Engine.
+     *
+     * @param servletContext the application servlet context
+     * @return true if writes are allowed, false otherwise
+     */
+    public static boolean isResourcesDeployable(ServletContext servletContext) {
+        try {
+            boolean canWrite = (servletContext.getRealPath("/") != null);
+            if (!canWrite) {
+                return false;
+            }
+
+            // Since Google App Engine returns a value for getRealPath, check
+            // SecurityManager if writes are allowed
+            SecurityManager security = System.getSecurityManager();
+            if (security != null) {
+        		    security.checkWrite("/click");
+            }
+            return true;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
     // -------------------------------------------------------- Package Methods
 
     /**
