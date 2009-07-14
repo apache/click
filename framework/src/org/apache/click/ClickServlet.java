@@ -19,7 +19,6 @@
 package org.apache.click;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -161,6 +160,9 @@ public class ClickServlet extends HttpServlet {
     /** The application log service. */
     protected LogService logger;
 
+    /** The application resource service. */
+    protected ResourceService resourceService;
+
     /** The request parameters OGNL type converter. */
     protected TypeConverter typeConverter;
 
@@ -187,6 +189,8 @@ public class ClickServlet extends HttpServlet {
                 logger.info("initialized in " + configService.getApplicationMode()
                             + " mode");
             }
+
+            resourceService = configService.getResourceService();
 
         } catch (Throwable e) {
             // In mock mode this exception can occur if click.xml is not
@@ -291,9 +295,9 @@ public class ClickServlet extends HttpServlet {
     protected void handleRequest(HttpServletRequest request,
         HttpServletResponse response, boolean isPost) throws IOException {
 
-        // Handle requests for static click resources
-        if (isResourceRequest(request)) {
-            handleResourceRequest(request, response);
+        // Handle requests for click resources, i.e. CSS, JS and image files
+        if (resourceService.isResourceRequest(request)) {
+            resourceService.renderResource(request, response);
             return;
         }
 
@@ -394,26 +398,6 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Return true if the request is for a static click resource
-     *
-     * @param request the servlet request
-     * @return true if the request is for a static click resource
-     */
-    protected boolean isResourceRequest(HttpServletRequest request) {
-        String resourcePath = ClickUtils.getResourcePath(request);
-        if (resourcePath.startsWith("/click/")) {
-
-            // If not a click page and not JSP and not a directory
-            return !resourcePath.endsWith(".htm")
-                && !resourcePath.endsWith(".jsp")
-                && !resourcePath.endsWith("/");
-
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Provides the application exception handler. The application exception
      * will be delegated to the configured error page. The default error page is
      * {@link ErrorPage} and the page template is "click/error.htm" <p/>
@@ -505,46 +489,6 @@ public class ClickServlet extends HttpServlet {
                     processPageOnDestroy(finalizeRef, 0);
                 }
             }
-        }
-    }
-
-    /**
-     * Handle the given static /click/ resource servlet request and render the
-     * results to the servlet response.
-     *
-     * @param request the servlet request
-     * @param response the servlet response to render the results to
-     * @throws IOException if the response data could not be rendered
-     */
-    protected void handleResourceRequest(HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
-
-        String resourcePath = ClickUtils.getResourcePath(request);
-
-        ResourceService resourceService = getConfigService().getResourceService();
-
-        byte[] resourceData = resourceService.getResourceData(resourcePath);
-
-        if (resourceData != null) {
-            String mimeType = ClickUtils.getMimeType(resourcePath);
-
-            OutputStream outputStream = null;
-            try {
-                if (mimeType != null) {
-                    response.setContentType(mimeType);
-                }
-                response.setContentLength(resourceData.length);
-
-                outputStream = response.getOutputStream();
-                outputStream.write(resourceData);
-                outputStream.flush();
-
-            } finally {
-                ClickUtils.close(outputStream);
-            }
-
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 

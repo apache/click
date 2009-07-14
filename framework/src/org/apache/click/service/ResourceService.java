@@ -21,6 +21,8 @@ package org.apache.click.service;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Provides a static resource service interface.
@@ -60,12 +62,21 @@ public interface ResourceService {
     public void onDestroy();
 
     /**
-     * Return the resource data byte array for the given resource path or null
-     * if not resource was found.
+     * Return true if the request is for a static resource
      *
-     * @param resourcePath the path of the resource to lookup
-     * @return the resource data byte array if found or null otherwise
+     * @param request the servlet request
+     * @return true if the request is for a static resource
      */
-    public byte[] getResourceData(String resourcePath);
+    public boolean isResourceRequest(HttpServletRequest request);
+
+    /**
+     * Render the resource request to the given servlet resource response
+     *
+     * @param request the servlet resource request
+     * @param response the servlet response
+     * @throws IOException if an IO error occurs rendering the resource
+     */
+    public void renderResource(HttpServletRequest request, HttpServletResponse response)
+        throws IOException;
 
 }
