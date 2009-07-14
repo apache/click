@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -32,6 +34,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.click.util.ClickUtils;
 import org.apache.commons.io.FileUtils;
@@ -51,6 +55,9 @@ public class ClickResourceService implements ResourceService {
     /** The application log service. */
     protected LogService logService;
 
+    /** The application template service. */
+    protected TemplateService templateService;
+
     /**
      * @see ResourceService#onInit(ServletContext)
      *
@@ -61,6 +68,7 @@ public class ClickResourceService implements ResourceService {
 
         ConfigService configService = ClickUtils.getConfigService(servletContext);
         logService = configService.getLogService();
+        templateService = configService.getTemplateService();
 
         // Load all JAR resources
         loadAllJarResources();
@@ -77,13 +85,84 @@ public class ClickResourceService implements ResourceService {
     }
 
     /**
-     * @see ResourceService#getResourceData(String)
+     * @see ResourceService#isResourceRequest(HttpServletRequest)
      *
-     * @param resourcePath the path of the resource to lookup
-     * @return the resource data byte array if found or null otherwise
+     * @param request the servlet request
+     * @return true if the request is for a static click resource
      */
-    public byte[] getResourceData(String resourcePath) {
-        return resourceCache.get(resourcePath);
+    public boolean isResourceRequest(HttpServletRequest request) {
+        String resourcePath = ClickUtils.getResourcePath(request);
+
+        // If not a click page and not JSP and not a directory
+        return !resourcePath.endsWith(".htm")
+            && !resourcePath.endsWith(".jsp")
+            && !resourcePath.endsWith("/");
+    }
+
+    /**
+     * @see ResourceService#renderResource(HttpServletRequest, HttpServletResponse)
+     *
+     * @param request the servlet resource request
+     * @param response the servlet response
+     * @throws IOException if an IO error occurs rendering the resource
+     */
+    public void renderResource(HttpServletRequest request, HttpServletResponse response)
+        throws IOException {
+
+        String resourcePath = ClickUtils.getResourcePath(request);
+
+        if (!resourceCache.containsKey(resourcePath)) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        String mimeType = ClickUtils.getMimeType(resourcePath);
+        if (mimeType != null) {
+            response.setContentType(mimeType);
+        }
+
+        String lowercasePath = resourcePath.toLowerCase();
+        if (lowercasePath.endsWith(".js") || lowercasePath.endsWith(".css")) {
+
+            String templatePath = "META-INF/web" + resourcePath;
+
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("context", request.getContextPath());
+            model.put("request", request);
+
+            PrintWriter writer = response.getWriter();
+
+            try {
+                templateService.renderTemplate(templatePath, model, writer);
+
+                writer.flush();
+
+            } catch (Exception e) {
+                if (e instanceof IOException) {
+                    throw (IOException) e;
+
+                } else {
+                    String msg = (e.getMessage() != null) ? e.getMessage() : e.toString();
+                    throw new RuntimeException(msg, e);
+                }
+            }
+
+        } else {
+
+            byte[] resourceData = resourceCache.get(resourcePath);
+
+            OutputStream outputStream = null;
+            try {
+                response.setContentLength(resourceData.length);
+
+                outputStream = response.getOutputStream();
+                outputStream.write(resourceData);
+                outputStream.flush();
+
+            } finally {
+                ClickUtils.close(outputStream);
+            }
+        }
     }
 
     // Private Methods --------------------------------------------------------
@@ -269,7 +348,7 @@ public class ClickResourceService implements ResourceService {
     private void loadClickDirResources(ServletContext servletContext)
         throws IOException {
 
-        Set resources = servletContext.getResourcePaths("/click/");
+        Set resources = servletContext.getResourcePaths("/");
 
         if (resources != null) {
             // Add all resources withtin web application
