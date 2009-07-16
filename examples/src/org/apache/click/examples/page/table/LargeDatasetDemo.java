@@ -46,10 +46,19 @@ public class LargeDatasetDemo extends BorderPage {
     private CustomerService customerService;
 
     public LargeDatasetDemo() {
-        table = new Table();
+        table = new Table() {
+
+            /**
+             * Sorting must be done on Database, so we override Table build in
+             * sorting to do nothing.
+             */
+            protected void sortRowList() {
+            }
+        };
 
         // Setup customers table
         table.setClass(Table.CLASS_ITS);
+        table.setSortable(true);
 
         Column column = new Column("name");
         column.setWidth("140px;");
@@ -89,7 +98,8 @@ public class LargeDatasetDemo extends BorderPage {
         table.setRowList(dataProvider);
 
         // Retrieve customers given the firstRow, lastRow and pageSize
-        List customers = getCustomers(table.getFirstRow(), table.getLastRow(), table.getPageSize());
+        List customers = getCustomers(table.getFirstRow(), table.getPageSize(),
+            table.getSortedColumn(), table.isSortedAscending());
 
         // Add the customers to the table dataProvider
         dataProvider.addAll(customers);
@@ -138,7 +148,7 @@ public class LargeDatasetDemo extends BorderPage {
         }
 
         /**
-         * Always return the total number of rows even the number of entries
+         * Always return the total number of rows even if the number of entries
          * are less.
          */
         public int size() {
@@ -152,11 +162,12 @@ public class LargeDatasetDemo extends BorderPage {
         return customerService.getNumberOfCustomers();
     }
 
-    private List<Customer> getCustomers(int from, int to, int pageSize) {
+    private List<Customer> getCustomers(int from, int pageSize, String sortedColumn,
+        boolean ascending) {
         // Below we retrieve only those customers between the from and to
         // args. In a real application one would use an ORM or JDBC to only
         // retrieve the needed rows
-        return customerService.getCustomersForPage(from, pageSize);
+        return customerService.getCustomersForPage(from, pageSize, sortedColumn, ascending);
     }
 
 }

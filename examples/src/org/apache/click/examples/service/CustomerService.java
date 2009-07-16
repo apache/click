@@ -198,22 +198,18 @@ public class CustomerService extends CayenneTemplate {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Customer> getCustomersForPage(int offset, int pageSize) {
-        List list = getCustomers();
+    public List<Customer> getCustomersForPage(int offset, int pageSize,
+        String sortColumn, boolean ascending) {
 
-        List pageList = new ArrayList(pageSize);
-        for (int i = 0; i < pageSize; i++) {
-            // Increment row index with the offset
-            int rowIndex = offset + i;
-
-            // Guard against rowIndex that moves past the end of the list
-            if (rowIndex >= list.size()) {
-                break;
-            }
-            pageList.add(list.get(rowIndex));
+        SelectQuery query = new SelectQuery(Customer.class);
+        if (sortColumn != null) {
+            query.addOrdering(sortColumn, ascending);
         }
+        query.setFetchOffset(offset);
+        query.setFetchLimit(pageSize);
+        List list = performQuery(query);
 
-        return pageList;
+        return list;
     }
 
     @SuppressWarnings("unchecked")
