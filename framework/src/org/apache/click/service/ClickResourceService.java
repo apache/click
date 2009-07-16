@@ -317,30 +317,12 @@ public class ClickResourceService implements ResourceService {
             String resourceName = file.substring(pathIndex);
 
             if (resourceName.length() > 0) {
-                byte[] resourceBytes = getResourceByteArray(file);
+                byte[] resourceBytes = getClasspathResourceData(file);
 
-                resourceCache.put("/" + resourceName, resourceBytes);
+                if (resourceBytes != null) {
+                    resourceCache.put("/" + resourceName, resourceBytes);
+                }
             }
-        }
-    }
-
-    private byte[] getResourceByteArray(String name)
-        throws IOException {
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
-        InputStream inputStream = classLoader.getResourceAsStream(name);
-        if (inputStream == null) {
-            inputStream = getClass().getResourceAsStream(name);
-        }
-
-        try {
-            byte[] resourceData = IOUtils.toByteArray(inputStream);
-
-            return resourceData;
-
-        } finally {
-            ClickUtils.close(inputStream);
         }
     }
 
@@ -358,21 +340,66 @@ public class ClickResourceService implements ResourceService {
                 if (!resource.endsWith(".htm") && !resource.endsWith(".jsp")
                     && !resource.endsWith("/")) {
 
-                    InputStream inputStream = null;
-                    try {
-                        inputStream = servletContext.getResourceAsStream(
-                            resource);
-
-                        byte[] resourceData = IOUtils.toByteArray(inputStream);
-
+                    byte[] resourceData = getServletResourceData(servletContext, resource);
+                    if (resourceData != null) {
                         resourceCache.put(resource, resourceData);
-
-                    } finally {
-                        ClickUtils.close(inputStream);
                     }
                 }
             }
         }
     }
 
+    /**
+     * Load the resource for the given resourcePath from the servlet context.
+     *
+     * @param servletContext the application servlet context
+     * @param resourcePath the path of the resource to load
+     * @return the byte array for the given resource path
+     * @throws IOException if the resource could not be loaded
+     */
+    private byte[] getServletResourceData(ServletContext servletContext,
+        String resourcePath) throws IOException {
+        InputStream inputStream = null;
+        try {
+            inputStream = servletContext.getResourceAsStream(resourcePath);
+
+            if (inputStream != null) {
+                return IOUtils.toByteArray(inputStream);
+            } else {
+                return null;
+            }
+
+        } finally {
+            ClickUtils.close(inputStream);
+        }
+    }
+
+    /**
+     * Load the resource for the given resourcePath from the classpath.
+     *
+     * @param resourcePath the path of the resource to load
+     * @return the byte array for the given resource path
+     * @throws IOException if the resource could not be loaded
+     */
+    private byte[] getClasspathResourceData(String resourcePath) throws IOException {
+
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+        InputStream inputStream = classLoader.getResourceAsStream(resourcePath);
+        if (inputStream == null) {
+            inputStream = getClass().getResourceAsStream(resourcePath);
+        }
+
+        try {
+
+            if (inputStream != null) {
+                return IOUtils.toByteArray(inputStream);
+            } else {
+                return null;
+            }
+
+        } finally {
+            ClickUtils.close(inputStream);
+        }
+    }
 }
