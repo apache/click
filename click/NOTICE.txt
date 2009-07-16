@@ -32,11 +32,6 @@ from [2], which states the following:
 
 ======================================================================
 
-This product includes contributions by Ahmed Mohombe and Christian Essl,
-released under the Apache 2.0 license.
-
-======================================================================
-
 This product includes software from the Seraph project developed by Atlassian
 and released under the BSD License.
 http://www.atlassian.com/
