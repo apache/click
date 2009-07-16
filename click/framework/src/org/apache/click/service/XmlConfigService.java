@@ -393,8 +393,15 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @return true if JSP exists for the given ".htm" path
      */
     public boolean isJspPage(String path) {
-        String jspPath = StringUtils.replace(path, ".htm", ".jsp");
-        return pageByPathMap.containsKey(jspPath);
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        int index = StringUtils.lastIndexOf(path, ".");
+        if (index > 0) {
+            buffer.append(path.substring(0, index));
+        } else {
+            buffer.append(path);
+        }
+        buffer.append(".jsp");
+        return pageByPathMap.containsKey(buffer.toString());
     }
 
     /**
@@ -663,7 +670,125 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
     }
 
-    // -------------------------------------------------------- Package Private Methods
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Find and return the page class for the specified pagePath and
+     * pagesPackage.
+     * <p/>
+     * For example if the pagePath is <tt>'/edit-customer.htm'</tt> and
+     * package is <tt>'com.mycorp'</tt>, the matching page class will be:
+     * <tt>com.mycorp.EditCustomer</tt> or <tt>com.mycorp.EditCustomerPage</tt>.
+     * <p/>
+     * If the page path is <tt>'/admin/add-customer.htm'</tt> and package is
+     * <tt>'com.mycorp'</tt>, the matching page class will be:
+     * <tt>com.mycorp.admin.AddCustomer</tt> or
+     * <tt>com.mycorp.admin.AddCustomerPage</tt>.
+     *
+     * @param pagePath the path used for matching against a page class name
+     * @param pagesPackage the package of the page class
+     * @return the page class for the specified pagePath and pagesPackage
+     */
+    protected Class getPageClass(String pagePath, String pagesPackage) {
+        // To understand this method lets walk through an example as the
+        // code plays out. Imagine this method is called with the arguments:
+        // pagePath='/pages/edit-customer.htm'
+        // pagesPackage='org.apache.click'
+
+        // Add period at end.
+        // packageName = 'org.apache.click.'
+        String packageName = pagesPackage + ".";
+        String className = "";
+
+        // Strip off extension.
+        // path = '/pages/edit-customer'
+        String path = pagePath.substring(0, pagePath.lastIndexOf("."));
+
+        // If page is excluded return the excluded class
+        Class excludePageClass = getExcludesPageClass(path);
+        if (excludePageClass != null) {
+            return excludePageClass;
+        }
+
+        // Build complete packageName.
+        // packageName = 'org.apache.click.pages.'
+        // className = 'edit-customer'
+        if (path.indexOf("/") != -1) {
+            StringTokenizer tokenizer = new StringTokenizer(path, "/");
+            while (tokenizer.hasMoreTokens()) {
+                String token = tokenizer.nextToken();
+                if (tokenizer.hasMoreTokens()) {
+                    packageName = packageName + token + ".";
+                } else {
+                    className = token;
+                }
+            }
+        } else {
+            className = path;
+        }
+
+        // CamelCase className.
+        // className = 'EditCustomer'
+        StringTokenizer tokenizer = new StringTokenizer(className, "_-");
+        className = "";
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            token = Character.toUpperCase(token.charAt(0)) + token.substring(1);
+            className += token;
+        }
+
+        // className = 'org.apache.click.pages.EditCustomer'
+        className = packageName + className;
+
+        Class pageClass = null;
+        try {
+            // Attempt to load class.
+            pageClass = ClickUtils.classForName(className);
+
+            if (!Page.class.isAssignableFrom(pageClass)) {
+                String msg = "Automapped page class " + className
+                             + " is not a subclass of org.apache.click.Page";
+                throw new RuntimeException(msg);
+            }
+
+        } catch (ClassNotFoundException cnfe) {
+
+            boolean classFound = false;
+
+            // Append "Page" to className and attempt to load class again.
+            // className = 'org.apache.click.pages.EditCustomerPage'
+            if (!className.endsWith("Page")) {
+                String classNameWithPage = className + "Page";
+                try {
+                    // Attempt to load class.
+                    pageClass = ClickUtils.classForName(classNameWithPage);
+
+                    if (!Page.class.isAssignableFrom(pageClass)) {
+                        String msg = "Automapped page class " + classNameWithPage
+                                     + " is not a subclass of org.apache.click.Page";
+                        throw new RuntimeException(msg);
+                    }
+
+                    classFound = true;
+
+                } catch (ClassNotFoundException cnfe2) {
+                }
+            }
+
+            if (!classFound) {
+                if (logService.isDebugEnabled()) {
+                    logService.debug(pagePath + " -> CLASS NOT FOUND");
+                }
+                if (logService.isTraceEnabled()) {
+                    logService.trace("class not found: " + className);
+                }
+            }
+        }
+
+        return pageClass;
+    }
+
+    // ------------------------------------------------ Package Private Methods
 
     /**
      * Loads all Click Pages defined in the <tt>click.xml</tt> file, including
@@ -923,122 +1048,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
 
         return headersMap;
-    }
-
-    /**
-     * Find and return the page class for the specified pagePath and
-     * pagesPackage.
-     * <p/>
-     * For example if the pagePath is <tt>'/edit-customer.htm'</tt> and
-     * package is <tt>'com.mycorp'</tt>, the matching page class will be:
-     * <tt>com.mycorp.EditCustomer</tt> or <tt>com.mycorp.EditCustomerPage</tt>.
-     * <p/>
-     * If the page path is <tt>'/admin/add-customer.htm'</tt> and package is
-     * <tt>'com.mycorp'</tt>, the matching page class will be:
-     * <tt>com.mycorp.admin.AddCustomer</tt> or
-     * <tt>com.mycorp.admin.AddCustomerPage</tt>.
-     *
-     * @param pagePath the path used for matching against a page class name
-     * @param pagesPackage the package of the page class
-     * @return the page class for the specified pagePath and pagesPackage
-     */
-    Class getPageClass(String pagePath, String pagesPackage) {
-        // To understand this method lets walk through an example as the
-        // code plays out. Imagine this method is called with the arguments:
-        // pagePath='/pages/edit-customer.htm'
-        // pagesPackage='org.apache.click'
-
-        // Add period at end.
-        // packageName = 'org.apache.click.'
-        String packageName = pagesPackage + ".";
-        String className = "";
-
-        // Strip off extension.
-        // path = '/pages/edit-customer'
-        String path = pagePath.substring(0, pagePath.lastIndexOf("."));
-
-        // If page is excluded return the excluded class
-        Class excludePageClass = getExcludesPageClass(path);
-        if (excludePageClass != null) {
-            return excludePageClass;
-        }
-
-        // Build complete packageName.
-        // packageName = 'org.apache.click.pages.'
-        // className = 'edit-customer'
-        if (path.indexOf("/") != -1) {
-            StringTokenizer tokenizer = new StringTokenizer(path, "/");
-            while (tokenizer.hasMoreTokens()) {
-                String token = tokenizer.nextToken();
-                if (tokenizer.hasMoreTokens()) {
-                    packageName = packageName + token + ".";
-                } else {
-                    className = token;
-                }
-            }
-        } else {
-            className = path;
-        }
-
-        // CamelCase className.
-        // className = 'EditCustomer'
-        StringTokenizer tokenizer = new StringTokenizer(className, "_-");
-        className = "";
-        while (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken();
-            token = Character.toUpperCase(token.charAt(0)) + token.substring(1);
-            className += token;
-        }
-
-        // className = 'org.apache.click.pages.EditCustomer'
-        className = packageName + className;
-
-        Class pageClass = null;
-        try {
-            // Attempt to load class.
-            pageClass = ClickUtils.classForName(className);
-
-            if (!Page.class.isAssignableFrom(pageClass)) {
-                String msg = "Automapped page class " + className
-                             + " is not a subclass of org.apache.click.Page";
-                throw new RuntimeException(msg);
-            }
-
-        } catch (ClassNotFoundException cnfe) {
-
-            boolean classFound = false;
-
-            // Append "Page" to className and attempt to load class again.
-            // className = 'org.apache.click.pages.EditCustomerPage'
-            if (!className.endsWith("Page")) {
-                String classNameWithPage = className + "Page";
-                try {
-                    // Attempt to load class.
-                    pageClass = ClickUtils.classForName(classNameWithPage);
-
-                    if (!Page.class.isAssignableFrom(pageClass)) {
-                        String msg = "Automapped page class " + classNameWithPage
-                                     + " is not a subclass of org.apache.click.Page";
-                        throw new RuntimeException(msg);
-                    }
-
-                    classFound = true;
-
-                } catch (ClassNotFoundException cnfe2) {
-                }
-            }
-
-            if (!classFound) {
-                if (logService.isDebugEnabled()) {
-                    logService.debug(pagePath + " -> CLASS NOT FOUND");
-                }
-                if (logService.isTraceEnabled()) {
-                    logService.trace("class not found: " + className);
-                }
-            }
-        }
-
-        return pageClass;
     }
 
     // -------------------------------------------------------- Private Methods
