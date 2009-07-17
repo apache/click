@@ -26,8 +26,6 @@ import org.apache.click.servlet.MockRequest;
 
 /**
  * Provides DateField JUnit TestCase.
- *
- * @author Malcolm Edgar
  */
 public class DateFieldTest extends TestCase {
 

@@ -467,8 +467,6 @@ public class SpringClickServlet extends ClickServlet {
 
     /**
      * Provides a Spring bean name and page bean property setter method holder.
-     *
-     * @author Malcolm Edgar
      */
     static class BeanNameAndMethod {
 

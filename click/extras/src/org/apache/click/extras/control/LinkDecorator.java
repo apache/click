@@ -662,8 +662,6 @@ public class LinkDecorator implements Decorator, Serializable {
 
     /**
      * Add page number control for setting the table page number.
-     *
-     * @author Malcolm Edgar
      */
     class PageNumberControl extends AbstractControl {
 
