@@ -80,8 +80,6 @@ import org.xml.sax.EntityResolver;
 
 /**
  * Provides miscellaneous Form, String and Stream utility methods.
- *
- * @author Malcolm Edgar
  */
 public class ClickUtils {
 

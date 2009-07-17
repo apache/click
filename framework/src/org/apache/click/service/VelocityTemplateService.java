@@ -623,8 +623,6 @@ public class VelocityTemplateService implements TemplateService {
      * Velocity logging.
      * <p/>
      * <b>PLEASE NOTE</b> this class is <b>not</b> for public use.
-     *
-     *  @author Malcolm Edgar
      */
     public static class LogChuteAdapter implements LogChute {
 

@@ -24,9 +24,7 @@ import org.apache.click.control.Form;
 import org.apache.click.pages.ListenerPage;
 
 /**
- * Test ClickServlet behavior.
- * 
- * @author Bob Schellink
+ * Provides tests for ClickServlet behavior.
  */
 public class ClickServletTest extends TestCase {
 

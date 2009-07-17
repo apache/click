@@ -30,8 +30,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * <p/>
  * However you can instruct Click to use a different log service implementation.
  * Please see {@link LogService} for more details.
- *
- * @author Malcolm Edgar
  */
 public class ConsoleLogService implements LogService {
 
