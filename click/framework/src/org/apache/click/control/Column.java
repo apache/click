@@ -1444,8 +1444,6 @@ public class Column implements Serializable {
      *
      * @see org.apache.click.control.Column
      * @see org.apache.click.control.Table
-     *
-     * @author Malcolm Edgar
      */
     static class ColumnComparator implements Comparator, Serializable {
 

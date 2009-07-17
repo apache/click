@@ -22,9 +22,7 @@ import junit.framework.TestCase;
 import org.apache.click.MockContext;
 
 /**
- * Test for manipulating html attributes of Click Controls.
- * 
- * @author Bob Schellink
+ * Provide tests for manipulating html attributes of Click Controls.
  */
 public class AttributeTest extends TestCase {
         

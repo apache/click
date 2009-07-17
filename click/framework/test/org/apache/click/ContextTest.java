@@ -23,9 +23,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 /**
- * Test Context behavior.
- * 
- * @author Bob Schellink
+ * Provides tests for Context behavior.
  */
 public class ContextTest extends TestCase {
 

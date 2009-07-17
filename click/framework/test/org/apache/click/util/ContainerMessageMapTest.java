@@ -28,8 +28,7 @@ import org.apache.click.control.Form;
 import org.apache.click.control.TextField;
 
 /**
- *
- * @author Bob Schellink
+ * Provides a message map test for Containers.
  */
 public class ContainerMessageMapTest extends TestCase {
 
