@@ -28,8 +28,6 @@ import org.apache.click.servlet.MockRequest;
 
 /**
  * Provides tests for the Google App Engine MemoryFileItem.
- *
- * @author Bob Schellink
  */
 public class MemoryFileItemTest extends TestCase {
 

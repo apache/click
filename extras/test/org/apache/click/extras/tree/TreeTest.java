@@ -26,8 +26,6 @@ import org.apache.click.servlet.MockRequest;
 
 /**
  * Basic Tree tests.
- *
- * @author Bob Schellink
  */
 public class TreeTest extends TestCase {
     

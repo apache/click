@@ -25,8 +25,6 @@ import org.apache.click.control.TextField;
 
 /**
  * A Google App Engine (GAE) file upload test page.
- *
- * @author Bob Schellink
  */
 public class MemoryFileItemUploadPage extends Page {
 
