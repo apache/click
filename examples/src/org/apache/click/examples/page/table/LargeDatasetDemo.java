@@ -46,19 +46,15 @@ public class LargeDatasetDemo extends BorderPage {
     private CustomerService customerService;
 
     public LargeDatasetDemo() {
-        table = new Table() {
-
-            /**
-             * Sorting must be done on Database, so we override Table build in
-             * sorting to do nothing.
-             */
-            protected void sortRowList() {
-            }
-        };
+        table = new Table();
 
         // Setup customers table
         table.setClass(Table.CLASS_ITS);
         table.setSortable(true);
+
+        // We will sort the data ourselves. We set table sorted attribute to true
+        // so the table doesn't attempt to sort the data
+        table.setSorted(true);
 
         Column column = new Column("name");
         column.setWidth("140px;");
