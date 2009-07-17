@@ -1886,8 +1886,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * <p/>
      * <b>PLEASE NOTE</b> this class is <b>not</b> for public use, and can be
      * ignore.
-     *
-     * @author Malcolm Edgar
      */
     public static class ExcludePage extends Page {
 
