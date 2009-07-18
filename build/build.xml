@@ -51,22 +51,6 @@
    <property name="maven-bundle" value="../maven-upload"/>
 
 
-   <!--
-    Task Definitions
-    -->
-	
-   <taskdef name="linetrim"
-   	        classname="org.apache.click.tools.devtasks.LineTrimTask"
-   	        classpath="lib/click-dev-tasks-1.0.jar"/>
-							
-   <taskdef name="replacetabs" 
-   	        classname="org.apache.click.tools.devtasks.ReplaceTabsTask"
-   	        classpath="lib/click-dev-tasks-1.0.jar"/>
-            
-   <taskdef name="package" 
-   	        classname="org.apache.click.tools.devtasks.PackageTask"
-   	        classpath="lib/click-dev-tasks-1.0.jar"/>
-
     <!--
      Macro Definitions
      -->
@@ -536,6 +520,22 @@
 
 
    <target name="format-java">
+
+      <!--
+      Task Definitions
+      -->
+      <taskdef name="linetrim"
+   	           classname="org.apache.click.tools.devtasks.LineTrimTask"
+   	           classpath="lib/click-dev-tasks-1.1.jar"/>
+
+      <taskdef name="replacetabs"
+   	           classname="org.apache.click.tools.devtasks.ReplaceTabsTask"
+      	        classpath="lib/click-dev-tasks-1.1.jar"/>
+
+      <taskdef name="package"
+   	           classname="org.apache.click.tools.devtasks.PackageTask"
+   	           classpath="lib/click-dev-tasks-1.1.jar"/>
+
       <linetrim srcdir="framework/src" includes="**/*.java"/>
       <replacetabs srcdir="framework/src" includes="**/*.java"/>
       <linetrim srcdir="extras/src" includes="**/*.java"/>
