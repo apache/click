@@ -2426,7 +2426,7 @@ public class ClickUtils {
             // SecurityManager if writes are allowed
             SecurityManager security = System.getSecurityManager();
             if (security != null) {
-        		    security.checkWrite("/click");
+                security.checkWrite("/click");
             }
             return true;
         } catch (Throwable e) {
