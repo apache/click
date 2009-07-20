@@ -66,6 +66,7 @@ import org.eclipse.wst.validation.internal.ValidatorMetaData;
  * </ol>
  * @author Naoki Takezoe
  */
+@SuppressWarnings("unchecked")
 public class ClickFacetInstallDelegate implements IDelegate {
 
 	public void execute(IProject project, IProjectFacetVersion fv,
@@ -291,9 +292,40 @@ public class ClickFacetInstallDelegate implements IDelegate {
 
 			servlet = ClickUtils.createOrUpdateServletRef(webApp, config, servlet, useSpring);
 			
-			// create performance filter
+			// Add PerformanceFilter
 			if(usePerformanceFilter){
-				// TODO Not implemented.
+				Filter filter = WebapplicationFactory.eINSTANCE.createFilter();
+				filter.setName("PerformanceFilter");
+				filter.setFilterClassName("org.apache.click.extras.filter.PerformanceFilter");
+				
+				if (webApp.getJ2EEVersionID() >= J2EEVersionConstants.J2EE_1_4_ID) {
+					// J2EE 1.4
+					ParamValue initParam = CommonFactory.eINSTANCE.createParamValue();
+					initParam.setName("cachable-paths");
+					initParam.setValue("/assets/*");
+					filter.getInitParamValues().add(initParam);
+				} else {
+					// J2EE 1.2 or 1.3
+					InitParam initParam = WebapplicationFactory.eINSTANCE.createInitParam();
+					initParam.setParamName("cachable-paths");
+					initParam.setParamValue("/assets/*");
+					filter.getInitParams().add(initParam);
+				}
+				
+				webApp.getFilters().add(filter);
+
+				FilterMapping mapping = WebapplicationFactory.eINSTANCE.createFilterMapping();
+				mapping.setServletName(servlet.getServletName());
+				mapping.setFilter(filter);
+				webApp.getFilterMappings().add(mapping);
+				
+				String[] filterPatterns = {"*.css", "*.js", "*.gif", "*.png"};
+				for(String pattern: filterPatterns){
+					mapping = WebapplicationFactory.eINSTANCE.createFilterMapping();
+					mapping.setFilter(filter);
+					mapping.setUrlPattern(pattern);
+					webApp.getFilterMappings().add(mapping);
+				}
 			}
 			
 			// init mappings
