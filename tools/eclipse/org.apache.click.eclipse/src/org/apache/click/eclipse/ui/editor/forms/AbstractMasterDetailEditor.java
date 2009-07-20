@@ -89,7 +89,7 @@ public abstract class AbstractMasterDetailEditor extends AbstractFormEditor {
 		tree.setLayoutData(new GridData(GridData.FILL_BOTH));
 		headerSection.setClient(tree);
 		
-		List acceptElements = new ArrayList();
+		List<String> acceptElements = new ArrayList<String>();
 		String[] acceptElementNames = getAcceptElementNames();
 		for(int i=0;i<acceptElementNames.length;i++){
 			acceptElements.add(acceptElementNames[i]);
@@ -171,6 +171,7 @@ public abstract class AbstractMasterDetailEditor extends AbstractFormEditor {
 		form.setFocus();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Object getAdapter(Class adapter) {
 		if(adapter.equals(TreeViewer.class)){
 			return this.viewer;

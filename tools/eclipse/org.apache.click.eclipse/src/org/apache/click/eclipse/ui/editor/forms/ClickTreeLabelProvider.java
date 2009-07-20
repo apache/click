@@ -37,7 +37,7 @@ import org.w3c.dom.NamedNodeMap;
  */
 public class ClickTreeLabelProvider extends JFaceNodeLabelProvider {
 
-	private Map images = new HashMap();
+	private Map<String, Image> images = new HashMap<String, Image>();
 
 	public ClickTreeLabelProvider(){
 		images.put(ClickPlugin.TAG_CLICK_APP,
@@ -67,8 +67,8 @@ public class ClickTreeLabelProvider extends JFaceNodeLabelProvider {
 	}
 
 	public void dispose(){
-		for(Iterator ite = images.values().iterator(); ite.hasNext();){
-			Image image = (Image)ite.next();
+		for(Iterator<Image> ite = images.values().iterator(); ite.hasNext();){
+			Image image = ite.next();
 			image.dispose();
 		}
 		super.dispose();

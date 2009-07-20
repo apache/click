@@ -30,14 +30,14 @@ import org.eclipse.wst.xml.ui.internal.contentoutline.JFaceNodeContentProvider;
  */
 public class ClickTreeContentProvider extends JFaceNodeContentProvider {
 	
-	private List accept;
+	private List<String> accept;
 	
-	public ClickTreeContentProvider(List accept){
+	public ClickTreeContentProvider(List<String> accept){
 		this.accept = accept;
 	}
 	
 	public Object[] getChildren(Object object) {
-		List result = new ArrayList();
+		List<Object> result = new ArrayList<Object>();
 		Object[] children =  super.getChildren(object);
 		for(int i=0;i<children.length;i++){
 			if(children[i] instanceof IDOMElement){
