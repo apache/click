@@ -59,7 +59,7 @@ public class SwitchToClassAction implements IEditorActionDelegate {
 			if(!ClickUtils.isClickProject(file.getProject())){
 				ClickUtils.openErrorDialog(MessageFormat.format(
 					ClickPlugin.getString("wizard.newPage.error.notClickProject"), 
-					new String[]{ file.getProject().getName() }));
+					new Object[]{ file.getProject().getName() }));
 				return;
 			}
 			
