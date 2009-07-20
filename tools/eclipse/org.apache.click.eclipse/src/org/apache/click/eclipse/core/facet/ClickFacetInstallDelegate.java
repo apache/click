@@ -18,6 +18,7 @@
  */
 package org.apache.click.eclipse.core.facet;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
@@ -182,9 +183,18 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			if(!file.exists()){
 				file.createNewFile();
 			}
-			ClickUtils.copyStream(ClickPlugin.getDefault().getBundle().getEntry(
-					ClickFacetUtil.SPRING_DIR + "/spring-beans.xml").openStream(),
+			
+			URL url = ClickPlugin.getDefault().getBundle().getEntry(
+					ClickFacetUtil.SPRING_DIR + "/spring-beans.xml");
+			
+			// Replaces ${rootPackage} by the input package name.
+			String contents = ClickUtils.readStream(url.openStream());
+			contents = contents.replace("${rootPackage}", 
+					config.getStringProperty(ClickFacetInstallDataModelProvider.ROOT_PACKAGE));
+			
+			ClickUtils.copyStream(new ByteArrayInputStream(contents.getBytes("UTF-8")), 
 					new FileOutputStream(file));
+			
 		} catch(Exception ex){
 			ClickPlugin.log(ex);
 		}
@@ -240,7 +250,18 @@ public class ClickFacetInstallDelegate implements IDelegate {
 
 				URL url = ClickPlugin.getDefault().getBundle().getEntry(
 						ClickFacetUtil.CLICK_DIR + ClickFacetUtil.COPY_FILES[i]);
-				ClickUtils.copyStream(url.openStream(), new FileOutputStream(file));
+				if(file.getName().equals("click.xml")){
+					// Replaces ${rootPackage} by the input package name.
+					String contents = ClickUtils.readStream(url.openStream());
+					contents = contents.replace("${rootPackage}", 
+							config.getStringProperty(ClickFacetInstallDataModelProvider.ROOT_PACKAGE));
+					
+					ClickUtils.copyStream(new ByteArrayInputStream(contents.getBytes("UTF-8")), 
+							new FileOutputStream(file));
+					
+				} else {
+					ClickUtils.copyStream(url.openStream(), new FileOutputStream(file));
+				}
 			} catch(Exception ex){
 				ClickPlugin.log(ex);
 			}

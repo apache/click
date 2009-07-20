@@ -18,9 +18,12 @@
  */
 package org.apache.click.eclipse;
 
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -758,15 +761,27 @@ public class ClickUtils {
 		} catch(IOException ex){
 			ClickPlugin.log(ex);
 		} finally {
-			if(in!=null){
-				try {
-					in.close();
-				} catch(Exception ex){}
-			}
-			if(out!=null){
-				try {
-					out.close();
-				} catch(Exception ex){}
+			closeQuietly(in);
+			closeQuietly(out);
+		}
+	}
+	
+	public static String readStream(InputStream in){
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		copyStream(in, out);
+		try {
+			return new String(out.toByteArray(), "UTF-8");
+		} catch(UnsupportedEncodingException ex){
+			throw new RuntimeException(ex);
+		}
+	}
+	
+	public static void closeQuietly(Closeable closeable){
+		if(closeable != null){
+			try {
+				closeable.close();
+			} catch(Exception ex){
+				;
 			}
 		}
 	}
