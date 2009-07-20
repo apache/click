@@ -38,10 +38,10 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jst.j2ee.common.CommonFactory;
+import org.eclipse.jst.j2ee.common.Listener;
 import org.eclipse.jst.j2ee.common.ParamValue;
 import org.eclipse.jst.j2ee.internal.J2EEVersionConstants;
 import org.eclipse.jst.j2ee.web.componentcore.util.WebArtifactEdit;
-import org.eclipse.jst.j2ee.webapplication.ContextParam;
 import org.eclipse.jst.j2ee.webapplication.Filter;
 import org.eclipse.jst.j2ee.webapplication.FilterMapping;
 import org.eclipse.jst.j2ee.webapplication.InitParam;
@@ -289,10 +289,14 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			servlet = ClickUtils.createOrUpdateServletRef(webApp, config, servlet, useSpring);
 			
 			if(useSpring){
-				ContextParam contextParam = WebapplicationFactory.eINSTANCE.createContextParam();
-				contextParam.setParamName("contextConfigLocation");
-				contextParam.setParamValue("WEB-INF/spring-beans.xml");
+				ParamValue contextParam = CommonFactory.eINSTANCE.createParamValue();
+				contextParam.setName("contextConfigLocation");
+				contextParam.setValue("WEB-INF/spring-beans.xml");
 				webApp.getContextParams().add(contextParam);
+				
+				Listener listener = CommonFactory.eINSTANCE.createListener();
+				listener.setListenerClassName("org.springframework.web.context.ContextLoaderListener");
+				webApp.getListeners().add(listener);
 			}
 			
 			// Add PerformanceFilter

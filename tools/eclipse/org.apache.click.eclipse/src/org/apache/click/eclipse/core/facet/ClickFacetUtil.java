@@ -51,10 +51,8 @@ public class ClickFacetUtil {
 	};
 
 	public static final String[] SPRING_LIBS = {
-		"/lib/jstl-1.1.2.jar",
 		"/lib/spring-2.5.6.jar",
-		"/lib/spring-security-core-2.0.4.jar",
-		"/lib/standard-1.1.2.jar",
+		"/lib/commons-logging-1.1.1.jar",
 	};
 
 	public static IPath getWebContentPath(IProject project) {
