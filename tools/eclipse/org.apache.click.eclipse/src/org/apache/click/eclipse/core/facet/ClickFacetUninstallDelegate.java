@@ -135,7 +135,9 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 	}
 	
 	private void removeCayenneFilter(WebApp webApp){
+		@SuppressWarnings("unchecked")
 		List filters = webApp.getFilters();
+		
 		Filter cayenneFilter = null;
 		for(int i=0;i<filters.size();i++){
 			Filter filter = (Filter) filters.get(i);

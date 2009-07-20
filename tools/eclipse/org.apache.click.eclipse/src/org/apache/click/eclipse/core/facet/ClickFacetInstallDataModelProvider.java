@@ -32,8 +32,9 @@ public class ClickFacetInstallDataModelProvider extends FacetInstallDataModelPro
 	public static final String USE_CAYENNE = "useCayenne";
 	public static final String USE_PERFORMANCE_FILTER = "usePerformanceFilter";
 	
-	public Set getPropertyNames() {
-		Set names = super.getPropertyNames();
+	public Set<String> getPropertyNames() {
+		@SuppressWarnings("unchecked")
+		Set<String> names = super.getPropertyNames();
 		names.add(USE_SPRING);
 		names.add(USE_CAYENNE);
 		names.add(USE_PERFORMANCE_FILTER);
