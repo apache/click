@@ -284,7 +284,9 @@ public class ClickUtils {
 		String servletClassName = useSpring ? CLICK_SPRING_SERVLET_CLASS : CLICK_SERVLET_CLASS;
 		
 		Servlet servlet = null;
+		@SuppressWarnings("unchecked")
 		Iterator it = webApp.getServlets().iterator();
+		
 		while (it.hasNext()) {
 			servlet = (Servlet) it.next();
 			if (servlet.getWebType().isServletType()) {
@@ -309,7 +311,9 @@ public class ClickUtils {
 	public static void removeURLMappings(WebApp webApp, Servlet servlet) {
 		String servletName = servlet.getServletName();
 		if (servletName != null) {
+			@SuppressWarnings("unchecked")
 			Iterator oldMappings = webApp.getServletMappings().iterator();
+			
 			while (oldMappings.hasNext()) {
 				ServletMapping mapping = (ServletMapping) oldMappings.next();
 				if (mapping.getServlet().getServletName().equals(servletName)) {
@@ -324,6 +328,7 @@ public class ClickUtils {
 	 * 
 	 * @param webApp the <code>WebApp</code> object
 	 */
+	@SuppressWarnings("unchecked")
 	public static void createOrUpdateFilelist(WebApp webApp) {
 		WelcomeFileList filelist = webApp.getFileList();
 		
@@ -346,6 +351,7 @@ public class ClickUtils {
 	 * @param useSpring If <code>true</code> then use Spring Framework with Click
 	 * @return the <code>Servlet</code> object of the ClickServlet
 	 */
+	@SuppressWarnings("unchecked")
 	public static Servlet createOrUpdateServletRef(WebApp webApp, IDataModel config, 
 			Servlet servlet, boolean useSpring) {
 		//String displayName = config.getStringProperty(CLICK_SERVLET_NAME);
@@ -388,6 +394,7 @@ public class ClickUtils {
 		return servlet;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static void setUpURLMappings(WebApp webApp, String[] urlMappingList, Servlet servlet) {
 		// Add mappings
 		for (int i=0;i<urlMappingList.length;i++) {
@@ -562,7 +569,7 @@ public class ClickUtils {
 		String hifun = path.replaceAll("([a-z])([A-Z])", "$1-$2").toLowerCase();
 		String under = path.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
 		
-		List list = new ArrayList();
+		List<String> list = new ArrayList<String>();
 		
 		list.add(path + ".htm");
 		list.add(path + "Page.htm");
@@ -573,7 +580,7 @@ public class ClickUtils {
 		list.add(under + ".htm");
 		list.add(under + "_page.htm");
 		
-		return (String[])list.toArray(new String[list.size()]);
+		return list.toArray(new String[list.size()]);
 	}
 	
 	/**

@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Display;
 public class ColorManager {
 	
 	private IPreferenceStore store;
-	private Map colors = new HashMap();
+	private Map<String, Color> colors = new HashMap<String, Color>();
 	
 	private IPropertyChangeListener listener = new IPropertyChangeListener(){
 		public void propertyChange(PropertyChangeEvent event) {
@@ -71,8 +71,8 @@ public class ColorManager {
 	}
 	
 	private void disposeColors(){
-		for(Iterator i = colors.values().iterator(); i.hasNext();){
-			Color color = (Color)i.next();
+		for(Iterator<Color> i = colors.values().iterator(); i.hasNext();){
+			Color color = i.next();
 			color.dispose();
 		}
 		colors.clear();

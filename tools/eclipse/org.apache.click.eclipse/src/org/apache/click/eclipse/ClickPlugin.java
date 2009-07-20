@@ -54,7 +54,8 @@ public class ClickPlugin extends AbstractUIPlugin {
 	private ResourceBundle resource;
 	private ColorManager colorManager;
 
-	private List configProviders = new ArrayList();
+	private List<IClickConfigurationProvider> 
+		configProviders = new ArrayList<IClickConfigurationProvider>();
 
 	public static final String CLICK_PAGE_CLASS = "org.apache.click.Page";
 	public static final String CLICK_CONTROL_IF = "org.apache.click.Control";
@@ -112,8 +113,8 @@ public class ClickPlugin extends AbstractUIPlugin {
 		return this.resource;
 	}
 
-	private static List loadContributedClasses(String extPointId, String elementName){
-		List result = new ArrayList();
+	private static List<IClickConfigurationProvider> loadContributedClasses(String extPointId, String elementName){
+		List<IClickConfigurationProvider> result = new ArrayList<IClickConfigurationProvider>();
 		try {
 			IExtensionRegistry registry = Platform.getExtensionRegistry();
 			IExtensionPoint point = registry.getExtensionPoint(PLUGIN_ID + "." + extPointId);
@@ -122,7 +123,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 				IConfigurationElement[] elements = extensions[i].getConfigurationElements();
 				for (int j = 0; j < elements.length; j++) {
 					if (elementName.equals(elements[j].getName())) {
-						result.add(elements[j].createExecutableExtension("class"));
+						result.add((IClickConfigurationProvider) elements[j].createExecutableExtension("class"));
 					}
 				}
 			}

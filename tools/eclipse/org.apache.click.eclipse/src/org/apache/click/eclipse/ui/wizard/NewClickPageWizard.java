@@ -172,7 +172,7 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 			String parentFolder, String filename, String sourceFolder, String packageName,
 			String className, String superClass, Template template) throws Exception {
 		
-		List files = new ArrayList();
+		List<IFile> files = new ArrayList<IFile>();
 		int totalTask = 0;
 		if(shouldCreateHTML){
 			totalTask++;

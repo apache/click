@@ -33,7 +33,7 @@ public class NewClassWizard extends NewClassCreationWizard {
 
 	private String superClass;
 	private String className;
-	private List implement;
+	private List<String> implement;
 	
 	public NewClassWizard() {
 		super();
@@ -49,7 +49,7 @@ public class NewClassWizard extends NewClassCreationWizard {
 	
 	public void addInterface(String implement){
 		if(this.implement==null){
-			this.implement = new ArrayList();
+			this.implement = new ArrayList<String>();
 		}
 		this.implement.add(implement);
 	}
