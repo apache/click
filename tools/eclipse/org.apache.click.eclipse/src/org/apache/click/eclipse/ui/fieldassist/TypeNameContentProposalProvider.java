@@ -62,7 +62,7 @@ public class TypeNameContentProposalProvider implements IContentProposalProvider
 			FieldAssistUtils.setContentsToCU(unit, source);
 			unit.codeComplete(source.length() - 2, collector, DefaultWorkingCopyOwner.PRIMARY);
 			IJavaCompletionProposal[] proposals = collector.getJavaCompletionProposals();
-			List result = new ArrayList();
+			List<IContentProposal> result = new ArrayList<IContentProposal>();
 			
 			for(int j=0;j<proposals.length;j++){
 				if(proposals[j].getImage()!=null){
@@ -80,7 +80,7 @@ public class TypeNameContentProposalProvider implements IContentProposalProvider
 				}
 			}
 			
-			return (IContentProposal[])result.toArray(new IContentProposal[result.size()]);
+			return result.toArray(new IContentProposal[result.size()]);
 			
 		} catch(Exception ex){
 			ex.printStackTrace();
