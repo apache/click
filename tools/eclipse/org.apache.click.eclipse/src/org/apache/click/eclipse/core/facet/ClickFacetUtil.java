@@ -33,7 +33,7 @@ import org.eclipse.core.runtime.Path;
 public class ClickFacetUtil {
 
 	public static String CLICK_DIR = "click-2.1.0";
-	public static String CAYENNE_DIR = "cayenne-2.0.4";
+	public static String CAYENNE_DIR = "cayenne-3.0M6";
 	public static String SPRING_DIR = "spring-2.5.6";
 
 	public static final String[] COPY_FILES = {
@@ -43,11 +43,9 @@ public class ClickFacetUtil {
 	};
 
 	public static final String[] CAYENNE_LIBS = {
-		"/lib/ashwood-1.1.jar",
-		"/lib/cayenne-nodeps.jar",
-		"/lib/commons-logging-1.0.4.jar",
-		"/lib/log4j-1.2.14.jar",
-		"/lib/oro-2.0.8.jar"
+		"/lib/ashwood-2.0.jar",
+		"/lib/cayenne-server-3.0M6.jar",
+		"/lib/commons-logging-1.1.jar",
 	};
 
 	public static final String[] SPRING_LIBS = {
