@@ -20,12 +20,8 @@
 
 <click-app charset="UTF-8">
 
-  <!--
-  <pages package="net.sf.click.examples.page">
-    <excludes pattern="/tiny_mce/"/>
-  </pages>
-  -->
+  <pages package="org.apache.click.examples.page" autobinding="annotation"/>
 
-  <mode value="development"/>
+  <mode value="profile"/>
 
 </click-app>

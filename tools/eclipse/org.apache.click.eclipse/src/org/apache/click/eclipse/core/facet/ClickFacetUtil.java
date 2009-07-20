@@ -32,13 +32,13 @@ import org.eclipse.core.runtime.Path;
  */
 public class ClickFacetUtil {
 
-	public static String CLICK_DIR = "click-2.0.1";
+	public static String CLICK_DIR = "click-2.1.0";
 	public static String CAYENNE_DIR = "cayenne-2.0.4";
-	public static String SPRING_DIR = "spring-2.5.4";
+	public static String SPRING_DIR = "spring-2.5.6";
 
 	public static final String[] COPY_FILES = {
-		"/lib/click-2.0.1-incubating.jar",
-		"/lib/click-extras-2.0.1-incubating.jar",
+		"/lib/click-2.1.0-RC1-incubating.jar",
+		"/lib/click-extras-2.1.0-RC1-incubating.jar",
 		"/click.xml",
 	};
 
@@ -52,10 +52,8 @@ public class ClickFacetUtil {
 
 	public static final String[] SPRING_LIBS = {
 		"/lib/jstl-1.1.2.jar",
-		"/lib/spring-beans-2.5.4.jar",
-		"/lib/spring-context-2.5.4.jar",
-		"/lib/spring-core-2.5.4.jar",
-		"/lib/spring-web-2.5.4.jar",
+		"/lib/spring-2.5.6.jar",
+		"/lib/spring-security-core-2.0.4.jar",
 		"/lib/standard-1.1.2.jar",
 	};
 

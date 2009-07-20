@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd">
+
+    <context:component-scan base-package="org.apache.click.examples" scope-resolver="org.apache.click.extras.spring.PageScopeResolver"/>
+
+    <!-- Spring Security Setup -->
+
+    <http auto-config="true">
+        <!-- Uncomment the line below if you need login.htm to be accessed through HTTPS,
+             and ensure that HTTPS is enabled on the server. -->
+        <!--<intercept-url pattern="/springsecurity/login.htm" requires-channel="https" />-->
+
+        <!-- Access to pages under the /springsecurity/secure folder requires to be authenticated -->
+        <intercept-url pattern='/springsecurity/secure/**' access='IS_AUTHENTICATED_REMEMBERED'/>
+
+        <!-- Specify the login page url, failure url and default landing page url. -->
+        <form-login login-page='/springsecurity/login.htm' authentication-failure-url="/springsecurity/login.htm?auth-error=1" default-target-url="/"/>
+
+        <!-- Specify a virtual "logout" url which forwards to the logout.htm page. -->
+        <logout logout-url="/springsecurity/logout" logout-success-url="/springsecurity/logout.htm"/>
+    </http>
+
+    <beans:bean id="authenticationManager" class="org.springframework.security.providers.ProviderManager">
+        <beans:property name="providers">
+            <beans:list>
+                <beans:ref local="daoAuthenticationProvider" />
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+
+    
+    <beans:bean id="daoAuthenticationProvider" class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
+        <beans:property name="userDetailsService" ref="userDetailsService"/>
+    </beans:bean>
+
+    <!-- Specify a simple property based authentication provider. For production
+         systems switch to LDAP or JDBC based providers. -->
+
+    <authentication-provider user-service-ref='userDetailsService'/>
+
+	  <!-- This bean is optional; it isn't used by any other bean as it only listens and logs -->
+    <beans:bean id="loggerListener" class="org.springframework.security.event.authentication.LoggerListener" />
+
+</beans:beans>

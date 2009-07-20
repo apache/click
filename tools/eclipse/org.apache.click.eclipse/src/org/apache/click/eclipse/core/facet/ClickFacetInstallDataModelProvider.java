@@ -30,11 +30,13 @@ public class ClickFacetInstallDataModelProvider extends FacetInstallDataModelPro
 	
 	public static final String USE_SPRING = "useSpring";
 	public static final String USE_CAYENNE = "useCayenne";
+	public static final String USE_PERFORMANCE_FILTER = "usePerformanceFilter";
 	
 	public Set getPropertyNames() {
 		Set names = super.getPropertyNames();
 		names.add(USE_SPRING);
 		names.add(USE_CAYENNE);
+		names.add(USE_PERFORMANCE_FILTER);
 		return names;
 	}
 
@@ -44,6 +46,8 @@ public class ClickFacetInstallDataModelProvider extends FacetInstallDataModelPro
 		} else if(propertyName.equals(USE_SPRING)){
 			return new Boolean(false);
 		} else if(propertyName.equals(USE_CAYENNE)){
+			return new Boolean(false);
+		} else if(propertyName.equals(USE_PERFORMANCE_FILTER)){
 			return new Boolean(false);
 		}
 		return super.getDefaultProperty(propertyName);

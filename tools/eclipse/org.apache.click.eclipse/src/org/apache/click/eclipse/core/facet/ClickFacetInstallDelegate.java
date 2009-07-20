@@ -93,7 +93,8 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			// Update web model
 			createServletAndModifyWebXML(project, config, monitor,
 					config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_SPRING),
-					config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_CAYENNE));
+					config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_CAYENNE),
+					config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_PERFORMANCE_FILTER));
 
 			if (monitor != null) {
 				monitor.worked(1);
@@ -271,8 +272,9 @@ public class ClickFacetInstallDelegate implements IDelegate {
 		return true;
 	}
 
-	private void createServletAndModifyWebXML(IProject project, final IDataModel config,
-			IProgressMonitor monitor, boolean useSpring, boolean useCayenne) {
+	private void createServletAndModifyWebXML(
+			IProject project, final IDataModel config,IProgressMonitor monitor, 
+			boolean useSpring, boolean useCayenne, boolean usePerformanceFilter) {
 
 		WebApp webApp = null;
 		WebArtifactEdit artifactEdit = null;
@@ -288,7 +290,12 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			}
 
 			servlet = ClickUtils.createOrUpdateServletRef(webApp, config, servlet, useSpring);
-
+			
+			// create performance filter
+			if(usePerformanceFilter){
+				// TODO Not implemented.
+			}
+			
 			// init mappings
 			String[] listOfMappings = {"*.htm"};
 			ClickUtils.setUpURLMappings(webApp, listOfMappings, servlet);

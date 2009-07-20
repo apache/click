@@ -37,6 +37,7 @@ public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 	private IDataModel model;
 	private Button useSpring;
 	private Button useCayenne;
+	private Button usePerformanceFilter;
 	
 	public ClickFacetWizardPage() {
 		super("ClickFacetWizardPage");
@@ -51,6 +52,10 @@ public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NULL);
 		composite.setLayout(new GridLayout());
+		
+		usePerformanceFilter = new Button(composite, SWT.CHECK);
+		usePerformanceFilter.setText(ClickPlugin.getString("wizard.facet.usePerformanceFilter"));
+		
 		useSpring = new Button(composite, SWT.CHECK);
 		useSpring.setText(ClickPlugin.getString("wizard.facet.useSpring"));
 		
@@ -61,6 +66,8 @@ public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 	}
 
 	public void transferStateToConfig() {
+		model.setBooleanProperty(ClickFacetInstallDataModelProvider.USE_PERFORMANCE_FILTER, 
+				usePerformanceFilter.getSelection());
 		model.setBooleanProperty(ClickFacetInstallDataModelProvider.USE_SPRING, 
 				useSpring.getSelection());
 		model.setBooleanProperty(ClickFacetInstallDataModelProvider.USE_CAYENNE, 
