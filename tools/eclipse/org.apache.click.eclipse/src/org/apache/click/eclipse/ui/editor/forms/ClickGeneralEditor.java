@@ -53,7 +53,7 @@ public class ClickGeneralEditor extends AbstractFormEditor {
 	private Combo comboMode;
 	
 	public void initModel(IStructuredModel model){
-		Section generic = toolkit.createSection(form.getBody(), Section.DESCRIPTION|Section.TITLE_BAR);
+		Section generic = toolkit.createSection(form.getBody(), Section.TITLE_BAR);
 		generic.setText(ClickPlugin.getString("editor.clickXML.general"));
 		generic.setLayoutData(ClickUtils.createGridData(2, GridData.FILL_HORIZONTAL));
 		

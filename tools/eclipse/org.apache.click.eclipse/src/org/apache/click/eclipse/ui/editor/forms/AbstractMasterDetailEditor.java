@@ -71,14 +71,14 @@ public abstract class AbstractMasterDetailEditor extends AbstractFormEditor {
 		left.setLayoutData(new GridData(GridData.FILL_BOTH));
 		left.setLayout(new FillLayout());
 		
-		Section headerSection = toolkit.createSection(left, Section.DESCRIPTION|Section.TITLE_BAR);
-		headerSection.setText(ClickPlugin.getString("editor.clickXML.fileUpload"));
+		Section headerSection = toolkit.createSection(left, Section.TITLE_BAR);
+		headerSection.setText(ClickPlugin.getString("editor.clickXML.outline"));
 		
 		Composite detailComposite = toolkit.createComposite(sash);
 		detailComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		detailComposite.setLayout(new FillLayout());
 		
-		Section detailSection = toolkit.createSection(detailComposite, Section.DESCRIPTION|Section.TITLE_BAR);
+		Section detailSection = toolkit.createSection(detailComposite, Section.TITLE_BAR);
 		detailSection.setText(ClickPlugin.getString("editor.clickXML.details"));
 		
 		final Composite right = toolkit.createComposite(detailSection);
