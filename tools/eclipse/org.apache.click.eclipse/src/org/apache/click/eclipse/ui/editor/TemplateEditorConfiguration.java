@@ -54,7 +54,7 @@ public class TemplateEditorConfiguration extends StructuredTextViewerConfigurati
 	 * @see TemplateAutoEditStrategy
 	 */
 	public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
-		List allStrategies = new ArrayList(0);
+		List<IAutoEditStrategy> allStrategies = new ArrayList<IAutoEditStrategy>(0);
 		
 		IAutoEditStrategy[] superStrategies = super.getAutoEditStrategies(sourceViewer, contentType);
 		for (int i = 0; i < superStrategies.length; i++) {
@@ -63,7 +63,7 @@ public class TemplateEditorConfiguration extends StructuredTextViewerConfigurati
 		
 		allStrategies.add(new TemplateAutoEditStrategy());
 
-		return (IAutoEditStrategy[]) allStrategies.toArray(new IAutoEditStrategy[allStrategies.size()]);
+		return allStrategies.toArray(new IAutoEditStrategy[allStrategies.size()]);
 	}
 	
 	/**

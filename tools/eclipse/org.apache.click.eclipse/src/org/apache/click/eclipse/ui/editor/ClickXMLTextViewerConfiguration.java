@@ -35,7 +35,7 @@ import org.eclipse.wst.xml.ui.StructuredTextViewerConfigurationXML;
 public class ClickXMLTextViewerConfiguration extends StructuredTextViewerConfigurationXML {
 	
 	public IHyperlinkDetector[] getHyperlinkDetectors(ISourceViewer sourceViewer) {
-		List result = new ArrayList(0);
+		List<IHyperlinkDetector> result = new ArrayList<IHyperlinkDetector>(0);
 		result.add(new ClickXMLHyperlinkDetector());
 		
 		IHyperlinkDetector[] superDetectors = super.getHyperlinkDetectors(sourceViewer);
@@ -46,7 +46,7 @@ public class ClickXMLTextViewerConfiguration extends StructuredTextViewerConfigu
 			}
 		}
 		
-		return (IHyperlinkDetector[]) result.toArray(new IHyperlinkDetector[0]);
+		return result.toArray(new IHyperlinkDetector[0]);
 	}
 	
 }

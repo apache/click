@@ -110,13 +110,13 @@ public class TemplateObject {
 		if(this.type!=null){
 			try {
 				IMethod[] methods = getAllMethods(type);
-				List result = new ArrayList();
+				List<TemplateObjectMethod> result = new ArrayList<TemplateObjectMethod>();
 				for(int i=0;i<methods.length;i++){
 					if(Flags.isPublic(methods[i].getFlags()) && !methods[i].isConstructor()){
 						result.add(new TemplateObjectMethod(methods[i]));
 					}
 				}
-				return (TemplateObjectMethod[])result.toArray(new TemplateObjectMethod[result.size()]);
+				return result.toArray(new TemplateObjectMethod[result.size()]);
 			} catch (JavaModelException e) {
 			}
 		}
@@ -132,7 +132,7 @@ public class TemplateObject {
 		if(this.type!=null){
 			try {
 				IMethod[] methods = getAllMethods(type);
-				List result = new ArrayList();
+				List<TemplateObjectProperty> result = new ArrayList<TemplateObjectProperty>();
 				for(int i=0;i<methods.length;i++){
 					if(Flags.isPublic(methods[i].getFlags()) && methods[i].getParameterTypes().length==0){
 						String name = methods[i].getElementName();
@@ -142,7 +142,7 @@ public class TemplateObject {
 						}
 					}
 				}
-				return (TemplateObjectProperty[])result.toArray(new TemplateObjectProperty[result.size()]);
+				return result.toArray(new TemplateObjectProperty[result.size()]);
 			} catch (JavaModelException e) {
 			}
 		}
@@ -155,7 +155,7 @@ public class TemplateObject {
 	 * @return the array of both methods and properties
 	 */
 	public TemplateObjectElement[] getChildren(){
-		List result = new ArrayList();
+		List<TemplateObjectElement> result = new ArrayList<TemplateObjectElement>();
 		if(this.type!=null){
 			TemplateObjectMethod[] methods = getMethods();
 			TemplateObjectProperty[] properties = getProperties();
@@ -165,8 +165,8 @@ public class TemplateObject {
 			for(int i=0;i<properties.length;i++){
 				result.add(properties[i]);
 			}
-			Collections.sort(result, new Comparator(){
-				public int compare(Object arg0, Object arg1) {
+			Collections.sort(result, new Comparator<TemplateObjectElement>(){
+				public int compare(TemplateObjectElement arg0, TemplateObjectElement arg1) {
 					return arg0.toString().compareTo(arg1.toString());
 				}
 			});
@@ -410,7 +410,7 @@ public class TemplateObject {
 	 * @throws JavaModelException
 	 */
 	private static IMethod[] getAllMethods(IType type) throws JavaModelException {
-		ArrayList list = new ArrayList();
+		ArrayList<IMethod> list = new ArrayList<IMethod>();
 		IMethod[] methods = type.getMethods();
 		for(int i=0;i<methods.length;i++){
 			if(!methods[i].isConstructor() && !methods[i].isMainMethod() && Flags.isPublic(methods[i].getFlags())){
@@ -429,7 +429,7 @@ public class TemplateObject {
 		return (IMethod[])list.toArray(new IMethod[list.size()]);
 	}
 	
-	private static void extractMethods(IType[] types, List methods) throws JavaModelException {
+	private static void extractMethods(IType[] types, List<IMethod> methods) throws JavaModelException {
 		for(int i=0;i<types.length;i++){
 			IMethod[] superMethods = types[i].getMethods();
 			for(int j=0;j<superMethods.length;j++){

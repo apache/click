@@ -36,8 +36,8 @@ import org.eclipse.wst.html.ui.internal.edit.ui.ActionContributorHTML;
 
 public class TemplateEditorActionContributor extends ActionContributorHTML {
 
-	private List actionIds = new ArrayList();
-	private List actions = new ArrayList();
+	private List<String> actionIds = new ArrayList<String>();
+	private List<IAction> actions = new ArrayList<IAction>();
 
 	public TemplateEditorActionContributor(){
 		actionIds.add(ToggleCommentAction.class.getName());

@@ -41,6 +41,8 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
  */
 public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
 
+	@Override
+	@SuppressWarnings("unchecked")
 	public boolean prepareRegions(ITypedRegion currentRegion, int start, int length, Collection styleRanges) {
         boolean result = super.prepareRegions(currentRegion, start, length, styleRanges);
         

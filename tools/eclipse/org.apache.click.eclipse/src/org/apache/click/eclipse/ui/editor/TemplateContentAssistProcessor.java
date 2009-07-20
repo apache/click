@@ -69,7 +69,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	private final Pattern PATTERN_SET = Pattern.compile("#set\\s*\\(\\s*\\$(.+?)\\s*=");
 	private final Pattern PATTERN_MACRO = Pattern.compile("#macro\\s*\\(\\s*(.+?)[\\s\\)]");
 	
-	private static final Map defaultObjects = new HashMap();
+	private static final Map<String, String> defaultObjects = new HashMap<String, String>();
 	static {
 		defaultObjects.put("imports", "org.apache.click.util.PageImports");
 		defaultObjects.put("context", "java.lang.String");
@@ -103,7 +103,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	/**
 	 * Appends the completion proposal to the <code>result</code>.
 	 */
-	private static void registerProposal(List result, int offset, 
+	private static void registerProposal(List<ICompletionProposal> result, int offset, 
 			String matchString, String replaceString, String displayString, Image image){
 		int position = replaceString.length();
 		if(replaceString.endsWith(")") && displayString.indexOf("()") < 0){
@@ -130,7 +130,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer textViewer, int offset) {
 		
 		String matchString = getLastWord(textViewer, offset);
-		List result = new ArrayList();
+		List<ICompletionProposal> result = new ArrayList<ICompletionProposal>();
 		
 		if(!matchString.startsWith("#") && !matchString.startsWith("$")){
 			ICompletionProposal[] proposals = super.computeCompletionProposals(textViewer, offset);
@@ -142,7 +142,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		}
 		
 		IType format = null;
-		List preferenceObjects = null;
+		List<VariableModel> preferenceObjects = null;
 		
 		if(this.file != null){
 			// for the format object
@@ -153,8 +153,8 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 				}
 			}
 			// other default objects
-			for(Iterator ite = defaultObjects.entrySet().iterator(); ite.hasNext(); ){
-				Map.Entry entry = (Map.Entry)ite.next();
+			for(Iterator<Map.Entry<String, String>> ite = defaultObjects.entrySet().iterator(); ite.hasNext(); ){
+				Map.Entry<String, String> entry = ite.next();
 				if(matchString.startsWith("$" + entry.getKey() + ".") || matchString.startsWith("${" + entry.getKey() + ".")){
 					IType type = findType((String)entry.getValue());
 					if(type != null){
@@ -169,7 +169,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 			if(vars != null && vars.length() > 0){
 				preferenceObjects = VariableModel.deserialize(vars);
 				for(int i=0;i<preferenceObjects.size();i++){
-					VariableModel model = (VariableModel) preferenceObjects.get(i);
+					VariableModel model = preferenceObjects.get(i);
 					if(matchString.startsWith("$" + model.name + ".") || matchString.startsWith("${" + model.name + ".")){
 						IType type = findType((String)model.type);
 						if(type != null){
@@ -180,10 +180,10 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 			}
 		}
 		
-		Map fields = extractPageFields();
-		for(Iterator ite = fields.entrySet().iterator(); ite.hasNext();){
-			Map.Entry entry = (Map.Entry)ite.next();
-			String name = (String)entry.getKey();
+		Map<String, TemplateObject> fields = extractPageFields();
+		for(Iterator<Map.Entry<String, TemplateObject>> ite = fields.entrySet().iterator(); ite.hasNext();){
+			Map.Entry<String, TemplateObject> entry = ite.next();
+			String name = entry.getKey();
 			if(matchString.startsWith("$" + name + ".") || matchString.startsWith("${" + name + ".")){
 				TemplateObject obj = (TemplateObject)entry.getValue();
 				if(obj.getType()!=null){
@@ -200,9 +200,9 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		}
 		
 		// for page class fields
-		for(Iterator ite = fields.entrySet().iterator(); ite.hasNext();){
-			Map.Entry entry = (Map.Entry)ite.next();
-			String name = (String)entry.getKey();
+		for(Iterator<Map.Entry<String, TemplateObject>> ite = fields.entrySet().iterator(); ite.hasNext();){
+			Map.Entry<String, TemplateObject> entry = ite.next();
+			String name = entry.getKey();
 			TemplateObject obj = (TemplateObject)entry.getValue();
 			registerProposal(result, offset, matchString, 
 				"$" + name, "$" + name + " - " + obj.getTypeName(), IMAGE_FIELD);
@@ -269,7 +269,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	/**
 	 * Read macro.vm and add macros to completion proposals.
 	 */
-	private void readMacroVM(List result, int offset, String matchString){
+	private void readMacroVM(List<ICompletionProposal> result, int offset, String matchString){
 		IProject project = this.file.getProject();
 		String folderName = ClickUtils.getWebAppRootFolder(project);
 		IFolder folder = project.getFolder(folderName);
@@ -298,7 +298,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	/**
 	 * Returns completion proposals for the java object.
 	 */
-	private ICompletionProposal[] processType(IType type, List result, String matchString, int offset){
+	private ICompletionProposal[] processType(IType type, List<ICompletionProposal> result, String matchString, int offset){
 		String prefix = matchString;
 		int index = matchString.lastIndexOf('.');
 		if(index >= 0){
@@ -319,7 +319,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 				}
 			}
 		}
-		return (ICompletionProposal[])result.toArray(new ICompletionProposal[result.size()]);
+		return result.toArray(new ICompletionProposal[result.size()]);
 	}
 	
 	/**
@@ -364,8 +364,8 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	/**
 	 * Extracts public fields from the page class.
 	 */
-	private Map extractPageFields(){
-		HashMap map = new HashMap();
+	private Map<String, TemplateObject> extractPageFields(){
+		HashMap<String, TemplateObject> map = new HashMap<String, TemplateObject>();
 		if(this.file != null){
 			try {
 				IType type = ClickUtils.getPageClassFromTemplate(this.file);
