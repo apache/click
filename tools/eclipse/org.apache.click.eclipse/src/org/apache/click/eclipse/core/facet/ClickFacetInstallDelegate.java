@@ -24,7 +24,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.apache.click.eclipse.ClickPlugin;
 import org.apache.click.eclipse.ClickUtils;
 import org.apache.click.eclipse.core.builder.ClickProjectNature;
@@ -42,6 +41,7 @@ import org.eclipse.jst.j2ee.common.CommonFactory;
 import org.eclipse.jst.j2ee.common.ParamValue;
 import org.eclipse.jst.j2ee.internal.J2EEVersionConstants;
 import org.eclipse.jst.j2ee.web.componentcore.util.WebArtifactEdit;
+import org.eclipse.jst.j2ee.webapplication.ContextParam;
 import org.eclipse.jst.j2ee.webapplication.Filter;
 import org.eclipse.jst.j2ee.webapplication.FilterMapping;
 import org.eclipse.jst.j2ee.webapplication.InitParam;
@@ -177,20 +177,16 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			}
 		}
 
-		IJavaProject javaProject = JavaCore.create(project);
-		IPackageFragmentRoot[] roots = javaProject.getPackageFragmentRoots();
-		for(int i=0;i<roots.length;i++){
-			if(roots[i].getResource() instanceof IFolder){
-				IFile file = ((IFolder) roots[i].getResource()).getFile("applicationContext.xml");
-				try {
-					file.create(ClickPlugin.getDefault().getBundle().getEntry(
-							ClickFacetUtil.SPRING_DIR + "/applicationContext.xml").openStream(),
-							true, monitor);
-				} catch(Exception ex){
-					ClickPlugin.log(ex);
-				}
-				break;
+		File file = new File(webInf, "spring-beans.xml");
+		try {
+			if(!file.exists()){
+				file.createNewFile();
 			}
+			ClickUtils.copyStream(ClickPlugin.getDefault().getBundle().getEntry(
+					ClickFacetUtil.SPRING_DIR + "/spring-beans.xml").openStream(),
+					new FileOutputStream(file));
+		} catch(Exception ex){
+			ClickPlugin.log(ex);
 		}
 	}
 
@@ -291,6 +287,13 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			}
 
 			servlet = ClickUtils.createOrUpdateServletRef(webApp, config, servlet, useSpring);
+			
+			if(useSpring){
+				ContextParam contextParam = WebapplicationFactory.eINSTANCE.createContextParam();
+				contextParam.setParamName("contextConfigLocation");
+				contextParam.setParamValue("WEB-INF/spring-beans.xml");
+				webApp.getContextParams().add(contextParam);
+			}
 			
 			// Add PerformanceFilter
 			if(usePerformanceFilter){

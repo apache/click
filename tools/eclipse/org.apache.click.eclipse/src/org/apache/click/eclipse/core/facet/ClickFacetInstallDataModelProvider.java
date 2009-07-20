@@ -28,6 +28,7 @@ import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvi
  */
 public class ClickFacetInstallDataModelProvider extends FacetInstallDataModelProvider {
 	
+	public static final String ROOT_PACKAGE = "rootPackage";
 	public static final String USE_SPRING = "useSpring";
 	public static final String USE_CAYENNE = "useCayenne";
 	public static final String USE_PERFORMANCE_FILTER = "usePerformanceFilter";
@@ -38,6 +39,7 @@ public class ClickFacetInstallDataModelProvider extends FacetInstallDataModelPro
 		names.add(USE_SPRING);
 		names.add(USE_CAYENNE);
 		names.add(USE_PERFORMANCE_FILTER);
+		names.add(ROOT_PACKAGE);
 		return names;
 	}
 
@@ -50,6 +52,8 @@ public class ClickFacetInstallDataModelProvider extends FacetInstallDataModelPro
 			return new Boolean(false);
 		} else if(propertyName.equals(USE_PERFORMANCE_FILTER)){
 			return new Boolean(false);
+		} else if(propertyName.equals(ROOT_PACKAGE)){
+			return "";
 		}
 		return super.getDefaultProperty(propertyName);
 	}

@@ -19,11 +19,14 @@
 package org.apache.click.eclipse.ui.wizard;
 
 import org.apache.click.eclipse.ClickPlugin;
+import org.apache.click.eclipse.ClickUtils;
 import org.apache.click.eclipse.core.facet.ClickFacetInstallDataModelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.ui.AbstractFacetWizardPage;
 
@@ -35,6 +38,7 @@ import org.eclipse.wst.common.project.facet.ui.AbstractFacetWizardPage;
 public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 	
 	private IDataModel model;
+	private Text rootPackage;
 	private Button useSpring;
 	private Button useCayenne;
 	private Button usePerformanceFilter;
@@ -51,16 +55,23 @@ public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NULL);
-		composite.setLayout(new GridLayout());
+		composite.setLayout(new GridLayout(2, false));
+		
+		ClickUtils.createLabel(composite, ClickPlugin.getString("wizard.facet.rootPackage"));
+		rootPackage = new Text(composite, SWT.BORDER);
+		rootPackage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		usePerformanceFilter = new Button(composite, SWT.CHECK);
 		usePerformanceFilter.setText(ClickPlugin.getString("wizard.facet.usePerformanceFilter"));
+		usePerformanceFilter.setLayoutData(ClickUtils.createGridData(2, GridData.FILL_HORIZONTAL));
 		
 		useSpring = new Button(composite, SWT.CHECK);
 		useSpring.setText(ClickPlugin.getString("wizard.facet.useSpring"));
+		useSpring.setLayoutData(ClickUtils.createGridData(2, GridData.FILL_HORIZONTAL));
 		
 		useCayenne = new Button(composite, SWT.CHECK);
 		useCayenne.setText(ClickPlugin.getString("wizard.facet.useCayenne"));
+		useCayenne.setLayoutData(ClickUtils.createGridData(2, GridData.FILL_HORIZONTAL));
 		
 		setControl(composite);
 	}
@@ -72,5 +83,7 @@ public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 				useSpring.getSelection());
 		model.setBooleanProperty(ClickFacetInstallDataModelProvider.USE_CAYENNE, 
 				useCayenne.getSelection());
+		model.setStringProperty(ClickFacetInstallDataModelProvider.ROOT_PACKAGE, 
+				rootPackage.getText());
 	}
 }
