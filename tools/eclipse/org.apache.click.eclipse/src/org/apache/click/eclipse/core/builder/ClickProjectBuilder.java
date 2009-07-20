@@ -44,6 +44,7 @@ public class ClickProjectBuilder extends IncrementalProjectBuilder {
 	
 	private ClickXMLValidator validator = new ClickXMLValidator();
 
+	@SuppressWarnings("unchecked")
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
 		if (kind == FULL_BUILD) {
 			fullBuild(monitor);

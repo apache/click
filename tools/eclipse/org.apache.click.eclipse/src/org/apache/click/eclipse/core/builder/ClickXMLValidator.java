@@ -225,14 +225,14 @@ public class ClickXMLValidator {
 	/**
 	 * Create the warning marker.
 	 */
-	private void createWarningMarker(IFile file, String key, String[] values, 
+	private void createWarningMarker(IFile file, String key, Object[] values, 
 			int start, int length){
 		try {
 			String message = resource.getString(key);
 			message = MessageFormat.format(message, values);
 			
 			IMarker marker = file.createMarker(IMarker.PROBLEM);
-			Map map = new HashMap();
+			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(IMarker.SEVERITY, new Integer(IMarker.SEVERITY_WARNING));
 			map.put(IMarker.MESSAGE, message);
 //			map.put(IMarker.LINE_NUMBER,new Integer(line));
