@@ -68,7 +68,7 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
  */
 public class ClickProjectPropertyPage extends PropertyPage {
 	
-	private List models = new ArrayList();
+	private List<VariableModel> models = new ArrayList<VariableModel>();
 	private TableViewer viewer;
 	
 	public ClickProjectPropertyPage(){
@@ -298,7 +298,7 @@ public class ClickProjectPropertyPage extends PropertyPage {
 		public String name = "";
 		public String type = "";
 		
-		public static String serialize(List models){
+		public static String serialize(List<VariableModel> models){
 			StringBuffer sb = new StringBuffer();
 			for(int i=0;i<models.size();i++){
 				VariableModel model = (VariableModel) models.get(i);
@@ -312,8 +312,8 @@ public class ClickProjectPropertyPage extends PropertyPage {
 			return sb.toString();
 		}
 		
-		public static List deserialize(String value){
-			List list = new ArrayList();
+		public static List<VariableModel> deserialize(String value){
+			List<VariableModel> list = new ArrayList<VariableModel>();
 			String[] dim = value.split(",");
 			for(int i=0;i<dim.length;i++){
 				String[] nameAndType = dim[i].split("=");

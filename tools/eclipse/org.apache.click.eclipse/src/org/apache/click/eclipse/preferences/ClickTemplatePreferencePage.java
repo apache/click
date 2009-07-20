@@ -64,7 +64,7 @@ public class ClickTemplatePreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
 
 	private TableViewer tableViewer;
-	private List tableModel = Template.loadFromPreference();
+	private List<Template> tableModel = Template.loadFromPreference();
 	
 	public ClickTemplatePreferencePage() {
 		super();

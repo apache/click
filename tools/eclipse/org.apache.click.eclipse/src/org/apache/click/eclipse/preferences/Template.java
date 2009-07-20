@@ -101,8 +101,8 @@ public class Template {
 		return sb.toString();
 	}
 	
-	public static List loadFromXML(String xml){
-		List list = new ArrayList();
+	public static List<Template> loadFromXML(String xml){
+		List<Template> list = new ArrayList<Template>();
 		try {
 			DOMParser parser = new DOMParser();
 			parser.parse(new InputSource(new StringReader(xml)));
@@ -132,7 +132,7 @@ public class Template {
 	}
 	
 	
-	public static List loadFromPreference(){
+	public static List<Template> loadFromPreference(){
 		IPreferenceStore store = ClickPlugin.getDefault().getPreferenceStore();
 		String xml = store.getString(ClickPlugin.PREF_TEMPLATES);
 		return loadFromXML(xml);
@@ -150,7 +150,7 @@ public class Template {
 		return sb.toString();
 	}
 	
-	public static void saveToPreference(List templates){
+	public static void saveToPreference(List<Template> templates){
 		StringBuffer sb = new StringBuffer();
 		sb.append("<templates>");
 		for(int i=0;i<templates.size();i++){
