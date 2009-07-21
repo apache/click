@@ -18,10 +18,12 @@
  */
 package org.apache.click.eclipse.ui.editor;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 import org.apache.click.eclipse.ClickPlugin;
 import org.eclipse.jface.text.ITypedRegion;
@@ -44,31 +46,19 @@ public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
 	@Override
 	@SuppressWarnings("unchecked")
 	public boolean prepareRegions(ITypedRegion currentRegion, int start, int length, Collection styleRanges) {
-        boolean result = super.prepareRegions(currentRegion, start, length, styleRanges);
-        
+		List<Object> results = new ArrayList<Object>();
+		boolean result = super.prepareRegions(currentRegion, start, length, results);
+
         // TODO Is it possible to update colors when preferences changed...?
     	Color colorVariable  = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_VAR);
     	Color colorDirective = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_DIR);
     	Color colorComment   = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_CMT);
-        Object sr[] = styleRanges.toArray();
-		
+
         IStructuredDocument document = getDocument();
         
-//        String allText = document.get();
-//        int commentStart = allText.substring(0, start).lastIndexOf("#*");
-//        if(commentStart >= 0){
-//        	int commentEnd = allText.indexOf("*#", commentStart);
-//        	if(commentEnd > start){
-//                for(int i = 0; i < sr.length; i++){
-//                	styleRanges.remove(sr[i]);
-//                }
-//                styleRanges.add(new StyleRange(start, length, colorComment, colorDirective));
-//        		return result;
-//        	}
-//        }
-        
-        for(int i = 0; i < sr.length; i++){
-            StyleRange styleRange = (StyleRange)sr[i];
+        for(Iterator ite = results.iterator(); ite.hasNext();){
+            StyleRange styleRange = (StyleRange)ite.next();
+            
             IStructuredDocumentRegion region = document.getRegionAtCharacterOffset(styleRange.start);
             String text = region.getText();
             int mStart = styleRange.start - region.getStartOffset();
@@ -150,7 +140,7 @@ public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
                 post.length = styleRange.length - pos;
                 styleRanges.add(post);
             }
-            styleRanges.remove(sr[i]);
+            //styleRanges.remove(styleRange);
         }
 
         return result;
