@@ -20,7 +20,7 @@ public class CayenneClasspathContainerPage extends WizardPage implements IClassp
 	public CayenneClasspathContainerPage() {
 		super("CayenneClasspathContainerPage");
 		setTitle("Cayenne Libraries");
-		setDescription("Add Cayenne libraries to classpath.");
+		setDescription(CayennePlugin.getString("wizard.classpathContainer.description"));
 	}
 
 	public boolean finish() {

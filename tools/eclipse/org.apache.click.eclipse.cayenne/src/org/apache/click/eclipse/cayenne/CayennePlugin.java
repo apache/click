@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ResourceBundle;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -36,10 +37,12 @@ import org.osgi.framework.BundleContext;
 public class CayennePlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "net.sf.clickide.cayenne";
+	public static final String PLUGIN_ID = "org.apache.click.eclipse.cayenne";
 
 	// The shared instance
 	private static CayennePlugin plugin;
+	
+	private ResourceBundle resource;
 	
 	/**
 	 * The constructor
@@ -54,6 +57,7 @@ public class CayennePlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		resource = ResourceBundle.getBundle("org.apache.click.eclipse.cayenne.messages");
 	}
 
 	/*
@@ -72,6 +76,10 @@ public class CayennePlugin extends AbstractUIPlugin {
 	 */
 	public static CayennePlugin getDefault() {
 		return plugin;
+	}
+	
+	public static String getString(String key){
+		return getDefault().resource.getString(key);
 	}
 	
 	/**
