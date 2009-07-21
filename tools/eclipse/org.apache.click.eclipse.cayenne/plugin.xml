@@ -44,11 +44,25 @@
       </wizard>
    </extension>
    <extension
+         point="org.eclipse.jdt.core.classpathContainerInitializer">
+      <classpathContainerInitializer
+         class="org.apache.click.eclipse.cayenne.CayenneClasspathContainerInitializer"
+         id="org.apache.click.eclipse.cayenne.CAYENNE_LIBS"/>
+   </extension>
+   <extension
+         point="org.eclipse.jdt.ui.classpathContainerPage">
+      <classpathContainerPath 
+         class="org.apache.click.eclipse.cayenne.CayenneClasspathContainerPage"
+         id="org.apache.click.eclipse.cayenne.CAYENNE_LIBS"
+         name="Cayennne Libraries"/>
+   </extension>
+   <!--
+   <extension
          point="org.eclipse.jdt.core.classpathVariableInitializer">
       <classpathVariableInitializer
             class="org.apache.click.eclipse.cayenne.CayenneClasspathVariableInitializer"
             variable="org.apache.click.eclipse.cayenne.classpathVariableInitializer">
       </classpathVariableInitializer>
    </extension>
-
+   -->
 </plugin>

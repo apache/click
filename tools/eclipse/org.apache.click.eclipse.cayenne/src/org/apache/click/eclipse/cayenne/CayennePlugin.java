@@ -89,15 +89,16 @@ public class CayennePlugin extends AbstractUIPlugin {
 		}
 		File dir = CayennePlugin.getDefault().getStateLocation().toFile();
 		files = new File[]{
-				new File(dir, "cayenne.jar"),
-				new File(dir, "cayenne-modeler.jar"),
-				new File(dir, "commons-dbcp-1.2.1.jar"),
-				new File(dir, "commons-pool-1.2.jar"),
-				new File(dir, "forms-1.0.3.jar"),
-				new File(dir, "hsqldb-1.8.0.2.jar"),
-				new File(dir, "looks-1.3.1.jar"),
-				new File(dir, "ognl-2.6.7.jar"),
-				new File(dir, "scope-bin-1.0.1.jar"),
+//				new File(dir, "cayenne.jar"),
+//				new File(dir, "cayenne-modeler.jar"),
+//				new File(dir, "commons-dbcp-1.2.1.jar"),
+//				new File(dir, "commons-pool-1.2.jar"),
+//				new File(dir, "forms-1.0.3.jar"),
+//				new File(dir, "hsqldb-1.8.0.2.jar"),
+//				new File(dir, "looks-1.3.1.jar"),
+//				new File(dir, "ognl-2.6.7.jar"),
+//				new File(dir, "scope-bin-1.0.1.jar"),
+				new File(dir, "CayenneModeler.jar"),
 		};
 		return files;
 	}
