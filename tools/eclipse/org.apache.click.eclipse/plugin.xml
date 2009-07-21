@@ -80,13 +80,13 @@
   <!--===============================================-->
   <extension point="org.eclipse.ui.newWizards">
      <wizard
-           category="net.sf.clickide.category"
-           class="net.sf.clickide.ui.wizard.NewClickPageWizard"
+           category="org.apache.click.eclipse.category"
+           class="org.apache.click.eclipse.ui.wizard.NewClickPageWizard"
            icon="icons/click-icon-16x16.png"
            id="net.sf.clickide.ui.wizard.NewClickPageWizard"
            name="%wizard.newPage"/>
      <category
-           id="net.sf.clickide.category"
+           id="org.apache.click.eclipse.category"
            name="%wizard.category"/>
   </extension>
 
@@ -96,20 +96,20 @@
   <extension point = "org.eclipse.ui.editors">
     <editor
           class="org.apache.click.eclipse.ui.editor.ClickEditor"
-          contributorClass="net.sf.clickide.ui.editor.ClickActionBarContributor"
+          contributorClass="org.apache.click.eclipse.ui.editor.ClickActionBarContributor"
           default="true"
           filenames="click.xml"
           icon="icons/click.gif"
-          id="net.sf.clickide.ui.editor.ClickEditor"
+          id="org.apache.click.eclipse.ui.editor.ClickEditor"
           name="%editor.clickXML">
     </editor>
     <editor
           class="org.apache.click.eclipse.ui.editor.TemplateEditor"
-          contributorClass="net.sf.clickide.ui.editor.TemplateEditorActionContributor"
+          contributorClass="org.apache.click.eclipse.ui.editor.TemplateEditorActionContributor"
           default="true"
           extensions="htm"
           icon="icons/velocity.gif"
-          id="net.sf.clickide.ui.editor.TemplateEditor"
+          id="org.apache.click.eclipse.ui.editor.TemplateEditor"
           name="%editor.template">
     </editor>
   </extension>
@@ -281,7 +281,7 @@
            id="org.apache.click.eclipse.ui.actions.SwitchToHTMLAction"
            name="%action.switchToHTML"/>
      <command
-           categoryId="net.sf.clickide.category"
+           categoryId="org.apache.click.eclipse.category"
            id="org.apache.click.eclipse.ui.actions.SwitchToClassAction"
            name="%action.switchToClass"/>
      <category
