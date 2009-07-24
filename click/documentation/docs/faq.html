@@ -430,24 +430,48 @@
   <dt><b>12.&nbsp; How can you prevent multiple form posts?</b></dt>
   <dd>
   You can prevent multiple form posts by using the Post Redirect pattern. With 
-  this pattern once the user has posted a form you redirect to another page. 
-  If the user then presses the refresh button, they will making a GET request on the
-  current page.
+  this pattern once the user has posted a form you redirect to another page.
+  If the user then presses the refresh button, they will be making a GET request
+  on the current page.
+  <pre class="prettyprint">
+public class Purchase extends Page {
+    ..
+
+    public boolean onPurchase() {
+        if (form.isValid()) {
+            Order order = new Order();
+            form.copyTo(order);
+            getOrderService().save(order);
+
+            // Perform a redirect after post to protect against users pressing
+            // the refresh or back button
+            setRedirect(Purchase.class);
+            return false;
+        }
+        return true;
+    }
+} </pre>
   <p/>
   Please see the <a target="blank" href="http://www.theserverside.com/articles/content/RedirectAfterPost/article.html">Redirect After Post</a> 
   article for more information on this topic.
   <p/>
-  To prevent users resubmitting a form with the browser back button use the
-  Form 
+  Another common way duplicate posts occur is if the user accidentally
+  click the Form's submit button twice, in quick succession. Redirecting to another
+  won't protect against the second accidental submit.
+  <p/>
+  Click provides a clean way to prevent users from resubmitting the same Form
+  through the Form's
   <a href="click-api/org/apache/click/control/Form.html#onSubmitCheck(org.apache.click.Page, java.lang.String)">onSubmitCheck()</a>
   method:
   
-<pre class="codeJava">
-<span class="kw">public class</span> Purchase <span class="kw">extends</span> Page {
+<pre class="prettyprint">
+public class Purchase extends Page {
     ..
     
-    <span class="kw">public boolean</span> onSecurityCheck() {
-        <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="st">"/invalid-submit.html"</span>);
+    public boolean onSecurityCheck() {
+        // Placing the onSubmitCheck in the onSecurityCheck event, prevents the
+        // page from being processed if a Form is resubmitted a second time
+        return form.onSubmitCheck(this, "/invalid-submit.html");
     }
 } </pre>
   <p/>

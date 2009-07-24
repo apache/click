@@ -1848,8 +1848,9 @@ public class Form extends AbstractContainer {
 
     /**
      * Perform a form submission check ensuring the user has not replayed the
-     * form submission by using the browser back button. If the form submit
-     * is valid this method will return true, otherwise set the page to
+     * form submission by using the browser's back or refresh buttons or by
+     * clicking the Form submit button twice, in quick succession. If the form
+     * submit is valid this method will return true, otherwise set the page to
      * redirect to the given redirectPath and return false.
      * <p/>
      * This method will add a token to the user's session and a hidden field
@@ -1858,12 +1859,12 @@ public class Form extends AbstractContainer {
      * Form submit checks should be performed before the pages controls are
      * processed in the Page onSecurityCheck method. For example:
      *
-     * <pre class="codeJava">
-     * <span class="kw">public class</span> Order <span class="kw">extends</span> Page {
+     * <pre class="prettyprint">
+     * public class Order extends Page {
      *     ..
      *
-     *     <span class="kw">public boolean</span> onSecurityCheck() {
-     *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="st">"/invalid-submit.html"</span>);
+     *     public boolean onSecurityCheck() {
+     *         return form.onSubmitCheck(this, "/invalid-submit.html");
      *     }
      * } </pre>
      *
