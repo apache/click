@@ -23,7 +23,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -43,9 +42,13 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
- * Provides a default Click static resource service class.
+ * Provides a default Click static resource service class. This class will
+ * serve static resources contained in the web applications JARs, under the
+ * resource path META-INF/web and which are contained under the WAR file web
+ * root.
  * <p/>
- * TODO
+ * This service is useful for application servers which do not allow Click to
+ * automatically deploy resources to the web root /click/ directory.
  */
 public class ClickResourceService implements ResourceService {
 
@@ -121,47 +124,18 @@ public class ClickResourceService implements ResourceService {
             response.setContentType(mimeType);
         }
 
-        String lowercasePath = resourcePath.toLowerCase();
-        if (lowercasePath.endsWith(".js") || lowercasePath.endsWith(".css")) {
+        byte[] resourceData = resourceCache.get(resourcePath);
 
-            String templatePath = "META-INF/web" + resourcePath;
+        OutputStream outputStream = null;
+        try {
+            response.setContentLength(resourceData.length);
 
-            Map<String, Object> model = new HashMap<String, Object>();
-            model.put("context", request.getContextPath());
-            model.put("request", request);
+            outputStream = response.getOutputStream();
+            outputStream.write(resourceData);
+            outputStream.flush();
 
-            PrintWriter writer = response.getWriter();
-
-            try {
-                templateService.renderTemplate(templatePath, model, writer);
-
-                writer.flush();
-
-            } catch (Exception e) {
-                if (e instanceof IOException) {
-                    throw (IOException) e;
-
-                } else {
-                    String msg = (e.getMessage() != null) ? e.getMessage() : e.toString();
-                    throw new RuntimeException(msg, e);
-                }
-            }
-
-        } else {
-
-            byte[] resourceData = resourceCache.get(resourcePath);
-
-            OutputStream outputStream = null;
-            try {
-                response.setContentLength(resourceData.length);
-
-                outputStream = response.getOutputStream();
-                outputStream.write(resourceData);
-                outputStream.flush();
-
-            } finally {
-                ClickUtils.close(outputStream);
-            }
+        } finally {
+            ClickUtils.close(outputStream);
         }
     }
 
@@ -340,7 +314,9 @@ public class ClickResourceService implements ResourceService {
                 if (!resource.endsWith(".htm") && !resource.endsWith(".jsp")
                     && !resource.endsWith("/")) {
 
-                    byte[] resourceData = getServletResourceData(servletContext, resource);
+                    byte[] resourceData =
+                        getServletResourceData(servletContext, resource);
+
                     if (resourceData != null) {
                         resourceCache.put(resource, resourceData);
                     }
@@ -349,16 +325,9 @@ public class ClickResourceService implements ResourceService {
         }
     }
 
-    /**
-     * Load the resource for the given resourcePath from the servlet context.
-     *
-     * @param servletContext the application servlet context
-     * @param resourcePath the path of the resource to load
-     * @return the byte array for the given resource path
-     * @throws IOException if the resource could not be loaded
-     */
     private byte[] getServletResourceData(ServletContext servletContext,
         String resourcePath) throws IOException {
+
         InputStream inputStream = null;
         try {
             inputStream = servletContext.getResourceAsStream(resourcePath);
@@ -374,14 +343,8 @@ public class ClickResourceService implements ResourceService {
         }
     }
 
-    /**
-     * Load the resource for the given resourcePath from the classpath.
-     *
-     * @param resourcePath the path of the resource to load
-     * @return the byte array for the given resource path
-     * @throws IOException if the resource could not be loaded
-     */
-    private byte[] getClasspathResourceData(String resourcePath) throws IOException {
+    private byte[] getClasspathResourceData(String resourcePath)
+        throws IOException {
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
