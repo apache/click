@@ -1,0 +1,113 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>5.9.&nbsp;Performance</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8247"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Best Practices"><link rel="prev" href="ch05s08.html" title="5.8.&nbsp;Error Handling"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5.9.&nbsp;Performance</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch05s08.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;5.&nbsp;Best Practices</th><td width="20%" align="right">&nbsp;</td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="performance"></a>5.9.&nbsp;Performance</h2></div></div></div><p>Yahoo published a list of
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://developer.yahoo.com/performance/rules.html" target="_blank">best practices</a>
+    for improving web application performance.
+    </p><p>Click Framework provides a
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/filter/PerformanceFilter.html" target="_blank">PerformanceFilter</a>
+    which caters for some of these rules. However not all rules can be easily automated.
+    </p><p>This section outlines how to apply some important rules which are not
+    covered by the PerformanceFilter namely,
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://developer.yahoo.com/performance/rules.html#num_http" target="_blank">Minimize HTTP Requests (by combining files)</a>
+    and <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://developer.yahoo.com/performance/rules.html#minify" target="_blank">Minify JavaScript and CSS</a>.
+    </p><p>The Rule, <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://developer.yahoo.com/performance/rules.html#num_http" target="_blank">Minimize HTTP Requests</a>,
+    also mentions <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://alistapart.com/articles/sprites" target="_blank">CSS Sprites</a>,
+    a method for combining multiple images into a single master image. CSS Sprites
+    can boost performance when your application has many images, however it is
+    harder to create and maintain. Note that CSS Sprites is not covered here.
+    </p><p>It is worth pointing out that its not necessary to optimize
+    every page in your application. Instead concentrate on popular pages, for
+    example a web site's <span class="emphasis"><em>Home Page</em></span> would be a good
+    candidate.
+    </p><p>There are a couple of tools that are useful in applying the rules
+    "Minimize HTTP Requests" and "Minify JavaScript and CSS":
+    </p><div class="itemizedlist"><ul type="disc"><li><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://developer.yahoo.com/yui/compressor/" target="_blank">YUICompressor</a>
+            - minifies and compresses JavaScript and CSS files so less bytes have to
+            be transferred across the wire.
+        </p></li><li><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://code.google.com/p/javaflight-code/" target="_blank">Ant Task for YUICompressor</a>
+            - an Ant task that uses YUICompressor to compress JavaScript and CSS files.
+        </p></li><li><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://www.crockford.com/javascript/jsmin.html" target="_blank">JSMin</a>
+            - similar to YUICompressor but only minifies (remove whitespace and newlines)
+            JavaScript files and does no compression at all. An advantage of JSMin
+            over YUICompressor is that its faster and can be used at runtime to minify
+            JavaScript, while YUICompressor is most often used at build time.
+        </p></li></ul></div><p>Below are some articles outlining how to use YUICompressor and Ant to
+    concatenate and compress JavaScript and CSS files:
+    </p><div class="itemizedlist"><ul type="disc"><li><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://www.julienlecomte.net/blog/2007/09/16/" target="_blank">Article</a>
+            explaining how to use Ant and YUICompressor for compression.
+        </p></li><li><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://javaflight.blogspot.com/2008/01/introducing-yui-compressor-ant-task.html" target="_blank">Article</a>
+            outlining how to use a special YUICompressor Ant Task for compression.
+        </p></li></ul></div><p>Using one of the approaches above you can concatenate and compress all
+    JavaScript and CSS for your Pages into two separate files, for example
+    <code class="filename">home-page.css</code>
+    and <code class="filename">home-page.js</code>. Note that the two files must include
+    all the JavaScript and CSS that is generated by the Page and its Controls.
+    Then you can instruct Click to <span class="emphasis"><em>only</em></span> include the two
+    compressed files, home-page.css and home-page.js.
+    </p><p>Click makes use of the utility class
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/util/PageImports.html" target="_blank">PageImports</a>
+    to include the CSS and JavaScript. PageImports exposes the method
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/util/PageImports.html#setInitialized(boolean)" target="_blank">setInitialized(boolean)</a>,
+    which controls when PageImports are fully initialized. Once PageImports have
+    been initialized, no other CSS and JavaScript will be included.
+    </p><p>Knowing this one can override
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Page.html#getPageImports()" target="_blank">Page.getPageImports()</a>,
+    and import the necessary JavaScript and CSS files and then set PageImports to
+    <code class="literal">initialized</code>, forcing PageImports to skip other CSS and
+    JavaScript files.
+    </p><p>Here is an example:</p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> HomePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> Form form = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Form(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"form"</span>);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> onInit() {
+        form.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> EmailField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"email"</span>);
+        addControl(form);
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> PageImports getPageImports () {
+        PageImports pageImports = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">super</span>.getPageImports();
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add the Page Css to the PageImports</span>
+        pageImports.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> CssImport(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"/assets/css/home-page.css"</span>));
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add the Page JS to the PageImports</span>
+        pageImports.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> JsImport(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"/assets/js/home-page.js"</span>));
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Set pageImports to initialized so that no other Css and JavaScript</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// files will be included.</span>
+        pageImports.setInitialized(true);
+        
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> pageImports;
+    }
+}</pre><p>Using the following <code class="filename">border-template.htm</code>:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;html&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;head&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;title&gt;</span>Click Examples<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/title&gt;</span>
+    ${headElements}
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/head&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;body&gt;</span>
+
+  ...
+
+  ${jsElements}
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/body&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/html&gt;</span></pre><p>the rendered HTML will include one CSS and one JavaScript import:</p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;html&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;head&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;title&gt;</span>Click Examples<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/title&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;link</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"text/css"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">rel</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"stylesheet"</span>
+          <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">href</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"/click-examples/assets/css/home-page.css"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">title</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Style"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/head&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;body&gt;</span>
+
+  ...
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;script</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"text/javascript"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">src</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"/click-examples/assets/js/home-page.js"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/script&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/body&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/html&gt;</span></pre><p>A live demo is available
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://www.avoka.com/click-examples/general/page-imports-example.htm" target="_blank">here</a>
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch05s08.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch05.html">Up</a></td><td width="40%" align="right">&nbsp;</td></tr><tr><td width="40%" align="left" valign="top">5.8.&nbsp;Error Handling&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;</td></tr></table></div></body></html>

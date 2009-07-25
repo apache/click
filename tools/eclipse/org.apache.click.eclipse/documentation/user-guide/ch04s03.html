@@ -1,0 +1,68 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>4.3.&nbsp;Auto Deployed Files</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_8247"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Configuration"><link rel="prev" href="ch04s02.html" title="4.2.&nbsp;Application Configuration"><link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Best Practices"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.3.&nbsp;Auto Deployed Files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;4.&nbsp;Configuration</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="auto-deployed-files"></a>4.3.&nbsp;Auto Deployed Files</h2></div></div></div><p>To make pre-configured resources (templates, stylesheets, etc.)
+    available to web applications, Click automatically deploys configured
+    classpath resources to the <code class="varname">/click</code> directory at startup
+    (if not already present).
+    </p><p>You can modify these support files and Click will
+    <span class="bold"><strong>not</strong></span> overwrite them. These files include:
+    </p><div class="itemizedlist"><ul type="disc"><li><p> click/error.htm &nbsp; - &nbsp; the Page
+          <a class="link" href="ch02s09.html" title="2.9.&nbsp;Error Handling">Error Handling</a> template
+        </p></li><li><p> click/control.css &nbsp; - &nbsp; the Controls cascading stylesheet</p></li><li><p> click/control.js &nbsp; - &nbsp; the Controls JavaScript library</p></li><li><p> click/not-found.htm &nbsp; - &nbsp; the
+          <a class="link" href="ch02s10.html" title="2.10.&nbsp;Page Not Found">Page Not Found</a> template
+        </p></li></ul></div><p>For example to customize the control styles you can place a customized
+    copy (or even a brand new version) of <code class="filename">control.css</code> under
+    the <code class="varname">/click</code> folder in your web project:
+    </p><div class="literallayout"><p>/webapp/click/control.css</p></div><p>When Click starts up it will <span class="bold"><strong>not</strong></span>
+    override your copy of <code class="filename">control.css</code> with its own default
+    version.
+    </p><p>Different controls might deploy different stylesheet, javascript or image
+    files, however the above principle still applies. By placing a customized copy
+    of the stylesheet, javascript or image under the <code class="varname">/click</code> folder,
+    you will override the default resource.
+    </p><p>Be aware that some of the more complex controls (checklist, colorpicker,
+    tree), deploys resources to subfolders under <code class="varname">/click</code>, for
+    example <code class="literal">/click/checklist/*</code>.
+    </p><p>A control's Javadoc will normally indicate what resources are deployed
+    for that control.
+    </p><p>It is generally easier to work with unpacked WARs and most servlet
+    containers do just that. However some contains such as WebLogic (at least
+    version 10) does not. To enable WebLogic to unpack the WAR go to the
+    <span class="emphasis"><em>Admin Console &gt; server node &gt; Web Applications</em></span>
+    tab and check the <span class="emphasis"><em>Archived Real Path Enabled</em></span> parameter.
+    </p><p>If Click cannot deploy resources because of restricted file system
+    permissions, warning messages will be logged.
+    </p><p>If your application server does not unpack the WAR/EAR or has restricted
+    permissions, you will need to package up these auto deployed files in your web
+    applications WAR file. To do this you should run you application on a development
+    machine without these restrictions and then package up the deployed files into
+    the WAR/EAR before deployment.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="deploying-custom-resources"></a>4.3.1.&nbsp;Deploying Custom Resources</h3></div></div></div><p> Click supports two ways of deploying pre-configured resources
+      (templates, stylesheets, JavaScript etc.) from a Jar to a web applications.
+      </p><div class="orderedlist"><ol type="1"><li><p> Through a Control's
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#onDeploy(javax.servlet.ServletContext)" target="_blank">onDeploy()</a>
+          event handler. See the <a class="link" href="ch04s02.html#application-controls" title="4.2.7.&nbsp;Controls">Controls</a>
+          section above.
+          </p></li><li><p> By packaging the resources (stylesheets, JavaScript, Images etc.)
+          into a special folder called <span class="emphasis"><em>'META-INF/web'</em></span>.
+          </p></li></ol></div><p>As option #1 was already discussed above in section
+      <a class="link" href="ch04s02.html#application-controls" title="4.2.7.&nbsp;Controls">Controls</a>, lets look at option #2.
+      </p><p>When Click starts up, it scans each Jar in the classpath for
+      specially marked entries starting with 'META-INF/web/'. (Please note that
+      even though Click will scan the entire classpath it is strongly recommended
+      to host your Jar files inside your WAR lib folder e.g. WEB-INF/lib. Sharing
+      Jars on the classpath can lead to class loading issues.)
+      </p><p>Click will then copy all files found under 'META-INF/web/' to the web
+      application folder.
+      </p><p>
+      For example, given a Jar file with the following entries:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>META-INF/web/mycorp/edit_customer.js</p></li><li><p>META-INF/web/mycorp/edit_customer.css</p></li><li><p>mycorp/pages/EditCustomerPage.class</p></li></ul></div><p>Click will copy the files <span class="emphasis"><em>'/mycorp/edit_customer.js'</em></span>
+      and <span class="emphasis"><em>'/mycorp/edit_customer.css'</em></span> to the web application
+      folder.
+      </p><p>Thus if the web application is called 'webapp', the files will be
+      deployed as <span class="emphasis"><em>'webapp/mycorp/edit_customer.js'</em></span> and
+      <span class="emphasis"><em>'webapp/mycorp/edit_customer.css'</em></span>.
+      </p><p>Option #2 is especially useful when you need to deploy a large number
+      of resources from a Jar. Note, only Jars placed under the
+      <span class="emphasis"><em>'WEB-INF/lib'</em></span> folder will be deployed.
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.2.&nbsp;Application Configuration&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Best Practices</td></tr></table></div></body></html>
