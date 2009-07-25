@@ -34,6 +34,7 @@ import org.apache.click.util.Format;
  * startup. Once the ConfigService has been initialized it is stored in the
  * ServletContext using the key "<tt>org.apache.click.service.ConfigService</tt>".
  *
+ * <a href="#" name="config"></a>
  * <h3>Configuration</h3>
  * The default ConfigService is {@link XmlConfigService}.
  * <p/>
@@ -207,6 +208,33 @@ public interface ConfigService {
      * @return true if JSP exists for the given ".htm" path
      */
     public boolean isJspPage(String path);
+
+    /**
+     * Return true if the given resource is a Page class template, false
+     * otherwise.
+     * <p/>
+     * Below is an example showing how to map <tt>.htm</tt> and <tt>.jsp</tt>
+     * files as Page class templates.
+     *
+     * <pre class="prettyprint">
+     * public class XmlConfigService implements ConfigService {
+     *
+     *     ...
+     *
+     *     public boolean isTemplate(String path) {
+     *         if (path.endsWith(".htm") || path.endsWith(".jsp")) {
+     *             return true;
+     *         }
+     *         return false;
+     *     }
+     *
+     *     ...
+     * } </pre>
+     *
+     * @param path the path to check if it is a Page class template or not
+     * @return true if the resource is a Page class template, false otherwise
+     */
+    public boolean isTemplate(String path);
 
     /**
      * Return the page auto binding mode. If the mode is "PUBLIC" any public
