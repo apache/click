@@ -16,37 +16,23 @@
  specific language governing permissions and limitations
  under the License.
 -->
-<toc label="Click Documentation">
-  <topic label="Click" href="documentation/docs/click.html">
-    <topic label="Introduction" href="documentation/docs/introduction.html"/>
-    <topic label="Why Click" href="documentation/docs/why-click.html"/>
-    <topic label="Click Online" href="documentation/docs/click-online.html"/>
-    <topic label="Pages" href="documentation/docs/pages.html"/>
-    <topic label="Controls" href="documentation/docs/controls.html"/>
-    <topic label="Configuration" href="documentation/docs/configuration.html"/>
-    <topic label="Quick Start" href="documentation/docs/quick-start.html"/>
-    <topic label="Best Practices" href="documentation/docs/best-practices.html"/>
-    <topic label="FAQ" href="documentation/docs/faq.html"/>
-    <topic label="Examples" href="documentation/docs/examples.html"/>
-    <topic label="Extension Projects" href="documentation/docs/extensions.html"/>
-    <topic label="Developer Guide" href="documentation/docs/developer-guide/developer-guide.html"/>
-    <topic label="RoadMap &amp; Changes" href="documentation/docs/roadmap-changes.html"/>
-    <topic label="Cheat Sheet PDF" href="documentation/docs/click-cheat-sheet.pdf"/>
-    <topic label="Downloads" href="documentation/docs/downloads.html"/>
+<toc label="Apache Click">
+  <topic label="Click User Guide" href="documentation/user-guide/index.html">
+    <topic label="Introduction to Click" href="documentation/user-guide/ch01.html"/>
+    <topic label="Pages" href="documentation/user-guide/ch02.html"/>
+    <topic label="Controls" href="documentation/user-guide/ch03.html"/>
+    <topic label="Configuration" href="documentation/user-guide/ch04.html"/>
+    <topic label="Best Practices" href="documentation/user-guide/ch05.html"/>
   </topic>
-  <topic label="Javadoc" href="documentation/docs/javadoc.html">
+  <topic label="Javadoc" href="documentation/javadoc.html">
     <topic label="Click API" href="http://incubator.apache.org/click/docs/click-api/overview-summary.html"/>
     <topic label="Control API" href="http://incubator.apache.org/click/docs/click-api/org/apache/click/control/package-summary.html"/>
     <topic label="Extras API" href="http://incubator.apache.org/click/docs/extras-api/overview-summary.html"/>
     <topic label="Mock API" href="http://incubator.apache.org/click/docs/mock-api/overview-summary.html"/>
   </topic>
-  <topic label="ClickIDE" href="documentation/docs/click-ide.html">
-    <topic label="RoadMap &amp; Changes" href="documentation/docs/click-ide-roadmap-changes.html"/>
-    <topic label="Download" href="https://sourceforge.net/project/showfiles.php?group_id=82095&amp;package_id=181305"/>
-  </topic>
-  <topic label="Velocity" href="documentation/docs/velocity/velocity.html">
-    <topic label="Users Guide PDF" href="documentation/docs/velocity/VelocityUsersGuide.pdf"/>
-    <topic label="Developers Guide" href="documentation/docs/velocity/developer-guide.html"/>
-    <topic label="VTL Reference" href="documentation/docs/velocity/vtl-reference-guide.html"/>
+  <topic label="Velocity" href="documentation/velocity/velocity.html">
+    <topic label="Users Guide PDF" href="documentation/velocity/VelocityUsersGuide.pdf"/>
+    <topic label="Developers Guide" href="documentation/velocity/developer-guide.html"/>
+    <topic label="VTL Reference" href="documentation/velocity/vtl-reference-guide.html"/>
   </topic>
 </toc>
