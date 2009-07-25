@@ -36,6 +36,9 @@ public class ClickServiceEditor extends AbstractMasterDetailEditor {
 
 	protected void createMenu(IDOMElement element) {
 		if(element.getNodeName().equals(ClickPlugin.TAG_CLICK_APP)){
+			if(ClickUtils.getElement(element, ClickPlugin.TAG_FILE_UPLOAD_SERVICE)==null){
+				newMenu.add(new ElementAppendAction(ClickPlugin.TAG_FILE_UPLOAD_SERVICE, element, null, this));
+			}
 			if(ClickUtils.getElement(element, ClickPlugin.TAG_LOG_SERVICE)==null){
 				newMenu.add(new ElementAppendAction(ClickPlugin.TAG_LOG_SERVICE, element, null, this));
 			}
@@ -43,22 +46,26 @@ public class ClickServiceEditor extends AbstractMasterDetailEditor {
 				newMenu.add(new ElementAppendAction(ClickPlugin.TAG_TEMPLATE_SERVICE, element, null, this));
 			}
 		}
-		if(element.getNodeName().equals(ClickPlugin.TAG_LOG_SERVICE) ||
+		if(element.getNodeName().equals(ClickPlugin.TAG_FILE_UPLOAD_SERVICE) ||
+				element.getNodeName().equals(ClickPlugin.TAG_LOG_SERVICE) ||
 				element.getNodeName().equals(ClickPlugin.TAG_TEMPLATE_SERVICE)){
 			newMenu.add(new ElementAppendAction(ClickPlugin.TAG_PROPERTY, element, null, this));
 		}
 	}
 
 	protected String[] getAcceptElementNames() {
-		return new String[]{ClickPlugin.TAG_LOG_SERVICE, ClickPlugin.TAG_TEMPLATE_SERVICE, ClickPlugin.TAG_PROPERTY};
+		return new String[]{ClickPlugin.TAG_FILE_UPLOAD_SERVICE, ClickPlugin.TAG_LOG_SERVICE, ClickPlugin.TAG_TEMPLATE_SERVICE, ClickPlugin.TAG_PROPERTY};
 	}
 
 	protected IAttributeEditor getAttributeEditor(String elementName) {
+		if(elementName.equals(ClickPlugin.TAG_FILE_UPLOAD_SERVICE)){
+			return new ServiceClassNameAttributeEditor("org.apache.click.service.FileUploadService");
+		}
 		if(elementName.equals(ClickPlugin.TAG_LOG_SERVICE)){
-			return new ServiceClassNameAttributeEditor("net.sf.click.service.LogService");
+			return new ServiceClassNameAttributeEditor("org.apache.click.service.LogService");
 		}
 		if(elementName.equals(ClickPlugin.TAG_TEMPLATE_SERVICE)){
-			return new ServiceClassNameAttributeEditor("net.sf.click.service.TemplateService");
+			return new ServiceClassNameAttributeEditor("org.apache.click.service.TemplateService");
 		}
 		if(elementName.equals(ClickPlugin.TAG_PROPERTY)){
 			return new PropertyAttributeEditor();

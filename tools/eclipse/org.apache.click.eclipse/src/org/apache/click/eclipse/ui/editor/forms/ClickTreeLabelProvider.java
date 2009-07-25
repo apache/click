@@ -56,10 +56,10 @@ public class ClickTreeLabelProvider extends JFaceNodeLabelProvider {
 				ClickPlugin.getImageDescriptor("icons/folder.gif").createImage());
 		images.put(ClickPlugin.TAG_EXCLUDES,
 				ClickPlugin.getImageDescriptor("icons/page.gif").createImage());
-		images.put(ClickPlugin.TAG_FILE_ITEM_FACTORY,
-				ClickPlugin.getImageDescriptor("icons/folder.gif").createImage());
 		images.put(ClickPlugin.TAG_PROPERTY,
 				ClickPlugin.getImageDescriptor("icons/property.gif").createImage());
+		images.put(ClickPlugin.TAG_FILE_UPLOAD_SERVICE,
+				ClickPlugin.getImageDescriptor("icons/class.gif").createImage());
 		images.put(ClickPlugin.TAG_LOG_SERVICE,
 				ClickPlugin.getImageDescriptor("icons/class.gif").createImage());
 		images.put(ClickPlugin.TAG_TEMPLATE_SERVICE,

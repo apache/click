@@ -21,7 +21,6 @@ package org.apache.click.eclipse.ui.editor;
 
 import org.apache.click.eclipse.ClickPlugin;
 import org.apache.click.eclipse.ui.editor.forms.ClickControlsEditor;
-import org.apache.click.eclipse.ui.editor.forms.ClickFileItemFactoryEditor;
 import org.apache.click.eclipse.ui.editor.forms.ClickGeneralEditor;
 import org.apache.click.eclipse.ui.editor.forms.ClickHeadersEditor;
 import org.apache.click.eclipse.ui.editor.forms.ClickPagesEditor;
@@ -61,7 +60,6 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 	private ClickHeadersEditor headerEditor;
 	private ClickPagesEditor pageEditor;
 	private ClickControlsEditor controlEditor;
-	private ClickFileItemFactoryEditor fileItemFactoryEditior;
 	private ClickServiceEditor serviceEditor;
 
 //	private int generalEditorIndex;
@@ -115,15 +113,6 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 			addPage(0, serviceEditor, getEditorInput());
 			serviceEditor.initModel(model);
 			setPageText(0, ClickPlugin.getString("editor.clickXML.service"));
-			sourceEditorIndex++;
-		} catch(Exception ex){
-			removePage(0);
-		}
-		try {
-			fileItemFactoryEditior = new ClickFileItemFactoryEditor();
-			addPage(0, fileItemFactoryEditior, getEditorInput());
-			fileItemFactoryEditior.initModel(model);
-			setPageText(0, ClickPlugin.getString("editor.clickXML.fileUpload"));
 			sourceEditorIndex++;
 		} catch(Exception ex){
 			removePage(0);
