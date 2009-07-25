@@ -47,6 +47,27 @@
     padding: 10px;
     font-weight: normal;
   }
+  .action-container a {
+      text-decoration:none;
+  }
+  div.action {
+    font-weight: bold;
+    font-size: larger;
+    padding: 10px;
+    background: #5569B4;
+    width: 140px;
+    text-align: center;
+    color: #FFFFFF;
+    float: left;
+    border: 1px solid #99A4DF;
+    margin: 10px 10px 10px 0px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+  }
+  div.action:hover {
+    background: #3350AF;
+    border: 1px outset #99A4DF;
+  }
  </style>
 </head>
 <body>
@@ -64,24 +85,33 @@ Click is designed to be very easy to learn and use, with developers getting up a
  <li class="item">Very easy to learn</li>
  <li class="item">Component and Page Oriented design</li>
  <li class="item">Event base programming model</li>
- <li class="item">Very high performance</li>
+ <li class="item">Exceptional performance</li>
  <li class="item">Automatic form rendering and client/server side validation</li>
  <li class="item">Supports Velocity, JSP or FreeMarker page rendering</li>
  <li class="item">Free Open Source with commercial friendly Apache License</li>
  <li class="item">Supports Java 1.5 and up</li>
 </ul>
+
+<div class="action-container">
+  <a target="_blank" href="http://www.avoka.com/click-examples/">
+    <div class="action">Examples</div>
+  </a>
+  <a target="_blank" href="http://www.apache.org/dyn/closer.cgi/incubator/click/click/2.1.0/click-2.1.0-incubating.zip">
+    <div class="action">Download</div>
+  </a>
+  <a target='topic' href="user-guide.html">
+     <div class="action">User Guide</div>
+  </a>
+  <div style="clear:both"></div>
+</div>
+
 <p/>
-The design philosophy behind Click is best summarized in the Swedish word 
-<b>lagom</b> which translates to <i>not too little or too much, but optimal</i>.  
+The design philosophy behind Click is best summarized in the Swedish word
+<b>lagom</b> which translates to <i>not too little or too much, but optimal</i>.
 <p/>
 If you want to dive straight into some code examples see the User Guide <a href="user-guide/html/ch01.html">Introduction</a>.
 <p/>
 For those interested in the design philosophy and background of the framework read <a href="why-click.html">Why Click?</a>.
-<p/>
-The Click project includes contributions by <a href="mailto:malcolm.edgar@gmail.com">Malcolm Edgar</a>,
-<a href="mailto:sabob1@gmail.com">Bob Schellink</a>, 
-Naoki Takezoe, Phil Barnes, Ahmed Mohombe, Christian Essl, Stephen Haberman, 
-Ricardo Lecheta and others.
 
 <hr/>
 <h3 style="margin-bottom:0em;">Disclaimer</h3>
