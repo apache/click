@@ -161,6 +161,20 @@ documentation and examples.
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-560">560</a>].
       </li>
       <li class="change">
+          Added support for an in-memory <a href="extras-api/org/apache/click/extras/gae/MemoryFileUploadService.html">File Upload Service</a>
+          that can be used for uploading files in a <a class="external" target="_blank" href="http://code.google.com/appengine/docs/java/overview.html">Google App Engine</a>
+          environment.
+      </li>
+       <li class="change">
+          Added support for templates with custom extensions through the new
+          ConfigService.<a href="click-api/org/apache/click/service/ConfigService.html#isTemplate(java.lang.String)">isTemplate</a>
+          method. The default ConfigService implementation, XmlConfigService, provides
+          support for the extensions <tt>.htm</tt> and <tt>.jsp</tt>, but new extensions
+          can be provided in a subclass. See the <a href="click-api/org/apache/click/service/XmlConfigService.html#isTemplate(java.lang.String)">JavaDoc</a>
+          for details
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-568">568</a>].
+      </li>
+      <li class="change">
           Added new Calendar popup to DateField. This Calendar popup uses
           <a target="_blank" class="external" href="http://code.google.com/p/calendardateselect/">Calendar Date Select</a>
           which is based on the Prototype JavaScript library.

@@ -405,6 +405,94 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
+     * Return true if the given path is a Page class template, false
+     * otherwise. By default this method returns true if the path has a
+     * <tt>.htm</tt> or <tt>.jsp</tt> extension.
+     * <p/>
+     * If you want to map alternative templates besides <tt>.htm</tt> and
+     * <tt>.jsp</tt> files you can override this method and provide extra
+     * checks against the given path whether it should be added as a
+     * template or not.
+     * <p/>
+     * Below is an example showing how to allow <tt>.xml</tt> paths to
+     * be recognized as Page class templates.
+     *
+     * <pre class="prettyprint">
+     * public class MyConfigService extends XmlConfigService {
+     *
+     *     protected boolean isTemplate(String path) {
+     *         // invoke default implementation
+     *         boolean isTemplate = super.isTemplate(path);
+     *
+     *         if (!isTemplate) {
+     *             // If path has an .xml extension, mark it as a template
+     *             isTemplate = path.endsWith(".xml");
+     *         }
+     *         return isTemplate;
+     *     }
+     * } </pre>
+     *
+     * Here is an example <tt>web.xml</tt> showing how to configure a custom
+     * ConfigService through the context parameter <tt>config-service-class</tt>.
+     * We also map <tt>*.xml</tt> requests to be routed through ClickServlet:
+     *
+     * <pre class="prettyprint">
+     * &lt;web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+     *   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     *   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+     *   version="2.4"&gt;
+     *
+     *   &lt;!-- Specify a custom ConfigService through the context param 'config-service-class' --&gt;
+     *   &lt;context-param&gt;
+     *     &lt;param-name&gt;config-service-class&lt;/param-name&gt;
+     *     &lt;param-value&gt;com.mycorp.service.MyConfigSerivce&lt;/param-value&gt;
+     *   &lt;/context-param&gt;
+     *
+     *   &lt;servlet&gt;
+     *     &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+     *     &lt;servlet-class&gt;org.apache.click.ClickServlet&lt;/servlet-class&gt;
+     *     &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
+     *   &lt;/servlet&gt;
+     *
+     *   &lt;!-- NOTE: we still map the .htm extension --&gt;
+     *   &lt;servlet-mapping&gt;
+     *     &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+     *     &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
+     *   &lt;/servlet-mapping&gt;
+     *
+     *   &lt;!-- NOTE: we also map .xml extension in order to route xml requests to the ClickServlet --&gt;
+     *   &lt;servlet-mapping&gt;
+     *     &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+     *     &lt;url-pattern&gt;*.xml&lt;/url-pattern&gt;
+     *   &lt;/servlet-mapping&gt;
+     *
+     *   ...
+     *
+     * &lt;/web-app&gt; </pre>
+     *
+     * <b>Please note</b>: even though you can add extra template mappings by
+     * overriding this method, it is still recommended to keep the default
+     * <tt>.htm</tt> mapping by invoking <tt>super.isTemplate(String)</tt>.
+     * The reason being that Click ships with some default templates such as
+     * {@link ConfigService#ERROR_PATH} and {@link ConfigService#NOT_FOUND_PATH}
+     * that must be mapped as <tt>.htm</tt>.
+     * <p/>
+     * Please see the ConfigService <a href="#config">javadoc</a> for details
+     * on how to configure a custom ConfigService implementation.
+     *
+     * @see ConfigService#isTemplate(String)
+     *
+     * @param path the path to check if it is a Page class template or not
+     * @return true if the path is a Page class template, false otherwise
+     */
+    public boolean isTemplate(String path) {
+        if (path.endsWith(".htm") || path.endsWith(".jsp")) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @see ConfigService#getPageClass(String)
      *
      * @param path the page path
@@ -1637,7 +1725,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         for (Iterator i = resources.iterator(); i.hasNext();) {
             String resource = (String) i.next();
 
-            if (resource.endsWith(".htm") || resource.endsWith(".jsp")) {
+            if (isTemplate(resource)) {
                 fileList.add(resource);
 
             } else if (resource.endsWith("/")) {
@@ -1659,7 +1747,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             for (Iterator i = resources.iterator(); i.hasNext();) {
                 String resource = (String) i.next();
 
-                if (resource.endsWith(".htm") || resource.endsWith(".jsp")) {
+                if (isTemplate(resource)) {
                     fileList.add(resource);
 
                 } else if (resource.endsWith("/")) {
