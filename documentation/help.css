@@ -294,3 +294,10 @@ table.buttons {
     color: #000099;
     font-weight: bold;
 }
+.click-table {
+    border: 1px solid black;
+}
+.click-table th {
+    background-color: navy;
+    color: white;
+}
