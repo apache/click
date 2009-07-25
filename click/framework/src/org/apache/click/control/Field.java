@@ -91,15 +91,15 @@ import org.apache.click.util.HtmlStringBuffer;
  *
  * <h3>Rendering</h3>
  *
- * Field subclasses must override the <tt>Object.toString()</tt> method to
- * enable themselves to be rendered as HTML. With the increasing use of AJAX,
- * Fields should render themselves as valid XHTML, so that they may be parsed
+ * Field subclasses must override the {@link #render(org.apache.click.util.HtmlStringBuffer)}
+ * method to enable themselves to be rendered as HTML. With the increasing use of
+ * AJAX, Fields should render themselves as valid XHTML, so that they may be parsed
  * correctly and used as the <tt>innerHtml</tt> in the DOM.
  * <p/>
  * When a Form object renders a Field using autolayout, it renders the
  * Field in a table row using the Field's {@link #label} attribute, its
- * {@link #error} attribute if defined, and the Fields <tt>toString()</tt>
- * method.
+ * {@link #error} attribute if defined, and the Fields
+ * {@link #render(org.apache.click.util.HtmlStringBuffer)} method.
  * <p/>
  * To assist with rendering valid HTML Field subclasses can use the
  * {@link org.apache.click.util.HtmlStringBuffer} class.
