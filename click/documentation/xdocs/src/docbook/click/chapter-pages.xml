@@ -38,14 +38,21 @@
   the Freemarker template engine instead of Velocity, the setup is the same.
   </para>
 
-  <para>The template path must have an <varname>.htm</varname> extension which
+  <para>The template path should have an <varname>.htm</varname> extension which
   is specified in <link linkend="servlet-configuration">web.xml</link> to route
-  *.htm requests to the <classname>ClickServlet</classname>. Please note that
-  currently Click only accepts <varname>.htm</varname> requests, and cannot be
-  mapped to a different extension in <filename>web.xml</filename>.
+  *.htm requests to the <classname>ClickServlet</classname>.
   </para>
 
-  <para>If you use JSP pages for rendering the <varname>.jsp</varname> extension
+  <para>Please note if you want Click to process templates with a different
+  extension e.g. <varname>.xml</varname>, you need to implement the method
+  <ulink url="../../click-api/org/apache/click/service/ConfigService.html#isTemplate(java.lang.String)">isTemplate(String path)</ulink>
+  and specify the extra extensions. The simplest way is to subclass
+  <classname>XmlConfigService</classname> and override the default implementation
+  as described <ulink url="../../click-api/org/apache/click/service/XmlConfigService.html#isTemplate(java.lang.String)">here</ulink>.
+  Also remember to map the new extensions in <filename>web.xml</filename>.
+  </para>
+
+  <para>If you use JSP pages for rendering, the <varname>.jsp</varname> extension
   must be used. For example:
   </para>
 

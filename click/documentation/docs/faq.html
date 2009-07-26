@@ -507,10 +507,15 @@ public class Purchase extends Page {
       <b>14.&nbsp; Can Click be mapped to an extension other than *.htm?</b>
   </dt>
   <dd>
-  Currently Click only supports *.htm extension. You cannot create templates
-  with a different extension for example '.xml'.
+  By default Click supports *.htm and *.jsp extensions.
   <p/>
-  However you can map URLs to different extensions using
+  However you can map templates with different extensions, for example *.xml, by
+  subclassing <tt>XmlConfigService</tt> and specify extra mappings by overriding
+  <tt>isTemplate(String path)</tt>. You can read more details
+  <a href="click-api/org/apache/click/service/XmlConfigService.html#isTemplate(java.lang.String)">here</a>.
+
+  <p/>
+  You can also map URLs to different extensions using
   <a href="http://tuckey.org/urlrewrite/">Url Rewrite Filter</a>. It is even
   possible to rewrite to REST like URLs:
   <ul>
@@ -551,7 +556,7 @@ public class Purchase extends Page {
    Spring uses a <tt>DispatcherServlet</tt> to route requests to <tt>Controller</tt> 
    objects and then passes the <tt>ModelAndView</tt> results to the rendering layer.
 
-<pre class="codeJava">
+<pre class="prettyprint">
 public interface Controller {
    public ModelAndView handleRequest(HttpServletRequest request, 
                                      HttpServletResponse response) throws Exception;
@@ -571,11 +576,13 @@ public interface Controller {
   <dd>
    Click fully supports JSP pages. 
    <p/>
-   JSP Pages can be automatically loaded, like Velocity templates, and 
+   JSP Pages can be automatically loaded, like Velocity templates, or
    can be explicitly defined in the <tt>click.xml</tt> file.
-   
+
  <pre class="codeConfig">
-&lt;page path="<span class="blue">customers-table.jsp</span>" class="<span class="red">com.mycorp.pages.CustomersTable</span>"/&gt; </pre>
+&lt;pages package="com.mycorp.pages"/&gt;
+  &lt;page path="<span class="blue">customers-table.jsp</span>" class="<span class="red">CustomersTable</span>"/&gt;
+&lt;/pages&gt; </pre>
    
    The page's model data values are automatically added to the request as
    attributes so they are available in the JSP. Other Click values added 
