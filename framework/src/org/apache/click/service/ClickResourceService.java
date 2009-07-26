@@ -44,8 +44,8 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 /**
  * Provides a default Click static resource service class. This class will
  * serve static resources contained in the web applications JARs, under the
- * resource path META-INF/web and which are contained under the WAR file web
- * root.
+ * resource path META-INF/resources and which are contained under the WAR file
+ * web root.
  * <p/>
  * This service is useful for application servers which do not allow Click to
  * automatically deploy resources to the web root /click/ directory.
@@ -134,46 +134,17 @@ public class ClickResourceService implements ResourceService {
 
     private void loadAllJarResources() throws IOException {
 
-        // Find all jars under WEB-INF/lib and deploy all resources from these jars
         long startTime = System.currentTimeMillis();
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-        Enumeration<URL> en = classLoader.getResources("META-INF/web");
+        // Find all jars and directories on the classpath that contains the
+        // directory "META-INF/resources/", and deploy those resources
+        String resourceDirectory = "META-INF/resources/";
+        Enumeration<URL> en = classLoader.getResources(resourceDirectory);
         while (en.hasMoreElements()) {
             URL url = en.nextElement();
-            String path = url.getFile();
-
-            // Decode the url, esp on Windows where file paths can have their
-            // spaces encoded. decodeURL will convert C:\Program%20Files\project
-            // to C:\Program Files\project
-            path = ClickUtils.decodeURL(path);
-
-            // Strip file prefix
-            if (path.startsWith("file:")) {
-                path = path.substring(5);
-            }
-
-            String jarPath = null;
-
-            // Check if path represents a jar
-            if (path.indexOf('!') > 0) {
-                jarPath = path.substring(0, path.indexOf('!'));
-
-                File jar = new File(jarPath);
-
-                if (jar.exists()) {
-                    loadFilesInJar(jar);
-
-                } else {
-                    logService.error("Could not load the jar '" + jarPath
-                        + "'. Please ensure this file exists in the specified"
-                        + " location.");
-                }
-            } else {
-                File dir = new File(path);
-                loadFilesInJarDir(dir);
-            }
+            loadResourcesOnClasspath(url, resourceDirectory);
         }
 
         if (logService.isTraceEnabled()) {
@@ -182,7 +153,53 @@ public class ClickResourceService implements ResourceService {
         }
     }
 
-    private void loadFilesInJar(File jar) throws IOException {
+    /**
+     * Deploy from the url all resources found under the prefix.
+     *
+     * @param url the url of the jar or folder which resources to deploy
+     * @param resourceDirectory the directory under which resources are found
+     * @throws IOException if resources from the url cannot be deployed
+     */
+    private void loadResourcesOnClasspath(URL url, String resourceDirectory)
+        throws IOException {
+
+        String path = url.getFile();
+
+        // Decode the url, esp on Windows where file paths can have their
+        // spaces encoded. decodeURL will convert C:\Program%20Files\project
+        // to C:\Program Files\project
+        path = ClickUtils.decodeURL(path);
+
+        // Strip file prefix
+        if (path.startsWith("file:")) {
+            path = path.substring(5);
+        }
+
+        String jarPath = null;
+
+        // Check if path represents a jar
+        if (path.indexOf('!') > 0) {
+            jarPath = path.substring(0, path.indexOf('!'));
+
+            File jar = new File(jarPath);
+
+            if (jar.exists()) {
+                loadFilesInJar(jar, resourceDirectory);
+
+            } else {
+                logService.error("Could not load the jar '" + jarPath +
+                    "'. Please ensure this file exists in the specified" +
+                    " location.");
+            }
+        } else {
+            File dir = new File(path);
+            loadFilesInJarDir(dir, resourceDirectory);
+        }
+    }
+
+    private void loadFilesInJar(File jar, String resourceDirectory)
+        throws IOException {
+
         if (jar == null) {
             throw new IllegalArgumentException("Jar cannot be null");
         }
@@ -201,16 +218,16 @@ public class ClickResourceService implements ResourceService {
             boolean logFeedback = true;
             while ((jarEntry = jarInputStream.getNextJarEntry()) != null) {
 
-                // Guard against loading folders -> META-INF/web/click/
+                // Guard against loading folders -> META-INF/resources/click/
                 if (jarEntry.isDirectory()) {
                     continue;
                 }
 
-                // jarEntryName example -> META-INF/web/click/table.css
+                // jarEntryName example -> META-INF/resources/click/table.css
                 String jarEntryName = jarEntry.getName();
 
-                // Only deploy resources from "META-INF/web/"
-                int pathIndex = jarEntryName.indexOf("META-INF/web/");
+                // Only deploy resources from "META-INF/resources/"
+                int pathIndex = jarEntryName.indexOf(resourceDirectory);
                 if (pathIndex == 0) {
                     if (logFeedback && logService.isTraceEnabled()) {
                         logService.trace("loaded files from jar -> "
@@ -219,7 +236,7 @@ public class ClickResourceService implements ResourceService {
                         // Only provide feedback once per jar
                         logFeedback = false;
                     }
-                    loadJarFile(jarEntryName, "META-INF/web/");
+                    loadJarFile(jarEntryName, resourceDirectory);
                 }
             }
         } finally {
@@ -229,7 +246,9 @@ public class ClickResourceService implements ResourceService {
     }
 
     @SuppressWarnings("unchecked")
-    private void loadFilesInJarDir(File dir) throws IOException {
+    private void loadFilesInJarDir(File dir, String resourceDirectory)
+        throws IOException {
+
         if (dir == null) {
             throw new IllegalArgumentException("Dir cannot be null");
         }
@@ -246,18 +265,18 @@ public class ClickResourceService implements ResourceService {
 
         boolean logFeedback = true;
         while (files.hasNext()) {
-            // file example -> META-INF/web/click/table.css
+            // file example -> META-INF/resources/click/table.css
             File file = (File) files.next();
 
-            // Guard against loading folders -> META-INF/web/click/
+            // Guard against loading folders -> META-INF/resources/click/
             if (file.isDirectory()) {
                 continue;
             }
 
             String fileName = file.getCanonicalPath().replace('\\', '/');
 
-            // Only deploy resources from "META-INF/web/"
-            int pathIndex = fileName.indexOf("META-INF/web/");
+            // Only deploy resources from "META-INF/resources/"
+            int pathIndex = fileName.indexOf(resourceDirectory);
             if (pathIndex != -1) {
                 if (logFeedback && logService.isTraceEnabled()) {
                     logService.trace("load files from folder -> "
@@ -267,7 +286,7 @@ public class ClickResourceService implements ResourceService {
                     logFeedback = false;
                 }
                 fileName = fileName.substring(pathIndex);
-                loadJarFile(fileName, "META-INF/web/");
+                loadJarFile(fileName, resourceDirectory);
             }
         }
     }
