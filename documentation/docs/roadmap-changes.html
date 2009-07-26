@@ -86,11 +86,11 @@ documentation and examples.
       when upgrading from previous releases.
     </div>
     <div style="margin-left:-2em;margin-bottom:1em;">
-      <span style="font-weight: bold; color: navy;">Please Note:</span>
+      <b>Please Note:</b>
       This release requires Java 1.5 or later.
     </div>
     <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
-      New examples:
+      <b>New examples:</b>
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li>
@@ -131,7 +131,7 @@ documentation and examples.
     </ul>
 
     <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
-      New documentation:
+      <b>New documentation:</b>
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li>
@@ -149,7 +149,26 @@ documentation and examples.
     </ul>
 
     <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
-      New features and issues resolved:
+      <b>Deprecated:</b>
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+       <li class="change">
+          Deprecated methods: <a href="click-api/org/apache/click/Control.html#getHtmlImports()">Control.getHtmlImports()</a> and
+          <a href="click-api/org/apache/click/Page.html#getHtmlImports()">Page.getHtmlImports()</a>.
+          These methods have been deprecated in favor of
+          <a href="click-api/org/apache/click/Control.html#getHeadElements()">Control.getHeadElements()</a>
+          and <a href="click-api/org/apache/click/Page.html#getHeadElements()">Page.getHeadElements()</a>.
+      </li>
+      <li class="change">
+          Deprecated methods: <a href="click-api/org/apache/click/Page.html#getPageImports()">Page.getPageImports()</a>
+          and <a href="click-api/org/apache/click/Page.html#setPageImports(org.apache.click.util.PageImports)">Page.setPageImports()</a>.
+          These methods have been deprecated in favor of
+          <a href="click-api/org/apache/click/Page.html#getHeadElements()">Page.getHeadElements()</a>.
+      </li>
+    </ul>
+
+    <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+      <b>New features and issues resolved:</b>
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li class="change">
@@ -173,6 +192,12 @@ documentation and examples.
           can be provided in a subclass. See the <a href="click-api/org/apache/click/service/XmlConfigService.html#isTemplate(java.lang.String)">JavaDoc</a>
           for details
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-568">568</a>].
+      </li>
+      <li class="change">
+          Added support to the Page class for conditionally including Control
+          <a href="click-api/org/apache/click/Page.html#getHeadElements()">head elements</a>
+          through the new method <a href="click-api/org/apache/click/Page.html#setIncludeControlHeadElements(boolean)">includeControlHeadElements</a>
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-571">571</a>].
       </li>
       <li class="change">
           Added new Calendar popup to DateField. This Calendar popup uses
@@ -357,13 +382,6 @@ documentation and examples.
           Fixed PerformanceFilter and CompressionFilter to properly handle
           <tt>&lt;jsp:include&gt;</tt> requests
           [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-557">557</a>].
-      </li>
-      <li class="change">
-          Deprecated methods: <a href="click-api/org/apache/click/Control.html#getHtmlImports()">Control.getHtmlImports()</a> and
-          <a href="click-api/org/apache/click/Page.html#getHtmlImports()">Page.getHtmlImports()</a>.
-          These methods have been deprecated in favor of
-          <a href="click-api/org/apache/click/Control.html#getHeadElements()">Control.getHeadElements()</a>
-          and <a href="click-api/org/apache/click/Page.html#getHeadElements()">Page.getHeadElements()</a>.
       </li>
       <li class="change">
           Update Velocity library to version 1.6.2.

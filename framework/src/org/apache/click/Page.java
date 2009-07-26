@@ -193,12 +193,18 @@ public class Page implements Serializable {
 
     /**
      * The page is stateful and should be saved to the users HttpSession
-     * between requests.
+     * between requests, default value is false.
      */
     protected boolean stateful;
 
     /** The path of the page border template to render.*/
     protected String template;
+
+    /**
+     * Indicates whether Control head elements should be included in the
+     * page template, default value is true.
+     */
+    protected boolean includeControlHeadElements = true;
 
     // --------------------------------------------------------- Event Handlers
 
@@ -645,9 +651,6 @@ public class Page implements Serializable {
      * <p/>
      * The order in which JS and CSS files are included will be preserved in the
      * page.
-     * <p/>
-     * If you need to customize the HTML imports included in your page override
-     * the method {@link #getPageImports()}.
      *
      * @return the HTML includes statements for the control stylesheet and
      * JavaScript files, by default this method returns null
@@ -927,6 +930,8 @@ public class Page implements Serializable {
      * If you need to create a custom PageImports, override the method
      * {@link ClickServlet#createPageImports(org.apache.click.Page)}
      *
+     * @deprecated use the new {@link #getHeadElements()} instead
+     *
      * @return the Page header imports
      */
     public PageImports getPageImports() {
@@ -952,6 +957,8 @@ public class Page implements Serializable {
      * <p/>
      * If you need to create a custom PageImports, override the method
      * {@link ClickServlet#createPageImports(org.apache.click.Page)}
+     *
+     * @deprecated use the new {@link #getHeadElements()} instead
      *
      * @param pageImports the new pageImports instance to set
      */
@@ -1023,7 +1030,7 @@ public class Page implements Serializable {
 
     /**
      * Return true if the page is stateful and should be saved in the users
-     * HttpSession between requests.
+     * HttpSession between requests, default value is false.
      *
      * @return true if the page is stateful and should be saved in the users
      * session
@@ -1056,6 +1063,70 @@ public class Page implements Serializable {
         if (isStateful()) {
             getContext().getSession();
         }
+    }
+
+    /**
+     * Return true if the Control head elements should be included in the page
+     * template, false otherwise. Default value is true.
+     *
+     * @see #setIncludeControlHeadElements(boolean)
+     *
+     * @return true if the Control head elements should be included in the page
+     * template, false otherwise
+     */
+    public boolean isIncludeControlHeadElements() {
+        return includeControlHeadElements;
+    }
+
+    /**
+     * Set whether the Control head elements should be included in the page
+     * template.
+     * <p/>
+     * By setting this value to <tt>false</tt>, Click won't include Control's
+     * {@link #getHeadElements() head elements}, however the Page head elements
+     * will still be included.
+     * <p/>
+     * This allows one to create a single JavaScript and CSS resource file for
+     * the entire Page which increases performance, since the browser only has
+     * to load one resource, instead of multiple resources.
+     * <p/>
+     * Below is an example:
+     *
+     * <pre class="prettyprint">
+     * public class HomePage extends Page {
+     *
+     *     private Form form = new Form("form");
+     *
+     *     public HomePage() {
+     *         // Indicate that Controls should not import their head elements
+     *         setIncludeControlHeadElements(false);
+     *
+     *         form.add(new EmailField("email");
+     *         addControl(form);
+     *     }
+     *
+     *     // Include the Page JavaScript and CSS resources
+     *     public List getHeadElements() {
+     *         if (headElements == null) {
+     *             headElements = super.getHeadElements();
+     *
+     *             // Include the Page CSS resource. This resource should combine
+     *             // all the CSS necessary for the page
+     *             headElements.add(new CssImport("/assets/css/home-page.css"));
+     *
+     *             // Include the Page JavaScript resource. This resource should
+     *             // combine all the JavaScript necessary for the page
+     *             headElements.add(new JsImport("/assets/js/home-page.js"));
+     *         }
+     *         return headElements;
+     *     }
+     * } </pre>
+     *
+     * @param includeControlHeadElements flag indicating whether Control
+     * head elements should be included in the page
+     */
+    public void setIncludeControlHeadElements(boolean includeControlHeadElements) {
+        this.includeControlHeadElements = includeControlHeadElements;
     }
 
     /**

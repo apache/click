@@ -23,29 +23,21 @@ import org.apache.click.element.CssImport;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.util.PageImports;
 
 /**
  * This page provides an example of how to programatically optimize your
  * PageImports for high traffic pages. You optimize your Page by combinding
  * multiple CSS and JavaScript import files into a single file, which reduces
  * the number of HTTP requests required to serve the page.
+ * <p/>
+ * Then you set the Page property "includeControlHeadElements" to false so that
+ * Controls won't have their head elements imported.
  */
 public class PageImportsExample extends BorderPage {
 
-    /**
-     * Provides an optimized home page imports.
-     *
-     * @see org.apache.click.Page#getPageImports()
-     */
-    @Override
-    public PageImports getPageImports() {
-        PageImports pageImports = super.getPageImports();
-
-        pageImports.addAll(getHeadElements());
-        pageImports.setInitialized(true);
-
-        return pageImports;
+    public PageImportsExample() {
+        // Indicate that Controls should not import their head elements
+        setIncludeControlHeadElements(false);
     }
 
     /**
