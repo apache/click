@@ -78,7 +78,7 @@
 
 	<filter-mapping>
 		<filter-name>DataContextFilter</filter-name>
-		<servlet-name>ClickServlet</servlet-name>
+    <url-pattern>*.htm</url-pattern>
 	</filter-mapping>
 
 	<filter-mapping>
