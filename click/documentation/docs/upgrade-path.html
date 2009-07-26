@@ -92,6 +92,27 @@ versions please email the Click user group.
           <a href="click-api/org/apache/click/Control.html#getHeadElements()">Control.getHeadElements()</a>
           and <a href="click-api/org/apache/click/Page.html#getHeadElements()">Page.getHeadElements()</a>.
       </li>
+      <li class="change">
+          Deprecated methods: <a href="click-api/org/apache/click/Page.html#getPageImports()">Page.getPageImports()</a>
+          and <a href="click-api/org/apache/click/Page.html#setPageImports(org.apache.click.util.PageImports)">Page.setPageImports()</a>.
+          These methods have been deprecated in favor of
+          <a href="click-api/org/apache/click/Page.html#getHeadElements()">Page.getHeadElements()</a>.
+      </li>
+      <li class="change">
+          Click automatically deploy resources from the classpath that are located
+          under the directory <tt>META-INF/web</tt>.
+          <p/>
+          The Servlet 3.0 specification introduced a similar concept where resources
+          can be packaged in a JAR and served directly without having to be
+          deployed.
+          <p/>
+          Click 2.1.0 aligns with Servlet 3.0 in that resources are now also deployed
+          from the location <tt>META-INF/resources</tt>.
+          <p/>
+          For backwards compatibility Click will still deploy resources from
+          <tt>META-INF/web</tt>, however it is highly recommended to use the new
+          Servlet 3.0 location instead.
+      </li>
     </ul>
   </dd>
 

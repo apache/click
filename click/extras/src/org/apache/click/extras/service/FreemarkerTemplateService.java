@@ -246,10 +246,10 @@ public class FreemarkerTemplateService implements TemplateService {
         String templatePath = page.getTemplate();
 
         if (!deployedErrorTemplate && templatePath.equals(ERROR_PAGE_PATH)) {
-            templatePath = "META-INF/web" + ERROR_PAGE_PATH;
+            templatePath = "META-INF/resources" + ERROR_PAGE_PATH;
         }
         if (!deployedErrorTemplate && templatePath.equals(NOT_FOUND_PAGE_PATH)) {
-            templatePath = "META-INF/web" + NOT_FOUND_PAGE_PATH;
+            templatePath = "META-INF/resources" + NOT_FOUND_PAGE_PATH;
         }
 
         // Get the template object

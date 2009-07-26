@@ -1237,7 +1237,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             deployControls(rootElm);
             deployControlSets(rootElm);
 
-            deployAutoFiles();
+            deployResourcesOnClasspath();
         } else {
             String msg = "Could not auto deploy files to 'click' web folder."
                 + " You may need to manually include click resources in your"
@@ -1247,73 +1247,101 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
-     * Deploy from jars and directories all files that are specified in the
-     * folder 'META-INF/web'.
+     * Deploy from the classpath all resources found under the directory
+     * 'META-INF/resources/'. For backwards compatibility resources under the
+     * directory 'META-INF/web/' are also deployed.
      * <p/>
      * Only jars and folders available on the classpath are scanned.
      *
-     * @throws java.lang.Exception if the files cannot be deployed
+     * @throws java.lang.IOException if the resources cannot be deployed
      */
-    private void deployAutoFiles() throws Exception {
+    private void deployResourcesOnClasspath() throws IOException {
 
-        // Find all jars under WEB-INF/lib and deploy all resources from these jars
         long startTime = System.currentTimeMillis();
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-        Enumeration en = classLoader.getResources("META-INF/web");
+        // Find all jars and directories on the classpath that contains the
+        // directory "META-INF/resources/", and deploy those resources
+        String resourceDirectory = "META-INF/resources/";
+        Enumeration<URL> en = classLoader.getResources(resourceDirectory);
         while (en.hasMoreElements()) {
-            URL url = (URL) en.nextElement();
-            String path = url.getFile();
-
-            // Decode the url, esp on Windows where file paths can have their
-            // spaces encoded. decodeURL will convert C:\Program%20Files\project
-            // to C:\Program Files\project
-            path = ClickUtils.decodeURL(path);
-
-            // Strip file prefix
-            if (path.startsWith("file:")) {
-                path = path.substring(5);
-            }
-
-            String jarPath = null;
-
-            // Check if path represents a jar
-            if (path.indexOf('!') > 0) {
-                jarPath = path.substring(0, path.indexOf('!'));
-
-                File jar = new File(jarPath);
-
-                if (jar.exists()) {
-                    deployFilesInJar(jar);
-
-                } else {
-                    logService.error("Could not deploy the jar '" + jarPath
-                        + "'. Please ensure this file exists in the specified"
-                        + " location.");
-                }
-            } else {
-                File dir = new File(path);
-                deployFilesInDir(dir);
-            }
+            URL url = en.nextElement();
+            deployResourcesOnClasspath(url, resourceDirectory);
         }
 
-        if (logService.isTraceEnabled()) {
-            logService.trace("deployed files from jars and folders - "
+        // For backward compatibility, find all jars and directories on the
+        // classpath that contains the directory "META-INF/web/", and deploy those
+        // resources
+        resourceDirectory = "META-INF/web/";
+        en = classLoader.getResources(resourceDirectory);
+        while (en.hasMoreElements()) {
+            URL url = en.nextElement();
+            deployResourcesOnClasspath(url, resourceDirectory);
+        }
+
+        //if (logService.isTraceEnabled()) {
+            logService.info("deployed files from jars and folders - "
                 + (System.currentTimeMillis() - startTime) + " ms");
+        //}
+    }
+
+    /**
+     * Deploy from the url all resources found under the prefix.
+     *
+     * @param url the url of the jar or folder which resources to deploy
+     * @param resourceDirectory the directory under which resources are found
+     * @throws IOException if resources from the url cannot be deployed
+     */
+    private void deployResourcesOnClasspath(URL url, String resourceDirectory)
+        throws IOException {
+
+        String path = url.getFile();
+
+        // Decode the url, esp on Windows where file paths can have their
+        // spaces encoded. decodeURL will convert C:\Program%20Files\project
+        // to C:\Program Files\project
+        path = ClickUtils.decodeURL(path);
+
+        // Strip file prefix
+        if (path.startsWith("file:")) {
+            path = path.substring(5);
+        }
+
+        String jarPath = null;
+
+        // Check if path represents a jar
+        if (path.indexOf('!') > 0) {
+            jarPath = path.substring(0, path.indexOf('!'));
+
+            File jar = new File(jarPath);
+
+            if (jar.exists()) {
+                deployFilesInJar(jar, resourceDirectory);
+
+            } else {
+                logService.error("Could not deploy the jar '" + jarPath +
+                    "'. Please ensure this file exists in the specified" +
+                    " location.");
+            }
+        } else {
+            File dir = new File(path);
+            deployFilesInDir(dir, resourceDirectory);
         }
     }
 
     /**
-     * Deploy files from the specified directory.
-     * <p/>
-     * Only files specified in the folder 'META-INF/web' will be deployed.
+     * Deploy files from the specified directory which are stored under the given
+     * resourceDirectory.
      *
      * @param dir the directory which resources will be deployed
-     * @throws java.lang.Exception if for some reason the files cannot be
+     * @param resourceDirectory the directory under which resources are found
+     * @throws java.lang.IOException if for some reason the files cannot be
      * deployed
      */
-    private void deployFilesInDir(File dir) throws Exception {
+    private void deployFilesInDir(File dir, String resourceDirectory)
+        throws IOException {
+
         if (dir == null) {
             throw new IllegalArgumentException("Dir cannot be null");
         }
@@ -1329,12 +1357,12 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
         boolean logFeedback = true;
         while (files.hasNext()) {
-            // file example -> META-INF/web/click/table.css
+            // file example -> META-INF/resources/click/table.css
             File file = (File) files.next();
             String fileName = file.getCanonicalPath().replace('\\', '/');
 
-            // Only deploy resources from "META-INF/web/"
-            int pathIndex = fileName.indexOf("META-INF/web/");
+            // Only deploy resources from "META-INF/resources/"
+            int pathIndex = fileName.indexOf(resourceDirectory);
             if (pathIndex != -1) {
                 if (logFeedback && logService.isTraceEnabled()) {
                     logService.trace("deploy files from folder -> "
@@ -1344,21 +1372,23 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                     logFeedback = false;
                 }
                 fileName = fileName.substring(pathIndex);
-                deployFile(fileName, "META-INF/web/");
+                deployFile(fileName, resourceDirectory);
             }
         }
     }
 
     /**
-     * Deploy files from the specified jar.
-     * <p/>
-     * Only files specified in the folder 'META-INF/web' will be deployed.
+     * Deploy files from the specified jar which are stored under the given
+     * resourceDirectory.
      *
      * @param jar the jar which resources will be deployed
-     * @throws java.lang.Exception if for some reason the files cannot be
+     * @param resourceDirectory the directory under which resources are found
+     * @throws java.lang.IOException if for some reason the files cannot be
      * deployed
      */
-    private void deployFilesInJar(File jar) throws Exception {
+    private void deployFilesInJar(File jar, String resourceDirectory)
+        throws IOException {
+
         if (jar == null) {
             throw new IllegalArgumentException("Jar cannot be null");
         }
@@ -1376,11 +1406,11 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             // from jar
             boolean logFeedback = true;
             while ((jarEntry = jarInputStream.getNextJarEntry()) != null) {
-                // jarEntryName example -> META-INF/web/click/table.css
+                // jarEntryName example -> META-INF/resources/click/table.css
                 String jarEntryName = jarEntry.getName();
 
-                // Only deploy resources from "META-INF/web/"
-                int pathIndex = jarEntryName.indexOf("META-INF/web/");
+                // Only deploy resources from "META-INF/resources/"
+                int pathIndex = jarEntryName.indexOf(resourceDirectory);
                 if (pathIndex == 0) {
                     if (logFeedback && logService.isTraceEnabled()) {
                         logService.trace("deploy files from jar -> "
@@ -1389,7 +1419,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                         // Only provide feedback once per jar
                         logFeedback = false;
                     }
-                    deployFile(jarEntryName, "META-INF/web/");
+                    deployFile(jarEntryName, resourceDirectory);
                 }
             }
         } finally {

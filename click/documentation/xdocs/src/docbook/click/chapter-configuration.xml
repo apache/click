@@ -1032,7 +1032,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
       <title>Deploying Custom Resources</title>
 
       <para> Click supports two ways of deploying pre-configured resources
-      (templates, stylesheets, JavaScript etc.) from a Jar to a web applications.
+      (templates, stylesheets, JavaScript etc.) from a Jar to a web application.
       </para>
 
       <orderedlist>
@@ -1044,8 +1044,14 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
           </para>
         </listitem>
         <listitem>
-          <para> By packaging the resources (stylesheets, JavaScript, Images etc.)
-          into a special folder called <emphasis>'META-INF/web'</emphasis>.
+          <para>By packaging the resources (stylesheets, JavaScript, Images etc.)
+          into a special folder called <emphasis>'META-INF/resources'</emphasis>.
+          Please note that if Click is executing inside a Servlet 3.0 compliant
+          server, it won't deploy its resources. Instead it will rely on the
+          Servlet 3.0 feature where if the server cannot find a resource
+          in the root directory of the webapp, it will look for the resource
+          under <emphasis>'META-INF/resources'</emphasis>, and if it is found,
+          serve it up.
           </para>
         </listitem>
       </orderedlist>
@@ -1055,14 +1061,14 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
       </para>
 
       <para>When Click starts up, it scans each Jar in the classpath for
-      specially marked entries starting with 'META-INF/web/'. (Please note that
-      even though Click will scan the entire classpath it is strongly recommended
-      to host your Jar files inside your WAR lib folder e.g. WEB-INF/lib. Sharing
-      Jars on the classpath can lead to class loading issues.)
+      specially marked entries starting with 'META-INF/resources/'. (Please note
+      that even though Click will scan the entire classpath it is strongly
+      recommended to host your Jar files under your WAR lib folder e.g. WEB-INF/lib.
+      Sharing Jars on the classpath can lead to class loading issues.)
       </para>
 
-      <para>Click will then copy all files found under 'META-INF/web/' to the web
-      application folder.
+      <para>Click will then copy all files found under 'META-INF/resources/' to
+      the root directory of the webapp.
       </para>
 
       <para>
@@ -1071,10 +1077,10 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
 
       <itemizedlist>
         <listitem>
-          <para>META-INF/web/mycorp/edit_customer.js</para>
+          <para>META-INF/resources/mycorp/edit_customer.js</para>
         </listitem>
         <listitem>
-          <para>META-INF/web/mycorp/edit_customer.css</para>
+          <para>META-INF/resources/mycorp/edit_customer.css</para>
         </listitem>
         <listitem>
           <para>mycorp/pages/EditCustomerPage.class</para>
