@@ -2405,7 +2405,8 @@ public class ClickUtils {
 
     /**
      * Returns true if Click resources (JavaScript, CSS, images etc) packaged
-     * in jars can be deployed to the web application folder, false otherwise.
+     * in jars can be deployed to the root directory of the webapp, false
+     * otherwise.
      * <p/>
      * This method will return false in restricted environments where write
      * access to the underlying file system is disallowed. Examples where
