@@ -78,8 +78,9 @@ documentation and examples.
 <h2>Changes</h2>
 
 <dl>
-  <dt><a name="2.1.0-RC2"></a>
-  <div class="release-header">Release Candidate - Version 2.1.0 RC2 - ??? July 2009</div></dt>
+  <dt><a name="2.1.0"></a>
+    <div class="release-header">Latest Stable Release - Version 2.1.0 - ??? August 2009</div>
+  </dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
       IMPORTANT be sure to read the <a href="upgrade-path.html">upgrade path</a>
@@ -184,7 +185,7 @@ documentation and examples.
           that can be used for uploading files in a <a class="external" target="_blank" href="http://code.google.com/appengine/docs/java/overview.html">Google App Engine</a>
           environment.
       </li>
-       <li class="change">
+      <li class="change">
           Added support for templates with custom extensions through the new
           ConfigService.<a href="click-api/org/apache/click/service/ConfigService.html#isTemplate(java.lang.String)">isTemplate</a>
           method. The default ConfigService implementation, XmlConfigService, provides
@@ -276,6 +277,16 @@ documentation and examples.
           Added <a href="click-api/org/apache/click/util/Bindable.html">@Bindable</a> 
           annotation support for page field autobinding
           [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-556">556</a>].
+      </li>
+      <li class="change">
+          Improved Form validation to allow Form subclasses to override the
+          <a href="click-api/org/apache/click/control/Form.html#validate()">validate</a>
+          method and implement cross-field validation. The following
+          changes were made: the previous <tt>validate</tt> method was renamed
+          to <a href="click-api/org/apache/click/control/Form.html#validateFileUpload()">validateFileUpload</a>
+          and a new empty <a href="click-api/org/apache/click/control/Form.html#validate()">validate</a>
+          method was introduced, that can safely be overridden in subclasses
+          [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-572">572</a>].
       </li>
       <li class="change">
           Improved Page redirect to support parameters. See the new Page methods
