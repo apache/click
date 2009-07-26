@@ -61,6 +61,9 @@ public class ClickResourceService implements ResourceService {
     /** The application template service. */
     protected TemplateService templateService;
 
+    /** The application configuration service. */
+    protected ConfigService configService;
+
     /**
      * @see ResourceService#onInit(ServletContext)
      *
@@ -69,7 +72,7 @@ public class ClickResourceService implements ResourceService {
      */
     public void onInit(ServletContext servletContext) throws IOException {
 
-        ConfigService configService = ClickUtils.getConfigService(servletContext);
+        configService = ClickUtils.getConfigService(servletContext);
         logService = configService.getLogService();
         templateService = configService.getTemplateService();
 
@@ -97,8 +100,7 @@ public class ClickResourceService implements ResourceService {
         String resourcePath = ClickUtils.getResourcePath(request);
 
         // If not a click page and not JSP and not a directory
-        return !resourcePath.endsWith(".htm")
-            && !resourcePath.endsWith(".jsp")
+        return !configService.isTemplate(resourcePath)
             && !resourcePath.endsWith("/");
     }
 
@@ -125,18 +127,7 @@ public class ClickResourceService implements ResourceService {
         }
 
         byte[] resourceData = resourceCache.get(resourcePath);
-
-        OutputStream outputStream = null;
-        try {
-            response.setContentLength(resourceData.length);
-
-            outputStream = response.getOutputStream();
-            outputStream.write(resourceData);
-            outputStream.flush();
-
-        } finally {
-            ClickUtils.close(outputStream);
-        }
+        renderResource(response, resourceData);
     }
 
     // Private Methods --------------------------------------------------------
@@ -311,7 +302,7 @@ public class ClickResourceService implements ResourceService {
             for (Iterator i = resources.iterator(); i.hasNext();) {
                 String resource = (String) i.next();
 
-                if (!resource.endsWith(".htm") && !resource.endsWith(".jsp")
+                if (!configService.isTemplate(resource)
                     && !resource.endsWith("/")) {
 
                     byte[] resourceData =
@@ -325,6 +316,14 @@ public class ClickResourceService implements ResourceService {
         }
     }
 
+    /**
+     * Load the resource for the given resourcePath from the servlet context.
+     *
+     * @param servletContext the application servlet context
+     * @param resourcePath the path of the resource to load
+     * @return the byte array for the given resource path
+     * @throws IOException if the resource could not be loaded
+     */
     private byte[] getServletResourceData(ServletContext servletContext,
         String resourcePath) throws IOException {
 
@@ -343,8 +342,14 @@ public class ClickResourceService implements ResourceService {
         }
     }
 
-    private byte[] getClasspathResourceData(String resourcePath)
-        throws IOException {
+    /**
+     * Load the resource for the given resourcePath from the classpath.
+     *
+     * @param resourcePath the path of the resource to load
+     * @return the byte array for the given resource path
+     * @throws IOException if the resource could not be loaded
+     */
+    private byte[] getClasspathResourceData(String resourcePath) throws IOException {
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
@@ -363,6 +368,29 @@ public class ClickResourceService implements ResourceService {
 
         } finally {
             ClickUtils.close(inputStream);
+        }
+    }
+
+    /**
+     * Render the given resourceData byte array to the response.
+     *
+     * @param response the response object
+     * @param resourceData the resource byte array
+     * @throws IOException if the resource data could not be rendered
+     */
+    private void renderResource(HttpServletResponse response,
+        byte[] resourceData) throws IOException {
+
+        OutputStream outputStream = null;
+        try {
+            response.setContentLength(resourceData.length);
+
+            outputStream = response.getOutputStream();
+            outputStream.write(resourceData);
+            outputStream.flush();
+
+        } finally {
+            ClickUtils.close(outputStream);
         }
     }
 }
