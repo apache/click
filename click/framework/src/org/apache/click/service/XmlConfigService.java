@@ -1280,10 +1280,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             deployResourcesOnClasspath(url, resourceDirectory);
         }
 
-        //if (logService.isTraceEnabled()) {
-            logService.info("deployed files from jars and folders - "
+        if (logService.isTraceEnabled()) {
+            logService.trace("deployed files from jars and folders - "
                 + (System.currentTimeMillis() - startTime) + " ms");
-        //}
+        }
     }
 
     /**
