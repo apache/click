@@ -909,7 +909,7 @@ public abstract class Field extends AbstractControl {
      * the request submission. Field subclasses should override this method
      * to implement request validation logic.
      * <p/>
-     * If the field determines that the submission is invalid it should set
+     * If the field determines that the submission is invalid it should set the
      * {@link #error} property with the error message.
      */
     public void validate() {

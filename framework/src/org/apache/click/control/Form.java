@@ -172,11 +172,14 @@ import org.apache.commons.lang.StringUtils;
  * request is made the form will validate the field values. To disable
  * automatic validation set {@link #setValidate(boolean)} to false.
  * <p/>
+ * Form also provides a {@link #validate()} method where subclasses can provide
+ * custom cross-field validation.
+ * <p/>
  * <b>File Upload Validation</b>
  * <p/>
- * Form {@link #validate()} method provides special validation for multipart requests
- * (multipart requests are used for when files are uploaded from the browser).
- * The {@link #validate()} method checks that files being uploaded do not exceed the
+ * The Form's {@link #validateFileUpload()} provides validation for multipart
+ * requests (multipart requests are used for uploading files from the browser).
+ * The {@link #validateFileUpload()} method checks that files being uploaded do not exceed the
  * {@link org.apache.click.service.CommonsFileUploadService#sizeMax maximum request size}
  * or the {@link org.apache.click.service.CommonsFileUploadService#fileSizeMax maximum file size}.
  * <p/>
@@ -184,7 +187,7 @@ import org.apache.commons.lang.StringUtils;
  * is exceeded, the request is deemed invalid ({@link #hasPostError hasPostError}
  * will return true), and no further processing is performed on the form or fields.
  * Instead the form will display the appropriate error message for the invalid request.
- * See {@link #validate()} for details of the error message properties.
+ * See {@link #validateFileUpload()} for details of the error message properties.
  * <p/>
  * <b>JavaScript Validation</b>
  * <p/>
@@ -1731,6 +1734,9 @@ public class Form extends AbstractContainer {
      * <li>Invoke the Forms listener if defined</li>
      * </ol>
      *
+     * This method delegates validation to {@link #validate()} while
+     * file upload validation are delegated to {@link #validateFileUpload()}.
+     *
      * @see org.apache.click.Context#getRequestParameter(String)
      * @see org.apache.click.Context#getFileItemMap()
      *
@@ -1738,18 +1744,16 @@ public class Form extends AbstractContainer {
      */
     public boolean onProcess() {
 
-        if (getValidate()) {
-            validate();
+        validateFileUpload();
 
-            // If a POST error occurred exit early.
-            if (hasPostError()) {
-                // Remove exception to ensure other forms on Page do not
-                // validate twice for same error.
-                getContext().getRequest().removeAttribute(
-                    FileUploadService.UPLOAD_EXCEPTION);
+        // If a POST error occurred exit early.
+        if (hasPostError()) {
+            // Remove exception to ensure other forms on Page do not
+            // validate twice for same error.
+            getContext().getRequest().removeAttribute(
+                FileUploadService.UPLOAD_EXCEPTION);
 
-                return true;
-            }
+            return true;
         }
 
         boolean continueProcessing = true;
@@ -1764,6 +1768,10 @@ public class Form extends AbstractContainer {
                         continueProcessing = false;
                     }
                 }
+            }
+
+            if (getValidate()) {
+                validate();
             }
 
             dispatchActionEvent();
@@ -1785,65 +1793,29 @@ public class Form extends AbstractContainer {
     }
 
     /**
-     * Validate the Form request submission.
+     * The validate method is invoked by {@link #onProcess()} to validate
+     * the request submission. A Form subclass can override this method
+     * to implement cross-field validation logic.
      * <p/>
-     * A form error message is displayed if a validation error occurs.
-     * These messages are defined in the resource bundle:
-     * <blockquote>
-     * <ul>
-     *   <li>/click-control.properties
-     *     <ul>
-     *       <li>file-size-limit-exceeded-error</li>
-     *       <li>post-size-limit-exceeded-error</li>
-     *     </ul>
-     *   </li>
-     * </ul>
-     * </blockquote>
+     * If the Form determines that the submission is invalid it should set the
+     * {@link #error} property with an appropriate error message. For example:
+     *
+     * <pre class="prettyprint">
+     * public class RegistrationForm extends Form {
+     *
+     *     // Add validation to ensure the password and confirmPassword fields match
+     *     public void validate() {
+     *         String password = getFieldValue("password");
+     *         String confirmPassword = getFieldValue("confirmPassword");
+     *         if (!password.equals(confirmPassword)) {
+     *
+     *             // Set Form's error property value that will be shown to the user
+     *             setError("The passwords do not match.");
+     *         }
+     *     }
+     * } </pre>
      */
     public void validate() {
-        setError(null);
-
-        Exception exception = (Exception) getContext().getRequest()
-            .getAttribute(FileUploadService.UPLOAD_EXCEPTION);
-
-        if (!(exception instanceof FileUploadException)) {
-            return;
-        }
-
-        FileUploadException fue = (FileUploadException) exception;
-
-        String key = null;
-        Object args[] = null;
-
-        if (fue instanceof SizeLimitExceededException) {
-            SizeLimitExceededException se =
-                (SizeLimitExceededException) fue;
-
-            key = "post-size-limit-exceeded-error";
-
-            args = new Object[2];
-            args[0] = new Long(se.getPermittedSize());
-            args[1] = new Long(se.getActualSize());
-            setError(getMessage(key, args));
-
-        } else if (fue instanceof FileSizeLimitExceededException) {
-            FileSizeLimitExceededException fse =
-                (FileSizeLimitExceededException) fue;
-
-            key = "file-size-limit-exceeded-error";
-
-            // Parse the FileField name from the message
-            String msg = fue.getMessage();
-            int start = 10;
-            int end = msg.indexOf(' ', start);
-            String fieldName = fue.getMessage().substring(start, end);
-
-            args = new Object[3];
-            args[0] = ClickUtils.toLabel(fieldName);
-            args[1] = new Long(fse.getPermittedSize());
-            args[2] = new Long(fse.getActualSize());
-            setError(getMessage(key, args));
-        }
     }
 
     /**
@@ -2706,6 +2678,68 @@ public class Form extends AbstractContainer {
         }
 
         return false;
+    }
+
+    /**
+     * Validate the request for any file upload (multipart) errors.
+     * <p/>
+     * A form error message is displayed if a file upload error occurs.
+     * These messages are defined in the resource bundle:
+     * <blockquote>
+     * <ul>
+     *   <li>/click-control.properties
+     *     <ul>
+     *       <li>file-size-limit-exceeded-error</li>
+     *       <li>post-size-limit-exceeded-error</li>
+     *     </ul>
+     *   </li>
+     * </ul>
+     * </blockquote>
+     */
+    protected void validateFileUpload() {
+        setError(null);
+
+        Exception exception = (Exception) getContext().getRequest()
+            .getAttribute(FileUploadService.UPLOAD_EXCEPTION);
+
+        if (!(exception instanceof FileUploadException)) {
+            return;
+        }
+
+        FileUploadException fue = (FileUploadException) exception;
+
+        String key = null;
+        Object args[] = null;
+
+        if (fue instanceof SizeLimitExceededException) {
+            SizeLimitExceededException se =
+                (SizeLimitExceededException) fue;
+
+            key = "post-size-limit-exceeded-error";
+
+            args = new Object[2];
+            args[0] = new Long(se.getPermittedSize());
+            args[1] = new Long(se.getActualSize());
+            setError(getMessage(key, args));
+
+        } else if (fue instanceof FileSizeLimitExceededException) {
+            FileSizeLimitExceededException fse =
+                (FileSizeLimitExceededException) fue;
+
+            key = "file-size-limit-exceeded-error";
+
+            // Parse the FileField name from the message
+            String msg = fue.getMessage();
+            int start = 10;
+            int end = msg.indexOf(' ', start);
+            String fieldName = fue.getMessage().substring(start, end);
+
+            args = new Object[3];
+            args[0] = ClickUtils.toLabel(fieldName);
+            args[1] = new Long(fse.getPermittedSize());
+            args[2] = new Long(fse.getActualSize());
+            setError(getMessage(key, args));
+        }
     }
 
     // -------------------------------------------------------- Private Methods
