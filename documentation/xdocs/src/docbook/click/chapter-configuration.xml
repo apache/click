@@ -91,9 +91,9 @@
     <sect2 id="servlet-mapping" remap="h3">
       <title>Servlet Mapping</title>
 
-      <para>By convention all Click page templates should have a .htm extension,
+      <para>By convention all Click page templates should have an .htm extension,
       and the ClickServlet should be mapped to process all *.htm URL requests.
-      With this convention you have all the static HTML pages use a .html extension
+      With this convention you have all the static HTML pages use an .html extension
       and they will not be processed as Click pages.
       </para>
 
