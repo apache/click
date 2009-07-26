@@ -201,6 +201,13 @@ documentation and examples.
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-571">571</a>].
       </li>
       <li class="change">
+          Added support to deploy resources inside JARs from the Servlet 3.0 compliant
+          location, <tt>META-INF/resources</tt>. If Click is running on a Servlet 3.0
+          server, it won't deploy its resources, but rely on the container to
+          serve the resources directly
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-570">570</a>].
+      </li>
+      <li class="change">
           Added new Calendar popup to DateField. This Calendar popup uses
           <a target="_blank" class="external" href="http://code.google.com/p/calendardateselect/">Calendar Date Select</a>
           which is based on the Prototype JavaScript library.

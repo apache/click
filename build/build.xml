@@ -708,7 +708,7 @@ Please ensure you have configured build.properties</echo>
             todir="documentation/docs/click-api/org/apache/click/control"/>
       <copy file="documentation/images/inline-paginator.png"
             todir="documentation/docs/extras-api/org/apache/click/extras/control"/>
-      <copy file="extras/src/META-INF/web/click/colorpicker/images/color-picker.png"
+      <copy file="extras/src/META-INF/resources/click/colorpicker/images/color-picker.png"
             todir="documentation/docs/extras-api/org/apache/click/extras/control/colorpicker"/>
       <copy file="documentation/images/tree.png"
             todir="documentation/docs/extras-api/org/apache/click/extras/tree"/>
