@@ -872,19 +872,18 @@ public class ErrorPage extends org.apache.click.util.ErrorPage {
     compressed files, home-page.css and home-page.js.
     </para>
 
-    <para>Click makes use of the utility class
-    <ulink url="../../click-api/org/apache/click/util/PageImports.html">PageImports</ulink>
-    to include the CSS and JavaScript. PageImports exposes the method
-    <ulink url="../../click-api/org/apache/click/util/PageImports.html#setInitialized(boolean)">setInitialized(boolean)</ulink>,
-    which controls when PageImports are fully initialized. Once PageImports have
-    been initialized, no other CSS and JavaScript will be included.
+    <para>The Click Page class exposes the property
+    <ulink url="../../click-api/org/apache/click/Page.html#setIncludeControlHeadElements(boolean)">includeControlHeadElements</ulink>
+    that indicates whether Controls have their CSS and JavaScript resources
+    included or not.
     </para>
 
-    <para>Knowing this one can override
-    <ulink url="../../click-api/org/apache/click/Page.html#getPageImports()">Page.getPageImports()</ulink>,
-    and import the necessary JavaScript and CSS files and then set PageImports to
-    <literal>initialized</literal>, forcing PageImports to skip other CSS and
-    JavaScript files.
+    <para>To optimize Page loading one can override
+    <ulink url="../../click-api/org/apache/click/Page.html#getHeadElements()">Page.getHeadElements()</ulink>,
+    and import the JavaScript and CSS files and then set the property
+    <ulink url="../../click-api/org/apache/click/Page.html#setIncludeControlHeadElements(boolean)">includeControlHeadElements</ulink>
+    to <literal>false</literal>, indicating that Controls won't contribute
+    their own JavaScript and CSS resources.
     </para>
 
     <para>Here is an example:</para>
@@ -894,24 +893,21 @@ public class ErrorPage extends org.apache.click.util.ErrorPage {
     private Form form = new Form("form");
 
     public void onInit() {
+        // Indicate that Controls should not import their head elements
+        setIncludeControlHeadElements(false);
+
         form.add(new EmailField("email");
         addControl(form);
     }
 
-    public PageImports getPageImports () {
-        PageImports pageImports = super.getPageImports();
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
 
-        // Add the Page Css to the PageImports
-        pageImports.add(new CssImport("/assets/css/home-page.css"));
-
-        // Add the Page JS to the PageImports
-        pageImports.add(new JsImport("/assets/js/home-page.js"));
-
-        // Set pageImports to initialized so that no other Css and JavaScript
-        // files will be included.
-        pageImports.setInitialized(true);
-        
-        return pageImports;
+            headElements.add(new CssImport("/assets/css/home-page.css"));
+            headElements.add(new JsImport("/assets/js/home-page.js"));
+        }
+        return headElements;
     }
 }</programlisting>
 

@@ -550,8 +550,10 @@ public class PageImports {
 
         setInitialized(true);
 
-        if (page.hasControls()) {
-            processControls(page.getControls());
+        if (page.isIncludeControlHeadElements()) {
+            if (page.hasControls()) {
+                processControls(page.getControls());
+            }
         }
 
         addImport(page.getHtmlImports());
