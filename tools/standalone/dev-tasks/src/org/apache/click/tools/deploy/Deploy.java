@@ -73,8 +73,8 @@ class Deploy {
     /**
      * Deploy all resources from the jar to the given target folder.
      *
-     * @param jar the jar file to extract resources from
-     * @param target the target folder to deploy the resources to
+     * @param jar the jar file to deploy resources from
+     * @param target the target folder to deploy resources to
      * @return true if resources was deployed, false otherwise
      * @throws IOException if a IO exception occurs
      */
@@ -91,11 +91,41 @@ class Deploy {
             throw new IllegalArgumentException("Jar cannot be null");
         }
 
+        deployResourcesInJar(jar, target, "META-INF/resources/");
+        deployResourcesInJar(jar, target, "META-INF/web/");
+
+        int after1 = deployed.size();
+        int after2 = outdated.size();
+
+        // If new reportEntries was added, set hasDeployeed to true
+        if (before1 != after1 || before2 != after2) {
+            hasDeployed = true;
+        }
+        return hasDeployed;
+    }
+
+
+    /**
+     * Deploy resources from a jar to a target folder for the given
+     * resourceDirectory, 'META-INF/resources'.
+     *
+     * @param jarFile the jar file to deploy resources from
+     * @param target the target folder to deploy resources to
+     * @param resourceDirectory the directory where resources are located in
+     * @throws IOException if a IO exception occurs
+     */
+    private void deployResourcesInJar(File jar, File target,
+        final String resourceDirectory) throws IOException {
+
         JarFile jarFile = null;
 
         try {
-
             jarFile = new JarFile(jar);
+
+            if (jarFile.getJarEntry(resourceDirectory) == null) {
+                return;
+            }
+
             JarEntry jarEntry = null;
 
             // Indicates whether feedback should be logged on the jar being
@@ -106,21 +136,20 @@ class Deploy {
             while (en.hasMoreElements()) {
                 jarEntry = en.nextElement();
 
-                // jarEntryName example -> META-INF/web/click/table.css
+                // jarEntryName example -> META-INF/resources/click/table.css
                 String jarEntryName = jarEntry.getName();
 
-                String prefix = "META-INF/web/";
-                // Only deploy resources from "META-INF/web/"
-                int pathIndex = jarEntryName.indexOf(prefix);
+                // Only deploy resources from "META-INF/resources/"
+                int pathIndex = jarEntryName.indexOf(resourceDirectory);
                 if (pathIndex == 0) {
                     if (logFeedback) {
-                        System.out.println("deploy files from jar -> "
-                                         + jar.getCanonicalPath());
+                        System.out.println("deploy files from jar -> " +
+                            jar.getCanonicalPath());
 
                         // Only provide feedback once per jar
                         logFeedback = false;
                     }
-                    pathIndex += prefix.length();
+                    pathIndex += resourceDirectory.length();
                     // resourceName example -> click/table.css
                     String resourceName = jarEntryName.substring(pathIndex);
                     int index = resourceName.lastIndexOf('/');
@@ -149,22 +178,13 @@ class Deploy {
         } finally {
             TaskUtils.close(jarFile);
         }
-
-        int after1 = deployed.size();
-        int after2 = outdated.size();
-
-        // If new reportEntries was added, set hasDeployeed to true
-        if (before1 != after1 || before2 != after2) {
-            hasDeployed = true;
-        }
-        return hasDeployed;
     }
 
     /**
      * Deploy all resources from the source folder to the given target folder.
      *
-     * @param jar the jar file to extract resources from
-     * @param target the target folder to deploy the resources to
+     * @param source the folder to deploy resources from
+     * @param target the target folder to deploy resources to
      * @return true if resources was deployed, false otherwise
      * @throws IOException if a IO exception occurs
      */
@@ -181,70 +201,9 @@ class Deploy {
             throw new IllegalArgumentException("Jar cannot be null");
         }
 
-        final String prefix = "META-INF/web";
-
         if (source.exists()) {
-
-            Iterator files = TaskUtils.listFiles(new File(source, prefix), new FilenameFilter() {
-                public boolean accept(File file, String name) {
-                    if (file.isDirectory()) {
-                        return false;
-                    }
-                    
-                    String path = file.getAbsolutePath();
-                    path = path.replace('\\', '/');
-                    return path.indexOf(prefix) >= 0;
-                }
-            }).iterator();
-
-            boolean logFeedback = true;
-            while (files.hasNext()) {
-                // example file -> c:/source/webapp/WEB-INF/classes/META-INF/web/click/table.css
-                File file = (File) files.next();
-
-                // Guard against loading folders -> META-INF/web/click/
-                if (file.isDirectory()) {
-                    continue;
-                }
-
-                String fileName = file.getCanonicalPath().replace('\\', '/');
-
-                // Only deploy resources from "META-INF/web/"
-                int pathIndex = fileName.indexOf(prefix);
-                if (pathIndex != -1) {
-                    if (logFeedback) {
-                        System.out.println("load files from folder -> " +
-                            source.getAbsolutePath());
-
-                        // Only provide feedback once per source
-                        logFeedback = false;
-                    }
-                    pathIndex += prefix.length();
-
-                    fileName = fileName.substring(pathIndex);
-                    int index = fileName.lastIndexOf('/');
-
-                    File targetDir = new File(target.getPath());
-                    if (index != -1) {
-                        // resourceDir example -> click
-                        String resourceDir =
-                            fileName.substring(0, index);
-                        targetDir = new File(targetDir, resourceDir);
-                    }
-
-                    InputStream inputStream = null;
-                    try {
-                        inputStream = new FileInputStream(file);
-                        byte[] resourceData = TaskUtils.toByteArray(inputStream);
-
-                        // Copy resources to web folder
-                        deployFile(fileName, resourceData, targetDir);
-
-                    } finally {
-                        TaskUtils.close(inputStream);
-                    }
-                }
-            }
+            deployResourcesInDir(source, target, "META-INF/resources");
+            deployResourcesInDir(source, target, "META-INF/web");
         }
 
         int after1 = deployed.size();
@@ -256,6 +215,83 @@ class Deploy {
         }
 
         return hasDeployed;
+    }
+
+    /**
+     * Deploy resources from a source folder to a target folder for the given
+     * resourceDirectory, 'META-INF/resources'.
+     *
+     * @param source the source folder to deploy resources from
+     * @param target the target folder to deploy resources to
+     * @param resourceDirectory the directory where resources are located in
+     * @throws IOException if a IO exception occurs
+     */
+    private void deployResourcesInDir(File source, File target,
+        final String resourceDirectory) throws IOException {
+
+        File dir = new File(source, resourceDirectory);
+
+        Iterator files = TaskUtils.listFiles(dir, new FilenameFilter() {
+
+            public boolean accept(File file, String name) {
+                if (file.isDirectory()) {
+                    return false;
+                }
+
+                String path = file.getAbsolutePath();
+                path = path.replace('\\', '/');
+                return path.indexOf(resourceDirectory) >= 0;
+            }
+        }).iterator();
+
+        boolean logFeedback = true;
+        while (files.hasNext()) {
+            // example file -> c:/source/webapp/WEB-INF/classes/META-INF/resources/click/table.css
+            File file = (File) files.next();
+
+            // Guard against loading folders -> META-INF/resources/click/
+            if (file.isDirectory()) {
+                continue;
+            }
+
+            String fileName = file.getCanonicalPath().replace('\\', '/');
+
+            // Only deploy resources from "META-INF/resources/"
+            int pathIndex = fileName.indexOf(resourceDirectory);
+            if (pathIndex != -1) {
+                if (logFeedback) {
+                    System.out.println("load files from folder -> " +
+                        source.getAbsolutePath());
+
+                    // Only provide feedback once per source
+                    logFeedback = false;
+                }
+                pathIndex += resourceDirectory.length();
+
+                fileName = fileName.substring(pathIndex);
+                int index = fileName.lastIndexOf('/');
+
+                File targetDir = new File(target.getPath());
+                if (index != -1) {
+                    // resourceDir example -> click
+                    String resourceDir =
+                        fileName.substring(0, index);
+                    targetDir = new File(targetDir, resourceDir);
+                }
+
+                InputStream inputStream = null;
+                try {
+                    inputStream = new FileInputStream(file);
+                    byte[] resourceData = TaskUtils.toByteArray(inputStream);
+
+                    // Copy resources to web folder
+                    deployFile(fileName, resourceData, targetDir);
+
+                } finally {
+                    TaskUtils.close(inputStream);
+                }
+            }
+        }
     }
 
     /**
@@ -320,7 +356,7 @@ class Deploy {
                         if (!contentEquals) {
                             // Indicate that an updated version of the resourceName
                             // is available
-                            outdated.add(new DeployReportEntry(resourceName, resourceName.replace("META-INF/web", "")));
+                            outdated.add(new DeployReportEntry(resourceName, removeResourceDirectoryPrefix(resourceName)));
                         }
 
                     } finally {
@@ -341,7 +377,7 @@ class Deploy {
                         destination =
                             destination.substring(lastIndex + 1);
                     }
-                    deployed.add(new DeployReportEntry(resourceName, resourceName.replace("META-INF/web", "")));
+                    deployed.add(new DeployReportEntry(resourceName, removeResourceDirectoryPrefix(resourceName)));
 
                 } finally {
                     TaskUtils.close(fos);
@@ -360,5 +396,21 @@ class Deploy {
                 + ", error " + se;
             throw new RuntimeException(msg, se);
         }
+    }
+
+    /**
+     * Remove the resource directory prefix, 'META-INF/resources' from the given
+     * resourceName.
+     *
+     * @param resourceName the resource name from which the prefix must be removed
+     * @return the resourceName without the resource directory prefix
+     */
+    private String removeResourceDirectoryPrefix(String resourceName) {
+        if (resourceName.startsWith("META-INF/resources")) {
+            resourceName = resourceName.replace("META-INF/resources", "");
+        } else {
+            resourceName = resourceName.replace("META-INF/web", "");
+        }
+        return resourceName;
     }
 }

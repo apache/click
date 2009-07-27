@@ -203,7 +203,7 @@ public class DeployTask extends Task {
 
                 if (deployed) {
                     report.writeReport(path + filename, toDir.getCanonicalPath(),
-                        deploy.getDeployed(), deploy.getOutdated(), reportWriter);
+                        deploy.getDeployed(), deploy.getOutdated(), writer);
                 }
             }
 
@@ -249,6 +249,7 @@ public class DeployTask extends Task {
 
     /**
      * Return the HTML representation of the given filenames.
+     * @param filenames the filenames to represent as HTML
      *
      * @param filenames the filenames to represent as HTML
      * @return return HTML representation of the given filenames
@@ -263,14 +264,21 @@ public class DeployTask extends Task {
             for (String filename : filenames) {
                 if (filename.endsWith(".jar")) {
                     JarFile jarFile = new JarFile(new File(path, filename));
-                    if (jarFile.getEntry("META-INF/web") != null) {
+                    if (jarFile.getEntry("META-INF/resources") != null) {
+                        render(buffer, filename);
+                    } else if (jarFile.getEntry("META-INF/web") != null) {
                         render(buffer, filename);
                     }
                 } else {
                     File file = new File(path, filename);
-                    file = new File(file, "META-INF/web");
-                    if (file.exists()) {
+                    File resourceFile = new File(file, "META-INF/resources");
+                    if (resourceFile.exists()) {
                         render(buffer, filename);
+                    } else {
+                        resourceFile = new File(file, "META-INF/web");
+                        if (resourceFile.exists()) {
+                            render(buffer, filename);
+                        }
                     }
                 }
             }

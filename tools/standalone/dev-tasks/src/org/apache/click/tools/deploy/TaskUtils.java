@@ -100,15 +100,17 @@ class TaskUtils {
     public static List<File> listFiles(File directory, FilenameFilter filter) {
         List<File> files = new ArrayList<File>();
 
-        File[] entries = directory.listFiles();
+        if (directory.exists()) {
+            File[] entries = directory.listFiles();
 
-        for (File entry : entries) {
-            if (filter == null || filter.accept(entry, entry.getName())) {
-                files.add(entry);
-            }
+            for (File entry : entries) {
+                if (filter == null || filter.accept(entry, entry.getName())) {
+                    files.add(entry);
+                }
 
-            if (entry.isDirectory()) {
-                files.addAll(listFiles(entry, filter));
+                if (entry.isDirectory()) {
+                    files.addAll(listFiles(entry, filter));
+                }
             }
         }
 
