@@ -2003,7 +2003,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * Provide an Excluded Page class.
      * <p/>
      * <b>PLEASE NOTE</b> this class is <b>not</b> for public use, and can be
-     * ignore.
+     * ignored.
      */
     public static class ExcludePage extends Page {
 
