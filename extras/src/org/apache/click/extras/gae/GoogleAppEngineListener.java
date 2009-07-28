@@ -133,16 +133,9 @@ import ognl.OgnlRuntime;
  * the webapp. Since GAE doesn't allow writing to disk, Click cannot
  * automatically deploy its resources.
  * <p/>
- * Instead you will have to manually add Click's resources in your GAE
- * application's "<tt>/war</tt>" folder. To do this create a <tt>click</tt>
- * folder under your <tt>/war</tt> directory -> "<tt>/war/click</tt>".
- * <p/>
- * Next you need to copy the resources from the click-core.X.X.X.jar and
- * click-extras.X.X.X.jar. Use your favorite IDE or ZIP utility to open the
- * jars and navigate to "<tt>META-INF/resources/</tt>" where you will find the
- * "<tt>/click</tt>" folder with all the resources packaged for that jar. Simply
- * copy the content of the "<tt>/click</tt>" folder to your GAE folder:
- * "<tt>/war/click</tt>".
+ * Please see the user-guide section,
+ * <a href="../../../../../../user-guide/html/ch04s03.html#deploying-restricted-env">Deploying resources in a restricted environment</a>,
+ * for various solutions.
  */
 public class GoogleAppEngineListener implements ServletContextListener {
 

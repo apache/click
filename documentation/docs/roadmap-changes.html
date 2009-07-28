@@ -147,6 +147,13 @@ documentation and examples.
         <a href="user-guide/html/ch02s12.html">here</a> and
         the section on Control HEAD elements <a href="user-guide/html/ch03s05.html">here</a>.
       </li>
+      <li>
+        Added a new section, <a href="user-guide/html/ch04s03.html#deploying-restricted-env">Deploying resources in a restricted environment</a>,
+        describing how to deploy static resources in environments where
+        WAR/EAR are not unpacked or where file system permissions are
+        restricted, such as
+        <a class="external" target="_blank" href="http://code.google.com/appengine/docs/java/overview.html">Google App Engine</a>.
+      </li>
     </ul>
 
     <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
@@ -202,9 +209,8 @@ documentation and examples.
       </li>
       <li class="change">
           Added support to deploy resources inside JARs from the Servlet 3.0 compliant
-          location, <tt>META-INF/resources</tt>. If Click is running on a Servlet 3.0
-          server, it won't deploy its resources, but rely on the container to
-          serve the resources directly
+          location, <tt>META-INF/resources</tt>. Click's own pre-packaged resources
+          are now also located in the JAR under <tt>META-INF/resources</tt>
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-570">570</a>].
       </li>
       <li class="change">

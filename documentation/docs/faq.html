@@ -78,13 +78,15 @@
   <li><a href="#performance">What is the performance of Click?</a>
   </li>
   <li><a href="#unit-testing">How do I unit test Click pages?</a>
-  </li>  
+  </li>
+  <li><a href="#restricted-env">How do I deploy Click resources in restricted environments?</a>
+  </li>
   <li><a href="#logging">Why doesn't Click use Commons Logging / Log4J for logging?</a>
   </li>
   <li><a href="#why-velocity">Why doesn't Click use FreeMarker as the default rendering engine?</a>
-  </li>  
+  </li>
   <li><a href="#why-click">Why develop a new Web Application Framework?</a>
-  </li> 
+  </li>
 </ol>
 <p>&nbsp;</p>
 
@@ -94,8 +96,8 @@
       <b>1.&nbsp; How to get help?</b>
   </dt>
   <dd>
-    OK you have read the documentation and reviewed the 
-    <a href="examples.html">Examples</a> applications, but there is still something 
+    OK you have read the documentation and reviewed the
+    <a href="examples.html">Examples</a> applications, but there is still something
     you still don't understand. What do you do?
     <p/>
     You go to the click-user or click-development mail
@@ -757,8 +759,30 @@ public MyPage extends Page {
   </dd>
 
 
+  <dt><a name="restricted-env"></a>
+      <b>21.&nbsp; How do I deploy Click resources in restricted environments?</b>
+  </dt>
+  <dd>
+  Often times one need to run Click applications in restricted environments.
+  Examples include:
+  <p/>
+  <ul>
+      <li>WAR/EAR is not unpacked - common with WebLogic and Websphere servers</li>
+      <li>File system permissions are restricted</li>
+      <li>Hosting applications on <a href="http://code.google.com/appengine/docs/java/overview.html">Google App Engine</a></li>
+  </ul>
+  Click works perfectly fine in these environments. The only issue one might
+  encounter is Click's auto-deploy feature where static resources are copied
+  to the webapp root directory at application startup. In restricted environments
+  it might not be possible for Click to deploy its resources.
+  <p/>
+  Please see the user-guide section, <a href="user-guide/html/ch04s03.html#deploying-restricted-env">Deploying resources in a restricted environment</a>,
+  for various solutions.
+  </dd>
+
+
   <dt><a name="logging"></a>
-      <b>21.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b>
+      <b>22.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b>
   </dt>
   <dd>
    Click by default does not use Commons Logging / Log4J to avoid the class 
@@ -771,7 +795,7 @@ public MyPage extends Page {
 
 
   <dt><a name="why-velocity"></a>
-      <b>22.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b>
+      <b>23.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b>
   </dt>
   <dd>
    FreeMarker is a powerful templating engine which was evaluated along side 
@@ -785,7 +809,7 @@ public MyPage extends Page {
 
 
   <dt><a name="why-click"></a>
-      <b>23.&nbsp; Why develop a new Web Application Framework?</b>
+      <b>24.&nbsp; Why develop a new Web Application Framework?</b>
   </dt>
   <dd>
   Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
