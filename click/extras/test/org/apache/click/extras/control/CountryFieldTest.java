@@ -55,7 +55,6 @@ public class CountryFieldTest extends TestCase {
             assertFalse(uniqueChecker.contains(option.getLabel()));
 
             uniqueChecker.add(option.getLabel());
-            System.out.println(option.getValue() + " " + option.getLabel());
         }
     }
 }
