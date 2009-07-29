@@ -18,15 +18,18 @@
  */
 package org.apache.click.extras.control;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.click.ActionListener;
-import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.control.AbstractContainer;
 import org.apache.click.control.Container;
 import org.apache.click.control.Field;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.ContainerUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
@@ -58,10 +61,17 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public abstract class AbstractContainerField extends Field implements Container {
 
+    // -------------------------------------------------------------- Constants
+
+    private static final long serialVersionUID = 1L;
+
     // ----------------------------------------------------- Instance Variables
 
-    /** Internal container instance. */
-    protected AbstractContainer container = new InnerContainerField();
+    /** The list of controls. */
+    protected List controls;
+
+    /** The map of controls keyed by field name. */
+    protected Map controlMap;
 
     // ---------------------------------------------------------- Constructorrs
 
@@ -90,7 +100,7 @@ public abstract class AbstractContainerField extends Field implements Container 
         super(name, label);
     }
 
-    // ------------------------------------------------------ Public methods
+    // --------------------------------------------------------- Public methods
 
     /**
      * @see org.apache.click.control.Container#add(org.apache.click.Control).
@@ -110,7 +120,7 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return the control that was added to the container
      */
     public Control insert(Control control, int index) {
-        return container.insert(control, index);
+        return ContainerUtils.insert(this, control, index, getControlMap());
     }
 
     /**
@@ -120,16 +130,20 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return true if the control was removed from the container
      */
     public boolean remove(Control control) {
-        return container.remove(control);
+        return ContainerUtils.remove(this, control, getControlMap());
     }
 
     /**
      * Return the internal container instance.
      *
+     * @deprecated the internal container instance was removed,
+     * AbstractContainerField can be used without accessing the internal
+     * container
+     *
      * @return the internal container instance
      */
     public Container getContainer() {
-        return container;
+        return this;
     }
 
     /**
@@ -138,7 +152,10 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return the sequential list of controls held by the container
      */
     public List getControls() {
-        return container.getControls();
+        if (controls == null) {
+            controls = new ArrayList();
+        }
+        return controls;
     }
 
     /**
@@ -148,7 +165,10 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return the named control from the container if found or null otherwise
      */
     public Control getControl(String controlName) {
-        return container.getControl(controlName);
+        if (hasControls()) {
+            return (Control) getControlMap().get(controlName);
+        }
+        return null;
     }
 
     /**
@@ -158,7 +178,7 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return true if the container contains the specified control
      */
     public boolean contains(Control control) {
-        return container.contains(control);
+        return getControls().contains(control);
     }
 
     /**
@@ -169,7 +189,7 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return true if the container has existing controls, false otherwise.
      */
     public boolean hasControls() {
-        return container.hasControls();
+        return (controls == null) ? false : !controls.isEmpty();
     }
 
     /**
@@ -256,8 +276,14 @@ public abstract class AbstractContainerField extends Field implements Container 
      */
     public boolean onProcess() {
         boolean continueProcessing = super.onProcess();
-        if (!container.onProcess()) {
-            continueProcessing = false;
+
+        if (hasControls()) {
+            for (Iterator it = getControls().iterator(); it.hasNext();) {
+                Control control = (Control) it.next();
+                if (!control.onProcess()) {
+                    continueProcessing = false;
+                }
+            }
         }
         return continueProcessing;
     }
@@ -266,21 +292,41 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @see org.apache.click.Control#onDestroy()
      */
     public void onDestroy() {
-        container.onDestroy();
+        if (hasControls()) {
+            for (int i = 0, size = getControls().size(); i < size; i++) {
+                Control control = (Control) getControls().get(i);
+                try {
+                    control.onDestroy();
+                } catch (Throwable t) {
+                    ClickUtils.getLogService().error("onDestroy error", t);
+                }
+            }
+        }
     }
 
     /**
      * @see org.apache.click.Control#onInit()
      */
     public void onInit() {
-        container.onInit();
+        super.onInit();
+        if (hasControls()) {
+            for (int i = 0, size = getControls().size(); i < size; i++) {
+                Control control = (Control) getControls().get(i);
+                control.onInit();
+            }
+        }
     }
 
     /**
      * @see org.apache.click.Control#onRender()
      */
     public void onRender() {
-        container.onRender();
+        if (hasControls()) {
+            for (int i = 0, size = getControls().size(); i < size; i++) {
+                Control control = (Control) getControls().get(i);
+                control.onRender();
+            }
+        }
     }
 
     /**
@@ -331,7 +377,7 @@ public abstract class AbstractContainerField extends Field implements Container 
         return buffer.toString();
     }
 
-    //-------------------------------------------- protected methods
+    //------------------------------------------------------- Protected Methods
 
     /**
      * @see org.apache.click.control.AbstractControl#renderTagEnd(java.lang.String, org.apache.click.util.HtmlStringBuffer)
@@ -385,7 +431,10 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return the map of controls
      */
     protected Map getControlMap() {
-        return container.getControlMap();
+        if (controlMap == null) {
+            controlMap = new HashMap();
+        }
+        return controlMap;
     }
 
     /**
@@ -394,125 +443,16 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return the estimated rendered control size in characters
      */
     protected int getControlSizeEst() {
-        return container.getControlSizeEst();
-    }
+        int size = 20;
 
-    // -------------------------------------------------------- Inner Class
-
-    /**
-     * Inner class providing the container implementation for
-     * AbstractContainerField.
-     * <p/>
-     * Note this class delegates certain methods to AbstractContainerField, so
-     * that the Container implementation can manipulate state of the
-     * AbstractContainerField instance.
-     */
-    class InnerContainerField extends AbstractContainer {
-
-        // -------------------------------------------------------- Constants
-
-        private static final long serialVersionUID = 1L;
-
-        // -------------------------------------------------------- Public Methods
-
-        /**
-         * Return the AbstractContainerField html tag.
-         *
-         * @return the AbstractContainerField html tag
-         */
-        public String getTag() {
-            return AbstractContainerField.this.getTag();
+        if (getTag() != null && hasAttributes()) {
+            size += 20 * getAttributes().size();
         }
 
-        /**
-         * Sets the AbstractContainerField parent.
-         *
-         * @param parent the parent of the AbstractContainerField
-         */
-        public void setParent(Object parent) {
-            AbstractContainerField.this.setParent(parent);
+        if (hasControls()) {
+            size += getControls().size() * size;
         }
 
-        /**
-         * Sets the AbstractContainerField name.
-         *
-         * @param name the name of the AbstractContainerField
-         */
-        public void setName(String name) {
-            AbstractContainerField.this.setName(name);
-        }
-
-        /**
-         * Sets the action listener of the AbstractContainerField.
-         *
-         * @param actionListener the action listener object to invoke
-         */
-        public void setActionListener(ActionListener actionListener) {
-            AbstractContainerField.this.setActionListener(actionListener);
-        }
-
-        /**
-         * Sets the listener of the AbstractContainerField.
-         *
-         * @param listener the listener object with the named method to invoke
-         * @param method the name of the method to invoke
-         */
-        public void setListener(Object listener, String method) {
-            AbstractContainerField.this.setListener(listener, method);
-        }
-
-        /**
-         * Return the parent of the AbstractContainerField.
-         *
-         * @return the parent of the AbstractContainerField
-         */
-        public Object getParent() {
-            return AbstractContainerField.this.getParent();
-        }
-
-        /**
-         * Return the name of the AbstractContainerField.
-         *
-         * @return the name of the AbstractContainerField
-         */
-        public String getName() {
-            return AbstractContainerField.this.getName();
-        }
-
-        /**
-         * Return the messages of the AbstractContainerField.
-         *
-         * @return the message of the AbstractContainerField
-         */
-        public Map getMessages() {
-            return AbstractContainerField.this.getMessages();
-        }
-
-        /**
-         * Return the id of the AbstractContainerField.
-         *
-         * @return the id of the AbstractContainerField
-         */
-        public String getId() {
-            return AbstractContainerField.this.getId();
-        }
-
-        /**
-         * Return the html imports of the AbstractContainerField.
-         *
-         * @return the html imports of the AbstractContainerField
-         */
-        public String getHtmlImports() {
-            return AbstractContainerField.this.getHtmlImports();
-        }
-
-        /**
-         * Return the Context of the AbstractContainerField.
-         *
-         * @return the Context of the AbstractContainerField
-         */
-        public Context getContext() {
-            return AbstractContainerField.this.getContext();
-        }
+        return size;
     }
 }
