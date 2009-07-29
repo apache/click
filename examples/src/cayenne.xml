@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <domains project-version="3.0">
 <domain name="cayenne">
+	<property name="cayenne.DataDomain.queryCacheFactory" value="org.apache.cayenne.cache.OSQueryCacheFactory"/>
+
 	<map name="cayenneMap" location="cayenneMap.map.xml"/>
 
 	<node name="cayenneNode"
