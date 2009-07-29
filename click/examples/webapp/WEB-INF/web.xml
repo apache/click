@@ -152,6 +152,12 @@
 		<url-pattern>*.htm</url-pattern>
 	</servlet-mapping>
 
+  <!--
+  Add mapping informing ClickServlet to serve static resources contained under
+  /click/* directly from Click's JAR files.
+  Please note, you only need this mapping in restricted environments where Click
+  cannot deploy resources to the file system.
+  -->
 	<servlet-mapping>
 		<servlet-name>ClickServlet</servlet-name>
 		<url-pattern>/click/*</url-pattern>
