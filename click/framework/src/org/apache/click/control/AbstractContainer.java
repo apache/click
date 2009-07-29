@@ -54,7 +54,7 @@ public abstract class AbstractContainer extends AbstractControl implements
 
     private static final long serialVersionUID = 1L;
 
-    // -------------------------------------------------------------- Instance Variables
+    // ----------------------------------------------------- Instance Variables
 
     /** The list of controls. */
     protected List controls;
@@ -62,7 +62,7 @@ public abstract class AbstractContainer extends AbstractControl implements
     /** The map of controls keyed by field name. */
     protected Map controlMap;
 
-    // ------------------------------------------------------ Constructorrs
+    // ---------------------------------------------------------- Constructorrs
 
     /**
      * Create a container with no name defined.
@@ -79,7 +79,7 @@ public abstract class AbstractContainer extends AbstractControl implements
         super(name);
     }
 
-    // ------------------------------------------------------ Public methods
+    // --------------------------------------------------------- Public methods
 
     /**
      * @see org.apache.click.control.Container#add(org.apache.click.Control).
