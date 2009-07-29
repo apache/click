@@ -21,21 +21,21 @@ package org.apache.click.examples.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import java.util.Map;
-import org.apache.cayenne.CayenneRuntimeException;
-import org.apache.click.examples.domain.Customer;
-import org.apache.click.extras.cayenne.CayenneTemplate;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.cayenne.CayenneRuntimeException;
 import org.apache.cayenne.exp.Expression;
 import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.map.DbEntity;
 import org.apache.cayenne.map.EntityResolver;
 import org.apache.cayenne.query.IndirectQuery;
 import org.apache.cayenne.query.Query;
+import org.apache.cayenne.query.QueryCacheStrategy;
 import org.apache.cayenne.query.SQLTemplate;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.click.examples.domain.Customer;
+import org.apache.click.extras.cayenne.CayenneTemplate;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.stereotype.Component;
 
@@ -43,8 +43,6 @@ import org.springframework.stereotype.Component;
  * Provides a Customer Service.
  *
  * @see Customer
- *
- * @author Malcolm Edgar
  */
 @Component
 public class CustomerService extends CayenneTemplate {
@@ -67,10 +65,15 @@ public class CustomerService extends CayenneTemplate {
 
     @SuppressWarnings("unchecked")
     public List<Customer> getCustomersSortedBy(String property, boolean ascending) {
+
         SelectQuery query = new SelectQuery(Customer.class);
         if (property != null) {
             query.addOrdering(property, ascending);
         }
+
+        // Example use of shared cache which is managed with oscache.properties
+        query.setCacheStrategy(QueryCacheStrategy.SHARED_CACHE);
+
         return performQuery(query);
     }
 

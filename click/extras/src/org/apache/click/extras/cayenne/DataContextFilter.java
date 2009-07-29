@@ -34,6 +34,7 @@ import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.LifecycleListener;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.access.DataDomain;
+import org.apache.cayenne.cache.OSQueryCacheFactory;
 import org.apache.cayenne.conf.Configuration;
 import org.apache.cayenne.conf.ServletUtil;
 import org.apache.cayenne.map.LifecycleEvent;
@@ -189,17 +190,17 @@ public class DataContextFilter implements Filter {
      * The filter configuration object we are associated with.  If this value
      * is null, this filter instance is not currently configured.
      */
-    protected FilterConfig filterConfig = null;
+    protected FilterConfig filterConfig;
 
     /**
-     * Maintain user HttpSession scope DataContext object, the default value is
-     * true. If sessionScope is false then a new DataContext object will be
+     * Maintain user DataContext object in their HttpSession, the default value
+     * is false. If sessionScope is false then a new DataContext object will be
      * created for each request.
      */
-    protected boolean sessionScope = true;
+    protected boolean sessionScope = false;
 
     /** Create DataContext objects using the shared cache. */
-    protected boolean sharedCache = true;
+    protected Boolean sharedCache;
 
     /** The Click log service. */
     protected LogService logger;
@@ -217,6 +218,9 @@ public class DataContextFilter implements Filter {
      */
     public synchronized void init(FilterConfig config) {
 
+         HtmlStringBuffer buffer = new HtmlStringBuffer();
+         buffer.append("DataContextFilter initialized: ");
+
         filterConfig = config;
 
         ServletUtil.initializeSharedConfiguration(config.getServletContext());
@@ -229,21 +233,34 @@ public class DataContextFilter implements Filter {
         if (StringUtils.isNotBlank(value)) {
             autoRollback = "true".equalsIgnoreCase(value);
         }
+        buffer.append(" auto-rollback=" + autoRollback);
+
 
         value = config.getInitParameter("session-scope");
         if (StringUtils.isNotBlank(value)) {
             sessionScope = "true".equalsIgnoreCase(value);
         }
+        buffer.append(", session-scope=" + sessionScope);
 
         value = config.getInitParameter("shared-cache");
         if (StringUtils.isNotBlank(value)) {
             sharedCache = "true".equalsIgnoreCase(value);
         }
+        buffer.append(", shared-cache=");
+        buffer.append((sharedCache != null) ? sharedCache : "default");
+
+        value = config.getInitParameter("oscache-enabled");
+        boolean oscacheEnabled = "true".equalsIgnoreCase(value);
+        if (oscacheEnabled) {
+            dataDomain.setQueryCacheFactory(new OSQueryCacheFactory());
+        }
+        buffer.append(", oscache-enabled=" + oscacheEnabled);
 
         String classname = config.getInitParameter("lifecycle-listener");
 
         if (StringUtils.isNotEmpty(classname)) {
             try {
+                @SuppressWarnings("unchecked")
                 Class listenerClass = ClickUtils.classForName(classname);
 
                 LifecycleCallbackRegistry registry =
@@ -254,6 +271,7 @@ public class DataContextFilter implements Filter {
 
                 if (registry.isEmpty(LifecycleEvent.POST_LOAD)) {
                     registry.addDefaultListener(lifecycleListener);
+                    buffer.append(", lifecycle-listener=" + classname);
 
                 } else {
                     String message =
@@ -268,6 +286,9 @@ public class DataContextFilter implements Filter {
                 throw new RuntimeException(message, e);
             }
         }
+
+        // Log init data, note LogService is not yet initialized
+        getFilterConfig().getServletContext().log(buffer.toString());
     }
 
     /**
@@ -393,7 +414,14 @@ public class DataContextFilter implements Filter {
      * @return the DataContext object
      */
     protected DataContext createDataContext() {
-        DataContext dataContext = dataDomain.createDataContext(sharedCache);
+
+        DataContext dataContext = null;
+        if (sharedCache != null) {
+            dataContext = dataDomain.createDataContext(sharedCache);
+
+        } else {
+            dataContext = dataDomain.createDataContext();
+        }
 
         if (logger.isTraceEnabled()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer();
@@ -403,11 +431,11 @@ public class DataContextFilter implements Filter {
             } else {
                 buffer.append("request scope");
             }
-            if (sharedCache) {
-                buffer.append(" and shared cache.");
-            } else {
-                buffer.append(".");
+            if (sharedCache != null) {
+                buffer.append(", and shared cache ");
+                buffer.append(sharedCache);
             }
+            buffer.append(".");
             logger.trace(buffer);
         }
 
