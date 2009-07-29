@@ -35,6 +35,9 @@
     <suppress checks="FileLength"
               files="Tree.java"/>
 
+    <suppress checks="FileLength"
+              files="XmlConfigService.java"/>
+
 	<!-- Javadoc Method -->                                          
               
     <suppress checks="JavadocMethod"

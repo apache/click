@@ -187,9 +187,9 @@ public class ClickResourceService implements ResourceService {
                 loadFilesInJar(jar, resourceDirectory);
 
             } else {
-                logService.error("Could not load the jar '" + jarPath +
-                    "'. Please ensure this file exists in the specified" +
-                    " location.");
+                logService.error("Could not load the jar '" + jarPath
+                    + "'. Please ensure this file exists in the specified"
+                    + " location.");
             }
         } else {
             File dir = new File(path);
