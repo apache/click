@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<data-map project-version="3.0">
+<data-map xmlns="http://cayenne.apache.org/schema/3.0/modelMap"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://cayenne.apache.org/schema/3.0/modelMap http://cayenne.apache.org/schema/3.0/modelMap"
+  project-version="3.0">
 	<property name="defaultPackage" value="org.apache.click.examples.domain"/>
 	<property name="defaultSuperclass" value="org.apache.click.examples.domain.BaseEntity"/>
 	<db-entity name="ADDRESS">
@@ -163,13 +166,11 @@
 	<obj-relationship name="studentHouse" source="Student" target="StudentHouse" db-relationship-path="STUDENT_HOUSE"/>
 	<obj-relationship name="student" source="StudentHouse" target="Student" db-relationship-path="STUDENT"/>
 	<query name="states" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="SystemCode">
-		<property name="cayenne.GenericSelectQuery.refreshingObjects" value="false"/>
 		<property name="cayenne.GenericSelectQuery.cacheStrategy" value="SHARED_CACHE"/>
 		<qualifier><![CDATA[name = "STATE"]]></qualifier>
 		<ordering><![CDATA[orderBy]]></ordering>
 	</query>
 	<query name="titles" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="SystemCode">
-		<property name="cayenne.GenericSelectQuery.refreshingObjects" value="false"/>
 		<property name="cayenne.GenericSelectQuery.cacheStrategy" value="SHARED_CACHE"/>
 		<qualifier><![CDATA[name = "TITLE"]]></qualifier>
 		<ordering><![CDATA[orderBy]]></ordering>
