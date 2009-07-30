@@ -32,10 +32,14 @@
       <priority value="INFO"/>
    </category>
    
+   <category name="com.opensymphony.oscache">
+      <priority value="WARN"/>
+   </category>
+
    <category name="org.apache.cayenne">
       <priority value="WARN"/>
    </category>
-   
+
    <category name="org">
       <priority value="WARN"/>
    </category>
