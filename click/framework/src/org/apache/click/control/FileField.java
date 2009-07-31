@@ -243,7 +243,7 @@ public class FileField extends Field {
      * submission.
      */
     public void bindRequestValue() {
-        fileItem = (FileItem) getContext().getFileItem(getName());
+        fileItem = getContext().getFileItem(getName());
     }
 
     /**
