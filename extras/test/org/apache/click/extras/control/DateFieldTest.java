@@ -23,6 +23,7 @@ import java.util.Date;
 import org.apache.click.MockContext;
 import junit.framework.TestCase;
 import org.apache.click.servlet.MockRequest;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides DateField JUnit TestCase.
@@ -124,5 +125,26 @@ public class DateFieldTest extends TestCase {
         calendarField.setFormatPattern("d/M/yy");
         assertEquals("d/M/yy", calendarField.getFormatPattern());
         assertEquals("d/M/yy", calendarField.getCalendarPattern());
+    }
+
+    /**
+     * Check that help text is not rendered twice.
+     *
+     * CLK-574
+     */
+    public void testRenderHelp() {
+        MockContext.initContext();
+
+        DateField dateField = new MyDateField("date");
+
+        int matches = StringUtils.countMatches(dateField.toString(), "Help Me!");
+
+        assertEquals(1, matches);
+    }
+
+    public class MyDateField extends DateField {
+        public MyDateField(String name) {
+            super(name);
+        }
     }
 }
