@@ -22,6 +22,8 @@ import org.apache.click.eclipse.ClickPlugin;
 import org.apache.click.eclipse.ClickUtils;
 import org.apache.click.eclipse.core.facet.ClickFacetInstallDataModelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -60,6 +62,11 @@ public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 		ClickUtils.createLabel(composite, ClickPlugin.getString("wizard.facet.rootPackage"));
 		rootPackage = new Text(composite, SWT.BORDER);
 		rootPackage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		rootPackage.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				doValidate();
+			}
+		});
 		
 		usePerformanceFilter = new Button(composite, SWT.CHECK);
 		usePerformanceFilter.setText(ClickPlugin.getString("wizard.facet.usePerformanceFilter"));
@@ -74,6 +81,17 @@ public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 		useCayenne.setLayoutData(ClickUtils.createGridData(2, GridData.FILL_HORIZONTAL));
 		
 		setControl(composite);
+		doValidate();
+	}
+	
+	private void doValidate(){
+		if(rootPackage.getText().length() == 0){
+			setErrorMessage(ClickPlugin.getString("wizard.facet.error.rootPackage.empty"));
+			setPageComplete(false);
+		} else {
+			setErrorMessage(null);
+			setPageComplete(true);
+		}
 	}
 
 	public void transferStateToConfig() {
