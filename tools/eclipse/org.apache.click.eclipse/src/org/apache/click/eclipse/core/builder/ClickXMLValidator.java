@@ -62,7 +62,7 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 public class ClickXMLValidator {
 	
 	private static ResourceBundle resource 
-		= ResourceBundle.getBundle("net.sf.clickide.core.validator.validation");
+		= ResourceBundle.getBundle("org.apache.click.eclipse.core.validator.validation");
 	
 	private String packageName = null;
 	

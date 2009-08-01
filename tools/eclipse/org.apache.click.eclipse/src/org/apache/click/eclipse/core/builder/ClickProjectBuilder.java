@@ -40,7 +40,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ClickProjectBuilder extends IncrementalProjectBuilder {
 
 	/** The id of this builder. */
-	public static final String BUILDER_ID = "net.sf.clickide.ClickProjectBuilder";
+	public static final String BUILDER_ID = "org.apache.click.eclipse.ClickProjectBuilder";
 	
 	private ClickXMLValidator validator = new ClickXMLValidator();
 

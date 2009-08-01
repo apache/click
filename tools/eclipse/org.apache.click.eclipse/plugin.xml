@@ -95,7 +95,7 @@
            category="org.apache.click.eclipse.category"
            class="org.apache.click.eclipse.ui.wizard.NewClickPageWizard"
            icon="icons/click-icon-16x16.png"
-           id="net.sf.clickide.ui.wizard.NewClickPageWizard"
+           id="org.apache.click.eclipse.ui.wizard.NewClickPageWizard"
            name="%wizard.newPage"/>
      <category
            id="org.apache.click.eclipse.category"

@@ -36,7 +36,7 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class ClickProjectNature implements IProjectNature {
 	
-	public static final String NATURE_ID = "net.sf.clickide.ClickProjectNature";
+	public static final String NATURE_ID = "org.apache.click.eclipse.ClickProjectNature";
 	
 	private IProject project;
 	

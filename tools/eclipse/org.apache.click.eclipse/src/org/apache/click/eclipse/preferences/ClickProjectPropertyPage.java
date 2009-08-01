@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.apache.click.eclipse.ClickPlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
@@ -46,7 +45,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -236,11 +234,11 @@ public class ClickProjectPropertyPage extends PropertyPage {
 			this.model = model;
 		}
 		
-		protected Point getInitialSize() {
-			Point point = super.getInitialSize();
-			point.x = 350;
-			return point;
-		}
+//		protected Point getInitialSize() {
+//			Point point = super.getInitialSize();
+//			point.x = 350;
+//			return point;
+//		}
 
 		protected Control createDialogArea(Composite parent) {
 			getShell().setText(ClickPlugin.getString("propertyPage.variables.dialog.title"));
