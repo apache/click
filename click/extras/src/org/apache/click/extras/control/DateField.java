@@ -177,6 +177,9 @@ public class DateField extends TextField {
      */
     protected String style = "default";
 
+    /** Indicates whether the help property should be rendered or not. */
+    private boolean renderHelp = true;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -695,6 +698,21 @@ public class DateField extends TextField {
         this.style = style;
     }
 
+    /**
+     * Return the field help text.
+     *
+     * @see org.apache.click.control.Field#getHelp()
+     *
+     * @return the help text of the Field
+     */
+    public String getHelp() {
+        // Conditionally render help property, otherwise return null.
+        if (renderHelp) {
+            return super.getHelp();
+        }
+        return null;
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -752,24 +770,25 @@ public class DateField extends TextField {
      * @param buffer the specified buffer to render the control's output to
      */
     public void render(HtmlStringBuffer buffer) {
-        String help = getHelp();
-        // Nullify help to ensure it is not rendered by super impl.
-        if (help != null) {
-            setHelp(null);
-        }
 
         // Set default title
         if (getTitle() == null) {
             setTitle(getMessage("date-title", formatPattern));
         }
 
+        // Ensure help is not rendered by super implementation
+        renderHelp = false;
+
         super.render(buffer);
+
+        renderHelp = true;
 
         if (isShowCalendar()) {
             renderCalendarButton(buffer);
         }
 
-
+        // Render help
+        String help = getHelp();
         if (help != null) {
             buffer.append(help);
         }
