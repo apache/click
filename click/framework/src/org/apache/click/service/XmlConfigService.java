@@ -783,9 +783,13 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         // pagePath='/pages/edit-customer.htm'
         // pagesPackage='org.apache.click'
 
-        // Add period at end.
-        // packageName = 'org.apache.click.'
-        String packageName = pagesPackage + ".";
+        String packageName = "";
+        if (StringUtils.isNotBlank(pagesPackage)) {
+            // Append period after package
+            // packageName = 'org.apache.click.'
+            packageName = pagesPackage + ".";
+        }
+
         String className = "";
 
         // Strip off extension.
