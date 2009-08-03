@@ -7,6 +7,7 @@ import benchmark.dao.Customer;
 import benchmark.dao.CustomerDao;
 import benchmark.dao.DetachableCustomer;
 import benchmark.dao.DetachableCustomerList;
+import java.io.Serializable;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -45,28 +46,17 @@ public class CustomerList extends WebPage {
             item.add(new Label("state"));
             item.add(new Label("birthDate", new Model() {
 
-                public Object getObject() {
+                public Serializable getObject() {
                     Customer customer = (Customer) item.getModelObject();
-
-                    // Under heavy testing the customer is sometimes null
-                    if (customer != null) {
-                        try {
-                            return FORMAT.format(customer.getBirthDate());
-                        } catch (Exception exception) {
-                            System.out.println("Error formatting date : " + customer.getBirthDate());
-                            throw new RuntimeException(exception);
-                        }
-
-                    } else {
-                        return customer.getBirthDate();
-                    }
+        				    //SimpleDateFormat FORMAT = new SimpleDateFormat("MMMM d, yyyy");
+                	  return FORMAT.format(customer.getBirthDate());
                 }
             }));
 
             item.add(new Link("delete") {
 
                 public void onClick() {
-                    Customer customer = (Customer) getParent().getModelObject();
+                    Customer customer = (Customer) getParent().getDefaultModelObject();
                     CustomerDao.getInstance().delete(customer);
                 }
             });
@@ -74,7 +64,7 @@ public class CustomerList extends WebPage {
             item.add(new Link("edit") {
 
                 public void onClick() {
-                    EditCustomer editPage = new EditCustomer(getParent().getModel());
+                    EditCustomer editPage = new EditCustomer(getParent().getDefaultModel());
                     setResponsePage(editPage);
                 }
             });

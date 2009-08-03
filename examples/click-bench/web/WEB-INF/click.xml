@@ -19,12 +19,12 @@
 -->
 <click-app> 
 
-  <pages package="benchmark.click">
+  <pages package="benchmark">
       <!-- Setup a velocity page -->
-      <page path="velocity/velocity-customer-list.htm" classname="velocity.VelocityCustomerList"/>
+      <page path="click/velocity/velocity-customer-list.htm" classname="click.velocity.VelocityCustomerList"/>
 
       <!-- Setup a JSP page -->
-      <page path="jsp/jsp-customer-list.jsp" classname="jsp.JSPCustomerList"/>
+      <page path="click/jsp/jsp-customer-list.jsp" classname="click.jsp.JSPCustomerList"/>
   </pages>
 
   <mode value="production"/>

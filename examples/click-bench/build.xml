@@ -21,7 +21,7 @@
 <project name="click-bench" default="compile" basedir=".">
     <description>Builds, tests, and runs the project click-bench.</description>
 
-    <property name="click.version" value="1.4.1"/>
+    <property name="click.version" value="2.0.1-RC1-incubator"/>
     <property name="name" value="click-bench"/>
     <property name="build.dir" value="build"/>
     <property name="build.web.dir" value="${build.dir}/web"/>
@@ -73,7 +73,7 @@
                destdir="${build.classes.dir}"
                debug="true"
                encoding="ISO-8859-1"
-               source="1.4">
+               source="1.5">
             <classpath refid="classpath"/>
         </javac>
     </target>

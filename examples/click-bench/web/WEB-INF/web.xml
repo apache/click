@@ -17,15 +17,81 @@
    specific language governing permissions and limitations
    under the License.
 -->
-<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
-<web-app>
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
     <display-name>Click/Wicket Benchmark</display-name>
-    
+
+    <!--
+    Wicket config
+    -->
     <context-param>
         <param-name>configuration</param-name>
         <param-value>deployment</param-value>
     </context-param>
-    
+
+    <!--
+    Tapestry config
+    -->
+    <context-param>
+       <!-- The only significant configuration for Tapestry 5, this informs Tapestry
+            of where to look for pages, components and mixins. -->
+       <param-name>tapestry.app-package</param-name>
+       <param-value>benchmark.tapestry</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>page_hard_limit</param-name>
+        <param-value>120</param-value>
+    </context-param>
+
+    <!--
+    Tapestry config
+    -->
+    <filter>
+        <filter-name>app</filter-name>
+        <filter-class>org.apache.tapestry5.TapestryFilter</filter-class>
+    </filter>
+
+    <!--
+    Stripes config
+    -->
+    <filter>
+		    <display-name>Stripes Filter</display-name>
+		    <filter-name>StripesFilter</filter-name>
+		    <filter-class>net.sourceforge.stripes.controller.StripesFilter</filter-class>
+		    <init-param>
+			      <param-name>ActionResolver.Packages</param-name>
+            <param-value>benchmark.stripes</param-value>
+        </init-param>
+ 	  </filter>
+
+    <!--
+    Tapestry config
+    -->
+    <filter-mapping>
+        <filter-name>app</filter-name>
+        <url-pattern>/tapestry/*</url-pattern>
+    </filter-mapping>
+
+    <!--
+    Stripes config
+    -->
+    <filter-mapping>
+	      <filter-name>StripesFilter</filter-name>
+		    <url-pattern>/stripes/*</url-pattern>
+		    <dispatcher>REQUEST</dispatcher>
+	  </filter-mapping>
+
+    <filter-mapping>
+		    <filter-name>StripesFilter</filter-name>
+        <servlet-name>StripesDispatcher</servlet-name>
+		    <dispatcher>REQUEST</dispatcher>
+	  </filter-mapping>
+
     <!--
     Wicket config
     -->
@@ -61,7 +127,17 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     
-   <!--
+    <!--
+    Stripes config
+    -->
+    <servlet>
+	      <servlet-name>StripesDispatcher</servlet-name>
+        <servlet-class>net.sourceforge.stripes.controller.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+
+    <!--
     Wicket mapping
     -->
     <servlet-mapping>
@@ -85,6 +161,13 @@
         <servlet-name>action</servlet-name>
         <url-pattern>*.do</url-pattern>
     </servlet-mapping>
-    
+
+    <!--
+    Stripes config
+    -->
+  	<servlet-mapping>
+        <servlet-name>StripesDispatcher</servlet-name>
+        <url-pattern>*.action</url-pattern>
+	  </servlet-mapping>
     
 </web-app>

@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
 <%@taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 <%@taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
@@ -24,26 +24,24 @@
 </tr>
 </thead>
 <tbody>
-    
 <logic:iterate name="customers" id="customer" indexId="index">
-    
-  <c:choose>
-   <c:when test="${lineInfo.count % 2 == 0}">
-    <tr class="odd">
-   </c:when>
-   <c:otherwise>
-    <tr class="even">
-   </c:otherwise>
-
-   </c:choose>
-     <td id="table-firstName_<c:out value="${index}"/>"><bean:write name="customer" property="firstName"/></td>
-     <td id="table-lastName_<c:out value="${index}"/>"><bean:write name="customer" property="lastName"/></td>
-     <td id="table-state_<c:out value="${index}"/>"><bean:write name="customer" property="state"/></td>
-     <td id="table-birthDate_<c:out value="${index}"/>"><bean:write name="customer" format="MMMM d, yyyy" property="birthDate"/></td>
-     <td>
-       <a href="/struts/customer-list.do?id=<c:out value="${index}"/>&amp;value=0&amp;page=0">Edit</a> |
-       <a href="/struts/customer-list.do?id=<c:out value="${index}"/>&amp;value=0&amp;page=0">Delete</a>
-     </td>
+<c:choose>
+ <c:when test="${lineInfo.count % 2 == 0}">
+<tr class="odd">
+ </c:when>
+ <c:otherwise>
+<tr class="even">
+ </c:otherwise>
+ </c:choose>
+    <td><bean:write name="customer" property="firstName"/></td>
+    <td><bean:write name="customer" property="lastName"/></td>
+    <td><bean:write name="customer" property="state"/></td>
+    <td><bean:write name="customer" format="MMMM d, yyyy" property="birthDate"/></td>
+    <td>
+      <a href="/struts/customer-list.do?id=<c:out value="${index}"/>&amp;value=0&amp;page=0">Edit</a> |
+      <a href="/struts/customer-list.do?id=<c:out value="${index}"/>&amp;value=0&amp;page=0">Delete</a>
+    </td>
+</tr>
 </logic:iterate>
 
 </tbody>

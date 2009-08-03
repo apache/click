@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page import="benchmark.dao.*" %>
 <%@page import="java.text.*" %>
 <%@page import="java.util.*" %>
@@ -26,18 +26,18 @@
 </tr>
 </thead>
 <tbody>
-<c:forEach var="customer" items="${customers}" varStatus="lineInfo"> 
+<c:forEach var="customer" items="${customers}" varStatus="lineInfo">
 <c:choose>
 <c:when test="${lineInfo.count % 2 == 0}"> <tr class="odd"> </c:when> 
 <c:otherwise> <tr class="even"> </c:otherwise>
 </c:choose> 
-<td id="table-firstName_<c:out value="${lineInfo.count}"/>"><c:out value="${customer.firstName}"/></td> 
-<td id="table-lastName_<c:out value="${lineInfo.count}"/>"><c:out value="${customer.lastName}"/></td>
-<td id="table-state_<c:out value="${lineInfo.count}"/>"> <c:out value="${customer.state}"/> </td>
-<td id="table-birthDate_<c:out value="${lineInfo.count}"/>"> <fmt:formatDate value="${customer.birthDate}" pattern="MMMM d, yyyy"/> </td>
+<td><c:out value="${customer.firstName}"/></td> 
+<td><c:out value="${customer.lastName}"/></td>
+<td> <c:out value="${customer.state}"/> </td>
+<td> <fmt:formatDate value="${customer.birthDate}" pattern="MMMM d, yyyy"/> </td>
 <td align="left">
-<a href="/jsp/jsp-customer-list.htm?id=${customer.id}&value=0&page=0">Edit</a> |
-<a href="/jsp/jsp-customer-list.htm?id=${customer.id}&value=0&page=0">Delete</a>                            
+<a href="${pageContext.request.contextPath}/jsp/direct-jsp.jsp?id=${customer.id}&value=0&page=0">Edit</a> |
+<a href="${pageContext.request.contextPath}/jsp/direct-jsp.jsp?id=${customer.id}&value=0&page=0">Delete</a>
 </td>
 </tr>
 </c:forEach>

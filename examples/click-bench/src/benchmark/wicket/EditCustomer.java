@@ -36,7 +36,7 @@ public class EditCustomer extends WebPage {
         public void onSubmit() {
             Customer customer = (Customer) getModelObject();
             CustomerDao.getInstance().saveOrUpdate(customer);
-            setResponsePage(newPage(CustomerList.class));
+            setResponsePage(new CustomerList());
         }
     }
 

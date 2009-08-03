@@ -1,0 +1,19 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+      xmlns:p="tapestry:parameter">
+    <head>
+        <title>Customer List</title>
+        <link rel="stylesheet" type="text/css" href="/click-bench/styles/default.css"/>
+    </head>
+    <body>
+         <h1>Customer List</h1>
+         <t:grid source="customers" row="customer"
+                 rowsPerPage="100" class="decorated" exclude="id"
+                 lean="true" model="mymodel">
+            <p:deletecell>
+                <t:actionlink t:id="edit" context="customer.id">Edit</t:actionlink>|
+                <t:actionlink t:id="delete" context="customer.id">Delete</t:actionlink>
+            </p:deletecell>
+
+         </t:grid>
+    </body>
+</html>
