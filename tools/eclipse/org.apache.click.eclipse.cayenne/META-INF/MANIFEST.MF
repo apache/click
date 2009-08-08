@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.debug.core,
  org.eclipse.ui.ide,
  org.eclipse.jdt.core,
- org.eclipse.jdt.ui;bundle-version="3.5.0"
+ org.eclipse.jdt.ui
 Eclipse-LazyStart: true
 Bundle-ClassPath: .
 Export-Package: org.apache.click.eclipse.cayenne,
