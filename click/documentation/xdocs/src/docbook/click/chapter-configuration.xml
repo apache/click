@@ -567,6 +567,37 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
 &lt;/click-app&gt;</programlisting>
 
       </sect3>
+      <sect3 id="application-autobinding-annotation" remap="h4">
+        <title>Page Autobinding - Using Annotations</title>
+
+        <para>By default Click's autobinding feature operates on
+        <literal>public</literal> fields. However Click also provides the
+        <ulink url="../../click-api/org/apache/click/util/Bindable.html">Bindable</ulink>
+        annotation which allows you to annotate public Page fields.
+        </para>
+
+        <para>To enable Click to recognize the <symbol>@Bindable</symbol>
+        annotation you need to set the <symbol>autobinding</symbol>
+        attribute to <varname>annotation</varname>, for example:
+        </para>
+
+        <programlisting language="xml"><![CDATA[<click-app>
+  <pages package="com.mycorp.page" ]]><symbol>autobinding</symbol>="<varname>annotation</varname>"<![CDATA[/>
+</click-app>]]></programlisting>
+
+        <para>You can now use the <symbol>@Bindable</symbol> annotation in your
+        Pages:
+        </para>
+
+        <programlisting language="java">public class EmployeePage extends Page {
+
+    <symbol>@Bindable</symbol> public Form employeeForm = new Form();
+
+    <symbol>@Bindable</symbol> public Table myTable = new Table();
+
+}</programlisting>
+
+      </sect3>
     </sect2>
 
     <sect2 id="application-headers" remap="h3">
@@ -1100,16 +1131,32 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
           </para>
           <programlisting language="xml"><![CDATA[<target name="deploy" description="Deploy static resources">
     <taskdef name="deploy"
-   	       classname="org.apache.click.tools.deploy.DeployTask"
-             classpath="<click-distribution>/lib/click-dev-tasks-1.1.jar"/>
+             classname="org.apache.click.tools.deploy.DeployTask"
+             classpath="<click-distribution>/lib/click-dev-tasks-1.1.jar"/>]]> <co id="co-click-distribution" linkends="ca-click-distribution"/><![CDATA[
 
     <deploy dir="<webapp-root>/WEB-INF"
-            todir="<webapp-root>"/>
+            todir="<webapp-root>"/>]]> <co id="co-webapp-root" linkends="ca-webapp-root"/><![CDATA[
 </target>]]> </programlisting>
+
+          <calloutlist>
+            <callout arearefs="co-click-distribution" id="ca-click-distribution">
+              <para><literal>&lt;click-distribution&gt;</literal> is the location
+              where Click is installed on your machine, for example:
+              <literal>C:\software\click-2.1.0\</literal>.
+              </para>
+            </callout>
+            <callout arearefs="co-webapp-root" id="ca-webapp-root">
+              <para><literal>&lt;webapp-root&gt;</literal> is the root directory
+              of your webapp, for example: <literal>C:\dev\my-webapp\</literal>.
+              </para>
+            </callout>
+          </calloutlist>
 
           <para>We use the <emphasis>&lt;deploy&gt;</emphasis> Ant Task and specify
           the attributes <varname>dir</varname> and <varname>todir</varname>.
-          <varname>dir</varname> specifies the <emphasis>source</emphasis>
+          </para>
+
+          <para><varname>dir</varname> specifies the <emphasis>source</emphasis>
           directory to scan for JARs and folders containing static resources,
           while <varname>todir</varname> specifies the <emphasis>target</emphasis>
           directory where the resources should be copied to.

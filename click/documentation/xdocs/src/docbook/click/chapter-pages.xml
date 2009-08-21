@@ -363,7 +363,7 @@ public class CustomerDetails extends Page {
       own type converter class and specify it as a ClickSerlvet init parameter.
       </para>
 
-      <para>For example if we wanted to automatically load a
+      <para>For example if you wanted to automatically load a
       <classname>Customer</classname> object from the database when a customer
       id request parameter is specified, you could write your own type converter:
       </para>
