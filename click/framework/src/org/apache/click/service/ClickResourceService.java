@@ -24,9 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarEntry;
@@ -79,8 +81,12 @@ public class ClickResourceService implements ResourceService {
         // Load all JAR resources
         loadAllJarResources();
 
-        // Load all file system resources
-        loadClickDirResources(servletContext);
+        // Load file system resources. File system resources override JAR
+        // resources
+        List<String> cacheables = getCacheableDirs();
+        for (String cacheable : cacheables) {
+            loadClickDirResources(servletContext, cacheable);
+        }
     }
 
     /**
@@ -128,6 +134,22 @@ public class ClickResourceService implements ResourceService {
 
         byte[] resourceData = resourceCache.get(resourcePath);
         renderResource(response, resourceData);
+    }
+
+    // ------------------------------------------------ Package Private Methods
+
+    /**
+     * Return the list of directories that contains cacheable resources.
+     * <p/>
+     * By default only resource under the "<tt>/click</tt>" directory will be
+     * cached.
+     *
+     * @return list of directories that should be cached
+     */
+    List<String> getCacheableDirs() {
+       List list = new ArrayList();
+       list.add("/click");
+       return list;
     }
 
     // Private Methods --------------------------------------------------------
@@ -279,7 +301,7 @@ public class ClickResourceService implements ResourceService {
             int pathIndex = fileName.indexOf(resourceDirectory);
             if (pathIndex != -1) {
                 if (logFeedback && logService.isTraceEnabled()) {
-                    logService.trace("load files from folder -> "
+                    logService.trace("loaded files from folder -> "
                         + dir.getAbsolutePath());
 
                     // Only provide feedback once per dir
@@ -311,24 +333,31 @@ public class ClickResourceService implements ResourceService {
     }
 
     @SuppressWarnings("unchecked")
-    private void loadClickDirResources(ServletContext servletContext)
+    private void loadClickDirResources(ServletContext servletContext, String dir)
         throws IOException {
 
-        Set resources = servletContext.getResourcePaths("/");
+        Set resources = servletContext.getResourcePaths(dir);
 
         if (resources != null) {
             // Add all resources withtin web application
             for (Iterator i = resources.iterator(); i.hasNext();) {
                 String resource = (String) i.next();
 
-                if (!configService.isTemplate(resource)
-                    && !resource.endsWith("/")) {
+                // If resource is a folder and a valid cacheable resource,
+                // recursively look for resources in that folder
+                if (resource.endsWith("/")) {
 
-                    byte[] resourceData =
-                        getServletResourceData(servletContext, resource);
+                    loadClickDirResources(servletContext, resource);
+                } else {
 
-                    if (resourceData != null) {
-                        resourceCache.put(resource, resourceData);
+                    if (!configService.isTemplate(resource)) {
+
+                        byte[] resourceData =
+                            getServletResourceData(servletContext, resource);
+
+                        if (resourceData != null) {
+                            resourceCache.put(resource, resourceData);
+                        }
                     }
                 }
             }
