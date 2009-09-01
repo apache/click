@@ -32,8 +32,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table column sorting using a database.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class TableSorting extends BorderPage {
