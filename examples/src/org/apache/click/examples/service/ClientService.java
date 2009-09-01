@@ -30,8 +30,6 @@ import org.springframework.stereotype.Component;
  * Provides a Client Service.
  *
  * @see Client
- *
- * @author Malcolm Edgar
  */
 @Component
 public class ClientService extends CayenneTemplate {

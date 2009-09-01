@@ -26,8 +26,6 @@ import org.springframework.stereotype.Component;
  * Provides a User Service.
  *
  * @see User
- *
- * @author Malcolm Edgar
  */
 @Component
 public class UserService extends CayenneTemplate {
