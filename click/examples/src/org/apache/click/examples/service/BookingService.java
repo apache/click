@@ -28,8 +28,6 @@ import org.springframework.stereotype.Component;
  * Provides a CourseBooking Service.
  *
  * @see CourseBooking
- *
- * @author Malcolm Edgar
  */
 @Component
 public class BookingService extends CayenneTemplate {
