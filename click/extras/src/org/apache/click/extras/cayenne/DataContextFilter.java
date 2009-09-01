@@ -80,6 +80,22 @@ import org.apache.commons.lang.StringUtils;
  * However when web applications which share a database you should probably
  * disable this option by setting the <tt>shared-cache</tt> init parameter to false.
  *
+ *
+ * <h3>OSCache Enabled</h3>
+ * 
+ * This option enables you to specify whether 
+ * <a href="http://www.opensymphony.com/oscache/">OSCache</a> should be used
+ * as the query cache for the DataDomain. By default OSCache is not enabled. 
+ * <p/>
+ * OSCache enables you to significantly
+ * increase the performance of your applications with in-memory query caching. 
+ * OSCache provides fine grain control over query caching, expiry and supports 
+ * clustered cache invalidation.
+ * <p/>
+ * See 
+ * Cayenne <a href="http://cayenne.apache.org/doc/query-result-caching.html">Query Result Caching</a>
+ * for more details. 
+ *
  * <h3>Lifecycle Listener</h3>
  *
  * You can register a data domain
