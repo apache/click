@@ -31,8 +31,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides a Student Service.
- *
- * @author Bob Schellink
  */
 @Component
 public class StudentService extends CayenneTemplate {

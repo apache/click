@@ -31,8 +31,6 @@ import org.springframework.stereotype.Component;
  * Provides a Postcode Service.
  *
  * @see PostCode
- *
- * @author Malcolm Edgar
  */
 @Component
 public class PostCodeService extends CayenneTemplate {
