@@ -50,7 +50,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * The <tt>cssStyle</tt> instance will render as follows:
  *
  * <pre class="prettyprint">
- * &lt;style type="text/css" rel="stylesheet"&gt;
+ * &lt;style type="text/css"&gt;
  * body { font: 12px arial; }
  * &lt;/style&gt; </pre>
  *
@@ -98,7 +98,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * <tt>myApp</tt>):
  *
  * <pre class="prettyprint">
- * &lt;style type="text/css" rel="stylesheet"&gt;
+ * &lt;style type="text/css"&gt;
  * .blue {
  *     background: #00ff00 url('/myApp/css/blue.png') no-repeat fixed center;
  * }
@@ -180,7 +180,6 @@ public class CssStyle extends ResourceElement {
             this.content = content;
         }
         setAttribute("type", "text/css");
-        setAttribute("rel", "stylesheet");
     }
 
     /**
