@@ -840,7 +840,7 @@ public class PageImports {
         // content
         if (StringUtils.isBlank(id) && content.length() > 0) {
             int hash = Math.abs(content.hashCode());
-            element.setId(Integer.toString(hash));
+            element.setId("c_" + Integer.toString(hash));
         }
     }
 
