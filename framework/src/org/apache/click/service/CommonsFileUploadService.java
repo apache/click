@@ -18,11 +18,13 @@
  */
 package org.apache.click.service;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.click.util.ClickUtils;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
@@ -72,11 +74,23 @@ public class CommonsFileUploadService implements FileUploadService {
 
     /**
      * @see FileUploadService#onInit(ServletContext)
-
      * @param servletContext the application servlet context
      * @throws Exception if an error occurs initializing the FileUploadService
      */
     public void onInit(ServletContext servletContext) throws Exception {
+        ConfigService configService = ClickUtils.getConfigService(servletContext);
+        LogService logService = configService.getLogService();
+
+        // Uploaded files are saved to java.io.tmpdir. Here we check if this
+        // directory exists, if it does does not, log a warning
+        String tmpdir = System.getProperty("java.io.tmpdir");
+        File tmpfile = new File(tmpdir);
+        if (!tmpfile.exists()) {
+            logService.warn("The java.io.tmpdir directory, '" + tmpdir
+                + "', does not exist. This can cause file uploading to fail"
+                + " as uploaded files are saved to directory specified by the"
+                + " 'java.io.tmpdir' property.");
+        }
     }
 
     /**
