@@ -4,13 +4,9 @@ Copyright 2009 The Apache Software Foundation
 This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
 
-======================================================================
-
 This product includes the OGNL library, developed by Drew Davidson and
 released under the BSD License.
 http://www.ognl.org/
-
-======================================================================
 
 This product includes the compiled classes
 framework/src/EDU/oswego/cs/dl/util/concurrent/ConcurrentReaderHashMap*.class,
@@ -30,90 +26,60 @@ from [2], which states the following:
 [2]: http://g.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html
 [3]: http://g.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/sun-u.c.license.pdf
 
-======================================================================
-
 This product includes software from the Seraph project developed by Atlassian
 and released under the BSD License.
 http://www.atlassian.com/
-
-======================================================================
 
 This product includes the prototype JavaScript library,
 developed by Sam Stephenson, distributed under the terms of the MIT
 license.
 http://prototypejs.org/
 
-======================================================================
-
 This product includes the script.aculo.us JavaScript library,
 developed by Thomas Fuchs, distributed under the terms of the MIT
 license.
 http://script.aculo.us/
 
-======================================================================
-
 This product includes the Virtual Keyboard JavaScript library,
 released under the BSD License.
 http://www.greywyvern.com/code/js/keyboard.html
-
-======================================================================
 
 This product includes the ColorPicker library, developed by Sebo Zoltan,
 distributed under the terms of the MIT license.
 http://www.dhtmlgoodies.com/index.html?whichScript=submitted-color-picker
 
-======================================================================
-
 This product includes the JQuery JavaScript library, developed by
 John Resig, distributed under the terms of the MIT license.
 http://jquery.com/
-
-======================================================================
 
 This product includes the Calendar Date Select JavaScript library,
 developed by Tim Harper, distributed under the terms of the MIT license.
 http://code.google.com/p/calendardateselect/
 
-======================================================================
-
 This product includes the Date Functions Select JavaScript library,
 developed by Matt Kruse, distributed under the terms of the MIT license.
 http://javascripttoolbox.com/lib/date/
-
-======================================================================
 
 This product includes the JQuery Tools JavaScript library, developed by
 Tero Piirainen, distributed under the terms of the MIT license.
 http://flowplayer.org/tools/index.html
 
-======================================================================
-
 This product includes the JQuery Star Rating plugin, developed by
 Fyneworks.com, distributed under the terms of the MIT license.
 http://www.fyneworks.com/jquery/star-rating/
-
-======================================================================
 
 This product includes the YUI JavaScript library, developed by Yahoo
 and released under the BSD License.
 http://developer.yahoo.com/yui/
 
-======================================================================
-
 This product includes the HSQLDB library developed by
 The HSQL Development Group and released under the HSQLDB License.
 http://www.hsqldb.org/
-
-======================================================================
 
 This product includes the Google Code Prettify JavaScript library
 developed by Mike Samuel and released under the Apache 2.0 license.
 http://code.google.com/p/google-code-prettify/
 
-======================================================================
-
 This project includes the FamFamFam icons by Mark James, distributed
 under the terms of the Creative Commons Attribution 2.5 License.
 http://www.famfamfam.com/lab/icons
-
-======================================================================
