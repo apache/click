@@ -100,8 +100,8 @@ public class PageScopeResolver implements ScopeMetadataResolver {
                 sm.setScopeName(ConfigurableBeanFactory.SCOPE_PROTOTYPE);
 
             } else {
-            	// TODO: see whether we can determine the default scope definition
-            	// from the beanDef and return this instead.
+                // TODO: see whether we can determine the default scope definition
+                // from the beanDef and return this instead.
                 sm.setScopeName(ConfigurableBeanFactory.SCOPE_SINGLETON);
             }
 
