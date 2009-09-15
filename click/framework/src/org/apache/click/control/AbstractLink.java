@@ -71,6 +71,9 @@ public abstract class AbstractLink extends AbstractControl {
     /** The link title attribute, which acts as a tooltip help message. */
     protected String title;
 
+    /** Flag to set if both icon and text are rendered. */
+    protected boolean renderBoth;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -460,7 +463,24 @@ public abstract class AbstractLink extends AbstractControl {
         title = value;
     }
 
-    // --------------------------------------------------------- Public Methods
+    /**
+     * Returns <code>true</code> if both icon and text are rendered, <code>false</code> otherwise.
+     *
+     * @return <code>true</code> if both icon and text are rendered, <code>false</code> otherwise
+     */
+    public boolean isRenderBoth() {
+        return renderBoth;
+    }
+
+    /**
+     * Sets the rendering type of the Link.
+     *
+     * @param renderBoth sets the rendering type of the link.
+     */
+    public void setRenderBoth(boolean renderBoth) {
+        this.renderBoth = renderBoth;
+    }
+// --------------------------------------------------------- Public Methods
 
     /**
      * This method does nothing by default since AbstractLink does not bind to
@@ -503,25 +523,7 @@ public abstract class AbstractLink extends AbstractControl {
                 buffer.append(getLabel());
 
             } else {
-                buffer.elementStart("img");
-                buffer.appendAttribute("border", 0);
-                buffer.appendAttribute("class", "link");
-
-                if (getTitle() != null) {
-                    buffer.appendAttributeEscaped("alt", getTitle());
-                } else {
-                    buffer.appendAttributeEscaped("alt", getLabel());
-                }
-
-                String src = getImageSrc();
-                if (StringUtils.isNotBlank(src)) {
-                    if (src.charAt(0) == '/') {
-                        src = getContext().getRequest().getContextPath() + src;
-                    }
-                    buffer.appendAttribute("src", src);
-                }
-
-                buffer.elementEnd();
+                renderImgTag(buffer);
             }
 
             buffer.elementEnd("span");
@@ -544,25 +546,12 @@ public abstract class AbstractLink extends AbstractControl {
                 buffer.append(getLabel());
 
             } else {
-                buffer.elementStart("img");
-                buffer.appendAttribute("border", 0);
-                buffer.appendAttribute("class", "link");
-
-                if (getTitle() != null) {
-                    buffer.appendAttributeEscaped("alt", getTitle());
-                } else {
-                    buffer.appendAttributeEscaped("alt", getLabel());
+                renderImgTag(buffer);
+                if (isRenderBoth()) {
+                    buffer.elementStart("span").closeTag().append("&nbsp;");
+                    buffer.append(getLabel());
+                    buffer.elementEnd("span");
                 }
-
-                String src = getImageSrc();
-                if (StringUtils.isNotBlank(src)) {
-                    if (src.charAt(0) == '/') {
-                        src = getContext().getRequest().getContextPath() + src;
-                    }
-                    buffer.appendAttribute("src", src);
-                }
-
-                buffer.elementEnd();
             }
 
             buffer.elementEnd(getTag());
@@ -570,6 +559,34 @@ public abstract class AbstractLink extends AbstractControl {
     }
 
     // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Render the Image tag to the buffer.
+     *
+     * @param buffer the buffer to render the image tag to
+     */
+    protected void renderImgTag(HtmlStringBuffer buffer) {
+        buffer.elementStart("img");
+        buffer.appendAttribute("border", 0);
+        buffer.appendAttribute("hspace", 2);
+        buffer.appendAttribute("class", "link");
+
+        if (getTitle() != null) {
+            buffer.appendAttributeEscaped("alt", getTitle());
+        } else {
+            buffer.appendAttributeEscaped("alt", getLabel());
+        }
+
+        String src = getImageSrc();
+        if (StringUtils.isNotBlank(src)) {
+            if (src.charAt(0) == '/') {
+                src = getContext().getRequest().getContextPath() + src;
+            }
+            buffer.appendAttribute("src", src);
+        }
+
+        buffer.elementEnd();
+    }    
 
     /**
      * Render the given link parameters to the buffer.

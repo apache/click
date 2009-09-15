@@ -16,14 +16,35 @@
    specific language governing permissions and limitations
    under the License.*#
 -->
-
-$ActionLink
-<p/>
-$ExternalLink
-<p/>
-$PageLink
-<p/>
-$PageButton
+<style type="text/css">
+    #linksDemo td {
+        border: solid 1px #ccc;
+        vertical-align:top;
+        padding: 1em;
+    }
+</style>
+<table id="linksDemo">
+    <tr>
+        <td>
+            <h4>Action Links:</h4>
+            $ActionLink<p/>
+            $DisabledActionLink<p/>
+            $IconActionLink
+        </td>
+        <td>
+            <h4>Page Links:</h4>
+            $PageLink<p/>
+            $DisabledPageLink<p/>
+            $IconPageLink
+        </td>
+        <td>
+            <h4>Other <i>(also links)</i>:</h4>
+            $PageButton<p/>
+            $DisabledPageButton<p/>
+            $ExternalLink
+        </td>
+    </tr>
+</table>
 
 #if ($clicked)
 <p class="infoMsg"> $clicked </p>
