@@ -197,19 +197,6 @@ public class TabbedPanel extends Panel {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * @see #add(org.apache.click.Control)
-     *
-     * @param control the control to add to the container
-     * @return the control that was added to the container
-     * @throws IllegalArgumentException if the control is null, if the name
-     *     of the control is not defined or the container already contains a
-     *     control with the same name
-     */
-    public Control addControl(Control control) {
-        return add(control);
-     }
-
-    /**
      * Add the control to the panel.
      * <p/>
      * If the control added is the first panel it will be made the active panel.
