@@ -36,16 +36,31 @@ import org.apache.click.util.Bindable;
 public class LinkDemo extends BorderPage {
 
     @Bindable public ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
-    @Bindable public ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
+    @Bindable public ActionLink disabledActionLink = new ActionLink("DisabledActionLink", this, "onLinkClick");
+    @Bindable public ActionLink iconActionLink = new ActionLink("IconActionLink", this, "onLinkClick");
+
     @Bindable public PageLink pageLink = new PageLink("PageLink", HomePage.class);
+    @Bindable public PageLink disabledPageLink = new PageLink("DisabledPageLink", HomePage.class);
+    @Bindable public PageLink iconPageLink = new PageLink("IconPageLink",HomePage.class);
+
+    @Bindable public ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
     @Bindable public PageButton pageButton = new PageButton("PageButton", HomePage.class);
+    @Bindable public PageButton disabledPageButton = new PageButton("DisabledPageButton", HomePage.class);
 
     @Bindable public String clicked;
 
     public LinkDemo() {
+        iconActionLink.setRenderBoth(true);
+        iconActionLink.setImageSrc("/assets/images/table-edit.png");
+        iconPageLink.setRenderBoth(true);
+        iconPageLink.setImageSrc("/assets/images/home.png");
+        
         externalLink.setParameter("q", "Click Framework");
         externalLink.setAttribute("target", "_blank");
         externalLink.setAttribute("class", "external");
+        disabledActionLink.setDisabled(true);
+        disabledPageLink.setDisabled(true);
+        disabledPageButton.setDisabled(true);
     }
 
     public boolean onLinkClick() {
