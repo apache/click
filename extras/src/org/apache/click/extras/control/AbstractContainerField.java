@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.click.Control;
-import org.apache.click.control.AbstractContainer;
 import org.apache.click.control.Container;
 import org.apache.click.control.Field;
 import org.apache.click.util.ClickUtils;
