@@ -64,14 +64,6 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
     }
 
     /**
-     * Called when user clicks on submit
-     */
-    public boolean onSelectClick() {
-        tree.bindSelectOrDeselectValues();
-        return true;
-    }
-
-    /**
      * Called when user submits the options form.
      */
     public boolean onApplyOptionsClick() {
