@@ -51,8 +51,10 @@ public class LinkDemo extends BorderPage {
 
     public LinkDemo() {
         iconActionLink.setRenderLabelAndImage(true);
+        iconActionLink.addStyleClass("image-link");
         iconActionLink.setImageSrc("/assets/images/table-edit.png");
         iconPageLink.setRenderLabelAndImage(true);
+        iconPageLink.addStyleClass("image-link");
         iconPageLink.setImageSrc("/assets/images/home.png");
         
         externalLink.setParameter("q", "Click Framework");

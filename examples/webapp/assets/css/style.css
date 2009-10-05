@@ -232,6 +232,16 @@ a.tb_label {
     margin-right: 2px;
 }
 
+.image-link {
+    text-decoration: none;
+}
+.image-link span {
+    text-decoration: underline;
+}
+.image-link img {
+    vertical-align: top;
+}
+
 /*
  * Spring Security (Acegi) example style.
  */
