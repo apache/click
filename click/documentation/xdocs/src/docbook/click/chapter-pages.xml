@@ -177,7 +177,7 @@
     <para>
     The next step is the processing of the Page's
     <ulink url="../../click-api/org/apache/click/Page.html#controls">controls</ulink>.
-    The ClickSerlvet gets the list of Controls from the page and then iterates
+    The ClickServlet gets the list of Controls from the page and then iterates
     through the list calling <methodname>onProcess()</methodname>. If any of the
     Control's <methodname>onProcess()</methodname> methods return false,
     processing of subsequent controls and the Page's <methodname>onGet()</methodname>
@@ -360,7 +360,7 @@ public class CustomerDetails extends Page {
       </para>
 
       <para>If you need to add support for additional types, you would write your
-      own type converter class and specify it as a ClickSerlvet init parameter.
+      own type converter class and specify it as a ClickServlet init parameter.
       </para>
 
       <para>For example if you wanted to automatically load a
