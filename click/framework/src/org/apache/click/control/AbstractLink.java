@@ -71,8 +71,8 @@ public abstract class AbstractLink extends AbstractControl {
     /** The link title attribute, which acts as a tooltip help message. */
     protected String title;
 
-    /** Flag to set if both icon and text are rendered. */
-    protected boolean renderLabelAndImage;
+    /** Flag to set if both icon and text are rendered, default value is false. */
+    protected boolean renderLabelAndImage = false;
 
     // ----------------------------------------------------------- Constructors
 
@@ -139,11 +139,11 @@ public abstract class AbstractLink extends AbstractControl {
 
     /**
      * Return the image src path attribute. If the image src is defined then a
-     * <tt>&lt;img/&gt;</tt> element will rendered inside the anchor link when
-     * using the AbstractLink {@link #toString()} method.
-     * <p/> 
-     * <b>Note:</b> The label will not be rendered in this case (default behavior),
-     * unless the <code>renderLabelAndImage</code> flag is set (using the AbstractLink {@link #setRenderLabelAndImage(boolean)} method) .
+     * <tt>&lt;img/&gt;</tt> element will be rendered inside the anchor link
+     * when using the AbstractLink {@link #toString()} method.
+     * <p/>
+     * <b>Note:</b> the label will not be rendered in this case (default behavior),
+     * unless the {@link #setRenderLabelAndImage(boolean)} flag is set to true.
      * <p/>
      * If the src value is prefixed with '/' then the request context path will
      * be prefixed to the src value when rendered by the control.
@@ -159,12 +159,12 @@ public abstract class AbstractLink extends AbstractControl {
      * '/' then the request context path will be prefixed to the src value when
      * rendered by the control.
      * <p/>
-     * If the image src is defined then a <tt>&lt;img/&gt;</tt> element will
-     * rendered inside the anchor link when using the AbstractLink
+     * If the image src is defined then an <tt>&lt;img/&gt;</tt> element will
+     * be rendered inside the anchor link when using the AbstractLink
      * {@link #toString()} method.
-     *<p/>
-     * <b>Note:</b> The label will not be rendered in this case (default behavior),
-     * unless the <code>renderLabelAndImage</code> flag is set (using the AbstractLink {@link #setRenderLabelAndImage(boolean)} method).     
+     * <p/>
+     * <b>Note:</b> the label will not be rendered in this case (default behavior),
+     * unless the {@link #setRenderLabelAndImage(boolean)} flag is set to true.
      *
      * @param src the image src path attribute
      */
@@ -469,23 +469,29 @@ public abstract class AbstractLink extends AbstractControl {
     }
 
     /**
-     * Returns <code>true</code> if both icon and text are rendered, <code>false</code> otherwise.
+     * Returns <code>true</code> if both {@link #setImageSrc(java.lang.String) icon}
+     * and {@link #setLabel(java.lang.String) label} are rendered,
+     * <code>false</code> otherwise.
      *
-     * @return <code>true</code> if both icon and text are rendered, <code>false</code> otherwise
+     * @return <code>true</code> if both icon and text are rendered,
+     * <code>false</code> otherwise
      */
     public boolean isRenderLabelAndImage() {
         return renderLabelAndImage;
     }
 
     /**
-     * Sets the rendering type of the Link.
+     * Sets whether both {@link #setLabel(java.lang.String) label} and
+     * {@link #setImageSrc(java.lang.String) icon} are rendered for this
+     * link.
      *
      * @param renderLabelAndImage sets the rendering type of the link.
      */
     public void setRenderLabelAndImage(boolean renderLabelAndImage) {
         this.renderLabelAndImage = renderLabelAndImage;
     }
-// --------------------------------------------------------- Public Methods
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * This method does nothing by default since AbstractLink does not bind to
