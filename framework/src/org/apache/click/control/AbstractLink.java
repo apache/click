@@ -559,7 +559,7 @@ public abstract class AbstractLink extends AbstractControl {
             } else {
                 renderImgTag(buffer);
                 if (isRenderLabelAndImage()) {
-                    buffer.elementStart("span").closeTag().append("&nbsp;");
+                    buffer.elementStart("span").closeTag();
                     buffer.append(getLabel());
                     buffer.elementEnd("span");
                 }
