@@ -1045,7 +1045,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
       <title>Deploying resources in a restricted environment</title>
 
       <para>It is generally easier to work with unpacked WARs and most servlet
-      containers do just that. However some contains such as WebLogic (at least
+      containers do just that. However some containers such as WebLogic (at least
       version 10) does not. To enable WebLogic to unpack the WAR go to the
       <emphasis>Admin Console &gt; server node &gt; Web Applications</emphasis>
       tab and check the <emphasis>Archived Real Path Enabled</emphasis> parameter.
