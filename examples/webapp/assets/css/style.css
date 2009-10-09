@@ -242,6 +242,7 @@ a.tb_label {
 
 .image-link img.link {
     vertical-align: top;
+    padding-right: 2px;
 }
 
 .export-attached {
