@@ -235,11 +235,47 @@ a.tb_label {
 .image-link {
     text-decoration: none;
 }
+
 .image-link span {
     text-decoration: underline;
 }
-.image-link img {
+
+.image-link img.link {
     vertical-align: top;
+}
+
+.export-attached {
+    display: inline;
+}
+
+.export-attached .export-actions {
+    border: 1px dotted #999999;
+    padding: 2px 4px;
+    display: block;
+    width: 390px;
+    background-color: #EEEEEE;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+/* Export */
+
+td.export-inline {
+	background-color: #eee;
+	padding-right: 1em;
+}
+
+table.isi td.export-inline, table.orange1 td.export-inline, table.orange2 td.export-inline {
+	background-color: #fff;
+}
+
+td.export-inline a {
+	color: #000;
+	text-decoration: none;
+}
+
+td.export-inline a:hover {
+	text-decoration: underline;
 }
 
 /*
