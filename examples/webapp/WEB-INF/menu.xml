@@ -144,6 +144,7 @@
     <menu label="PickList Demo (*-to-*)" path="cayenne/enrollment-demo.htm"/>
     <menu separator="true"/>
     <menu label="Apache POI Excel Export" path="general/excel-export.htm"/>
+    <menu label="Export Table to Excel" path="general/excel-table-export.htm"/>
     <menu separator="true"/>
     <menu label="Quartz Scheduler" path="quartz/quartz-job-scheduler.htm"/>
   </menu>
