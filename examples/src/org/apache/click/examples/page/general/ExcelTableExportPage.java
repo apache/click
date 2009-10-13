@@ -27,7 +27,8 @@ import org.apache.click.control.AbstractLink;
 import org.apache.click.control.Column;
 import org.apache.click.control.PageLink;
 import org.apache.click.control.Table;
-import org.apache.click.examples.control.ExportTable;
+import org.apache.click.examples.control.exporter.ExcelTableExporter;
+import org.apache.click.examples.control.exporter.ExportTable;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.EditCustomer;
@@ -43,7 +44,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExcelTableExportPage extends BorderPage {
 
-    private ExportTable table = new ExportTable("table");
+    private ExportTable table1 = new ExportTable("table1");
+    private ExportTable table2 = new ExportTable("table2");
+    private ExportTable table3 = new ExportTable("table3");
+
     private PageLink editLink = new PageLink("Edit", EditCustomer.class);
 
     @Resource(name="customerService")
@@ -52,41 +56,22 @@ public class ExcelTableExportPage extends BorderPage {
     // ------------------------------------------------------------ Constructor
 
     public ExcelTableExportPage() {
-        table.setClass(Table.CLASS_ITS);
+        addColumns(table1);
+        addColumns(table2);
+        addColumns(table3);
 
-        table.addColumn(new Column("id"));
-        table.addColumn(new Column("name"));
-        table.addColumn(new Column("age"));
-        table.addColumn(new Column("email"));
+        setupExporter(table1);
+        table1.setExportAttachment(ExportTable.EXPORTER_ATTACHED);
 
-        Column column = new Column("holdings");
-        column.setFormat("{0,number,currency}");
-        column.setTextAlign("right");
-        table.addColumn(column);
+        setupExporter(table2);
+        table2.setExportAttachment(ExportTable.EXPORTER_DETACHED);
 
-        column = new Column("dateJoined");
-        column.setFormat("{0,date,medium}");
-        table.addColumn(column);
+        setupExporter(table3);
+        table3.setExportAttachment(ExportTable.EXPORTER_INLINE);
 
-        column = new Column("action");
-        column.setTextAlign("center");
-        AbstractLink[] links = new AbstractLink[] { editLink };
-        editLink.setParameter("referrer", "/general/excel-table-export.htm");
-        column.setDecorator(new LinkDecorator(table, links, "id"));
-        column.setSortable(false);
-        table.addColumn(column);
-
-        table.setPageSize(5);
-        table.setSortable(true);
-        table.setExportBannerPosition(Table.POSITION_BOTTOM);
-
-        // Exclude the action column from being exported
-        table.getExcludedColumns().add("action");
-        table.setExportAttachment(ExportTable.EXPORTER_INLINE);
-        table.setPaginator(new TableInlinePaginator(table));
-        table.setPaginatorAttachment(ExportTable.PAGINATOR_INLINE);
-
-        addControl(table);
+        addControl(table1);
+        addControl(table2);
+        addControl(table3);
         addControl(editLink);
     }
 
@@ -97,7 +82,62 @@ public class ExcelTableExportPage extends BorderPage {
      */
     @Override
     public void onRender() {
-        List<Customer> list = customerService.getCustomersSortedByName(10);
-        table.setRowList(list);
+        List<Customer> customers = customerService.getCustomersSortedByName(10);
+        table1.setRowList(customers);
+        table2.setRowList(customers);
+        table3.setRowList(customers);
+    }
+
+    // -------------------------------------------------------- Private Methods
+
+    private void setupExporter(ExportTable table) {
+        // Setup table exporting
+        ExcelTableExporter excel = new ExcelTableExporter("Excel", "/assets/images/page_excel.png");
+        table.getExporter().add(excel);
+
+        // Exclude the action column from being exported
+        table.getExcludedColumns().add("action");
+    }
+
+    private void addColumns(ExportTable table) {
+        table.setSortable(true);
+        table.setClass(Table.CLASS_ITS);
+
+        // Setup table paginator
+        table.setPageSize(4);
+        table.setPaginator(new TableInlinePaginator(table));
+        table.setPaginatorAttachment(ExportTable.PAGINATOR_INLINE);
+
+        Column column = new Column("name");
+        column.setWidth("140px;");
+        table.addColumn(column);
+
+        column = new Column("email");
+        column.setAutolink(true);
+        column.setWidth("230px;");
+        table.addColumn(column);
+
+        column = new Column("age");
+        column.setTextAlign("center");
+        column.setWidth("40px;");
+        table.addColumn(column);
+
+        column = new Column("holdings");
+        column.setFormat("{0,number,currency}");
+        column.setTextAlign("right");
+        column.setWidth("100px;");
+        table.addColumn(column);
+
+        column = new Column("dateJoined");
+        column.setFormat("{0,date,medium}");
+        column.setWidth("100px;");
+        table.addColumn(column);
+
+        column = new Column("action");
+        AbstractLink[] links = new AbstractLink[] { editLink };
+        editLink.setParameter("referrer", "/general/excel-table-export.htm");
+        column.setDecorator(new LinkDecorator(table, links, "id"));
+        column.setSortable(false);
+        table.addColumn(column);
     }
 }
