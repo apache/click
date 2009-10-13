@@ -18,6 +18,10 @@
  */
 package org.apache.click.examples.util;
 
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import org.apache.click.Context;
 
 /**
@@ -26,6 +30,8 @@ import org.apache.click.Context;
  * @author Malcolm Edgar
  */
 public class ExampleUtils {
+
+    private static final Map<Currency, String> CURRENCY_SYMBOLS = new HashMap<Currency, String>();
 
     @SuppressWarnings("unchecked")
     public static Object getSessionObject(Class aClass) {
@@ -54,6 +60,38 @@ public class ExampleUtils {
         if (getContext().hasSession() && aClass != null) {
             getContext().getSession().removeAttribute(aClass.getName());
         }
+    }
+
+    public static String getCurrencySymbol(Currency currency) {
+        if(currency == null) {
+            return "";
+        }
+
+        String symbol = CURRENCY_SYMBOLS.get(currency);
+        if(symbol != null) {
+            return symbol;
+        }
+
+        String currencyCode = currency.getCurrencyCode();
+
+        Locale locale = Locale.getDefault();
+        symbol = currency.getSymbol(locale);
+        if(!symbol.equals(currencyCode)) {
+            CURRENCY_SYMBOLS.put(currency, symbol);
+            return symbol;
+        }
+
+        Locale[] allLocales = Locale.getAvailableLocales();
+        for (int i = 0; i < allLocales.length; i++) {
+            symbol = currency.getSymbol(allLocales[i]);
+            if(!symbol.equals(currencyCode)) {
+                CURRENCY_SYMBOLS.put(currency, symbol);
+                return symbol;
+            }
+        }
+
+        CURRENCY_SYMBOLS.put(currency, currencyCode);
+        return currencyCode;
     }
 
     private static Context getContext() {
