@@ -245,21 +245,32 @@ a.tb_label {
     padding-right: 2px;
 }
 
-.export-attached {
-    display: inline;
-}
+/* Exporter */
 
-.export-attached .export-actions {
+.export-attached, .export-detached {
     border: 1px dotted #999999;
     padding: 2px 4px;
+    margin-bottom: 10px;
+    margin-top: 10px;
     display: block;
     width: 390px;
     background-color: #EEEEEE;
-    margin-bottom: 10px;
-    margin-top: 10px;
 }
 
-/* Export */
+.export-attached a, .export-detached a, .export-inline a {
+    text-decoration: none;
+}
+
+.export-attached a span, .export-detached a span, .export-inline a span {
+    text-decoration: underline;
+}
+
+.export-attached img.link, .export-detached img.link, .export-inline img.link {
+    vertical-align: top;
+    padding-right: 2px;
+}
+
+/* Inline Exporter */
 
 td.export-inline {
 	background-color: #eee;
@@ -270,13 +281,8 @@ table.isi td.export-inline, table.orange1 td.export-inline, table.orange2 td.exp
 	background-color: #fff;
 }
 
-td.export-inline a {
-	color: #000;
-	text-decoration: none;
-}
-
-td.export-inline a:hover {
-	text-decoration: underline;
+td.export-inline span {
+    width: 100%;
 }
 
 /*
