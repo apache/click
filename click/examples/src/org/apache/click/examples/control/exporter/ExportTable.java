@@ -49,9 +49,11 @@ public class ExportTable extends Table {
 
     protected List excludedColumns;
 
-    protected List exportColumnList;
+    protected List excludedExportColumns;
 
     protected TableExportBanner exporter;
+
+    private List exportColumnList;
 
     public ExportTable() {
     }
@@ -127,28 +129,33 @@ public class ExportTable extends Table {
         this.exportBannerPosition = exportBannerPosition;
     }
 
-    /**
-     * @return the excludedColumns
-     */
-    public List getExcludedColumns() {
+    public List<String> getExcludedColumns() {
         if (excludedColumns == null) {
             excludedColumns = new ArrayList();
         }
         return excludedColumns;
     }
 
-    /**
-     * @param excludedColumns the excludedColumns to set
-     */
-    public void setExcludedColumns(List excludedColumns) {
+    public void setExcludedColumns(List<String> excludedColumns) {
         this.excludedColumns = excludedColumns;
     }
 
-    public List getExportColumnList() {
+    public List<String> getExcludedExportColumns() {
+        if (excludedExportColumns == null) {
+            excludedExportColumns = new ArrayList();
+        }
+        return excludedExportColumns;
+    }
+
+    public void setExcludedExportColumns(List<String> excludedExportColumns) {
+        this.excludedExportColumns = excludedExportColumns;
+    }
+
+   public List getExportColumnList() {
         if (exportColumnList == null) {
             exportColumnList = new ArrayList();
             List<Column> columns = getColumnList();
-            List<String> excludes = getExcludedColumns();
+            List<String> excludes = getExcludedExportColumns();
 
             for (Column column : columns) {
                 String name = column.getName();
@@ -158,6 +165,14 @@ public class ExportTable extends Table {
             }
         }
         return exportColumnList;
+    }
+
+    public int getExportAttachment() {
+        return exportAttachment;
+    }
+
+    public void setExportAttachment(int exportAttachment) {
+        this.exportAttachment = exportAttachment;
     }
 
     @Override
@@ -207,7 +222,7 @@ public class ExportTable extends Table {
                 buffer.append("<tbody>\n");
                 buffer.append("<tr class=\"export-inline\">\n");
                 buffer.append("<td class=\"export-inline\" colspan=\"");
-                buffer.append(getColumnList().size());
+                buffer.append(getColumnList().size() - getExcludedExportColumns().size());
                 buffer.append("\">");
 
                 getExporter().render(buffer);
@@ -225,7 +240,7 @@ public class ExportTable extends Table {
                 buffer.append("<tbody>\n");
                 buffer.append("<tr class=\"export-inline\">\n");
                 buffer.append("<td class=\"export-inline\" colspan=\"");
-                buffer.append(getColumnList().size());
+                buffer.append(getColumnList().size() - getExcludedExportColumns().size());
                 buffer.append("\">");
 
                 getExporter().render(buffer);
@@ -236,11 +251,50 @@ public class ExportTable extends Table {
         }
     }
 
-    public int getExportAttachment() {
-        return exportAttachment;
+    @Override
+    protected void renderHeaderRow(HtmlStringBuffer buffer) {
+        buffer.append("<thead>\n<tr>\n");
+
+        final List tableColumns = getColumnList();
+        final List excludedColumns = getExcludedColumns();
+
+        for (int j = 0; j < tableColumns.size(); j++) {
+            Column column = (Column) tableColumns.get(j);
+            if (!excludedColumns.contains(column.getName())) {
+                column.renderTableHeader(buffer, getContext());
+                if (j < tableColumns.size() - 1) {
+                    buffer.append("\n");
+                }
+            }
+        }
+
+        buffer.append("</tr></thead>\n");
     }
 
-    public void setExportAttachment(int exportAttachment) {
-        this.exportAttachment = exportAttachment;
+    @Override
+    protected void renderBodyRowColumns(HtmlStringBuffer buffer, int rowIndex) {
+        Object row = getRowList().get(rowIndex);
+
+        final List tableColumns = getColumnList();
+        final List excludedColumns = getExcludedColumns();
+
+        for (int j = 0; j < tableColumns.size(); j++) {
+            Column column = (Column) tableColumns.get(j);
+            if (!excludedColumns.contains(column.getName())) {
+                column.renderTableData(row, buffer, getContext(), rowIndex);
+                if (j < tableColumns.size() - 1) {
+                    buffer.append("\n");
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void renderBodyNoRows(HtmlStringBuffer buffer) {
+        buffer.append("<tr class=\"odd\"><td colspan=\"");
+        buffer.append(getColumns().size() - getExcludedColumns().size());
+        buffer.append("\" class=\"error\">");
+        buffer.append(getMessage("table-no-rows-found"));
+        buffer.append("</td></tr>\n");
     }
 }

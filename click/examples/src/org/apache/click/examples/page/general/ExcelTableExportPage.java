@@ -44,6 +44,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExcelTableExportPage extends BorderPage {
 
+    private static final String ACTION_COLUMN = "action";
+
     private ExportTable table1 = new ExportTable("table1");
     private ExportTable table2 = new ExportTable("table2");
     private ExportTable table3 = new ExportTable("table3");
@@ -95,8 +97,9 @@ public class ExcelTableExportPage extends BorderPage {
         ExcelTableExporter excel = new ExcelTableExporter("Excel", "/assets/images/page_excel.png");
         table.getExporter().add(excel);
 
-        // Exclude the action column from being exported
-        table.getExcludedColumns().add("action");
+        // Excluding the action column ensures the actions are not exported to
+        // Excel
+        table.getExcludedExportColumns().add(ACTION_COLUMN);
     }
 
     private void addColumns(ExportTable table) {
@@ -108,32 +111,36 @@ public class ExcelTableExportPage extends BorderPage {
         table.setPaginator(new TableInlinePaginator(table));
         table.setPaginatorAttachment(ExportTable.PAGINATOR_INLINE);
 
-        Column column = new Column("name");
+        Column column = new Column(Customer.NAME_PROPERTY);
         column.setWidth("140px;");
         table.addColumn(column);
 
-        column = new Column("email");
+        column = new Column(Customer.EMAIL_PROPERTY);
         column.setAutolink(true);
         column.setWidth("230px;");
         table.addColumn(column);
 
-        column = new Column("age");
+        column = new Column(Customer.AGE_PROPERTY);
         column.setTextAlign("center");
         column.setWidth("40px;");
         table.addColumn(column);
 
-        column = new Column("holdings");
+        column = new Column(Customer.HOLDINGS_PROPERTY);
         column.setFormat("{0,number,currency}");
         column.setTextAlign("right");
         column.setWidth("100px;");
         table.addColumn(column);
 
-        column = new Column("dateJoined");
+        column = new Column(Customer.DATE_JOINED_PROPERTY);
         column.setFormat("{0,date,medium}");
         column.setWidth("100px;");
         table.addColumn(column);
 
-        column = new Column("action");
+        // Excluding the dateJoined column ensures the date is not shown in the
+        // HTML table, but will be exported to the Excel spreadsheet
+        table.getExcludedColumns().add(Customer.DATE_JOINED_PROPERTY);
+
+        column = new Column(ACTION_COLUMN);
         AbstractLink[] links = new AbstractLink[] { editLink };
         editLink.setParameter("referrer", "/general/excel-table-export.htm");
         column.setDecorator(new LinkDecorator(table, links, "id"));
