@@ -32,7 +32,7 @@ import org.apache.click.util.Format;
  * <p/>
  * A single application ConfigService instance is created by the ClickServlet at
  * startup. Once the ConfigService has been initialized it is stored in the
- * ServletContext using the key "<tt>org.apache.click.service.ConfigService</tt>".
+ * ServletContext using the key {@value #CONTEXT_NAME}.
  *
  * <a href="#" name="config"></a>
  * <h3>Configuration</h3>
@@ -76,21 +76,22 @@ import org.apache.click.util.Format;
  * Also define the new service in your <tt>web.xml</tt> as follows:
  *
  * <pre class="prettyprint">
- * &lt;web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+ * {@code
+ * <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
  *   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  *   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
- *   version="2.4"&gt;
+ *   version="2.4">
  *
  * ...
  *
- *     &lt;context-param&gt;
- *         &lt;param-name&gt;config-service-class&lt;/param-name&gt;
- *         &lt;param-value&gt;com.mycorp.service.CustomConfigSerivce&lt;/param-value&gt;
- *     &lt;/context-param&gt;
+ *     <context-param>
+ *         <param-name>config-service-class</param-name>
+ *         <param-value>com.mycorp.service.CustomConfigSerivce</param-value>
+ *     </context-param>
  *
  * ...
  *
- * &lt;/web-app&gt; </pre>
+ * </web-app>} </pre>
  */
 public interface ConfigService {
 
@@ -121,7 +122,7 @@ public interface ConfigService {
     /**
      * The servlet context attribute name. The ClickServlet stores the
      * application ConfigService instance in the ServletContext using this
-     * context attribute name.
+     * context attribute name. The value of this constant is {@value}.
      */
     public static final String CONTEXT_NAME = "org.apache.click.service.ConfigService";
 
