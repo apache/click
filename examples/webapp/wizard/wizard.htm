@@ -17,17 +17,20 @@
    under the License.*#
 -->
 
+<hr/>
+
 <!-- Print any messages -->
 #set ($message = $session.message)
 #if ($message)
-    <h3>$message</h3>
+    <h4>$message</h4>
 #end
+
+$heading
 
 <!-- Some markup -->
 <div id="wizard">
     <div id="wizard-heading">
         <h2>$step.label</h2>
-        $step.description
     </div>
     $step
 </div>
