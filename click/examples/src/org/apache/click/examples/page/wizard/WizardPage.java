@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.click.examples.page.BorderPage;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * This Page manages steps in a wizard process.
@@ -36,15 +37,15 @@ public class WizardPage extends BorderPage {
     private Step currentStep;
 
     /** List of all steps. */
-    private List steps = new ArrayList();
+    private List<Step> steps = new ArrayList<Step>();
 
     /**
      * Default constructor.
      */
     public WizardPage() {
-        steps.add(new Step1("step", "Client", "Step 1 of 3", this));
-        steps.add(new Step2("step", "Address", "Step 2 of 3", this));
-        steps.add(new Step3("step", "Confirmation", "Step 3 of 3", this));
+        steps.add(new Step1("step", "Client", "Step 1", this));
+        steps.add(new Step2("step", "Address", "Step 2", this));
+        steps.add(new Step3("step", "Confirmation", "Step 3", this));
 
         // Set first step as current
         setCurrentStep((Step) steps.get(0));
@@ -75,10 +76,12 @@ public class WizardPage extends BorderPage {
         if (this.currentStep != null) {
             // Remove the current step from the page list of controls
             removeControl(this.currentStep);
+            getModel().remove("heading");
         }
         this.currentStep = step;
         // Add the new step to the page list of controls
         addControl(step);
+        addModel("heading", getHeading());
     }
 
     /**
@@ -147,4 +150,28 @@ public class WizardPage extends BorderPage {
         return "<link type=\"text/css\" rel=\"stylesheet\" href=\"" + contextPath + "/wizard/wizard.css\"/>";
     }
 
+    /**
+     * Return an HTML representation of the wizard steps as an Html List <ul>.
+     * The current step is assigned a special CSS class so it can be highlighted
+     * through CSS.
+     */
+    private String getHeading() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        buffer.append("<ul id=\"steps\">");
+        for (Step step : steps) {
+            buffer.elementStart("li");
+            if (step == currentStep) {
+                buffer.appendAttribute("class", "current");
+            }
+            buffer.closeTag();
+            buffer.append(step.getDescription());
+            buffer.elementStart("span");
+            buffer.closeTag();
+            buffer.append(step.getLabel());
+            buffer.elementEnd("span");
+            buffer.elementEnd("li");
+        }
+        buffer.append("</ul>");
+        return buffer.toString();
+    }
 }
