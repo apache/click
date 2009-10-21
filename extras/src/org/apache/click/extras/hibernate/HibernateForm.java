@@ -67,11 +67,11 @@ import org.hibernate.type.Type;
  * </table>
  *
  * <a href="http://www.hibernate.org/">Hibernate</a> is an Object Relational
- * Mapping (ORM) framework. The HibernatteForm supports creating (inserting) and
+ * Mapping (ORM) framework. The HibernateForm supports creating (inserting) and
  * saving (updating) POJO instances. This form will automatically apply the
  * given objects property required validation constraints to the form fields.
  * <p/>
- * The HibernatteForm uses the thread local <tt>Session</tt> obtained via
+ * The HibernateForm uses the thread local <tt>Session</tt> obtained via
  * <tt>SessionContext.getSession()</tt> for all object for persistence
  * operations. To use an alternative Session source override set the forms
  * getSession() method.
@@ -87,12 +87,12 @@ import org.hibernate.type.Type;
  *   <span class="kw">private</span> HibernateForm form = <span class="kw">new</span> HibernateForm(<span class="st">"form"</span>, User.<span class="kw">class</span>);
  *
  *    <span class="kw">public</span> UserEdit() {
- *        form.add(<span class="kw">new</span> TextField(<span class="st">"firstName"</span>);
- *        form.add(<span class="kw">new</span> TextField(<span class="st">"middleNames"</span>);
- *        form.add(<span class="kw">new</span> TextField(<span class="st">"FamilyName"</span>);
+ *        form.add(<span class="kw">new</span> TextField(<span class="st">"firstName"</span>));
+ *        form.add(<span class="kw">new</span> TextField(<span class="st">"middleNames"</span>));
+ *        form.add(<span class="kw">new</span> TextField(<span class="st">"FamilyName"</span>));
  *
- *        form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
- *        form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>);
+ *        form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>));
+ *        form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>));
  *
  *        form.setButtonAlign(<span class="st">"right"</span>);
  *        form.setLabelRequiredPrefix(<span class="st">"&lt;b&gt;"</span>);
