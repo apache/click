@@ -1115,10 +1115,10 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
           </para>
         </listitem>
         <listitem>
-          <para>Use the DeployTask to deploy Click's static resources at build
-          time to your web application. With this option Click's static resources
-          can be copied to the root directory of your webapp, where you can
-          customize the resources as you see fit. The DeployTask is an Ant Task
+          <para>Use the Ant based DeployTask to deploy Click's static resources at
+          build time to your web application. With this option Click's static
+          resources can be copied to the root directory of your webapp, where you
+          can customize the resources as you see fit. The DeployTask is an Ant Task
           you can incorporate into your build script.
           </para>
           <para>Currently the DeployTask is part of the <filename>click-dev-tools-xxx.jar</filename>
