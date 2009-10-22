@@ -20,6 +20,7 @@ package org.apache.click.extras.hibernate;
 
 import java.io.Serializable;
 
+import org.apache.click.control.Checkbox;
 import org.apache.click.control.Field;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
@@ -399,7 +400,12 @@ public class HibernateForm extends Form {
             for (int i = 0; i < propertyNames.length; i++) {
                 Field field = getField(propertyNames[i]);
                 if (field != null) {
-                    field.setRequired(propertyNullability[i]);
+                    boolean isMandatory = !propertyNullability[i];
+                    if(!field.isRequired() && isMandatory) {
+                        if (!(field instanceof Checkbox)) {
+                            field.setRequired(true);
+                        }
+                    }
                 }
             }
 
