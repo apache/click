@@ -324,7 +324,13 @@ public class SubmitLink extends ActionLink {
         }
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(60);
-        buffer.append("return Click.submitLinkAction(this, '");
+        buffer.append("return");
+        if (getForm().getValidate() && getForm().getJavaScriptValidation()) {
+            buffer.append(" on_");
+            buffer.append(getForm().getId());
+            buffer.append("_submit() &&");
+        }
+        buffer.append(" Click.submitLinkAction(this, '");
         buffer.append(formName);
         buffer.append("');");
         return buffer.toString();
