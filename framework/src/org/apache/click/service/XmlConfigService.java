@@ -1268,6 +1268,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         // Find all jars and directories on the classpath that contains the
         // directory "META-INF/resources/", and deploy those resources
         String resourceDirectory = "META-INF/resources/";
+
+        // TODO: finding resources in jars and META-INF/classes might not always
+        // work on all servers. Might need to strip the final '/' from resourceDirectory
         Enumeration<URL> en = classLoader.getResources(resourceDirectory);
         while (en.hasMoreElements()) {
             URL url = en.nextElement();
