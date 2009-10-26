@@ -80,7 +80,9 @@ public class BorderPage extends Page {
 
     public void onDestroy() {
         // Remove menu for when BorderPage is Serialized to disk
-        removeControl(rootMenu);
+        if (rootMenu != null) {
+            removeControl(rootMenu);
+        }
     }
 
     // --------------------------------------------------------- Public Methods
