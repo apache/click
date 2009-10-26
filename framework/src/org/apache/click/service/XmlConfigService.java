@@ -1354,8 +1354,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
 
         if (!dir.exists()) {
-            logService.trace("There are no files in the folder '"
-                + dir.getAbsolutePath() + "'");
+            logService.trace("The folder '" + dir.getAbsolutePath()
+                + "' does not exist.");
             return;
         }
 
