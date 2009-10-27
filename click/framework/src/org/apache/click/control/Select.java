@@ -168,7 +168,7 @@ import org.apache.click.util.PropertyUtils;
  * When a Select control's required property is set to true, then the user has
  * to select a value other than the first value in the option list. The  first
  * value represents a non-selection by the user. In the example below an
- * Empty Option as set as the first value in the option list.
+ * Empty Option is set as the first value in the option list.
  *
  * <pre class="prettyprint">
  * public MyPage extends Page {
