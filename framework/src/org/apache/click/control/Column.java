@@ -1262,12 +1262,11 @@ public class Column implements Serializable {
      * Return the column name property value from the given row object.
      * <p/>
      * If the row object is a <tt>Map</tt> this method will attempt to return
-     * the map value for the column name.
-     * <p/>
-     * The row map lookup will be performed using the property name,
-     * if a value is not found the property name in uppercase will be used,
-     * if a value is still not found the property name in lowercase will be used.
-     * If a map value is still not found then this method will return null.
+     * the map value for the column name. The row map lookup will be performed
+     * using the property name, if a value is not found the property name in
+     * uppercase will be used, if a value is still not found the property name
+     * in lowercase will be used. If a map value is still not found then this
+     * method will return null.
      * <p/>
      * Object property values can also be specified using a path expression.
      *
@@ -1283,12 +1282,11 @@ public class Column implements Serializable {
      * Return the column property value from the given row object and property name.
      * <p/>
      * If the row object is a <tt>Map</tt> this method will attempt to return
-     * the map value for the column.
-     * <p/>
-     * The row map lookup will be performed using the property name,
-     * if a value is not found the property name in uppercase will be used,
-     * if a value is still not found the property name in lowercase will be used.
-     * If a map value is still not found then this method will return null.
+     * the map value for the column. The row map lookup will be performed using
+     * the property name, if a value is not found the property name in uppercase
+     * will be used, if a value is still not found the property name in lowercase
+     * will be used. If a map value is still not found then this method will
+     * return null.
      * <p/>
      * Object property values can also be specified using a path expression.
      *
