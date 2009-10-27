@@ -160,7 +160,7 @@
       <webDownloadMacro name="${jar.logging}" path="commons-logging/commons-logging/${commons-logging.version}"/>
       <webDownloadMacro name="${jar.log4j}" path="log4j/log4j/${log4j.version}"/>
       <webDownloadMacro name="${jar.oscache}" path="opensymphony/oscache/${oscache.version}"/>
-      <webDownloadMacro name="${jar.poi}" path="poi/poi/${poi.version}"/>
+      <webDownloadMacro name="${jar.poi}" path="org/apache/poi/poi/${poi.version}"/>
       <webDownloadMacro name="${jar.quartz}" path="opensymphony/quartz-all/${quartz.version}"/>
       <webDownloadMacro name="${jar.spring}" path="org/springframework/spring/${spring.version}"/>
       <webDownloadMacro name="${jar.standard}" path="taglibs/standard/${standard.version}"/>
