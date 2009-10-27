@@ -1269,7 +1269,7 @@ public class Column implements Serializable {
      * if a value is still not found the property name in lowercase will be used.
      * If a map value is still not found then this method will return null.
      * <p/>
-     * Object property values can also be specified using an path expression.
+     * Object property values can also be specified using a path expression.
      *
      * @param row the row object to obtain the property from
      * @return the named row object property value
@@ -1290,7 +1290,7 @@ public class Column implements Serializable {
      * if a value is still not found the property name in lowercase will be used.
      * If a map value is still not found then this method will return null.
      * <p/>
-     * Object property values can also be specified using an path expression.
+     * Object property values can also be specified using a path expression.
      *
      * @param name the name of the property
      * @param row the row object to obtain the property from

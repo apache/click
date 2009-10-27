@@ -59,11 +59,12 @@ public class ColumnTest extends TestCase {
     }
 
     /**
-     * Check that Column renders when binding object has no value.
+     * Check that Column renders when binding object is set.
      */
     public void testOuterJoin() {
-    	  // Test with null child object
         TestObject row = new TestObject("name", "label");
+
+        // Test with child object
         row.setChild(new Child("mina"));
 
     	  Column column = new Column("child.name");
