@@ -59,7 +59,7 @@ public class ColumnTest extends TestCase {
     }
 
     /**
-     * Check that Column renders when binding object has not value.
+     * Check that Column renders when binding object has no value.
      */
     public void testOuterJoin() {
     	  // Test with null child object
