@@ -25,6 +25,7 @@ import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.control.Renderable;
 import org.apache.click.util.HtmlStringBuffer;
+import org.apache.commons.collections.CollectionUtils;
 
 /**
  *
@@ -123,6 +124,10 @@ public class TableExportBanner implements Renderable {
      * @param buffer the StringBuffer to render the paging controls to
      */
     protected void renderExportBanner(HtmlStringBuffer buffer) {
+        List exportFormats = getExportFormats();
+        if (exportFormats == null || exportFormats.isEmpty()) {
+            return;
+        }
 
         HtmlStringBuffer banner = new HtmlStringBuffer();
         Iterator<AbstractTableExporter> it = getExportFormats().iterator();
