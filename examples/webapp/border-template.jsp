@@ -25,10 +25,11 @@
 <html>
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
 <title>${title} : Click Examples</title>
 <link type="text/css" rel="stylesheet" href="${context}/assets/css/style.css" title="Style"/>
 ${headElements}
-<link rel="Click icon" href="$context/favicon.ico" type="image/ico"/>
+<link rel="shortcut icon" href="$context/favicon.ico" type="image/ico"/>
 </head>
 <body>
 
