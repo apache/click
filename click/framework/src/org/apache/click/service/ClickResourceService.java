@@ -276,8 +276,8 @@ public class ClickResourceService implements ResourceService {
         }
 
         if (!dir.exists()) {
-            logService.trace("The folder '" + dir.getAbsolutePath()
-                + "' does not exist.");
+            logService.trace("No resources deployed from the folder '" + dir.getAbsolutePath()
+                + "' as it does not exist.");
             return;
         }
 
