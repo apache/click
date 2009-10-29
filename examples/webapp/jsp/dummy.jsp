@@ -23,6 +23,7 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html>
 <head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <title>Click Examples</title>
 <link rel="stylesheet" type="text/css" href="${context}/assets/css/style.css" title="Style"/>
 </head>
