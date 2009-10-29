@@ -1243,9 +1243,16 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             deployResourcesOnClasspath();
         } else {
-            String msg = "Could not auto deploy files to 'click' web folder."
-                + " You may need to manually include click resources in your"
-                + " web application.";
+            String msg = "Could not auto deploy files to the 'click' web folder."
+                + " This can occur if the call to ServletContext.getRealPath(\"/\") "
+                + " returns null, which means the web application cannot determine"
+                + " the file system path to deploy files to. Another common problem"
+                + " is if the web application is not allowed to write to the file"
+                + " system. To resolve this issue you need to manually include"
+                + " click resources in your web application at build time. You"
+                + " can use the Ant 'DeployTask' that is shipped with Click"
+                + " to include resources at build time. The 'DeployTask' is"
+                + " included in the jar 'lib\\click-dev-tasks.jar'";
             getLogService().warn(msg);
         }
     }
@@ -1354,8 +1361,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
 
         if (!dir.exists()) {
-            logService.trace("The folder '" + dir.getAbsolutePath()
-                + "' does not exist.");
+            logService.trace("No resources deployed from the folder '" + dir.getAbsolutePath()
+                + "' as it does not exist.");
             return;
         }
 
