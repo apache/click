@@ -1044,90 +1044,46 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
     <sect2 id="deploying-restricted-env" remap="h3">
       <title>Deploying resources in a restricted environment</title>
 
-      <para>It is generally easier to work with unpacked WARs and most servlet
-      containers do just that. However some containers such as WebLogic (at least
-      version 10) does not. To enable WebLogic to unpack the WAR go to the
-      <emphasis>Admin Console &gt; server node &gt; Web Applications</emphasis>
-      tab and check the <emphasis>Archived Real Path Enabled</emphasis> parameter.
+      <para>Some environments place restrictions on the file system and
+      Click won't be able to deploy its resources. WebLogic and
+      Google App Engine are examples of such environments. (Note that WebLogic has
+      a property to allow access to the file system. From the Admin Console go
+      to the <emphasis>Server node &gt; Web Applications</emphasis>
+      tab and check the <emphasis>Archived Real Path Enabled</emphasis> parameter.)
       </para>
 
-      <para>If Click cannot deploy resources because the WAR/EAR is not unpacked
-      or because of restricted file system permissions, warning messages will be
-      logged.
+      <para>If Click cannot deploy its resources because of limited file system
+      access or permissions, warning messages will be logged.
       </para>
 
       <para><emphasis role="bold">Note: </emphasis>if your application is
       running on a <emphasis>Servlet 3.0</emphasis> compliant server, there is
-      no need to deploy resources in restricted environments. Servlet 3.0
-      provide a feature where if the server cannot find a resource in the root
-      directory of the webapp, it will look for the resource under
-      <emphasis>'META-INF/resources'</emphasis>, and if found, serve it up.
-      Since Click packages its resources under
-      <emphasis>'META-INF/resources'</emphasis> as well, there is no need to
-      deploy the resources.
+      no need to deploy resources. Servlet 3.0 specifies that if the server
+      cannot find a resource in the root directory of the webapp, it will look
+      for the resource under <emphasis>'META-INF/resources'</emphasis>, and if
+      found, serve it up. Click is Servlet 3.0 compliant and packages its
+      resources under <emphasis>'META-INF/resources'</emphasis>.
       </para>
 
-      <para>Click also provides a number of options to make resources available
+      <para>Click provides a number of options to make resources available
       in restricted environments which is covered below:
       </para>
 
       <itemizedlist>
         <listitem>
-          <para>Add a mapping in <emphasis>web.xml</emphasis> to inform
-          ClickServlet to serve static resources. This feature is made available
-          through the <ulink url="../../click-api/org/apache/click/service/ResourceService.html">ResourceService</ulink>
-          interface and its default implementation,
-          <ulink url="../../click-api/org/apache/click/service/ClickResourceService.html">ClickResourceService</ulink>.
-          Below is an example:
-          </para>
-          <programlisting language="xml"><![CDATA[<servlet>
-  <servlet-name>ClickServlet</servlet-name>
-  <servlet-class>org.apache.click.ClickServlet</servlet-class>
-  <load-on-startup>0</load-on-startup>
-</servlet>
-
-<servlet-mapping>
-  <servlet-name>ClickServlet</servlet-name>
-  <url-pattern>*.htm</url-pattern>
-</servlet-mapping>
-
- <!-- Inform ClickServlet to serve static resources contained under the /click/*
-       directory directly from Click's JAR files. -->
-<servlet-mapping>
-  <servlet-name>ClickServlet</servlet-name>
-  <url-pattern>/click/*</url-pattern>
-</servlet-mapping>]]></programlisting>
-
-          <para>Now ClickServlet will serve all static <varname>/click/*</varname>
-          resources directly from Click's JAR files.
-          </para>
-
-          <para>One restriction of ClickResourceService is it only serves
-          resources from the <emphasis>/click/*</emphasis> folder. So if you use
-          third-party Click libraries that serve their resources from a different
-          folder e.g. <emphasis>/clickclick/*</emphasis>, this option won't work
-          out-of-the-box.
-          </para>
-
-          <para>Also note that with this option Click's resources are served
-          directly from the JAR files, you won't be able to customize the resources,
-          if for example you want change the default styling through CSS.
-          </para>
-        </listitem>
-        <listitem>
-          <para>Use the Ant based DeployTask to deploy Click's static resources at
-          build time to your web application. With this option Click's static
-          resources can be copied to the root directory of your webapp, where you
-          can customize the resources as you see fit. The DeployTask is an Ant Task
-          you can incorporate into your build script.
+          <para>The first option (which will work in all environments) is to deploy
+          the resources at build time. Click ships with an Ant Task
+          called DeployTask that deploys Click static resources to a web
+          application. With this option Click's static resources can be copied
+          to the root directory of your webapp, where you can customize the
+          resources further if needed. The DeployTask can easily be incorporated
+          into your build script.
           </para>
           <para>Currently the DeployTask is part of the <filename>click-dev-tools-xxx.jar</filename>
-          which can be found in your Click distribution under the <emphasis>lib</emphasis>
+          that can be found in your Click distribution under the <emphasis>lib</emphasis>
           folder.
           </para>
-          <para>To use this Ant Task, ensure the <filename>click-dev-tools-xxx.jar</filename>
-          is available on your build classpath and add the following target to your
-          <filename>build.xml</filename>:
+          <para>Here is an example:
           </para>
           <programlisting language="xml"><![CDATA[<target name="deploy" description="Deploy static resources">
     <taskdef name="deploy"
@@ -1171,25 +1127,73 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
 
           <para>The DeployTask also generates an HTML report in the same folder
           where the build script is executed from. The report will indicate
-          which resources was deployed and also which resources in your webapp
-          root directory is outdated. Resources can become outdated if you
-          upgrade to a new version of Click and certain Click resources were
-          updated.
+          which resources was deployed successfully and which resources
+          in your webapp root directory is outdated. (An outdated resource mean
+          that the resource in the <emphasis>click-xxx.jar</emphasis> differs
+          from the resource currently present in your webapp root directory.
+          This can happen when upgrading to a new version of Click)
           </para>
         </listitem>
         <listitem>
-          <para>Click resources are packaged in JARs under the directory
-          <emphasis>META-INF/resources</emphasis>. You can use your favorite IDE
+          <para>Another option is to add a mapping in <emphasis>web.xml</emphasis>
+          to inform ClickServlet to serve static resources. This feature is made
+          available through the
+          <ulink url="../../click-api/org/apache/click/service/ResourceService.html">ResourceService</ulink>
+          interface and its default implementation,
+          <ulink url="../../click-api/org/apache/click/service/ClickResourceService.html">ClickResourceService</ulink>.
+          Below is an example:
+          </para>
+          <programlisting language="xml"><![CDATA[<servlet>
+  <servlet-name>ClickServlet</servlet-name>
+  <servlet-class>org.apache.click.ClickServlet</servlet-class>
+  <load-on-startup>0</load-on-startup>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>ClickServlet</servlet-name>
+  <url-pattern>*.htm</url-pattern>
+</servlet-mapping>
+
+ <!-- Inform ClickServlet to serve static resources contained under the /click/*
+       directory directly from Click's JAR files. -->
+<servlet-mapping>
+  <servlet-name>ClickServlet</servlet-name>
+  <url-pattern>/click/*</url-pattern>
+</servlet-mapping>]]></programlisting>
+
+          <para>With this setup, ClickServlet will serve all static
+          <varname>/click/*</varname> resources directly from Click's JAR files.
+          </para>
+
+          <para>One restriction of ClickResourceService is it only serves
+          resources from the <emphasis>/click/*</emphasis> folder. So if you use
+          third-party Click libraries that serve their resources from a different
+          folder e.g. <emphasis>/clickclick/*</emphasis>, this option won't work
+          out-of-the-box.
+          </para>
+
+          <para>Also note that with this option Click's resources are served
+          directly from the JAR files, you won't be able to customize the resources,
+          if for example you want change the default styling through CSS.
+          </para>
+        </listitem>
+        <listitem>
+          <para>Another option is to manually deploy the resources. Click
+          resources are packaged in JARs under the directory
+          <emphasis>META-INF/resources</emphasis>. You can use your IDE
           to navigate into the JARs and copy all the resources from
           <emphasis>META-INF/resources</emphasis> to your webapp root directory.
-          Just remember to copy the resources in the same structure as they
-          appear under <emphasis>META-INF/resources</emphasis>.
+          </para>
+
+          <para>For example, to deploy the resources from
+          <emphasis>click-core.jar</emphasis>, copy the <emphasis>/click</emphasis>
+          folder and its contents to your web application root folder.
           </para>
         </listitem>
         <listitem>
-          <para>You can also access Click's resources by deploying your
+          <para>And finally you can access Click's resources by deploying your
           application on a development machine where there are no file system
-          restrictions and the WAR/EAR is unpacked. Then you can copy the
+          restrictions and the WAR/EAR can be unpacked. You can then copy the
           deployed resources to your webapp root directory.
           </para>
         </listitem>
