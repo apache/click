@@ -25,14 +25,13 @@ import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.control.Renderable;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.commons.collections.CollectionUtils;
 
 /**
  *
  */
 public class TableExportBanner implements Renderable {
 
-    private List<AbstractTableExporter> exportFormats = new ArrayList<AbstractTableExporter>();
+    private List<AbstractTableExporter> exporters = new ArrayList<AbstractTableExporter>();
 
     protected String separator;
 
@@ -42,52 +41,52 @@ public class TableExportBanner implements Renderable {
         this.table = table;
     }
 
-    public void add(AbstractTableExporter exportFormat) {
-        getExportFormats().add(exportFormat);
+    public void add(AbstractTableExporter exporter) {
+        getExporters().add(exporter);
     }
 
-    public void remove(AbstractTableExporter exportFormat) {
-        getExportFormats().remove(exportFormat);
+    public void remove(AbstractTableExporter exporter) {
+        getExporters().remove(exporter);
     }
 
     public void render(HtmlStringBuffer buffer) {
         renderExportBanner(buffer);
     }
 
-    public List<AbstractTableExporter> getExportFormats() {
-        return exportFormats;
+    public List<AbstractTableExporter> getExporters() {
+        return exporters;
     }
 
-    public void setExportFormats(List<AbstractTableExporter> exporters) {
-        this.exportFormats = exporters;
+    public void setExporters(List<AbstractTableExporter> exporters) {
+        this.exporters = exporters;
     }
 
     public void onInit() {
         String tableName = table.getName();
-        for (AbstractTableExporter format : getExportFormats()) {
-            format.setName(tableName);
-            Control control = format.getExportLink();
+        for (AbstractTableExporter exporter : getExporters()) {
+            exporter.setName(tableName);
+            Control control = exporter.getExportLink();
             control.onInit();
         }
     }
 
     public void onRender() {
-        AbstractTableExporter selectedFormat = null;
-        for (AbstractTableExporter format : getExportFormats()) {
-            format.getExportLink().onRender();
-            if (format.isSelected()) {
-                selectedFormat = format;
+        AbstractTableExporter selectedExporter = null;
+        for (AbstractTableExporter exporter : getExporters()) {
+            exporter.getExportLink().onRender();
+            if (exporter.isSelected()) {
+                selectedExporter = exporter;
             }
         }
-        if(selectedFormat != null) {
-            export(selectedFormat);
+        if(selectedExporter != null) {
+            export(selectedExporter);
         }
     }
 
     public boolean onProcess() {
         boolean continueProcessing = true;
-        for (AbstractTableExporter format : getExportFormats()) {
-            if (!format.getExportLink().onProcess()) {
+        for (AbstractTableExporter exporter : getExporters()) {
+            if (!exporter.getExportLink().onProcess()) {
                 continueProcessing = false;
             }
         }
@@ -102,9 +101,9 @@ public class TableExportBanner implements Renderable {
         this.separator = separator;
     }
 
-    public void export(AbstractTableExporter format) {
+    public void export(AbstractTableExporter exporter) {
         Context context = table.getContext();
-        format.export(table, context);
+        exporter.export(table, context);
     }
 
     public String toString() {
@@ -124,16 +123,16 @@ public class TableExportBanner implements Renderable {
      * @param buffer the StringBuffer to render the paging controls to
      */
     protected void renderExportBanner(HtmlStringBuffer buffer) {
-        List exportFormats = getExportFormats();
-        if (exportFormats == null || exportFormats.isEmpty()) {
+        List exporters = getExporters();
+        if (exporters == null || exporters.isEmpty()) {
             return;
         }
 
         HtmlStringBuffer banner = new HtmlStringBuffer();
-        Iterator<AbstractTableExporter> it = getExportFormats().iterator();
+        Iterator<AbstractTableExporter> it = getExporters().iterator();
         while(it.hasNext()) {
-            AbstractTableExporter format = it.next();
-            format.getExportLink().render(banner);
+            AbstractTableExporter exporter = it.next();
+            exporter.getExportLink().render(banner);
             if (it.hasNext()) {
                 banner.append(getSeparator());
             }
