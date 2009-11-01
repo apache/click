@@ -94,21 +94,20 @@ class DeployReport {
         if (entries.size() > 0) {
             writer.append("<table>\n");
             writer.append("<tr>");
-            writer.append("<th>Destination - ").append(destination).append("</th>");
             writer.append("<th>Source - ").append(source).append("</th>");
+            writer.append("<th>Destination - ").append(destination).append("</th>");
             writer.append("</tr>\n");
             for (DeployReportEntry entry : entries) {
                 writer.append("<tr>");
                 writer.append("<td>");
-                writer.append(entry.destination);
+                writer.append(entry.source);
                 writer.append("</td>");
                 writer.append("<td>");
-                writer.append(entry.source);
+                writer.append(entry.destination);
                 writer.append("</td>");
                 writer.append("</tr>\n");
             }
             writer.append("</table>\n");
         }
-
     }
 }
