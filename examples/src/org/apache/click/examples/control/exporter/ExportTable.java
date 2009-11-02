@@ -51,7 +51,7 @@ public class ExportTable extends Table {
 
     protected List excludedExportColumns;
 
-    protected TableExportBanner exporter;
+    protected TableExportContainer exportContainer;
 
     private List exportColumnList;
 
@@ -62,15 +62,15 @@ public class ExportTable extends Table {
         super(name);
     }
 
-    public TableExportBanner getExporter() {
-        if (exporter == null) {
-            exporter = new TableExportBanner(this);
+    public TableExportContainer getExportContainer() {
+        if (exportContainer == null) {
+            exportContainer = new TableExportContainer(this);
         }
-        return exporter;
+        return exportContainer;
     }
 
-    public void setExporter(TableExportBanner exporter) {
-        this.exporter = exporter;
+    public void setExportContainer(TableExportContainer exportContainer) {
+        this.exportContainer = exportContainer;
     }
 
     /**
@@ -178,20 +178,20 @@ public class ExportTable extends Table {
     @Override
     public void onInit() {
         super.onInit();
-        getExporter().onInit();
+        getExportContainer().onInit();
     }
 
     @Override
     public void onRender() {
         super.onRender();
-        getExporter().onRender();
+        getExportContainer().onRender();
     }
 
     @Override
     public boolean onProcess() {
         boolean continueProcessing = super.onProcess();
-        TableExportBanner tableExporter = getExporter();
-        if (!tableExporter.onProcess()) {
+        TableExportContainer exportContainer = getExportContainer();
+        if (!exportContainer.onProcess()) {
             continueProcessing = false;
         }
         return continueProcessing;
@@ -201,7 +201,7 @@ public class ExportTable extends Table {
         if (getExportAttachment() == EXPORTER_ATTACHED) {
             if (getExportBannerPosition() == POSITION_BOTH ||
                 getExportBannerPosition() == POSITION_TOP) {
-                getExporter().render(buffer);
+                getExportContainer().render(buffer);
             }
         }
 
@@ -210,7 +210,7 @@ public class ExportTable extends Table {
         if (getExportAttachment() == EXPORTER_ATTACHED) {
             if (getExportBannerPosition() == POSITION_BOTH ||
                 getExportBannerPosition() == POSITION_BOTTOM) {
-                getExporter().render(buffer);
+                getExportContainer().render(buffer);
             }
         }
     }
@@ -225,7 +225,7 @@ public class ExportTable extends Table {
                 buffer.append(getColumnList().size() - getExcludedExportColumns().size());
                 buffer.append("\">");
 
-                getExporter().render(buffer);
+                getExportContainer().render(buffer);
 
                 buffer.append("</td></tr>\n");
                 buffer.append("</tbody>\n");
@@ -243,7 +243,7 @@ public class ExportTable extends Table {
                 buffer.append(getColumnList().size() - getExcludedExportColumns().size());
                 buffer.append("\">");
 
-                getExporter().render(buffer);
+                getExportContainer().render(buffer);
 
                 buffer.append("</td></tr>\n");
                 buffer.append("</tbody>\n");

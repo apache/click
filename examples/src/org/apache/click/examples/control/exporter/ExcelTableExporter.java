@@ -43,9 +43,6 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.DataFormat;
 
-/**
- *
- */
 public class ExcelTableExporter extends AbstractTableExporter {
 
     private DataFormat cellFormat;
