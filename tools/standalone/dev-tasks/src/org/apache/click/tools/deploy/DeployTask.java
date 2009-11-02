@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.jar.JarFile;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
@@ -53,8 +55,23 @@ public class DeployTask extends Task {
     /** The exclude filter to use when scanning {@link #dir}. */
     private String excludes;
 
-    /** FileSet that specifies jars and folders to check for filenames. */
-    private FileSet fileSet;
+    /**
+     * Default FileSet associated with the DeployTask element that specifies
+     * jars and folders to check for filenames.
+     */
+    private FileSet defaultFileSet;
+
+    /** List of nested FileSets. */
+    private List<FileSet> fileSets = new ArrayList<FileSet>();
+
+    /**
+     * Buffer containing a listing of all the jar and folder sources that
+     * contained deployable resources.
+     */
+    private StringBuilder deployableSourceListing = new StringBuilder();
+
+    /** The report content. */
+    private Writer reportContent = new StringWriter();
 
     // ----------------------------------------------------------- Constructors
 
@@ -62,10 +79,30 @@ public class DeployTask extends Task {
      * Creates a default DeployTask instance.
      */
     public DeployTask() {
-        fileSet = new FileSet();
+        defaultFileSet = new FileSet();
     }
 
     // ------------------------------------------------------ Public properties
+
+    /**
+     * Add the given fileSet to the list of {@link #fileSets}.
+     *
+     * @param fileSet the fileSet to add to the list of {@link #fileSets}.
+     */
+    public void addFileSet(FileSet fileSet) {
+        if (!fileSets.contains(fileSet)) {
+            fileSets.add(fileSet);
+        }
+    }
+
+    /**
+     * Return the list of the {@link #fileSets}.
+     *
+     * @return the list of fileSets
+     */
+    public List<FileSet> getFileSets() {
+        return fileSets;
+    }
 
     /**
      * Set the directory consisting of JARs and folders where filenames are
@@ -95,7 +132,7 @@ public class DeployTask extends Task {
      */
     public void setExcludes(String excludes) {
         this.excludes = excludes;
-        fileSet.setExcludes(excludes);
+        defaultFileSet.setExcludes(excludes);
     }
 
     /**
@@ -106,7 +143,7 @@ public class DeployTask extends Task {
      */
     public void setIncludes(String includes) {
         this.includes = includes;
-        fileSet.setIncludes(includes);
+        defaultFileSet.setIncludes(includes);
     }
 
     /**
@@ -125,16 +162,8 @@ public class DeployTask extends Task {
      *
      * @throws BuildException if the build fails
      */
+    @Override
     public void execute() throws BuildException {
-        if(dir == null) {
-            throw new BuildException("dir attribute must be set!");
-        }
-        if(!dir.exists()) {
-            throw new BuildException("dir does not exist!");
-        }
-        if(!dir.isDirectory()) {
-            throw new BuildException("dir is not a directory!");
-        }
 
         if(toDir == null) {
             throw new BuildException("todir attribute must be set!");
@@ -149,18 +178,30 @@ public class DeployTask extends Task {
             throw new BuildException("todir is not a directory!");
         }
 
-        fileSet.setDir(dir);
-        fileSet.setDefaultexcludes(true);
-        if (getIncludes() == null) {
-            // Set default standard includes
-            fileSet.setIncludes("**/*.jar, classes");
+        if (!isDir(dir) && getFileSets().isEmpty()) {
+            throw new BuildException("no input dirs specified.");
         }
-        DirectoryScanner directoryScanner = fileSet.getDirectoryScanner(getProject());
-        String files[] = directoryScanner.getIncludedFiles();
-        String dirs[] = directoryScanner.getIncludedDirectories();
-        String resources[] = (String[]) TaskUtils.addAll(files, dirs);
 
-        deployResources(resources);
+        if (dir != null && dir.exists()) {
+            defaultFileSet.setDir(dir);
+            getFileSets().add(defaultFileSet);
+            defaultFileSet.setDefaultexcludes(true);
+            if (TaskUtils.isBlank(getIncludes())) {
+                // Set default standard includes
+                defaultFileSet.setIncludes("**/*.jar, classes");
+            }
+        }
+
+        for (FileSet fileSet : getFileSets()) {
+            DirectoryScanner directoryScanner = fileSet.getDirectoryScanner(
+                getProject());
+            String files[] = directoryScanner.getIncludedFiles();
+            String dirs[] = directoryScanner.getIncludedDirectories();
+            String resources[] = (String[]) TaskUtils.addAll(files, dirs);
+            deployResources(fileSet.getDir(), resources);
+        }
+
+        writeReport();
     }
 
     // -------------------------------------------------------- Private Methods
@@ -170,25 +211,13 @@ public class DeployTask extends Task {
      *
      * @param filenames the filenames for the resources to deploy.
      */
-    private void deployResources(String filenames[]) {
-        Writer reportWriter = null;
+    private void deployResources(File dir, String filenames[]) {
         try {
-
-            InputStream is = TaskUtils.getResourceAsStream("/report-template.html", DeployTask.class);
-            String template = null;
-
-            if (is == null) {
-                System.out.println("The report template 'report-template.html' could not be found on the classpath. No report will be generated.");
-            } else {
-                template = TaskUtils.toString(is);
-            }
-
             DeployReport report = new DeployReport();
 
-            StringWriter writer = new StringWriter();
             for (int i = 0; i < filenames.length; i++) {
                 String filename = filenames[i];
-                String path = getCurrentPath();
+                String path = getCanonicalPath(dir);
                 File file = new File(dir, filename);
 
                 Deploy deploy = new Deploy();
@@ -203,31 +232,45 @@ public class DeployTask extends Task {
 
                 if (deployed) {
                     report.writeReport(path + filename, toDir.getCanonicalPath(),
-                        deploy.getDeployed(), deploy.getOutdated(), writer);
+                        deploy.getDeployed(), deploy.getOutdated(), reportContent);
                 }
+            }
+
+            appendResourceListing(dir, filenames);
+
+        } catch(IOException ioe) {
+            throw new BuildException(ioe.getClass().getName() + ":" + ioe.getMessage(), ioe);
+        }
+    }
+
+    /**
+     * Write the deploy report to a report file.
+     *
+     * @throws BuildException if the build fails
+     */
+    private void writeReport() {
+        Writer reportWriter = null;
+        try {
+            InputStream is = TaskUtils.getResourceAsStream("/report-template.html", DeployTask.class);
+            String template = null;
+
+            if (is == null) {
+                System.out.println("The report template 'report-template.html' could not be found on the classpath. No report will be generated.");
+            } else {
+                template = TaskUtils.toString(is);
             }
 
             if (template != null) {
                 String reportContent = template;
-                reportContent = reportContent.replace("{0}", dir.getCanonicalPath());
-                reportContent = reportContent.replace("{1}", toDir.getCanonicalPath());
-                reportContent = reportContent.replace("{2}", toHtml(filenames));
+                reportContent = reportContent.replace("{0}", toDir.getCanonicalPath());
+                reportContent = reportContent.replace("{1}", getDeployableSourceListingAsHtml());
+                reportContent = reportContent.replace("{2}", getReportContentAsHtml());
 
-                String reportEntries = writer.toString();
-
-                // If no report entries were made, print a success message
-                if (TaskUtils.isBlank(reportEntries)) {
-                    reportContent = reportContent.replace("{3}", "<h3 class='success'>All resources are successfully deployed</h3>");
-                } else {
-                    reportContent = reportContent.replace("{3}", writer.toString());
-                }
-
-                File reportFile = new File("report.html");
+                File reportFile = getUniqueReportFile();
                 reportWriter = new FileWriter(reportFile);
                 reportWriter.append(reportContent);
                 System.out.println("See report: " + reportFile.getCanonicalPath());
             }
-
         } catch(IOException ioe) {
             throw new BuildException(ioe.getClass().getName() + ":" + ioe.getMessage(), ioe);
 
@@ -237,12 +280,31 @@ public class DeployTask extends Task {
     }
 
     /**
-     * Returns the current path.
+     * Return a unique file where the report can be written to.
      *
-     * @return the current path
-     * @throws IOException if the path cannot be looked up
+     * @return the file the report can be written to
      */
-    private String getCurrentPath() throws IOException {
+    private File getUniqueReportFile() {
+        String reportName = "deployed";
+        File reportFile = new File(reportName + ".html");
+
+        // Find unique report name
+        int count = 0;
+        while (reportFile.exists()) {
+            count++;
+            reportFile = new File(reportName + "-" + count + ".html");
+        }
+        return reportFile;
+    }
+
+    /**
+     * Returns the canonical path of the given dir.
+     *
+     * @param dir the dir from which to return the canonical path of
+     * @return the canonical path of the given dir
+     * @throws IOException if the canonical path cannot be looked up
+     */
+    private String getCanonicalPath(File dir) throws IOException {
         String path = dir.getCanonicalPath();
         return path.endsWith(File.separator) ? path : path + File.separator;
     }
@@ -255,11 +317,11 @@ public class DeployTask extends Task {
      * @return return HTML representation of the given filenames
      * @throws IOException if an IO exception occurs
      */
-    private String toHtml(String[] filenames) throws IOException {
+    private void appendResourceListing(File dir, String[] filenames) throws IOException {
         StringBuilder buffer = new StringBuilder();
 
         if (filenames != null && filenames.length > 0) {
-            String path = getCurrentPath();
+            String path = getCanonicalPath(dir);
 
             for (String filename : filenames) {
                 if (filename.endsWith(".jar")) {
@@ -284,7 +346,7 @@ public class DeployTask extends Task {
             }
         }
 
-        return buffer.toString();
+        deployableSourceListing.append(buffer.toString());
     }
 
     /**
@@ -299,5 +361,56 @@ public class DeployTask extends Task {
         buffer.append("'>");
         buffer.append(filename);
         buffer.append("</a></li>");
+    }
+
+    /**
+     * Return true if the given file is a directory, false otherwise.
+     *
+     * @param file file to check if its a directory
+     * @return true if the given file is a directory, false otherwise
+     */
+    private boolean isDir(File file) {
+        if (file == null || !file.exists() || !file.isDirectory()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Return the HTML representation of the report content generated by the
+     * deployed resources.
+     *
+     * @return the HTML representation of the report content generated by the
+     * deployed resources
+     */
+    private String getReportContentAsHtml() {
+        String result = reportContent.toString();
+
+        // If no report entries were made, print a feedback message
+        if (TaskUtils.isBlank(result)) {
+
+            if (deployableSourceListing.length() == 0) {
+                // If no deployable sources were found, print a warning message
+                result = "<h3 class='warning'>No deployable resources were found</h3>";
+            } else {
+                // Otherwise we assume that all resources are already deployed
+                // in the target folder
+                result = "<h3 class='success'>All resources are successfully deployed</h3>";
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Return the HTML representation of the list of deployable sources.
+     *
+     * @return the HTML representation of the list of deployable sources
+     */
+    private String getDeployableSourceListingAsHtml() {
+        String listingAsString = deployableSourceListing.toString();
+        if (listingAsString.length() == 0) {
+            listingAsString = "<li><span style=\"color:blue\">No jars or folders were found with deployable resources.</span></li>";
+        }
+        return listingAsString;
     }
 }
