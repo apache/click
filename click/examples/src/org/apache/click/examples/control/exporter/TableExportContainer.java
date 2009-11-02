@@ -26,10 +26,7 @@ import org.apache.click.Control;
 import org.apache.click.control.Renderable;
 import org.apache.click.util.HtmlStringBuffer;
 
-/**
- *
- */
-public class TableExportBanner implements Renderable {
+public class TableExportContainer implements Renderable {
 
     private List<AbstractTableExporter> exporters = new ArrayList<AbstractTableExporter>();
 
@@ -37,7 +34,7 @@ public class TableExportBanner implements Renderable {
 
     private ExportTable table;
 
-    public TableExportBanner(ExportTable table) {
+    public TableExportContainer(ExportTable table) {
         this.table = table;
     }
 
@@ -117,7 +114,7 @@ public class TableExportBanner implements Renderable {
     /**
      * Render the table export banner.
      * <p/>
-     * See the <tt>TableExportBanner.properies</tt> for the HTML template:
+     * See the <tt>TableExportContainer.properies</tt> for the HTML template:
      * <tt>table-export-banner</tt>.
      *
      * @param buffer the StringBuffer to render the paging controls to

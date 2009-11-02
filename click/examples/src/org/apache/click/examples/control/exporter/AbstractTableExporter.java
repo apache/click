@@ -31,9 +31,6 @@ import org.apache.click.control.ActionLink;
 import org.apache.click.util.ClickUtils;
 import org.apache.commons.lang.StringUtils;
 
-/**
- *
- */
 public abstract class AbstractTableExporter {
 
     protected String label;

@@ -95,7 +95,7 @@ public class ExcelTableExportPage extends BorderPage {
     private void setupExporter(ExportTable table) {
         // Setup table exporting
         ExcelTableExporter excel = new ExcelTableExporter("Excel", "/assets/images/page_excel.png");
-        table.getExporter().add(excel);
+        table.getExportContainer().add(excel);
 
         // Excluding the action column ensures the actions are not exported to
         // Excel
