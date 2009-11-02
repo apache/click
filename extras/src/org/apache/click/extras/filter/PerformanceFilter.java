@@ -124,6 +124,9 @@ import org.apache.commons.lang.StringUtils;
  * through the <tt>init-param</tt> <span class="blue">"compression-threshold"</span>.
  * <p/>
  * Click *.htm pages are automatically compressed by the filter.
+ * <p/>
+ * It is also possible to disable GZIP compression by setting the
+ * <tt>init-param</tt> <span class="blue">"compression-enabled"</span> to false.
  *
  * <h3>Page Template Import References</h3>
  *
@@ -274,6 +277,9 @@ public class PerformanceFilter implements Filter {
 
     /** The threshold number to compress, default value is 384 bytes. */
     protected int compressionThreshold = MIN_COMPRESSION_THRESHOLD;
+
+    /** Indicates if compression is enabled or not, default value is true. */
+    protected boolean compressionEnabled = true;
 
     /** The fitler has been configured flag. */
     protected boolean configured;
@@ -457,8 +463,14 @@ public class PerformanceFilter implements Filter {
         ServletContext servletContext = getFilterConfig().getServletContext();
         configService = ClickUtils.getConfigService(servletContext);
 
+        // Get gzip enabled parameter
+        String param = filterConfig.getInitParameter("compression-enabled");
+        if (StringUtils.isNotBlank(param)) {
+            compressionEnabled = Boolean.parseBoolean(param);
+        }
+
         // Get compression threshold
-        String param = filterConfig.getInitParameter("compression-threshold");
+        param = filterConfig.getInitParameter("compression-threshold");
         if (param != null) {
             compressionThreshold = Integer.parseInt(param);
             if (compressionThreshold != 0
@@ -693,6 +705,10 @@ public class PerformanceFilter implements Filter {
      */
     protected boolean useGzipCompression(HttpServletRequest request,
         HttpServletResponse response, String path) {
+
+        if (!compressionEnabled) {
+            return false;
+        }
 
         // If Content-Encoding header is already set on response, skip compression
         if (response.containsHeader("Content-Encoding")) {
