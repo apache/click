@@ -87,6 +87,14 @@
          <fileset dir="${dir.webapp}/javadoc" includes="**/*"/>
       </delete>
       <delete dir="${dir.webapp}/click"/>
+      <delete dir="${dir.webapp}/images"/>
+
+      <!-- Delete all deployed.html reports -->
+      <delete>
+          <fileset dir="${basedir}" includes="deployed*.html"/>
+          <fileset dir="../build" includes="deployed*.html"/>
+      </delete>
+
       <javadoc sourcepath="src"
                destdir="${dir.webapp}/javadoc"
                author="true"
@@ -105,6 +113,22 @@
       	    tofile="${dir.webapp}/javadoc/stylesheet.css"/>
       <delete file="${dir.deploy}/${name}.war"/>
       <mkdir dir="${dir.deploy}"/>
+
+      <taskdef name="deploy"
+            classname="org.apache.click.tools.deploy.DeployTask"
+            classpath="../lib/click-dev-tasks-1.1.jar"/>
+
+      <deploy todir="${dir.webapp}">
+        <fileset dir="${dir.webapp}/WEB-INF">
+            <include name="**/classes"/>
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="../dist">
+            <include name="${jar.click}"/>
+            <include name="${jar.click-extras}"/>
+        </fileset>
+      </deploy>
+
       <war destfile="${dir.deploy}/${name}.war"
            webxml="${dir.webapp}/WEB-INF/web.xml">
          <manifest>

@@ -158,10 +158,11 @@
   Please note, you only need this mapping in restricted environments where Click
   cannot deploy resources to the file system.
   -->
+  <!--
 	<servlet-mapping>
 		<servlet-name>ClickServlet</servlet-name>
 		<url-pattern>/click/*</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
 	
 	<!-- Wecome Files -->
 
