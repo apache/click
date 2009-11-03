@@ -214,11 +214,12 @@ public class ClickResourceService implements ResourceService {
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-        // Find all jars and directories on the classpath that contains the
-        // directory "META-INF/resources/", and deploy those resources
         if (!resourceDir.startsWith("/")) {
             resourceDir = '/' + resourceDir;
         }
+
+        // Find all jars and directories on the classpath that contains the
+        // directory "META-INF/resources/<resourceDir>", and deploy those resources
         String resourceDirectory = "META-INF/resources" + resourceDir;
         Enumeration<URL> en = classLoader.getResources(resourceDirectory);
         while (en.hasMoreElements()) {
