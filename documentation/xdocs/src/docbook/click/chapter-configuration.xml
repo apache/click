@@ -1083,7 +1083,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
           that can be found in your Click distribution under the <emphasis>lib</emphasis>
           folder.
           </para>
-          <para>Here is an example:
+          <para>Here is a basic example:
           </para>
           <programlisting language="xml"><![CDATA[<target name="deploy" description="Deploy static resources">
     <taskdef name="deploy"
@@ -1125,10 +1125,31 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
           will be served from.
           </para>
 
+          <para>The DeployTask also supports nested
+          <ulink url="http://ant.apache.org/manual/CoreTypes/fileset.html">FileSets</ulink>
+          if you need to deploy resources from multiple source locations. For
+          example:</para>
+          <programlisting language="xml"><![CDATA[<target name="deploy" description="Deploy static resources">
+    <taskdef name="deploy"
+             classname="org.apache.click.tools.deploy.DeployTask"
+             classpath="<click-distribution>/lib/click-dev-tasks-1.1.jar"/>
+
+    <deploy todir="${dir.webapp}">
+        <fileset dir="<webapp-root>/WEB-INF">
+            <include name="**/classes"/>
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="/some/folder/with/jars">
+            <include name="lib-with-resources.jar"/>
+            <include name="another-lib-with-resources.jar"/>
+        </fileset>
+    </deploy>
+</target>]]> </programlisting>
+
           <para>The DeployTask also generates an HTML report in the same folder
           where the build script is executed from. The report will indicate
           which resources was deployed successfully and which resources
-          in your webapp root directory is outdated. (An outdated resource mean
+          in your webapp root directory is outdated. (An outdated resource means
           that the resource in the <emphasis>click-xxx.jar</emphasis> differs
           from the resource currently present in your webapp root directory.
           This can happen when upgrading to a new version of Click)
