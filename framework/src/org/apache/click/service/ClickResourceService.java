@@ -79,13 +79,15 @@ public class ClickResourceService implements ResourceService {
         templateService = configService.getTemplateService();
 
         // Load all JAR resources
-        loadAllJarResources();
+        List<String> cacheables = getCacheableDirs();
+        for (String cacheable : cacheables) {
+            loadJarResources(cacheable);
+        }
 
         // Load file system resources. File system resources override JAR
         // resources
-        List<String> cacheables = getCacheableDirs();
         for (String cacheable : cacheables) {
-            loadClickDirResources(servletContext, cacheable);
+            loadDirResources(servletContext, cacheable);
         }
     }
 
@@ -136,17 +138,66 @@ public class ClickResourceService implements ResourceService {
         renderResource(response, resourceData);
     }
 
-    // ------------------------------------------------ Package Private Methods
+    // ------------------------------------------------------ Protected Methods
 
     /**
      * Return the list of directories that contains cacheable resources.
      * <p/>
-     * By default only resource under the "<tt>/click</tt>" directory will be
-     * cached.
+     * By default only resource packaged under the "<tt>/click</tt>" directory
+     * will be processed. To serve resources from other directories you need to
+     * override this method and return a list of directories to process.
+     * <p/>
+     * For example:
+     *
+     * <pre class="prettyprint">
+     * public class MyResourceService extends ClickResourceService {
+     *
+     *     protected List<String> getCacheableDirs() {
+     *         // Get default dirs which includes /click
+     *         List list = super.getCacheableDirs();
+     *
+     *         // Add resources packaged under the folder /clickclick
+     *         list.add("/clickclick");
+     *         // Add resources packaged under the folder /mycorp
+     *         list.add("/mycorp");
+     *     }
+     * } </pre>
+     *
+     * You also need to add a mapping in your <tt>web.xml</tt> to forward
+     * requests for these resources on to Click:
+     *
+     * <pre class="prettyprint">
+     * &lt;-- The default Click *.htm mapping --&gt;
+     * &lt;servlet-mapping&gt;
+		 *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+		 *   &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
+	   * &lt;/servlet-mapping&gt;
+     *
+     * &lt;-- Add a mapping to serve all resources under /click directly from
+     * the JARs. --&gt;
+	   * &lt;servlet-mapping&gt;
+		 *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+		 *   &lt;url-pattern&gt;/click/*&lt;/url-pattern&gt;
+	   * &lt;/servlet-mapping&gt;
+     *
+     * &lt;-- Add another mapping to serve all resources under /clickclick
+     * from the JARs. --&gt;
+	   * &lt;servlet-mapping&gt;
+		 *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+		 *   &lt;url-pattern&gt;/clickclick/*&lt;/url-pattern&gt;
+	   * &lt;/servlet-mapping&gt;
+     *
+     * &lt;-- Add a mapping to serve all resources under /mycorp
+     * from the JARs. --&gt;
+	   * &lt;servlet-mapping&gt;
+		 *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+		 *   &lt;url-pattern&gt;/mycorp/*&lt;/url-pattern&gt;
+	   * &lt;/servlet-mapping&gt;
+     * </pre>
      *
      * @return list of directories that should be cached
      */
-    List<String> getCacheableDirs() {
+    protected List<String> getCacheableDirs() {
        List list = new ArrayList();
        list.add("/click");
        return list;
@@ -154,7 +205,10 @@ public class ClickResourceService implements ResourceService {
 
     // Private Methods --------------------------------------------------------
 
-    private void loadAllJarResources() throws IOException {
+    private void loadJarResources(String resourceDir) throws IOException {
+        if (resourceDir == null) {
+            throw new IllegalArgumentException("resource directory cannot be null");
+        }
 
         long startTime = System.currentTimeMillis();
 
@@ -162,7 +216,10 @@ public class ClickResourceService implements ResourceService {
 
         // Find all jars and directories on the classpath that contains the
         // directory "META-INF/resources/", and deploy those resources
-        String resourceDirectory = "META-INF/resources/";
+        if (!resourceDir.startsWith("/")) {
+            resourceDir = '/' + resourceDir;
+        }
+        String resourceDirectory = "META-INF/resources" + resourceDir;
         Enumeration<URL> en = classLoader.getResources(resourceDirectory);
         while (en.hasMoreElements()) {
             URL url = en.nextElement();
@@ -333,21 +390,25 @@ public class ClickResourceService implements ResourceService {
     }
 
     @SuppressWarnings("unchecked")
-    private void loadClickDirResources(ServletContext servletContext, String dir)
+    private void loadDirResources(ServletContext servletContext, String resourceDir)
         throws IOException {
 
-        Set resources = servletContext.getResourcePaths(dir);
+        if (resourceDir == null) {
+            throw new IllegalArgumentException("resource directory cannot be null");
+        }
+
+        Set resources = servletContext.getResourcePaths(resourceDir);
 
         if (resources != null) {
             // Add all resources withtin web application
             for (Iterator i = resources.iterator(); i.hasNext();) {
                 String resource = (String) i.next();
 
-                // If resource is a folder and a valid cacheable resource,
-                // recursively look for resources in that folder
+                // If resource is a folder, recursively look for resources in
+                // that folder
                 if (resource.endsWith("/")) {
 
-                    loadClickDirResources(servletContext, resource);
+                    loadDirResources(servletContext, resource);
                 } else {
 
                     if (!configService.isTemplate(resource)) {
