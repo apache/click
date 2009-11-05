@@ -60,9 +60,6 @@ public class ClickResourceService implements ResourceService {
     /** The application log service. */
     protected LogService logService;
 
-    /** The application template service. */
-    protected TemplateService templateService;
-
     /** The application configuration service. */
     protected ConfigService configService;
 
@@ -76,7 +73,6 @@ public class ClickResourceService implements ResourceService {
 
         configService = ClickUtils.getConfigService(servletContext);
         logService = configService.getLogService();
-        templateService = configService.getTemplateService();
 
         // Load all JAR resources
         List<String> cacheables = getCacheableDirs();
