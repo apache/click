@@ -257,6 +257,20 @@ improved project generation, documentation and examples.
           [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-406">406</a>].
       </li>
       <li class="change">
+          Added an Ant task, called DeployTask, for deploying static resources
+          at build time. This task is useful when deploying Click applications
+          in restricted environments. For more details see the section:
+          <a href="user-guide/html/ch04s03.html#deploying-restricted-env">deploying resources in a restricted environment</a>.
+      </li>
+      <li class="change">
+          Added a <a href="click-api/org/apache/click/service/ResourceService.html">ResourceService</a>,
+          for serving static resources at runtime. This service is useful when
+          deploying Click applications in restricted environments. For more details
+          see the section:
+          <a href="user-guide/html/ch04s03.html#deploying-restricted-env">deploying resources in a restricted environment</a>
+          [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-564">564</a>].
+      </li>
+      <li class="change">
           Added method,
           <a href="click-api/org/apache/click/util/ClickUtils.html#createTemplateModel(org.apache.click.Page, org.apache.click.Context)">ClickUtils.createTemplateModel</a>,
           which returns a template model containing objects such as the Context
