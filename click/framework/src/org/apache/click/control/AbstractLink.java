@@ -597,7 +597,7 @@ public abstract class AbstractLink extends AbstractControl {
         }
 
         buffer.elementEnd();
-    }    
+    }
 
     /**
      * Render the given link parameters to the buffer.
