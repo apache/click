@@ -18,30 +18,21 @@
  */
 package org.apache.click.service;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.click.util.ClickUtils;
-import org.apache.commons.io.FileUtils;
+import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
  * Provides a default Click static resource service class. This class will
@@ -50,12 +41,12 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * web root.
  * <p/>
  * This service is useful for application servers which do not allow Click to
- * automatically deploy resources to the web root /click/ directory.
+ * automatically deploy resources to the web root directory.
  */
 public class ClickResourceService implements ResourceService {
 
     /** The click resources cache. */
-    protected Map<String, byte[]> resourceCache = new HashMap<String, byte[]>();
+    protected Map<String, byte[]> resourceCache = new ConcurrentHashMap<String, byte[]>();
 
     /** The application log service. */
     protected LogService logService;
@@ -73,18 +64,6 @@ public class ClickResourceService implements ResourceService {
 
         configService = ClickUtils.getConfigService(servletContext);
         logService = configService.getLogService();
-
-        // Load all JAR resources
-        List<String> cacheables = getCacheableDirs();
-        for (String cacheable : cacheables) {
-            loadJarResources(cacheable);
-        }
-
-        // Load file system resources. File system resources override JAR
-        // resources
-        for (String cacheable : cacheables) {
-            loadDirResources(servletContext, cacheable);
-        }
     }
 
     /**
@@ -120,9 +99,16 @@ public class ClickResourceService implements ResourceService {
 
         String resourcePath = ClickUtils.getResourcePath(request);
 
-        if (!resourceCache.containsKey(resourcePath)) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
+        byte[] resourceData = resourceCache.get(resourcePath);
+
+        if (resourceData == null) {
+            // Lazily load resource
+            resourceData = loadResourceData(resourcePath);
+
+            if (resourceData == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
         }
 
         String mimeType = ClickUtils.getMimeType(resourcePath);
@@ -130,7 +116,14 @@ public class ClickResourceService implements ResourceService {
             response.setContentType(mimeType);
         }
 
-        byte[] resourceData = resourceCache.get(resourcePath);
+        if (logService.isDebugEnabled()) {
+            HtmlStringBuffer buffer = new HtmlStringBuffer(200);
+            buffer.append("handleRequest: ");
+            buffer.append(request.getMethod());
+            buffer.append(" ");
+            buffer.append(request.getRequestURL());
+            logService.debug(buffer);
+        }
         renderResource(response, resourceData);
     }
 
@@ -165,30 +158,30 @@ public class ClickResourceService implements ResourceService {
      * <pre class="prettyprint">
      * &lt;-- The default Click *.htm mapping --&gt;
      * &lt;servlet-mapping&gt;
-		 *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
-		 *   &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
-	   * &lt;/servlet-mapping&gt;
+         *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+         *   &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
+       * &lt;/servlet-mapping&gt;
      *
      * &lt;-- Add a mapping to serve all resources under /click directly from
      * the JARs. --&gt;
-	   * &lt;servlet-mapping&gt;
-		 *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
-		 *   &lt;url-pattern&gt;/click/*&lt;/url-pattern&gt;
-	   * &lt;/servlet-mapping&gt;
+       * &lt;servlet-mapping&gt;
+         *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+         *   &lt;url-pattern&gt;/click/*&lt;/url-pattern&gt;
+       * &lt;/servlet-mapping&gt;
      *
      * &lt;-- Add another mapping to serve all resources under /clickclick
      * from the JARs. --&gt;
-	   * &lt;servlet-mapping&gt;
-		 *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
-		 *   &lt;url-pattern&gt;/clickclick/*&lt;/url-pattern&gt;
-	   * &lt;/servlet-mapping&gt;
+       * &lt;servlet-mapping&gt;
+         *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+         *   &lt;url-pattern&gt;/clickclick/*&lt;/url-pattern&gt;
+       * &lt;/servlet-mapping&gt;
      *
      * &lt;-- Add a mapping to serve all resources under /mycorp
      * from the JARs. --&gt;
-	   * &lt;servlet-mapping&gt;
-		 *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
-		 *   &lt;url-pattern&gt;/mycorp/*&lt;/url-pattern&gt;
-	   * &lt;/servlet-mapping&gt;
+       * &lt;servlet-mapping&gt;
+         *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+         *   &lt;url-pattern&gt;/mycorp/*&lt;/url-pattern&gt;
+       * &lt;/servlet-mapping&gt;
      * </pre>
      *
      * @return list of directories that should be cached
@@ -201,225 +194,47 @@ public class ClickResourceService implements ResourceService {
 
     // Private Methods --------------------------------------------------------
 
-    private void loadJarResources(String resourceDir) throws IOException {
-        if (resourceDir == null) {
-            throw new IllegalArgumentException("resource directory cannot be null");
-        }
-
-        long startTime = System.currentTimeMillis();
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
-        if (!resourceDir.startsWith("/")) {
-            resourceDir = '/' + resourceDir;
-        }
-
-        // Find all jars and directories on the classpath that contains the
-        // directory "META-INF/resources/<resourceDir>", and deploy those resources
-        String resourceDirectory = "META-INF/resources" + resourceDir;
-        Enumeration<URL> en = classLoader.getResources(resourceDirectory);
-        while (en.hasMoreElements()) {
-            URL url = en.nextElement();
-            loadResourcesOnClasspath(url, resourceDirectory);
-        }
-
-        if (logService.isTraceEnabled()) {
-            logService.trace("loaded files from jars and folders - "
-                + (System.currentTimeMillis() - startTime) + " ms");
+    /**
+     * Store the resource under the given resource path.
+     *
+     * @param resourcePath the path to store the resource under
+     * @param data the resource byte array
+     */
+    private void storeResourceData(String resourcePath, byte[] data) {
+        // Only cache in production modes
+        if (configService.isProductionMode() || configService.isProfileMode()) {
+            resourceCache.put(resourcePath, data);
         }
     }
 
     /**
-     * Deploy from the url all resources found under the prefix.
+     * Load the resource for the given resourcePath. This method will load the
+     * resource from the servlet context, and if not found, load it from the
+     * classpath under the folder 'META-INF/resources'.
      *
-     * @param url the url of the jar or folder which resources to deploy
-     * @param resourceDirectory the directory under which resources are found
-     * @throws IOException if resources from the url cannot be deployed
+     * @param resourcePath the path to the resource to load
+     * @return the resource as a byte array
+     * @throws IOException if the resources cannot be loaded
      */
-    private void loadResourcesOnClasspath(URL url, String resourceDirectory)
-        throws IOException {
+    private byte[] loadResourceData(String resourcePath) throws IOException {
 
-        String path = url.getFile();
+        byte[] resourceData = null;
 
-        // Decode the url, esp on Windows where file paths can have their
-        // spaces encoded. decodeURL will convert C:\Program%20Files\project
-        // to C:\Program Files\project
-        path = ClickUtils.decodeURL(path);
+        ServletContext servletContext = configService.getServletContext();
 
-        // Strip file prefix
-        if (path.startsWith("file:")) {
-            path = path.substring(5);
-        }
-
-        String jarPath = null;
-
-        // Check if path represents a jar
-        if (path.indexOf('!') > 0) {
-            jarPath = path.substring(0, path.indexOf('!'));
-
-            File jar = new File(jarPath);
-
-            if (jar.exists()) {
-                loadFilesInJar(jar, resourceDirectory);
-
-            } else {
-                logService.error("Could not load the jar '" + jarPath
-                    + "'. Please ensure this file exists in the specified"
-                    + " location.");
-            }
+        resourceData = getServletResourceData(servletContext, resourcePath);
+        if (resourceData != null) {
+            storeResourceData(resourcePath, resourceData);
         } else {
-            File dir = new File(path);
-            loadFilesInJarDir(dir, resourceDirectory);
-        }
-    }
+            resourceData = getClasspathResourceData("META-INF/resources"
+                + resourcePath);
 
-    private void loadFilesInJar(File jar, String resourceDirectory)
-        throws IOException {
-
-        if (jar == null) {
-            throw new IllegalArgumentException("Jar cannot be null");
-        }
-
-        InputStream inputStream = null;
-        JarInputStream jarInputStream = null;
-
-        try {
-
-            inputStream = new FileInputStream(jar);
-            jarInputStream = new JarInputStream(inputStream);
-            JarEntry jarEntry = null;
-
-            // Indicates whether feedback should be logged about the files deployed
-            // from jar
-            boolean logFeedback = true;
-            while ((jarEntry = jarInputStream.getNextJarEntry()) != null) {
-
-                // Guard against loading folders -> META-INF/resources/click/
-                if (jarEntry.isDirectory()) {
-                    continue;
-                }
-
-                // jarEntryName example -> META-INF/resources/click/table.css
-                String jarEntryName = jarEntry.getName();
-
-                // Only deploy resources from "META-INF/resources/"
-                int pathIndex = jarEntryName.indexOf(resourceDirectory);
-                if (pathIndex == 0) {
-                    if (logFeedback && logService.isTraceEnabled()) {
-                        logService.trace("loaded files from jar -> "
-                                         + jar.getCanonicalPath());
-
-                        // Only provide feedback once per jar
-                        logFeedback = false;
-                    }
-                    loadJarFile(jarEntryName, resourceDirectory);
-                }
-            }
-        } finally {
-            ClickUtils.close(jarInputStream);
-            ClickUtils.close(inputStream);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private void loadFilesInJarDir(File dir, String resourceDirectory)
-        throws IOException {
-
-        if (dir == null) {
-            throw new IllegalArgumentException("Dir cannot be null");
-        }
-
-        if (!dir.exists()) {
-            logService.trace("No resources deployed from the folder '" + dir.getAbsolutePath()
-                + "' as it does not exist.");
-            return;
-        }
-
-        Iterator files = FileUtils.iterateFiles(dir,
-                                                TrueFileFilter.INSTANCE,
-                                                TrueFileFilter.INSTANCE);
-
-        boolean logFeedback = true;
-        while (files.hasNext()) {
-            // file example -> META-INF/resources/click/table.css
-            File file = (File) files.next();
-
-            // Guard against loading folders -> META-INF/resources/click/
-            if (file.isDirectory()) {
-                continue;
-            }
-
-            String fileName = file.getCanonicalPath().replace('\\', '/');
-
-            // Only deploy resources from "META-INF/resources/"
-            int pathIndex = fileName.indexOf(resourceDirectory);
-            if (pathIndex != -1) {
-                if (logFeedback && logService.isTraceEnabled()) {
-                    logService.trace("loaded files from folder -> "
-                        + dir.getAbsolutePath());
-
-                    // Only provide feedback once per dir
-                    logFeedback = false;
-                }
-                fileName = fileName.substring(pathIndex);
-                loadJarFile(fileName, resourceDirectory);
+            if (resourceData != null) {
+                storeResourceData(resourcePath, resourceData);
             }
         }
-    }
 
-    private void loadJarFile(String file, String prefix) throws IOException {
-        // Only deploy resources containing the prefix
-        int pathIndex = file.indexOf(prefix);
-        if (pathIndex == 0) {
-            pathIndex += prefix.length();
-
-            // resourceName example -> click/table.css
-            String resourceName = file.substring(pathIndex);
-
-            if (resourceName.length() > 0) {
-                byte[] resourceBytes = getClasspathResourceData(file);
-
-                if (resourceBytes != null) {
-                    resourceCache.put("/" + resourceName, resourceBytes);
-                }
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private void loadDirResources(ServletContext servletContext, String resourceDir)
-        throws IOException {
-
-        if (resourceDir == null) {
-            throw new IllegalArgumentException("resource directory cannot be null");
-        }
-
-        Set resources = servletContext.getResourcePaths(resourceDir);
-
-        if (resources != null) {
-            // Add all resources withtin web application
-            for (Iterator i = resources.iterator(); i.hasNext();) {
-                String resource = (String) i.next();
-
-                // If resource is a folder, recursively look for resources in
-                // that folder
-                if (resource.endsWith("/")) {
-
-                    loadDirResources(servletContext, resource);
-                } else {
-
-                    if (!configService.isTemplate(resource)) {
-
-                        byte[] resourceData =
-                            getServletResourceData(servletContext, resource);
-
-                        if (resourceData != null) {
-                            resourceCache.put(resource, resourceData);
-                        }
-                    }
-                }
-            }
-        }
+        return resourceData;
     }
 
     /**
