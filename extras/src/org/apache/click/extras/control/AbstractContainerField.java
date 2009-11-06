@@ -183,7 +183,7 @@ public abstract class AbstractContainerField extends Field implements Container 
     /**
      * Returns true if this container has existing controls, false otherwise.
      *
-     * @see AbstractContainer#hasControls()
+     * @see org.apache.click.control.AbstractContainer#hasControls()
      *
      * @return true if the container has existing controls, false otherwise.
      */
