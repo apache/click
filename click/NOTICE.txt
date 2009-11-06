@@ -83,3 +83,7 @@ http://code.google.com/p/google-code-prettify/
 This project includes the FamFamFam icons by Mark James, distributed
 under the terms of the Creative Commons Attribution 2.5 License.
 http://www.famfamfam.com/lab/icons
+
+This product includes the class org.apache.click.service.DeployUtils.java
+from the Stripes Framework, released under the Apache 2.0 license.
+http://stripesframework.org
