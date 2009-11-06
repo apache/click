@@ -18,8 +18,6 @@
  */
 package org.apache.click.service;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -28,7 +26,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,8 +34,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
 
 import javax.servlet.ServletContext;
 
@@ -50,8 +45,6 @@ import org.apache.click.util.Bindable;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.w3c.dom.Document;
@@ -880,6 +873,26 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         return pageClass;
     }
 
+    /**
+     * Returns true if Click resources (JavaScript, CSS, images etc) packaged
+     * in jars can be deployed to the root directory of the webapp, false
+     * otherwise.
+     * <p/>
+     * By default this method will return false in restricted environments where
+     * write access to the underlying file system is disallowed. Example
+     * environments where write access is not allowed include the WebLogic JEE
+     * server and Google App Engine. (Note: WebLogic provides the property
+     * <tt>"Archived Real Path Enabled"</tt> that controls whether web
+     * applications can access the file system or not. See the Click user manual
+     * for details).
+     *
+     * @return true if resources can be deployed, false otherwise
+     */
+    protected boolean isResourcesDeployable() {
+        // Only deploy if writes are allowed
+        return ClickUtils.isResourcesDeployable(servletContext);
+    }
+
     // ------------------------------------------------ Package Private Methods
 
     /**
@@ -1230,29 +1243,22 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     private void deployFiles(Element rootElm) throws Exception {
 
-        // Deploy application files if they are not already present.
-        // Only deploy if writes are allowed
-        boolean isResourcesDeployable =
-            ClickUtils.isResourcesDeployable(servletContext);
-
-        if (isResourcesDeployable) {
+        if (isResourcesDeployable()) {
             deployControls(getResourceRootElement("/click-controls.xml"));
             deployControls(getResourceRootElement("/extras-controls.xml"));
             deployControls(rootElm);
             deployControlSets(rootElm);
-
             deployResourcesOnClasspath();
+
         } else {
-            String msg = "Could not auto deploy files to the 'click' web folder."
-                + " This can occur if the call to ServletContext.getRealPath(\"/\") "
-                + " returns null, which means the web application cannot determine"
-                + " the file system path to deploy files to. Another common problem"
-                + " is if the web application is not allowed to write to the file"
-                + " system. To resolve this issue you need to manually include"
-                + " click resources in your web application at build time. You"
-                + " can use the Ant 'DeployTask' that is shipped with Click"
-                + " to include resources at build time. The 'DeployTask' is"
-                + " included in the jar 'lib\\click-dev-tasks.jar'";
+            String msg = "WARNING: could not deploy Click resources to the"
+                + " 'click' web folder.\nThis can occur if the call to"
+                + " ServletContext.getRealPath(\"/\") returns null, which means"
+                + " the web application cannot determine the file system path"
+                + " to deploy files to. Another common problem is if the web"
+                + " application is not allowed to write to the file"
+                + " system.\nTo resolve this issue please see the Click user-guide: "
+                + "http://incubator.apache.org/click/docs/user-guide/html/ch04s03.html#deploying-restricted-env";
             getLogService().warn(msg);
         }
     }
@@ -1267,179 +1273,28 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @throws java.lang.IOException if the resources cannot be deployed
      */
     private void deployResourcesOnClasspath() throws IOException {
-
         long startTime = System.currentTimeMillis();
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
         // Find all jars and directories on the classpath that contains the
         // directory "META-INF/resources/", and deploy those resources
-        String resourceDirectory = "META-INF/resources/";
+        String resourceDirectory = "META-INF/resources";
 
-        // TODO: finding resources in jars and META-INF/classes might not always
-        // work on all servers. Might need to strip the final '/' from resourceDirectory
-        Enumeration<URL> en = classLoader.getResources(resourceDirectory);
-        while (en.hasMoreElements()) {
-            URL url = en.nextElement();
-            deployResourcesOnClasspath(url, resourceDirectory);
+        List<String> resources = new DeployUtils(logService).findResources(resourceDirectory).getResources();
+        for (String resource : resources) {
+            deployFile(resource, resourceDirectory);
         }
 
         // For backward compatibility, find all jars and directories on the
         // classpath that contains the directory "META-INF/web/", and deploy those
         // resources
-        resourceDirectory = "META-INF/web/";
-        en = classLoader.getResources(resourceDirectory);
-        while (en.hasMoreElements()) {
-            URL url = en.nextElement();
-            deployResourcesOnClasspath(url, resourceDirectory);
+        resourceDirectory = "META-INF/web";
+        resources = new DeployUtils(logService).findResources(resourceDirectory).getResources();
+        for (String resource : resources) {
+            deployFile(resource, resourceDirectory);
         }
 
-        if (logService.isTraceEnabled()) {
-            logService.trace("deployed files from jars and folders - "
-                + (System.currentTimeMillis() - startTime) + " ms");
-        }
-    }
-
-    /**
-     * Deploy from the url all resources found under the prefix.
-     *
-     * @param url the url of the jar or folder which resources to deploy
-     * @param resourceDirectory the directory under which resources are found
-     * @throws IOException if resources from the url cannot be deployed
-     */
-    private void deployResourcesOnClasspath(URL url, String resourceDirectory)
-        throws IOException {
-
-        String path = url.getFile();
-
-        // Decode the url, esp on Windows where file paths can have their
-        // spaces encoded. decodeURL will convert C:\Program%20Files\project
-        // to C:\Program Files\project
-        path = ClickUtils.decodeURL(path);
-
-        // Strip file prefix
-        if (path.startsWith("file:")) {
-            path = path.substring(5);
-        }
-
-        String jarPath = null;
-
-        // Check if path represents a jar
-        if (path.indexOf('!') > 0) {
-            jarPath = path.substring(0, path.indexOf('!'));
-
-            File jar = new File(jarPath);
-
-            if (jar.exists()) {
-                deployFilesInJar(jar, resourceDirectory);
-
-            } else {
-                logService.error("Could not deploy the jar '" + jarPath
-                    + "'. Please ensure this file exists in the specified"
-                    + " location.");
-            }
-        } else {
-            File dir = new File(path);
-            deployFilesInDir(dir, resourceDirectory);
-        }
-    }
-
-    /**
-     * Deploy files from the specified directory which are stored under the given
-     * resourceDirectory.
-     *
-     * @param dir the directory which resources will be deployed
-     * @param resourceDirectory the directory under which resources are found
-     * @throws java.lang.IOException if for some reason the files cannot be
-     * deployed
-     */
-    private void deployFilesInDir(File dir, String resourceDirectory)
-        throws IOException {
-
-        if (dir == null) {
-            throw new IllegalArgumentException("Dir cannot be null");
-        }
-
-        if (!dir.exists()) {
-            logService.trace("No resources deployed from the folder '" + dir.getAbsolutePath()
-                + "' as it does not exist.");
-            return;
-        }
-
-        Iterator files = FileUtils.iterateFiles(dir, TrueFileFilter.INSTANCE,
-            TrueFileFilter.INSTANCE);
-
-        boolean logFeedback = true;
-        while (files.hasNext()) {
-            // file example -> META-INF/resources/click/table.css
-            File file = (File) files.next();
-            String fileName = file.getCanonicalPath().replace('\\', '/');
-
-            // Only deploy resources from "META-INF/resources/"
-            int pathIndex = fileName.indexOf(resourceDirectory);
-            if (pathIndex != -1) {
-                if (logFeedback && logService.isTraceEnabled()) {
-                    logService.trace("deploy files from folder -> "
-                        + dir.getAbsolutePath());
-
-                    // Only provide feedback once per dir
-                    logFeedback = false;
-                }
-                fileName = fileName.substring(pathIndex);
-                deployFile(fileName, resourceDirectory);
-            }
-        }
-    }
-
-    /**
-     * Deploy files from the specified jar which are stored under the given
-     * resourceDirectory.
-     *
-     * @param jar the jar which resources will be deployed
-     * @param resourceDirectory the directory under which resources are found
-     * @throws java.lang.IOException if for some reason the files cannot be
-     * deployed
-     */
-    private void deployFilesInJar(File jar, String resourceDirectory)
-        throws IOException {
-
-        if (jar == null) {
-            throw new IllegalArgumentException("Jar cannot be null");
-        }
-
-        InputStream inputStream = null;
-        JarInputStream jarInputStream = null;
-
-        try {
-
-            inputStream = new FileInputStream(jar);
-            jarInputStream = new JarInputStream(inputStream);
-            JarEntry jarEntry = null;
-
-            // Indicates whether feedback should be logged about the files deployed
-            // from jar
-            boolean logFeedback = true;
-            while ((jarEntry = jarInputStream.getNextJarEntry()) != null) {
-                // jarEntryName example -> META-INF/resources/click/table.css
-                String jarEntryName = jarEntry.getName();
-
-                // Only deploy resources from "META-INF/resources/"
-                int pathIndex = jarEntryName.indexOf(resourceDirectory);
-                if (pathIndex == 0) {
-                    if (logFeedback && logService.isTraceEnabled()) {
-                        logService.trace("deploy files from jar -> "
-                                         + jar.getCanonicalPath());
-
-                        // Only provide feedback once per jar
-                        logFeedback = false;
-                    }
-                    deployFile(jarEntryName, resourceDirectory);
-                }
-            }
-        } finally {
-            ClickUtils.close(jarInputStream);
-            ClickUtils.close(inputStream);
-        }
+        logService.trace("deployed files from jars and folders - "
+            + (System.currentTimeMillis() - startTime) + " ms");
     }
 
     /**

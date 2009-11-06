@@ -804,3 +804,10 @@ FAMFAMFAM LICENSE
          here. Licensor shall not be bound by any additional provisions that
          may appear in any communication from You. This License may not be
          modified without the mutual written agreement of the Licensor and You.
+
+======================================================================
+
+STRIPES FRAMEWORK LICENSE
+
+org.apache.click.service.DeployUtils is taken from the Stripes Framework
+distributed under the terms of the Apache Software License 2.0.
