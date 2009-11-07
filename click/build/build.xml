@@ -550,10 +550,6 @@
 
  
    <target name="get-deps" description="download JAR dependencies">
-       <ant antfile="build.xml"
-           dir="examples"
-           target="get-deps"
-           inheritall="false"/>
       <downloadMacro name="${jar.codec}" path="commons-codec/commons-codec/${commons-codec.version}"/>
       <downloadMacro name="${jar.collections}" path="commons-collections/commons-collections/${commons-collections.version}"/>
       <downloadMacro name="${jar.io}" path="commons-io/commons-io/${commons-io.version}"/>
