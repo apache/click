@@ -1244,6 +1244,12 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     private void deployFiles(Element rootElm) throws Exception {
 
         if (isResourcesDeployable()) {
+            if (getLogService().isTraceEnabled()) {
+                String deployTarget = servletContext.getRealPath("/");
+                getLogService().trace("resource deploy folder: "
+                    + deployTarget);
+            }
+
             deployControls(getResourceRootElement("/click-controls.xml"));
             deployControls(getResourceRootElement("/extras-controls.xml"));
             deployControls(rootElm);

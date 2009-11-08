@@ -174,7 +174,7 @@ class DeployUtils<T> {
             }
         }
         catch (IOException ioe) {
-            logService.error("Could not read package: " + packageName + " -- " + ioe);
+            logService.error("could not read package: " + packageName + " -- " + ioe);
         }
 
         return this;
@@ -195,7 +195,7 @@ class DeployUtils<T> {
      */
     protected List<String> listClassResources(URL url, String path) throws IOException {
         if (logService.isDebugEnabled()) {
-            logService.debug("Listing classes in " + url);
+            logService.debug("listing classes in " + url);
         }
 
         InputStream is = null;
@@ -223,7 +223,7 @@ class DeployUtils<T> {
                         JarInputStream jarInput = new JarInputStream(is);
                         for (JarEntry entry; (entry = jarInput.getNextJarEntry()) != null;) {
                             if (logService.isTraceEnabled()) {
-                                logService.trace("Jar entry: " + entry.getName());
+                                logService.trace("jar entry: " + entry.getName());
                             }
 
                             if (isRelevantResource(entry.getName())) {
@@ -249,7 +249,7 @@ class DeployUtils<T> {
                             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                             for (String line; (line = reader.readLine()) != null;) {
                                 if (logService.isTraceEnabled()) {
-                                    logService.trace("Reader entry: " + line);
+                                    logService.trace("reader entry: " + line);
                                 }
                                 if (isRelevantResource(line)) {
                                     children.add(line);
@@ -274,7 +274,7 @@ class DeployUtils<T> {
                         }
                     } else {
                         // No idea where the exception came from so log it
-                        logService.error("Could not deploy the resources from"
+                        logService.error("could not deploy the resources from"
                             + " the url '" + url + "'. You will need to"
                             + " manually included resources from this url in"
                             + " your application.");
@@ -291,7 +291,7 @@ class DeployUtils<T> {
                     String resourcePath = path + "/" + child;
                     if (child.indexOf(".") != -1) {
                         if (logService.isTraceEnabled()) {
-                            logService.trace("Found deployable resource: " + resourcePath);
+                            logService.trace("found deployable resource: " + resourcePath);
                         }
                         resources.add(resourcePath);
                     }
@@ -360,7 +360,7 @@ class DeployUtils<T> {
      */
     protected URL findJarForResource(URL url, String path) throws MalformedURLException {
         if (logService.isTraceEnabled()) {
-            logService.trace("Find JAR URL: " + url);
+            logService.trace("find jar url: " + url);
         }
 
         // If the file part of the URL is itself a URL, then that URL probably points to the JAR
@@ -368,7 +368,7 @@ class DeployUtils<T> {
             for (;;) {
                 url = new URL(url.getFile());
                 if (logService.isTraceEnabled()) {
-                    logService.trace("Inner URL: " + url);
+                    logService.trace("inner url: " + url);
                 }
             }
         } catch (MalformedURLException e) {
@@ -381,11 +381,11 @@ class DeployUtils<T> {
         if (index >= 0) {
             jarUrl.setLength(index + 4);
             if (logService.isTraceEnabled()) {
-                logService.trace("Extracted JAR URL: " + jarUrl);
+                logService.trace("extracted jar url: " + jarUrl);
             }
         } else {
             if (logService.isTraceEnabled()) {
-                logService.trace("Not a JAR: " + jarUrl);
+                logService.trace("not a jar: " + jarUrl);
             }
             return null;
         }
@@ -398,7 +398,7 @@ class DeployUtils<T> {
             } else {
                 // WebLogic fix: check if the URL's file exists in the filesystem.
                 if (logService.isTraceEnabled()) {
-                    logService.trace("Not a JAR: " + jarUrl);
+                    logService.trace("not a jar: " + jarUrl);
                 }
 
                 jarUrl.replace(0, jarUrl.length(), testUrl.getFile());
@@ -407,7 +407,7 @@ class DeployUtils<T> {
                 File file = new File(ClickUtils.decodeURL(jarUrl.toString()));
                 if (file.exists()) {
                     if (logService.isTraceEnabled()) {
-                        logService.trace("Trying real file: " + file.getAbsolutePath());
+                        logService.trace("trying real file: " + file.getAbsolutePath());
                     }
                     testUrl =  file.toURI().toURL();
                     if (isJar(testUrl)) {
@@ -417,11 +417,11 @@ class DeployUtils<T> {
             }
         }
         catch (MalformedURLException e) {
-            logService.warn("Invalid JAR URL: " + e.getMessage());
+            logService.warn("invalid jar url: " + e.getMessage());
         }
 
         if (logService.isTraceEnabled()) {
-            logService.trace("Not a JAR: " + jarUrl);
+            logService.trace("not a jar: " + jarUrl);
         }
         return null;
     }
@@ -471,7 +471,7 @@ class DeployUtils<T> {
             is.read(buffer, 0, JAR_MAGIC.length);
             if (Arrays.equals(buffer, JAR_MAGIC)) {
                 if (logService.isInfoEnabled()) {
-                    logService.info("Found JAR: " + url);
+                    logService.info("found jar: " + url);
                 }
                 return true;
             }
@@ -505,7 +505,7 @@ class DeployUtils<T> {
             }
         }
         catch (Throwable t) {
-            logService.error("Could not examine class '" + fqn + "'" + " due to a "
+            logService.error("could not examine class '" + fqn + "'" + " due to a "
                 + t.getClass().getName() + " with message: " + t.getMessage());
         }
     }
