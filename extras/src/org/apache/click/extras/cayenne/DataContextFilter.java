@@ -82,19 +82,19 @@ import org.apache.commons.lang.StringUtils;
  *
  *
  * <h3>OSCache Enabled</h3>
- * 
- * This option enables you to specify whether 
+ *
+ * This option enables you to specify whether
  * <a href="http://www.opensymphony.com/oscache/">OSCache</a> should be used
- * as the query cache for the DataDomain. By default OSCache is not enabled. 
+ * as the query cache for the DataDomain. By default OSCache is not enabled.
  * <p/>
  * OSCache enables you to significantly
- * increase the performance of your applications with in-memory query caching. 
- * OSCache provides fine grain control over query caching, expiry and supports 
+ * increase the performance of your applications with in-memory query caching.
+ * OSCache provides fine grain control over query caching, expiry and supports
  * clustered cache invalidation.
  * <p/>
- * See 
+ * See
  * Cayenne <a href="http://cayenne.apache.org/doc/query-result-caching.html">Query Result Caching</a>
- * for more details. 
+ * for more details.
  *
  * <h3>Lifecycle Listener</h3>
  *
