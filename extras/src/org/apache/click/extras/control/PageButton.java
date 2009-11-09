@@ -52,9 +52,6 @@ import org.apache.click.util.HtmlStringBuffer;
  *      <li>Over {@link org.apache.click.control.ActionButton ActionButton} + forward/redirect trick:
  *          <ul>
  *               <li>there's no roundtrip to the server.</li>
- *               <li><code>org.apache.click.Page#redirect(Class) does not support parameters</code> and
- *               <code>org.apache.click.Page#redirect(String)</code> is prone to errors when hardcoding
- *               them in the <code>String</code>.</li>
  *          </ul>
  *      </li>
  * </ul>
