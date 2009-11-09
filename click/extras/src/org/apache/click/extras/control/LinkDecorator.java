@@ -174,8 +174,8 @@ public class LinkDecorator implements Decorator, Serializable {
     /** The method cached for rendering column values. */
     protected transient Map methodCache;
 
-    /** The parameter name of the target object identifier property. */
-    protected String targetIdProperty;
+    /** An optional parameter name for the {@link #idProperty}. */
+    protected String parameterName;
 
     /**
      * Create a new AbstractLink table column Decorator with the given actionLink
@@ -211,8 +211,7 @@ public class LinkDecorator implements Decorator, Serializable {
      * For the PostCode "NSW" the PageLink will render as follows:
      *
      * <pre class="prettyprint">
-     * &lt;a href="/mycorp/postcodes.htm?state=NSW&gt;Select&lt;/a&gt;
-     * </pre>
+     * &lt;a href="/mycorp/postcodes.htm?state=NSW&gt;Select&lt;/a&gt; </pre>
      *
      * @param table the table to render the links for
      * @param link the AbstractLink to render
@@ -265,39 +264,44 @@ public class LinkDecorator implements Decorator, Serializable {
 
     /**
      * Create a new AbstractLink table column Decorator with the given
-     * AbstractLinks array, row object identifier property name and a target object identifier property.
+     * AbstractLinks array, <tt>row object identifier</tt> property name and
+     * <tt>parameter name</tt>.
      * <p/>
-     * This approach is very useful for tables that have columns from various entities, to be able to point
-     * to those entities directly (since e.g. the ID is already available).
+     * When the link is rendered, the <tt>parameter name</tt> is set as the
+     * <tt>row object identifier</tt> parameter. For example:
      *
      * <pre class="prettyprint">
-     *   // e.g. for a Table that various data, but a column with related users too.
-     *   ...
-     *   Column userName = new Column("toUser.userName");
-     *   userName.setHeaderTitle("User Name");
-     *   table.addColumn(userName);
-     *   ...
+     *   // PageLink links to a Page where customers can be edited -> EditCustomerPage
+     *   PageLink editLink = new PageLink("edit", EditCustomerPage.class);
+     *   AbstractLink[] actions = new AbstractLink[] {editLink};
+     *   Column column = new Column("id");
+     *   table.addColumn(column);
+     *   column.setDecorator(new LinkDecorator(table, actions, "id", "idParam")); </pre>
      *
-     *   // to be able to point with the action from the table to that user directly:
-     *   ...
-     *   column.setDecorator(new LinkDecorator(table,links,"toUser.userName","id"));
-     *   // or if a type converter is used:
-     *   column.setDecorator(new LinkDecorator(table,links,"toUser.userName","user"));
-     *   ...
-     * </pre>
+     * If the table displayed a list of customers, the customer with <tt>id</tt>,
+     * <tt>"123"</tt>, will render the following editLink:
      *
-     * Or in any case where the same entity need to be referenced from two different directions.
+     * <pre class="codeHtml">
+     * &lt;a href="/mycorp/edit-customer.htm?<span class="red">idParam=123</span>"&gt;edit&lt;/a&gt; </pre>
+     *
+     * If the <tt>parameter name</tt> was not specified the <tt>row object identifier</tt>
+     * parameter will default to the given <tt>idProperty</tt>, in this case <tt>"id"</tt>:
+     *
+     * <pre class="codeHtml">
+     * &lt;a href="/mycorp/edit-customer.htm?<span class="red">id=123</span>"&gt;edit&lt;/a&gt; </pre>
      *
      * @see LinkDecorator#LinkDecorator(org.apache.click.control.Table, org.apache.click.control.AbstractLink, java.lang.String)
      *
      * @param table the table to render the links for
      * @param links the array of AbstractLinks to render
      * @param idProperty the row object identifier property name
-     * @param targetIdProperty the parameter name for the target identifier property
+     * @param parameterName a parameter name for the row object identifier
      */
-    public LinkDecorator(Table table, AbstractLink[] links, String idProperty, String targetIdProperty) {
+    public LinkDecorator(Table table, AbstractLink[] links, String idProperty,
+        String parameterName) {
+
         this(table, links, idProperty);
-        this.targetIdProperty = targetIdProperty;
+        this.parameterName = parameterName;
     }
 
     /**
@@ -328,6 +332,48 @@ public class LinkDecorator implements Decorator, Serializable {
         this.linkSeparator = " ";
 
         table.addControl(new LinkDecorator.PageNumberControl(table));
+    }
+
+    /**
+     * Create a new ActionButton table column Decorator with the given
+     * ActionButton array, <tt>row object identifier</tt> property name and
+     * <tt>parameter name</tt>.
+     * <p/>
+     * When the button is rendered, the <tt>parameter name</tt> is set as the
+     * <tt>row object identifier</tt> parameter. For example:
+     *
+     * <pre class="prettyprint">
+     *   // PageButton links to a Page where customers can be edited -> EditCustomerPage
+     *   PageButton editButton = new PageButton("edit", EditCustomerPage.class);
+     *   ActionButton[] actions = new ActionButton[] {editButton};
+     *   Column column = new Column("id");
+     *   table.addColumn(column);
+     *   column.setDecorator(new LinkDecorator(table, actions, "id", "idParam")); </pre>
+     *
+     * If the table displayed a list of customers, the customer with <tt>id</tt>,
+     * <tt>"123"</tt>, will render the following editButton:
+     *
+     * <pre class="codeHtml">
+     * &lt;input onclick="javascript:document.location.href='/mycorp/edit-customer.htm?actionButton=edit&value=123&<span class="red">idParam=123</span>';"/&gt; </pre>
+     *
+     * If the <tt>parameter name</tt> was not specified the <tt>row object identifier</tt>
+     * parameter will default to {@value org.apache.click.control.ActionButton#VALUE}:
+     *
+     * <pre class="codeHtml">
+     * &lt;input onclick="javascript:document.location.href='/mycorp/edit-customer.htm?actionButton=edit&amp;<span class="red">value=123</span>';"/&gt; </pre>
+     *
+     * @see LinkDecorator#LinkDecorator(org.apache.click.control.Table, org.apache.click.control.ActionButton, java.lang.String)
+     *
+     * @param table the table to render the buttons for
+     * @param buttons the array of ActionButtons to render
+     * @param idProperty the row object identifier property name
+     * @param parameterName a parameter name for the row object identifier
+     */
+    public LinkDecorator(Table table, ActionButton[] buttons, String idProperty,
+        String parameterName) {
+
+        this(table, buttons, idProperty);
+        this.parameterName = parameterName;
     }
 
     /**
@@ -613,11 +659,14 @@ public class LinkDecorator implements Decorator, Serializable {
 
         if (link instanceof ActionLink) {
             ((ActionLink) link).setValueObject(value);
+            if (parameterName != null) {
+                link.setParameter(parameterName, value.toString());
+            }
 
         } else {
             if (value != null) {
-                if (targetIdProperty != null) {
-                    link.setParameter(targetIdProperty, value.toString());
+                if (parameterName != null) {
+                    link.setParameter(parameterName, value.toString());
                 } else {
                     link.setParameter(idProperty, value.toString());
                 }
@@ -648,6 +697,9 @@ public class LinkDecorator implements Decorator, Serializable {
      */
     protected void initButton(ActionButton button, Context context, Object value) {
         button.setValueObject(value);
+        if (parameterName != null) {
+            button.setParameter(parameterName, value.toString());
+        }
 
         button.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
 
