@@ -331,7 +331,8 @@ public abstract class AutoCompleteTextField extends TextField {
         buffer.elementStart("div");
         buffer.appendAttribute("class", "auto_complete");
         buffer.appendAttribute("id", getId() + "_auto_complete_div");
-        buffer.elementEnd();
+        buffer.closeTag();
+        buffer.elementEnd("div");
     }
 
     // --------------------------------------------------------- Event Handlers
