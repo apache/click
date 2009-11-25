@@ -526,6 +526,8 @@ public class VelocityTemplateService implements TemplateService {
         velProps.put(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
                      LogChuteAdapter.class.getName());
 
+        velProps.put("directive.if.tostring.nullcheck", "false");
+
         // Use 'macro.vm' exists set it as default VM library
         ServletContext servletContext = configService.getServletContext();
         URL macroURL = servletContext.getResource("/" + MACRO_VM_FILE_NAME);
