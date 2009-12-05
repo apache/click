@@ -398,7 +398,7 @@ public class JsScript extends ResourceElement {
 
         renderContent(buffer, context);
 
-        // Render the DOM ready function suffic for non-ajax requests
+        // Render the DOM ready function suffix for non-ajax requests
         if (!isAjaxRequest) {
             renderDomReadySuffix(buffer);
         }
