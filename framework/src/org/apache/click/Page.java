@@ -1052,8 +1052,9 @@ public class Page implements Serializable {
      * <p/>
      * It is worth noting that Click checks a Page's stateful property after
      * each request. Thus it becomes possible to enable a stateful Page for a
-     * number of request and then setting it to <tt>false</tt> again. Click will
-     * remove the Page from the HttpSession, freeing up memory for the server.
+     * number of requests and then setting it to <tt>false</tt> again at which
+     * point Click will remove the Page from the HttpSession, freeing up memory
+     * for the server.
      *
      * @param stateful the flag indicating whether the page should be saved
      *         between user requests
