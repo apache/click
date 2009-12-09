@@ -88,7 +88,7 @@ import org.apache.commons.lang.StringUtils;
  * <p/>
  * This filter will automatically add long expiry headers to configured
  * resources. The default expiry header is 1 year, but can be changed through
- * the <tt>init-param</tt> <span class="blue">"cachable-max-age"</span>.
+ * the <tt>init-param</tt> <span class="blue">"cacheable-max-age"</span>.
  * This ensures the resources are cached in the users browser and will not
  * have to be requested again.
  * <p/>
@@ -159,7 +159,7 @@ import org.apache.commons.lang.StringUtils;
  *  &lt;filter-name&gt;<span class="blue">PerformanceFilter</span>&lt;/filter-name&gt;
  *  &lt;filter-class&gt;<span class="red">org.apache.click.extras.filter.PerformanceFilter</span>&lt;/filter-class&gt;
  *   &lt;init-param&gt;
- *     &lt;param-name&gt;<font color="blue">cachable-paths</font>&lt;/param-name&gt;
+ *     &lt;param-name&gt;<font color="blue">cacheable-paths</font>&lt;/param-name&gt;
  *     &lt;param-value&gt;<font color="red">/assets/*</font>, <font color="red">*.css</font>&lt;/param-value&gt;
  *  &lt;/init-param&gt;
  * &lt;/filter&gt;
@@ -193,7 +193,7 @@ import org.apache.commons.lang.StringUtils;
  *  &lt;servlet-name&gt;<span class="green">ClickServlet</span>&lt;/servlet-name&gt;
  * .. </pre>
  *
- * The <tt>init-param</tt> <span class="blue">"cachable-paths"</span>, allows
+ * The <tt>init-param</tt> <span class="blue">"cacheable-paths"</span>, allows
  * you to specify paths for resources such as JavaScript, CSS and images to be
  * <tt>cached</tt> by the browser. (Caching here means setting the
  * "Expires" and "Cache-Control" headers). The <tt>param-value</tt> accepts a
@@ -281,7 +281,7 @@ public class PerformanceFilter implements Filter {
     /** Indicates if compression is enabled or not, default value is true. */
     protected boolean compressionEnabled = true;
 
-    /** The fitler has been configured flag. */
+    /** The filter has been configured flag. */
     protected boolean configured;
 
     /** The application configuration service. */
@@ -293,16 +293,16 @@ public class PerformanceFilter implements Filter {
      */
     protected FilterConfig filterConfig = null;
 
-    /** The cachable-path include directories. */
+    /** The cacheable-path include directories. */
     protected List includeDirs = new ArrayList();
 
-    /** The cachable-path include files. */
+    /** The cacheable-path include files. */
     protected List includeFiles = new ArrayList();
 
-    /** The cachable-path exclude directories. */
+    /** The cacheable-path exclude directories. */
     protected List excludeDirs = new ArrayList();
 
-    /** The cachable-path exclude files. */
+    /** The cacheable-path exclude files. */
     protected List excludeFiles = new ArrayList();
 
     /** The application resource version indicator. */
@@ -487,8 +487,30 @@ public class PerformanceFilter implements Filter {
             ClickUtils.setApplicationVersion(param);
         }
 
-        param = filterConfig.getInitParameter("cachable-paths");
+        param = filterConfig.getInitParameter("cacheable-paths");
         if (param != null) {
+            String[] paths = StringUtils.split(param, ',');
+
+            for (int i = 0; i  < paths.length; i++) {
+                String path = paths[i].trim();
+
+                if (path.endsWith("*")) {
+                    includeDirs.add(path.substring(0, path.length() - 1));
+
+                } else if (path.startsWith("*")) {
+                    includeFiles.add(path.substring(1));
+
+                } else {
+                    String message = "cacheable-path '" + path + "' ignored, "
+                        + "path must start or end with a wildcard character: *";
+                    getConfigService().getLogService().warn(message);
+                }
+            }
+        }
+
+        // Fixed misspelling. Use cacheable-paths instead.
+        param = filterConfig.getInitParameter("cachable-paths");
+         if (param != null) {
             String[] paths = StringUtils.split(param, ',');
 
             for (int i = 0; i  < paths.length; i++) {
@@ -530,15 +552,22 @@ public class PerformanceFilter implements Filter {
         }
 
         // Get the cache max-age in seconds
-        param = filterConfig.getInitParameter("cachable-max-age");
+        param = filterConfig.getInitParameter("cacheable-max-age");
         if (param != null) {
             cacheMaxAge = Long.parseLong(param);
+
+        } else {
+            // Fixed misspelling. Use cacheable-max-age instead.
+            param = filterConfig.getInitParameter("cachable-max-age");
+            if (param != null) {
+                cacheMaxAge = Long.parseLong(param);
+            }
         }
 
         String message =
-            "PerformanceFilter initialized with: cachable-paths="
-            + filterConfig.getInitParameter("cachable-paths")
-            + " and cachable-max-age=" + cacheMaxAge;
+            "PerformanceFilter initialized with: cacheable-paths="
+            + filterConfig.getInitParameter("cacheable-paths")
+            + " and cacheable-max-age=" + cacheMaxAge;
 
         getConfigService().getLogService().info(message);
 
