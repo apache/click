@@ -18,8 +18,10 @@
  */
 package org.apache.click.extras.gae;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.click.service.CommonsFileUploadService;
+import org.apache.click.service.FileUploadService;
 import org.apache.commons.fileupload.FileItemFactory;
 
 /**
@@ -54,11 +56,21 @@ import org.apache.commons.fileupload.FileItemFactory;
 public class MemoryFileUploadService extends CommonsFileUploadService {
 
     /**
+     * @see FileUploadService#onInit(ServletContext)
+     * @param servletContext the application servlet context
+     * @throws Exception if an error occurs initializing the FileUploadService
+     */
+    @Override
+    public void onInit(ServletContext servletContext) throws Exception {
+    }
+
+    /**
      * Create and return a new {@link MemoryFileItemFactory} instance.
      *
      * @param request the servlet request
      * @return a new MemoryFileItemFactory instance
      */
+    @Override
     public FileItemFactory createFileItemFactory(HttpServletRequest request) {
         return new MemoryFileItemFactory();
     }
