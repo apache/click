@@ -590,10 +590,6 @@ public class FieldSet extends Field implements Container {
      * @param form FieldSet's parent <tt>Form</tt>
      */
     public void setForm(Form form) {
-        if (form == null) {
-            throw new IllegalArgumentException("Cannot set the FieldSet's form to null");
-        }
-
         this.form = form;
 
         // Set the specified form on the fieldsSets children. This call is not
