@@ -172,8 +172,8 @@ class DeployUtils<T> {
                     addIfMatching(test, child);
                 }
             }
-        }
-        catch (IOException ioe) {
+
+        } catch (IOException ioe) {
             logService.error("could not read package: " + packageName + " -- " + ioe);
         }
 
@@ -257,6 +257,7 @@ class DeployUtils<T> {
                             }
                         }
                     }
+
                 } catch (FileNotFoundException e) {
                     /*
                      * For file URLs the openStream() call might fail, depending on the servlet
@@ -283,8 +284,9 @@ class DeployUtils<T> {
 
                 // The URL prefix to use when recursively listing child resources
                 String prefix = url.toExternalForm();
-                if (!prefix.endsWith("/"))
+                if (!prefix.endsWith("/")) {
                     prefix = prefix + "/";
+                }
 
                 // Iterate over each immediate child, adding classes and recursing into directories
                 for (String child : children) {
@@ -294,8 +296,8 @@ class DeployUtils<T> {
                             logService.trace("found deployable resource: " + resourcePath);
                         }
                         resources.add(resourcePath);
-                    }
-                    else {
+
+                    } else {
                         URL childUrl = new URL(prefix + child);
                         resources.addAll(listClassResources(childUrl, resourcePath));
                     }
@@ -303,13 +305,9 @@ class DeployUtils<T> {
             }
 
             return resources;
-        }
-        finally {
-            try {
-                is.close();
-            }
-            catch (Exception e) {
-            }
+
+        } finally {
+            ClickUtils.close(is);
         }
     }
 
@@ -324,10 +322,12 @@ class DeployUtils<T> {
      */
     protected List<String> listClassResources(JarInputStream jar, String path) throws IOException {
         // Include the leading and trailing slash when matching names
-        if (!path.startsWith("/"))
+        if (!path.startsWith("/")) {
             path = "/" + path;
-        if (!path.endsWith("/"))
+        }
+        if (!path.endsWith("/")) {
             path = path + "/";
+        }
 
         // Iterate over the entries and collect those that begin with the requested path
         List<String> resources = new ArrayList<String>();
@@ -335,8 +335,9 @@ class DeployUtils<T> {
             if (!entry.isDirectory()) {
                 // Add leading slash if it's missing
                 String name = entry.getName();
-                if (!name.startsWith("/"))
+                if (!name.startsWith("/")) {
                     name = "/" + name;
+                }
 
                 // Check resource name
                 if (name.startsWith(path)) {
@@ -344,6 +345,7 @@ class DeployUtils<T> {
                 }
             }
         }
+
         return resources;
     }
 
@@ -371,6 +373,7 @@ class DeployUtils<T> {
                     logService.trace("inner url: " + url);
                 }
             }
+
         } catch (MalformedURLException e) {
             // This will happen at some point and serves a break in the loop
         }
@@ -395,6 +398,7 @@ class DeployUtils<T> {
             URL testUrl = new URL(jarUrl.toString());
             if (isJar(testUrl)) {
                 return testUrl;
+
             } else {
                 // WebLogic fix: check if the URL's file exists in the filesystem.
                 if (logService.isTraceEnabled()) {
@@ -415,8 +419,8 @@ class DeployUtils<T> {
                     }
                 }
             }
-        }
-        catch (MalformedURLException e) {
+
+        } catch (MalformedURLException e) {
             logService.warn("invalid jar url: " + e.getMessage());
         }
 
@@ -475,15 +479,14 @@ class DeployUtils<T> {
                 }
                 return true;
             }
-        }
-        catch (Exception e) {
+
+        } catch (Exception e) {
             // Failure to read the stream means this is not a JAR
-        }
-        finally {
+
+        } finally {
             try {
                 is.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
             }
         }
 
@@ -500,11 +503,10 @@ class DeployUtils<T> {
     @SuppressWarnings("unchecked")
     protected void addIfMatching(Test test, String fqn) {
         try {
-            if (test.matches(fqn) ) {
+            if (test.matches(fqn)) {
                 matches.add(fqn);
             }
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             logService.error("could not examine class '" + fqn + "'" + " due to a "
                 + t.getClass().getName() + " with message: " + t.getMessage());
         }
