@@ -56,7 +56,7 @@ public class LinkDemo extends BorderPage {
         iconPageLink.setRenderLabelAndImage(true);
         iconPageLink.addStyleClass("image-link");
         iconPageLink.setImageSrc("/assets/images/home.png");
-        
+
         externalLink.setParameter("q", "Click Framework");
         externalLink.setAttribute("target", "_blank");
         externalLink.setAttribute("class", "external");
