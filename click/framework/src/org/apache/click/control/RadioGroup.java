@@ -332,7 +332,7 @@ public class RadioGroup extends Field {
         if (hasRadios()) {
             for (int i = 0, size = getRadioList().size(); i < size; i++) {
                 Radio radio = (Radio) getRadioList().get(i);
-                radio.setForm(form);
+                radio.setForm(getForm());
             }
         }
     }
