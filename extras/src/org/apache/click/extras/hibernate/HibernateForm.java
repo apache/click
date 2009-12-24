@@ -401,7 +401,7 @@ public class HibernateForm extends Form {
                 Field field = getField(propertyNames[i]);
                 if (field != null) {
                     boolean isMandatory = !propertyNullability[i];
-                    if(!field.isRequired() && isMandatory) {
+                    if (!field.isRequired() && isMandatory) {
                         if (!(field instanceof Checkbox)) {
                             field.setRequired(true);
                         }

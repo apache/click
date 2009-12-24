@@ -21,7 +21,6 @@ package org.apache.click.extras.gae;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.click.service.CommonsFileUploadService;
-import org.apache.click.service.FileUploadService;
 import org.apache.commons.fileupload.FileItemFactory;
 
 /**
