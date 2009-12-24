@@ -21,6 +21,7 @@ package org.apache.click.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
 
@@ -1681,19 +1683,43 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
         } else if (mode == AutoBinding.ANNOTATION) {
 
-            List<Field> fieldList = new ArrayList<Field>();
+            List<Class> pageClassList = new ArrayList<Class>();
+            pageClassList.add(pageClass);
 
-            // Only include bindable fields
-            for (Field field : pageClass.getFields()) {
-                if (field.getAnnotation(Bindable.class) != null) {
-                    fieldList.add(field);
+            Class parentClass = pageClass.getSuperclass();
+            while (parentClass != null) {
+                pageClassList.add(parentClass);
+                parentClass = parentClass.getSuperclass();
+            }
+
+            // Reverse class list so parents are processed first, with the
+            // actual page class fields processed last. This will enable the
+            // page classes fields to override any
+            Collections.reverse(pageClassList);
+
+            Map<String, Field> fieldMap = new TreeMap<String, Field>();
+
+            for (Class aPageClass : pageClassList) {
+
+                for (Field field : aPageClass.getDeclaredFields()) {
+
+                    if (field.getAnnotation(Bindable.class) != null) {
+                        fieldMap.put(field.getName(), field);
+
+                        // If field is not public set accessiblity true
+                        if (!Modifier.isPublic(field.getModifiers())) {
+                            field.setAccessible(true);
+                        }
+                    }
                 }
             }
 
-            Field[] fieldArray = new Field[fieldList.size()];
+            // Copy the field map values into a field list
+            Field[] fieldArray = new Field[fieldMap.size()];
 
-            for (int i = 0; i < fieldList.size(); i++) {
-                fieldArray[i] = fieldList.get(i);
+            int i = 0;
+            for (Field field : fieldMap.values()) {
+                fieldArray[i++] = field;
             }
 
             return fieldArray;
