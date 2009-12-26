@@ -1694,7 +1694,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             // Reverse class list so parents are processed first, with the
             // actual page class fields processed last. This will enable the
-            // page classes fields to override any
+            // page classes fields to override parent class fields
             Collections.reverse(pageClassList);
 
             Map<String, Field> fieldMap = new TreeMap<String, Field>();
