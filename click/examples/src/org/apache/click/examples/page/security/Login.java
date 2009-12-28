@@ -42,8 +42,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Login extends BorderPage {
 
-    @Bindable public Form form = new Form();
-    @Bindable public HiddenField redirectField = new HiddenField("redirect", String.class);
+    @Bindable protected Form form = new Form();
+    @Bindable protected HiddenField redirectField = new HiddenField("redirect", String.class);
 
     private TextField usernameField = new TextField("username", true);
     private PasswordField passwordField = new PasswordField("password", true);

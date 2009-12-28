@@ -39,7 +39,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SimpleTablePage extends BorderPage {
 
-    @Bindable public Table table = new Table();
+    @Bindable protected Table table = new Table();
 
     @Resource(name="customerService")
     private CustomerService customerService;

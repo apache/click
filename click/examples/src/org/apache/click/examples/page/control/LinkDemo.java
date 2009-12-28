@@ -35,19 +35,19 @@ import org.apache.click.util.Bindable;
  */
 public class LinkDemo extends BorderPage {
 
-    @Bindable public ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
-    @Bindable public ActionLink disabledActionLink = new ActionLink("DisabledActionLink", this, "onLinkClick");
-    @Bindable public ActionLink iconActionLink = new ActionLink("IconActionLink", this, "onLinkClick");
+    @Bindable protected ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
+    @Bindable protected ActionLink disabledActionLink = new ActionLink("DisabledActionLink", this, "onLinkClick");
+    @Bindable protected ActionLink iconActionLink = new ActionLink("IconActionLink", this, "onLinkClick");
 
-    @Bindable public PageLink pageLink = new PageLink("PageLink", HomePage.class);
-    @Bindable public PageLink disabledPageLink = new PageLink("DisabledPageLink", HomePage.class);
-    @Bindable public PageLink iconPageLink = new PageLink("IconPageLink",HomePage.class);
+    @Bindable protected PageLink pageLink = new PageLink("PageLink", HomePage.class);
+    @Bindable protected PageLink disabledPageLink = new PageLink("DisabledPageLink", HomePage.class);
+    @Bindable protected PageLink iconPageLink = new PageLink("IconPageLink",HomePage.class);
 
-    @Bindable public ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
-    @Bindable public PageButton pageButton = new PageButton("PageButton", HomePage.class);
-    @Bindable public PageButton disabledPageButton = new PageButton("DisabledPageButton", HomePage.class);
+    @Bindable protected ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
+    @Bindable protected PageButton pageButton = new PageButton("PageButton", HomePage.class);
+    @Bindable protected PageButton disabledPageButton = new PageButton("DisabledPageButton", HomePage.class);
 
-    @Bindable public String clicked;
+    @Bindable protected String clicked;
 
     public LinkDemo() {
         iconActionLink.setRenderLabelAndImage(true);

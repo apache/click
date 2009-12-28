@@ -44,11 +44,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ActionTable extends BorderPage {
 
-    @Bindable public List customers;
-    @Bindable public Customer customerDetail;
-    @Bindable public ActionLink viewLink = new ActionLink(this, "onViewClick");
-    @Bindable public PageLink editLink = new PageLink(EditCustomer.class);
-    @Bindable public ActionLink deleteLink = new ActionLink(this, "onDeleteClick");
+    @Bindable protected List customers;
+    @Bindable protected Customer customerDetail;
+    @Bindable protected ActionLink viewLink = new ActionLink(this, "onViewClick");
+    @Bindable protected PageLink editLink = new PageLink(EditCustomer.class);
+    @Bindable protected ActionLink deleteLink = new ActionLink(this, "onDeleteClick");
 
     @Resource(name="customerService")
     private CustomerService customerService;

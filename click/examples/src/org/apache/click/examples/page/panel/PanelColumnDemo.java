@@ -42,10 +42,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class PanelColumnDemo extends BorderPage {
 
-    @Bindable public Panel panel = new Panel("panel", "/panel/customerDetailsPanel.htm");
-    @Bindable public Form form = new Form();
-    @Bindable public String nameSearch;
-    @Bindable public Table table = new Table("table");
+    @Bindable protected Panel panel = new Panel("panel", "/panel/customerDetailsPanel.htm");
+    @Bindable protected Form form = new Form();
+    @Bindable protected String nameSearch;
+    @Bindable protected Table table = new Table("table");
 
     private TextField textName = new TextField("name", true);
 

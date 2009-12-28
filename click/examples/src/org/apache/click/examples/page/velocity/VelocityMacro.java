@@ -38,7 +38,7 @@ import org.apache.click.util.Bindable;
  */
 public class VelocityMacro extends BorderPage {
 
-    @Bindable public Form form = new Form();
+    @Bindable protected Form form = new Form();
 
     public VelocityMacro() {
         TextField nameField = new TextField("name", true);

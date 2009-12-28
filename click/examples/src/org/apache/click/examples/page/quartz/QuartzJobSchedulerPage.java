@@ -52,7 +52,7 @@ public class QuartzJobSchedulerPage extends BorderPage {
     private static final String DATE_FORMAT = "{0,date,hh:mm a d MMM yy }";
 
     /** The auto bound refresh button. */
-    @Bindable public ActionButton refresh = new ActionButton("refresh");
+    @Bindable protected ActionButton refresh = new ActionButton("refresh");
 
     // Private Variables ------------------------------------------------------
 

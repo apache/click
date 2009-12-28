@@ -103,7 +103,7 @@ To see this concept in action take a simple Click page where we have an ActionLi
 <pre class="codeJava">
 <span class="kw">public class</span> ExamplePage <span class="kw">extends</span> Page {
 
-    @Bindable <span class="kw">public</span> ActionLink myLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, "<span class="st">onClick</span>");
+    @Bindable <span class="kw">protected</span> ActionLink myLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, "<span class="st">onClick</span>");
     
     <span class="kw">public boolean</span> onClick() {
         System.out.println("<span class="st">onClick invoked</span>");

@@ -40,8 +40,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ListPanelDemo extends BorderPage {
 
-    @Bindable public ListPanel listPanel = new ListPanel();
-    @Bindable public List customers;
+    @Bindable protected ListPanel listPanel = new ListPanel();
+    @Bindable protected List customers;
 
     @Resource(name="customerService")
     private CustomerService customerService;

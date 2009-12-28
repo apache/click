@@ -47,9 +47,9 @@ public class AdvancedTable extends BorderPage implements ApplicationContextAware
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable public Table table = new Table();
-    @Bindable public PageLink editLink = new PageLink("Edit", EditCustomer.class);
-    @Bindable public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
+    @Bindable protected Table table = new Table();
+    @Bindable protected PageLink editLink = new PageLink("Edit", EditCustomer.class);
+    @Bindable protected ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
     /**
      * Spring's application context from where a CustomerService instance can be

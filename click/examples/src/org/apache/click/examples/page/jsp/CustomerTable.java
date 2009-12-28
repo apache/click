@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomerTable extends BorderPage {
 
-    @Bindable public List customers = null;
+    @Bindable protected List customers = null;
 
     @Resource(name="customerService")
     private CustomerService customerService;

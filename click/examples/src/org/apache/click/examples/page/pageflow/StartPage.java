@@ -51,7 +51,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class StartPage extends BorderPage {
 
-    @Bindable public Form form = new Form();
+    @Bindable protected Form form = new Form();
 
     private Select customerSelect;
     private DateField dateField;

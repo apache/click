@@ -35,7 +35,7 @@ import org.apache.click.util.Bindable;
  */
 public class EditCustomerPage extends BorderPage {
 
-    @Bindable public Form form = new Form("form");
+    @Bindable protected Form form = new Form("form");
 
     public EditCustomerPage() {
         // Setup customers form

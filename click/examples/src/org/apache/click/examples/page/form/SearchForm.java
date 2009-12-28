@@ -43,7 +43,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SearchForm extends BorderPage {
 
-    @Bindable public Form form = new Form();
+    @Bindable protected Form form = new Form();
 
     private TextField textField;
     private Select typeSelect;

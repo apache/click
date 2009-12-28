@@ -38,8 +38,8 @@ import org.apache.click.util.Bindable;
  */
 public class SimpleForm extends BorderPage {
 
-    @Bindable public Form form = new Form();
-    @Bindable public String msg;
+    @Bindable protected Form form = new Form();
+    @Bindable protected String msg;
 
     // ------------------------------------------------------------ Constructor
 

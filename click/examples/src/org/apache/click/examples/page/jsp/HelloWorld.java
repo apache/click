@@ -34,6 +34,6 @@ import org.apache.click.util.Bindable;
  */
 public class HelloWorld extends Page {
 
-    @Bindable public Date time = new Date();
+    @Bindable protected Date time = new Date();
 
 }

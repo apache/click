@@ -35,7 +35,7 @@ import org.apache.click.util.Bindable;
  */
 public class FileUpload extends BorderPage {
 
-    @Bindable public Form form = new Form();
+    @Bindable protected Form form = new Form();
 
     private FileField fileField1;
     private TextField descField1;

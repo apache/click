@@ -37,13 +37,13 @@ import org.apache.click.util.Bindable;
  */
 public class SubmitLinkDemo extends BorderPage {
 
-    @Bindable public String demo1Msg;
+    @Bindable protected String demo1Msg;
 
-    @Bindable public String demo2Msg;
+    @Bindable protected String demo2Msg;
 
-    @Bindable public String demo3Msg;
+    @Bindable protected String demo3Msg;
 
-    @Bindable public String demo4Msg;
+    @Bindable protected String demo4Msg;
 
     public SubmitLinkDemo() {
         demo1();

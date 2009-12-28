@@ -30,12 +30,12 @@ import org.apache.click.util.Bindable;
  */
 public class ExceptionPage extends BorderPage {
 
-    @Bindable public ActionLink nullPointerLink = new ActionLink(this, "onNullPointerClick");
-    @Bindable public ActionLink illegalArgumentLink = new ActionLink(this, "onIllegalArgumentExceptionClick");
-    @Bindable public ActionLink missingMethodLink = new ActionLink(this, "onMissingMethodClick");
-    @Bindable public ActionLink brokenRendererLink = new ActionLink(this, "onBrokenRendererClick");
-    @Bindable public ActionLink brokenBorderLink = new ActionLink(this, "onBrokenBorderClick");
-    @Bindable public ActionLink brokenContentLink = new ActionLink(this, "onBrokenContentClick");
+    @Bindable protected ActionLink nullPointerLink = new ActionLink(this, "onNullPointerClick");
+    @Bindable protected ActionLink illegalArgumentLink = new ActionLink(this, "onIllegalArgumentExceptionClick");
+    @Bindable protected ActionLink missingMethodLink = new ActionLink(this, "onMissingMethodClick");
+    @Bindable protected ActionLink brokenRendererLink = new ActionLink(this, "onBrokenRendererClick");
+    @Bindable protected ActionLink brokenBorderLink = new ActionLink(this, "onBrokenBorderClick");
+    @Bindable protected ActionLink brokenContentLink = new ActionLink(this, "onBrokenContentClick");
 
     private String template;
 

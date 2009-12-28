@@ -50,7 +50,7 @@ public class FormTablePage extends BorderPage {
 
     private static final int NUM_ROWS = 20;
 
-    @Bindable public FormTable table = new FormTable();
+    @Bindable protected FormTable table = new FormTable();
 
     @Resource(name="customerService")
     private CustomerService customerService;

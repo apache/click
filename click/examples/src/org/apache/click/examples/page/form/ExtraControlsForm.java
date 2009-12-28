@@ -66,8 +66,8 @@ public class ExtraControlsForm extends BorderPage {
         boolean javaScriptValidate = false;
     }
 
-    @Bindable public Form form = new Form();
-    @Bindable public Form optionsForm = new Form();
+    @Bindable protected Form form = new Form();
+    @Bindable protected Form optionsForm = new Form();
 
     private CheckList checkList = new CheckList("checkList");
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");

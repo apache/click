@@ -25,6 +25,13 @@ import java.lang.annotation.Target;
 
 /**
  * Provides a Page field auto binding annotation.
+ * <p/>
+ * Note if a &#64;Bindable field's visibility is not public then Click will set
+ * the field to be accessible using reflection. If the Java application server
+ * has restricted security policies in place then this may cause an
+ * SecurityException to be thrown. In these environments you can either modify
+ * your fields visibility to be public or modify your servers Java security
+ * policy.
  *
  * <h3>Bindable Example</h3>
  *
@@ -32,16 +39,15 @@ import java.lang.annotation.Target;
  * public class BindableDemo extends Page {
  *
  *     // ActionLink automatically added to Page control list
- *     &#64;Bindable public ActionLink link = new ActionLink();
+ *     &#64;Bindable protected ActionLink link = new ActionLink();
  *
  *     // Message string is automatically added to Page model
- *     &#64;Bindable public String message;
+ *     &#64;Bindable protected String message;
  *
  *     public BindableDemo() {
  *
  *         // Listener method invoked when link clicked
  *         link.setActionListener(new ActionListener() {
- *
  *             public boolean onAction(Control source) {
  *                 // message added to page mode and rendered in template
  *                 message = "I was clicked";
