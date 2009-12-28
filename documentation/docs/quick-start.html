@@ -301,7 +301,7 @@ new <tt>border-template.htm</tt> file:
 <span class="kw">public class</span> BorderPage <span class="kw">extends</span> Page {
 
    <span class="kw">public String</span> getTemplate() {
-      <span class="kw">return</span> <span class="st">"border-template.htm"</span>;
+      <span class="kw">return</span> <span class="st">"/border-template.htm"</span>;
    }
 
 } </pre>
@@ -319,7 +319,7 @@ and define a <span class="blue">title</span> value.
 
 <span class="kw">public class</span> HomePage <span class="kw">extends</span> BorderPage {
 
-    <span class="kw">public</span> String <span class="blue">title</span> = <span class="st">"Home"</span>;
+    @Bindable <span class="kw">protected</span> String <span class="blue">title</span> = <span class="st">"Home"</span>;
 
 } </pre>
 
