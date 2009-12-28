@@ -184,10 +184,10 @@ public class CayenneForm extends Form {
     private static final long serialVersionUID = 1;
 
     /** The form data object classname parameter name. */
-    protected static final String FO_CLASS = "FO_CLASS";
+    public static final String FO_CLASS = "FO_CLASS";
 
     /** The form data object id parameter name. */
-    protected static final String FO_ID = "FO_ID";
+    public static final String FO_ID = "FO_ID";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -230,8 +230,6 @@ public class CayenneForm extends Form {
      * @param dataObjectClass the <tt>DataObject</tt> class
      */
     public CayenneForm(Class dataObjectClass) {
-        super();
-
         add(oidField);
         add(classField);
 
