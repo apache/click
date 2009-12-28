@@ -30,7 +30,7 @@ import org.apache.click.util.Bindable;
  */
 public class Logout extends BorderPage {
 
-    @Bindable public User user;
+    @Bindable protected User user;
 
     /**
      * @see Page#onInit()

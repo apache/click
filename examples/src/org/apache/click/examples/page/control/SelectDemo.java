@@ -39,7 +39,7 @@ import org.apache.click.util.Bindable;
  */
 public class SelectDemo extends BorderPage {
 
-    @Bindable public Form form = new Form();
+    @Bindable protected Form form = new Form();
 
     private Select genderSelect;
     private Select investmentSelect;

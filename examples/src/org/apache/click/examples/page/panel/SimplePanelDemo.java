@@ -29,6 +29,6 @@ import org.apache.click.util.Bindable;
  */
 public class SimplePanelDemo extends BorderPage {
 
-    @Bindable public Panel panel = new Panel("panel", "/panel/simple-panel.htm");
+    @Bindable protected Panel panel = new Panel("panel", "/panel/simple-panel.htm");
 
 }

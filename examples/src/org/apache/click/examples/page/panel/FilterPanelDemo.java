@@ -40,8 +40,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class FilterPanelDemo extends BorderPage {
 
-    @Bindable public FilterPanel filterPanel = new FilterPanel();
-    @Bindable public Table table = new Table();
+    @Bindable protected FilterPanel filterPanel = new FilterPanel();
+    @Bindable protected Table table = new Table();
 
     @Resource(name="customerService")
     private CustomerService customerService;

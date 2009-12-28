@@ -34,8 +34,8 @@ import org.apache.click.util.Bindable;
  */
 public class PickListDemo extends BorderPage {
 
-    @Bindable public Form form = new Form();
-    @Bindable public List selectedValues;
+    @Bindable protected Form form = new Form();
+    @Bindable protected List selectedValues;
 
     private PickList pickList = new PickList("languages");
 

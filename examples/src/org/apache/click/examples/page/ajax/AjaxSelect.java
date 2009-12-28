@@ -43,7 +43,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AjaxSelect extends BorderPage {
 
-    @Bindable public Select customerSelect = new Select("customerSelect");
+    @Bindable protected Select customerSelect = new Select("customerSelect");
 
     @Resource(name="customerService")
     private CustomerService customerService;

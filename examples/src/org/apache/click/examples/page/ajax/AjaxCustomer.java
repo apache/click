@@ -44,7 +44,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AjaxCustomer extends Page {
 
-    @Bindable public Customer customer;
+    @Bindable protected Customer customer;
 
     @Resource(name="customerService")
     private CustomerService customerService;

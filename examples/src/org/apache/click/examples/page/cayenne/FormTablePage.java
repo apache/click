@@ -47,10 +47,10 @@ import org.apache.click.util.Bindable;
  */
 public abstract class FormTablePage extends BorderPage {
 
-    @Bindable public CayenneForm form;
-    @Bindable public Table table = new Table();
-    @Bindable public ActionLink editLink = new ActionLink("edit", this, "onEditClick");
-    @Bindable public ActionLink removeLink = new ActionLink("remove", this, "onRemoveClick");
+    @Bindable protected CayenneForm form;
+    @Bindable protected Table table = new Table();
+    @Bindable protected ActionLink editLink = new ActionLink("edit", this, "onEditClick");
+    @Bindable protected ActionLink removeLink = new ActionLink("remove", this, "onRemoveClick");
 
     // ------------------------------------------------------------ Constructor
 

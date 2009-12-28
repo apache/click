@@ -45,8 +45,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdvancedForm extends BorderPage {
 
-    @Bindable public Form form = new Form();
-    @Bindable public String msg;
+    @Bindable protected Form form = new Form();
+    @Bindable protected String msg;
 
     private Select investmentSelect = new Select("investments");
 

@@ -33,7 +33,7 @@ import org.apache.click.util.Bindable;
  */
 public class RegexDemo extends BorderPage {
 
-    @Bindable public Form form = new Form();
+    @Bindable protected Form form = new Form();
 
     public RegexDemo() {
         RegexField versionField = new RegexField("version", "Version", 10);

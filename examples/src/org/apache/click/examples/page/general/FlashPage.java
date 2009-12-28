@@ -32,7 +32,7 @@ import org.apache.click.util.Bindable;
  */
 public class FlashPage extends BorderPage {
 
-    @Bindable public Form form = new Form();
+    @Bindable protected Form form = new Form();
 
     private TextField valueField = new TextField("value", "Value:", true);
 

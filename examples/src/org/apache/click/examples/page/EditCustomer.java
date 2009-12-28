@@ -51,11 +51,11 @@ import org.springframework.stereotype.Component;
 public class EditCustomer extends BorderPage {
 
     // Public controls are automatically added to the page
-    @Bindable public Form form = new Form("form");
-    @Bindable public HiddenField referrerField = new HiddenField("referrer", String.class);
+    @Bindable protected Form form = new Form("form");
+    @Bindable protected HiddenField referrerField = new HiddenField("referrer", String.class);
 
     // Public variables can automatically have their value set by request parameters
-    @Bindable public Integer id;
+    @Bindable protected Integer id;
 
     private HiddenField idField = new HiddenField("id", Integer.class);
 

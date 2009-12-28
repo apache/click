@@ -313,7 +313,7 @@
 
 public class CustomerDetails extends Page {
 
-    @Bindable public Integer <varname>customerId</varname>;
+    @Bindable protected Integer <varname>customerId</varname>;
 }</programlisting>
 
     <para>After the CustomerDetails page has been created the
@@ -400,7 +400,7 @@ public class CustomerDetails extends Page {
 
 public class CustomerDetails extends Page {
 
-    @Bindable public Customer <varname>customer</varname>;
+    @Bindable protected Customer <varname>customer</varname>;
 
 }</programlisting>
 

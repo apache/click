@@ -50,7 +50,7 @@ public class CheckListDemo extends BorderPage{
         }
     }
 
-    @Bindable public  Form form = new Form();
+    @Bindable protected  Form form = new Form();
 
     private CheckList standardCheckList;
     private CheckList sortableCheckList;

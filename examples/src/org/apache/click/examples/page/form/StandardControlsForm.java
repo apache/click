@@ -65,8 +65,8 @@ public class StandardControlsForm extends BorderPage {
         boolean javaScriptValidate = false;
     }
 
-    @Bindable public Form form = new Form();
-    @Bindable public Form optionsForm = new Form();
+    @Bindable protected Form form = new Form();
+    @Bindable protected Form optionsForm = new Form();
 
     private Select select = new Select("select");
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");

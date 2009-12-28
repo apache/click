@@ -35,9 +35,9 @@ import org.apache.click.util.Bindable;
 public class ControlListenerType1Page extends BorderPage {
 
     /* Set the listener to this object's "onLinkClick" method. */
-    @Bindable public ActionLink myLink = new ActionLink(this, "onLinkClick");
+    @Bindable protected ActionLink myLink = new ActionLink(this, "onLinkClick");
 
-    @Bindable public String msg;
+    @Bindable protected String msg;
 
     // --------------------------------------------------------- Event Handlers
 

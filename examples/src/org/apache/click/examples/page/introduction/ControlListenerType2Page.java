@@ -36,9 +36,9 @@ import org.apache.click.util.Bindable;
  */
 public class ControlListenerType2Page extends BorderPage {
 
-    @Bindable public ActionLink myLink = new ActionLink();
+    @Bindable protected ActionLink myLink = new ActionLink();
 
-    @Bindable public String msg;
+    @Bindable protected String msg;
 
     // ------------------------------------------------------------ Constructor
 

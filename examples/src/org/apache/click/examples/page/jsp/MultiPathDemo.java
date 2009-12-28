@@ -29,9 +29,9 @@ import org.apache.click.util.Bindable;
  */
 public class MultiPathDemo extends BorderPage {
 
-    @Bindable public ActionLink changePath = new ActionLink("changePath", this, "changePath");
+    @Bindable protected ActionLink changePath = new ActionLink("changePath", this, "changePath");
 
-    @Bindable public PageLink defaultPath = new PageLink("defaultPath", MultiPathDemo.class);
+    @Bindable protected PageLink defaultPath = new PageLink("defaultPath", MultiPathDemo.class);
 
     public boolean changePath() {
         setPath("/jsp/dummy.jsp");

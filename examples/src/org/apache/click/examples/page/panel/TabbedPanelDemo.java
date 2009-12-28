@@ -37,8 +37,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class TabbedPanelDemo extends BorderPage {
 
-    @Bindable public TabbedPanel tabbedPanel = new TabbedPanel();
-    @Bindable public List customers;
+    @Bindable protected TabbedPanel tabbedPanel = new TabbedPanel();
+    @Bindable protected List customers;
 
     @Resource(name="customerService")
     private CustomerService customerService;

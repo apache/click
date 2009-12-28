@@ -30,10 +30,10 @@ import org.apache.click.util.Bindable;
  */
 public class NavigationA extends BorderPage {
 
-    @Bindable public ActionLink forwardLink = new ActionLink("forwardLink", this, "onForwardClick");
-    @Bindable public ActionLink forwardParamLink = new ActionLink("forwardParamLink", this, "onForwardParamClick");
-    @Bindable public ActionLink redirectLink = new ActionLink("redirectLink", this, "onRedirectClick");
-    @Bindable public ActionLink redirectParamLink = new ActionLink("redirectParamLink", this, "onRedirectParamClick");
+    @Bindable protected ActionLink forwardLink = new ActionLink("forwardLink", this, "onForwardClick");
+    @Bindable protected ActionLink forwardParamLink = new ActionLink("forwardParamLink", this, "onForwardParamClick");
+    @Bindable protected ActionLink redirectLink = new ActionLink("redirectLink", this, "onRedirectClick");
+    @Bindable protected ActionLink redirectParamLink = new ActionLink("redirectParamLink", this, "onRedirectParamClick");
 
     // --------------------------------------------------------- Event Handlers
 

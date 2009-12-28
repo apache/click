@@ -44,8 +44,8 @@ public class TableStyles extends BorderPage implements ApplicationContextAware {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable public Form form = new Form();
-    @Bindable public Table table = new Table();
+    @Bindable protected Form form = new Form();
+    @Bindable protected Table table = new Table();
 
     private Select styleSelect = new Select("style", "Table Style:");
     private Checkbox hoverCheckbox = new Checkbox("hover", "Hover Rows:");

@@ -35,7 +35,7 @@ public class PopulateOnSelect extends BorderPage {
     private static final String GAUTENG_PROVINCE = "GP";
     private static final String WESTERN_CAPE = "WC";
 
-    @Bindable public TabbedForm form = new TabbedForm("form");
+    @Bindable protected TabbedForm form = new TabbedForm("form");
 
     private Select state = new Select("state");
     private Select city = new Select("city");

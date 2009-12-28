@@ -50,10 +50,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class EditTable extends BorderPage {
 
-    @Bindable public CayenneForm form = new CayenneForm("form", Customer.class);
-    @Bindable public Table table = new Table();
-    @Bindable public ActionLink editLink = new ActionLink("edit", "Edit", this, "onEditClick");
-    @Bindable public ActionLink deleteLink = new ActionLink("delete", "Delete", this, "onDeleteClick");
+    @Bindable protected CayenneForm form = new CayenneForm("form", Customer.class);
+    @Bindable protected Table table = new Table();
+    @Bindable protected ActionLink editLink = new ActionLink("edit", "Edit", this, "onEditClick");
+    @Bindable protected ActionLink deleteLink = new ActionLink("delete", "Delete", this, "onDeleteClick");
 
     @Resource(name="customerService")
     private CustomerService customerService;

@@ -7,20 +7,17 @@
 	<classpathentry kind="src" path="extras/test"/>
 	<classpathentry kind="src" path="framework/src"/>
 	<classpathentry kind="src" path="framework/test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jrockit-R27.5.0-jdk1.5.0_14"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.5.0_15"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/junit-3.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/ognl-2.6.9.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
-	<classpathentry kind="var" path="EXAMPLES/ashwood-1.1.jar"/>
-	<classpathentry kind="var" path="EXAMPLES/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="var" path="EXAMPLES/ashwood-2.0.jar"/>
+	<classpathentry kind="var" path="EXAMPLES/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="var" path="EXAMPLES/hsqldb-1.8.0.1.jar"/>
 	<classpathentry kind="var" path="EXAMPLES/jstl-1.1.2.jar"/>
 	<classpathentry kind="var" path="EXAMPLES/log4j-1.2.14.jar"/>
-	<classpathentry kind="var" path="EXAMPLES/oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/poi-3.0-FINAL.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/freemarker-2.3.12.jar"/>
@@ -29,9 +26,12 @@
 	<classpathentry kind="lib" path="lib/spring-2.5.6.jar"/>
 	<classpathentry kind="lib" path="lib/velocity-1.6.2.jar"/>
 	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/geronimo-annotation_1.0_spec-1.1.1.jar"/>
-	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/acegi-security-1.0.7.jar"/>
 	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/quartz-all-1.6.3.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.5.6.jar"/>
-	<classpathentry kind="lib" path="lib/cayenne-server-3.0M5.jar"/>
+	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/poi-3.5-FINAL.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/cayenne-server-3.0M6.jar"/>
+	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/spring-2.5.6.jar"/>
+	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/spring-security-core-2.0.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

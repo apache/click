@@ -160,9 +160,9 @@ public HelloWorld extends Page {
     <programlisting language="java">public class ControlListenerType1Page extends Page {
 
     /* Set the listener to this object's "onLinkClick" method. */
-    @Bindable public ActionLink myLink = new ActionLink(this, "onLinkClick"); <co id="co-bindable" linkends="ca-bindable"/>
+    @Bindable protected ActionLink myLink = new ActionLink(this, "onLinkClick"); <co id="co-bindable" linkends="ca-bindable"/>
 
-    @Bindable public String msg;
+    @Bindable protected String msg;
 
     // --------------------------------------------------------- Event Handlers
 
@@ -180,7 +180,7 @@ public HelloWorld extends Page {
 
     <calloutlist>
       <callout arearefs="co-bindable" id="ca-bindable">
-        <para>Variables declared as <literal>@Bindable public</literal>
+        <para>Variables declared as <literal>@Bindable protected</literal>
         is a short-hand way of instructing Click to automatically bind request
         parameters to Page variables. Additionally these variables will be
         automatically added to the Page model. For more information please see the
@@ -255,9 +255,9 @@ public HelloWorld extends Page {
     <programlisting language="java">public class ControlListenerType2Page extends Page {
 
     /* Public scope controls are automatically added to the page. */
-    @Bindable public ActionLink myLink = new ActionLink();
+    @Bindable protected ActionLink myLink = new ActionLink();
 
-    @Bindable public String msg;
+    @Bindable protected String msg;
 
     // ------------------------------------------------------------ Constructor
 
@@ -334,7 +334,7 @@ public HelloWorld extends Page {
 
     <programlisting language="java">public class SimpleTablePage extends Page {
 
-    @Bindable public Table table = new Table();
+    @Bindable protected Table table = new Table();
 
     // -------------------------------------------------------- Constructor
      
@@ -439,9 +439,9 @@ public HelloWorld extends Page {
 
     <programlisting language="java">public class CustomerPage extends Page {
 
-    @Bindable public Table table = new Table();
-    @Bindable public PageLink editLink = new PageLink("Edit", EditCustomer.class);
-    @Bindable public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
+    @Bindable protected Table table = new Table();
+    @Bindable protected PageLink editLink = new PageLink("Edit", EditCustomer.class);
+    @Bindable protected ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
     // ------------------------------------- Constructor
 
@@ -588,8 +588,8 @@ public HelloWorld extends Page {
 
     <programlisting language="java">public class SimpleForm extends Page {
 
-    @Bindable public Form form = new Form();
-    @Bindable public String msg;
+    @Bindable protected Form form = new Form();
+    @Bindable protected String msg;
 
     // -------------------------------------------------------- Constructor
 
@@ -712,8 +712,8 @@ public HelloWorld extends Page {
 
     <programlisting language="java">public class AdvancedForm extends Page {
 
-    @Bindable public Form form = new Form();
-    @Bindable public String msg;
+    @Bindable protected Form form = new Form();
+    @Bindable protected String msg;
 
     private Select investmentSelect = new Select("investment");
 

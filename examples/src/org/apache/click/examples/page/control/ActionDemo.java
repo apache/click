@@ -38,9 +38,9 @@ import org.apache.click.util.Bindable;
  */
 public class ActionDemo extends BorderPage {
 
-    @Bindable public ActionLink link = new ActionLink();
-    @Bindable public ActionButton button = new ActionButton();
-    @Bindable public String clicked;
+    @Bindable protected ActionLink link = new ActionLink();
+    @Bindable protected ActionButton button = new ActionButton();
+    @Bindable protected String clicked;
 
     public ActionDemo() {
 

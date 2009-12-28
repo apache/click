@@ -40,9 +40,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class TablePaginatorPage extends BorderPage {
 
-    @Bindable public Table table1 = new Table();
-    @Bindable public Table table2 = new Table();
-    @Bindable public Table table3 = new Table();
+    @Bindable protected Table table1 = new Table();
+    @Bindable protected Table table2 = new Table();
+    @Bindable protected Table table3 = new Table();
 
     @Resource(name="customerService")
     private CustomerService customerService;

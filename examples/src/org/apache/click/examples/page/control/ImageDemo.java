@@ -33,8 +33,8 @@ public class ImageDemo extends BorderPage {
 
     private ImageSubmit colorSubmit;
 
-    @Bindable public Form buttonsForm = new Form();
-    @Bindable public Form form = new Form();
+    @Bindable protected Form buttonsForm = new Form();
+    @Bindable protected Form form = new Form();
 
     public ImageDemo() {
         // Buttons Form

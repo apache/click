@@ -39,8 +39,8 @@ import org.apache.click.util.Bindable;
  */
 public class FormLayout extends BorderPage {
 
-    @Bindable public Form form1 = new Form();
-    @Bindable public Form form2 = new Form();
+    @Bindable protected Form form1 = new Form();
+    @Bindable protected Form form2 = new Form();
 
     public FormLayout() {
         // ------

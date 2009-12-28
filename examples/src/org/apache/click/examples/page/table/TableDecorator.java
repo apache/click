@@ -43,12 +43,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class TableDecorator extends BorderPage {
 
-    @Bindable public Table table = new Table();
-    @Bindable public Customer customerDetail;
+    @Bindable protected Table table = new Table();
+    @Bindable protected Customer customerDetail;
 
-    @Bindable public ActionLink viewLink = new ActionLink("view", this, "onViewClick");
-    @Bindable public PageLink editLink = new PageLink("edit", EditCustomer.class);
-    @Bindable public ActionLink deleteLink = new ActionLink("delete", this, "onDeleteClick");
+    @Bindable protected ActionLink viewLink = new ActionLink("view", this, "onViewClick");
+    @Bindable protected PageLink editLink = new PageLink("edit", EditCustomer.class);
+    @Bindable protected ActionLink deleteLink = new ActionLink("delete", this, "onDeleteClick");
 
     @Resource(name="customerService")
     private CustomerService customerService;

@@ -47,7 +47,7 @@ import org.apache.click.util.ClickUtils;
  */
 public class FieldSetDemo extends BorderPage {
 
-    @Bindable public Form form = new Form();
+    @Bindable protected Form form = new Form();
 
     // Payment options
     private RadioGroup paymentGroup;

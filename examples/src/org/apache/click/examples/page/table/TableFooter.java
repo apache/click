@@ -40,7 +40,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TableFooter extends BorderPage {
 
-    @Bindable public Table table;
+    @Bindable protected Table table;
 
     @Resource(name="customerService")
     private CustomerService customerService;
