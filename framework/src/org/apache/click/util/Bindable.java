@@ -26,6 +26,8 @@ import java.lang.annotation.Target;
 /**
  * Provides a Page field auto binding annotation.
  * <p/>
+ * Bindable can bind private, protected and public Page fields.
+ * <p/>
  * Note if a &#64;Bindable field's visibility is not public then Click will set
  * the field to be accessible using reflection. If the Java application server
  * has restricted security policies in place then this may cause a
