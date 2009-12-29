@@ -570,10 +570,14 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
       <sect3 id="application-autobinding-annotation" remap="h4">
         <title>Page Autobinding - Using Annotations</title>
 
-        <para>By default Click's autobinding feature operates on
-        <literal>public</literal> fields. However Click also provides the
+        <para>Click provides the
         <ulink url="../../click-api/org/apache/click/util/Bindable.html">Bindable</ulink>
-        annotation which allows you to annotate public Page fields.
+        annotation which enables autobinding of Page fields. The Bindable
+        annotation can bind private, protected and public Page fields.
+        However by default, Click's autobinding feature operates only on
+        <literal>public</literal> fields. The reason for this is keeping
+        backwards compatibility with earlier versions which did not support
+        the Bindable annotation.
         </para>
 
         <para>To enable Click to recognize the <symbol>@Bindable</symbol>
