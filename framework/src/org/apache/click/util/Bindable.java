@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
  * <p/>
  * Note if a &#64;Bindable field's visibility is not public then Click will set
  * the field to be accessible using reflection. If the Java application server
- * has restricted security policies in place then this may cause an
+ * has restricted security policies in place then this may cause a
  * SecurityException to be thrown. In these environments you can either modify
  * your fields visibility to be public or modify your servers Java security
  * policy.
