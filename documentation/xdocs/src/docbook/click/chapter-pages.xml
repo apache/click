@@ -295,8 +295,10 @@
     <title>Request Parameter Auto Binding</title>
 
     <para>Click will automatically bind any request parameter values to public
-    Page fields with the same name. When binding these values it will also
-    attempt to convert them to the correct type.
+    Page fields with the same name. You can also use the
+    <ulink url="../../click-api/org/apache/click/util/Bindable.html">Bindable</ulink>
+    annotation to bind private and protected Page fields. When binding these
+    values Click will also attempt to convert them to the correct type.
     </para>
 
     <para>The best way to understand this is to walk through an example. Our
