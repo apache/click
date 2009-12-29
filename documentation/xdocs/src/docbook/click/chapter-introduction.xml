@@ -180,7 +180,7 @@ public HelloWorld extends Page {
 
     <calloutlist>
       <callout arearefs="co-bindable" id="ca-bindable">
-        <para>Variables declared as <literal>@Bindable</literal>
+        <para>Variables annotated with <literal>@Bindable</literal>
         is a short-hand way of instructing Click to automatically bind request
         parameters to Page variables. Additionally these variables will be
         automatically added to the Page model. For more information please see the
