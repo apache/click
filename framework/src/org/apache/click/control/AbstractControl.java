@@ -429,9 +429,6 @@ public abstract class AbstractControl implements Control {
      * was found
      */
     public String getMessage(String name, Object[] args) {
-        if (args == null) {
-            throw new IllegalArgumentException("Null args parameter");
-        }
         String value = getMessage(name);
         if (value == null) {
             return null;

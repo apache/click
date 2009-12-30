@@ -844,9 +844,6 @@ public class Page implements Serializable {
      * @return the named localized message for the page
      */
     public String getMessage(String name, Object[] args) {
-        if (args == null) {
-            throw new IllegalArgumentException("Null args parameter");
-        }
         String value = getMessage(name);
 
         return MessageFormat.format(value, args);
