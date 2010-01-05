@@ -650,7 +650,7 @@ public class ErrorReport {
             } else {
                 buffer.append("null");
             }
-            buffer.append("</br>");
+            buffer.append("<br/>");
         }
         if (map.isEmpty()) {
             buffer.append("&nbsp;");
