@@ -46,6 +46,9 @@
 #apache-incubator-logo img {
     border: 1px solid white;
 }
+.image {
+    border: 0 none;
+}
 #apache-incubator-logo a {
   top: 2px;
   right: 15px;
@@ -300,4 +303,14 @@ table.buttons {
 .click-table th {
     background-color: navy;
     color: white;
+}
+ul.items {
+    margin-top:1em;
+    padding-left: 15px;
+}
+ul.items li.item {
+    background: url(images/tick.png) no-repeat;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 25px;
 }
