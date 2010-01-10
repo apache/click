@@ -334,7 +334,7 @@
   <sect1 id="packages-classes" remap="h2">
     <title>Packages and Classes</title>
 
-    <para> An excellent way to design your project package structure is the
+    <para> An excellent way to design your project package structure is to
     classify packages initially by technology. So in a Click application all
     of our pages would be contained under a <package>page</package> package.
     This also works very well with the Page automapping feature.
