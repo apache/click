@@ -620,7 +620,7 @@ improved project generation, documentation and examples.
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li>
         <a target="_blank" class="external" href="http://www.avoka.com/click-examples/wizard/wizard.htm">
-          Wizard demo</a> shows how to leverage a <a href="pages.html#page-stateful">stateful</a>
+          Wizard demo</a> shows how to leverage a <a href="user-guide/html/ch02s08.html">stateful</a>
           page and <a href="click-api/org/apache/click/control/Panel.html">Panels</a>
           to create a process flow. Each Step in the process is represented by a
           Panel which is managed by the stateful Page.
@@ -828,14 +828,14 @@ improved project generation, documentation and examples.
       </li>
       <li class="change">
         Added support for multiple page package definitions in click.xml configuration.
-        See the configuration topic <a href="configuration.html#application-multi-packages">Multiple Pages Packages</a>
+        See the configuration topic <a href="user-guide/html/ch04s02.html#application-multiple-packages">Multiple Pages Packages</a>
         for more details.
         This issue was raised by Ricardo R. Lecheta
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-328">328</a>].
       </li>
       <li class="change">
-        Added configurable table <a href="click-api/org/apache/click/control/Paginator.html">Paginator</a> support 
-        and an <a href="click-api/org/apache/click/control/InlinePaginator.html">InlinePaginator</a>.
+        Added configurable table <a href="click-api/org/apache/click/control/TablePaginator.html">Paginator</a> support
+        and an <a href="extras-api/org/apache/click/extras/control/TableInlinePaginator.html">InlinePaginator</a>.
         A new <a target="_blank" href="http://www.avoka.com/click-examples/table/table-paginator.htm">example</a>
         shows the different Paginator options available. This issue was raised by Gustav Weber
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-390">390</a>].
@@ -920,7 +920,7 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Introduce a two phase listener dispatch mechanism. During the onProcess event,
-        Control listeners will be registered on the <a href="click-api/org/apache/click/ControlRegistry.html">ControlRegistry</a>
+        Control listeners will be registered on the <a href="click-api/org/apache/click/ActionEventDispatcher.html">ActionEventDispatcher</a>
         and triggered after the onProcess event finish. The net effect of this change
         is that when Control listeners are triggered, all request values have been bound to Controls,
         and can safely be referred to from the listener [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-365">365</a>].
@@ -947,7 +947,7 @@ public class MyPage extends Page {
         All files found under 'META-INF/web/' will be copied verbatim to the web
         application folder.
         <p/>
-        See the section <a href="configuration.html#deploying-custom-resources">Deploying Custom Resources</a>
+        See the section <a href="user-guide/html/ch04s03.html#deploying-custom-resources">Deploying Custom Resources</a>
         for more detail.
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-393">393</a>].
       </li>
@@ -1048,7 +1048,7 @@ public class MyPage extends Page {
     Click 1.5 (currently in development) introduces important new features including:
     <p/>
     <ul style="margin-top:0.5em;">
-     <li class="item"><a href="controls.html#container">Container</a> - new interface for building arbitrary complex, hierarchical Controls.</li>
+     <li class="item"><a href="user-guide/html/ch03s06.html">Container</a> - new interface for building arbitrary complex, hierarchical Controls.</li>
      <li class="item"><a href="click-api/org/apache/click/service/package-summary.html#services">Services</a> - Click core has been refactored into pluggable services.</li>
      <li class="item"><a href="mock-api/overview-summary.html">Mock Test Support</a> - Unit and Functional Testing.</li>
      <li class="item"><a href="click-api/org/apache/click/control/AbstractControl.html">AbstractControl</a>
@@ -1086,10 +1086,10 @@ public class MyPage extends Page {
      <li class="change">New documentation:
      <ul style="padding-top: 5px;">
          <li class="change">
-             <a href="controls.html#container">Container</a>
+             <a href="user-guide/html/ch03s06.html#container">Container</a>
          </li>
          <li class="change">
-             <a href="controls.html#layout">Template vs Container layout</a>
+             <a href="user-guide/html/ch03s07.html#layout">Template vs Container layout</a>
          </li>
          <li class="change">
              <a href="click-api/org/apache/click/service/package-summary.html">Click Runtime Services</a>
@@ -1333,7 +1333,7 @@ public class MyPage extends Page {
 		an Grade A rating with Yahoo's YSlow.
       </li>
       <li class="change">
-		Added <a href="pages.html#page-stateful">Stateful Pages</a> topic and 
+		Added <a href="user-guide/html/ch02s08.html">Stateful Pages</a> topic and
 		completed framework support for serializing stateful Pages and their controls.
       </li>
       <li class="change">
@@ -1555,8 +1555,8 @@ public class MyPage extends Page {
 		Important Change 
 		multipart file upload requests are now processed using a globally configured Commons FileUpload
 		class. Please see the 
-		<a href="configuration.html#application-file-item-factory">File Item Factory</a> 
-		topic for more details. This change enables for request parameter auto binding
+		<a href="click-api/org/apache/click/service/CommonsFileUploadService.html">CommonsFileUploadService</a>
+		for more details. This change enables for request parameter auto binding
 		on multipart file upload requests.
       </li>
       <li class="change">
@@ -1680,7 +1680,7 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
 		Important Change 
-		the <a href="pages.html#activity-diagram">Pages</a> event execution order 
+		the <a href="user-guide/html/ch02s02.html#activity-diagram">Pages</a> event execution order
 		has changed with the <tt>onSecurityCheck()</tt> method now invoked before 
 		the <tt>onInit()</tt> method. The benefit of this is that the <tt>onInit()</tt> 
 		is only invoked if the request has passed the <tt>onSecurityCheck()</tt>.
@@ -1697,7 +1697,7 @@ public class MyPage extends Page {
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-186">186</a>].
       </li>
       <li class="change">
-      	Added <a href="configuration.html#application-autobinding">autobinding</a> configuration option.
+      	Added <a href="user-guide/html/ch04s02.html#application-autobinding">autobinding</a> configuration option.
       	This issue was raised by Ahmed Mohombe 
       	[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-199">199</a>].
       </li>
@@ -1764,11 +1764,11 @@ public class MyPage extends Page {
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-160">160</a>].
       </li>
       <li class="change">
-      	Added controls 
-      	<a href="extras-api/org/apache/click/extras/graph/JSBarChart.html">JSBarChart</a>,
-      	<a href="extras-api/org/apache/click/extras/graph/JSLineChart.html">JSLineChart</a> and 
-      	<a href="extras-api/org/apache/click/extras/graph/JSPieChart.html">JSPieChart</a>.
+      	Added controls JSBarChart, JSLineChart and JSPieChart.
       	These controls were created by Ahmed Mohombe.
+        <span class="red">Update:</span> these controls were moved to the
+        <a class="external" target="_blank" href="http://code.google.com/p/click-charts/">Click Charts</a>
+        project.
       </li>
       <li class="change">
       	Added Field convenience methods for setting style, text-align and width HTML attributes.
@@ -1860,7 +1860,7 @@ public class MyPage extends Page {
         Added <a href="click-ide.html">ClickIDE</a> documentation.
       </li>
       <li class="change">
-        Added Page <a href="pages.html#page-param-auto-binding">Request Param Auto Binding</a> documentation topic.
+        Added Page <a href="user-guide/html/ch02s03.html#request-param-auto-binding">Request Param Auto Binding</a> documentation topic.
       </li>
       <li class="change">
         Added Best Practices <a href="user-guide/html/ch05s02.html#packages-classes">Packages and Classes</a> documentation topic.
@@ -2362,12 +2362,12 @@ public class MyPage extends Page {
       </li>
       <li class="change">
        Add configurable application Locale. See 
-       <a href="configuration.html#application-click-app">Click App</a> for
+       <a href="user-guide/html/ch04s02.html#click-app">Click App</a> for
        details [<a href="https://issues.apache.org/jira/browse/CLK-96">96</a>].
       </li>
       <li class="change">
        Added support for 'Page' suffix when automapping path -> classname.
-       See <a href="configuration.html#application-automapping">automapping</a>
+       See <a href="user-guide/html/ch04s02.html#application-automapping">automapping</a>
        topic for details. This issue raised by Stephen Haberman.
       </li>
       <li class="change">
@@ -2388,11 +2388,11 @@ public class MyPage extends Page {
        Ricardo Lecheta [<a href="https://issues.apache.org/jira/browse/CLK-86">86</a>].
       </li>
       <li class="change">
-       Added <a target="blank" class="external" href="www.objectstyle.org/cayenne/">Cayenne</a> 
+       Added <a target="blank" class="external" href="http://cayenne.apache.org/">Cayenne</a>
        integration example to Examples.
       </li>
       <li class="change">
-       Added <a target="blank" class="external" href="www.springframework.org">Spring</a> 
+       Added <a target="blank" class="external" href="http://www.springsource.org/">Spring</a>
        integration example to Examples and improved 
        <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
        documentation.
@@ -2454,7 +2454,7 @@ public class MyPage extends Page {
       </li>
       <li class="change">
        Added new Click Extras controls 
-       <a href="extras-api/org/apache/click/extras/control/ActionButton.html">ActionButton</a>,
+       <a href="click-api/org/apache/click/control/ActionButton.html">ActionButton</a>,
        <a href="extras-api/org/apache/click/extras/control/LongField.html">LongField</a>,
        <a href="extras-api/org/apache/click/extras/control/NumberField.html">NumberField</a>,
        <a href="extras-api/org/apache/click/extras/control/TabbedForm.html">TabbedForm</a> and
@@ -2493,7 +2493,7 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Added page automapping
-        <a href="configuration.html#application-excludes">excludes</a>.
+        <a href="user-guide/html/ch04s02.html#application-excludes">excludes</a>.
         This issue was identified by Ahmed Mohombe
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-52">52</a>].
       </li>
@@ -2596,7 +2596,7 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Added 
-        <a href="extras-api/org/apache/click/extras/cayenne/RelationshipSelect.html">RelationshipSelect</a> 
+        <a href="extras-api/org/apache/click/extras/cayenne/PropertySelect.html">PropertySelect</a>
         provided by Ahmed Mohombe. Please see Click Cayenne web application for
         a demonstration.
       </li>
@@ -2708,12 +2708,12 @@ public class MyPage extends Page {
       </li> 
       <li class="change">
         Added Menu 
-        <a href="extras-api/org/apache/click/extras/menu/Menu.html#pages">pages</a>
+        <a href="extras-api/org/apache/click/extras/control/Menu.html#pages">pages</a>
         property for selecting menu items. This feature was provided by 
         Geoff Hopson
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-39">39</a>].
         <p/>
-        Refactored <a href="extras-api/org/apache/click/extras/menu/Menu.html">Menu</a> 
+        Refactored <a href="extras-api/org/apache/click/extras/control/Menu.html">Menu</a>
         to implement Control interface to improve Page subclassing.
       </li>
       <li class="change">
@@ -2903,12 +2903,12 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-      	Added <a href="extras-api/org/apache/click/extras/menu/Menu.html">Menu</a> component.
+      	Added <a href="extras-api/org/apache/click/extras/control/Menu.html">Menu</a> component.
       	See Javadoc for details and Click Examples for a demonstration 
       	[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-12">CLK-12</a>].
       </li> 
       <li class="change">
-      	Added runtime <a href="configuration.html#page-auto-loading">Page Auto Loading</a> 
+      	Added runtime <a href="user-guide/html/ch04s02.html#page-auto-loading">Page Auto Loading</a>
         when the application is in
         <tt>"development"</tt>, <tt>"debug"</tt> or <tt>"trace"</tt> mode
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-18">CLK-18</a>].
@@ -2957,7 +2957,7 @@ public class MyPage extends Page {
         components by Phil Barnes. See Javadoc for details and Click Examples for a demonstration.
       </li> 
       <li class="change">
-      	Added <a href="extras-api/org/apache/click/extras/table/Table.html">Table</a> control.
+      	Added <a href="click-api/org/apache/click/control/Table.html">Table</a> control.
       	See Javadoc for details and Click Examples for a demonstration 
       	[<a target='_blank' href="http://sourceforge.net/tracker/index.php?func=detail&aid=1243243&group_id=82095&atid=565027">1243243</a>].
       </li> 
@@ -2978,7 +2978,7 @@ public class MyPage extends Page {
         methods to Context class to enable overriding the default request Locale. </div>
       </li>  
       <li class="change">
-      	New <a href="extras.html">Click Extras</a> module and JAR provided for 
+      	New <a href="extras-api/overview-summary.html">Click Extras</a> module and JAR provided for
         contributions and non-core framework components.
       </li>   
       <li class="change">
@@ -3014,9 +3014,9 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-      	Added <a href="click-api/org/apache/click/util/ClickLogger.html">ClickLogger</a>
+      	Added <a href="click-api/org/apache/click/service/LogService.html">LogService</a>
       	which logs to the console by default. 
-      	See the Click and  Velocity <a href="configuration.html#click-logging">Logging</a>
+      	See the Click and  Velocity <a href="user-guide/html/ch04s02.html#click-logging">Logging</a>
       	topic.
       </li>    
       <li class="change">Updated documentation and examples.</li> 
@@ -3033,9 +3033,8 @@ public class MyPage extends Page {
          File Upload page for a demonstration [<a href="http://sourceforge.net/tracker/index.php?func=detail&aid=1237942&group_id=82095&atid=565027">1237942</a>].
       </li>
       <li class="changes">
-        Added pages <a href="configuration.html#application-automapping">Auto Mapping</a> 
-        configuration option [<a href="http://sourceforge.net/tracker/index.php?func=detail&aid=1237397&group_id=82095&atid=565027">1237397</a>]. 
-        This feature can automatically map HTML page
+        Added pages <a href="user-guide/html/ch04s02.html#application-automapping">Auto Mapping</a>
+        configuration option. This feature can automatically map HTML page
         templates to Page classes so you dont have to declare them manually in
         the click.xml configuration file. 
         <div style="margin-top:0.5em;">
@@ -3043,7 +3042,7 @@ public class MyPage extends Page {
       </li>
       <li class="changes">
         Added 
-        <a href="pages.html#page-forwarding">Page Fowarding</a> 
+        <a href="user-guide/html/ch02s05.html#page-forwarding">Page Forwarding</a>
         enabling you to configure the Page to forward the request to.
         This provides similar functionality as Tapestry's <tt>cycle.getPage()</tt>
         interpage calling technique. See the Examples Page
@@ -3064,7 +3063,7 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Added "trace" application mode to provide more detailed logging.
-        See the Configuration <a href="configuration.html#application-mode">Mode</a> topic.
+        See the Configuration <a href="user-guide/html/ch04s02.html#application-mode">Mode</a> topic.
       </li> 
       <li class="change">
         Added 
@@ -3128,7 +3127,7 @@ public class MyPage extends Page {
   <dt>Version 0.4 - May 2005</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
-      <li class="change">Implemented <a href="pages.html#page-templating">Page Templating</a> 
+      <li class="change">Implemented <a href="user-guide/html/ch02s06.html#page-templating">Page Templating</a>
          capability. Enabling you to create a standardized look and feel for your web 
          application and greatly reducing the amount of HTML you need to maintain.
       </li>
@@ -3137,7 +3136,7 @@ public class MyPage extends Page {
          <a href="error-npe.html">NullPointerException</a>.    
       </li>
       <li class="change">Integrated the DHTML Calendar widget by <a href="http://www.dynarch.com/">Dyna.com</a>
-         into <a href="click-api/org/apache/click/control/DateField.html">DateField</a> control.
+         into <a href="extras-api/org/apache/click/extras/control/DateField.html">DateField</a> control.
       </li>
       <li class="change">Added Form and Field <a href="click-api/org/apache/click/control/Field.html#readonly">readonly</a> 
          property. Modified Field subclasses to render their HTML readonly attribute. If the Form is set to
