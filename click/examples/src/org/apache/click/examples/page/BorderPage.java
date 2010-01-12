@@ -78,6 +78,9 @@ public class BorderPage extends Page {
         addControl(rootMenu);
     }
 
+    /**
+     * @see org.apache.click.Page#onDestroy()
+     */
     @Override
     public void onDestroy() {
         // Remove menu for when BorderPage is Serialized to disk
