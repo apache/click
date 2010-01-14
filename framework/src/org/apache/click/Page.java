@@ -771,8 +771,8 @@ public class Page implements Serializable {
 
     /**
      * Return the localized Page resource message for the given resource
-     * property key. The resource message returned will use the Locale obtained
-     * from the Context.
+     * name or null if not found. The resource message returned will use the
+     * Locale obtained from the Context.
      * <p/>
      * Pages can define text properties files to store localized messages. These
      * properties files must be stored on the Page class path with a name
@@ -810,25 +810,32 @@ public class Page implements Serializable {
      * <pre class="codeHtml">
      * <span class="blue">$messages.title</span> </pre>
      *
-     * Please see the {@link org.apache.click.util.MessagesMap} adaptor for more details.
+     * Please see the {@link org.apache.click.util.MessagesMap} adaptor for more
+     * details.
      *
-     * @param key the message property key name
-     * @return the Page message for the given message property key
+     * @param name resource name of the message
+     * @return the named localized message for the page or null if no message
+     * was found
      */
-    public String getMessage(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("Null key parameter");
+    public String getMessage(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
         }
-        return (String) getMessages().get(key);
+        return (String) getMessages().get(name);
     }
 
     /**
      * Return the formatted page message for the given resource name
-     * and message format argument and for the context request locale.
+     * and message format argument or null if no message was found. The resource
+     * message returned will use the Locale obtained from the Context.
+     * <p/>
+     * {@link #getMessage(java.lang.String, java.lang.Object[])} is invoked to
+     * retrieve the message for the specified name.
      *
      * @param name resource name of the message
      * @param arg the message argument to format
-     * @return the named localized message for the page
+     * @return the named localized message for the page or null if no message
+     * was found
      */
     public String getMessage(String name, Object arg) {
         Object[] args = new Object[] { arg };
@@ -837,11 +844,16 @@ public class Page implements Serializable {
 
     /**
      * Return the formatted page message for the given resource name and
-     * message format arguments and for the context request locale.
+     * message format arguments or null if no message was found. The resource
+     * message returned will use the Locale obtained from the Context.
+     * <p/>
+     * {@link #getMessage(java.lang.String)} is invoked to retrieve the message
+     * for the specified name.
      *
      * @param name resource name of the message
      * @param args the message arguments to format
-     * @return the named localized message for the page
+     * @return the named localized message for the page or null if no message
+     * was found
      */
     public String getMessage(String name, Object[] args) {
         String value = getMessage(name);
@@ -850,7 +862,8 @@ public class Page implements Serializable {
     }
 
     /**
-     * Return a Map of localized messages for the Page.
+     * Return a Map of localized messages for the Page. The messages returned
+     * will use the Locale obtained from the Context.
      *
      * @see #getMessage(String)
      *

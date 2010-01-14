@@ -119,6 +119,16 @@ import org.apache.click.util.HtmlStringBuffer;
  * <li>{@link #setErrorMessage(String, Object)}</li>
  * </ul>
  *
+ * Fields automatically pick up localized messages where applicable. Please see
+ * the following methods on how to customize these messages:
+ * <ul>
+ * <li>{@link #getLabel()}</li>
+ * <li>{@link #getTitle()}</li>
+ * <li>{@link #getHelp()}</li>
+ * <li>{@link #setErrorMessage(String)}</li>
+ * <li>{@link #setErrorMessage(String, Object)}</li>
+ * </ul>
+ *
  * <a name="message-resolve-order" href="#"></a>
  * The order in which localized messages resolve are:
  * <dl>
