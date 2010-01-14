@@ -357,15 +357,15 @@
     <pre class="codeHtml">
     &lt;h2&gt;<span class="red">$</span><span class="blue">messages.title</span>&lt;/h2&gt; </pre>
 
-   You can also define Field and ActionLink labels and title values in your pages
+   You can also define Field and AbstractLink label and title values in your pages
    properties file using control name lookup convention. For details please see
    the Javadoc:
    <ul style="margin-top:1em;">
     <li>
-     <a href="click-api/org/apache/click/control/ActionLink.html#getLabel()">ActionLink.getLabel()</a>
+     <a href="click-api/org/apache/click/control/AbstractLink.html#getLabel()">AbstractLink.getLabel()</a>
     </li>
     <li>
-     <a href="click-api/org/apache/click/control/ActionLink.html#getTitle()">ActionLink.getTitle()</a>
+     <a href="click-api/org/apache/click/control/AbstractLink.html#getTitle()">AbstractLink.getTitle()</a>
     </li>
     <li>
      <a href="click-api/org/apache/click/control/Field.html#getLabel()">Field.getLabel()</a>
@@ -376,16 +376,19 @@
     <li>
      <a href="click-api/org/apache/click/control/FieldSet.html#getLegend()">FieldSet.getLegend()</a>
     </li>
+    <li>
+     <a href="click-api/org/apache/click/control/Panel.html#getLabel()">Panel.getLabel()</a>
+    </li>
    </ul>
 
-   <h4>Field Messages</h4>
+   <h4>Control Messages</h4>
   
-   The Field control classes share a common messages properties file:
+   The Control classes share a common messages properties file:
 <pre class="codeConfig">
 /click-control.properties </pre>  
 
-   The field class provides a number of 
-   <a href="click-api/org/apache/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a>
+   The AbstractControl class provides a number of
+   <a href="click-api/org/apache/click/control/AbstractControl.html#getMessage(java.lang.String)">getMessage(String)</a>
    methods which support localized strings and message formatting.
    Please also see the Control topic <a href="user-guide/html/ch03s04.html">Message Properties</a>.
   </dd>
