@@ -229,7 +229,7 @@ public class EmailField extends TextField {
      * <ul>
      *   <li>/click-control.properties
      *     <ul>
-     *       <li>field-maxlenght-error</li>
+     *       <li>field-maxlength-error</li>
      *       <li>field-minlength-error</li>
      *       <li>field-required-error</li>
      *     </ul>
