@@ -368,7 +368,9 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Return the localized message for the given key, or null if not found.
+     * Return the localized message for the given key or null if not found.
+     * The resource message returned will use the Locale obtained from the
+     * Context.
      * <p/>
      * This method will attempt to lookup the localized message in the
      * parent's messages, which resolves to the Page's resource bundle.
@@ -380,7 +382,7 @@ public abstract class AbstractControl implements Control {
      * If still not found, this method will return null.
      *
      * @param name the name of the message resource
-     * @return the named localized message, or null if not found
+     * @return the named localized message for the control, or null if not found
      */
     public String getMessage(String name) {
         if (name == null) {
@@ -399,16 +401,17 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Return the formatted message for the given resource name,
-     * message format argument and the context request locale, or null
-     * if no message was found.
+     * Return the formatted message for the given resource name and message
+     * format argument or null if no message was found. The resource message
+     * returned will use the Locale obtained from the Context.
      * <p/>
      * {@link #getMessage(java.lang.String, java.lang.Object[])} is invoked to
      * retrieve the message for the specified name.
      *
      * @param name resource name of the message
      * @param arg the message argument to format
-     * @return the named localized message for the control
+     * @return the named localized message for the control or null if no message
+     * was found
      */
     public String getMessage(String name, Object arg) {
         Object[] args = new Object[] { arg };
@@ -416,16 +419,16 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Return the formatted message for the given resource name,
-     * message format arguments and the context request locale, or null if
-     * no message was found.
+     * Return the formatted message for the given resource name and message
+     * format arguments or null if no message was found. The resource
+     * message returned will use the Locale obtained from the Context.
      * <p/>
      * {@link #getMessage(java.lang.String)} is invoked to retrieve the message
      * for the specified name.
      *
      * @param name resource name of the message
      * @param args the message arguments to format
-     * @return the named localized message for the package or null if no message
+     * @return the named localized message for the control or null if no message
      * was found
      */
     public String getMessage(String name, Object[] args) {
@@ -437,7 +440,8 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Return a Map of localized messages for the control.
+     * Return a Map of localized messages for the control. The messages returned
+     * will use the Locale obtained from the Context.
      *
      * @return a Map of localized messages for the control
      * @throws IllegalStateException if the context for the control has not be set
