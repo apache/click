@@ -38,7 +38,7 @@ import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.IntegerField;
 import org.apache.click.extras.control.PageSubmit;
 import org.apache.click.util.Bindable;
-import org.apache.click.util.ClickUtils;
+import org.apache.click.util.ContainerUtils;
 
 /**
  * Provides a form FieldSet example.
@@ -110,7 +110,7 @@ public class FieldSetDemo extends BorderPage {
 
     public boolean onOkClick() {
         if (isFormValid()) {
-            List fieldList = ClickUtils.getFormFields(form);
+            List fieldList = ContainerUtils.getInputFields(form);
             for (Iterator i = fieldList.iterator(); i.hasNext(); ) {
                 Field field = (Field) i.next();
                 System.out.println(field.getName() + "=" + field.getValue());

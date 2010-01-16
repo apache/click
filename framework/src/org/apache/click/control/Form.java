@@ -1990,7 +1990,7 @@ public class Form extends AbstractContainer {
      * @return the rendered form start tag and the forms hidden fields
      */
     public String startTag() {
-        List formFields = ClickUtils.getFormFields(this);
+        List formFields = ContainerUtils.getInputFields(this);
 
         int bufferSize = getFormSizeEst(formFields);
 
@@ -2010,7 +2010,7 @@ public class Form extends AbstractContainer {
     public String endTag() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        List formFields = ClickUtils.getFormFields(this);
+        List formFields = ContainerUtils.getInputFields(this);
 
         renderTagEnd(formFields, buffer);
 
@@ -2031,7 +2031,7 @@ public class Form extends AbstractContainer {
         final boolean process =
             getContext().getRequest().getMethod().equalsIgnoreCase(getMethod());
 
-        List formFields = ClickUtils.getFormFields(this);
+        List formFields = ContainerUtils.getInputFields(this);
 
         renderHeader(buffer, formFields);
 

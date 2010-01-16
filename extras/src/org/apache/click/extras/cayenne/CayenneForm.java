@@ -384,7 +384,7 @@ public class CayenneForm extends Form {
             // Clear any form data
             oidField.setValueObject(null);
 
-            List fields = ClickUtils.getFormFields(this);
+            List fields = ContainerUtils.getInputFields(this);
             for (int i = 0; i < fields.size(); i++) {
                 Field field = (Field) fields.get(i);
                 if (field instanceof HiddenField == false) {
