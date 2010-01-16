@@ -41,7 +41,7 @@ import org.apache.click.extras.control.IntegerField;
 import org.apache.click.extras.control.PageSubmit;
 import org.apache.click.extras.control.TabbedForm;
 import org.apache.click.extras.control.TelephoneField;
-import org.apache.click.util.ClickUtils;
+import org.apache.click.util.ContainerUtils;
 
 /**
  * Provides an TabbedForm control example.
@@ -155,7 +155,7 @@ public class TabbedFormDemo extends BorderPage {
     }
 
     private void processDelivery() {
-        List fieldList = ClickUtils.getFormFields(form);
+        List fieldList = ContainerUtils.getInputFields(form);
         for (Iterator i = fieldList.iterator(); i.hasNext(); ) {
             Field field = (Field) i.next();
             System.out.println(field.getName() + "=" + field.getValue());

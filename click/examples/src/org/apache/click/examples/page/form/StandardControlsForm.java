@@ -47,7 +47,7 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.examples.util.ExampleUtils;
 import org.apache.click.util.Bindable;
-import org.apache.click.util.ClickUtils;
+import org.apache.click.util.ContainerUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -149,7 +149,7 @@ public class StandardControlsForm extends BorderPage {
         Options options = (Options) ExampleUtils.getSessionObject(Options.class);
 
         form.setJavaScriptValidation(options.javaScriptValidate);
-        List formFiels = ClickUtils.getFormFields(form);
+        List formFiels = ContainerUtils.getInputFields(form);
         for (Iterator i = formFiels.iterator(); i.hasNext();) {
             Field field = (Field) i.next();
             field.setRequired(options.allFieldsRequired);
