@@ -135,6 +135,9 @@ public class DateField extends TextField {
 
     // -------------------------------------------------------------- Constants
 
+    /** The date default format pattern: "<tt>dd MMM yyyy</tt>". */
+    public static String defaultFormatPattern = "dd MMM yyyy";
+
     private static final long serialVersionUID = 1L;
 
     /** Supported locales. */
@@ -192,7 +195,7 @@ public class DateField extends TextField {
     public DateField(String name) {
         super(name);
         setAttribute("id", getName() + "_field");
-        setFormatPattern("dd MMM yyyy");
+        setFormatPattern(defaultFormatPattern);
     }
 
     /**
@@ -206,7 +209,7 @@ public class DateField extends TextField {
     public DateField(String name, String label) {
         super(name, label);
         setAttribute("id", getName() + "_field");
-        setFormatPattern("dd MMM yyyy");
+        setFormatPattern(defaultFormatPattern);
     }
 
     /**
@@ -234,7 +237,7 @@ public class DateField extends TextField {
     public DateField(String name, String label, boolean required) {
         super(name, label, required);
         setAttribute("id", getName() + "_field");
-        setFormatPattern("dd MMM yyyy");
+        setFormatPattern(defaultFormatPattern);
     }
 
     /**
@@ -270,7 +273,7 @@ public class DateField extends TextField {
      */
     public DateField() {
         super();
-        setFormatPattern("dd MMM yyyy");
+        setFormatPattern(defaultFormatPattern);
     }
 
     // ------------------------------------------------------ Public Attributes
