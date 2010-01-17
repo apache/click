@@ -25,5 +25,8 @@ _translations = {
   "OK": "OK",
   "Now": "Сейчас",
   "Today": "Сегодня",
-  "Clear": "Ясный"
+  "Clear": "Очистить"
 }
+
+Date.prototype.getAMPMHour = function() { var hour = this.getHours(); return hour; }
+Date.prototype.getAMPM = function() { return ""; }
