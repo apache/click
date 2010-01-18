@@ -1373,7 +1373,7 @@ public class ClickUtils {
             oos = new ObjectOutputStream(gos);
 
             oos.writeObject(object);
-            oos.close();
+
         } finally {
             close(oos);
             close(gos);
