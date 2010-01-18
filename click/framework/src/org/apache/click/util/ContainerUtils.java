@@ -1040,10 +1040,11 @@ public class ContainerUtils {
     }
 
     /**
-     * Add input fields (TextField, Select, Radio, Checkbox etc.) for the given
-     * Container to the specified field list, recursively including any Fields
-     * contained in child containers. The list of returned fields will exclude
-     * any <tt>Button</tt>, <tt>FieldSet</tt> and <tt>Label</tt> fields.
+     * Add input fields (TextField, TextArea, Select, Radio, Checkbox etc.) for
+     * the given Container to the specified field list, recursively including
+     * any Fields contained in child containers. The list of returned fields
+     * will exclude any <tt>Button</tt>, <tt>FieldSet</tt> and <tt>Label</tt>
+     * fields.
      *
      * @param container the container to obtain the fields from
      * @param the list of contained fields
@@ -1062,6 +1063,7 @@ public class ContainerUtils {
                 }
                 Container childContainer = (Container) control;
                 addInputFields(childContainer, fields);
+
             } else if (control instanceof Field) {
                 fields.add(control);
             }
