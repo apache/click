@@ -102,7 +102,7 @@ import org.apache.velocity.exception.ParseErrorException;
  *
  * A single application {@link ConfigService} instance is created by the ClickServlet at
  * startup. Once the ConfigService has been initialized it is stored in the
- * ServletContext using the key "<tt>org.apache.click.service.ConfigService</tt>".
+ * ServletContext using the key {@value org.apache.click.service.ConfigService#CONTEXT_NAME}.
  */
 public class ClickServlet extends HttpServlet {
 
