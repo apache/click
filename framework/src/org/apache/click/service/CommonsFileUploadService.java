@@ -82,31 +82,52 @@ public class CommonsFileUploadService implements FileUploadService {
         ConfigService configService = ClickUtils.getConfigService(servletContext);
         LogService logService = configService.getLogService();
 
+        boolean logWarning = false;
+        boolean restrictedEnvironment = false;
+
+        // Uploaded files are saved to java.io.tmpdir. Here we check if this
+        // directory exists, if it does does not, log a warning
+        String tmpdir = System.getProperty("java.io.tmpdir");
+
         try {
-            // Uploaded files are saved to java.io.tmpdir. Here we check if this
-            // directory exists, if it does does not, log a warning
-            String tmpdir = System.getProperty("java.io.tmpdir");
-            File tmpfile = new File(tmpdir);
-            if (!tmpfile.exists()) {
-                logService.warn("The java.io.tmpdir directory, '" + tmpdir
-                    + "', does not exist. This can cause file uploading to fail"
-                    + " as uploaded files are saved to directory specified by the"
-                    + " 'java.io.tmpdir' property.");
+            if (tmpdir == null) {
+                logWarning = true;
+
+            } else {
+                File tmpfile = new File(tmpdir);
+                if (!tmpfile.exists()) {
+                    logWarning = true;
+                }
+            }
+
+            if (!ClickUtils.isResourcesDeployable(servletContext)) {
+                restrictedEnvironment = true;
             }
 
         } catch (AccessControlException exception) {
-            if (!ClickUtils.isResourcesDeployable(servletContext)) {
-                // Probably deploying on Google App Engine which throws
-                // Security Exception if accessing temp folder
-                logService.warn("If you are deploying to Google App Engine,"
-                    + " please note that Click's default"
-                    + " org.apache.click.service.CommonsFileUploadService"
-                    + " does not work with Google App Engine. Instead use"
-                    + " org.apache.click.extras.gae.MemoryFileUploadService.");
-            } else {
-                // If resources are deployable throw exception
+            if (ClickUtils.isResourcesDeployable(servletContext)) {
+                // If resources are deployable, throw exception
                 throw exception;
+            } else {
+                restrictedEnvironment = true;
             }
+        }
+
+        if (logWarning) {
+            logService.warn("The java.io.tmpdir directory, '" + tmpdir
+                + "', does not exist. This can cause file uploading to fail"
+                + " as uploaded files are saved to directory specified by the"
+                + " 'java.io.tmpdir' property.");
+        }
+
+        if (restrictedEnvironment) {
+            // Probably deploying on Google App Engine which throws
+            // Security Exception if accessing temp folder
+            logService.warn("If you are deploying to Google App Engine,"
+                + " please note that Click's default"
+                + " org.apache.click.service.CommonsFileUploadService"
+                + " does not work with Google App Engine. Instead use"
+                + " org.apache.click.extras.gae.MemoryFileUploadService.");
         }
     }
 
