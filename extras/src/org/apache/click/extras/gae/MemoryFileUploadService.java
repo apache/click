@@ -55,7 +55,7 @@ import org.apache.commons.fileupload.FileItemFactory;
 public class MemoryFileUploadService extends CommonsFileUploadService {
 
     /**
-     * @see FileUploadService#onInit(ServletContext)
+     * @see org.apache.click.service.FileUploadService#onInit(ServletContext)
      * @param servletContext the application servlet context
      * @throws Exception if an error occurs initializing the FileUploadService
      */
