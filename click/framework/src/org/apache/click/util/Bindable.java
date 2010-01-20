@@ -24,7 +24,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Provides a Page field auto binding annotation.
+ * Provides a Page field auto binding annotation. Please see the user guide
+ * sections on <a href="../../../../../user-guide/html/ch04s02.html#application-autobinding">Autobinding</a>
+ * and <a href="../../../../../user-guide/html/ch04s02.html#application-autobinding-annotation">Autobinding Using Annotations</a>
+ * for a detailed description of Page field binding.
  * <p/>
  * Bindable can bind private, protected and public Page fields.
  * <p/>
@@ -35,7 +38,20 @@ import java.lang.annotation.Target;
  * your fields visibility to be public or modify your servers Java security
  * policy.
  *
+ * <h3>Configuration</h3>
+ * By default Click only binds public page fields. In order for Click to
+ * recognize the &#64;Bindable annotation you need to set the autobinding
+ * attribute to "<tt>annotation</tt>" in your <tt>click.xml</tt> config file:
+ *
+ * <pre class="prettyprint">
+ * &lt;click-app&gt;
+ *   &lt;pages package="com.mycorp.page" autobinding="annotation"/&gt;
+ * &lt;/click-app&gt; </pre>
+ *
  * <h3>Bindable Example</h3>
+ *
+ * With the above configuration in place, Click will bind all page fields
+ * annotated with the &#64;Bindable annotation:
  *
  * <pre class="prettyprint">
  * public class BindableDemo extends Page {
