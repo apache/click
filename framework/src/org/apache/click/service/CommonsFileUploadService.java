@@ -125,9 +125,9 @@ public class CommonsFileUploadService implements FileUploadService {
             // Security Exception if accessing temp folder
             logService.warn("If you are deploying to Google App Engine,"
                 + " please note that Click's default"
-                + " org.apache.click.service.CommonsFileUploadService"
+                + " 'org.apache.click.service.CommonsFileUploadService'"
                 + " does not work with Google App Engine. Instead use"
-                + " org.apache.click.extras.gae.MemoryFileUploadService.");
+                + " 'org.apache.click.extras.gae.MemoryFileUploadService'.");
         }
     }
 
