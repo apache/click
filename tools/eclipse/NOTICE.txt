@@ -1,0 +1,9 @@
+ClickIDE
+Copyright 2010 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+This product includes Spring Fraemwork by SpringSource
+and released under the Apache 2.0 license.
+http://www.springsource.org/
