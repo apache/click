@@ -590,7 +590,7 @@ public class PerformanceFilter implements Filter {
             }
         }
 
-        if (!excludeFiles.isEmpty()) {
+        if (!excludeDirs.isEmpty()) {
             for (int i = 0; i < excludeDirs.size(); i++) {
                 String dir = excludeDirs.get(i).toString();
                 if (path.startsWith(dir)) {
