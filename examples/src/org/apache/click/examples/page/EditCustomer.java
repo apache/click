@@ -41,28 +41,28 @@ import org.springframework.stereotype.Component;
  * Provides an edit Customer Form example. The Customer business object
  * is initially passed to this Page as a request attribute.
  * <p/>
- * Note the public visibility "referrer" HiddenField and the "id" field
- * have their value automatically set with any identically named request
- * parameters after the page is created.
- *
- * @author Malcolm Edgar
+ * Note the bindable "id" and "referrer" fields have their values automatically
+ * set with any identically named request parameters after the page is created.
+ * These fields will be used to populate the similarly named HiddenFields
+ * on GET requests. See the onGet method below.
  */
 @Component
 public class EditCustomer extends BorderPage {
 
-    // Public controls are automatically added to the page
-    @Bindable protected Form form = new Form("form");
-    @Bindable protected HiddenField referrerField = new HiddenField("referrer", String.class);
-
-    // Public variables can automatically have their value set by request parameters
-    @Bindable protected Integer id;
-
+    private Form form = new Form("form");
+    private HiddenField referrerField = new HiddenField("referrer", String.class);
     private HiddenField idField = new HiddenField("id", Integer.class);
+
+    // Bindable variables can automatically have their value set by request parameters
+    @Bindable protected Integer id;
+    @Bindable protected String referrer;
 
     @Resource(name="customerService")
     private CustomerService customerService;
 
     public EditCustomer() {
+        addControl(form);
+
         form.add(referrerField);
 
         form.add(idField);
@@ -106,8 +106,15 @@ public class EditCustomer extends BorderPage {
             Customer customer = customerService.getCustomerForID(id);
 
             if (customer != null) {
+                // Copy customer data to form. The idField value will be set by
+                // this call
                 form.copyFrom(customer);
             }
+        }
+
+        if (referrer != null) {
+            // Set HiddenField to bound referrer field
+            referrerField.setValue(referrer);
         }
     }
 
