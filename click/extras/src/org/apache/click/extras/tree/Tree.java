@@ -1110,7 +1110,6 @@ public class Tree extends AbstractControl {
         } else {
             buffer.append("<span class=\"spacer\"></span>");
         }
-        buffer.append("\n");
     }
 
     /**
@@ -1147,7 +1146,6 @@ public class Tree extends AbstractControl {
         }
 
         getExpandLink().render(buffer);
-        buffer.append("\n");
     }
 
     /**
@@ -1182,8 +1180,6 @@ public class Tree extends AbstractControl {
         //renders the node value
         renderValue(buffer, treeNode);
 
-        // IE requires a newline here otherwise a large space appear between
-        buffer.append("\n");
         buffer.elementEnd("span");
     }
 
@@ -1207,10 +1203,6 @@ public class Tree extends AbstractControl {
             }
             buffer.append(">");
 
-            // TODO IE HACK. With a empty span <span></span> IE does not render
-            // the icons. Putting a non-breaking space, '&#160;', in the
-            // span seemed to work. Perhaps there is a better workaround.
-            buffer.append("&#160;");
             buffer.append("</span>");
 
         } else {
