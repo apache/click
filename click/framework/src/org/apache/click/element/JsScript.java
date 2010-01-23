@@ -293,10 +293,10 @@ public class JsScript extends ResourceElement {
      * <p/>
      * If this flag is true, the JsScript content will be registered with
      * the "<tt>addLoadEvent</tt>" function from the JavaScript file
-     * "<tt>control.js</tt>".
+     * "<tt>/click/control.js</tt>".
      * <p/>
-     * <b>Please note:</b> when setting this flag to true, the file JavaScript
-     * file "<tt>control.js</tt>" must already be included in the Page or
+     * <b>Please note:</b> when setting this flag to true, the JavaScript
+     * file "<tt>/click/control.js</tt>" must already be included in the Page or
      * Control, it won't be included automatically.
      * <p/>
      * <b>Also note:</b> for {@link org.apache.click.Context#isAjaxRequest() Ajax}
