@@ -17,6 +17,10 @@
  * under the License.
  */
 
+ html {
+     overflow: auto;
+}
+
 html, body {
   height: 95%;
 }
