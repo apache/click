@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="feature_export" name="build">
+	
+	<property name="dest.dir" value="dest" />
+	<property name="version" value="2.1.0.0" />
+	
+	<target name="feature_export">
+		<mkdir dir="${dest.dir}"/>
+		
+		<pde.exportFeatures destination="${dest.dir}/clickide-${version}" exportSource="true" 
+			exportType="directory" features="org.apache.click.eclipse.feature" useJARFormat="false"/>
+	</target>
+	
+	<target name="append_files">
+		<copy file="LICENSE.txt" todir="${dest.dir}/clickide-${version}" />
+		<copy file="NOTICE.txt" todir="${dest.dir}/clickide-${version}" />
+		<copy file="README.txt" todir="${dest.dir}/clickide-${version}" />
+	</target>
+	
+	<target name="create_zip">
+		<zip basedir="${dest.dir}/clickide-${version}" destfile="${dest.dir}/clickide-${version}.zip" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${dest.dir}" />
+		<delete file="compile.org.apache.click.eclipse.feature.xml" />
+	</target>
+
+</project>
