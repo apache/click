@@ -36,6 +36,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import ognl.DefaultMemberAccess;
+import ognl.MemberAccess;
 
 import ognl.Ognl;
 import ognl.OgnlException;
@@ -165,6 +167,9 @@ public class ClickServlet extends HttpServlet {
 
     /** The request parameters OGNL type converter. */
     protected TypeConverter typeConverter;
+
+    /** The OGNL member access handler. */
+    protected MemberAccess memberAccess;
 
     // --------------------------------------------------------- Public Methods
 
@@ -1161,7 +1166,8 @@ public class ClickServlet extends HttpServlet {
                             || Boolean.class.isAssignableFrom(type))) {
 
                         if (ognlContext == null) {
-                            ognlContext = Ognl.createDefaultContext(page, null, getTypeConverter());
+                            ognlContext = Ognl.createDefaultContext(
+                                page, null, getTypeConverter(), getMemberAccess());
                         }
 
                         PropertyUtils.setValueOgnl(page, name, value, ognlContext);
@@ -1558,6 +1564,19 @@ public class ClickServlet extends HttpServlet {
     }
 
     // ------------------------------------------------ Package Private Methods
+
+    /**
+     * Return the OGNL <tt>MemberAccess</tt>. This method performs a lazy load
+     * of the MemberAccess object, using a {@link DefaultMemberAccess} instance.
+     *
+     * @return the OGNL <tt>MemberAccess</tt>
+     */
+    MemberAccess getMemberAccess() {
+        if (memberAccess == null) {
+            memberAccess = new DefaultMemberAccess(true);
+        }
+        return memberAccess;
+    }
 
    /**
     * Create a Click application ConfigService instance.
