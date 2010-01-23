@@ -134,7 +134,7 @@ public class PlainTreePage extends BorderPage {
         //we do specify a id as the 2nd argument, so no id is generated.
         TreeNode dev = new TreeNode("dev","1", root);
 
-        //The follwing 2 nodes represent files in the directory, setting the
+        //The follwing 3 nodes represent files in the directory, setting the
         //dev node as their parent. Note the false argument to the constructor.
         //This means that the specific node does not support child nodes, and
         //it will be rendered as a leaf icon. If children are supported (the
@@ -142,28 +142,31 @@ public class PlainTreePage extends BorderPage {
         //as a collapsed icon. In the example a default leaf node will be
         //rendered as a directory, and a node that does not support children is
         //rendered as a file.
-        new TreeNode("java.pdf", "2", dev, false);
-        new TreeNode("ruby.pdf", "3", dev, false);
+        // Also note the node with the long text, will cause the tree to overflow
+        // and add scrollbars
+        new TreeNode("java.pdf", "1.1", dev, false);
+        new TreeNode("JEE 6 - the new fantastic approach to write better software (apparently)", "1.2", dev, false);
+        new TreeNode("ruby.pdf", "1.3", dev, false);
 
         //We continue constructing the rest of the tree
-        TreeNode programFiles = new TreeNode("program files", "4", root);
-        new TreeNode("Adobe", "5", programFiles);
+        TreeNode programFiles = new TreeNode("program files", "2", root);
+        new TreeNode("Adobe", "2.1", programFiles);
 
-        TreeNode download = new TreeNode("downloads","6", root);
+        TreeNode download = new TreeNode("downloads","3", root);
 
-        TreeNode web = new TreeNode("web", "7", download);
-        new TreeNode("html.pdf", "8", web, false);
-        new TreeNode("css.html", "9", web, false);
+        TreeNode web = new TreeNode("web", "3.1", download);
+        new TreeNode("html.pdf", "3.1.1", web, false);
+        new TreeNode("css.html", "3.1.2", web, false);
 
-        TreeNode databases = new TreeNode("databases", "10", download);
-        TreeNode relationalDb = new TreeNode("relational", "11", databases);
+        TreeNode databases = new TreeNode("databases", "3.2", download);
+        TreeNode relationalDb = new TreeNode("relational", "3.2.1", databases);
 
-        new TreeNode("mysql.html","13", relationalDb, false);
-        new TreeNode("oracle.pdf","14", relationalDb, false);
-        new TreeNode("postgres","15", relationalDb, false);
+        new TreeNode("mysql.html", "3.2.1.1", relationalDb, false);
+        new TreeNode("oracle.pdf", "3.2.1.2", relationalDb, false);
+        new TreeNode("postgres", "3.2.1.3", relationalDb, false);
 
-        TreeNode objectDb = new TreeNode("object", "12", databases);
-        new TreeNode("db4o.html","16", objectDb, false);
+        TreeNode objectDb = new TreeNode("object", "3.2.2", databases);
+        new TreeNode("db4o.html", "3.2.2.1", objectDb, false);
 
         return root;
     }
