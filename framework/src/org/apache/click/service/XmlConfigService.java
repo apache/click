@@ -1688,6 +1688,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             Class parentClass = pageClass.getSuperclass();
             while (parentClass != null) {
+                // Include parent classes up to but excluding Page.class
+                if (parentClass.isAssignableFrom(Page.class)) {
+                    break;
+                }
                 pageClassList.add(parentClass);
                 parentClass = parentClass.getSuperclass();
             }
