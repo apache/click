@@ -120,7 +120,7 @@
   </menu>
 
   <menu label=" Tree" path="#" imageSrc="/assets/images/tree.png">
-    <menu label="Basic Tree" path="tree/plain-tree-page.htm"/>
+    <menu label="Tree" path="tree/tree-page.htm"/>
     <menu label="Advanced Tree" path="tree/advanced-tree-page.htm"/>
     <menu label="Checkbox Tree" path="tree/checkbox-tree-page.htm"/>
     <menu label="Page Link Tree" path="tree/page-link-tree-page.htm"/>

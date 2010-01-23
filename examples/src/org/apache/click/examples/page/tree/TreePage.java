@@ -27,7 +27,7 @@ import org.apache.click.extras.tree.TreeNode;
  *
  * @author Bob Schellink
  */
-public class PlainTreePage extends BorderPage {
+public class TreePage extends BorderPage {
 
     public static final String TREE_NODES_SESSION_KEY = "treeNodes";
 
