@@ -463,8 +463,7 @@ public class Tree extends AbstractControl {
      *
      * <pre class="prettyprint">
      * Tree tree = new Tree("mytree");
-     * tree.setWidth("200px");
-     * </pre>
+     * tree.setWidth("200px"); </pre>
      *
      * @param value the CSS "width" style attribute
      */
@@ -487,8 +486,7 @@ public class Tree extends AbstractControl {
      *
      * <pre class="prettyprint">
      * Tree tree = new Tree("mytree");
-     * tree.setHeight("200px");
-     * </pre>
+     * tree.setHeight("200px"); </pre>
      *
      * @param value the CSS "height" style attribute
      */
