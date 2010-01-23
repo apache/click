@@ -39,7 +39,7 @@ import org.apache.commons.lang.ClassUtils;
  *
  * @author Bob Schellink
  */
-public class PageLinkTreePage extends PlainTreePage {
+public class PageLinkTreePage extends TreePage {
 
     public static final String TREE_NODES_SESSION_KEY = "pageLinkTreeNodes";
 
