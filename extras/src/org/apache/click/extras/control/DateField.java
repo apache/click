@@ -832,11 +832,10 @@ public class DateField extends TextField {
     /**
      * Add the calendar options as a script to the list of head elements.
      * <p/>
-     * The default option script will render as (depending on the values off
-     * course):
+     * The default option script will render as (depending on the values):
      *
      * <pre class="prettyprint">
-     * document.observe('dom:loaded', function(){
+     * addLoadEvent(function() {
      *   Event.observe('my-calendar-button', 'click', function(){
      *     Date.first_day_of_week=0;
      *     calendar = new CalendarDateSelect($('my-calendar'), {
