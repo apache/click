@@ -448,6 +448,55 @@ public class Tree extends AbstractControl {
     }
 
     /**
+     * Return the CSS "width" style attribute of the tree, or null if not
+     * defined.
+     *
+     * @return the CSS "width" style attribute of the tree, or null if not
+     * defined
+     */
+    public String getWidth() {
+        return getStyle("width");
+    }
+
+    /**
+     * Set the the CSS "width" style attribute of the tree. For example:
+     *
+     * <pre class="prettyprint">
+     * Tree tree = new Tree("mytree");
+     * tree.setWidth("200px");
+     * </pre>
+     *
+     * @param value the CSS "width" style attribute
+     */
+    public void setWidth(String value) {
+        setStyle("width", value);
+    }
+
+    /**
+     * Return the CSS "height" style of the tree, or null if not defined.
+     *
+     * @return the CSS "height" style attribute of the tree, or null if not
+     * defined
+     */
+    public String getHeight() {
+        return getStyle("height");
+    }
+
+    /**
+     * Set the the CSS "height" style attribute of the tree. For example:
+     *
+     * <pre class="prettyprint">
+     * Tree tree = new Tree("mytree");
+     * tree.setHeight("200px");
+     * </pre>
+     *
+     * @param value the CSS "height" style attribute
+     */
+    public void setHeight(String value) {
+        setStyle("height", value);
+    }
+
+    /**
      * Return the Tree HTML head imports statements for the following
      * resources:
      * <p/>
