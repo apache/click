@@ -17,11 +17,11 @@
  * under the License.
  */
 .treestyle {
-   white-space: nowrap;	
+   white-space: nowrap;
    border: 1px solid #ccc;
    width: 20em;
    overflow: auto;
-   line-height: 1.5em;         
+   line-height: 1.5em;
    padding-top: 2px;
 }
 .treestyle ul {
@@ -47,7 +47,6 @@
    margin-left: 0px;
 }
 .treestyle li {
-   /* li is not needed*/
    margin: 0;
    padding: 0;
    padding-left: 10px;
@@ -65,12 +64,12 @@
 .treestyle span.collapsed {
    background-image: url(images/plus.png);
    background-repeat: no-repeat;
-}  
+}
 .treestyle span.leafLastNode {
    background-image: url(images/corner.png);
    background-repeat: no-repeat;
    background-color: #fff;
-}                       
+}
 .treestyle span.expandedLastNode {
    background-image: url(images/minus-corner.png);
    background-color: #fff;
@@ -83,18 +82,17 @@
 }
 .treestyle span.leafIcon {
     background: url(images/item.png) 0 50% no-repeat;
-    padding-left: 0.9em;
+    padding-left: 14px;
 }
 .treestyle span.expandedIcon {
     background: url(images/folder-open.png) 0 50% no-repeat;
-    padding-left: 1.1em;
+    padding-left: 18px;
 }
 .treestyle span.collapsedIcon {
     background: url(images/folder-closed.png) 0 50% no-repeat;
-    padding-left: 1.1em;
+    padding-left: 18px;
 }
 .treestyle .spacer {
-    float: left;
     min-height: 18px;
     padding-left: 18px;
 }
@@ -110,31 +108,31 @@
 .treestyle .unselected {
     margin-left: 1px;
 }
- 
-/*needed for client side */
-.treestyle .hide { 
+
+/* Needed for client side */
+.treestyle .hide {
    display : none;
 }
-.treestyle .show { 
-}
-
-.treestyle span.leaf,
-.treestyle span.expanded,
-.treestyle span.collapsed,
-.treestyle span.leafLastNode,
-.treestyle span.expandedLastNode,
-.treestyle span.collapsedLastNode,
-.treestyle span.leafIcon,
-.treestyle span.expandedIcon,
-.treestyle span.collapsedIcon,
-.treestyle .spacer,
-.treestyle img.customIcon {
-    clear: both;
-    _float: none; /*IE only*/
+.treestyle .show {
 }
 
 /* Style for a custom TreeNode icon. Tweak it if further customization is needed */
 .treestyle img.customIcon {
     margin-right: 2px;
     vertical-align: top;
+}
+
+.treestyle a.spacer,
+.treestyle span.spacer,
+.treestyle span.leafIcon,
+.treestyle span.expandedIcon,
+.treestyle span.collapsedIcon,
+.treestyle span.leaf,
+.treestyle span.expanded,
+.treestyle span.collapsed,
+.treestyle span.leafLastNode,
+.treestyle span.expandedLastNode,
+.treestyle span.collapsedLastNode {
+    /* Holly hack for IE6+7 */
+    zoom: 1;
 }
