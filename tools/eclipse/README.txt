@@ -8,6 +8,16 @@ ClickIDE is a sub project of Apache Click ant it is an open source project
 licensed using the Apache license. 
 
 
+Installation
+============
+
+ClickIDE 2.1.x requires Eclipse 3.4.x and WTP 2.0.x.
+
+The easiest way to use ClickIDE is installing Eclipse IDE for Java EE Developers 
+and get a copy of ClickIDE from the downloads page. Unzip clickide-x.x.x.zip and 
+put 2 folders (plugins/ and features/) into your ECLIPSE_HOME. 
+
+
 Docmentation
 ============
 
@@ -22,18 +32,6 @@ Release Notes
 Detailed release notes are available here:
 
     http://incubator.apache.org/click/docs/click-ide-roadmap-changes.html
-
-
-Distribution Jars
-=================
-
-Distributed ClickIDE JAR files include:
-
-   plugins/org.apache.click.eclipse.jar         - ClickIDE Core
-
-   plugins/org.apache.click.eclipse.cayenne.jar - ClickIDE Cayenne Extension
-
-   features/org.apache.click.feature.jar        - ClickIDE Feature
 
 
 Build Information
