@@ -50,7 +50,7 @@
 
         <p/>
         Before starting the release ensure that you have your <tt>public key</tt>
-        appended to the <a class="external" target="_blank" href="http://svn.apache.org/repos/asf/incubator/click/trunk/click/KEYS">KEYS</a>
+        appended to the <a class="external" target="_blank" href="http://svn.apache.org/repos/asf/click/trunk/click/KEYS">KEYS</a>
         file and that the key is published to a public key server
         such as <a class="external" target="_blank" href="http://pgp.mit.edu/">MIT</a>.
         More info can be found here: <a class="external" target="_blank" href="http://www.apache.org/dev/release-signing.html">http://www.apache.org/dev/release-signing.html</a>.
@@ -138,10 +138,10 @@
                 and test click-examples.
             </li>
             <li>
-                Digitally sign the distribution click-X.X.X-incubating.zip.
+                Digitally sign the distribution click-X.X.X.zip.
                 If you have more than 1 GPG Key, use the -u argument to specify
                 the KEY name.
-                <pre class="codeConfig">gpg --armor --output click-X.X.X-incubating.zip.asc --detach-sig click-X.X.X-incubating.zip</pre>
+                <pre class="codeConfig">gpg --armor --output click-X.X.X.zip.asc --detach-sig click-X.X.X.zip</pre>
             </li>
             <li>
                 Upload the distribution to your account at <tt>people.apache.org</tt>
@@ -153,10 +153,10 @@
 
                 <p/>
                 <ul>
-                    <li><tt>click-X.X.X-incubating.zip</tt></li>
-                    <li><tt>click-X.X.X-incubating.zip.MD5</tt></li>
-                    <li><tt>click-X.X.X-incubating.zip.SHA1</tt></li>
-                    <li><tt>click-X.X.X-incubating.zip.asc</tt></li>
+                    <li><tt>click-X.X.X.zip</tt></li>
+                    <li><tt>click-X.X.X.zip.MD5</tt></li>
+                    <li><tt>click-X.X.X.zip.SHA1</tt></li>
+                    <li><tt>click-X.X.X.zip.asc</tt></li>
                 </ul>
                 Make sure the uploaded files have the right permissions (<tt>664</tt>).
                 If not execute the following commands to ensure file and directory
@@ -186,15 +186,15 @@ gpg --keyserver pgp.mit.edu --recv-keys 709F7561
                 <pre class="codeConfig">
 ssh people.apache.org
 cd ~/public_html/click/click/X.X.X/dist
-gpg --verify click-X.X.X-incubating.zip.asc click-X.X.X-incubating.zip
+gpg --verify click-X.X.X.zip.asc click-X.X.X.zip
 </pre>
             </li>
         </ol>
 
         <h3><a href="#" name="voting"></a>Voting</h3>
 
-        Each release must be voted by the Incubator PMC on the <tt>click-dev</tt>
-        mailing list and again on the <tt>general</tt> incubator list.
+        Each release must be voted by the PMC on the <tt>click-dev</tt>
+        mailing list.
 
         <p/>
         Vote threads are indicated by starting the subject line with <tt>[VOTE]</tt>.
@@ -214,14 +214,14 @@ gpg --verify click-X.X.X-incubating.zip.asc click-X.X.X-incubating.zip
         <ol>
             <li>
                 Tag the new release, e.g. click-2.0.1
-                <pre class="codeConfig">svn copy https://svn.apache.org/repos/asf/incubator/click/trunk/click https://svn.apache.org/repos/asf/incubator/click/tags/click-X.X.X -m "tag X.X.X"
+                <pre class="codeConfig">svn copy https://svn.apache.org/repos/asf/click/trunk/click https://svn.apache.org/repos/asf/click/tags/click-X.X.X -m "tag X.X.X"
 </pre>
             </li>
             <li>
-                Incubating releases are published at <tt>people.apache.org</tt> under
+                Releases are published at <tt>people.apache.org</tt> under
                 the folder:
                 <p/>
-                <tt>/www/www.apache.org/dist/incubator/click/click/X.X.X</tt>
+                <tt>/www/www.apache.org/dist/click/click/X.X.X</tt>
 
                 <p/>
                 First off login at apache:
@@ -233,7 +233,7 @@ gpg --verify click-X.X.X-incubating.zip.asc click-X.X.X-incubating.zip
                 <tt>/public_html</tt> account to the apache distribution folder,
                 for example:
                 <pre class="codeConfig">
-cp -r ~/public_html/click/click/X.X.X/dist/ /www/www.apache.org/dist/incubator/click/click/X.X.X
+cp -r ~/public_html/click/click/X.X.X/dist/ /www/www.apache.org/dist/click/click/X.X.X
 </pre>
             </li>
         </ol>
@@ -270,10 +270,10 @@ cp -r ~/public_html/click/click/X.X.X/dist/ /www/www.apache.org/dist/incubator/c
                 folder execute the following commands:
                 <pre class="codeConfig">
 cd maven-upload
-gpg --armor --output click/click-X.X.X-incubating.pom.asc --detach-sig click/click-X.X.X-incubating.pom
-gpg --armor --output click-extras/click-extras-X.X.X-incubating.pom.asc --detach-sig click-extras/click-extras-X.X.X-incubating.pom
-gpg --armor --output click-mock/click-mock-X.X.X-incubating.pom.asc --detach-sig click-mock/click-mock-X.X.X-incubating.pom
-gpg --armor --output click-nodeps/click-nodeps-X.X.X-incubating.pom.asc --detach-sig click-nodeps/click-nodeps-X.X.X-incubating.pom</pre>
+gpg --armor --output click/click-X.X.X.pom.asc --detach-sig click/click-X.X.X.pom
+gpg --armor --output click-extras/click-extras-X.X.X.pom.asc --detach-sig click-extras/click-extras-X.X.X.pom
+gpg --armor --output click-mock/click-mock-X.X.X.pom.asc --detach-sig click-mock/click-mock-X.X.X.pom
+gpg --armor --output click-nodeps/click-nodeps-X.X.X.pom.asc --detach-sig click-nodeps/click-nodeps-X.X.X.pom</pre>
 
                 The signed poms will have to be manually uploaded after the
                 artifacts have been deployed. More on this in the next section.
@@ -292,10 +292,10 @@ gpg --armor --output click-nodeps/click-nodeps-X.X.X-incubating.pom.asc --detach
                     to specify the KEY name.)
                     <pre class="codeConfig">
 cd maven-upload
-mvn gpg:sign-and-deploy-file -DpomFile=click/click-X.X.X-incubating.pom -Dfile=click/click-X.X.X-incubating.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
-mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-X.X.X-incubating.pom -Dfile=click-extras/click-extras-X.X.X-incubating.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
-mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-X.X.X-incubating.pom -Dfile=click-nodeps/click-nodeps-X.X.X-incubating.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
-mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X-incubating.pom -Dfile=click-mock/click-mock-X.X.X-incubating.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click/click-X.X.X.pom -Dfile=click/click-X.X.X.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-X.X.X.pom -Dfile=click-extras/click-extras-X.X.X.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-X.X.X.pom -Dfile=click-nodeps/click-nodeps-X.X.X.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X.pom -Dfile=click-mock/click-mock-X.X.X.jar -Durl=scp://people.apache.org:/home/USER/public_html/click/click/X.X.X/maven2 -DrepositoryId=apache.releases
 </pre>
                     For the commands above remember to replace USER with your Apache
                     username and X.X.X with the Click version.
@@ -305,18 +305,18 @@ mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X-incubating.po
                     to specify the KEY name.)
  		                <pre class="codeConfig">
 cd maven-upload
-mvn gpg:sign-and-deploy-file -DpomFile=click/click-X.X.X-incubating.pom -Dfile=click/click-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
-mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-X.X.X-incubating.pom -Dfile=click-extras/click-extras-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
-mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-X.X.X-incubating.pom -Dfile=click-nodeps/click-nodeps-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
-mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X-incubating.pom -Dfile=click-mock/click-mock-X.X.X-incubating.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click/click-X.X.X.pom -Dfile=click/click-X.X.X.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-extras/click-extras-X.X.X.pom -Dfile=click-extras/click-extras-X.X.X.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-nodeps/click-nodeps-X.X.X.pom -Dfile=click-nodeps/click-nodeps-X.X.X.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
+mvn gpg:sign-and-deploy-file -DpomFile=click-mock/click-mock-X.X.X.pom -Dfile=click-mock/click-mock-X.X.X.jar -Durl=scp://people.apache.org:/www/people.apache.org/repo/m2-ibiblio-rsync-repository -DrepositoryId=apache.releases
 </pre>
                     </li>
                     <li>The <tt>sign-and-deploy-file</tt> command creates a number
                     of unnecessary artifacts that can be deleted. The artifacts
                     that can be deleted are:
                     <pre class="codeConfig">
-click-X.X.X-incubating.jar.asc.md5
-click-X.X.X-incubating.jar.asc.sha1
+click-X.X.X.jar.asc.md5
+click-X.X.X.jar.asc.sha1
 </pre>
                     </li>
                 </ul>
@@ -324,10 +324,10 @@ click-X.X.X-incubating.jar.asc.sha1
                     following POM's must be uploaded to their respective folders:
                     (this step must be done for both <tt>snapshots</tt> and <tt>releases</tt>)
                     <pre class="codeConfig">
-click-X.X.X-incubating.pom.asc         ->  /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/click/X.X.X-incubating/
-click-extras-X.X.X-incubating.pom.asc  ->  /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/click-extras/X.X.X-incubating/
-click-mock-X.X.X-incubating.pom.asc    ->  /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/click-mock/X.X.X-incubating/
-click-nodeps-X.X.X-incubating.pom.asc  ->  /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/click-nodeps/X.X.X-incubating/</pre>
+click-X.X.X.pom.asc         ->  /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/click/X.X.X/
+click-extras-X.X.X.pom.asc  ->  /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/click-extras/X.X.X/
+click-mock-X.X.X.pom.asc    ->  /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/click-mock/X.X.X/
+click-nodeps-X.X.X.pom.asc  ->  /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/click-nodeps/X.X.X/</pre>
                     </li>
                     <li>Once the artifacts and POM signatures have been uploaded, execute
                     the following commands to ensure the file and directory permissions
@@ -350,17 +350,17 @@ ssh people.apache.org
 cd /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/
 #cd public_html/click/click/X.X.X/maven2/org/apache/click
 
-gpg --verify click/X.X.X-incubating/click-X.X.X-incubating.jar.asc click/X.X.X-incubating/click-X.X.X-incubating.jar
-gpg --verify click/X.X.X-incubating/click-X.X.X-incubating.pom.asc click/X.X.X-incubating/click-X.X.X-incubating.pom
+gpg --verify click/X.X.X/click-X.X.X.jar.asc click/X.X.X/click-X.X.X.jar
+gpg --verify click/X.X.X/click-X.X.X.pom.asc click/X.X.X/click-X.X.X.pom
 
-gpg --verify click-extras/X.X.X-incubating/click-extras-X.X.X-incubating.jar.asc click-extras/X.X.X-incubating/click-extras-X.X.X-incubating.jar
-gpg --verify click-extras/X.X.X-incubating/click-extras-X.X.X-incubating.pom.asc click-extras/X.X.X-incubating/click-extras-X.X.X-incubating.pom
+gpg --verify click-extras/X.X.X/click-extras-X.X.X.jar.asc click-extras/X.X.X/click-extras-X.X.X.jar
+gpg --verify click-extras/X.X.X/click-extras-X.X.X.pom.asc click-extras/X.X.X/click-extras-X.X.X.pom
 
-gpg --verify click-nodeps/X.X.X-incubating/click-nodeps-X.X.X-incubating.jar.asc click-nodeps/X.X.X-incubating/click-nodeps-X.X.X-incubating.jar
-gpg --verify click-nodeps/X.X.X-incubating/click-nodeps-X.X.X-incubating.pom.asc click-nodeps/X.X.X-incubating/click-nodeps-X.X.X-incubating.pom
+gpg --verify click-nodeps/X.X.X/click-nodeps-X.X.X.jar.asc click-nodeps/X.X.X/click-nodeps-X.X.X.jar
+gpg --verify click-nodeps/X.X.X/click-nodeps-X.X.X.pom.asc click-nodeps/X.X.X/click-nodeps-X.X.X.pom
 
-gpg --verify click-mock/X.X.X-incubating/click-mock-X.X.X-incubating.jar.asc click-mock/X.X.X-incubating/click-mock-X.X.X-incubating.jar
-gpg --verify click-mock/X.X.X-incubating/click-mock-X.X.X-incubating.pom.asc click-mock/X.X.X-incubating/click-mock-X.X.X-incubating.pom
+gpg --verify click-mock/X.X.X/click-mock-X.X.X.jar.asc click-mock/X.X.X/click-mock-X.X.X.jar
+gpg --verify click-mock/X.X.X/click-mock-X.X.X.pom.asc click-mock/X.X.X/click-mock-X.X.X.pom
 </pre>
                     </li>
             </li>
@@ -371,8 +371,8 @@ gpg --verify click-mock/X.X.X-incubating/click-mock-X.X.X-incubating.pom.asc cli
         The following tasks should be completed once the release is out:
         <ul>
             <li>
-            Upload the web site at <tt>people.apache.org</tt> under the folder
-                <tt>/www/incubator.apache.org/click/</tt>.
+                Upload the web site to <tt>people.apache.org</tt> under the folder
+                <tt>/www/click.apache.org/</tt>.
                 <p/>
                 You can either upload the website from your local machine or
                 checkout and sync the site on the people.apache.org server. For
@@ -381,18 +381,18 @@ gpg --verify click-mock/X.X.X-incubating/click-mock-X.X.X-incubating.pom.asc cli
 ssh people.apache.org
 mkdir temp
 cd temp
-svn co http://svn.apache.org/repos/asf/incubator/click/trunk/click/
+svn co http://svn.apache.org/repos/asf/click/trunk/click/
 cd click/build
 ant get-deps
 ant build-distribution
-rsync -avz --exclude ".svn" ~/temp/click/documentation/ /www/incubator.apache.org/click/</pre>
+rsync -avz --exclude ".svn" ~/temp/click/documentation/ /www/click.apache.org/</pre>
 
                 <p/>
                 Make sure the website files and folders have the right permissions (<tt>664</tt>).
                 If not execute the following commands to ensure file and directory
                 permissions are correct:
                 <pre class="codeConfig">ssh people.apache.org
-cd /www/incubator.apache.org/click/
+cd /www/click.apache.org/
 find . -type d | xargs chmod 776
 find . -type f | xargs chmod 664</pre>
             </li>
