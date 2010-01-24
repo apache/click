@@ -57,7 +57,7 @@
             </li>
             <li>
                 Digitally sign the distribution, for example:
-                <pre class="codeConfig">gpg --armor --output ClickIDE-X.X.X-incubating.zip.asc --detach-sig ClickIDE-X.X.X-incubating.zip</pre>
+                <pre class="codeConfig">gpg --armor --output ClickIDE-X.X.X.zip.asc --detach-sig ClickIDE-X.X.X.zip</pre>
             </li>
             <li>
                 Upload the distribution to your account at <tt>people.apache.org</tt>
@@ -87,7 +87,7 @@ gpg --keyserver pgp.mit.edu --recv-keys 709F7561
                 <pre class="codeConfig">
 ssh people.apache.org
 cd ~/public_html/click/SUBPROJECT/X.X.X
-gpg --verify SUBPROJECT-X.X.X-incubating.zip.asc SUBPROJECT-X.X.X-incubating.zip
+gpg --verify SUBPROJECT-X.X.X.zip.asc SUBPROJECT-X.X.X.zip
 </pre>
             </li>
             <li>
@@ -96,22 +96,22 @@ gpg --verify SUBPROJECT-X.X.X-incubating.zip.asc SUBPROJECT-X.X.X-incubating.zip
                 section for details.
             </li>
             <li>
-                Incubating releases are published at <tt>people.apache.org</tt> under
+                Releases are published at <tt>people.apache.org</tt> under
                 the folder:
                 <p/>
-                <tt>/www/www.apache.org/dist/incubator/click/<tt>SUBPROJECT</tt>/X.X.X</tt>
+                <tt>/www/www.apache.org/dist/click/<tt>SUBPROJECT</tt>/X.X.X</tt>
 
                 <p/>
                 For example <tt>ClickIDE</tt> will be published to the folder:
 
                 <p/>
-                <tt>/www/www.apache.org/dist/incubator/click/clickide/X.X.X</tt>
+                <tt>/www/www.apache.org/dist/click/clickide/X.X.X</tt>
 
                 <p/>
                 An easy way to do this is to copy the files in your <tt>public_html</tt>
                 folder for example:
                 <pre class="codeConfig">ssh people.apache.org
-cp ~/public_html/click/clickide/X.X.X/ /www/www.apache.org/dist/incubator/click/clickide/X.X.X
+cp ~/public_html/click/clickide/X.X.X/ /www/www.apache.org/dist/click/clickide/X.X.X
 </pre>
             </li>
              <li>
