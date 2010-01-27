@@ -27,6 +27,10 @@ if ( typeof Click.domready == 'undefined' ) {
         events: [],
         ready: false,
         run : function() {
+            if ( !document.body ) {
+              // If body is null run this function after timeout
+              return setTimeout(arguments.callee, 13);
+            }
             Click.domready.ready=true;
             var e;
             while(e = Click.domready.events.shift()) {
@@ -41,50 +45,54 @@ if ( typeof Click.domready == 'undefined' ) {
  * Matthias Miller, John Resig and Jesse Skinner.
  *
  * http://dean.edwards.name/weblog/2006/06/again/
- * http://simon.incutio.com/archive/2004/05/26/addLoadEvent
+ * http://simonwillison.net/2004/May/26/addLoadEvent/
  * http://javascript.nwbox.com/IEContentLoaded/
- * http://www.thefutureoftheweb.com/blog/adddomloadevent
+ * http://www.thefutureoftheweb.com/blog/adddomloadevent/
+ * http://www.subprint.com/blog/demystifying-the-dom-ready-event-method/
  */
 (function() {
-    /* Handle IE (32/64 bit) */
-    /*@cc_on
-			@if (@_win32 || @_win64)
-      // Guard against iframe
-      if (window == top) {
-	  		var d = window.document;
-  	    (function () {
-  		    try {
-  			    d.documentElement.doScroll('left');
-  		    } catch (e) {
-  			    setTimeout(arguments.callee, 50);
-  			    return;
+    // Handle DOMContentLoaded compliant browsers.
+    if (document.addEventListener) {
+      document.addEventListener("DOMContentLoaded", function() {
+        document.removeEventListener("DOMContentLoaded", arguments.callee, false);
+        Click.domready.run();
+      }, false);
+
+      // A fallback to window.onload, that will always work
+			window.addEventListener( "load",  Click.domready.run, false );
+
+    // If IE event model is used
+    } else if ( document.attachEvent ) {
+      // ensure firing before onload, maybe late but safe also for iframes
+      document.attachEvent("onreadystatechange", function() {
+        if (document.readyState === "complete") {
+          document.detachEvent("onreadystatechange", arguments.callee);
+          Click.domready.run();
+        }
+      });
+
+			// A fallback to window.onload, that will always work
+			window.attachEvent( "onload", Click.domready.run );
+
+      // If IE and not a frame continually check to see if the document is ready
+			var toplevel = false;
+      try {
+				toplevel = window.frameElement == null;
+			} catch(e) {}
+
+			if ( document.documentElement.doScroll && toplevel) {
+	      (function () {
+    	    try {
+    			  document.documentElement.doScroll('left');
+    		  } catch (e) {
+     			  setTimeout(arguments.callee, 1);
+    			  return;
  		      }
 		      // Dom is ready, run events
 		      Click.domready.run();
 	      })();
       }
-			@end
-		@*/
-
-    // Handle DOMContentLoaded compliant browsers.
-    if(document.addEventListener) {
-        document.addEventListener("DOMContentLoaded", Click.domready.run, false);
-
-    // Handle old KHTML/WebKit
-    } else if(/KHTML|WebKit/i.test(navigator.userAgent)) {
-        if(/loaded|complete/.test(document.readyState)) {
-            Click.domready.run();
-        } else {
-            setTimeout(arguments.callee, 0);
-        }
     }
-
-    // Fallback to window.onload
-    var prevOnload = window.onload;
-    window.onload = function() {
-        Click.domready.run();
-        if (typeof prevOnload === 'function') prevOnload();
-    };
 })();
 
 /**
@@ -113,72 +121,72 @@ addLoadEvent = function(func) {
 function doubleFilter(event) {
     var keyCode;
     if (document.all) {
-        keyCode = event.keyCode; 
+        keyCode = event.keyCode;
     } else if (document.getElementById) {
-        keyCode = event.which;   
+        keyCode = event.which;
     } else if (document.layers) {
-        keyCode = event.which;   
+        keyCode = event.which;
     }
-  
+
     if (keyCode >= 33 && keyCode <= 43) {
         return false;
-        
+
     } else if (keyCode == 47) {
         return false;
-        
+
     } else if (keyCode >= 58 && keyCode <= 126) {
         return false;
-        
-    } else {  
-        return true;     
+
+    } else {
+        return true;
     }
 }
 
 function integerFilter(event) {
     var keyCode;
     if (document.all) {
-        keyCode = event.keyCode; 
+        keyCode = event.keyCode;
     } else if (document.getElementById) {
-        keyCode = event.which;   
+        keyCode = event.which;
     } else if (document.layers) {
-        keyCode = event.which;   
+        keyCode = event.which;
     }
-    
+
     if (keyCode >= 33 && keyCode <= 44) {
         return false;
-        
+
     } else if (keyCode >= 46 && keyCode <= 47) {
         return false;
-        
+
     } else if (keyCode >= 58 && keyCode <= 126) {
         return false;
-        
-    } else {  
-        return true;     
+
+    } else {
+        return true;
     }
 }
 
 function noLetterFilter(event) {
     var keyCode;
     if (document.all) {
-        keyCode = event.keyCode; 
+        keyCode = event.keyCode;
     } else if (document.getElementById) {
-        keyCode = event.which;   
+        keyCode = event.which;
     } else if (document.layers) {
-        keyCode = event.which;   
-    } 
+        keyCode = event.which;
+    }
 
     if (keyCode >= 33 && keyCode <= 39) {
         return false;
-        
+
     } else if (keyCode == 47) {
         return false;
-        
+
     } else if (keyCode >= 58 && keyCode <= 126) {
         return false;
-        
-    } else {  
-        return true;     
+
+    } else {
+        return true;
     }
 }
 
@@ -192,11 +200,11 @@ function setFocus(id) {
     }
 }
 
-function trim(str) {  
-    while (str.charAt(0) == (" ")) {  
+function trim(str) {
+    while (str.charAt(0) == (" ")) {
         str = str.substring(1);
       }
-      while (str.charAt(str.length - 1) == " ") {  
+      while (str.charAt(str.length - 1) == " ") {
           str = str.substring(0,str.length-1);
       }
       return str;
@@ -284,7 +292,7 @@ function validateRadioGroup(pathName, required, msgs) {
         return msgs[0];
     }
 }
- 
+
 function validateFileField(id, required, msgs) {
     var field = document.getElementById(id);
     if (field) {
@@ -303,18 +311,18 @@ function validateFileField(id, required, msgs) {
 function validateForm(msgs, id, align, style) {
     var errorsHtml = '';
     var focusFieldId = null;
-    
+
     for (i = 0; i < msgs.length; i++) {
         var value = msgs[i];
         if (value != null) {
             var index = value.lastIndexOf('|');
             var fieldMsg = value.substring(0, index);
             var fieldId = value.substring(index + 1);
-            
+
             if (focusFieldId == null) {
                 focusFieldId = fieldId;
             }
-            
+
             errorsHtml += '<tr class="errors"><td class="errors" align="';
             errorsHtml += align;
 			if (style != null) {
@@ -323,26 +331,26 @@ function validateForm(msgs, id, align, style) {
             }
             errorsHtml += '">';
             errorsHtml += '<a class="error" href="javascript:setFocus(\'';
-            errorsHtml += fieldId; 
+            errorsHtml += fieldId;
             errorsHtml += '\');">';
             errorsHtml += fieldMsg;
             errorsHtml += '</a>';
             errorsHtml += '</td></tr>';
         }
     }
-    
+
     if (errorsHtml.length > 0) {
-        errorsHtml = '<table class="errors">' + errorsHtml + '</table>';        
+        errorsHtml = '<table class="errors">' + errorsHtml + '</table>';
         //alert(errorsHtml);
-        
+
         document.getElementById(id + '-errorsDiv').innerHTML = errorsHtml;
         document.getElementById(id + '-errorsTr').style.display = 'inline';
-        
+
         setFocus(focusFieldId);
-        
+
         return false;
-        
-    } else {        
+
+    } else {
         return true;
     }
 }
