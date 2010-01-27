@@ -1,6 +1,6 @@
 
 Welcome to ClickIDE
-================
+===================
 
 ClickIDE is an Eclipse plug-in for the developing Click web applications.
 
@@ -37,19 +37,25 @@ Detailed release notes are available here:
 Build Information
 =================
 
-ClickIDE is built using the J2SE 1.5.0 and Eclipse 3.5.x.
+ClickIDE is built using the J2SE 1.5.0, Eclipse 3.5.x and Ant.
 At first, import following plugins as plugin project:
 
  - org.apache.click.eclipse
  - org.apache.click.eclipse.cayenne
  - org.apache.click.eclipse.feature
 
-Then run org.apache.click.eclipse.feature/clickide-build.xml by following sequence:
+The Ant build script is located at : org.apache.click.eclipse.feature/clickide-build.xml.
+
+Note: Ant tasks have to be run in the same JRE as the workspace. To do this right click
+on clickide-build.xml -> Run As -> Ant Build ... -> JRE -> select the "Run in the same
+JRE as the workspace" radio button. 
+
+From the Eclipse IDE run org.apache.click.eclipse.feature/clickide-build.xml as follows:
 
  1) Run feature_export task
  
-   This task exports plugins as dest directory using PDE.
-   So this task requires Eclipse environment.
+   This task exports plugins to the dest directory using PDE and requires
+   an Eclipse environment.
    
    Note: Plugin exporting is executed as asynchronous job, so we have to wait for 
    the completion of exporting before running the next task.
