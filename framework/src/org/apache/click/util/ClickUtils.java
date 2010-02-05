@@ -576,7 +576,7 @@ public class ClickUtils {
     /**
      * Close the given input stream and ignore any exceptions thrown.
      *
-     * @param closeable the stream, reader or writer to close.
+     * @param stream the stream, reader or writer to close.
      */
     public static void close(InputStream  stream) {
         if (stream != null) {
