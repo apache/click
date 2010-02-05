@@ -1266,7 +1266,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 + " to deploy files to. Another common problem is if the web"
                 + " application is not allowed to write to the file"
                 + " system.\nTo resolve this issue please see the Click user-guide: "
-                + "http://incubator.apache.org/click/docs/user-guide/html/ch04s03.html#deploying-restricted-env";
+                + "http://click.apache.org/docs/user-guide/html/ch04s03.html#deploying-restricted-env";
             getLogService().warn(msg);
         }
     }
