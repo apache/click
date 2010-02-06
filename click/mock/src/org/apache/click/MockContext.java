@@ -279,8 +279,10 @@ public class MockContext extends Context {
             ActionEventDispatcher.pushThreadLocalDispatcher(controlRegistry);
             Context.pushThreadLocalContext(mockContext);
 
-            ConsoleLogService logService = (ConsoleLogService) ClickUtils.getLogService();
-            logService.setLevel(ConsoleLogService.TRACE_LEVEL);
+            if (ClickUtils.getLogService() instanceof ConsoleLogService) {
+                ConsoleLogService logService = (ConsoleLogService) ClickUtils.getLogService();
+                logService.setLevel(ConsoleLogService.TRACE_LEVEL);
+            }
             return (MockContext) Context.getThreadLocalContext();
         } catch (Exception e) {
             throw new MockContainer.CleanRuntimeException(e);
