@@ -30,8 +30,8 @@
    <property name="jar.annotation" value="geronimo-annotation_1.0_spec-${geronimo-common-annotations.version}.jar"/>
    <property name="jar.ashwood" value="ashwood-${ashwood.version}.jar"/>
    <property name="jar.cayenne" value="cayenne-server-${cayenne.version}.jar"/>
-   <property name="jar.click" value="click-${version}-incubating.jar"/>
-   <property name="jar.click-extras" value="click-extras-${version}-incubating.jar"/>
+   <property name="jar.click" value="click-${version}.jar"/>
+   <property name="jar.click-extras" value="click-extras-${version}.jar"/>
    <property name="jar.hsqldb" value="hsqldb-${hsqldb.version}.jar"/>
    <property name="jar.jstl" value="jstl-${jstl.version}.jar"/>
    <property name="jar.log4j" value="log4j-${log4j.version}.jar"/>
@@ -105,7 +105,7 @@
          <classpath refid="classpath"/>
          <packageset dir="src"/>
          <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
-         <link href="http://incubator.apache.org/click/docs/click-api/"/>
+         <link href="http://click.apache.org/docs/click-api/"/>
          <link href="http://static.springframework.org/spring/docs/2.5.x/api/"/>
       </javadoc>
       <copy file="../documentation/docs/javadoc-stylesheet.css"  
