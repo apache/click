@@ -100,18 +100,20 @@ versions please email the Click user group.
       </li>
       <li class="change">
           Click automatically deploy resources from JARs and folders on the
-          classpath that are located under the directory <tt>META-INF/web</tt>.
+          classpath that are located under a predefined directory. In previous
+          versions of Click that directory was <tt>META-INF/web</tt>.
           <p/>
-          The Servlet 3.0 specification introduced a similar concept where resources
-          can be packaged in a JAR and served directly without having to be
-          deployed.
+          The new Servlet 3.0 specification introduced a similar concept where
+          resources can be packaged in a JAR and served directly without having
+          to be deployed. The directory defined by Servlet 3.0 is
+          <tt>META-INF/resources</tt>.
           <p/>
-          Click 2.1.0 aligns with Servlet 3.0 in that resources are now also deployed
-          from the location <tt>META-INF/resources</tt>.
+          Click 2.1.0 aligns with Servlet 3.0 in that resources are also deployed
+          from <tt>META-INF/resources</tt>.
           <p/>
           For backwards compatibility Click will still deploy resources from
-          <tt>META-INF/web</tt>, however it is highly recommended to use the new
-          Servlet 3.0 location instead.
+          <tt>META-INF/web</tt>, however it is highly recommended to deploy
+          resources from <tt>META-INF/resources</tt> instead.
       </li>
     </ul>
   </dd>
