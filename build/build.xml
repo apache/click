@@ -25,10 +25,10 @@
     
    <property file="./build/build.properties"/>
    <xmlproperty file="./build/javascript-syntax-highlighter.xml"/>
-   <property name="click" value="click-${version}-incubating"/>
-   <property name="click-extras" value="click-extras-${version}-incubating"/>
-   <property name="click-nodeps" value="click-nodeps-${version}-incubating"/>
-   <property name="click-mock" value="click-mock-${version}-incubating"/>
+   <property name="click" value="click-${version}"/>
+   <property name="click-extras" value="click-extras-${version}"/>
+   <property name="click-nodeps" value="click-nodeps-${version}"/>
+   <property name="click-mock" value="click-mock-${version}"/>
 
    <property name="jar.cayenne" value="cayenne-server-${cayenne.version}.jar"/>
    <property name="jar.checkstyle" value="checkstyle-all-${checkstyle.version}.jar"/>
@@ -70,20 +70,20 @@
         <attribute name="name"/>
         <sequential>
             <mkdir dir="${maven-bundle}/@{name}"/>
-            <copy file="build/@{name}.pom" tofile="${maven-bundle}/@{name}/@{name}-${version}-incubating.pom"/>
-            <replace file="${maven-bundle}/@{name}/@{name}-${version}-incubating.pom"
+            <copy file="build/@{name}.pom" tofile="${maven-bundle}/@{name}/@{name}-${version}.pom"/>
+            <replace file="${maven-bundle}/@{name}/@{name}-${version}.pom"
                      token="VERSION" 
-                     value="${version}-incubating"/>
+                     value="${version}"/>
 
             <!--
                 Replace the TEMPLATE token with the value of the template pom
             -->
             <loadfile property="pom-template" srcFile="build/template.pom"/>
-            <replace file="${maven-bundle}/@{name}/@{name}-${version}-incubating.pom"
+            <replace file="${maven-bundle}/@{name}/@{name}-${version}.pom"
                      value="${pom-template}">
               <replacetoken>&lt;!--TEMPLATE--&gt;</replacetoken>
             </replace>
-            <copy file="dist/@{name}-${version}-incubating.jar" todir="${maven-bundle}/@{name}/"/>
+            <copy file="dist/@{name}-${version}.jar" todir="${maven-bundle}/@{name}/"/>
         </sequential>
     </macrodef>
 
@@ -252,7 +252,6 @@
       </copy>
  	    <copy file="LICENSE.txt" todir="extras/classes/META-INF"/>
  	    <copy file="NOTICE.txt" todir="extras/classes/META-INF"/>
-      <copy file="DISCLAIMER.txt" todir="extras/classes/META-INF"/>
       <javac srcdir="extras/src"
              destdir="extras/classes"
              debug="true"
@@ -298,7 +297,6 @@
       </copy>
  	  <copy file="LICENSE.txt" todir="${dir.classes}/META-INF"/>
  	  <copy file="NOTICE.txt" todir="${dir.classes}/META-INF"/>
-    <copy file="DISCLAIMER.txt" todir="${dir.classes}/META-INF"/>
       <!-- No Dependencies -->
       <javac srcdir="${dir.source}"
              destdir="${dir.classes}"
@@ -386,7 +384,6 @@
       </copy>
  	  <copy file="LICENSE.txt" todir="mock/classes/META-INF"/>
  	  <copy file="NOTICE.txt" todir="mock/classes/META-INF"/>
-    <copy file="DISCLAIMER.txt" todir="mock/classes/META-INF"/>
       <javac srcdir="mock/src"
              destdir="mock/classes"
              debug="true"
@@ -870,7 +867,7 @@ Please ensure you have configured build.properties</echo>
             <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
             <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
             <link href="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
-            <link href="http://incubator.apache.org/click/docs/click-api/"/>
+            <link href="http://click.apache.org/docs/click-api/"/>
             <link href="http://www.hibernate.org/hib_docs/v3/api/"/>
             <link href="http://static.springframework.org/spring/docs/2.5.x/api/"/>
          </javadoc>

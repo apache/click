@@ -27,7 +27,8 @@
 	color: #000080;
 	font-weight: bold;
 	font-size: 20pt;
-    letter-spacing: 0.2em;
+  letter-spacing: 0.2em;
+  text-shadow: #888 1px 1px 1px;
 	position: absolute;
 	top: 8px;
 	left: 60px;
@@ -43,16 +44,8 @@
 	top: 26px;
 	right: 15px;
 }
-#apache-incubator-logo img {
-    border: 1px solid white;
-}
 .image {
     border: 0 none;
-}
-#apache-incubator-logo a {
-  top: 2px;
-  right: 15px;
-	position: absolute;
 }
 #header {
 	background: #4A70BC url(images/banner.gif) top left no-repeat;
@@ -311,6 +304,33 @@ ul.items {
 }
 ul.items li.item {
     background: url(images/tick.png) no-repeat;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 25px;
+}
+div.news {
+    margin-top:20px;
+    padding-top:8px;
+    padding-left:8px;
+    border : 1px solid #99A4DF;
+    background-color: #EFEFF7;
+}
+div.news-header {
+    font-weight: bold;
+    font-size: 110%;
+    color: navy;
+}
+div.news-item {
+    margin-left: 10px;
+    padding: 10px;
+    font-weight: normal;
+}
+
+ul.news-items {
+    padding-left:15px;
+}
+ul.news-items li.news-item {
+    background: url(images/news-tick.png) no-repeat;
     list-style: none;
     margin-left: 0;
     padding-left: 25px;

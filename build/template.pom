@@ -10,17 +10,17 @@
 
   <organization>
     <name>Apache Click</name>
-    <url>http://incubator.apache.org/click</url>
+    <url>http://click.apache.org/</url>
   </organization>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/click/trunk/click/</connection>
-    <developerConnection>scm:svn:https://username@svn.apache.org/repos/asf/incubator/click/trunk/click/</developerConnection>
-    <url>http://svn.apache.org/viewvc/incubator/click/trunk/click/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/click/trunk/click/</connection>
+    <developerConnection>scm:svn:https://username@svn.apache.org/repos/asf/click/trunk/click/</developerConnection>
+    <url>http://svn.apache.org/viewvc/click/trunk/click/</url>
   </scm>
 
   <inceptionYear>2003</inceptionYear>
-  <url>http://incubator.apache.org/click</url>
+  <url>http://click.apache.org/</url>
   <description>Apache Click is a J2EE web application framework designed for commercial developers.</description>
 
   <issueManagement>
@@ -31,17 +31,17 @@
   <mailingLists>
     <mailingList>
       <name>User List</name>
-      <subscribe>click-user-subscribe@incubator.apache.org</subscribe>
-      <unsubscribe>click-user-unsubscribe@incubator.apache.org</unsubscribe>
-      <post>click-user@incubator.apache.org</post>
-      <archive>http://mail-archives.apache.org/mod_mbox/incubator-click-user/</archive>
+      <subscribe>user-subscribe@click.apache.org</subscribe>
+      <unsubscribe>user-unsubscribe@click.apache.org</unsubscribe>
+      <post>user@click.apache.org</post>
+      <archive>http://mail-archives.apache.org/mod_mbox/click-user/</archive>
     </mailingList>
     <mailingList>
       <name>Development List</name>
-      <subscribe>click-dev-subscribe@incubator.apache.org</subscribe>
-      <unsubscribe>click-dev-unsubscribe@incubator.apache.org</unsubscribe>
-      <post>click-dev@incubator.apache.org</post>
-      <archive>http://mail-archives.apache.org/mod_mbox/incubator-click-dev/</archive>
+      <subscribe>dev-subscribe@click.apache.org</subscribe>
+      <unsubscribe>dev-unsubscribe@click.apache.org</unsubscribe>
+      <post>dev@click.apache.org</post>
+      <archive>http://mail-archives.apache.org/mod_mbox/click-dev/</archive>
     </mailingList>
   </mailingLists>
 

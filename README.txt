@@ -12,9 +12,9 @@ Docmentation
 
 Comprehensive HTML documentation is available online at:
 
-    http://incubator.apache.org/click
+    http://click.apache.org/
 
-This documentation is also available in the directory:
+The documentation is also available from the directory:
 
    documentation
 
