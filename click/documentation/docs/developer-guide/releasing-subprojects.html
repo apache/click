@@ -67,6 +67,16 @@
                 <p/>
                 For example version <tt>2.2.0</tt> of subproject <tt>ClickIDE</tt> could be published to:
                 <pre class="codeConfig"><tt>~/public_html/click/clickide/2.2.0</tt></pre>
+                Make sure the uploaded files have the right permissions (<tt>664</tt>)
+                and belong to the 'click' group to ensure that other members
+                have proper access to these files.
+                If not execute the following commands to ensure file and directory
+                permissions are correct:
+                <pre class="codeConfig">ssh people.apache.org
+cd ~/public_html/click/clickide/X.X.X
+find . -type d | xargs chmod 775
+find . -type f | xargs chmod 664
+chgrp -R click *</pre>
             </li>
             <li>
                 Verify the digital signatures at <tt>people.apache.org</tt> to
