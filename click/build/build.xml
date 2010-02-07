@@ -93,8 +93,8 @@
             <!--
             Calculating checksum currently not very useful
             -->
-            <checksum file="@{file}" forceOverwrite="true" fileext="md5"/>
-            <checksum file="@{file}" forceOverwrite="true" algorithm="SHA1" fileext="sha1"/>
+            <checksum file="@{file}" forceOverwrite="true" fileext=".md5"/>
+            <checksum file="@{file}" forceOverwrite="true" algorithm="SHA1" fileext=".sha1"/>
         </sequential>
     </macrodef>
 
