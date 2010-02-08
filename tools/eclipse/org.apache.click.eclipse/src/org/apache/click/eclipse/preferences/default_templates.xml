@@ -49,9 +49,11 @@ public class ${classname} extends ${superclass} {
 <![CDATA[
 package ${package};
 
-import net.sf.click.control.Form;
+import org.apache.click.control.Form;
 
 public class ${classname} extends ${superclass} {
+
+	private static final long serialVersionUID = 1L;
 	
 	private Form form = new Form("form");
 	
