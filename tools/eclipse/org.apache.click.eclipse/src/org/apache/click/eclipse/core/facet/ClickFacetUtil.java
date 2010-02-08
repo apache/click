@@ -37,15 +37,15 @@ public class ClickFacetUtil {
 	public static String SPRING_DIR = "spring-2.5.6";
 
 	public static final String[] COPY_FILES = {
-		"/lib/click-2.1.0-RC1-incubating.jar",
-		"/lib/click-extras-2.1.0-RC1-incubating.jar",
+		"/lib/click-2.1.0.jar",
+		"/lib/click-extras-2.1.0.jar",
 		"/click.xml",
 	};
 
 	public static final String[] CAYENNE_LIBS = {
 		"/lib/ashwood-2.0.jar",
 		"/lib/cayenne-server-3.0M6.jar",
-		"/lib/commons-logging-1.1.jar",
+		"/lib/commons-logging-1.1.1.jar",
 	};
 
 	public static final String[] SPRING_LIBS = {
