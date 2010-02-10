@@ -344,8 +344,7 @@ cd /www/people.apache.org/repo/m2-ibiblio-rsync-repository/org/apache/click/
 #cd public_html/click/click/X.X.X/maven2
 find . ! -perm 775 -type d -user ${USER} -exec chmod 775 {} \;
 find . ! -perm 664 -iname maven-metadata.xml* -user ${USER} -exec chmod 664 {} \;
-find . ! -perm 644 ! -iname maven-metadata.xml* -type f -user ${USER} -exec chmod 644 {} \;
-chgrp -R click *</pre>
+find . ! -perm 644 ! -iname maven-metadata.xml* -type f -user ${USER} -exec chmod 644 {} \;</pre>
                     </li>
                     <li>Once the artifacts are uploaded you need to verify the signatures:
                     (this step must be done for both <tt>snapshots</tt> and <tt>releases</tt>)
