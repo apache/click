@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
  "http://www.w3.org/TR/html4/loose.dtd">
 <!--
    Licensed to the Apache Software Foundation (ASF) under one
@@ -34,27 +34,32 @@
       text-decoration:none;
   }
   div.action {
-    text-shadow: #333 1px 1px 1px;
-    font-weight: bold;
+    text-shadow: #fff 1px 1px 1px;
     font-size: larger;
     padding: 5px;
-    background: #3350AF;
+    background-color: #D0D0D0;
+    background: -moz-linear-gradient(-90deg, #FFFFFF, rgba(255, 255, 255, 0.5) 5%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0)) repeat scroll 0 0 #D0D0D0;
+    background: #D0D0D0 -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), color-stop(0.05, rgba(255, 255, 255, 0.496094)), color-stop(0.50, rgba(255, 255, 255, 0.199219)), to(rgba(255, 255, 255, 0)));
     width: 140px;
     text-align: center;
-    color: #FFFFFF;
+    color: #000;
     float: left;
-    border: 1px solid #99A4DF;
+    border: 1px solid #444444;
     cursor: pointer;
     margin: 10px 10px 10px 0px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
   }
   div.action:hover {
-    text-shadow: #fff 1px 1px 1px;
-    background-color: #d0d0d0;
-    color: #000;
-    border: 1px solid #99A4DF;
+    text-shadow: #000 1px 1px 1px;
+    -moz-box-shadow: 1px 1px 20px #888;
+    -webkit-box-shadow: 1px 1px 20px #888;
+    background-color: #3350AF;
+    background: -moz-linear-gradient(-90deg, #FFFFFF, rgba(255, 255, 255, 0.5) 5%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0)) repeat scroll 0 0 #3350AF;
+    background: #3350AF -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), color-stop(0.05, rgba(255, 255, 255, 0.6)), color-stop(0.50, rgba(255, 255, 255, 0.19)), to(rgba(255, 255, 255, 0)));
+    color: #fff;
   }
+
  </style>
 </head>
 <body>
@@ -66,7 +71,7 @@
 Apache Click is a modern JEE web application framework, providing a natural rich
 client style programming model. Apache Click is designed to be very easy to learn
 and use, with developers getting up and running within a day.
- 
+
 <p/>
 <h3 style="margin-bottom:0em;">Highlights</h3>
 <ul class="items">
