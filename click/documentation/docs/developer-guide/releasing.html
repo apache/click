@@ -401,7 +401,7 @@ rsync -avz --exclude ".svn" --exclude "xdocs" ~/temp/click/documentation/ /www/c
                 permissions are correct:
                 <pre class="codeConfig">ssh people.apache.org
 cd /www/click.apache.org/
-find . -type d | xargs chmod 776
+find . -type d | xargs chmod 775
 find . -type f | xargs chmod 664
 chgrp -R click *</pre>
             </li>
