@@ -388,6 +388,9 @@ svn co http://svn.apache.org/repos/asf/click/trunk/click/
 cd click/build
 ant get-deps
 ant build-distribution
+cd ../documentation/xdocs/
+ant get-deps
+ant all
 rsync -avz --exclude ".svn" ~/temp/click/documentation/ /www/click.apache.org/</pre>
 
                 <p/>
