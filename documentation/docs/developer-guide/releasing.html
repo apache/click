@@ -391,7 +391,7 @@ ant build-distribution
 cd ../documentation/xdocs/
 ant get-deps
 ant all
-rsync -avz --exclude ".svn" ~/temp/click/documentation/ /www/click.apache.org/</pre>
+rsync -avz --exclude ".svn" --exclude "xdocs" ~/temp/click/documentation/ /www/click.apache.org/</pre>
 
                 <p/>
                 Make sure the website files and folders have the right permissions (<tt>664</tt>)
