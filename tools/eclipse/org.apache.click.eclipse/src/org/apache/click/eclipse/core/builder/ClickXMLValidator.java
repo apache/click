@@ -135,11 +135,15 @@ public class ClickXMLValidator {
 			return;
 		}
 		
-		// classname of <control>, <page> and <format>
-		if(tagName.equals(ClickPlugin.TAG_CONTROL) || tagName.equals(ClickPlugin.TAG_PAGE) || tagName.equals(ClickPlugin.TAG_FORMAT)){
+		// classname of <control>, <page>, <format> and <xxx-service>
+		if(tagName.equals(ClickPlugin.TAG_CONTROL) || tagName.equals(ClickPlugin.TAG_PAGE) || tagName.equals(ClickPlugin.TAG_FORMAT) ||
+				tagName.equals(ClickPlugin.TAG_LOG_SERVICE) || tagName.equals(ClickPlugin.TAG_TEMPLATE_SERVICE) || 
+				tagName.equals(ClickPlugin.TAG_FILE_UPLOAD_SERVICE) || tagName.equals(ClickPlugin.TAG_RESOURCE_SERVICE)){
+			
 			if(tagName.equals(ClickPlugin.TAG_PAGE) && packageName!=null && !packageName.equals("")){
 				attrValue = packageName + "." + attrValue;
 			}
+			
 			if(attrName.equals(ClickPlugin.ATTR_CLASSNAME)){
 				if(!existsJavaClass(file, attrValue)){
 					createWarningMarker(file, "notExist", new String[]{attrValue}, start, length);

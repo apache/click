@@ -45,16 +45,22 @@ public class ClickServiceEditor extends AbstractMasterDetailEditor {
 			if(ClickUtils.getElement(element, ClickPlugin.TAG_TEMPLATE_SERVICE)==null){
 				newMenu.add(new ElementAppendAction(ClickPlugin.TAG_TEMPLATE_SERVICE, element, null, this));
 			}
+			if(ClickUtils.getElement(element, ClickPlugin.TAG_RESOURCE_SERVICE)==null){
+				newMenu.add(new ElementAppendAction(ClickPlugin.TAG_RESOURCE_SERVICE, element, null, this));
+			}
 		}
 		if(element.getNodeName().equals(ClickPlugin.TAG_FILE_UPLOAD_SERVICE) ||
 				element.getNodeName().equals(ClickPlugin.TAG_LOG_SERVICE) ||
-				element.getNodeName().equals(ClickPlugin.TAG_TEMPLATE_SERVICE)){
+				element.getNodeName().equals(ClickPlugin.TAG_TEMPLATE_SERVICE) ||
+				element.getNodeName().equals(ClickPlugin.TAG_RESOURCE_SERVICE)){
 			newMenu.add(new ElementAppendAction(ClickPlugin.TAG_PROPERTY, element, null, this));
 		}
 	}
 
 	protected String[] getAcceptElementNames() {
-		return new String[]{ClickPlugin.TAG_FILE_UPLOAD_SERVICE, ClickPlugin.TAG_LOG_SERVICE, ClickPlugin.TAG_TEMPLATE_SERVICE, ClickPlugin.TAG_PROPERTY};
+		return new String[]{ClickPlugin.TAG_FILE_UPLOAD_SERVICE, ClickPlugin.TAG_LOG_SERVICE, 
+				ClickPlugin.TAG_TEMPLATE_SERVICE, ClickPlugin.TAG_RESOURCE_SERVICE, 
+				ClickPlugin.TAG_PROPERTY};
 	}
 
 	protected IAttributeEditor getAttributeEditor(String elementName) {
@@ -66,6 +72,9 @@ public class ClickServiceEditor extends AbstractMasterDetailEditor {
 		}
 		if(elementName.equals(ClickPlugin.TAG_TEMPLATE_SERVICE)){
 			return new ServiceClassNameAttributeEditor("org.apache.click.service.TemplateService");
+		}
+		if(elementName.equals(ClickPlugin.TAG_RESOURCE_SERVICE)){
+			return new ServiceClassNameAttributeEditor("org.apache.click.service.ResourceService");
 		}
 		if(elementName.equals(ClickPlugin.TAG_PROPERTY)){
 			return new PropertyAttributeEditor();

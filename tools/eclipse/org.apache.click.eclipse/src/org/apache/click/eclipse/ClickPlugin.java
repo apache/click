@@ -75,6 +75,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String TAG_FILE_UPLOAD_SERVICE = "file-upload-service";
 	public static final String TAG_LOG_SERVICE = "log-service";
 	public static final String TAG_TEMPLATE_SERVICE = "template-service";
+	public static final String TAG_RESOURCE_SERVICE = "resource-service";
 	public static final String ATTR_CHARSET = "charset";
 	public static final String ATTR_LOCALE = "locale";
 	public static final String ATTR_CLASSNAME = "classname";
