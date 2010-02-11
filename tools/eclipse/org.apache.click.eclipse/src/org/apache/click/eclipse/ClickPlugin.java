@@ -67,6 +67,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String TAG_PAGE = "page";
 	public static final String TAG_CONTROLS = "controls";
 	public static final String TAG_CONTROL = "control";
+	public static final String TAG_CONTROL_SET = "control-set";
 	public static final String TAG_FORMAT = "format";
 	public static final String TAG_MODE = "mode";
 	public static final String TAG_EXCLUDES = "excludes";
@@ -87,6 +88,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String ATTR_PATTERN = "pattern";
 
 	public static final String[] BOOLEAN_VALUES = {"true", "false"};
+	public static final String[] AUTO_BINDING_VALUES = {"annotation", "public", "none"};
 	public static final String[] LOGTO_VALUES = {"console", "servlet"};
 	public static final String[] MODE_VALUES = {"production", "profile", "development", "debug", "trace"};
 	public static final String[] HEADER_TYPE_VALUES = {"String", "Integer", "Date"};

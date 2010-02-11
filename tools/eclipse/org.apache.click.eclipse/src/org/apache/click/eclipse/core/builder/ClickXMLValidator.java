@@ -146,6 +146,7 @@ public class ClickXMLValidator {
 				}
 			}
 		}
+		
 		// automapping and package of <pages>
 		if(tagName.equals(ClickPlugin.TAG_PAGES)){
 			if(attrName.equals(ClickPlugin.ATTR_AUTO_MAPPING)){
@@ -153,7 +154,7 @@ public class ClickXMLValidator {
 					createWarningMarker(file, "autoMapping", new String[0], start, length);
 				}
 			} else if(attrName.equals(ClickPlugin.ATTR_AUTO_BINDING)){
-				if(!containsValue(ClickPlugin.BOOLEAN_VALUES, attrValue)){
+				if(!containsValue(ClickPlugin.AUTO_BINDING_VALUES, attrValue)){
 					createWarningMarker(file, "autoBinding", new String[0], start, length);
 				}
 			} else if(attrName.equals(ClickPlugin.ATTR_PACKAGE)){

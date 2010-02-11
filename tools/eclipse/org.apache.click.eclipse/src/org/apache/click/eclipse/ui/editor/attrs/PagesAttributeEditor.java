@@ -77,7 +77,7 @@ public class PagesAttributeEditor implements IAttributeEditor {
 				toolkit, composite, element, 
 				ClickPlugin.getString("editor.clickXML.pages.autoBinding"), 
 				ClickPlugin.ATTR_AUTO_BINDING,
-				ClickUtils.createComboValues(ClickPlugin.BOOLEAN_VALUES));
+				ClickUtils.createComboValues(ClickPlugin.AUTO_BINDING_VALUES));
 		autoBinding.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent evt){
 				if(autoBinding.getText().equals("")){
