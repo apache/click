@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            filenames="cayenne.xml"
+            icon="icons/cayenne.png"
+            id="org.apache.click.eclipse.cayenne.editor.CayenneModelerLauncher"
+            launcher="org.apache.click.eclipse.cayenne.editor.CayenneModelerLauncher"
+            name="Cayenne Modeler">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.apache.click.eclipse.cayenne"
+            name="Cayenne">
+      </category>
+      <wizard
+            category="org.apache.click.eclipse.cayenne"
+            class="org.apache.click.eclipse.cayenne.wizard.NewCayenneWizard"
+            icon="icons/cayenne.png"
+            id="org.apache.click.eclipse.cayenne.wizard"
+            name="Cayenne Mapping Project">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.jdt.core.classpathContainerInitializer">
+      <classpathContainerInitializer
+         class="org.apache.click.eclipse.cayenne.CayenneClasspathContainerInitializer"
+         id="org.apache.click.eclipse.cayenne.CAYENNE_LIBS"/>
+   </extension>
+   <extension
+         point="org.eclipse.jdt.ui.classpathContainerPage">
+      <classpathContainerPath 
+         class="org.apache.click.eclipse.cayenne.CayenneClasspathContainerPage"
+         id="org.apache.click.eclipse.cayenne.CAYENNE_LIBS"
+         name="Cayennne Libraries"/>
+   </extension>
+   <!--
+   <extension
+         point="org.eclipse.jdt.core.classpathVariableInitializer">
+      <classpathVariableInitializer
+            class="org.apache.click.eclipse.cayenne.CayenneClasspathVariableInitializer"
+            variable="org.apache.click.eclipse.cayenne.classpathVariableInitializer">
+      </classpathVariableInitializer>
+   </extension>
+   -->
+</plugin>

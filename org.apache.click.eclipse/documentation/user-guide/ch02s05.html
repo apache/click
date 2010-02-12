@@ -1,0 +1,194 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.5.&nbsp;Page Navigation</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Pages"><link rel="prev" href="ch02s04.html" title="2.4.&nbsp;Security"><link rel="next" href="ch02s06.html" title="2.6.&nbsp;Page Templating"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.5.&nbsp;Page Navigation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s04.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;2.&nbsp;Pages</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s06.html">Next</a></td></tr></table><hr></div><div class="sect1" title="2.5.&nbsp;Page Navigation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="page-navigation"></a>2.5.&nbsp;Page Navigation</h2></div></div></div><p> Navigation between pages is achieved by using forwards, redirects
+    and by setting the page template path.
+    </p><div class="sect2" title="2.5.1.&nbsp;Forward"><div class="titlepage"><div><div><h3 class="title"><a name="forward"></a>2.5.1.&nbsp;Forward</h3></div></div></div><p> To forward to another page using the servlet
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/RequestDispatcher.html" target="_blank">RequestDispatcher</a>,
+      set the Page's forward property. For example to forward to a page with a
+      path <code class="varname">index.htm</code>:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+ * @see Page#onPost()
+ */</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> onPost() {
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Process form post</span>
+    ..
+
+    setForward(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"index.htm"</span>);
+}</pre><p>This will invoke a new Page class instance mapped to the path
+      <code class="varname">index.htm</code>.
+      </p><p><span class="bold"><strong>Please note</strong></span> when a request is
+      forwarded to another Page, the controls on the second page will not be
+      processed. This prevents confusion and bugs, like a form on the second page
+      trying to process a POST request from the first page.
+      </p><div class="sect3" title="2.5.1.1.&nbsp;Forward Parameter Passing"><div class="titlepage"><div><div><h4 class="title"><a name="forward-parameter-passing"></a>2.5.1.1.&nbsp;Forward Parameter Passing</h4></div></div></div><p>When you forward to another page the request parameters are
+        maintained. This is a handy way of passing through state information
+        with the request. For example you could add a customer object as a
+        request parameter which is displayed in the template of the forwarded
+        page.
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onViewClick() {
+    Long id = viewLink.getValueLong();
+    Customer customer = CustomerDAO.findByPK(id);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Set the customer object as a request parameter</span>
+    getContext().setRequestAttribute(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"customer"</span>, customer);
+    setForward(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"view-customer.htm"</span>);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+}</pre><p>The snippet above forwards to the page template
+        <code class="varname">view-customer.htm</code>:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;html&gt;</span>
+ <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;head&gt;</span>
+   <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;title&gt;</span>Customer Details<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/title&gt;</span>
+ <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/head&gt;</span>
+ <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;body&gt;</span>
+   <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;h1&gt;</span>Customer Details<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/h1&gt;</span>
+   <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pre&gt;</span>
+     Full Name: <code class="varname">$customer.fullName</code>
+     Email:     <code class="varname">$customer.email</code>
+     Telephone: <code class="varname">$customer.telephone</code>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/pre&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/body&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/html&gt;</span></pre><p>Request attributes are automatically added to the Velocity Context
+    object so are available in the page template.
+        </p></div><div class="sect3" title="2.5.1.2.&nbsp;Page Forwarding"><div class="titlepage"><div><div><h4 class="title"><a name="page-forwarding"></a>2.5.1.2.&nbsp;Page Forwarding</h4></div></div></div><p>Page forwarding is another way of passing information between
+        pages. In this case you create the page to be forwarded to using the
+        Context <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Context.html#createPage(java.lang.String)" target="_blank">createPage(String)</a>
+        method and then set properties directly on the Page. Finally set this
+        page as the page to forward the request to. For example:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onEditClick() {
+    Long id = viewLink.getValueLong();
+    Customer customer = CustomerDAO.findByPK(id);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create a new EditPage instance based on the specified path</span>
+    EditPage editPage = (EditPage) getContext().createPage(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"/edit-customer.htm"</span>);
+    editPage.setCustomer(customer);
+    setForward(editPage);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+}</pre><p>When creating a page with the <code class="methodname">createPage()</code>
+        method, ensure you prefix the page path with the <code class="varname">"/"</code>
+        character.
+        </p><p>You can also specify the target page using its class as long as
+        the Page has a unique path. Using this technique the above code becomes:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onEditClick() {
+    Long id = viewLink.getValueLong();
+    Customer customer = CustomerDAO.findByPK(id);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create a new EditPage instance based on its class</span>
+    EditPage editPage = (EditPage) getContext().createPage(EditPage.<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span>);
+    editPage.setCustomer(customer);
+    setForward(editPage);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+}</pre><p>This Page forwarding technique is best practice as it provides you
+        with compile time safety and alleviates you from having to specify page
+        paths in your code. Please always use the Context
+        <code class="methodname">createPage()</code> methods to allow Click to inject
+        Page dependencies.
+        </p><p>Although uncommon it is possible to map more than one path to the
+        same class. In these cases invoking Context
+        <code class="methodname">createPage(Class)</code> will throw an exception, because
+        Click will not be able to determine which path to use for the Page.
+        </p></div></div><div class="sect2" title="2.5.2.&nbsp;Template Path"><div class="titlepage"><div><div><h3 class="title"><a name="template-path"></a>2.5.2.&nbsp;Template Path</h3></div></div></div><p>An alternative method of forwarding to a new page is to simply set
+      the current Page's path to the new page template to render. With this
+      approach the page template being rendered must have everything it needs
+      without having its associated Page object created. Our modified example
+      would be:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onViewClick() {
+    Long id = viewLink.getValueLong();
+    Customer customer = CustomerDAO.findByPK(id);
+
+    addModel(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"customer"</span>, customer);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Set the Page's path to a new value</span>
+    setPath(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"view-customer.htm"</span>);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+}</pre><p>Note how the <code class="varname">customer</code> object is passed through to
+      the template in the Page model. This approach of using the Page model is
+      not available when you forward to another Page, as the first Page object is
+      "<a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Page.html#onDestroy()" target="_blank">destroyed</a>"
+      before the second Page object is created and any model values would be lost.
+      </p></div><div class="sect2" title="2.5.3.&nbsp;Redirect"><div class="titlepage"><div><div><h3 class="title"><a name="redirect"></a>2.5.3.&nbsp;Redirect</h3></div></div></div><p>Redirects are another very useful way to navigate between pages.
+      See HttpServletResponse.
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html#sendRedirect(java.lang.String)" target="_blank">sendRedirect</a>
+      (location) for details.
+      </p><p>The great thing about redirects are that they provide a clean URL in
+      the users browser which matches the page that they are viewing. This is
+      important for when users want to bookmark a page. The downside of
+      redirects are that they involve a communications round trip with the users
+      browser which requests the new page. Not only does this take time, it also
+      means that all the page and request information is lost.
+      </p><p>An example of a redirect to a <code class="varname">logout.htm</code> page is
+      provided below:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onLogoutClick() {
+    setRedirect(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"/logout.htm"</span>);
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+}</pre><p>If the redirect location begins with a <span class="symbol">"/"</span> character
+      the redirect location will be prefixed with the web applications context
+      path. For example if an application is deployed to the context
+      <code class="varname">"mycorp"</code> calling
+      <code class="methodname">setRedirect(<code class="varname">"/customer/details.htm"</code>)</code>
+      will redirect the request to: <code class="varname">"/mycorp/customer/details.htm"</code>.
+      </p><p>You can also obtain the redirect path via the target Page's class.
+      For example:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onLogoutClick() {
+    String path = getContext().getPagePath(Logout.<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span>);
+    setRedirect(path);
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+}</pre><p>Note when using this redirect method, the target Page class must have
+      a unique path.
+      </p><p>A short hand way of redirecting is to simply specify the target Page
+      class in the redirect method. For example:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onLogoutClick() {
+    setRedirect(Logout.<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span>);
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+}</pre><div class="sect3" title="2.5.3.1.&nbsp;Redirect Parameter Passing"><div class="titlepage"><div><div><h4 class="title"><a name="redirect-parameter-passing"></a>2.5.3.1.&nbsp;Redirect Parameter Passing</h4></div></div></div><p>You can pass information between redirected pages using URL
+        request parameters. The ClickServlet will encode the URL for you using
+        HttpServletResponse.<a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html#encodeRedirectURL(java.lang.String)" target="_blank">encodeRedirectURL</a>
+        (url).
+        </p><p>In the example below a user will click on an OK button to confirm
+        a payment. The <code class="methodname">onOkClick()</code> button handler
+        processes the payment, gets the payment transaction id, and then
+        redirects to the <code class="varname">trans-complete.htm</code> page with the
+        transaction id encoded in the URL.
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> Payment <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+    ..
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onOkClick() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (form.isValid()) {
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Process payment</span>
+            ..
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Get transaction id</span>
+            Long transId = OrderDAO.purchase(order);
+
+            setRedirect(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"trans-complete.htm?transId="</span> + transId);
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+        }
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> true;
+    }
+}</pre><p>The Page class for the trans-complete.htm page can then get the
+        transaction id through the request parameter <code class="varname">"transId"</code>:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> TransComplete <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * @see Page#onInit()
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> onInit() {
+        String transId = getContext().getRequest().getParameter(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"transId"</span>);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (transId != null) {
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Get order details</span>
+            Order order = OrderDAO.findOrderByPK(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Long(transId));
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (order != null) {
+                addModel(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"order"</span>, order);
+            }
+        }
+    }
+}</pre></div><div class="sect3" title="2.5.3.2.&nbsp;Post Redirect"><div class="titlepage"><div><div><h4 class="title"><a name="post-redirect"></a>2.5.3.2.&nbsp;Post Redirect</h4></div></div></div><p>The parameter passing example above is also an example of a Post
+        Redirect. The Post Redirect technique is a very useful method of
+        preventing users from submitting a form twice by hitting the refresh
+        button.
+        </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s04.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.4.&nbsp;Security&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.6.&nbsp;Page Templating</td></tr></table></div></body></html>
