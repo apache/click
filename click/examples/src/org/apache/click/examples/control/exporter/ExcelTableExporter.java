@@ -90,7 +90,11 @@ public class ExcelTableExporter extends AbstractTableExporter {
         wb = createWorkbook();
         cellFormat = wb.createDataFormat();
         locale = context.getLocale();
-        currency = Currency.getInstance(locale);
+        try {
+            currency = Currency.getInstance(locale);
+        } catch (IllegalArgumentException e) {
+            // locale doesn't specify a country
+        }
 
         currentRow = 0;
 
