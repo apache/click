@@ -31,7 +31,7 @@ Date.dayAbbreviations = new Array('日','月','火','水','木','金','土');
 // Weekdays displayed by popup calendar
 Date.weekdays = new Array('日','月','火','水','木','金','土');
 
-Date.first_day_of_week = 0;
+Date.first_day_of_week = 1;
 
 _translations = {
   "OK": "OK",
