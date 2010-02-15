@@ -42,9 +42,24 @@ Element.buildAndAppend = function(type, options, style)
 nil = null;
 
 Date.one_day = 24*60*60*1000;
-Date.weekdays = $w("S M T W T F S");
+
+// Full month names
+Date.months = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+
+// Month abbreviations
+Date.monthAbbreviations = new Array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+
+// Full day names
+Date.dayNames = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+
+// Day abbreviations
+Date.dayAbbreviations = new Array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+
+// Weekdays displayed by popup calendar
+Date.weekdays = new Array('S','M','T','W','T','F','S');
+
 Date.first_day_of_week = 0;
-Date.months = $w("January February March April May June July August September October November December" );
+
 Date.padded2 = function(hour) { var padded2 = parseInt(hour, 10); if (hour < 10) padded2 = "0" + padded2; return padded2; }
 Date.prototype.getPaddedMinutes = function() { return Date.padded2(this.getMinutes()); }
 Date.prototype.getAMPMHour = function() { var hour = this.getHours(); return (hour == 0) ? 12 : (hour > 12 ? hour - 12 : hour ) }
@@ -185,7 +200,7 @@ CalendarDateSelect.prototype = {
     var days_table = body_div.build("table", { cellPadding: "0px", cellSpacing: "0px", width: "100%" })
     // make the weekdays!
     var weekdays_row = days_table.build("thead").build("tr");
-    Date.weekdays.each( function(weekday) { 
+    Date.weekdays.each( function(weekday) {
       weekdays_row.build("th", {innerHTML: weekday});
     });
     
@@ -505,14 +520,6 @@ Date.$VERSION = 1.02;
 
 // Utility function to append a 0 to single-digit numbers
 Date.LZ = function(x) {return(x<0||x>9?"":"0")+x};
-// Full month names. Change this for local month names
-Date.monthNames = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
-// Month abbreviations. Change this for local month names
-Date.monthAbbreviations = new Array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
-// Full day names. Change this for local month names
-Date.dayNames = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
-// Day abbreviations. Change this for local month names
-Date.dayAbbreviations = new Array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 // Used for parsing ambiguous dates like 1/2/2000 - default to preferring 'American' format meaning Jan 2.
 // Set to false to prefer 'European' format meaning Feb 1
 Date.preferAmericanFormat = true;
@@ -614,7 +621,7 @@ Date.parseString = function(val, format) {
     }
     else if (token=="MMM" || token=="NNN"){
       month=0;
-      var names = (token=="MMM"?(Date.monthNames.concat(Date.monthAbbreviations)):Date.monthAbbreviations);
+      var names = (token=="MMM"?(Date.months.concat(Date.monthAbbreviations)):Date.monthAbbreviations);
       for (var i=0; i<names.length; i++) {
         var month_name=names[i];
         if (val.substring(i_val,i_val+month_name.length).toLowerCase()==month_name.toLowerCase()) {
@@ -813,7 +820,7 @@ Date.prototype.format = function(format) {
   value["yy"]=y.substring(2,4);
   value["M"]=M;
   value["MM"]=Date.LZ(M);
-  value["MMM"]=Date.monthNames[M-1];
+  value["MMM"]=Date.months[M-1];
   value["NNN"]=Date.monthAbbreviations[M-1];
   value["d"]=d;
   value["dd"]=Date.LZ(d);
@@ -873,7 +880,7 @@ Date.prototype.getDayAbbreviation = function() {
 
 // Get the full name of the month for a date
 Date.prototype.getMonthName = function() {
-  return Date.monthNames[this.getMonth()];
+  return Date.months[this.getMonth()];
 };
 
 // Get the abbreviation of the month for a date

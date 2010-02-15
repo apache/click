@@ -16,10 +16,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-Date.weekdays = $w("Ma Ti Ke To Pe La Su");
-Date.months = $w("Tammikuu Helmikuu Maaliskuu Huhtikuu Toukokuu Kesäkuu Heinäkuu Elokuu Syyskuu Lokakuu Marraskuu Joulukuu" );
+// Full month names
+Date.months = new Array('Tammikuu','Helmikuu','Maaliskuu','Huhtikuu','Toukokuu','Kesäkuu','Heinäkuu','Elokuu','Syyskuu','Lokakuu','Marraskuu','Joulukuu');
 
-Date.first_day_of_week = 1
+// Month abbreviations
+Date.monthAbbreviations = new Array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+
+// Full day names
+Date.dayNames = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+
+// Day abbreviations
+Date.dayAbbreviations = new Array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+
+// Weekdays displayed by popup calendar
+Date.weekdays = new Array('Ma','Ti','Ke','To','Pe','La','Su');
+
+Date.first_day_of_week = 1;
 
 _translations = {
   "OK": "OK",

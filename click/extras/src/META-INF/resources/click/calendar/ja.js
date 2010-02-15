@@ -16,8 +16,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-Date.weekdays = $w('月 火 水 木 金 土 日');
-Date.months = $w('1月 2月 3月 4月 5月 6月 7月 8月 9月 10月 11月 12月');
+// Full month names
+Date.months = new Array('1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月');
+
+// Month abbreviations
+Date.monthAbbreviations = new Array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+
+// Full day names
+Date.dayNames = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+
+// Day abbreviations
+Date.dayAbbreviations = new Array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+
+// Weekdays displayed by popup calendar
+Date.weekdays = new Array('月','火','水','木','金','土','日');
 
 Date.first_day_of_week = 1;
 
