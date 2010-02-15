@@ -38,7 +38,12 @@ Build Information
 =================
 
 ClickIDE is built using the J2SE 1.5.0, Eclipse 3.5.x and Ant.
-At first, import following plugins as plugin project:
+
+First, checkout the source code from SVN onto a folder on your local machine:
+
+  svn co http://svn.apache.org/repos/asf/click/trunk/tools/eclipse/
+
+Next, open Eclipse and import the following plugins into a Plug-in Project:
 
  - org.apache.click.eclipse
  - org.apache.click.eclipse.cayenne
