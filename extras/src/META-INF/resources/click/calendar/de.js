@@ -16,8 +16,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-Date.weekdays = $w('Mo Di Mi Do Fr Sa So');
-Date.months = $w('Januar Februar März April Mai Juni Juli August September Oktober November Dezember');
+// Full month names
+Date.months = new Array('Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember');
+
+// Month abbreviations
+Date.monthAbbreviations = new Array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+
+// Full day names
+Date.dayNames = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+
+// Day abbreviations
+Date.dayAbbreviations = new Array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+
+// Weekdays displayed by popup calendar
+Date.weekdays = new Array('Mo','Di','Mi','Do','Fr','Sa','So');
 
 Date.first_day_of_week = 1;
 
