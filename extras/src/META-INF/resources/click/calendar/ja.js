@@ -20,18 +20,18 @@
 Date.months = new Array('1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月');
 
 // Month abbreviations
-Date.monthAbbreviations = new Array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+Date.monthAbbreviations = new Array('1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月');
 
 // Full day names
-Date.dayNames = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+Date.dayNames = new Array('日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日');
 
 // Day abbreviations
-Date.dayAbbreviations = new Array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+Date.dayAbbreviations = new Array('日','月','火','水','木','金','土');
 
 // Weekdays displayed by popup calendar
-Date.weekdays = new Array('月','火','水','木','金','土','日');
+Date.weekdays = new Array('日','月','火','水','木','金','土');
 
-Date.first_day_of_week = 1;
+Date.first_day_of_week = 0;
 
 _translations = {
   "OK": "OK",
