@@ -20,13 +20,13 @@
 Date.months = $w('Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień');
 
 // Month abbreviations
-Date.monthAbbreviations = new Array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+Date.monthAbbreviations = new Array('Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Paź','Lis','Gru');
 
 // Full day names
-Date.dayNames = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+Date.dayNames = new Array('Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota');
 
 // Day abbreviations
-Date.dayAbbreviations = new Array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+Date.dayAbbreviations = new Array('Nie','Pon','Wto','Śro','Czw','Pią','Sob');
 
 // Weekdays displayed by popup calendar
 Date.weekdays = new Array('P','W','Ś','C','P','S','N');
