@@ -331,12 +331,14 @@ public class FormTable extends Table {
             if (column instanceof FieldColumn) {
                 Field field = ((FieldColumn) column).getField();
 
-                for (int j = firstRow; j < lastRow; j++) {
-                    field.setName(column.getName() + "_" + j);
+                if (field != null) {
+                    for (int j = firstRow; j < lastRow; j++) {
+                        field.setName(column.getName() + "_" + j);
 
-                    htmlImports = field.getHtmlImports();
-                    if (htmlImports != null) {
-                        buffer.append(htmlImports);
+                        htmlImports = field.getHtmlImports();
+                        if (htmlImports != null) {
+                            buffer.append(htmlImports);
+                        }
                     }
                 }
             }
@@ -365,10 +367,12 @@ public class FormTable extends Table {
                 if (column instanceof FieldColumn) {
                     Field field = ((FieldColumn) column).getField();
 
-                    for (int j = firstRow; j < lastRow; j++) {
-                        field.setName(column.getName() + "_" + j);
+                    if (field != null) {
+                        for (int j = firstRow; j < lastRow; j++) {
+                            field.setName(column.getName() + "_" + j);
 
-                        headElements.addAll(field.getHeadElements());
+                            headElements.addAll(field.getHeadElements());
+                        }
                     }
                 }
             }
@@ -546,15 +550,17 @@ public class FormTable extends Table {
                         FieldColumn fieldColumn = (FieldColumn) column;
                         Field field = fieldColumn.getField();
 
-                        field.setName(column.getName() + "_" + i);
+                        if (field != null) {
+                            field.setName(column.getName() + "_" + i);
 
-                        field.onProcess();
+                            field.onProcess();
 
-                        if (field.isValid()) {
-                            fieldColumn.setProperty(row, column.getName(),
-                                field.getValueObject());
-                        } else {
-                            getForm().setError(getMessage("formtable-error"));
+                            if (field.isValid()) {
+                                fieldColumn.setProperty(row, column.getName(),
+                                    field.getValueObject());
+                            } else {
+                                getForm().setError(getMessage("formtable-error"));
+                            }
                         }
                     }
                 }
