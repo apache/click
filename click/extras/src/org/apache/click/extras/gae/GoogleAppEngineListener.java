@@ -38,12 +38,12 @@ import ognl.OgnlRuntime;
  *     &lt;/listener&gt;
  *
  *     &lt;servlet&gt;
- *         &lt;servlet-name&gt;ClickClickServlet&lt;/servlet-name&gt;
- *         &lt;servlet-class&gt;net.sf.clickclick.ClickClickServlet&lt;/servlet-class&gt;
+ *         &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+ *         &lt;servlet-class&gt;org.apache.click.ClickServlet&lt;/servlet-class&gt;
  *         &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
  *     &lt;/servlet&gt;
  *     &lt;servlet-mapping&gt;
- *         &lt;servlet-name&gt;ClickClickServlet&lt;/servlet-name&gt;
+ *         &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
  *         &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
  *     &lt;/servlet-mapping&gt;
  * &lt;/web-app&gt; </pre>
