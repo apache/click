@@ -20,7 +20,7 @@
 -->
 
 <!-- The Click Application (click.xml) Document Type Definition. -->
-<!ELEMENT click-app (pages*, headers?, format?, mode?, controls?, file-upload-service?, log-service?, template-service?)>
+<!ELEMENT click-app (pages*, headers?, format?, mode?, controls?, file-upload-service?, log-service?, template-service?, page-listener*)>
   <!ATTLIST click-app charset CDATA #IMPLIED>
   <!ATTLIST click-app locale CDATA #IMPLIED>
 
@@ -84,4 +84,9 @@
   <!-- Template Service class. -->
   <!ELEMENT template-service (property*)>
    <!ATTLIST template-service classname CDATA #FIXED "org.apache.click.service.VelocityTemplateService">
+  
+  <!-- Application page listeners. -->
+  <!ELEMENT page-listener (property*)>
+    <!ATTLIST page-listener classname CDATA #REQUIRED>
+    <!ATTLIST page-listener scope (application|request) "request">
   
