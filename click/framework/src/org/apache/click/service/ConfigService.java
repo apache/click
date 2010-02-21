@@ -25,6 +25,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.apache.click.PageInterceptor;
 import org.apache.click.util.Format;
 
 /**
@@ -329,6 +330,12 @@ public interface ConfigService {
      */
     public Field[] getPageFieldArray(Class pageClass);
 
+    /**
+     * Return the list of configured PageInterceptors instances.
+     *
+     * @return the list of configured PageInterceptors instances
+     */
+    public List<PageInterceptor> getPageInterceptors();
 
     /**
      * Return the page not found <tt>Page</tt> <tt>Class</tt>.

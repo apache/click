@@ -43,10 +43,12 @@ import ognl.Ognl;
 
 import org.apache.click.Control;
 import org.apache.click.Page;
+import org.apache.click.PageInterceptor;
 import org.apache.click.util.Bindable;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
+import org.apache.click.util.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.w3c.dom.Document;
@@ -182,6 +184,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     private int mode;
 
+    /** The list of application page interceptor instances. */
+    private List<PageInterceptorConfig> pageInterceptorConfigList
+        = new ArrayList<PageInterceptorConfig>();
+
     /** The ServletContext instance. */
     private ServletContext servletContext;
 
@@ -250,6 +256,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             // Load the Resource service
             loadResourceService(rootElm);
+
+            // Load the PageInterceptors
+            loadPageInterceptors(rootElm);
 
         } finally {
             ClickUtils.close(inputStream);
@@ -718,6 +727,27 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         } else {
             return Collections.EMPTY_MAP;
         }
+    }
+
+    /**
+     * @see ConfigService#getPageInterceptors()
+     *
+     * @return the list of configured PageInterceptor instances
+     */
+    public List<PageInterceptor> getPageInterceptors() {
+
+        if (pageInterceptorConfigList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<PageInterceptor> interceptorList =
+            new ArrayList<PageInterceptor>(pageInterceptorConfigList.size());
+
+        for (PageInterceptorConfig pageListenerConfig : pageInterceptorConfigList) {
+            interceptorList.add(pageListenerConfig.getPageInterceptor());
+        }
+
+        return interceptorList;
     }
 
     /**
@@ -1506,6 +1536,35 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
     }
 
+    private void loadPageInterceptors(Element rootElm) throws Exception {
+        List<Element> interceptorList = (List<Element>)
+            ClickUtils.getChildren(rootElm, "page-interceptor");
+
+        for (Element interceptorElm : interceptorList) {
+            String classname = interceptorElm.getAttribute("classname");
+
+            String scopeValue = interceptorElm.getAttribute("scope");
+            boolean applicationScope = "application".equalsIgnoreCase(scopeValue);
+
+            Class interceptorClass = ClickUtils.classForName(classname);
+
+            Map propertyMap = loadPropertyMap(interceptorElm);
+            List<Property> propertyList = new ArrayList<Property>();
+
+            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
+                String name = i.next().toString();
+                String value = propertyMap.get(name).toString();
+
+                propertyList.add(new Property(name, value));
+            }
+
+            PageInterceptorConfig pageListenerConfig =
+                new PageInterceptorConfig(interceptorClass, applicationScope, propertyList);
+
+            pageInterceptorConfigList.add(pageListenerConfig);
+        }
+    }
+
     private void loadResourceService(Element rootElm) throws Exception {
 
         Element resourceServiceElm = ClickUtils.getChild(rootElm, "resource-service");
@@ -1735,6 +1794,30 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
     // ---------------------------------------------------------- Inner Classes
 
+    /**
+     * Provide an Excluded Page class.
+     * <p/>
+     * <b>PLEASE NOTE</b> this class is <b>not</b> for public use, and can be
+     * ignored.
+     */
+    public static class ExcludePage extends Page {
+
+        static final Map HEADERS = new HashMap();
+
+        static {
+            HEADERS.put("Cache-Control", "max-age=3600, public");
+        }
+
+        /**
+         * @see Page#getHeaders()
+         *
+         * @return the map of HTTP header to be set in the HttpServletResponse
+         */
+        public Map getHeaders() {
+            return HEADERS;
+        }
+    }
+
     static class PageElm {
 
         final Map fields;
@@ -1904,27 +1987,71 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
     }
 
-    /**
-     * Provide an Excluded Page class.
-     * <p/>
-     * <b>PLEASE NOTE</b> this class is <b>not</b> for public use, and can be
-     * ignored.
-     */
-    public static class ExcludePage extends Page {
+    static class PageInterceptorConfig {
 
-        static final Map HEADERS = new HashMap();
+        final Class<? extends PageInterceptor> interceptorClass;
+        final boolean applicationScope;
+        final List<Property> properties;
+        PageInterceptor pageInterceptor;
 
-        static {
-            HEADERS.put("Cache-Control", "max-age=3600, public");
+        PageInterceptorConfig(Class<? extends PageInterceptor> interceptorClass,
+                           boolean applicationScope,
+                           List<Property> properties) {
+
+            this.interceptorClass = interceptorClass;
+            this.applicationScope = applicationScope;
+            this.properties = properties;
         }
 
-        /**
-         * @see Page#getHeaders()
-         *
-         * @return the map of HTTP header to be set in the HttpServletResponse
-         */
-        public Map getHeaders() {
-            return HEADERS;
+        public PageInterceptor getPageInterceptor() {
+            PageInterceptor listener = null;
+
+            // If cached interceptor not already created (application scope)
+            // or is scope request then create a new interceptor
+            if (pageInterceptor == null || !applicationScope) {
+                try {
+                    listener = (PageInterceptor) interceptorClass.newInstance();
+
+                    Map ognlContext = new HashMap();
+
+                    for (Property property : properties) {
+                        PropertyUtils.setValueOgnl(listener,
+                                                   property.getName(),
+                                                   property.getValue(),
+                                                   ognlContext);
+                    }
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+                if (applicationScope) {
+                    pageInterceptor = listener;
+                }
+
+            } else {
+                listener = pageInterceptor;
+            }
+
+            return listener;
+        }
+    }
+
+    static class Property {
+        final String name;
+        final String value;
+
+        Property(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getValue() {
+            return value;
         }
     }
 

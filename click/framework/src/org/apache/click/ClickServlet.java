@@ -21,6 +21,7 @@ package org.apache.click;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -36,9 +37,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import ognl.DefaultMemberAccess;
 import ognl.MemberAccess;
-
 import ognl.Ognl;
 import ognl.OgnlException;
 import ognl.TypeConverter;
@@ -162,14 +163,18 @@ public class ClickServlet extends HttpServlet {
     /** The application log service. */
     protected LogService logger;
 
+    /** The OGNL member access handler. */
+    protected MemberAccess memberAccess;
+
     /** The application resource service. */
     protected ResourceService resourceService;
 
     /** The request parameters OGNL type converter. */
     protected TypeConverter typeConverter;
 
-    /** The OGNL member access handler. */
-    protected MemberAccess memberAccess;
+    /** The thread local page listeners. */
+    private static final ThreadLocal<List<PageInterceptor>>
+        THREAD_LOCAL_INTERCEPTORS = new ThreadLocal<List<PageInterceptor>>();
 
     // --------------------------------------------------------- Public Methods
 
@@ -349,7 +354,12 @@ public class ClickServlet extends HttpServlet {
                 }
             }
 
-            page = createPage(request);
+            page = createPage(context);
+
+            // If no page created, then an PageInterceptor has aborted processing
+            if (page == null) {
+                return;
+            }
 
             if (page.isStateful()) {
                 synchronized (page) {
@@ -391,6 +401,12 @@ public class ClickServlet extends HttpServlet {
                         processPageOnDestroy(page, startTime);
                     }
                 }
+
+                for (PageInterceptor interceptor : getThreadLocalInterceptors()) {
+                    interceptor.postDestroy(page);
+                }
+
+                setThreadLocalInterceptors(null);
 
             } finally {
                 // Only clear the context when running in normal mode.
@@ -715,6 +731,13 @@ public class ClickServlet extends HttpServlet {
      */
     protected void performRender(Page page, Context context) throws Exception {
 
+        // Process page interceptors, and abort rendering if specified
+        for (PageInterceptor interceptor : getThreadLocalInterceptors()) {
+            if (!interceptor.preResponse(page)) {
+                return;
+            }
+        }
+
         final HttpServletRequest request = context.getRequest();
         final HttpServletResponse response = context.getResponse();
 
@@ -876,14 +899,17 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Return a new Page instance for the given request. This method will
+     * Return a new Page instance for the given request context. This method will
      * invoke {@link #initPage(String, Class, HttpServletRequest)} to create
      * the Page instance and then set the properties on the page.
      *
-     * @param request the servlet request
-     * @return a new Page instance for the given request
+     * @param context the page request context
+     * @return a new Page instance for the given request, or null if an
+     * PageInterceptor has aborted page creation
      */
-    protected Page createPage(HttpServletRequest request) {
+    protected Page createPage(Context context) {
+
+        HttpServletRequest request = context.getRequest();
 
         // Log request parameters
         if (logger.isTraceEnabled()) {
@@ -929,11 +955,26 @@ public class ClickServlet extends HttpServlet {
             pageClass = configService.getNotFoundPageClass();
             path = ConfigService.NOT_FOUND_PATH;
         }
+        // Set thread local app page listeners
+        List<PageInterceptor> interceptors = configService.getPageInterceptors();
+        setThreadLocalInterceptors(interceptors);
+
+        for (PageInterceptor listener : interceptors) {
+            if (!listener.preCreate(pageClass, context)) {
+                return null;
+            }
+        }
 
         final Page page = initPage(path, pageClass, request);
 
         if (page.getFormat() == null) {
             page.setFormat(configService.createFormat());
+        }
+
+        for (PageInterceptor listener : interceptors) {
+            if (!listener.postCreate(page)) {
+                return null;
+            }
         }
 
         return page;
@@ -1690,6 +1731,21 @@ public class ClickServlet extends HttpServlet {
                 }
             }
         }
+    }
+
+    List<PageInterceptor> getThreadLocalInterceptors() {
+        List<PageInterceptor> listeners =
+            (List<PageInterceptor>) THREAD_LOCAL_INTERCEPTORS.get();
+
+        if (listeners != null) {
+            return listeners;
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    void setThreadLocalInterceptors(List<PageInterceptor> listeners) {
+        THREAD_LOCAL_INTERCEPTORS.set(listeners);
     }
 
     // ---------------------------------------------------------- Inner Classes
