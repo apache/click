@@ -72,7 +72,7 @@ public interface Container extends Control {
      *
      * @return the sequential list of controls held by the container
      */
-    List getControls();
+    List<Control> getControls();
 
     /**
      * Return the named control from the container if found or null otherwise.

@@ -30,7 +30,6 @@ import java.util.StringTokenizer;
 import org.apache.click.Control;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -383,6 +382,9 @@ public class Table extends AbstractControl {
     /** The table HTML &lt;td&gt; height attribute. */
     protected String height;
 
+    /** The table data provider. */
+    protected CachingDataProvider dataProvider;
+
     /**
      * The table rows set 'hover' CSS class on mouseover events flag. By default
      * hoverRows is false.
@@ -426,11 +428,11 @@ public class Table extends AbstractControl {
      */
     protected boolean renderId;
 
-    /**
-     * The list Table rows. Please note the rowList is cleared in table
-     * {@link #onDestroy()} method at the end of each request.
-     */
-    protected List rowList;
+//    /**
+//     * The list Table rows. Please note the rowList is cleared in table
+//     * {@link #onDestroy()} method at the end of each request.
+//     */
+//    protected List rowList;
 
     /**
      * The show table banner flag detailing number of rows and rows
@@ -744,6 +746,35 @@ public class Table extends AbstractControl {
     }
 
     /**
+     * Return the table row list DataProvider.
+     *
+     * @return the table row list DataProvider
+     */
+    public DataProvider getDataProvider() {
+        return dataProvider;
+    }
+
+    /**
+     * Set the table row list DataProvider.
+     *
+     * @param dataProvider the table row list DataProvider
+     */
+    public void setDataProvider(DataProvider dataProvider) {
+        if (dataProvider != null) {
+
+            if (dataProvider instanceof CachingDataProvider) {
+                this.dataProvider = (CachingDataProvider) dataProvider;
+
+            } else {
+                this.dataProvider = new CachingDataProvider(dataProvider);
+            }
+
+        } else {
+            this.dataProvider = null;
+        }
+    }
+
+    /**
      * Return the table HTML &lt;td&gt; height attribute.
      *
      * @return the table HTML &lt;td&gt; height attribute
@@ -993,11 +1024,12 @@ public class Table extends AbstractControl {
      * @return the list of table rows
      */
     public List getRowList() {
-        if (rowList == null) {
-            rowList = new ArrayList(0);
-        }
+        if (dataProvider != null) {
+            return dataProvider.getData();
 
-        return rowList;
+        } else {
+            return Collections.EMPTY_LIST;
+        }
     }
 
     /**
@@ -1010,7 +1042,7 @@ public class Table extends AbstractControl {
      * @param rowList the list of table rows to set
      */
     public void setRowList(List rowList) {
-        this.rowList = rowList;
+        this.dataProvider = new CachingDataProvider(rowList);
     }
 
     /**
@@ -1262,7 +1294,7 @@ public class Table extends AbstractControl {
             }
         }
         if (getNullifyRowListOnDestroy()) {
-            setRowList(null);
+            getRowList().clear();
         }
     }
 
