@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.click.element.Element;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
@@ -152,13 +153,13 @@ public class Page implements Serializable {
     // ----------------------------------------------------- Instance Variables
 
     /** The list of page controls. */
-    protected List controls;
+    protected List<Control> controls;
 
     /**
      * The list of page HTML HEAD elements including: Javascript imports,
      * Css imports, inline Javascript and inline Css.
      */
-    protected List headElements;
+    protected List<Element> headElements;
 
     /** The Velocity template formatter object. */
     protected Format format;
@@ -167,7 +168,7 @@ public class Page implements Serializable {
     protected String forward;
 
     /** The HTTP response headers. */
-    protected Map headers;
+    protected Map<String, Object> headers;
 
     /** The headers have been edited flag, to support copy on write. */
     protected boolean headersEdited;
@@ -180,7 +181,7 @@ public class Page implements Serializable {
      * Velocity context. For JSP pages the model values are set as named
      * request attributes.
      */
-    protected Map model = new HashMap();
+    protected Map<String, Object> model = new HashMap<String, Object>();
 
     /** The Page header imports. */
     protected transient PageImports pageImports;
@@ -409,9 +410,9 @@ public class Page implements Serializable {
      *
      * @return the list of page Controls
      */
-    public List getControls() {
+    public List<Control> getControls() {
         if (controls == null) {
-            controls = new ArrayList();
+            controls = new ArrayList<Control>();
         }
         return controls;
     }
@@ -564,7 +565,7 @@ public class Page implements Serializable {
      * @throws IllegalArgumentException if the Page Class is not configured
      * with a unique path
      */
-    public void setForward(Class pageClass) {
+    public void setForward(Class<? extends Page> pageClass) {
         String target = getContext().getPagePath(pageClass);
 
         // If page class maps to a jsp, convert to htm which allows ClickServlet
@@ -582,7 +583,7 @@ public class Page implements Serializable {
      *
      * @return the map of HTTP header to be set in the HttpServletResponse
      */
-    public Map getHeaders() {
+    public Map<String, Object> getHeaders() {
         return headers;
     }
 
@@ -600,7 +601,7 @@ public class Page implements Serializable {
         }
         if (!headersEdited) {
             headersEdited = true;
-            headers = new HashMap(headers);
+            headers = new HashMap<String, Object>(headers);
         }
         headers.put(name, value);
     }
@@ -610,7 +611,7 @@ public class Page implements Serializable {
      *
      * @param value the map of HTTP header to be set in the HttpServletResponse
      */
-    public void setHeaders(Map value) {
+    public void setHeaders(Map<String, Object> value) {
         headers = value;
     }
 
@@ -762,9 +763,9 @@ public class Page implements Serializable {
      *
      * @return the list of HEAD elements to be included in the page
      */
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
-            headElements = new ArrayList(2);
+            headElements = new ArrayList<Element>(2);
         }
         return headElements;
     }
@@ -870,7 +871,7 @@ public class Page implements Serializable {
      * @return a Map of localized messages for the Page
      * @throws IllegalStateException if the context for the Page has not be set
      */
-    public Map getMessages() {
+    public Map<String, String> getMessages() {
         if (messages == null) {
             if (getContext() != null) {
                 messages = new MessagesMap(getClass(), PAGE_MESSAGES);
@@ -917,7 +918,7 @@ public class Page implements Serializable {
      *
      * @return the Page's model map
      */
-    public Map getModel() {
+    public Map<String, Object> getModel() {
         return model;
     }
 
@@ -1197,7 +1198,7 @@ public class Page implements Serializable {
      * @throws IllegalArgumentException if the Page Class is not configured
      * with a unique path
      */
-    public void setRedirect(Class pageClass) {
+    public void setRedirect(Class<? extends Page> pageClass) {
         setRedirect(pageClass, null);
     }
 
@@ -1244,7 +1245,7 @@ public class Page implements Serializable {
      * @param location the path to redirect the request to
      * @param params the map of request parameter name and value pairs
      */
-    public void setRedirect(String location, Map params) {
+    public void setRedirect(String location, Map<String, Object> params) {
         Context context = getContext();
         if (StringUtils.isNotBlank(location)) {
             if (location.charAt(0) == '/') {
@@ -1260,8 +1261,8 @@ public class Page implements Serializable {
         if (params != null && !params.isEmpty()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-            for (Iterator i = params.keySet().iterator(); i.hasNext();) {
-                String paramName = i.next().toString();
+            for (Iterator<String> i = params.keySet().iterator(); i.hasNext();) {
+                String paramName = i.next();
                 Object paramValue = params.get(paramName);
 
                 // Check for multivalued parameter
@@ -1314,7 +1315,7 @@ public class Page implements Serializable {
      * @throws IllegalArgumentException if the Page Class is not configured
      * with a unique path
      */
-    public void setRedirect(Class pageClass, Map params) {
+    public void setRedirect(Class<? extends Page> pageClass, Map<String, Object> params) {
         String target = getContext().getPagePath(pageClass);
 
         // If page class maps to a jsp, convert to htm which allows ClickServlet
