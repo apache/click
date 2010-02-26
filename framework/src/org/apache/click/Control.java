@@ -24,6 +24,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.apache.click.element.Element;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
@@ -274,7 +275,7 @@ public interface Control extends Serializable {
      *
      * @return the list of HEAD elements to be included in the page
      */
-    public List getHeadElements();
+    public List<Element> getHeadElements();
 
     /**
      * Return HTML element identifier attribute "id" value.
@@ -316,7 +317,7 @@ public interface Control extends Serializable {
      *
      * @return the localized messages <tt>Map</tt> of the Control
      */
-    public Map getMessages();
+    public Map<String, String> getMessages();
 
     /**
      * Return the name of the Control. Each control name must be unique in the
