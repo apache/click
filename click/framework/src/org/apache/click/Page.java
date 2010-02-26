@@ -150,7 +150,7 @@ public class Page implements Serializable {
      */
     public static final String PAGE_MESSAGES = "click-page";
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The list of page controls. */
     protected List<Control> controls;
@@ -207,7 +207,7 @@ public class Page implements Serializable {
      */
     protected boolean includeControlHeadElements = true;
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * The on Security Check event handler. This event handler is invoked after
@@ -356,7 +356,7 @@ public class Page implements Serializable {
     public void onDestroy() {
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Add the control to the page. The control will be added to the pages model
