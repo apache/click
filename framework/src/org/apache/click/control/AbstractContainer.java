@@ -20,7 +20,6 @@ package org.apache.click.control;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -44,25 +43,24 @@ import org.apache.click.util.HtmlStringBuffer;
  *         // Return the HTML tag
  *         return "div";
  *     }
- * }
- * </pre>
+ * } </pre>
  */
 public abstract class AbstractContainer extends AbstractControl implements
     Container {
 
-    // -------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The list of controls. */
-    protected List controls;
+    protected List<Control> controls;
 
     /** The map of controls keyed by field name. */
-    protected Map controlMap;
+    protected Map<String, Control> controlMap;
 
-    // ---------------------------------------------------------- Constructorrs
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a container with no name defined.
@@ -79,7 +77,7 @@ public abstract class AbstractContainer extends AbstractControl implements
         super(name);
     }
 
-    // --------------------------------------------------------- Public methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * @see org.apache.click.control.Container#add(org.apache.click.Control).
@@ -134,9 +132,9 @@ public abstract class AbstractContainer extends AbstractControl implements
      *
      * @return the sequential list of controls held by the container
      */
-    public List getControls() {
+    public List<Control> getControls() {
         if (controls == null) {
-            controls = new ArrayList();
+            controls = new ArrayList<Control>();
         }
         return controls;
     }
@@ -182,9 +180,9 @@ public abstract class AbstractContainer extends AbstractControl implements
      *
      * @return the map of controls
      */
-    public Map getControlMap() {
+    public Map<String, Control> getControlMap() {
         if (controlMap == null) {
-            controlMap = new HashMap();
+            controlMap = new HashMap<String, Control>();
         }
         return controlMap;
     }
@@ -217,12 +215,9 @@ public abstract class AbstractContainer extends AbstractControl implements
 
         boolean continueProcessing = true;
 
-        if (hasControls()) {
-            for (Iterator it = getControls().iterator(); it.hasNext();) {
-                Control control = (Control) it.next();
-                if (!control.onProcess()) {
-                    continueProcessing = false;
-                }
+        for (Control control : getControls()) {
+            if (!control.onProcess()) {
+                continueProcessing = false;
             }
         }
 
@@ -235,14 +230,11 @@ public abstract class AbstractContainer extends AbstractControl implements
      * @see org.apache.click.Control#onDestroy()
      */
     public void onDestroy() {
-        if (hasControls()) {
-            for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
-                try {
-                    control.onDestroy();
-                } catch (Throwable t) {
-                    ClickUtils.getLogService().error("onDestroy error", t);
-                }
+        for (Control control : getControls()) {
+            try {
+                control.onDestroy();
+            } catch (Throwable t) {
+                ClickUtils.getLogService().error("onDestroy error", t);
             }
         }
     }
@@ -252,11 +244,8 @@ public abstract class AbstractContainer extends AbstractControl implements
     */
     public void onInit() {
         super.onInit();
-        if (hasControls()) {
-            for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
-                control.onInit();
-            }
+        for (Control control : getControls()) {
+            control.onInit();
         }
     }
 
@@ -264,11 +253,8 @@ public abstract class AbstractContainer extends AbstractControl implements
     * @see org.apache.click.Control#onRender()
     */
     public void onRender() {
-        if (hasControls()) {
-            for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
-                control.onRender();
-            }
+        for (Control control : getControls()) {
+            control.onRender();
         }
     }
 
@@ -283,8 +269,7 @@ public abstract class AbstractContainer extends AbstractControl implements
     public String getHtmlImports() {
         if (hasControls()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(0);
-            for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
+            for (Control control : getControls()) {
                 String htmlImports = control.getHtmlImports();
                 if (htmlImports != null) {
                     buffer.append(htmlImports);
@@ -342,7 +327,7 @@ public abstract class AbstractContainer extends AbstractControl implements
         return buffer.toString();
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * @see AbstractControl#renderTagEnd(java.lang.String, org.apache.click.util.HtmlStringBuffer).
@@ -371,17 +356,14 @@ public abstract class AbstractContainer extends AbstractControl implements
      * @param buffer the buffer to append the output to
      */
     protected void renderChildren(HtmlStringBuffer buffer) {
-        if (hasControls()) {
-            for (int i = 0; i < getControls().size(); i++) {
-                Control control = (Control) getControls().get(i);
+        for (Control control : getControls()) {
 
-                int before = buffer.length();
-                control.render(buffer);
+            int before = buffer.length();
+            control.render(buffer);
 
-                int after = buffer.length();
-                if (before != after) {
-                    buffer.append("\n");
-                }
+            int after = buffer.length();
+            if (before != after) {
+                buffer.append("\n");
             }
         }
     }

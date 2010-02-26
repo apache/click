@@ -32,11 +32,12 @@ import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
 
+import org.apache.click.ActionEventDispatcher;
 import org.apache.click.ActionListener;
 import org.apache.click.Context;
 import org.apache.click.Control;
-import org.apache.click.ActionEventDispatcher;
 import org.apache.click.Page;
+import org.apache.click.element.Element;
 import org.apache.click.util.ActionListenerAdaptor;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -121,11 +122,11 @@ import org.apache.click.util.MessagesMap;
  */
 public abstract class AbstractControl implements Control {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The control's action listener. */
     protected ActionListener actionListener;
@@ -134,13 +135,13 @@ public abstract class AbstractControl implements Control {
      * The list of page HTML HEAD elements including: Javascript imports,
      * Css imports, inline Javascript and inline Css.
      */
-    protected List headElements;
+    protected List<Element> headElements;
 
     /** The Control attributes Map. */
-    protected Map attributes;
+    protected Map<String, String> attributes;
 
     /** The Control localized messages Map. */
-    protected transient Map messages;
+    protected transient Map<String, String> messages;
 
     /** The Control name. */
     protected String name;
@@ -154,7 +155,7 @@ public abstract class AbstractControl implements Control {
      * @deprecated use {@link #addStyleClass(String)} and
      * {@link #removeStyleClass(String)} instead.
      */
-    protected Map styles;
+    protected Map<String, String> styles;
 
     /** The listener target object. */
     protected Object listener;
@@ -162,7 +163,7 @@ public abstract class AbstractControl implements Control {
     /** The listener method name. */
     protected String listenerMethod;
 
-    // ---------------------------------------------------- Public Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a control with no name defined.
@@ -181,7 +182,7 @@ public abstract class AbstractControl implements Control {
         }
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Returns the controls html tag.
@@ -280,9 +281,9 @@ public abstract class AbstractControl implements Control {
      *
      * @return the control's attributes Map.
      */
-    public Map getAttributes() {
+    public Map<String, String> getAttributes() {
         if (attributes == null) {
-            attributes = new HashMap();
+            attributes = new HashMap<String, String>();
         }
         return attributes;
     }
@@ -446,7 +447,7 @@ public abstract class AbstractControl implements Control {
      * @return a Map of localized messages for the control
      * @throws IllegalStateException if the context for the control has not be set
      */
-    public Map getMessages() {
+    public Map<String, String> getMessages() {
         if (messages == null) {
             messages = new MessagesMap(getClass(), CONTROL_MESSAGES);
         }
@@ -566,11 +567,11 @@ public abstract class AbstractControl implements Control {
      *
      * @return the list of HEAD elements to be included in the page
      */
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             // Most controls won't provide their own head elements, so save
             // memory by creating an empty array list
-            headElements = new ArrayList(0);
+            headElements = new ArrayList<Element>(0);
         }
         return headElements;
     }
@@ -593,8 +594,8 @@ public abstract class AbstractControl implements Control {
     public String getStyle(String name) {
         if (hasAttribute("style")) {
             String currentStyles = getAttribute("style");
-            Map stylesMap = parseStyles(currentStyles);
-            return (String) stylesMap.get(name);
+            Map<String, String> stylesMap = parseStyles(currentStyles);
+            return stylesMap.get(name);
         } else {
             return null;
         }
@@ -619,6 +620,7 @@ public abstract class AbstractControl implements Control {
      * @param name the CSS style name
      * @param value the CSS style value
      */
+    @SuppressWarnings("unchecked")
     public void setStyle(String name, String value) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
@@ -643,7 +645,7 @@ public abstract class AbstractControl implements Control {
             oldStyles.length() + 10);
 
         //Parse the current styles into a map
-        Map stylesMap = parseStyles(oldStyles);
+        Map<String, String> stylesMap = parseStyles(oldStyles);
 
         //Check if the new style is already present
         if (stylesMap.containsKey(name)) {
@@ -697,9 +699,9 @@ public abstract class AbstractControl implements Control {
      *
      * @return the Map of control CSS styles
      */
-    public Map getStyles() {
+    public Map<String, String> getStyles() {
         if (styles == null) {
-            styles = new HashMap();
+            styles = new HashMap<String, String>();
         }
         return styles;
     }
@@ -774,7 +776,7 @@ public abstract class AbstractControl implements Control {
 
             // If the class does exist, parse the class attributes into a set
             // and remove the specified class
-            Set styleClassSet = parseStyleClasses(oldStyleClasses);
+            Set<String> styleClassSet = parseStyleClasses(oldStyleClasses);
             styleClassSet.remove(value);
 
             if (styleClassSet.isEmpty()) {
@@ -788,9 +790,9 @@ public abstract class AbstractControl implements Control {
                     oldStyleClasses.length() + value.length());
 
                 // Iterate over the styleClassSet appending each entry to buffer
-                Iterator it = styleClassSet.iterator();
+                Iterator<String> it = styleClassSet.iterator();
                 while (it.hasNext()) {
-                    String entry = (String) it.next();
+                    String entry = it.next();
                     buffer.append(entry);
                     if (it.hasNext()) {
                         buffer.append(" ");
@@ -839,7 +841,7 @@ public abstract class AbstractControl implements Control {
         return buffer.toString();
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Dispatch an ActionListener event with the {@link org.apache.click.ActionEventDispatcher}.
@@ -932,7 +934,7 @@ public abstract class AbstractControl implements Control {
         return size;
     }
 
-    // -------------------------------------------------------- Private Methods
+    // Private Methods --------------------------------------------------------
 
     /**
      * Parse the specified string of style attributes and return a Map
@@ -943,7 +945,7 @@ public abstract class AbstractControl implements Control {
      * @return map containing key/value pairs of the specified style
      * @throws IllegalArgumentException if style is null
      */
-    private Map parseStyles(String style) {
+    private Map<String, String> parseStyles(String style) {
         if (style == null) {
             throw new IllegalArgumentException("style cannot be null");
         }
@@ -951,7 +953,7 @@ public abstract class AbstractControl implements Control {
         //LinkHashMap is used to keep the order of the style names. Probably
         //makes no difference to browser but it makes testing easier since the
         //order that styles are added are kept when rendering the control.
-        Map stylesMap = new LinkedHashMap();
+        Map<String, String> stylesMap = new LinkedHashMap<String, String>();
         StringTokenizer tokens = new StringTokenizer(style, ";");
         while (tokens.hasMoreTokens()) {
             String token = tokens.nextToken();
@@ -983,7 +985,7 @@ public abstract class AbstractControl implements Control {
      * @return map containing key/value pairs of the specified style
      * @throws IllegalArgumentException if styleClasses is null
      */
-    private Set parseStyleClasses(String styleClasses) {
+    private Set<String> parseStyleClasses(String styleClasses) {
         if (styleClasses == null) {
             throw new IllegalArgumentException("styleClasses cannot be null");
         }
@@ -992,7 +994,7 @@ public abstract class AbstractControl implements Control {
         //makes no difference to browser but it makes testing easier since the
         //order that classes were added in, are kept when rendering the control.
         //Thus one can test whether the expected result and actual result match.
-        Set styleClassesSet = new LinkedHashSet();
+        Set<String> styleClassesSet = new LinkedHashSet<String>();
         StringTokenizer tokens = new StringTokenizer(styleClasses, " ");
         while (tokens.hasMoreTokens()) {
             String token = tokens.nextToken();
