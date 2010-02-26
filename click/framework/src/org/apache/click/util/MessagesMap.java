@@ -66,7 +66,7 @@ import org.apache.click.service.ConfigService;
  * The ClickServlet adds a MessagesMap instance to the Velocity Context before
  * it is merged with the page template.
  */
-public class MessagesMap implements Map {
+public class MessagesMap implements Map<String, String> {
 
     /** Cache of resource bundle and locales which were not found. */
     protected static final Set NOT_FOUND_CACHE =
@@ -159,7 +159,7 @@ public class MessagesMap implements Map {
      * @see java.util.Map#get(Object)
      * @throws MissingResourceException if the given key was not found
      */
-    public Object get(Object key) {
+    public String get(Object key) {
         if (containsKey(key)) {
             return (String) messages.get(key);
 
@@ -180,7 +180,7 @@ public class MessagesMap implements Map {
      *
      * @see java.util.Map#put(Object, Object)
      */
-    public Object put(Object key, Object value) {
+    public String put(String key, String value) {
         throw new UnsupportedOperationException();
     }
 
@@ -190,7 +190,7 @@ public class MessagesMap implements Map {
      *
      * @see java.util.Map#remove(Object)
      */
-    public Object remove(Object key) {
+    public String remove(Object key) {
         throw new UnsupportedOperationException();
     }
 
