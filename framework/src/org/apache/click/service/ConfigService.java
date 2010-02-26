@@ -25,6 +25,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.apache.click.Page;
 import org.apache.click.PageInterceptor;
 import org.apache.click.util.Format;
 
@@ -194,7 +195,7 @@ public interface ConfigService {
      *
      * @return the error handling page <tt>Page</tt> <tt>Class</tt>
      */
-    public Class getErrorPageClass();
+    public Class<? extends Page> getErrorPageClass();
 
     /**
      * Create and return a new format object instance.
@@ -277,7 +278,7 @@ public interface ConfigService {
      * @throws IllegalArgumentException if the Page Class is not configured
      * with a unique path
      */
-    public String getPagePath(Class pageClass);
+    public String getPagePath(Class<? extends Page> pageClass);
 
     /**
      * Return the page <tt>Class</tt> for the given path.
@@ -287,14 +288,14 @@ public interface ConfigService {
      * @throws IllegalArgumentException if the Page Class for the path is not
      * found
      */
-    public Class getPageClass(String path);
+    public Class<? extends Page> getPageClass(String path);
 
     /**
      * Return the list of configured page classes.
      *
      * @return the list of configured page classes
      */
-    public List getPageClassList();
+    public List<? extends Page> getPageClassList();
 
     /**
      * Return Map of bindable fields for the given page class.
@@ -302,7 +303,7 @@ public interface ConfigService {
      * @param pageClass the page class
      * @return a Map of bindable fields for the given page class
      */
-    public Map getPageFields(Class pageClass);
+    public Map<String, Field> getPageFields(Class<? extends Page> pageClass);
 
     /**
      * Return the bindable field of the given name for the pageClass,
@@ -312,7 +313,7 @@ public interface ConfigService {
      * @param fieldName the name of the field
      * @return the bindable field of the pageClass with the given name or null
      */
-    public Field getPageField(Class pageClass, String fieldName);
+    public Field getPageField(Class<? extends Page> pageClass, String fieldName);
 
     /**
      * Return the headers of the page for the given path.
@@ -320,7 +321,7 @@ public interface ConfigService {
      * @param path the path of the page
      * @return a Map of headers for the given page path
      */
-    public Map getPageHeaders(String path);
+    public Map<String, Object> getPageHeaders(String path);
 
     /**
      * Return an array bindable for the given page class.
@@ -328,7 +329,7 @@ public interface ConfigService {
      * @param pageClass the page class
      * @return an array bindable fields for the given page class
      */
-    public Field[] getPageFieldArray(Class pageClass);
+    public Field[] getPageFieldArray(Class<? extends Page> pageClass);
 
     /**
      * Return the list of configured PageInterceptors instances.
@@ -342,7 +343,7 @@ public interface ConfigService {
      *
      * @return the page not found <tt>Page</tt> <tt>Class</tt>
      */
-    public Class getNotFoundPageClass();
+    public Class<? extends Page> getNotFoundPageClass();
 
     /**
      * Return the application servlet context.
