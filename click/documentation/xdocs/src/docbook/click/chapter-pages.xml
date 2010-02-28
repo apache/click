@@ -302,7 +302,7 @@
     </para>
 
     <para>The best way to understand this is to walk through an example. Our
-    application recieves a GET request:
+    application receives a GET request:
     </para>
 
     <literallayout>http://localhost:8080/mycorp/customer-details.htm?<varname>customerId</varname>=<symbol>7203</symbol></literallayout>
@@ -1170,7 +1170,7 @@ public class SearchPage extends Page implements Serializable {
 
     <literallayout>&lt;page path="<varname>click/error.htm</varname>" classname="<symbol>com.mycorp.page.ErrorPage</symbol>"/&gt;</literallayout>
 
-    <para>When the ClickSevlet starts up it checks to see whether the
+    <para>When the ClickServlet starts up it checks to see whether the
     <varname>error.htm</varname> template exists in the <varname>click</varname>
     web sub directory. If it cannot find the page the ClickServlet will
     automatically deploy one. You can tailor the <varname>click/error.htm</varname>
@@ -1228,7 +1228,7 @@ public class SearchPage extends Page implements Serializable {
     but you cannot change the path.
     </para>
 
-    <para>When the ClickSevlet starts up it checks to see whether the
+    <para>When the ClickServlet starts up it checks to see whether the
     <varname>not-found.htm</varname> template exists in the <varname>click</varname>
     web sub directory. If it cannot find the page the ClickServlet will
     automatically deploy one.
