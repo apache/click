@@ -186,7 +186,7 @@ public class HtmlStringBuffer {
     }
 
     /**
-     * Append the given value to the buffer and escape its HMTL value.
+     * Append the given value to the buffer and escape its HTML value.
      *
      * @param value the object value to append
      * @return a reference to this <tt>HtmlStringBuffer</tt> object
@@ -254,7 +254,7 @@ public class HtmlStringBuffer {
      * <pre class="javaCode">
      *    appendAttribute(<span class="st">"class"</span>, <span class="st">"required"</span>)  <span class="green">-></span>  <span class="st">class="required"</span> </pre>
      *
-     * The attribute value will be HMTL escaped. If the attribute name is a
+     * The attribute value will be HTML escaped. If the attribute name is a
      * JavaScript event handler the value will not be escaped.
      *
      * @param name the HTML attribute name
