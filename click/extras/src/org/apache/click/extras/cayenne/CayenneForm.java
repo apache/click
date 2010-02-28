@@ -145,7 +145,7 @@ import org.apache.commons.lang.StringUtils;
  * Note the <tt>getDataObject(false)</tt> method is used to obtain the
  * DataObject from the Form without applying the field values to the data object.
  * This is very important when dealing with already persistent objects and you
- * dont want to apply any form changes.
+ * don't want to apply any form changes.
  * <p/>
  * Alternatively you can save a submitted DataObject using a Service or DAO
  * pattern. For example:
@@ -239,7 +239,7 @@ public class CayenneForm extends Form {
     /**
      * Create an CayenneForm with no name or dataObjectClass.
      * <p/>
-     * <b>Important Note</b> the forms's name and dataObjectClass must be defined
+     * <b>Important Note</b> the form's name and dataObjectClass must be defined
      * before it is valid.
      */
     public CayenneForm() {

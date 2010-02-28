@@ -491,7 +491,7 @@ public abstract class AbstractControl implements Control {
      * Set the controls event listener.
      * <p/>
      * The method signature of the listener is:<ul>
-     * <li>must hava a valid Java method name</li>
+     * <li>must have a valid Java method name</li>
      * <li>takes no arguments</li>
      * <li>returns a boolean value</li>
      * </ul>
@@ -756,7 +756,7 @@ public abstract class AbstractControl implements Control {
      * @param value the CSS class attribute
      */
     public void removeStyleClass(String value) {
-        // If vaule is null, exit early
+        // If value is null, exit early
         if (value == null) {
             return;
         }

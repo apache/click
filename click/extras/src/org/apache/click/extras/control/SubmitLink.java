@@ -268,7 +268,7 @@ public class SubmitLink extends ActionLink {
     }
 
     /**
-     * Set the paramter prefix that is applied to the SubmitLink parameters.
+     * Set the parameter prefix that is applied to the SubmitLink parameters.
      *
      * @param prefix the parameter prefix
      */
@@ -277,9 +277,9 @@ public class SubmitLink extends ActionLink {
     }
 
     /**
-     * Return the paramter prefix that is applied to the SubmitLink parameters.
+     * Return the parameter prefix that is applied to the SubmitLink parameters.
      *
-     * @return the paramter prefix that is applied to the SubmitLink parameters.
+     * @return the parameter prefix that is applied to the SubmitLink parameters.
      */
     public String getParameterPrefix() {
         if (!hasParentForm()) {

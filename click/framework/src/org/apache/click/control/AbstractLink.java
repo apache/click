@@ -297,7 +297,7 @@ public abstract class AbstractLink extends AbstractControl {
     /**
      * Set the link parameter with the given parameter name and value. You would
      * generally use parameter if you were creating the entire AbstractLink
-     * programatically and rendering it with the {@link #toString()} method.
+     * programmatically and rendering it with the {@link #toString()} method.
      * <p/>
      * For example given the ActionLink:
      *

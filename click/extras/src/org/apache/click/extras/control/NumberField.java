@@ -56,7 +56,7 @@ import org.apache.click.util.ClickUtils;
  * off or call {@link #getValue()}.
  * <p/>
  * When the Number is set through {@link #setNumber(Number)} the value of the field
- * is also set to the formated number. The number returned from
+ * is also set to the formatted number. The number returned from
  * {@link #getNumber()} is then the formatted number. It is not the orginal Number
  * passed in. To circumvent formatting use setValue().
  *
@@ -248,9 +248,9 @@ public class NumberField extends TextField {
     }
 
     /**
-     * Set the miminum valid double field value.
+     * Set the minimum valid double field value.
      *
-     * @param value the miminum valid double field value
+     * @param value the minimum valid double field value
      */
     public void setMinValue(double value) {
         minvalue = value;
@@ -267,7 +267,7 @@ public class NumberField extends TextField {
 
     /**
      * Return the field Number value, or null if value was empty or a parsing
-     * error occured.
+     * error occurred.
      *
      * @return the field Number value
      */
@@ -299,7 +299,7 @@ public class NumberField extends TextField {
     }
 
     /**
-     * Return the NumberFormat for formating/parsing the field value.
+     * Return the NumberFormat for formatting/parsing the field value.
      * If no NumberFormat has been set before, the NumberFormat for the
      * requests locale is used. If this format is a DecimalNumberFormat the
      * {@link #pattern} is applied to it.
@@ -375,7 +375,7 @@ public class NumberField extends TextField {
 
     /**
      * Return the field Number value, or null if value was empty or a parsing
-     * error occured.
+     * error occurred.
      *
      * @return the Number object representation of the Field value
      */

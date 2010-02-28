@@ -279,7 +279,7 @@ public class FreemarkerTemplateService implements TemplateService {
 
     /**
      * Return the template cache duration in seconds to use when the application
-     * is in "productin" or "profile" mode.
+     * is in "production" or "profile" mode.
      *
      * @return the cacheDuration the template cache duration in seconds
      */
@@ -289,7 +289,7 @@ public class FreemarkerTemplateService implements TemplateService {
 
     /**
      * Return the template cache duration in seconds to use when the application
-     * is in "productin" or "profile" mode.
+     * is in "production" or "profile" mode.
      *
      * @param cacheDuration the template cache duration in seconds to set
      */

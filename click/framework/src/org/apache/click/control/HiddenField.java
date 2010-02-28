@@ -106,10 +106,10 @@ public class HiddenField extends Field {
      */
     public HiddenField(String name, Class valueClass) {
         if (name == null) {
-            throw new IllegalArgumentException("Null name paratemer");
+            throw new IllegalArgumentException("Null name parameter");
         }
         if (valueClass == null) {
-            throw new IllegalArgumentException("Null valueClass paratemer");
+            throw new IllegalArgumentException("Null valueClass parameter");
         }
         this.name = name;
         this.valueClass = valueClass;
@@ -123,10 +123,10 @@ public class HiddenField extends Field {
      */
     public HiddenField(String name, Object value) {
         if (name == null) {
-            throw new IllegalArgumentException("Null name paratemer");
+            throw new IllegalArgumentException("Null name parameter");
         }
         if (value == null) {
-            throw new IllegalArgumentException("Null value paratemer");
+            throw new IllegalArgumentException("Null value parameter");
         }
         this.name = name;
         this.valueClass = value.getClass();

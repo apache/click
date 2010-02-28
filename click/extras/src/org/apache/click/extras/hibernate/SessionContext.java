@@ -158,7 +158,7 @@ public class SessionContext {
     }
 
     /**
-     * Return the Hibernate SesssionFactory.
+     * Return the Hibernate SessionFactory.
      *
      * @return the Hibernate SessionFactory
      */

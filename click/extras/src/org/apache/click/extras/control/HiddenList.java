@@ -30,7 +30,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * &nbsp; &lt;input type='hidden'&gt;.
  * <p/>
  * Click also provides the {@link org.apache.click.control.HiddenField} to render
- * &lt;input type="hidden"&gt;, however HiddeField can not render multiple values
+ * &lt;input type="hidden"&gt;, however HiddenField can not render multiple values
  * under the same name.
  * <p/>
  * HiddenList supports multiple values under the same name by rendering

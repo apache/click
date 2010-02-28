@@ -171,7 +171,7 @@ public class LongField extends NumberField {
 
     /**
      * Return the field Integer value, or null if value was empty or a parsing
-     * error occured.
+     * error occurred.
      *
      * @return the field Integer value
      */
@@ -186,7 +186,7 @@ public class LongField extends NumberField {
 
     /**
      * Return the field Long value, or null if value was empty or a parsing
-     * error occured.
+     * error occurred.
      *
      * @see org.apache.click.control.Field#getValueObject()
      *

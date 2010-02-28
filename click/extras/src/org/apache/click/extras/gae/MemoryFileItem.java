@@ -213,7 +213,7 @@ public class MemoryFileItem implements FileItem, FileItemHeadersSupport {
      * storing the contents of the file.
      *
      * @return an {@link java.io.OutputStream OutputStream} that can be used
-     * for storing the contensts of the file
+     * for storing the contents of the file
      * @throws IOException if an error occurs
      */
     public OutputStream getOutputStream() throws IOException {

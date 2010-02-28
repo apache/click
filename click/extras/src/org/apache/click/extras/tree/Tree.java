@@ -387,7 +387,7 @@ public class Tree extends AbstractControl {
     /**
      * Enables javascript functionality.
      * <p/>
-     * If true the tree will be navigatable in the browser using javascript,
+     * If true the tree will be navigable in the browser using javascript,
      * instead of doing round trips to the server on each operation.
      * <p/>
      * With javascript enabled you need to store the values passed from the
@@ -406,7 +406,7 @@ public class Tree extends AbstractControl {
      * <p/>
      * <strong>Note:</strong> if javascript is enabled, then the entire
      * tree is rendered even if some nodes are in a collapsed state. This
-     * enables the tree to still be fully navigatable in the browser. However
+     * enables the tree to still be fully navigable in the browser. However
      * nodes that are in a collapsed state are still displayed as collapsed
      * using the style <tt>"display:none"</tt>.
      *
@@ -2117,7 +2117,7 @@ public class Tree extends AbstractControl {
      * issue new cookies and update the state of the nodes
      * accordingly.
      * <p/>
-     * Note: This class is used in conjuction with cookie-helper.js
+     * Note: This class is used in conjunction with cookie-helper.js
      * which manipulates the cookie values in the browser as the
      * user navigates the tree.
      */
@@ -2378,7 +2378,7 @@ public class Tree extends AbstractControl {
      * client side javascript behavior by tracking the client's selected tree paths.
      * <p/>
      * <strong>The problem</strong>: when javascript is enabled, the entire
-     * tree must be sent to the browser to be navigatable without round trips
+     * tree must be sent to the browser to be navigable without round trips
      * to the server. However the tree should not be displayed in an expanded
      * state so css is used to apply the 'display: none' idiom to 'collapse' the
      * nodes even though they are really expanded.
@@ -2579,7 +2579,7 @@ public class Tree extends AbstractControl {
                 boolean oldValue) {
             //Check for duplicate path's. A duplicate path means that the user
             //selected a node that is already stored in the handler's tracker map.
-            //This can only really happen when the tree is representated with
+            //This can only really happen when the tree is represented with
             //checkboxes. Each time the form is submitted all the "checked"
             //checkboxes are submitted but these node's might already have been
             //submitted in a previous request. So here is a check against the
@@ -2757,7 +2757,7 @@ public class Tree extends AbstractControl {
      * Javascript helper method that checks if the specified tree
      * node should be hidden or not.
      *
-     * @param specified tree node to check
+     * @param treeNode tree node to check
      * @return true if the node should be hidden, false otherwise
      */
     private boolean shouldHideNode(TreeNode treeNode) {

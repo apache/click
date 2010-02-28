@@ -597,7 +597,7 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Remove the named colum from the Table.
+     * Remove the named column from the Table.
      *
      * @param name the name of the column to remove from the table
      */
@@ -764,7 +764,7 @@ public class Table extends AbstractControl {
      * Return true if the table row (&lt;tr&gt;) elements should have the
      * class="hover" attribute set on JavaScript mouseover events. This class
      * can be used to define mouse over :hover CSS pseudo classes to create
-     * table row highlite effects.
+     * table row highlight effects.
      *
      * @return true if table rows elements will have the class 'hover' attribute
      * set on JavaScript mouseover events
