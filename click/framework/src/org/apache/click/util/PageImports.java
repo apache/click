@@ -271,7 +271,7 @@ public class PageImports {
      *
      * @param model the model to populate with html import keys
      */
-    public void popuplateTemplateModel(Map model) {
+    public void populateTemplateModel(Map model) {
         LogService logger = ClickUtils.getLogService();
 
         Object pop = model.put("headElements", new HeadElements());
