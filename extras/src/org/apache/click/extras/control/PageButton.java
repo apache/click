@@ -33,7 +33,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * The PageButton is provides link style navigation button to a Page that is
  * rendered in form of a <code>button</code> (an <code>input</code> HTML element
  * with the <code>type="button"</code> more precisely) plus javascript getting
- * the borwser to the location of that Page.
+ * the browser to the location of that Page.
  *
  * <h4>PageButton Advantages</h4>
  * <ul>

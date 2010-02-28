@@ -413,7 +413,7 @@ public abstract class Field extends AbstractControl {
      * If not found then the message will be looked up in the
      * <tt>/click-control.properties</tt> file using the same key.
      * <p/>
-     * For examle given a <tt>CustomerPage</tt> with the properties file
+     * For example given a <tt>CustomerPage</tt> with the properties file
      * <tt>CustomerPage.properties</tt>:
      *
      * <pre class="codeConfig">

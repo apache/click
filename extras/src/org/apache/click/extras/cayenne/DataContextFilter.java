@@ -104,7 +104,7 @@ import org.apache.commons.lang.StringUtils;
  * Cayenne <a href="http://cayenne.apache.org/doc/lifecycle-callbacks.html">Lifecycle Callbacks</a>
  * documentation for more details.
  * <p/>
- * To configure a Livecycle Listener simply specify the class name of the listener
+ * To configure a Lifecycle Listener simply specify the class name of the listener
  * class as a filter init parameter. For example:
  *
  * <pre class="codeConfig">
@@ -390,7 +390,7 @@ public class DataContextFilter implements Filter {
      * to associate the DataContext with the session (which is the default
      * behaviour), the DataContext will be bound to the users session. If
      * the DataContext is already available, the existing DataContext will be
-     * used otherwise a new DataContex object will be created.
+     * used otherwise a new DataContext object will be created.
      * <p/>
      * If this filter is configured with <tt>create-each-request</tt> to be true
      * then a new DataContext will be created for each request and the DataContext
@@ -423,7 +423,7 @@ public class DataContextFilter implements Filter {
     }
 
     /**
-     * Return a new DataContex instance using a shared cache if the filter is
+     * Return a new DataContext instance using a shared cache if the filter is
      * configured with <tt>use-shared-cache</tt>, otherwise the DataContext
      * will not use a shared cache.
      *

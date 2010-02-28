@@ -372,7 +372,7 @@ public class Select extends Field {
     }
 
     /**
-     * Add the given option value to the Select. This covenience method will
+     * Add the given option value to the Select. This convenience method will
      * create a new {@link Option} with the given value and add it to the
      * Select. The new Option display label will be the same as its value.
      *

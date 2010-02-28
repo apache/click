@@ -22,7 +22,7 @@ import org.apache.click.control.TextField;
 import org.apache.click.util.ClickUtils;
 
 /**
- * Provides a graphical Vitural Keyboard interface text field control: &nbsp; &lt;input type='text'&gt;.
+ * Provides a graphical Virtual Keyboard interface text field control: &nbsp; &lt;input type='text'&gt;.
  *
  * <table class='htmlHeader' cellspacing='10'>
  * <tr>

@@ -54,7 +54,7 @@ import org.apache.commons.lang.Validate;
  * which provide their own public interface. All methods on CayenneTemplate have
  * protected visibility so they are not publicly visible on the custom subclasses.
  * <p/>
- * CayenneTemplate provides many convience DataContext methods using the
+ * CayenneTemplate provides many convenience DataContext methods using the
  * DataContext object bound to the current thread.
  */
 public class CayenneTemplate {

@@ -46,7 +46,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * turned off by setting {@link #setShowTextField(boolean)} to false
  * (default is true).
  * <p/>
- * The ColorPicker control will validate wheter the entered color is present (if required) and that it
+ * The ColorPicker control will validate whether the entered color is present (if required) and that it
  * is a valid hex color either in 3-digit presentation (ie #EEE) or 6-digit presentation (ie #EEEEEE).
  * If the color is not required the color-picker popup will show a button for 'no-color' on the top-left.
  *
@@ -211,7 +211,7 @@ public class ColorPicker extends Field {
     }
 
     /**
-     * Wheter the TextField to enter the color hex number should be shown or
+     * Whether the TextField to enter the color hex number should be shown or
      * not. Default is true
      *
      * @return Returns the showTextField.
@@ -221,7 +221,7 @@ public class ColorPicker extends Field {
     }
 
     /**
-     * Wheter the TextField to enter the color hex number should be shown or
+     * Whether the TextField to enter the color hex number should be shown or
      * not. Default is true.
      *
      * @param showTextField the showTextField to set

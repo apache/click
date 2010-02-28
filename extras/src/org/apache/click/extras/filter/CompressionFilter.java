@@ -55,7 +55,7 @@ import org.apache.click.util.ClickUtils;
  *  &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
  * .. </pre>
  *
- * This filter will automaitically set the configured click.xml charset as the
+ * This filter will automatically set the configured click.xml charset as the
  * requests character encoding.
  * <p/>
  * This package is derived from the Jakarta
@@ -70,7 +70,7 @@ public class CompressionFilter implements Filter {
     /** The threshold number to compress, default value is 2048 bytes. */
     protected int compressionThreshold = minThreshold;
 
-    /** The fitler has been configured flag. */
+    /** The filter has been configured flag. */
     protected boolean configured;
 
     /** The application configuration service. */

@@ -274,7 +274,7 @@ public class CompressionResponseStream extends ServletOutputStream {
     /**
      * Initialize the GZip output stream.
      * <p/>
-     * This method delgates to {@link #setContentEncodingGZip()} to set the
+     * This method delegates to {@link #setContentEncodingGZip()} to set the
      * GZip response Content-Encoding header.
      *
      * @throws IOException If an I/O error has occurred

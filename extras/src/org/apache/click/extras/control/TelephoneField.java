@@ -76,7 +76,7 @@ public class TelephoneField extends TextField {
 
     /**
      * Construct the TelephoneField with the given name and required status.
-     * The default text field size is 20 characters and the minium valid length
+     * The default text field size is 20 characters and the minimum valid length
      * is 10 characters.
      *
      * @param name the name of the field
@@ -89,7 +89,7 @@ public class TelephoneField extends TextField {
 
     /**
      * Construct the TelephoneField with the given name and label. The default
-     * text field size is 20 characters and the minium valid length is 10
+     * text field size is 20 characters and the minimum valid length is 10
      * characters.
      *
      * @param name the name of the field
@@ -103,7 +103,7 @@ public class TelephoneField extends TextField {
 
     /**
      * Construct the TelephoneField with the given name, label and required
-     * status. The default text field size is 20 characters and the minium valid
+     * status. The default text field size is 20 characters and the minimum valid
      * length is 10 characters.
      *
      * @param name the name of the field
@@ -143,7 +143,7 @@ public class TelephoneField extends TextField {
     }
 
     /**
-     * Create a TelephoneField with no name defined. The default the minium
+     * Create a TelephoneField with no name defined. The default the minimum
      * valid length is 10 characters.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.

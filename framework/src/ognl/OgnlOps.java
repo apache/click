@@ -119,7 +119,7 @@ public abstract class OgnlOps implements NumericTypes
      * @param object1 First object to compare
      * @param object2 Second object to compare
      *
-     * @return true if objec1 == object2
+     * @return true if object1 == object2
      */
     public static boolean isEqual(Object object1, Object object2)
     {

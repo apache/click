@@ -207,7 +207,7 @@ public class TextField extends Field {
      * {@link #maxLength} property is greater than zero, the Field values length
      * will be validated against this constraint when processed.
      * <p/>
-     * If maxLenth is greater than zero, it is rendered as the field
+     * If maxLength is greater than zero, it is rendered as the field
      * attribute 'maxlength'
      *
      * @return the maximum field length validation constraint
@@ -221,7 +221,7 @@ public class TextField extends Field {
      * greater than zero, the Field values length will be validated against
      * this constraint when processed.
      * <p/>
-     * If maxLenth is greater than zero, it is rendered as the field
+     * If maxLength is greater than zero, it is rendered as the field
      * attribute 'maxlength'
      *
      * @param maxLength the maximum field length validation constraint
