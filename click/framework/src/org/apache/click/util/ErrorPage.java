@@ -45,7 +45,7 @@ import org.apache.click.Page;
  *      * @see Page#onDestroy()
  *      * /</span>
  *     <span class="kw">public void</span> onDestroy() {
- *         Exception errror = getError();
+ *         Exception error = getError();
  *
  *         <span class="kw">if</span> (error <span class="kw">instanceof</span> SQLException ||
  *             error.getCause() <span class="kw">instanceof</span> SQLException) {
