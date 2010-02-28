@@ -613,7 +613,7 @@ public class PageImports {
      * This class enables lazy, on demand importing for
      * {@link #renderAllIncludes(org.apache.click.util.HtmlStringBuffer)}.
      *
-     * @deprecated rather use {@link HeadElements} and {@link JsImports}
+     * @deprecated rather use {@link HeadElements} and {@link JsImport}
      */
     class Imports {
 
@@ -706,10 +706,10 @@ public class PageImports {
     }
 
     /**
-     * Convert the given HTML import line to a {@link JavascriptImport} instance.
+     * Convert the given HTML import line to a {@link JsImport} instance.
      *
      * @param line the HTML import line to convert to a JavaScriptImport instance
-     * @return a JavascriptImport instance
+     * @return a JsImport instance
      */
     private JsImport asJsImport(String line) {
         JsImport jsImport = new JsImport();
@@ -718,10 +718,10 @@ public class PageImports {
     }
 
     /**
-     * Convert the given HTML import line to a {@link Javascript} instance.
+     * Convert the given HTML import line to a {@link JsScript} instance.
      *
      * @param line the HTML import line to convert to a JavaScript instance
-     * @return a Javascript instance
+     * @return a JsScript instance
      */
     private JsScript asJsScript(String line) {
         JsScript jsScript = new JsScript();
