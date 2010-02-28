@@ -1327,7 +1327,7 @@ public class ClickServlet extends HttpServlet {
         final Map model = ClickUtils.createTemplateModel(page, context);
 
         PageImports pageImports = page.getPageImports();
-        pageImports.popuplateTemplateModel(model);
+        pageImports.populateTemplateModel(model);
 
         return model;
     }
