@@ -279,7 +279,7 @@ public HelloWorld extends Page {
 
     <para>In the Page class we create an ActionLink called
     <varname>myLink</varname>. In the Page constructor we set the control's
-    action listener to an annonymous inner class which implements the 
+    action listener to an anonymous inner class which implements the 
     <methodname>onAction()</methodname>. When a user clicks on
     <varname>myLink</varname> control it will invoke the action listener method
     <methodname>onAction()</methodname>.
@@ -693,7 +693,7 @@ public HelloWorld extends Page {
     <title>Advanced Form Example</title>
 
     <para>The <classname>AdvancedForm</classname> page below provides a more
-    advanced demonstration of using Form, Field and FielsSet controls.
+    advanced demonstration of using Form, Field and FieldSet controls.
     </para>
 
     <para>First we have an <classname>AdvancedForm</classname> class which

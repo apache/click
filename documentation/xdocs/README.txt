@@ -9,7 +9,7 @@ such as PDF, HTML (multiple pages) and HTML (single page).
 Project Layout
 ==============
 
-The project consists of the folowing:
+The project consists of the following:
 
 build.xml           the documentation build script
 project.properties  the documentation properties
@@ -53,7 +53,7 @@ downloaded using the command:
 
     ant get-deps
 
-The 'get-deps' command will downlooad the dependency from the 'Click Docbook'
+The 'get-deps' command will download the dependency from the 'Click Docbook'
 project. The dependency is a 9MB zip file containing all that is needed to
 build the documentation.
 

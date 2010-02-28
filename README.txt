@@ -7,8 +7,8 @@ and Component oriented design. Click is an open source project
 licensed using the Apache license. 
 
 
-Docmentation
-============
+Documentation
+=============
 
 Comprehensive HTML documentation is available online at:
 
@@ -44,7 +44,7 @@ Distributed Click JAR files include:
 Examples
 ========
 
-Example pre-built web appliation include:
+Example pre-built web application include:
 
    dist/click-examples.war
 
@@ -67,7 +67,7 @@ The main Ant targets include:
     build-maven-bundles   build Maven repository upload bundles
     build-mock            build mock JAR file
     build-sources         build source ZIP files for use with IDEs
-    checkstyle            run checkstyle report on Java soruce
+    checkstyle            run checkstyle report on Java source
     deploy-examples       copy example WAR files to app server
     get-deps              download JAR dependencies
     get-deps-proxy        download JAR dependencies via proxy
