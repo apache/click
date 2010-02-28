@@ -169,7 +169,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /** The format class. */
     private Class formatClass;
 
-    /** The charcter encoding of this application. */
+    /** The character encoding of this application. */
     private String charset;
 
     /** The default application locale.*/
@@ -949,7 +949,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             Element pagesElm = (Element) pagesList.get(i);
 
-            // Deterime whether to use automapping
+            // Determine whether to use automapping
             boolean automap = true;
             String automapStr = pagesElm.getAttribute("automapping");
             if (StringUtils.isBlank(automapStr)) {
@@ -1308,7 +1308,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * <p/>
      * Only jars and folders available on the classpath are scanned.
      *
-     * @throws java.lang.IOException if the resources cannot be deployed
+     * @throws IOException if the resources cannot be deployed
      */
     private void deployResourcesOnClasspath() throws IOException {
         long startTime = System.currentTimeMillis();
@@ -1769,7 +1769,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                     if (field.getAnnotation(Bindable.class) != null) {
                         fieldMap.put(field.getName(), field);
 
-                        // If field is not public set accessiblity true
+                        // If field is not public set accessibility true
                         if (!Modifier.isPublic(field.getModifiers())) {
                             field.setAccessible(true);
                         }
