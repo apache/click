@@ -350,7 +350,7 @@ public class VelocityTemplateService implements TemplateService {
             template.merge(context, velocityWriter);
 
         } catch (Exception error) {
-            // Exception occured merging template and model. It is possible
+            // Exception occurred merging template and model. It is possible
             // that some output has already been written, so we will append the
             // error report to the previous output.
             ErrorReport errorReport =
@@ -427,7 +427,7 @@ public class VelocityTemplateService implements TemplateService {
             template.merge(velocityContext, velocityWriter);
 
         } catch (Exception error) {
-            // Exception occured merging template and model. It is possible
+            // Exception occurred merging template and model. It is possible
             // that some output has already been written, so we will append the
             // error report to the previous output.
             ErrorReport errorReport =

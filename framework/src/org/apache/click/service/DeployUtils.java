@@ -131,7 +131,7 @@ class DeployUtils<T> {
     }
 
     /**
-     * Attemp to discover resources inside the given directory. Accumulated
+     * Attempt to discover resources inside the given directory. Accumulated
      * resources can be accessed by calling {@link #getResources()}.
      *
      * @param dirs one or more directories to scan (including sub-directories)
