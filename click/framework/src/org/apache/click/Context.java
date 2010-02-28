@@ -251,7 +251,7 @@ public class Context {
     }
 
     /**
-     * Return the page resouce path from the request. For example:
+     * Return the page resource path from the request. For example:
      * <pre class="codeHtml">
      * <span class="blue">http://www.mycorp.com/banking/secure/login.htm</span>  ->  <span class="red">/secure/login.htm</span> </pre>
      *
@@ -785,7 +785,7 @@ public class Context {
             templateService.renderTemplate(templatePath, model, stringWriter);
 
         } catch (Exception e) {
-            String msg = "Error occured rendering template: "
+            String msg = "Error occurred rendering template: "
                          + templatePath + "\n";
             clickServlet.getConfigService().getLogService().error(msg, e);
 

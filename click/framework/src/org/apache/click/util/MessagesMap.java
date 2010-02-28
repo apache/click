@@ -154,7 +154,7 @@ public class MessagesMap implements Map<String, String> {
 
     /**
      * Return localized resource message for the given key. If the message is
-     * not found a <tt>MissingResourceExcetion</tt> will be thrown.
+     * not found a <tt>MissingResourceException</tt> will be thrown.
      *
      * @see java.util.Map#get(Object)
      * @throws MissingResourceException if the given key was not found

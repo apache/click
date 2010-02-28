@@ -624,7 +624,7 @@ public class ClickServlet extends HttpServlet {
 
         boolean continueProcessing = true;
 
-        // Make sure dont process a forwarded request
+        // Make sure don't process a forwarded request
         if (page.hasControls() && !context.isForward()) {
             List controls = page.getControls();
 
@@ -648,7 +648,7 @@ public class ClickServlet extends HttpServlet {
             }
 
             if (continueProcessing) {
-                // Fire registered action events for the POST_ON_PROCSESS event,
+                // Fire registered action events for the POST_ON_PROCESS event,
                 // which is also the default event
                 continueProcessing = eventDispatcher.fireActionEvents(context);
 
@@ -1016,7 +1016,7 @@ public class ClickServlet extends HttpServlet {
             String path = page.getContext().getResourcePath();
             page.setPath(path);
 
-            // Reset the foward
+            // Reset the forward
             if (configService.isJspPage(path)) {
                 page.setForward(StringUtils.replace(path, ".htm", ".jsp"));
             } else {
