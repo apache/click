@@ -329,7 +329,7 @@ public class PageImports {
      * @param request the http request to populate
      * @param model the model to populate with html import keys
      */
-    public void popuplateRequest(HttpServletRequest request, Map model) {
+    public void populateRequest(HttpServletRequest request, Map model) {
         LogService logger = ClickUtils.getLogService();
 
         request.setAttribute("headElements", new HeadElements());

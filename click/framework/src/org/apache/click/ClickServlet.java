@@ -1453,7 +1453,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         PageImports pageImports = page.getPageImports();
-        pageImports.popuplateRequest(request, model);
+        pageImports.populateRequest(request, model);
     }
 
     /**
