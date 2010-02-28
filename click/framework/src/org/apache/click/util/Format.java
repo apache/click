@@ -347,7 +347,7 @@ public class Format implements Serializable {
      * number pattern character and will throw a parsing exception. When using
      * this method substitute the '#' decimal pattern character
      * (Digit, zero shows as absent) with 'N'. Internally this method will
-     * reverse the subsitution before invoking <tt>DecimalFormat</tt>.
+     * reverse the substitution before invoking <tt>DecimalFormat</tt>.
      * For example:
      *
      * <pre class="codeHtml">
@@ -428,7 +428,7 @@ public class Format implements Serializable {
      *
      * @param number the number to format
      * @param pattern the decimal format pattern
-     * @return the fornmatted decimal number
+     * @return the formatted decimal number
      * @throws IllegalArgumentException if the pattern string is null
      */
     public String decimal(Number number, String pattern) {
@@ -457,7 +457,7 @@ public class Format implements Serializable {
      * {@link #getEmptyString()} value.
      *
      * @param number the number to format
-     * @return the fornmatted decimal number
+     * @return the formatted decimal number
      */
     public String decimal(Number number) {
         if (number != null) {

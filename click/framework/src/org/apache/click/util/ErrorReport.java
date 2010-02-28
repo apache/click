@@ -86,7 +86,7 @@ public class ErrorReport {
     /** The name of the error source. */
     protected final String sourceName;
 
-    /** The error souce LineNumberReader. */
+    /** The error source LineNumberReader. */
     protected LineNumberReader sourceReader;
 
     // ------------------------------------------------------------ Constructor
@@ -662,7 +662,7 @@ public class ErrorReport {
      * using the given line.
      *
      * @param line the Java source line to render
-     * @return HTML rendred Java source line
+     * @return HTML rendered Java source line
      */
     protected String getRenderJavaLine(String line) {
         line = ClickUtils.escapeHtml(line);
