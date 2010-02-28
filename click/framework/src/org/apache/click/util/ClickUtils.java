@@ -1272,13 +1272,13 @@ public class ClickUtils {
 
         } catch (IOException ioe) {
             String msg =
-                "error occured deploying resource " + resource
+                "error occurred deploying resource " + resource
                 + ", error " + ioe;
             logger.warn(msg);
 
         } catch (SecurityException se) {
             String msg =
-                "error occured deploying resource " + resource
+                "error occurred deploying resource " + resource
                 + ", error " + se;
             logger.warn(msg);
         }
@@ -1418,7 +1418,7 @@ public class ClickUtils {
 
         } catch (Throwable t) {
             String message =
-                "error occured Base64 encoding: " + object + " : " + t;
+                "error occurred Base64 encoding: " + object + " : " + t;
             throw new IOException(message);
         }
     }
@@ -1442,7 +1442,7 @@ public class ClickUtils {
 
         } catch (Throwable t) {
             String message =
-                "error occured Base64 decoding: " + string + " : " + t;
+                "error occurred Base64 decoding: " + string + " : " + t;
             throw new IOException(message);
         }
 
@@ -1728,13 +1728,13 @@ public class ClickUtils {
             Class listenerClass = listener.getClass();
             targetMethod = listenerClass.getMethod(method);
 
-            // Change accessible for annonymous inner classes public methods
+            // Change accessible for anonymous inner classes public methods
             // only. Conditional checks:
             // #1 - Target method is not accessible
-            // #2 - Annonomous inner classes are not public
+            // #2 - Anonymous inner classes are not public
             // #3 - Only modify public methods
-            // #4 - Annonomous inner classes have no declaring class
-            // #5 - Annonomous inner classes have $ in name
+            // #4 - Anonymous inner classes have no declaring class
+            // #5 - Anonymous inner classes have $ in name
             if (!targetMethod.isAccessible()
                 && !Modifier.isPublic(listenerClass.getModifiers())
                 && Modifier.isPublic(targetMethod.getModifiers())
@@ -1766,26 +1766,26 @@ public class ClickUtils {
 
             } else if (e instanceof Exception) {
                 String msg =
-                    "Exception occured invoking public method: " + targetMethod;
+                    "Exception occurred invoking public method: " + targetMethod;
 
                 throw new RuntimeException(msg, e);
 
             } else if (e instanceof Error) {
                 String msg =
-                    "Error occured invoking public method: " + targetMethod;
+                    "Error occurred invoking public method: " + targetMethod;
 
                 throw new RuntimeException(msg, e);
 
             } else {
                 String msg =
-                    "Error occured invoking public method: " + targetMethod;
+                    "Error occurred invoking public method: " + targetMethod;
 
                 throw new RuntimeException(msg, e);
             }
 
         } catch (Exception e) {
             String msg =
-                "Exception occured invoking public method: " + targetMethod;
+                "Exception occurred invoking public method: " + targetMethod;
 
             throw new RuntimeException(msg, e);
 
@@ -2477,9 +2477,8 @@ public class ClickUtils {
      * Append the HTML escaped string for the given character value to the
      * buffer.
      *
-     * @param aChar the character value to escape
+     * @param value the String value to escape
      * @param buffer the string buffer to append the escaped value to
-     * @return the HTML escaped string for the given character value
      */
     static void appendEscapeString(String value, HtmlStringBuffer buffer) {
         char aChar;
