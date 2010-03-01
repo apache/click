@@ -369,12 +369,12 @@ public class ContainerUtils {
      * @return list of container fields which are not valid, not hidden and not
      * disabled
      */
-    public static List getErrorFields(final Container container) {
+    public static List<Field> getErrorFields(final Container container) {
         if (container == null) {
             throw new IllegalArgumentException("Null container parameter");
         }
 
-        final List fields = new ArrayList();
+        final List<Field> fields = new ArrayList<Field>();
         addErrorFields(container, fields);
         return fields;
     }
@@ -442,12 +442,12 @@ public class ContainerUtils {
      * @param container the container to obtain the fields from
      * @return the list of contained fields
      */
-    public static List getHiddenFields(final Container container) {
+    public static List<Field> getHiddenFields(final Container container) {
         if (container == null) {
             throw new IllegalArgumentException("Null container parameter");
         }
 
-        final List fields = new ArrayList();
+        final List<Field> fields = new ArrayList<Field>();
         addHiddenFields(container, fields);
         return fields;
     }
@@ -461,12 +461,12 @@ public class ContainerUtils {
      * @param container the container to obtain the fields from
      * @return the list of contained fields
      */
-    public static List getInputFields(final Container container) {
+    public static List<Field> getInputFields(final Container container) {
         if (container == null) {
             throw new IllegalArgumentException("Null container parameter");
         }
 
-        final List fields = new ArrayList();
+        final List<Field> fields = new ArrayList<Field>();
         addInputFields(container, fields);
         return fields;
     }
@@ -959,7 +959,7 @@ public class ContainerUtils {
      * @param map the map containing values to populate the fields with
      * @param fieldList the forms list of fields to be populated
      */
-    private static void copyMapToFields(Map map, List fieldList) {
+    private static void copyMapToFields(Map map, List<Field> fieldList) {
 
         LogService logService = ClickUtils.getLogService();
 
@@ -967,8 +967,7 @@ public class ContainerUtils {
         objectClassname =
             objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
 
-        for (int i = 0, size = fieldList.size(); i < size; i++) {
-            Field field = (Field) fieldList.get(i);
+        for (Field field : fieldList) {
             String fieldName = field.getName();
 
             // Check if the fieldName is contained in the map. For
@@ -998,18 +997,19 @@ public class ContainerUtils {
      * @param container the container to obtain the fields from
      * @param buttons the list of contained fields
      */
-    private static void addButtons(final Container container, final List buttons) {
-        for (int i = 0; i < container.getControls().size(); i++) {
-            Control control = (Control) container.getControls().get(i);
+    private static void addButtons(final Container container, final List<Button> buttons) {
+        for (Control control : container.getControls()) {
+
             if (control instanceof Container) {
                 // Include buttons that are containers
                 if (control instanceof Button) {
-                    buttons.add(control);
+                    buttons.add((Button) control);
                 }
                 Container childContainer = (Container) control;
                 addButtons(childContainer, buttons);
+
             } else if (control instanceof Button) {
-                buttons.add(control);
+                buttons.add((Button) control);
             }
         }
     }
@@ -1021,18 +1021,19 @@ public class ContainerUtils {
      * @param container the container to obtain the fields from
      * @param fields the list of contained fields
      */
-    private static void addFields(final Container container, final List fields) {
-        for (int i = 0; i < container.getControls().size(); i++) {
-            Control control = (Control) container.getControls().get(i);
+    private static void addFields(final Container container, final List<Field> fields) {
+        for (Control control : container.getControls()) {
+
             if (control instanceof Container) {
                 // Include fields that are containers
                 if (control instanceof Field) {
-                    fields.add(control);
+                    fields.add((Field) control);
                 }
                 Container childContainer = (Container) control;
                 addFields(childContainer, fields);
+
             } else if (control instanceof Field) {
-                fields.add(control);
+                fields.add((Field) control);
             }
         }
     }
@@ -1047,9 +1048,9 @@ public class ContainerUtils {
      * @param container the container to obtain the fields from
      * @param fields the list of contained fields
      */
-    private static void addInputFields(final Container container, final List fields) {
-        for (int i = 0; i < container.getControls().size(); i++) {
-            Control control = (Control) container.getControls().get(i);
+    private static void addInputFields(final Container container, final List<Field> fields) {
+        for (Control control : container.getControls()) {
+
             if (control instanceof Label || control instanceof Button) {
                 // Skip buttons and labels
                 continue;
@@ -1057,13 +1058,13 @@ public class ContainerUtils {
             } else if (control instanceof Container) {
                 // Include fields but skip fieldSets
                 if (control instanceof Field && !(control instanceof FieldSet)) {
-                    fields.add(control);
+                    fields.add((Field) control);
                 }
                 Container childContainer = (Container) control;
                 addInputFields(childContainer, fields);
 
             } else if (control instanceof Field) {
-                fields.add(control);
+                fields.add((Field) control);
             }
         }
     }
@@ -1077,18 +1078,19 @@ public class ContainerUtils {
      * @param container the container to obtain the hidden fields from
      * @param fields the list of contained fields
      */
-    private static void addHiddenFields(final Container container, final List fields) {
-        for (int i = 0; i < container.getControls().size(); i++) {
-            Control control = (Control) container.getControls().get(i);
+    private static void addHiddenFields(final Container container, final List<Field> fields) {
+        for (Control control : container.getControls()) {
+
             if (control instanceof Label || control instanceof Button) {
                 // Skip buttons and labels
                 continue;
+
             } else if (control instanceof Container) {
                 // Include fields but skip fieldSets
                 if (control instanceof Field && !(control instanceof FieldSet)) {
                     Field field = (Field) control;
                     if (field.isHidden()) {
-                        fields.add(control);
+                        fields.add((Field) control);
                     }
                 }
 
@@ -1098,7 +1100,7 @@ public class ContainerUtils {
             } else if (control instanceof Field) {
                 Field field = (Field) control;
                 if (field.isHidden()) {
-                    fields.add(control);
+                    fields.add((Field) control);
                 }
             }
         }
@@ -1113,9 +1115,9 @@ public class ContainerUtils {
      * @param container the container to obtain the fields from
      * @param fields the list of contained fields
      */
-    private static void addFieldsAndLabels(final Container container, final List fields) {
-        for (int i = 0; i < container.getControls().size(); i++) {
-            Control control = (Control) container.getControls().get(i);
+    private static void addFieldsAndLabels(final Container container, final List<Field> fields) {
+        for (Control control : container.getControls()) {
+
             if (control instanceof Button) {
                 // Skip buttons
                 continue;
@@ -1123,12 +1125,13 @@ public class ContainerUtils {
             } else if (control instanceof Container) {
                 // Include fields but skip fieldSets
                 if (control instanceof Field && !(control instanceof FieldSet)) {
-                    fields.add(control);
+                    fields.add((Field) control);
                 }
                 Container childContainer = (Container) control;
                 addFieldsAndLabels(childContainer, fields);
+
             } else if (control instanceof Field) {
-                fields.add(control);
+                fields.add((Field) control);
             }
         }
     }
@@ -1142,18 +1145,19 @@ public class ContainerUtils {
      * @param container the container to obtain the fields from
      * @param fields the map of contained fields
      */
-    private static void addFields(final Container container, final Map fields) {
-        for (int i = 0; i < container.getControls().size(); i++) {
-            Control control = (Control) container.getControls().get(i);
+    private static void addFields(final Container container, final Map<String, Field> fields) {
+        for (Control control : container.getControls()) {
+
             if (control instanceof Container) {
                 // Include fields that are containers
                 if (control instanceof Field) {
-                    fields.put(control.getName(), control);
+                    fields.put(control.getName(), (Field) control);
                 }
                 Container childContainer = (Container) control;
                 addFields(childContainer, fields);
+
             } else if (control instanceof Field) {
-                fields.put(control.getName(), control);
+                fields.put(control.getName(), (Field) control);
             }
         }
     }
@@ -1168,9 +1172,9 @@ public class ContainerUtils {
      * @param container the container to obtain the fields from
      * @param fields the map of contained fields
      */
-    private static void addErrorFields(final Container container, final List fields) {
-        for (int i = 0; i < container.getControls().size(); i++) {
-            Control control = (Control) container.getControls().get(i);
+    private static void addErrorFields(final Container container, final List<Field> fields) {
+        for (Control control : container.getControls()) {
+
             if (control instanceof Button) {
                 // Skip buttons
                 continue;
@@ -1178,9 +1182,11 @@ public class ContainerUtils {
             } else if (control instanceof Container) {
                 if (control instanceof Field) {
                     Field field = (Field) control;
-                    if (!field.isValid() && !field.isHidden()
+                    if (!field.isValid()
+                        && !field.isHidden()
                         && !field.isDisabled()) {
-                        fields.add(control);
+
+                        fields.add((Field) control);
                     }
                 }
                 Container childContainer = (Container) control;
@@ -1188,9 +1194,11 @@ public class ContainerUtils {
 
             } else if (control instanceof Field) {
                 Field field = (Field) control;
-                if (!field.isValid() && !field.isHidden()
+                if (!field.isValid()
+                    && !field.isHidden()
                     && !field.isDisabled()) {
-                    fields.add(control);
+
+                    fields.add((Field) control);
                 }
             }
         }
