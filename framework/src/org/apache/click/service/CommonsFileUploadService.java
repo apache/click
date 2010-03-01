@@ -26,6 +26,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.click.util.ClickUtils;
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
@@ -144,7 +145,8 @@ public class CommonsFileUploadService implements FileUploadService {
      * @return the list of FileItem instances parsed from the request
      * @throws FileUploadException if request cannot be parsed
      */
-    public List parseRequest(HttpServletRequest request)
+    @SuppressWarnings("unchecked")
+    public List<FileItem> parseRequest(HttpServletRequest request)
             throws FileUploadException {
 
         Validate.notNull(request, "Null request parameter");
