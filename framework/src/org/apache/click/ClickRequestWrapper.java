@@ -45,16 +45,16 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     /**
      * The <tt>FileItem</tt> objects for <tt>"multipart"</tt> POST requests.
      */
-    private final Map fileItemMap;
+    private final Map<String, FileItem[]> fileItemMap;
 
     /** The request is a multi-part file upload POST request. */
     private final boolean isMultipartRequest;
 
+    /** The map of <tt>"multipart"</tt> request parameter values. */
+    private final Map<String, String[]> multipartParameterMap;
+
     /** The wrapped servlet request. */
     private final HttpServletRequest request;
-
-    /** The map of <tt>"multipart"</tt> request parameter values. */
-    private final Map multipartParameterMap;
 
     // ----------------------------------------------------------- Constructors
 
@@ -70,11 +70,11 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
 
         if (isMultipartRequest) {
 
-            Map requestParams = new HashMap();
-            Map fileItems = new HashMap();
+            Map<String, String[]> requestParams = new HashMap<String, String[]>();
+            Map<String, FileItem[]> fileItems = new HashMap<String, FileItem[]>();
 
             try {
-                List itemsList = new ArrayList();
+                List<FileItem> itemsList = new ArrayList<FileItem>();
 
                 try {
 
@@ -127,8 +127,8 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
             }
 
         } else {
-            fileItemMap = Collections.EMPTY_MAP;
-            multipartParameterMap = Collections.EMPTY_MAP;
+            fileItemMap = Collections.emptyMap();
+            multipartParameterMap = Collections.emptyMap();
         }
     }
 
@@ -142,7 +142,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
      * @return map of <tt>FileItem arrays</tt> keyed on request parameter name
      * for "multipart" POST requests
      */
-    public Map getFileItemMap() {
+    public Map<String, FileItem[]> getFileItemMap() {
         return fileItemMap;
     }
 
@@ -176,6 +176,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     /**
      * @see javax.servlet.ServletRequest#getParameterNames()
      */
+    @SuppressWarnings("unchecked")
     public Enumeration getParameterNames() {
         if (isMultipartRequest) {
             return Collections.enumeration(getMultipartParameterMap().keySet());
@@ -208,6 +209,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     /**
      * @see javax.servlet.ServletRequest#getParameterMap()
      */
+    @SuppressWarnings("unchecked")
     public Map getParameterMap() {
         if (isMultipartRequest) {
             return getMultipartParameterMap();
@@ -245,8 +247,8 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
      * @param name the name of the map key
      * @param value the value to add to the FileItem array
      */
-    private void addToMapAsFileItem(Map map, String name, FileItem value) {
-        FileItem[] oldValues = (FileItem[]) map.get(name);
+    private void addToMapAsFileItem(Map<String, FileItem[]> map, String name, FileItem value) {
+        FileItem[] oldValues = map.get(name);
         FileItem[] newValues = null;
         if (oldValues == null) {
             newValues = new FileItem[] {value};
@@ -267,8 +269,8 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
      * @param name the name of the map key
      * @param value the value to add to the string array
      */
-    private void addToMapAsString(Map map, String name, String value) {
-        String[] oldValues = (String[]) map.get(name);
+    private void addToMapAsString(Map<String, String[]> map, String name, String value) {
+        String[] oldValues = map.get(name);
         String[] newValues = null;
         if (oldValues == null) {
             newValues = new String[] {value};

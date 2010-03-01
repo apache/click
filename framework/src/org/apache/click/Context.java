@@ -61,12 +61,12 @@ public class Context {
     static final String CONTEXT_FATAL_ERROR = "_context_fatal_error";
 
     /** The thread local context. */
-    private static final ThreadLocal THREAD_LOCAL_CONTEXT = new ThreadLocal();
+    private static final ThreadLocal<ContextStack> THREAD_LOCAL_CONTEXT = new ThreadLocal<ContextStack>();
 
     /** Ajax request header or parameter: "<tt>X-Requested-With</tt>". */
     private static final String X_REQUESTED_WITH = "X-Requested-With";
 
-    // -------------------------------------------------------------- Instance Variables
+    // ----------------------------------------------------- Instance Variables
 
     /** The servlet context. */
     protected final ServletContext context;
@@ -551,7 +551,7 @@ public class Context {
      * @throws IllegalArgumentException if the Page is not found, or is not
      * configured with a unique path
      */
-    public Page createPage(Class pageClass) {
+    public Page createPage(Class<? extends Page> pageClass) {
         return clickServlet.createPage(pageClass, request);
     }
 
@@ -563,7 +563,7 @@ public class Context {
      * @throws IllegalArgumentException if the Page Class is not configured
      * with a unique path
      */
-    public String getPagePath(Class pageClass) {
+    public String getPagePath(Class<? extends Page> pageClass) {
         return clickServlet.getConfigService().getPagePath(pageClass);
     }
 
@@ -575,7 +575,7 @@ public class Context {
      * @throws IllegalArgumentException if the Page Class for the path is not
      * found
      */
-    public Class getPageClass(String path) {
+    public Class<? extends Page> getPageClass(String path) {
         return clickServlet.getConfigService().getPageClass(path);
     }
 
@@ -619,7 +619,7 @@ public class Context {
      * @return map of <tt>FileItem arrays</tt> keyed on request parameter name
      * for "multipart" POST requests
      */
-    public Map getFileItemMap() {
+    public Map<String, FileItem[]> getFileItemMap() {
         return findClickRequestWrapper(request).getFileItemMap();
     }
 
@@ -736,7 +736,7 @@ public class Context {
      * @return rendered Velocity template merged with the model data
      * @throws RuntimeException if an error occurs
      */
-    public String renderTemplate(Class templateClass, Map model) {
+    public String renderTemplate(Class templateClass, Map<String, Object> model) {
 
         if (templateClass == null) {
             String msg = "Null templateClass parameter";
@@ -764,7 +764,7 @@ public class Context {
      * @return rendered Velocity template merged with the model data
      * @throws RuntimeException if an error occurs
      */
-    public String renderTemplate(String templatePath, Map model) {
+    public String renderTemplate(String templatePath, Map<String, Object> model) {
 
         if (templatePath == null) {
             String msg = "Null templatePath parameter";
@@ -865,7 +865,7 @@ public class Context {
     /**
      * Provides an unsynchronized Context Stack.
      */
-    static class ContextStack extends ArrayList {
+    static class ContextStack extends ArrayList<Context> {
 
         /** Serialization version indicator. */
         private static final long serialVersionUID = 1L;
