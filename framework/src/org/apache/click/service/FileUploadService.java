@@ -23,6 +23,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 
 /**
@@ -58,6 +59,6 @@ public interface FileUploadService {
      * @return the list of FileItem instances parsed from the request
      * @throws FileUploadException if request cannot be parsed
      */
-     public List parseRequest(HttpServletRequest request) throws FileUploadException;
+     public List<FileItem> parseRequest(HttpServletRequest request) throws FileUploadException;
 
 }
