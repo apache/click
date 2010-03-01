@@ -180,7 +180,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * </dl>
  */
 public abstract class Field extends AbstractControl {
-    
+
     // -------------------------------------------------------------- Constants
 
     private static final long serialVersionUID = 1L;
