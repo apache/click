@@ -500,16 +500,4 @@ public class NumberField extends TextField {
             }
         }
     }
-
-    // ------------------------------------------------------ Protected Methods
-
-    /**
-     * @see org.apache.click.control.Field#getRequestValue()
-     *
-     * @return the field's value from the request
-     */
-    protected String getRequestValue() {
-        return super.getRequestValue();
-    }
-
 }
