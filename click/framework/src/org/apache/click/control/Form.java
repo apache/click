@@ -20,13 +20,13 @@ package org.apache.click.control;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
@@ -35,10 +35,9 @@ import org.apache.click.service.LogService;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ContainerUtils;
 import org.apache.click.util.HtmlStringBuffer;
-
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -558,7 +557,7 @@ public class Form extends AbstractContainer {
     protected String error;
 
     /** The ordered list of fields, excluding buttons. */
-    protected final List fieldList = new ArrayList();
+    protected final List<Field> fieldList = new ArrayList<Field>();
 
     /**
      * The form method <tt>["post, "get"]</tt>, default value: &nbsp;
@@ -576,7 +575,7 @@ public class Form extends AbstractContainer {
     protected String buttonAlign = ALIGN_LEFT;
 
     /** The ordered list of button values. */
-    protected final List buttonList = new ArrayList(5);
+    protected final List<Button> buttonList = new ArrayList<Button>(5);
 
     /** The button &lt;td&gt; "style" attribute value. */
     protected String buttonStyle;
@@ -613,7 +612,7 @@ public class Form extends AbstractContainer {
     protected String fieldStyle;
 
     /** The map of field width values. */
-    protected Map fieldWidths = new HashMap();
+    protected Map<String, Integer> fieldWidths = new HashMap<String, Integer>();
 
     /**
      * The JavaScript client side form fields validation flag. By default
@@ -710,7 +709,7 @@ public class Form extends AbstractContainer {
 
             // Add field to either buttonList or fieldList for fast access
             if (field instanceof Button) {
-                getButtonList().add(field);
+                getButtonList().add((Button) field);
 
             } else {
                 // Adjust index for hidden fields added by Form
@@ -892,7 +891,7 @@ public class Form extends AbstractContainer {
      * @param fieldNames the list of field names to remove from the form
      * @throws IllegalArgumentException if any of the fields is null
      */
-    public void removeFields(List fieldNames) {
+    public void removeFields(List<String> fieldNames) {
         if (fieldNames != null) {
             for (int i = 0; i < fieldNames.size(); i++) {
                 removeField(fieldNames.get(i).toString());
@@ -992,9 +991,7 @@ public class Form extends AbstractContainer {
      */
     public String getEnctype() {
         if (enctype == null) {
-            List fieldList = ContainerUtils.getInputFields(this);
-            for (int i = 0, size = fieldList.size(); i < size; i++) {
-                Field field = (Field) fieldList.get(i);
+            for (Field field : ContainerUtils.getInputFields(this)) {
                 if (!field.isHidden() && (field instanceof FileField)) {
                     enctype = MULTIPART_FORM_DATA;
                     break;
@@ -1039,7 +1036,7 @@ public class Form extends AbstractContainer {
      * @return list of form fields which are not valid, not hidden and not
      *  disabled
      */
-    public List getErrorFields() {
+    public List<Field> getErrorFields() {
         return ContainerUtils.getErrorFields(this);
     }
 
@@ -1102,13 +1099,10 @@ public class Form extends AbstractContainer {
 
         buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, getContext()));
 
-        if (hasControls()) {
-            for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
-                String htmlImports = control.getHtmlImports();
-                if (htmlImports != null) {
-                    buffer.append(htmlImports);
-                }
+        for (Control control : getControls()) {
+            String htmlImports = control.getHtmlImports();
+            if (htmlImports != null) {
+                buffer.append(htmlImports);
             }
         }
 
@@ -1211,9 +1205,7 @@ public class Form extends AbstractContainer {
             return false;
         }
 
-        List fields = ContainerUtils.getInputFields(this);
-        for (Iterator i = fields.iterator(); i.hasNext();) {
-            Field field = (Field) i.next();
+        for (Field field : ContainerUtils.getInputFields(this)) {
             if (!field.isValid()) {
                 return false;
             }
@@ -1231,7 +1223,7 @@ public class Form extends AbstractContainer {
      *
      * @return the ordered List of form fields, excluding buttons
      */
-    public List getFieldList() {
+    public List<Field> getFieldList() {
         return fieldList;
     }
 
@@ -1301,7 +1293,7 @@ public class Form extends AbstractContainer {
      *
      * @return the ordered list of {@link Button}s.
      */
-    public List getButtonList() {
+    public List<Button> getButtonList() {
         return buttonList;
     }
 
@@ -1453,7 +1445,7 @@ public class Form extends AbstractContainer {
      *
      * @return the map of field width values, keyed on field name
      */
-    public Map getFieldWidths() {
+    public Map<String, Integer> getFieldWidths() {
         return fieldWidths;
     }
 
@@ -1557,10 +1549,8 @@ public class Form extends AbstractContainer {
      */
     public void clearErrors() {
         setError(null);
-        List fields = ContainerUtils.getInputFields(this);
-        Field field = null;
-        for (int i = 0, size = fields.size(); i < size; i++) {
-            field = (Field) fields.get(i);
+
+        for (Field field : ContainerUtils.getInputFields(this)) {
             field.setError(null);
         }
     }
@@ -1569,11 +1559,7 @@ public class Form extends AbstractContainer {
      * Clear all the form field values setting them to null.
      */
     public void clearValues() {
-        List fields = ContainerUtils.getInputFields(this);
-        Field field = null;
-        for (int i = 0, size = fields.size(); i < size; i++) {
-            field = (Field) fields.get(i);
-
+        for (Field field : ContainerUtils.getInputFields(this)) {
             if (!field.getName().equals(FORM_NAME)
                 && (!field.getName().startsWith(SUBMIT_CHECK))) {
                 field.setValue(null);
@@ -1901,7 +1887,7 @@ public class Form extends AbstractContainer {
      * @return true if the form submit is OK or false otherwise
      * @throws IllegalArgumentException if the page or pageClass is null
      */
-    public boolean onSubmitCheck(Page page, Class pageClass) {
+    public boolean onSubmitCheck(Page page, Class<? extends Page> pageClass) {
         if (page == null) {
             throw new IllegalArgumentException("Null page parameter");
         }
@@ -1990,7 +1976,7 @@ public class Form extends AbstractContainer {
      * @return the rendered form start tag and the forms hidden fields
      */
     public String startTag() {
-        List formFields = ContainerUtils.getInputFields(this);
+        List<Field> formFields = ContainerUtils.getInputFields(this);
 
         int bufferSize = getFormSizeEst(formFields);
 
@@ -2010,7 +1996,7 @@ public class Form extends AbstractContainer {
     public String endTag() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        List formFields = ContainerUtils.getInputFields(this);
+        List<Field> formFields = ContainerUtils.getInputFields(this);
 
         renderTagEnd(formFields, buffer);
 
@@ -2031,7 +2017,7 @@ public class Form extends AbstractContainer {
         final boolean process =
             getContext().getRequest().getMethod().equalsIgnoreCase(getMethod());
 
-        List formFields = ContainerUtils.getInputFields(this);
+        List<Field> formFields = ContainerUtils.getInputFields(this);
 
         renderHeader(buffer, formFields);
 
@@ -2164,7 +2150,7 @@ public class Form extends AbstractContainer {
      * @param formFields the list of form fields
      * @return the estimated rendered form size in characters
      */
-    protected int getFormSizeEst(List formFields) {
+    protected int getFormSizeEst(List<Field> formFields) {
         return 500 + (formFields.size() * 350);
     }
 
@@ -2175,7 +2161,7 @@ public class Form extends AbstractContainer {
      * @param buffer the HTML string buffer to render to
      * @param formFields the list of form fields
      */
-    protected void renderHeader(HtmlStringBuffer buffer, List formFields) {
+    protected void renderHeader(HtmlStringBuffer buffer, List<Field> formFields) {
 
         buffer.elementStart(getTag());
 
@@ -2195,9 +2181,7 @@ public class Form extends AbstractContainer {
         buffer.append("\n");
 
         // Render hidden fields
-        List hiddenFields = ContainerUtils.getHiddenFields(this);
-        for (int i = 0, size = hiddenFields.size(); i < size; i++) {
-            Field field = (Field) hiddenFields.get(i);
+        for (Field field : ContainerUtils.getHiddenFields(this)) {
             field.render(buffer);
             buffer.append("\n");
         }
@@ -2242,8 +2226,8 @@ public class Form extends AbstractContainer {
      * @param fieldWidths a map of field widths keyed on field name
      * @param columns the number of form layout table columns
      */
-    protected void renderControls(HtmlStringBuffer buffer,
-        Container container, List controls, Map fieldWidths, int columns) {
+    protected void renderControls(HtmlStringBuffer buffer, Container container,
+            List<Control> controls, Map<String, Integer> fieldWidths, int columns) {
 
         buffer.append("<table class=\"fields\"");
         String containerId = container.getId();
@@ -2255,9 +2239,7 @@ public class Form extends AbstractContainer {
         int column = 1;
         boolean openTableRow = false;
 
-        for (int i = 0, size = controls.size(); i < size; i++) {
-
-            Control control = (Control) controls.get(i);
+        for (Control control : controls) {
 
             // Buttons are rendered separately
             if (control instanceof Button) {
@@ -2454,10 +2436,7 @@ public class Form extends AbstractContainer {
                 buffer.append("</td></tr>\n");
             }
 
-            List errorFieldList = getErrorFields();
-
-            for (int i = 0, size = errorFieldList.size(); i < size; i++) {
-                Field field = (Field) errorFieldList.get(i);
+            for (Field field : getErrorFields()) {
 
                 // Certain fields might be invalid because
                 // one of their contained fields are invalid. However these
@@ -2507,7 +2486,8 @@ public class Form extends AbstractContainer {
      */
     protected void renderButtons(HtmlStringBuffer buffer) {
 
-        List buttonList = getButtonList();
+        List<Button> buttonList = getButtonList();
+
         if (!buttonList.isEmpty()) {
             buffer.append("<tr><td");
             buffer.appendAttribute("align", getButtonAlign());
@@ -2518,12 +2498,11 @@ public class Form extends AbstractContainer {
             buffer.append("-buttons\"><tbody>\n");
             buffer.append("<tr class=\"buttons\">");
 
-            for (int i = 0, size = buttonList.size(); i < size; i++) {
+            for (Button button : buttonList) {
                 buffer.append("<td class=\"buttons\"");
                 buffer.appendAttribute("style", getButtonStyle());
                 buffer.closeTag();
 
-                Button button = (Button) buttonList.get(i);
                 button.render(buffer);
 
                 buffer.append("</td>");
@@ -2544,7 +2523,7 @@ public class Form extends AbstractContainer {
      * @param formFields all fields contained within the form
      * @param buffer the buffer to render to
      */
-    protected void renderTagEnd(List formFields, HtmlStringBuffer buffer) {
+    protected void renderTagEnd(List<Field> formFields, HtmlStringBuffer buffer) {
 
         buffer.elementEnd(getTag());
         buffer.append("\n");
@@ -2560,7 +2539,7 @@ public class Form extends AbstractContainer {
      * @param buffer the StringBuffer to render to
      * @param formFields the list of form fields
      */
-    protected void renderFocusJavaScript(HtmlStringBuffer buffer, List formFields) {
+    protected void renderFocusJavaScript(HtmlStringBuffer buffer, List<Field> formFields) {
 
         // Set field focus
         boolean errorFieldFound = false;
@@ -2606,17 +2585,16 @@ public class Form extends AbstractContainer {
      * @param buffer the StringBuffer to render to
      * @param formFields the list of form fields
      */
-    protected void renderValidationJavaScript(HtmlStringBuffer buffer, List formFields) {
+    protected void renderValidationJavaScript(HtmlStringBuffer buffer, List<Field> formFields) {
 
         // Render JavaScript form validation code
         if (getValidate() && getJavaScriptValidation()) {
-            List functionNames = new ArrayList();
+            List<String> functionNames = new ArrayList<String>();
 
             buffer.append("<script type=\"text/javascript\"><!--\n");
 
             // Render field validation functions & build list of function names
-            for (Iterator i = formFields.iterator(); i.hasNext();) {
-                Field field = (Field) i.next();
+            for (Field field : formFields) {
                 String fieldJS = field.getValidationJavaScript();
                 if (fieldJS != null) {
                     buffer.append(fieldJS);
@@ -2765,6 +2743,8 @@ public class Form extends AbstractContainer {
      * Provides a HiddenField which name cannot be changed, once it is set.
      */
     private class ImmutableNameHiddenField extends HiddenField {
+
+        private static final long serialVersionUID = 1L;
 
         /**
          * Create a field with the given name and value.
