@@ -158,36 +158,36 @@ public class ClickResourceService implements ResourceService {
      * <pre class="prettyprint">
      * &lt;-- The default Click *.htm mapping --&gt;
      * &lt;servlet-mapping&gt;
-         *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
-         *   &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
-       * &lt;/servlet-mapping&gt;
+     *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+     *   &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
+     * &lt;/servlet-mapping&gt;
      *
      * &lt;-- Add a mapping to serve all resources under /click directly from
      * the JARs. --&gt;
-       * &lt;servlet-mapping&gt;
-         *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
-         *   &lt;url-pattern&gt;/click/*&lt;/url-pattern&gt;
-       * &lt;/servlet-mapping&gt;
+     * &lt;servlet-mapping&gt;
+     *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+     *   &lt;url-pattern&gt;/click/*&lt;/url-pattern&gt;
+     * &lt;/servlet-mapping&gt;
      *
      * &lt;-- Add another mapping to serve all resources under /clickclick
      * from the JARs. --&gt;
-       * &lt;servlet-mapping&gt;
-         *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
-         *   &lt;url-pattern&gt;/clickclick/*&lt;/url-pattern&gt;
-       * &lt;/servlet-mapping&gt;
+     * &lt;servlet-mapping&gt;
+     *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+     *   &lt;url-pattern&gt;/clickclick/*&lt;/url-pattern&gt;
+     * &lt;/servlet-mapping&gt;
      *
      * &lt;-- Add a mapping to serve all resources under /mycorp
      * from the JARs. --&gt;
-       * &lt;servlet-mapping&gt;
-         *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
-         *   &lt;url-pattern&gt;/mycorp/*&lt;/url-pattern&gt;
-       * &lt;/servlet-mapping&gt;
+     * &lt;servlet-mapping&gt;
+     *   &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
+     *   &lt;url-pattern&gt;/mycorp/*&lt;/url-pattern&gt;
+     * &lt;/servlet-mapping&gt;
      * </pre>
      *
      * @return list of directories that should be cached
      */
     protected List<String> getCacheableDirs() {
-       List list = new ArrayList();
+       List<String> list = new ArrayList<String>();
        list.add("/click");
        return list;
     }

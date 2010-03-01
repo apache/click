@@ -500,7 +500,6 @@ class DeployUtils<T> {
      * @param test the test used to determine if the class matches
      * @param fqn the fully qualified name of a class
      */
-    @SuppressWarnings("unchecked")
     protected void addIfMatching(Test test, String fqn) {
         try {
             if (test.matches(fqn)) {
@@ -545,7 +544,6 @@ class DeployUtils<T> {
          * @return true if the resource should be included in the results, false
          * otherwise
          */
-        @SuppressWarnings("unchecked")
         public boolean matches(String resource) {
             // If a resource is found, it must be deployed
             return true;

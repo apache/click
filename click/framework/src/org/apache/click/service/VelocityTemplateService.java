@@ -311,7 +311,7 @@ public class VelocityTemplateService implements TemplateService {
      * @param writer the writer to send the merged template and model data to
      * @throws Exception if an error occurs
      */
-    public void renderTemplate(Page page, Map model, Writer writer) throws Exception {
+    public void renderTemplate(Page page, Map<String, Object> model, Writer writer) throws Exception {
 
         final VelocityContext context = new VelocityContext(model);
 
@@ -397,7 +397,7 @@ public class VelocityTemplateService implements TemplateService {
      * @param writer the writer to send the merged template and model data to
      * @throws Exception if an error occurs
      */
-    public void renderTemplate(String templatePath, Map model, Writer writer) throws Exception {
+    public void renderTemplate(String templatePath, Map<String, Object> model, Writer writer) throws Exception {
 
         final VelocityContext velocityContext = new VelocityContext(model);
 
@@ -498,6 +498,7 @@ public class VelocityTemplateService implements TemplateService {
      * @return the Velocity Engine initialization properties
      * @throws MalformedURLException if a resource cannot be loaded
      */
+    @SuppressWarnings("unchecked")
     protected Properties getInitProperties() throws MalformedURLException {
 
         final Properties velProps = new Properties();

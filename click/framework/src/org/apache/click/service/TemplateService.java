@@ -73,7 +73,7 @@ public interface TemplateService {
      * @param writer the writer to send the merged template and model data to
      * @throws Exception if an error occurs
      */
-    public void renderTemplate(Page page, Map model, Writer writer) throws Exception;
+    public void renderTemplate(Page page, Map<String, Object> model, Writer writer) throws Exception;
 
     /**
      * Render the given template and model to the writer.
@@ -83,6 +83,6 @@ public interface TemplateService {
      * @param writer the writer to send the merged template and model data to
      * @throws Exception if an error occurs
      */
-    public void renderTemplate(String templatePath, Map model, Writer writer) throws Exception;
+    public void renderTemplate(String templatePath, Map<String, Object> model, Writer writer) throws Exception;
 
 }
