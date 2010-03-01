@@ -139,13 +139,13 @@ public class NumberFieldTest extends TestCase{
         
         assertTrue(engF.onProcess());
         assertEquals("12.30",engF.getValue());
-        assertEquals("12.3", engF.getRequestValue());
+        assertEquals("12.3", req.getParameter(engF.getName()));
         
         params.put("en", "some value");
         assertTrue(engF.onProcess());
         assertEquals("some value", engF.getValue());
         assertNull(engF.getNumber());
-        assertEquals("some value", engF.getRequestValue());
+        assertEquals("some value", req.getParameter(engF.getName()));
     }
     
     public void testValidate() {
