@@ -153,7 +153,10 @@ default requests will be served this file:
 <p/>
 When the browser processes the <tt>redirect.html</tt> it will redirect to the
 applications <span class="blue">home.htm</span> page.
-
+<p/>
+This trick is required because many servlet containers including Tomcat, don't dispatch the URLs specified
+in the <tt>welcome-files-list</tt> to the servlets, so to overcome this problem a redirect is required form a static
+file like <tt>redirect.htm</tt> or from and unmapped JSP file.
 
 <a name="home" class="heading"></a><h2>4.&nbsp; Home Page</h2>
 
