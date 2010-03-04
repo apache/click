@@ -28,5 +28,7 @@
     <!ATTLIST menu imageSrc CDATA #IMPLIED>
     <!ATTLIST menu external (true|false) "false">
     <!ATTLIST menu separator (true|false) "false">
+    <!ATTLIST menu visible (true|false) "true">
+    <!ATTLIST menu enabled (true|false) "true">
     <!ATTLIST menu roles CDATA #IMPLIED>
     <!ATTLIST menu pages CDATA #IMPLIED>
