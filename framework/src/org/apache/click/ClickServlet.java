@@ -1310,7 +1310,7 @@ public class ClickServlet extends HttpServlet {
             processPageFields(page, new FieldCallback() {
                 public void processField(String fieldName, Object fieldValue) {
                     if (fieldValue instanceof Control == false) {
-                        page.getModel().put(fieldName, fieldValue);
+                        page.addModel(fieldName, fieldValue);
 
                     } else {
                         // Add any controls not already added to model
