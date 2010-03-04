@@ -265,6 +265,12 @@ public class Menu extends AbstractControl {
     /** The tooltip title attribute. */
     protected String title = "";
 
+    /** Visibility flag. Used to hide menu items at runtime */
+    protected boolean visible = true;
+
+    /** Enable flag. Used to disable menu items at runtime. Disabled menu items might be still visible */
+    protected boolean enabled = true;
+    
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -360,6 +366,16 @@ public class Menu extends AbstractControl {
             setSeparator(true);
         }
 
+        String visibilityAtr = menuElement.getAttribute("visible");
+        if ("false".equalsIgnoreCase(visibilityAtr)) {
+            setVisible(false);
+        }
+
+        String enablingAtr = menuElement.getAttribute("enabled");
+        if ("false".equalsIgnoreCase(enablingAtr)) {
+            setEnabled(false);
+        }
+        
         String pagesValue = menuElement.getAttribute("pages");
         if (!StringUtils.isBlank(pagesValue)) {
             StringTokenizer tokenizer = new StringTokenizer(pagesValue, ",");
@@ -432,6 +448,26 @@ public class Menu extends AbstractControl {
         }
 
         return loadedMenu;
+    }
+
+    /**
+     * Finds the first Menu item that has the specified path.
+     * 
+     * @param path the path to find the Menu item
+     * @return the first Menu item, or null if not found.
+     */
+    public static Menu findMenuItem(String path) {
+        if (rootMenu != null) {
+            List children = rootMenu.getChildren();
+            for (int i = 0; i < children.size(); i++) {
+                Menu menu = (Menu) children.get(i);
+                String itemPath = menu.getPath();
+                if (itemPath != null && itemPath.equals(path)) {
+                    return menu;
+                }
+            }
+        }
+        return null;
     }
 
     // ------------------------------------------------------ Public Attributes
@@ -718,6 +754,49 @@ public class Menu extends AbstractControl {
      */
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    /**
+     * Return the visibility flag of the Menu item.<p/>
+     * <i>Note:</i> default, all Menu items are visible.
+     * 
+     * @return the visibility flag of the Menu item.
+     */
+    public boolean isVisible() {
+        return visible;
+    }
+
+    /**
+     * Set the visibility flag of the Menu item. <p/>
+     * <i>Note:</i> changing this flag won't trigger the visibility on the page. It is the duty of
+     * the rendering template for the Menu to take this flag in consideration when rendering.
+     *
+     * @param visible the visibility flag of the menu item.
+     */
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    /**
+     * Return the enabling flag of the Menu item. <p/>
+     * <i>Note:</i> default, all Menu items are enabled.
+     *
+     * @return he enabling flag of the Menu item.
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * Set the enabling flag of the Menu item. <p/>
+     * <i>Note:</i> changing this flag won't trigger the disabling on the page. It is the duty of
+     * the rendering template for the Menu to take this flag in consideration when rendering, and
+     * e.g. grey it out.
+     *
+     * @param enabled the enabling flag of the menu item.
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     /**
