@@ -47,6 +47,7 @@ import ognl.TypeConverter;
 import org.apache.click.service.ConfigService;
 import org.apache.click.service.LogService;
 import org.apache.click.service.ResourceService;
+import org.apache.click.service.TemplateException;
 import org.apache.click.service.XmlConfigService;
 import org.apache.click.service.ConfigService.AutoBinding;
 import org.apache.click.util.ClickUtils;
@@ -58,7 +59,6 @@ import org.apache.click.util.RequestTypeConverter;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.velocity.exception.ParseErrorException;
 
 /**
  * Provides the Click application HttpServlet.
@@ -443,7 +443,7 @@ public class ClickServlet extends HttpServlet {
         HttpServletResponse response, boolean isPost, Throwable exception,
         Class pageClass) {
 
-        if (exception instanceof ParseErrorException == false) {
+        if (exception instanceof TemplateException == false) {
             logger.error("handleException: ", exception);
         }
 

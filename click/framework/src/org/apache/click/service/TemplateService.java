@@ -18,6 +18,7 @@
  */
 package org.apache.click.service;
 
+import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
@@ -71,9 +72,11 @@ public interface TemplateService {
      * @param page the page template to render
      * @param model the model to merge with the template and render
      * @param writer the writer to send the merged template and model data to
-     * @throws Exception if an error occurs
+     * @throws IOException if an IO error occurs
+     * @throws TemplateException if template error occurs
      */
-    public void renderTemplate(Page page, Map<String, Object> model, Writer writer) throws Exception;
+    public void renderTemplate(Page page, Map<String, Object> model, Writer writer)
+        throws IOException, TemplateException;
 
     /**
      * Render the given template and model to the writer.
@@ -81,8 +84,10 @@ public interface TemplateService {
      * @param templatePath the path of the template to render
      * @param model the model to merge with the template and render
      * @param writer the writer to send the merged template and model data to
-     * @throws Exception if an error occurs
+     * @throws IOException if an IO error occurs
+     * @throws TemplateException if template error occurs
      */
-    public void renderTemplate(String templatePath, Map<String, Object> model, Writer writer) throws Exception;
+    public void renderTemplate(String templatePath, Map<String, Object> model, Writer writer)
+        throws IOException, TemplateException;
 
 }

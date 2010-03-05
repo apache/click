@@ -40,6 +40,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.click.Page;
+import org.apache.click.service.TemplateException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.exception.ParseErrorException;
 
@@ -75,7 +77,7 @@ public class ErrorReport {
     protected final boolean isProductionMode;
 
     /** The page class which caused the error. */
-    protected final Class pageClass;
+    protected final Class<? extends Page> pageClass;
 
     /** The servlet request. */
     protected final HttpServletRequest request;
@@ -89,7 +91,7 @@ public class ErrorReport {
     /** The error source LineNumberReader. */
     protected LineNumberReader sourceReader;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     /**
      * Create a ErrorReport instance from the given error and page.
@@ -100,7 +102,7 @@ public class ErrorReport {
      * @param request the page request
      * @param servletContext the servlet context
      */
-    public ErrorReport(Throwable error, Class pageClass,
+    public ErrorReport(Throwable error, Class<? extends Page> pageClass,
             boolean isProductionMode, HttpServletRequest request,
             ServletContext servletContext) {
 
@@ -112,20 +114,25 @@ public class ErrorReport {
 
         isParseError = error instanceof ParseErrorException;
 
-        if (error instanceof ParseErrorException) {
-            ParseErrorException pee = (ParseErrorException) error;
-            if (pee.getTemplateName().charAt(0) == '/') {
-                sourceName = pee.getTemplateName();
+        if (error instanceof TemplateException) {
+            TemplateException te = (TemplateException) error;
+            if (te.getTemplateName() != null) {
+                if (te.getTemplateName().charAt(0) == '/') {
+                    sourceName = te.getTemplateName();
+                } else {
+                    sourceName =  '/' + te.getTemplateName();
+                }
+                lineNumber = te.getLineNumber();
+                columnNumber = te.getColumnNumber();
+
+                InputStream is =
+                    servletContext.getResourceAsStream(sourceName);
+
+                sourceReader = new LineNumberReader(new InputStreamReader(is));
+
             } else {
-                sourceName =  '/' + pee.getTemplateName();
+                sourceName = null;
             }
-            lineNumber = pee.getLineNumber();
-            columnNumber = pee.getColumnNumber();
-
-            InputStream is =
-                servletContext.getResourceAsStream(sourceName);
-
-            sourceReader = new LineNumberReader(new InputStreamReader(is));
 
         } else {
             sourceName = null;
@@ -179,7 +186,7 @@ public class ErrorReport {
         }
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Return a error report HTML &lt;div&gt; element for the given error and
@@ -249,7 +256,7 @@ public class ErrorReport {
         buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%' style='background-color: white;'>");
         buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Request</td></tr>");
 
-        TreeMap requestAttributes = new TreeMap();
+        Map<String, Object> requestAttributes = new TreeMap<String, Object>();
         Enumeration attributeNames = request.getAttributeNames();
         while (attributeNames.hasMoreElements()) {
             String name = attributeNames.nextElement().toString();
@@ -271,7 +278,7 @@ public class ErrorReport {
         buffer.append("</a>");
         buffer.append("</td></tr>");
 
-        TreeMap requestHeaders = new TreeMap();
+        Map<String, Object> requestHeaders = new TreeMap<String, Object>();
         Enumeration headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String name = headerNames.nextElement().toString();
@@ -289,7 +296,7 @@ public class ErrorReport {
         buffer.append(request.getMethod());
         buffer.append("</td></tr>");
 
-        TreeMap requestParams = new TreeMap();
+        Map<String, Object> requestParams = new TreeMap<String, Object>();
         Enumeration paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
             String name = paramNames.nextElement().toString();
@@ -320,7 +327,7 @@ public class ErrorReport {
         buffer.append("</a>");
         buffer.append("</td></tr>");
 
-        TreeMap sessionAttributes = new TreeMap();
+        Map<String, Object> sessionAttributes = new TreeMap<String, Object>();
         if (request.getSession(false) != null) {
             HttpSession session = request.getSession();
             attributeNames = session.getAttributeNames();
@@ -339,7 +346,7 @@ public class ErrorReport {
         return buffer.toString();
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Return the cause of the error.
@@ -637,7 +644,7 @@ public class ErrorReport {
      * @param map the Map of name value pairs
      * @param buffer the string buffer to write out the values to
      */
-    protected void writeMap(Map map, HtmlStringBuffer buffer) {
+    protected void writeMap(Map<String, Object> map, HtmlStringBuffer buffer) {
         for (Iterator i = map.entrySet().iterator(); i.hasNext();) {
             Map.Entry entry = (Map.Entry) i.next();
             String key = entry.getKey().toString();

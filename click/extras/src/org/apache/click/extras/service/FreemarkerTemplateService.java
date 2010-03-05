@@ -27,6 +27,7 @@ import javax.servlet.ServletContext;
 import org.apache.click.Page;
 import org.apache.click.service.ConfigService;
 import org.apache.click.service.LogService;
+import org.apache.click.service.TemplateException;
 import org.apache.click.service.TemplateService;
 import org.apache.click.util.ClickUtils;
 import org.apache.commons.lang.Validate;
@@ -238,10 +239,11 @@ public class FreemarkerTemplateService implements TemplateService {
      * @param page the page template to render
      * @param model the model to merge with the template and render
      * @param writer the writer to send the merged template and model data to
-     * @throws Exception if an error occurs
+     * @throws IOException if an IO error occurs
+     * @throws TemplateException if template error occurs
      */
-    public void renderTemplate(Page page, Map model, Writer writer)
-            throws Exception {
+    public void renderTemplate(Page page, Map<String, Object> model, Writer writer)
+        throws IOException, TemplateException {
 
         String templatePath = page.getTemplate();
 
@@ -256,7 +258,12 @@ public class FreemarkerTemplateService implements TemplateService {
         Template template = configuration.getTemplate(templatePath);
 
         // Merge the data-model and the template
-        template.process(model, writer);
+        try {
+            template.process(model, writer);
+
+        } catch (freemarker.template.TemplateException fmte) {
+            throw new TemplateException(fmte);
+        }
     }
 
     /**
@@ -265,16 +272,22 @@ public class FreemarkerTemplateService implements TemplateService {
      * @param templatePath the path of the template to render
      * @param model the model to merge with the template and render
      * @param writer the writer to send the merged template and model data to
-     * @throws Exception if an error occurs
+     * @throws IOException if an IO error occurs
+     * @throws TemplateException if template error occurs
      */
-    public void renderTemplate(String templatePath, Map model, Writer writer)
-            throws Exception {
+    public void renderTemplate(String templatePath, Map<String, Object> model, Writer writer)
+            throws IOException, TemplateException {
 
         // Get the template object
         Template template = configuration.getTemplate(templatePath);
 
         // Merge the data-model and the template
-        template.process(model, writer);
+        try {
+            template.process(model, writer);
+
+        } catch (freemarker.template.TemplateException fmte) {
+            throw new TemplateException(fmte);
+        }
     }
 
     /**

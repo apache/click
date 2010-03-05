@@ -25,8 +25,6 @@ import org.apache.click.util.Bindable;
 
 /**
  * Provides examples of the Click Exception handling.
- *
- * @author Malcolm Edgar
  */
 public class ExceptionPage extends BorderPage {
 
@@ -58,12 +56,12 @@ public class ExceptionPage extends BorderPage {
 
     public boolean onBrokenBorderClick() {
         setPath("broken-border.htm");
-        template = "broken-border.htm";
+        template = "/general/broken-border.htm";
         return true;
     }
 
     public boolean onBrokenContentClick() {
-        setPath("broken-content.htm");
+        setPath("/general/broken-content.htm");
         return true;
     }
 
