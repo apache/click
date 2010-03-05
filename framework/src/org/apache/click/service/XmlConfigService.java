@@ -80,7 +80,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     static final String CLICK_PATH = "/click";
 
     /** The default common page headers. */
-    static final Map DEFAULT_HEADERS;
+    static final Map<String, Object> DEFAULT_HEADERS;
 
     /**
      * The default velocity properties filename: &nbsp;
@@ -135,7 +135,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
     /** Initialize the default headers. */
     static {
-        DEFAULT_HEADERS = new HashMap();
+        DEFAULT_HEADERS = new HashMap<String, Object>();
         DEFAULT_HEADERS.put("Pragma", "no-cache");
         DEFAULT_HEADERS.put("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
         DEFAULT_HEADERS.put("Expires", new Date(1L));
@@ -167,7 +167,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     private FileUploadService fileUploadService;
 
     /** The format class. */
-    private Class formatClass;
+    private Class<? extends Format> formatClass;
 
     /** The character encoding of this application. */
     private String charset;
