@@ -30,7 +30,6 @@ import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
 
-import org.apache.click.Context;
 import org.apache.click.Page;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ErrorReport;
@@ -38,11 +37,14 @@ import org.apache.commons.lang.Validate;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.apache.velocity.exception.TemplateInitException;
 import org.apache.velocity.io.VelocityWriter;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.log.LogChute;
+import org.apache.velocity.runtime.parser.TemplateParseException;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.apache.velocity.util.SimplePool;
@@ -242,7 +244,7 @@ public class VelocityTemplateService implements TemplateService {
      * @see TemplateService#onInit(ServletContext)
      *
      * @param servletContext the application servlet velocityContext
-     * @throws Exception if an error occurs initializing the Template Service
+     * @throws TemplateException if an error occurs initializing the Template Service
      */
     public void onInit(ServletContext servletContext) throws Exception {
 
@@ -309,11 +311,11 @@ public class VelocityTemplateService implements TemplateService {
      * @param page the page template to render
      * @param model the model to merge with the template and render
      * @param writer the writer to send the merged template and model data to
-     * @throws Exception if an error occurs
+     * @throws IOException if an IO error occurs
+     * @throws TemplateException if template error occurs
      */
-    public void renderTemplate(Page page, Map<String, Object> model, Writer writer) throws Exception {
-
-        final VelocityContext context = new VelocityContext(model);
+    public void renderTemplate(Page page, Map<String, Object> model, Writer writer)
+        throws IOException, TemplateException {
 
         String templatePath = page.getTemplate();
 
@@ -324,69 +326,7 @@ public class VelocityTemplateService implements TemplateService {
             templatePath = "META-INF/resources" + NOT_FOUND_PAGE_PATH;
         }
 
-        // May throw parsing error if template could not be obtained
-        Template template = null;
-        String charset = configService.getCharset();
-        if (charset != null) {
-            template = velocityEngine.getTemplate(templatePath, charset);
-
-        } else {
-            template = velocityEngine.getTemplate(templatePath);
-        }
-
-        VelocityWriter velocityWriter = null;
-
-        try {
-            velocityWriter = (VelocityWriter) writerPool.get();
-
-            if (velocityWriter == null) {
-                velocityWriter =
-                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
-
-            } else {
-                velocityWriter.recycle(writer);
-            }
-
-            template.merge(context, velocityWriter);
-
-        } catch (Exception error) {
-            // Exception occurred merging template and model. It is possible
-            // that some output has already been written, so we will append the
-            // error report to the previous output.
-            ErrorReport errorReport =
-                new ErrorReport(error,
-                                page.getClass(),
-                                configService.isProductionMode(),
-                                page.getContext().getRequest(),
-                                configService.getServletContext());
-
-            if (velocityWriter == null) {
-
-                velocityWriter =
-                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
-            }
-
-            velocityWriter.write(errorReport.toString());
-
-            throw error;
-
-        } finally {
-            if (velocityWriter != null) {
-                // flush and put back into the pool don't close to allow
-                // us to play nicely with others.
-                velocityWriter.flush();
-
-                // Clear the VelocityWriter's reference to its
-                // internal Writer to allow the latter
-                // to be GC'd while vw is pooled.
-                velocityWriter.recycle(null);
-
-                writerPool.put(velocityWriter);
-            }
-
-            writer.flush();
-            writer.close();
-        }
+        internalRenderTemplate(templatePath, page, model, writer);
     }
 
     /**
@@ -397,76 +337,13 @@ public class VelocityTemplateService implements TemplateService {
      * @param writer the writer to send the merged template and model data to
      * @throws Exception if an error occurs
      */
-    public void renderTemplate(String templatePath, Map<String, Object> model, Writer writer) throws Exception {
+    public void renderTemplate(String templatePath, Map<String, Object> model, Writer writer)
+        throws IOException, TemplateException {
 
-        final VelocityContext velocityContext = new VelocityContext(model);
-
-        // May throw parsing error if template could not be obtained
-        Template template = null;
-        String charset = configService.getCharset();
-        if (charset != null) {
-            template = velocityEngine.getTemplate(templatePath, charset);
-
-        } else {
-            template = velocityEngine.getTemplate(templatePath);
-        }
-
-        VelocityWriter velocityWriter = null;
-
-        try {
-            velocityWriter = (VelocityWriter) writerPool.get();
-
-            if (velocityWriter == null) {
-                velocityWriter =
-                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
-
-            } else {
-                velocityWriter.recycle(writer);
-            }
-
-            template.merge(velocityContext, velocityWriter);
-
-        } catch (Exception error) {
-            // Exception occurred merging template and model. It is possible
-            // that some output has already been written, so we will append the
-            // error report to the previous output.
-            ErrorReport errorReport =
-                new ErrorReport(error,
-                                null,
-                                configService.isProductionMode(),
-                                Context.getThreadLocalContext().getRequest(),
-                                configService.getServletContext());
-
-            if (velocityWriter == null) {
-
-                velocityWriter =
-                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
-            }
-
-            velocityWriter.write(errorReport.toString());
-
-            throw error;
-
-        } finally {
-            if (velocityWriter != null) {
-                // flush and put back into the pool don't close to allow
-                // us to play nicely with others.
-                velocityWriter.flush();
-
-                // Clear the VelocityWriter's reference to its
-                // internal Writer to allow the latter
-                // to be GC'd while vw is pooled.
-                velocityWriter.recycle(null);
-
-                writerPool.put(velocityWriter);
-            }
-
-            writer.flush();
-            writer.close();
-        }
+        internalRenderTemplate(templatePath, null, model, writer);
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Return the Velocity Engine initialization log level.
@@ -615,7 +492,170 @@ public class VelocityTemplateService implements TemplateService {
         return velProps;
     }
 
-    // ---------------------------------------------------------- Inner Classes
+    /**
+     * Provides the underlying Velocity template rendering.
+     *
+     * @param templatePath the template path to render
+     * @param page the page template to render
+     * @param model the model to merge with the template and render
+     * @param writer the writer to send the merged template and model data to
+     * @throws IOException if an IO error occurs
+     * @throws TemplateException if template error occurs
+     */
+    protected void internalRenderTemplate(String templatePath,
+                                          Page page,
+                                          Map<String, Object> model,
+                                          Writer writer)
+        throws IOException, TemplateException {
+
+        final VelocityContext velocityContext = new VelocityContext(model);
+
+        // May throw parsing error if template could not be obtained
+        Template template = null;
+        VelocityWriter velocityWriter = null;
+        try {
+            String charset = configService.getCharset();
+            if (charset != null) {
+                template = velocityEngine.getTemplate(templatePath, charset);
+
+            } else {
+                template = velocityEngine.getTemplate(templatePath);
+            }
+
+            velocityWriter = (VelocityWriter) writerPool.get();
+
+            if (velocityWriter == null) {
+                velocityWriter =
+                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
+
+            } else {
+                velocityWriter.recycle(writer);
+            }
+
+            template.merge(velocityContext, velocityWriter);
+
+        } catch (IOException ioe) {
+            throw ioe;
+
+        } catch (ParseErrorException pee) {
+            TemplateException te = new TemplateException(pee,
+                                                         pee.getTemplateName(),
+                                                         pee.getLineNumber(),
+                                                         pee.getColumnNumber());
+
+            // Exception occurred merging template and model. It is possible
+            // that some output has already been written, so we will append the
+            // error report to the previous output.
+            ErrorReport errorReport =
+                new ErrorReport(te,
+                                ((page != null) ? page.getClass() : null),
+                                configService.isProductionMode(),
+                                page.getContext().getRequest(),
+                                configService.getServletContext());
+
+
+            if (velocityWriter == null) {
+                velocityWriter =
+                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
+            }
+
+            velocityWriter.write(errorReport.toString());
+
+            throw te;
+
+        } catch (TemplateInitException tie) {
+            TemplateException te = new TemplateException(tie,
+                                                         tie.getTemplateName(),
+                                                         tie.getLineNumber(),
+                                                         tie.getColumnNumber());
+
+            // Exception occurred merging template and model. It is possible
+            // that some output has already been written, so we will append the
+            // error report to the previous output.
+            ErrorReport errorReport =
+                new ErrorReport(te,
+                                ((page != null) ? page.getClass() : null),
+                                configService.isProductionMode(),
+                                page.getContext().getRequest(),
+                                configService.getServletContext());
+
+
+            if (velocityWriter == null) {
+                velocityWriter =
+                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
+            }
+
+            velocityWriter.write(errorReport.toString());
+
+            throw te;
+
+        } catch (TemplateParseException tpe) {
+            TemplateException te = new TemplateException(tpe,
+                                                         tpe.getTemplateName(),
+                                                         tpe.getLineNumber(),
+                                                         tpe.getColumnNumber());
+
+            // Exception occurred merging template and model. It is possible
+            // that some output has already been written, so we will append the
+            // error report to the previous output.
+            ErrorReport errorReport =
+                new ErrorReport(te,
+                        ((page != null) ? page.getClass() : null),
+                        configService.isProductionMode(),
+                        page.getContext().getRequest(),
+                        configService.getServletContext());
+
+            if (velocityWriter == null) {
+                velocityWriter =
+                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
+            }
+
+            velocityWriter.write(errorReport.toString());
+
+            throw te;
+
+        } catch (Exception error) {
+            TemplateException te = new TemplateException(error);
+
+            // Exception occurred merging template and model. It is possible
+            // that some output has already been written, so we will append the
+            // error report to the previous output.
+            ErrorReport errorReport =
+                new ErrorReport(te,
+                        ((page != null) ? page.getClass() : null),
+                        configService.isProductionMode(),
+                        page.getContext().getRequest(),
+                        configService.getServletContext());
+
+            if (velocityWriter == null) {
+                velocityWriter =
+                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
+            }
+
+            velocityWriter.write(errorReport.toString());
+
+            throw te;
+
+        } finally {
+            if (velocityWriter != null) {
+                // flush and put back into the pool don't close to allow
+                // us to play nicely with others.
+                velocityWriter.flush();
+
+                // Clear the VelocityWriter's reference to its
+                // internal Writer to allow the latter
+                // to be GC'd while vw is pooled.
+                velocityWriter.recycle(null);
+
+                writerPool.put(velocityWriter);
+            }
+
+            writer.flush();
+            writer.close();
+        }
+    }
+
+    // Inner Classes ----------------------------------------------------------
 
     /**
      * Provides a Velocity <tt>LogChute</tt> adapter class around the application
