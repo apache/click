@@ -316,6 +316,16 @@ public class Context {
     }
 
     /**
+     * Return true if the request contains the named attribute.
+     *
+     * @param name the name of the request attribute
+     * @return true if the request contains the named attribute
+     */
+    public boolean hasRequestAttribute(String name) {
+        return (getRequestAttribute(name) != null);
+    }
+
+    /**
      * Return the named request attribute, or null if not defined.
      *
      * @param name the name of the request attribute
@@ -333,6 +343,16 @@ public class Context {
      */
     public void setRequestAttribute(String name, Object value) {
         request.setAttribute(name, value);
+    }
+
+    /**
+     * Return true if the request contains the named parameter.
+     *
+     * @param name the name of the request parameter
+     * @return true if the request contains the named parameter
+     */
+    public boolean hasRequestParameter(String name) {
+        return (getRequestParameter(name) != null);
     }
 
     /**
