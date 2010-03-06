@@ -175,8 +175,9 @@ public class FormTest extends TestCase {
         // Create form.
         form = new Form("form");
         
-        // Form automatically creates and adds a HiddenField for storing the
-        // form name between requests. This field is at index 0 at the start
+        // Form automatically creates and adds two HiddenFields. One for storing
+        // the form anem between requests and one for tracking if form validation
+        // is bypassed. The form name field is at index 1 at the start
         // of each test.
         // The tests below checks the trackField index position in the Form
         // for the lists Form#controls, Form#fieldList and Form#buttonList
@@ -264,8 +265,9 @@ public class FormTest extends TestCase {
      * Form#buttonList should not.
      */
     public void testInsertOrderAfterInsertingButton() {
-        // Check that the fieldList includes only trackField thus its size is 1
-        assertTrue(form.getFieldList().size() == 1);
+        // Check that the fieldList includes only two hidden fields (FORM_NAME
+        // and BYPASS_VALIDATION) thus size is 2
+        assertTrue(form.getFieldList().size() == 2);
 
         Button button = new Button("button1");
 
@@ -276,7 +278,7 @@ public class FormTest extends TestCase {
         // button index: #buttonList=0
         assertTrue(form.getButtonList().indexOf(button) == 0);
         // Check that button was not added to fieldList accidentally
-        assertTrue(form.getFieldList().size() == 1);
+        assertTrue(form.getFieldList().size() == 2);
     }
 
     /**
@@ -320,16 +322,16 @@ public class FormTest extends TestCase {
         // trackField index: #fieldList=1
         assertTrue(form.getFieldList().indexOf(trackField) == 1);
         
-        int expectedSize = 2;
-        // Check the list sizes to be 2
+        int expectedSize = 3;
+        // Check the list sizes to be 3
         assertTrue(form.getControls().size() == expectedSize);
         assertTrue(form.getFieldList().size() == expectedSize);
         
         // Removing field should shift up trackField index
         form.remove(field);
 
-        expectedSize = 1;
-        // Check the list sizes to be 1
+        expectedSize = 2;
+        // Check the list sizes to be 2
         assertTrue(form.getControls().size() == expectedSize);
         assertTrue(form.getFieldList().size() == expectedSize);
         
