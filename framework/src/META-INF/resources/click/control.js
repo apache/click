@@ -354,3 +354,32 @@ function validateForm(msgs, id, align, style) {
         return true;
     }
 }
+
+/**
+ * Submit the form and optionally validate the fields.
+ *
+ * Usage: <input onclick="Click.submit(formName, false)">
+ */
+Click.submit=function(form, validate) {
+    if (typeof form == "undefined") {
+        alert('Error: form is undefined. Usage: Click.submit(formName)');
+    }
+
+    // Validate is true by default
+    validate = (typeof validate == "undefined") ? true : validate;
+
+    if (form) {
+        if(document.getElementsByName('submit').length != 0) {
+            alert('Error: In order to submit the Form through JavaScript, buttons and fields must not be named "submit". Please rename the button/field called "submit".');
+            return false;
+        }
+        if (!validate) {
+            // Bypass JS validation
+            var input = document.getElementById(form.id + '_bypass_validation');
+            if (input) {
+                input.value="true";
+            }
+        }
+        form.submit();
+    }
+}
