@@ -62,6 +62,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
+import org.apache.click.control.AbstractLink;
+import org.apache.click.control.Container;
+import org.apache.click.control.Field;
 import org.apache.click.control.Form;
 import org.apache.click.service.ConfigService;
 import org.apache.click.service.LogService;
@@ -520,6 +523,195 @@ public class ClickUtils {
     }
 
     /**
+     * A helper method which binds the submitted request value to the Field's
+     * value. Since Field values are only bound during the <tt>"onProcess"</tt>
+     * event, this method can be used to bind a submitted Field value during
+     * the <tt>"onInit"</tt> event, which occurs <b>before</b> the
+     * <tt>"onProcess"</tt> event.
+     * <p/>
+     * This is especially useful for dynamic Form and Page behavior where Field
+     * values are inspected during the <tt>"onInit"</tt> event to add or remove
+     * specific Fields.
+     * <p/>
+     * This method delegates to
+     * {@link #canBind(org.apache.click.Control, org.apache.click.Context)}
+     * to check if the Field value can be bound.
+     * <p/>
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *     Form form = new Form("form");
+     *     Select select = new Select("select");
+     *     select.setAttribute("onchange", "Click.submit(form, false)");
+     *
+     *     // Bind the select Field request value
+     *     ClickUtils.bind(select);
+     *
+     *     if (select.getValue() == COMPANY) {
+     *         form.add(new TextField("companyName"));
+     *     } else {
+     *         form.add(new TextField("fullname"));
+     *         form.add(new TextField("age"));
+     *     }
+     * } </pre>
+     *
+     * @param field the Field to bind
+     */
+    public static void bind(Field field) {
+        Context context = Context.getThreadLocalContext();
+        if (canBind(field, context)) {
+            field.bindRequestValue();
+        }
+    }
+
+    /**
+     * A helper method which binds the submitted request value to the Link's
+     * value. See {@link #bind(org.apache.click.control.Field)} for a detailed
+     * description.
+     * <p/>
+     * This method delegates to
+     * {@link #canBind(org.apache.click.Control, org.apache.click.Context)}
+     * to check if the Link value can be bound.
+     *
+     * @param link the AbstractLink to bind
+     */
+    public static void bind(AbstractLink link) {
+        Context context = Context.getThreadLocalContext();
+        if (canBind(link, context)) {
+            link.bindRequestValue();
+        }
+    }
+
+    /**
+     * A helper method which binds the submitted request values of all Fields
+     * and Links inside the given container or child containers. See
+     * {@link #bind(org.apache.click.control.Field)} for a detailed description.
+     * <p/>
+     * This method delegates to
+     * {@link #canBind(org.apache.click.Control, org.apache.click.Context)}
+     * to check if the Container Fields and Links can be bound.
+     * <p/>
+     * Below is an example to bind Form Field's during the onInit event:
+     *
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *     Form form = new Form("form");
+     *     Checkbox commentChk = new Checkbox("comment");
+     *     Select select = new Select("select");
+     *     select.setAttribute("onchange", "Click.submit(form, false)");
+     *
+     *     // Bind all Form Field request values
+     *     ClickUtils.bind(form);
+     *
+     *     if (select.getValue() == COMPANY) {
+     *         form.add(new TextField("companyName"));
+     *     } else {
+     *         form.add(new TextField("fullname"));
+     *         form.add(new TextField("age"));
+     *     }
+     *
+     *     if (commentChk.isChecked()) {
+     *         form.add(new TextArea("feedback"));
+     *     }
+     * } </pre>
+     *
+     * @param container the container which Fields and Links to bind
+     */
+    public static void bind(Container container) {
+        Context context = Context.getThreadLocalContext();
+        if (canBind(container, context)) {
+            bind(container, context);
+        }
+    }
+
+    /**
+     * A helper method which binds and validates the Field's submitted request
+     * value. This method will return true if the validation succeeds, false
+     * otherwise. See {@link #bind(org.apache.click.control.Field)} for a
+     * detailed description.
+     * <p/>
+     * This method delegates to
+     * {@link #canBind(org.apache.click.Control, org.apache.click.Context)}
+     * to check if the Field value can be bound and validated.
+     * <p/>
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *     Form form = new Form("form");
+     *     Select select = new Select("select", true);
+     *     select.addOption(Option.EMPTY_OPTION);
+     *
+     *     select.setAttribute("onchange", "Click.submit(form, false)");
+     *
+     *     // Bind the Field request value and validate it before continuing
+     *     if (ClickUtils.bindAndValidate(select)) {
+     *         if (select.getValue() == COMPANY) {
+     *             form.add(new TextField("companyName"));
+     *         } else {
+     *             form.add(new TextField("fullname"));
+     *             form.add(new TextField("age"));
+     *         }
+     *     }
+     * } </pre>
+     *
+     * @param field the Field to bind and validate
+     */
+    public static boolean bindAndValidate(Field field) {
+        Context context = Context.getThreadLocalContext();
+        if (canBind(field, context)) {
+            return bindAndValidate(field, context);
+        }
+        return false;
+    }
+
+    /**
+     * A helper method which binds and validates the submitted request values
+     * of all Fields and Links inside the given container or child containers.
+     * This method will return true if the validation succeeds, false
+     * otherwise. See {@link #bind(org.apache.click.control.Field)} for a
+     * detailed description.
+     * <p/>
+     * This method delegates to
+     * {@link #canBind(org.apache.click.Control, org.apache.click.Context)}
+     * to check if the Container Fields and Links can be bound and
+     * validated.
+     *
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *     Form form = new Form("form");
+     *     Checkbox commentChk = new Checkbox("comment");
+     *     Select select = new Select("select", true);
+     *     select.addOption(Option.EMPTY_OPTION);
+     *
+     *     select.setAttribute("onchange", "Click.submit(form, false)");
+     *
+     *     // Bind all Form field request values and validate it before continuing
+     *     if (ClickUtils.bindAndValidate(form)) {
+     *
+     *         if (select.getValue() == COMPANY) {
+     *             form.add(new TextField("companyName"));
+     *         } else {
+     *             form.add(new TextField("fullname"));
+     *             form.add(new TextField("age"));
+     *         }
+     *
+     *         if (commentChk.isChecked()) {
+     *             form.add(new TextArea("feedback"));
+     *         }
+     *     }
+     * } </pre>
+     *
+     * @param container the container which Fields and Links to bind and
+     * validate
+     * @return true if all Fields are valid, false otherwise
+     */
+    public static boolean bindAndValidate(Container container) {
+        Context context = Context.getThreadLocalContext();
+        if (canBind(container, context)) {
+            return bindAndValidate(container, context);
+        }
+        return false;
+    }
+
+    /**
      * Return a new XML Document for the given input stream.
      *
      * @param inputStream the input stream
@@ -541,21 +733,61 @@ public class ClickUtils {
      */
     public static Document buildDocument(InputStream inputStream,
                                          EntityResolver entityResolver) {
-         try {
-             DocumentBuilderFactory factory =
-                 DocumentBuilderFactory.newInstance();
+        try {
+            DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
 
-             DocumentBuilder builder = factory.newDocumentBuilder();
+            DocumentBuilder builder = factory.newDocumentBuilder();
 
-             if (entityResolver != null) {
-                 builder.setEntityResolver(entityResolver);
-             }
+            if (entityResolver != null) {
+                builder.setEntityResolver(entityResolver);
+            }
 
-             return builder.parse(inputStream);
+            return builder.parse(inputStream);
 
-         } catch (Exception ex) {
-             throw new RuntimeException("Error parsing XML", ex);
-         }
+        } catch (Exception ex) {
+            throw new RuntimeException("Error parsing XML", ex);
+        }
+    }
+
+    /**
+     * Return true if the given control's request value can be bound, false
+     * otherwise.
+     * <p/>
+     * The following algorithm is used to determine if the Control can be
+     * bound to a request value or not.
+     * <ul>
+     * <li>return false if the request is a forward.
+     * See {@link org.apache.click.Context#isForward()}</li>
+     * <li>return true if the request is an Ajax request.
+     * See {@link org.apache.click.Context#isAjaxRequest()}</li>
+     * <li>return true if the control has no parent Form</li>
+     * <li>return true if the control's parent Form was submitted, false otherwise.
+     * See {@link org.apache.click.control.Form#isFormSubmission()}</li>
+     * </ul>
+     *
+     * @param control the control to check if it can be bound or not
+     * @param context the request context
+     * @return true if the given control request value be bound, false otherwise
+     */
+    public static boolean canBind(Control control, Context context) {
+
+        if (context.isForward()) {
+            return false;
+        }
+
+        // This can cause issue with two fields inside a form with the same name.
+        // TODO: Fields can expose a isAjaxTarget which can check if the field
+        // is an Ajax target through getId, getName etc
+        if (context.isAjaxRequest()) {
+            return true;
+        }
+
+        Form form = ContainerUtils.findForm(control);
+        if (form != null) {
+            return form.isFormSubmission();
+        }
+        return true;
     }
 
     /**
@@ -1703,6 +1935,20 @@ public class ClickUtils {
     }
 
     /**
+     * Return true if the control has a submitted request value, false otherwise.
+     *
+     * @param the control which request parameter to check
+     * @return true if the control has a submitted request value, false otherwise
+     */
+    public static boolean hasRequestParameter(Control control) {
+        Context context = Context.getThreadLocalContext();
+        if (canBind(control, context)) {
+            return context.hasRequestParameter(control.getName());
+        }
+        return false;
+    }
+
+    /**
      * Invoke the named method on the given object and return the boolean
      * result.
      *
@@ -2496,6 +2742,102 @@ public class ClickUtils {
     }
 
     // -------------------------------------------------------- Private Methods
+
+    /**
+     * A helper method which binds the submitted request values of all Fields
+     * and Links inside the given container or child containers.
+     *
+     * @param container the container which Fields and Links to bind
+     * @param context the request context
+     */
+    private static void bind(Container container, Context context) {
+        for (int i = 0; i < container.getControls().size(); i++) {
+            Control control = (Control) container.getControls().get(i);
+            if (control instanceof Container) {
+                // Include fields but skip fieldSets
+                if (control instanceof Field) {
+                    ((Field) control).bindRequestValue();
+                } else if (control instanceof AbstractLink) {
+                    ((AbstractLink) control).bindRequestValue();
+                }
+                Container childContainer = (Container) control;
+                bind(childContainer, context);
+
+            } else if (control instanceof Field) {
+                ((Field) control).bindRequestValue();
+            } else if (control instanceof AbstractLink) {
+                ((AbstractLink) control).bindRequestValue();
+            }
+        }
+    }
+
+    /**
+     * A helper method which binds and validates the submitted request values
+     * of all Fields and Links inside the given container or child containers.
+     *
+     * @param container the container which Fields and Links to bind and
+     * validate
+     * @param context the request context
+     */
+    private static boolean bindAndValidate(Container container, Context context) {
+        boolean valid = true;
+        for (int i = 0; i < container.getControls().size(); i++) {
+            Control control = (Control) container.getControls().get(i);
+            if (control instanceof Container) {
+
+                // Include fields but skip fieldSets
+                if (control instanceof Field) {
+                    if (!bindAndValidate((Field) control, context)) {
+                        valid = false;
+                    }
+
+                } else if (control instanceof AbstractLink) {
+                    ((AbstractLink) control).bindRequestValue();
+                }
+
+                Container childContainer = (Container) control;
+                if (!bindAndValidate(childContainer, context)) {
+                    valid = false;
+                }
+
+            } else if (control instanceof Field) {
+                if (!bindAndValidate((Field) control, context)) {
+                    valid = false;
+                }
+
+            } else if (control instanceof AbstractLink) {
+                ((AbstractLink) control).bindRequestValue();
+            }
+        }
+        return valid;
+    }
+
+    /**
+     * A helper method which binds and validates the Field's submitted request
+     * value.
+     *
+     * @param field the Field to bind and validate
+     * @param context the request context
+     */
+    private static boolean bindAndValidate(Field field, Context context) {
+        field.bindRequestValue();
+
+        if (field.getValidate()) {
+            // Keep reference to current error
+            String errorReference = field.getError();
+
+            // Validate field. If validation fails the field error will be changed
+            field.validate();
+
+            boolean valid = field.isValid();
+
+            // Revert back to original error
+            field.setError(errorReference);
+
+            return valid;
+        }
+        return true;
+    }
 
     private static void ensureObjectPathNotNull(Object object, String path) {
 
