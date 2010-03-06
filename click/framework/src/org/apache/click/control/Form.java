@@ -467,6 +467,34 @@ import org.apache.commons.lang.StringUtils;
  * The form submit check methods store a special token in the users session
  * and in a hidden field in the form to ensure a form post isn't replayed.
  *
+ * <a name="dynamic-forms"></a>
+ * <h3>Dynamic Forms and bypassing validation</h3>
+ *
+ * A common use case for web applications is to create Form fields dynamically
+ * based upon user selection. For example if a checkbox is ticked another Field
+ * is added to the Form. A simple way to achieve this is using JavaScript
+ * to submit the Form when the Field is changed or clicked.
+ * <p/>
+ * When submitting a Form using JavaScript, it is often undesirable to validate
+ * the fields since the user is still filling out the form.
+ * To cater for this use case, Form provides the ability to bypass the validation
+ * step. A special hidden field called, {@link #BYPASS_VALIDATION}, is added to
+ * the Form which controls whether validation should be bypassed or not.
+ * <p/>
+ * Form also provides a JavaScript function (part of the <tt>"/click/control.js"</tt>
+ * resource) that will submit the Form and optionally bypasses validation. The
+ * JavaScript function is:
+ * <tt>"Click.submit(formName, validate)"</tt> and can be used as follows:
+ * <pre class="prettyprint">
+ * Form form = new Form("myform");
+ *
+ * // The second argument to Click.submit is "false", meaning validation is bypassed
+ * checkbox.setAttribute("onclick", "Click.submit(myform, false)");
+ *
+ * // For a Select field use the "onchange" JavaScript event instead
+ * select.setAttribute("onchange", "Click.submit(myform, false)");
+ * </pre>
+ *
  * <p>&nbsp;<p/>
  * See also the W3C HTML reference:
  * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
@@ -527,6 +555,12 @@ public class Form extends AbstractContainer {
      * The form name parameter for multiple forms: &nbsp; <tt>"form_name"</tt>.
      */
     public static final String FORM_NAME = "form_name";
+
+    /**
+     * The parameter name for bypassing form validation: &nbsp;
+     * <tt>"bypass_validation"</tt>.
+     */
+    public static final String BYPASS_VALIDATION = "bypass_validation";
 
     /** The HTTP content type header for multipart forms. */
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
@@ -637,6 +671,9 @@ public class Form extends AbstractContainer {
      * added by Form does not interfere with Controls added by users.
      */
     private int insertIndexOffset;
+
+    /** Flag indicating whether validation is bypassed or not. */
+    private Boolean bypassValidation = null;
 
     // ----------------------------------------------------------- Constructors
 
@@ -1154,6 +1191,26 @@ public class Form extends AbstractContainer {
     }
 
     /**
+     * Return whether or not validation is bypassed for this request. This flag
+     * is controlled by a request parameter called {@link #BYPASS_VALIDATION}.
+     * If this request parameter is "<tt>true</tt>", validation will be bypassed
+     * for this request.
+     * <p/>
+     * This feature is useful for dynamic forms where JavaScript events are
+     * registered on Controls which in turn submits the Form.
+     * <p/>
+     * For more details see
+     *
+     * @return true if validation should be bypassed, false otherwise
+     */
+    public boolean isBypassValidation() {
+        if (bypassValidation == null) {
+            bypassValidation = "true".equals(getContext().getRequestParameter(BYPASS_VALIDATION));
+        }
+        return bypassValidation.booleanValue();
+    }
+
+    /**
      * Set the name of the form.
      *
      * @see org.apache.click.Control#setName(String)
@@ -1167,9 +1224,18 @@ public class Form extends AbstractContainer {
         }
         this.name = name;
 
+        HiddenField bypassValidationField = (HiddenField) getField(BYPASS_VALIDATION);
+        if (bypassValidationField == null) {
+            // Create a hidden field which name and value cannot be change
+            bypassValidationField = new ImmutableHiddenField(BYPASS_VALIDATION, Boolean.FALSE);
+            add(bypassValidationField);
+            insertIndexOffset++;
+        }
+
         HiddenField nameField = (HiddenField) getField(FORM_NAME);
         if (nameField == null) {
-            nameField = new ImmutableNameHiddenField(FORM_NAME, String.class);
+            // Create a hidden field which name cannot be changed
+            nameField = new NonbindableHiddenField(FORM_NAME, String.class);
             add(nameField);
             insertIndexOffset++;
         }
@@ -1245,11 +1311,17 @@ public class Form extends AbstractContainer {
     /**
      * Return true if the Form fields should validate themselves when being
      * processed.
+     * <p/>
+     * If {@link #isBypassValidation()} returns true, Form fields will not be
+     * validated.
      *
      * @return true if the form fields should perform validation when being
      *  processed
      */
     public boolean getValidate() {
+        if (isBypassValidation()) {
+            return false;
+        }
         return validate;
     }
 
@@ -1775,6 +1847,7 @@ public class Form extends AbstractContainer {
     public void onDestroy() {
         super.onDestroy();
 
+        bypassValidation = null;
         setError(null);
     }
 
@@ -2125,7 +2198,7 @@ public class Form extends AbstractContainer {
         // CLK-267: check against adding a duplicate field
         HiddenField field = (HiddenField) getField(submitTokenName);
         if (field == null) {
-            field = new ImmutableNameHiddenField(submitTokenName, Long.class);
+            field = new NonbindableHiddenField(submitTokenName, Long.class);
             add(field);
             insertIndexOffset++;
         }
@@ -2197,14 +2270,21 @@ public class Form extends AbstractContainer {
      */
     protected void renderFields(HtmlStringBuffer buffer) {
 
-        // If Form contains only HiddenField, exit early
-        if (getControls().size() == 1) {
+        // If Form contains only FORM_NAME and BYPASS_VALIDATION HiddenFields,
+        // exit early
+        if (getControls().size() == 2) {
 
             // getControlMap is cheaper than getFieldMap, so check that first
-            if (getControlMap().containsKey(FORM_NAME)) {
+            if (getControlMap().containsKey(FORM_NAME)
+                && getControlMap().containsKey(BYPASS_VALIDATION)) {
                 return;
-            } else if (ContainerUtils.getFieldMap(this).containsKey(FORM_NAME)) {
-                return;
+
+            } else {
+                Map fieldMap = ContainerUtils.getFieldMap(this);
+                if (fieldMap.containsKey(FORM_NAME)
+                    && fieldMap.containsKey(BYPASS_VALIDATION)) {
+                    return;
+                }
             }
         }
 
@@ -2466,6 +2546,8 @@ public class Form extends AbstractContainer {
             buffer.append("</td></tr>\n");
         }
 
+        // Reset bypass flag to ensure it does not influence the validate flag
+        bypassValidation = Boolean.FALSE;
         if (getValidate() && getJavaScriptValidation()) {
             buffer.append("<tr style=\"display:none\" id=\"");
             buffer.append(getId());
@@ -2586,6 +2668,9 @@ public class Form extends AbstractContainer {
      * @param formFields the list of form fields
      */
     protected void renderValidationJavaScript(HtmlStringBuffer buffer, List<Field> formFields) {
+
+        // Reset bypass flag to ensure it does not influence the validate flag
+        bypassValidation = Boolean.FALSE;
 
         // Render JavaScript form validation code
         if (getValidate() && getJavaScriptValidation()) {
@@ -2740,32 +2825,99 @@ public class Form extends AbstractContainer {
     // ---------------------------------------------------------- Inner Classes
 
     /**
-     * Provides a HiddenField which name cannot be changed, once it is set.
+     * Provides a HiddenField which does not bind to incoming values.
      */
-    private class ImmutableNameHiddenField extends HiddenField {
+    private class NonbindableHiddenField extends HiddenField {
 
         private static final long serialVersionUID = 1L;
 
         /**
-         * Create a field with the given name and value.
+         * Create a field with the given name and class.
          *
          * @param name the field name
          * @param valueClass the Class of the value Object
          */
-        public ImmutableNameHiddenField(String name, Class valueClass) {
+        public NonbindableHiddenField(String name, Class valueClass) {
             super(name, valueClass);
         }
 
         /**
-         * Set the field name. The field name cannot be changed once it is set.
+         * This method is overriden to not change the field name once it is set.
          *
          * @param name the name of the field
          */
+        @Override
         public void setName(String name) {
             if (this.name != null) {
                 return;
             }
             super.setName(name);
+        }
+
+        /**
+         * Overridden to not bind to request value.
+         */
+        @Override
+        public void bindRequestValue() {
+        }
+    }
+
+    /**
+     * Provides a HiddenField which name and value cannot be changed, once it
+     * is set.
+     */
+    private class ImmutableHiddenField extends HiddenField {
+
+        private static final long serialVersionUID = 1L;
+
+       /**
+         * Create a field with the given name and value.
+         *
+         * @param name the field name
+         * @param value the value of the field
+         */
+        public ImmutableHiddenField(String name, Object value) {
+            super(name, value);
+        }
+
+        /**
+         * This method is overriden to not change the field name once it is set.
+         *
+         * @param name the name of the field
+         */
+        @Override
+        public void setName(String name) {
+            if (this.name != null) {
+                return;
+            }
+            super.setName(name);
+        }
+
+        /**
+         * This method is overridden to not change the field value once it is set.
+         *
+         * @param value the field value
+         */
+        @Override
+        public void setValue(String value) {
+            if (this.value != null) {
+                return;
+            }
+            super.setValue(value);
+        }
+
+        /**
+         * This method is overridden to not change the field value object once
+         * it is set.
+         *
+         * @param valueObject the field value object
+         */
+        @Override
+        public void setValueObject(Object valueObject) {
+            if (this.valueObject != null) {
+                return;
+            }
+            super.setValueObject(valueObject);
         }
     }
 }
