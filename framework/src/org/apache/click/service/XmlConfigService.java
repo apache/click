@@ -1289,7 +1289,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             deployResourcesOnClasspath();
 
         } else {
-            String msg = "WARNING: could not deploy Click resources to the"
+            String msg = "could not deploy Click resources to the"
                 + " 'click' web folder.\nThis can occur if the call to"
                 + " ServletContext.getRealPath(\"/\") returns null, which means"
                 + " the web application cannot determine the file system path"
