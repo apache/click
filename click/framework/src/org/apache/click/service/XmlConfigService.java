@@ -1275,28 +1275,42 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     private void deployFiles(Element rootElm) throws Exception {
 
-        if (isResourcesDeployable()) {
-            if (getLogService().isTraceEnabled()) {
-                String deployTarget = servletContext.getRealPath("/");
-                getLogService().trace("resource deploy folder: "
-                    + deployTarget);
+        boolean isResourcesDeployable = isResourcesDeployable();
+
+        if (isResourcesDeployable) {
+            try {
+                if (getLogService().isTraceEnabled()) {
+                    String deployTarget = servletContext.getRealPath("/");
+                    getLogService().trace("resource deploy folder: "
+                        + deployTarget);
+                }
+
+                deployControls(getResourceRootElement("/click-controls.xml"));
+                deployControls(getResourceRootElement("/extras-controls.xml"));
+                deployControls(rootElm);
+                deployControlSets(rootElm);
+                deployResourcesOnClasspath();
+
+            } catch (Error ignore) {
+                // Google App Engine (GAE) can indicate that resources are deployable
+                // when they are not, and will throw an error if restricted classes
+                // such as FileOutputStream are accessed. We will log a warning
+                // to indicate that resources coule not be deployed.
+                isResourcesDeployable = false;
             }
+        }
 
-            deployControls(getResourceRootElement("/click-controls.xml"));
-            deployControls(getResourceRootElement("/extras-controls.xml"));
-            deployControls(rootElm);
-            deployControlSets(rootElm);
-            deployResourcesOnClasspath();
-
-        } else {
+        if (!isResourcesDeployable) {
             String msg = "could not deploy Click resources to the"
                 + " 'click' web folder.\nThis can occur if the call to"
                 + " ServletContext.getRealPath(\"/\") returns null, which means"
                 + " the web application cannot determine the file system path"
                 + " to deploy files to. Another common problem is if the web"
                 + " application is not allowed to write to the file"
-                + " system.\nTo resolve this issue please see the Click user-guide: "
-                + "http://click.apache.org/docs/user-guide/html/ch04s03.html#deploying-restricted-env";
+                + " system.\nTo resolve this issue please see the Click user-guide:"
+                + " http://click.apache.org/docs/user-guide/html/ch04s03.html#deploying-restricted-env"
+                + " \nIgnore this warning in the future once you have settled on a"
+                + " deployment strategy";
             getLogService().warn(msg);
         }
     }
@@ -1687,7 +1701,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
         Set resources = servletContext.getResourcePaths("/");
 
-        // Add all resources withtin web application
+        // Add all resources within web application
         for (Iterator i = resources.iterator(); i.hasNext();) {
             String resource = (String) i.next();
 
