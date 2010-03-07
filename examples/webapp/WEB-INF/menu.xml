@@ -81,7 +81,6 @@
     <menu label="Link Controls" path="control/link-demo.htm"/>
     <menu label="SubmitLink Control" path="control/submit-link-demo.htm"/>
     <menu label="Select" path="control/select-demo.htm"/>
-    <menu label="Populate on select" path="control/populate-on-select.htm"/>
     <menu separator="true"/>
     <menu label="Menu" path="control/menu-demo.htm"/>
     <menu label="PickList" path="control/pick-list-demo.htm"/>
@@ -100,6 +99,11 @@
     <menu separator="true"/>
     <menu label="Tabbed Form" path="form/tabbed-form-demo.htm"/>
     <menu label="Custom Form Layout" path="form/contact-details.htm"/>
+    <menu separator="true"/>
+    <menu label="Dynamic Form" path="form/dynamic/dynamic-form.htm"/>
+    <menu label="Dynamic FieldSet" path="form/dynamic/dynamic-field-set.htm"/>
+    <menu label="Dynamic Select" path="form/dynamic/dynamic-select.htm"/>
+    <menu label="Populate on select" path="form/dynamic/populate-on-select.htm"/>
   </menu>
 
   <menu label=" Table" path="#" imageSrc="/assets/images/table.png">

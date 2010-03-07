@@ -38,13 +38,15 @@ function printValues() {
 /**
  * This method is invoked when a Select control is changed.
  *
- * @id specifies the Select control that must be reset
+ * @id specifies the dependent Select control which value to clear
  * @form specified the form that must be submitted
  */
 function handleChange(id, form) {
     var select=document.getElementById(id);
     if(select != null) {
-        select.selectedIndex=-1;
+        // Clear dependent Select value
+        select.selectedIndex=0;
     }
-    form.submit();
+    // Submit form and bypass server-side validation
+    Click.submit(form, false);
 }

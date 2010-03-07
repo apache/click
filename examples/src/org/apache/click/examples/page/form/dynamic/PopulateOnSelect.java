@@ -16,18 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.click.examples.page.control;
+package org.apache.click.examples.page.form.dynamic;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Select;
+import org.apache.click.control.Submit;
+import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.control.TabbedForm;
 import org.apache.click.util.Bindable;
+import org.apache.click.util.ClickUtils;
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * Demonstrate how to populate Select controls.
+ */
 public class PopulateOnSelect extends BorderPage {
 
     private static final String EASTERN_CAPE = "EC";
@@ -37,10 +44,12 @@ public class PopulateOnSelect extends BorderPage {
 
     @Bindable protected TabbedForm form = new TabbedForm("form");
 
-    private Select state = new Select("state");
-    private Select city = new Select("city");
-    private Select suburb = new Select("suburb");
+    private Select state = new Select("state", true);
+    private Select city = new Select("city", true);
+    private Select suburb = new Select("suburb", true);
+    private Submit save = new Submit("save");
 
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -64,6 +73,8 @@ public class PopulateOnSelect extends BorderPage {
 
         // build the Selects in the onInit phase
         buildSelects();
+
+        form.add(save);
     }
 
     public void buildSelects() {
@@ -74,8 +85,8 @@ public class PopulateOnSelect extends BorderPage {
         // Populate the States. Do this before binding requests
         populateStateData();
 
-        // Bind the state to its request value
-        state.bindRequestValue();
+        // Bind the form field request values
+        ClickUtils.bind(form);
 
         if (StringUtils.isEmpty(state.getValue())) {
             // No state selected, exit early
@@ -84,9 +95,6 @@ public class PopulateOnSelect extends BorderPage {
 
         // If state is selected, proceed to populate city
         populateCityData(state.getValue());
-
-        // Bind the city to its request value
-        city.bindRequestValue();
 
         if (StringUtils.isEmpty(city.getValue())) {
             // No city selected, exit early
@@ -98,20 +106,21 @@ public class PopulateOnSelect extends BorderPage {
     }
 
     @Override
-    public String getHtmlImports() {
-        Map model = new HashMap();
-        model.put("stateId", state.getId());
-        model.put("cityId", city.getId());
-        model.put("suburbId", suburb.getId());
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
 
-        // populate-on-select.js is a Velocity template which is rendered directly
-        // from this Page
-        String templatePath = "/control/populate-on-select.js";
-        String template = getContext().renderTemplate(templatePath, model);
+            Map model = new HashMap();
+            model.put("stateId", state.getId());
+            model.put("cityId", city.getId());
+            model.put("suburbId", suburb.getId());
 
-        // Click's JavaScript and CSS import parser does not yet handle multiline
-        // imports so coerce it into a single line
-        return "<script type=\"text/javascript\">" + template.replace('\n', ' ') + "</script>\n";
+            // populate-on-select.js is a Velocity template which is rendered directly
+            // from this Page
+            JsScript script = new JsScript("/form/dynamic/populate-on-select.js", model);
+            headElements.add(script);
+        }
+        return headElements;
     }
 
     // -------------------------------------------------------- Private Methods
