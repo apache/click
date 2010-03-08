@@ -444,6 +444,15 @@ public class MockRequest implements HttpServletRequest {
     }
 
     /**
+     * Return the map of headers for this request.
+     *
+     * @return the map of headers for this request
+     */
+    public Map getHeaders() {
+        return headers;
+    }
+
+    /**
      * Returns an input stream if there has been added some uploaded files. Use
      * {@link #addFile(String, File, String)} to add some uploaded files.
      *
