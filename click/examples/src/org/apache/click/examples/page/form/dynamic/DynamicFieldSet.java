@@ -56,10 +56,6 @@ public class DynamicFieldSet extends BorderPage {
         super.onInit();
 
         form.add(customerFS);
-        nameField.setLabelStyleClass("label-style");
-        nameField.setParentStyleClass("parent-style");
-        nameField.setLabelStyle("color: blue; font-weight: bold");
-        nameField.setParentStyle("padding-bottom: 20px");
         customerFS.add(nameField);
         customerFS.add(ageField);
         customerFS.add(addressChk);
