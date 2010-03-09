@@ -155,6 +155,8 @@
    </path>
 
    <path id="classpath.checkstyle"> 
+      <pathelement location="framework/classes"/>
+      <pathelement location="extras/classes"/> 
    	  <fileset dir="lib">
          <include name="**/*.jar"/>
       </fileset>
