@@ -31,7 +31,7 @@ import java.util.TreeMap;
 import javax.servlet.ServletContext;
 
 import org.apache.click.Page;
-import org.apache.click.Context;
+
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ErrorReport;
 import org.apache.commons.lang.Validate;
@@ -245,7 +245,7 @@ public class VelocityTemplateService implements TemplateService {
      * @see TemplateService#onInit(ServletContext)
      *
      * @param servletContext the application servlet velocityContext
-     * @throws TemplateException if an error occurs initializing the Template Service
+     * @throws Exception if an error occurs initializing the Template Service
      */
     public void onInit(ServletContext servletContext) throws Exception {
 
@@ -316,7 +316,7 @@ public class VelocityTemplateService implements TemplateService {
      * @throws TemplateException if template error occurs
      */
     public void renderTemplate(Page page, Map<String, Object> model, Writer writer)
-        throws TemplateException, Exception {
+        throws IOException, TemplateException {
 
         String templatePath = page.getTemplate();
 
@@ -336,10 +336,11 @@ public class VelocityTemplateService implements TemplateService {
      * @param templatePath the path of the template to render
      * @param model the model to merge with the template and render
      * @param writer the writer to send the merged template and model data to
-     * @throws Exception if an error occurs
+     * @throws IOException if an IO error occurs
+     * @throws TemplateException if an error occurs
      */
     public void renderTemplate(String templatePath, Map<String, Object> model, Writer writer)
-        throws TemplateException, Exception {
+        throws IOException, TemplateException {
 
         internalRenderTemplate(templatePath, null, model, writer);
     }
@@ -507,7 +508,7 @@ public class VelocityTemplateService implements TemplateService {
                                           Page page,
                                           Map<String, Object> model,
                                           Writer writer)
-        throws TemplateException, Exception {
+        throws IOException, TemplateException {
 
         final VelocityContext velocityContext = new VelocityContext(model);
 
@@ -534,6 +535,9 @@ public class VelocityTemplateService implements TemplateService {
             }
 
             template.merge(velocityContext, velocityWriter);
+
+        } catch (IOException ioe) {
+            throw ioe;
 
         } catch (ParseErrorException pee) {
             TemplateException te = new TemplateException(pee,
@@ -613,23 +617,16 @@ public class VelocityTemplateService implements TemplateService {
             throw te;
 
         } catch (Exception error) {
+            TemplateException te = new TemplateException(error);
 
             // Exception occurred merging template and model. It is possible
             // that some output has already been written, so we will append the
             // error report to the previous output.
-
-            Context context = null;
-            if (page == null) {
-                context = Context.getThreadLocalContext();
-            } else {
-                context = page.getContext();
-            }
-
             ErrorReport errorReport =
-                new ErrorReport(error,
+                new ErrorReport(te,
                         ((page != null) ? page.getClass() : null),
                         configService.isProductionMode(),
-                        context.getRequest(),
+                        page.getContext().getRequest(),
                         configService.getServletContext());
 
             if (velocityWriter == null) {
@@ -639,7 +636,7 @@ public class VelocityTemplateService implements TemplateService {
 
             velocityWriter.write(errorReport.toString());
 
-            throw error;
+            throw te;
 
         } finally {
             if (velocityWriter != null) {
