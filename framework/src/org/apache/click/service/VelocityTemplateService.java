@@ -30,6 +30,7 @@ import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
 
+import org.apache.click.Context;
 import org.apache.click.Page;
 
 import org.apache.click.util.ClickUtils;
@@ -552,7 +553,7 @@ public class VelocityTemplateService implements TemplateService {
                 new ErrorReport(te,
                                 ((page != null) ? page.getClass() : null),
                                 configService.isProductionMode(),
-                                page.getContext().getRequest(),
+                                Context.getThreadLocalContext().getRequest(),
                                 configService.getServletContext());
 
 
@@ -578,7 +579,7 @@ public class VelocityTemplateService implements TemplateService {
                 new ErrorReport(te,
                                 ((page != null) ? page.getClass() : null),
                                 configService.isProductionMode(),
-                                page.getContext().getRequest(),
+                                Context.getThreadLocalContext().getRequest(),
                                 configService.getServletContext());
 
 
@@ -602,10 +603,10 @@ public class VelocityTemplateService implements TemplateService {
             // error report to the previous output.
             ErrorReport errorReport =
                 new ErrorReport(te,
-                        ((page != null) ? page.getClass() : null),
-                        configService.isProductionMode(),
-                        page.getContext().getRequest(),
-                        configService.getServletContext());
+                                ((page != null) ? page.getClass() : null),
+                                configService.isProductionMode(),
+                                Context.getThreadLocalContext().getRequest(),
+                                configService.getServletContext());
 
             if (velocityWriter == null) {
                 velocityWriter =
@@ -624,10 +625,10 @@ public class VelocityTemplateService implements TemplateService {
             // error report to the previous output.
             ErrorReport errorReport =
                 new ErrorReport(te,
-                        ((page != null) ? page.getClass() : null),
-                        configService.isProductionMode(),
-                        page.getContext().getRequest(),
-                        configService.getServletContext());
+                                ((page != null) ? page.getClass() : null),
+                                configService.isProductionMode(),
+                                Context.getThreadLocalContext().getRequest() ,
+                                configService.getServletContext());
 
             if (velocityWriter == null) {
                 velocityWriter =
