@@ -653,6 +653,7 @@ public class ClickUtils {
      * } </pre>
      *
      * @param field the Field to bind and validate
+     * @return true if field was bound and valid, or false otherwise
      */
     public static boolean bindAndValidate(Field field) {
         Context context = Context.getThreadLocalContext();
@@ -1937,7 +1938,7 @@ public class ClickUtils {
     /**
      * Return true if the control has a submitted request value, false otherwise.
      *
-     * @param the control which request parameter to check
+     * @param control the control which request parameter to check
      * @return true if the control has a submitted request value, false otherwise
      */
     public static boolean hasRequestParameter(Control control) {
