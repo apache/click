@@ -22,8 +22,6 @@ import org.apache.click.examples.domain.auto._CourseBooking;
 
 /**
  * Provides an Course Booking entity class.
- *
- * @author Malcolm Edgar
  */
 public class CourseBooking extends _CourseBooking {
 

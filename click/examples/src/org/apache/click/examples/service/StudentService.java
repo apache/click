@@ -18,8 +18,8 @@
  */
 package org.apache.click.examples.service;
 
-import java.util.Iterator;
 import java.util.List;
+
 import org.apache.cayenne.exp.ExpressionFactory;
 import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.SelectQuery;
@@ -37,27 +37,29 @@ public class StudentService extends CayenneTemplate {
 
     // ---------------------------------------------------------- Student logic
 
-    public List getStudents() {
+    @SuppressWarnings("unchecked")
+    public List<Student> getStudents() {
         SelectQuery query = new SelectQuery(Student.class);
         query.addPrefetch("studentHouse");
         query.addOrdering("db:id", true);
         return performQuery(query);
     }
 
+    @SuppressWarnings("unchecked")
     public Student getStudent(Object id) {
         SelectQuery query = new SelectQuery(Student.class);
         query.addPrefetch("courses");
         query.addPrefetch("studentHouse");
         query.setQualifier(ExpressionFactory.matchDbExp("id", id));
 
-        List students = getDataContext().performQuery(query);
+        List<Student> students = getDataContext().performQuery(query);
 
         if (students.size() == 0) {
             return null;
         }
 
         if (students.size() == 1) {
-            return (Student) students.get(0);
+            return students.get(0);
         } else {
             String msg = "SelectQuery for " + Student.class.getName()
                     + " where id equals " + id + " returned "
@@ -75,11 +77,11 @@ public class StudentService extends CayenneTemplate {
 
     // ----------------------------------------------------------- Course logic
 
+    @SuppressWarnings("unchecked")
     public void setStudentCourses(Student student, List courseIds) {
         // First remove current courses
-        List removes = student.getCourses();
-        for (int i = removes.size() - 1; i >= 0; i--) {
-            Course course = (Course) removes.get(i);
+        List<Course> removes = student.getCourses();
+        for (Course course : removes) {
             student.removeFromCourses(course);
         }
 
@@ -90,15 +92,15 @@ public class StudentService extends CayenneTemplate {
         // Next, set the new courses
         SelectQuery query = new SelectQuery(Course.class);
         query.setQualifier(ExpressionFactory.inDbExp("id", courseIds));
-        List courses = getDataContext().performQuery(query);
+        List<Course> courses = getDataContext().performQuery(query);
 
-        for (Iterator it = courses.iterator(); it.hasNext(); ) {
-            Course course = (Course) it.next() ;
+        for (Course course : courses) {
             student.addToCourses(course);
         }
     }
 
-    public List getCourses() {
+    @SuppressWarnings("unchecked")
+    public List<Course> getCourses() {
         SelectQuery query = new SelectQuery(Course.class);
         query.addOrdering("db:id", true);
         return performQuery(query);
@@ -117,18 +119,20 @@ public class StudentService extends CayenneTemplate {
 
     // ---------------------------------------------------- Student House logic
 
-    public List getStudentsByHouse() {
+    @SuppressWarnings("unchecked")
+    public List<Student> getStudentsByHouse() {
         SelectQuery query = new SelectQuery(Student.class);
         query.addPrefetch("studentHouse");
 
         // Add in-memory ordering
         Ordering ordering = new Ordering("studentHouse.name", true);
-        List result = performQuery(query);
+        List<Student> result = performQuery(query);
         ordering.orderList(result);
         return result;
     }
 
-    public List getStudentHouses() {
+    @SuppressWarnings("unchecked")
+    public List<StudentHouse> getStudentHouses() {
         SelectQuery query = new SelectQuery(StudentHouse.class);
         query.addOrdering(StudentHouse.NAME_PROPERTY, true);
         return performQuery(query);

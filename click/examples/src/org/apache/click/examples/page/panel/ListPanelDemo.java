@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.click.control.Panel;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.panel.ListPanel;
@@ -34,14 +35,14 @@ import org.springframework.stereotype.Component;
  * <p/>
  * Please note the ListPanel control will be automatically add to the Page using
  * the fields name "listPanel".
- *
- * @author Phil Barnes
  */
 @Component
 public class ListPanelDemo extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     @Bindable protected ListPanel listPanel = new ListPanel();
-    @Bindable protected List customers;
+    @Bindable protected List<Customer> customers;
 
     @Resource(name="customerService")
     private CustomerService customerService;

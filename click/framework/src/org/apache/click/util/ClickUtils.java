@@ -908,12 +908,12 @@ public class ClickUtils {
      * @param context the request context
      * @return a template model as a map
      */
-    public static Map createTemplateModel(final Page page, Context context) {
+    public static Map<String, Object> createTemplateModel(final Page page, Context context) {
 
         ConfigService configService = ClickUtils.getConfigService(context.getServletContext());
         LogService logger = configService.getLogService();
 
-        final Map model = new HashMap(page.getModel());
+        final Map<String, Object> model = new HashMap<String, Object>(page.getModel());
 
         final HttpServletRequest request = context.getRequest();
 

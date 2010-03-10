@@ -22,8 +22,6 @@ import org.apache.click.examples.domain.auto._Client;
 
 /**
  * Provides an Client entity class.
- *
- * @author Malcolm Edgar
  */
 public class Client extends _Client {
 

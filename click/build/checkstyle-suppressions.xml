@@ -44,6 +44,9 @@
               files="MessagesMap.java"/>
               
     <suppress checks="JavadocMethod"
+              files="PaginatingList.java"/>
+
+    <suppress checks="JavadocMethod"
               files="SessionMap.java"/>
               
 	<!-- Line Length -->              

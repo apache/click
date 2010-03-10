@@ -24,10 +24,10 @@ import org.apache.click.examples.page.BorderPage;
 /**
  * Provides an <tt>onSecurityCheck</tt> example secure Page, which other secure
  * pages can extend.
- *
- * @author Malcolm Edgar
  */
 public class Secure extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * @see Page#onSecurityCheck()

@@ -19,7 +19,6 @@
 package org.apache.click.examples.page.form;
 
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -29,6 +28,7 @@ import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.examples.service.CustomerService;
@@ -53,11 +53,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides a form containing all the Click Extras Controls.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class ExtraControlsForm extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     /** Form options holder. */
     public static class Options implements Serializable {
@@ -76,7 +76,7 @@ public class ExtraControlsForm extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public ExtraControlsForm() {
         form.setErrorsPosition(Form.POSITION_TOP);
@@ -110,7 +110,7 @@ public class ExtraControlsForm extends BorderPage {
         optionsForm.setListener(this, "onOptionsSubmit");
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onInit()
@@ -119,7 +119,7 @@ public class ExtraControlsForm extends BorderPage {
     public void onInit() {
         super.onInit();
 
-        List customers = customerService.getCustomers();
+        List<Customer> customers = customerService.getCustomers();
         checkList.addAll(customers, "id", "name");
         applyOptions();
     }
@@ -133,15 +133,13 @@ public class ExtraControlsForm extends BorderPage {
         return true;
     }
 
-    // -------------------------------------------------------- Private Methods
+    // Private Methods --------------------------------------------------------
 
     private void applyOptions() {
         Options options = (Options) ExampleUtils.getSessionObject(Options.class);
 
         form.setJavaScriptValidation(options.javaScriptValidate);
-        List formFiels = ContainerUtils.getInputFields(form);
-        for (Iterator i = formFiels.iterator(); i.hasNext();) {
-            Field field = (Field) i.next();
+        for (Field field :  ContainerUtils.getInputFields(form)) {
             field.setRequired(options.allFieldsRequired);
         }
 

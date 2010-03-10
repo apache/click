@@ -28,6 +28,8 @@ import org.apache.click.util.Bindable;
  */
 public class ExceptionPage extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     @Bindable protected ActionLink nullPointerLink = new ActionLink(this, "onNullPointerClick");
     @Bindable protected ActionLink illegalArgumentLink = new ActionLink(this, "onIllegalArgumentExceptionClick");
     @Bindable protected ActionLink missingMethodLink = new ActionLink(this, "onMissingMethodClick");
@@ -37,6 +39,9 @@ public class ExceptionPage extends BorderPage {
 
     private String template;
 
+    // Event Handlers ---------------------------------------------------------
+
+    @SuppressWarnings("null")
     public boolean onNullPointerClick() {
         Object object = null;
         object.hashCode();
@@ -65,6 +70,8 @@ public class ExceptionPage extends BorderPage {
         return true;
     }
 
+    // Public Methods ---------------------------------------------------------
+
     /**
      * Override getTemplate so we can stuff things up.
      *
@@ -75,11 +82,11 @@ public class ExceptionPage extends BorderPage {
         return (template != null) ? template : super.getTemplate();
     }
 
+    // Inner Classes ----------------------------------------------------------
+
     /**
      * Provides a rendering ojbect which will throw a NPE when merged by
      * velocity in the template.
-     *
-     * @author Malcolm Edgar
      */
     public static class BrokenRenderer {
 
@@ -88,6 +95,7 @@ public class ExceptionPage extends BorderPage {
          *
          * @see Object#toString()
          */
+        @SuppressWarnings("null")
         public String toString() {
             Object object = null;
             return object.toString();

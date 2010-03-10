@@ -26,8 +26,6 @@ import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * This Page manages steps in a wizard process.
- *
- * @author Bob Schellink
  */
 public class WizardPage extends BorderPage {
 
@@ -38,6 +36,8 @@ public class WizardPage extends BorderPage {
 
     /** List of all steps. */
     private List<Step> steps = new ArrayList<Step>();
+
+    // Constructor ------------------------------------------------------------
 
     /**
      * Default constructor.
@@ -57,6 +57,8 @@ public class WizardPage extends BorderPage {
             step.init();
         }
     }
+
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Return the current step.
@@ -149,6 +151,8 @@ public class WizardPage extends BorderPage {
         String contextPath = getContext().getRequest().getContextPath();
         return "<link type=\"text/css\" rel=\"stylesheet\" href=\"" + contextPath + "/wizard/wizard.css\"/>";
     }
+
+    // Private Methods --------------------------------------------------------
 
     /**
      * Return an HTML representation of the wizard steps as an Html List <ul>.

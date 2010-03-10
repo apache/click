@@ -77,7 +77,7 @@ public class ProfilingInterceptor implements PageInterceptor {
 
         LogService logService = ClickUtils.getLogService();
         if (logService.isInfoEnabled()) {
-            logService.info(this);
+//            logService.info(this);
         }
     }
 

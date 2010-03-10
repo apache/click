@@ -64,8 +64,6 @@ import org.quartz.impl.StdSchedulerFactory;
  * <p/>
  * This listener also provides a customer reloading task which runs every 15
  * minutes.
- *
- * @author Malcolm Edgar
  */
 public class DatabaseInitListener implements ServletContextListener {
 

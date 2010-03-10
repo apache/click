@@ -19,8 +19,8 @@
 package org.apache.click.examples.page.pageflow;
 
 import java.util.List;
-
 import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.apache.click.Context;
@@ -29,6 +29,7 @@ import org.apache.click.control.Option;
 import org.apache.click.control.Select;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextArea;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.control.InvestmentSelect;
@@ -45,11 +46,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides the start page of a multi page work flow.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class StartPage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form = new Form();
 
@@ -63,7 +64,7 @@ public class StartPage extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public StartPage() {
         form.setLabelsPosition("top");
@@ -88,7 +89,7 @@ public class StartPage extends BorderPage {
         form.add(new Submit(" Next > ", this, "onNextClick"));
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onSecurityCheck()
@@ -143,13 +144,15 @@ public class StartPage extends BorderPage {
         return true;
     }
 
+    // Public Methods ---------------------------------------------------------
+
     /**
      * Return the Page JavaScript resources.
      *
      * @see org.apache.click.Page#getHeadElements()
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
@@ -180,8 +183,6 @@ public class StartPage extends BorderPage {
 
         return headElements;
     }
-
-    // --------------------------------------------------------- Public Methods
 
     public void setCourseBooking(CourseBooking courseBooking) {
         this.courseBooking = courseBooking;

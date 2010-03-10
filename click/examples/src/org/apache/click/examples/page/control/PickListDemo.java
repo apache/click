@@ -29,15 +29,17 @@ import org.apache.click.util.Bindable;
 
 /**
  * Provides an Select example Page.
- *
- * @author Naoki Takezoe
  */
 public class PickListDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form = new Form();
     @Bindable protected List selectedValues;
 
     private PickList pickList = new PickList("languages");
+
+    // Constructor ------------------------------------------------------------
 
     public PickListDemo() {
         pickList.setHeaderLabel("Languages", "Selected");
@@ -57,6 +59,8 @@ public class PickListDemo extends BorderPage {
         form.add(new Submit("ok", " OK ", this, "onOkClick"));
         form.add(new Submit("canel", this, "onCancelClick"));
     }
+
+    // Event Handlers ---------------------------------------------------------
 
     public boolean onOkClick() {
         selectedValues = pickList.getSelectedValues();

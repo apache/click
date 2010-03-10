@@ -250,6 +250,7 @@ public class CustomerService extends CayenneTemplate {
     /**
      * A custom Cayenne query which performs a count(*) query on the database.
      */
+    @SuppressWarnings("unchecked")
     class CountQuery extends IndirectQuery {
 
         private static final long serialVersionUID = 1L;
@@ -260,6 +261,7 @@ public class CustomerService extends CayenneTemplate {
             this.objectClass = objectClass;
         }
 
+        @SuppressWarnings("deprecation")
         protected Query createReplacementQuery(EntityResolver resolver) {
             DbEntity entity = resolver.lookupDbEntity(objectClass);
 

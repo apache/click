@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.click.control.Panel;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.panel.TabbedPanel;
@@ -31,17 +32,19 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides an TabbedPanel demonstration.
- *
- * @author Phil Barnes
  */
 @Component
 public class TabbedPanelDemo extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     @Bindable protected TabbedPanel tabbedPanel = new TabbedPanel();
-    @Bindable protected List customers;
+    @Bindable protected List<Customer> customers;
 
     @Resource(name="customerService")
     private CustomerService customerService;
+
+    // Constructor ------------------------------------------------------------
 
     public TabbedPanelDemo() {
         Panel panel1 = new Panel("panel1", "panel/customersPanel1.htm");
@@ -59,6 +62,8 @@ public class TabbedPanelDemo extends BorderPage {
         // Register a listener that is notified when a different panel is selected.
         tabbedPanel.setTabListener(this, "onTabClick");
     }
+
+    // Event Handlers ---------------------------------------------------------
 
     public boolean onTabClick() {
         System.out.println("Tab Clicked");

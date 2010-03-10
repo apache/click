@@ -29,10 +29,10 @@ import org.apache.click.util.Bindable;
  * <p/>
  * Note the public scope time Date field is automatically added to the page's
  * model as a value named "time".
- *
- * @author Malcolm Edgar
  */
 public class HelloWorld extends Page {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Date time = new Date();
 

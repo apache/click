@@ -25,15 +25,15 @@ import org.apache.click.examples.page.BorderPage;
 
 /**
  * Provides an example of multiple Forms on one page using submit checks.
- *
- * @author Bob Schellink
  */
 public class MultipleFormsDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private Form form1 = new Form("form1");
     private Form form2 = new Form("form2");
 
-    // --------------------------------------------------------- Event Handlers
+    //  Event Handlers --------------------------------------------------------
 
 
     /**
@@ -106,7 +106,7 @@ public class MultipleFormsDemo extends BorderPage {
         return true;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     public void redirectAfterPost() {
         // redirect back to this page after the post

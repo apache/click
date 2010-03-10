@@ -49,6 +49,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class EditCustomer extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     private Form form = new Form("form");
     private HiddenField referrerField = new HiddenField("referrer", String.class);
     private HiddenField idField = new HiddenField("id", Integer.class);
@@ -59,6 +61,8 @@ public class EditCustomer extends BorderPage {
 
     @Resource(name="customerService")
     private CustomerService customerService;
+
+    // Constructor -----------------------------------------------------------
 
     public EditCustomer() {
         addControl(form);
@@ -94,6 +98,8 @@ public class EditCustomer extends BorderPage {
         form.add(new Submit("ok", "  OK  ", this, "onOkClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
     }
+
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * When page is first displayed on the GET request.

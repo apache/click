@@ -20,10 +20,10 @@ package org.apache.click.examples.page;
 
 /**
  * Provides the applications home page.
- *
- * @author Malcolm Edgar
  */
 public class HomePage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     public HomePage() {
         getModel().put("title", "Click Examples");

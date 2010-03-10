@@ -29,6 +29,8 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class ExportTable extends Table {
 
+    private static final long serialVersionUID = 1L;
+
     final static int ALL_ROWS = Integer.MAX_VALUE;
 
     public static final int EXPORTER_ATTACHED = 1;

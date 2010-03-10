@@ -30,10 +30,10 @@ import org.apache.cayenne.access.DataContext;
  * requests even if <tt>org.apache.click.extras.cayenne.DataContextFilter</tt> is
  * configured to rollback changes after each request, which is the case for
  * click-examples.
- *
- * @author Bob Schellink
  */
 public class NestedCayenneForm extends CayenneForm {
+
+    private static final long serialVersionUID = 1L;
 
     /** A transient reference to a nested DataContext. */
     protected transient DataContext nestedDataContext;
@@ -44,7 +44,7 @@ public class NestedCayenneForm extends CayenneForm {
      * @param name the form name
      * @param dataObjectClass the DataObject class
      */
-    public NestedCayenneForm(String name, Class dataObjectClass) {
+    public NestedCayenneForm(String name, Class<? extends DataObject> dataObjectClass) {
         super(name, dataObjectClass);
     }
 
@@ -53,7 +53,7 @@ public class NestedCayenneForm extends CayenneForm {
      *
      * @param dataObjectClass the DataObject class
      */
-    public NestedCayenneForm(Class dataObjectClass) {
+    public NestedCayenneForm(Class<? extends DataObject> dataObjectClass) {
         super(dataObjectClass);
     }
 
@@ -95,6 +95,7 @@ public class NestedCayenneForm extends CayenneForm {
     /**
      * Override onDestroy not to nullify the dataObject instance each request.
      */
+    @Override
     public void onDestroy() {
         // CayenneForm.onDestroy nullifies the dataObject. Below a
         // reference is kept to the cached dataObject

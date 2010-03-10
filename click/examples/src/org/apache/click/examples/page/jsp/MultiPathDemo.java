@@ -24,10 +24,11 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.util.Bindable;
 
 /**
- *
- * @author Bob Schellink
+ * Provides a multiple JSP page path example class.
  */
 public class MultiPathDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected ActionLink changePath = new ActionLink("changePath", this, "changePath");
 

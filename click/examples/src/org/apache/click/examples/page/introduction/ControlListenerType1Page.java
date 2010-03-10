@@ -29,17 +29,17 @@ import org.apache.click.util.Bindable;
  * The advantage of this control listener binding style is
  * that you write less lines of code, the disadvantage is that there is no
  * compile time checking.
- *
- * @author Malcolm Edgar
  */
 public class ControlListenerType1Page extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     /* Set the listener to this object's "onLinkClick" method. */
     @Bindable protected ActionLink myLink = new ActionLink(this, "onLinkClick");
 
     @Bindable protected String msg;
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * Handle the ActionLink control click event.

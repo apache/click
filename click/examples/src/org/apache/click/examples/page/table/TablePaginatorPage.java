@@ -34,11 +34,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table pagination options.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class TablePaginatorPage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Table table1 = new Table();
     @Bindable protected Table table2 = new Table();
@@ -46,6 +46,8 @@ public class TablePaginatorPage extends BorderPage {
 
     @Resource(name="customerService")
     private CustomerService customerService;
+
+    // Constructor ------------------------------------------------------------
 
     public TablePaginatorPage() {
         // Table 1
@@ -64,6 +66,8 @@ public class TablePaginatorPage extends BorderPage {
         table3.setPaginatorAttachment(Table.PAGINATOR_INLINE);
     }
 
+    // Event Handlers ---------------------------------------------------------
+
     /**
      * @see org.apache.click.Page#onRender()
      */
@@ -74,6 +78,8 @@ public class TablePaginatorPage extends BorderPage {
         table2.setRowList(customers);
         table3.setRowList(customers);
     }
+
+    // Private Methods --------------------------------------------------------
 
     private void addColumns(Table table) {
         table.setClass(Table.CLASS_ITS);

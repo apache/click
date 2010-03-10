@@ -31,22 +31,24 @@ import org.apache.click.util.Bindable;
  * The advantage of this control listener binding style is you get compile
  * time safety and compiler refactoring support, the disadvantage is that you
  * have to write more lines of code.
- *
- * @author Malcolm Edgar
  */
 public class ControlListenerType2Page extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected ActionLink myLink = new ActionLink();
 
     @Bindable protected String msg;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     /**
      * Create a new Page instance.
      */
     public ControlListenerType2Page() {
         myLink.setActionListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control control) {
                  msg = "ControlListenerPage#" + hashCode()
                  + " object method <tt>onAction()</tt> invoked.";

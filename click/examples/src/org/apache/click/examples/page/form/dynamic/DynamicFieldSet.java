@@ -35,6 +35,8 @@ import org.apache.click.util.ClickUtils;
  */
 public class DynamicFieldSet extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     private Form form = new Form("dynamicForm");
 
     private FieldSet customerFS = new FieldSet("customer");
@@ -50,6 +52,8 @@ public class DynamicFieldSet extends BorderPage {
     private EmailField emailField = new EmailField("email", true);
 
     private Submit submit = new Submit("ok");
+
+    // Event Handlers ---------------------------------------------------------
 
     @Override
     public void onInit() {
@@ -82,6 +86,8 @@ public class DynamicFieldSet extends BorderPage {
         }
 
         form.setActionListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 return onFormSubmit();
             }

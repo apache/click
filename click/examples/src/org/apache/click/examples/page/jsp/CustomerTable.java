@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.util.Bindable;
@@ -30,16 +31,18 @@ import org.springframework.stereotype.Component;
 /**
  * Provides JSP Page example where a JSP page and JSP border template is used to
  * render a table.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class CustomerTable extends BorderPage {
 
-    @Bindable protected List customers = null;
+    private static final long serialVersionUID = 1L;
+
+    @Bindable protected List<Customer> customers = null;
 
     @Resource(name="customerService")
     private CustomerService customerService;
+
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onRender()
@@ -48,6 +51,8 @@ public class CustomerTable extends BorderPage {
     public void onRender() {
         customers = customerService.getCustomersSortedByName(10);
     }
+
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Returns the name of the border template: &nbsp; <tt>"/border-template.jsp"</tt>

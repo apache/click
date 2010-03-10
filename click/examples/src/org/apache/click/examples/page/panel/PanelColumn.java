@@ -25,8 +25,6 @@ import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * Provides a custom Column that wraps a Panel for display in a Table.
- *
- * @author rlecheta
  */
 public class PanelColumn extends Column {
 
@@ -34,14 +32,14 @@ public class PanelColumn extends Column {
 
     private final Panel panel;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public PanelColumn(String name, Panel panel) {
         super(name);
         this.panel = panel;
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see Column#renderTableDataContent(Object, HtmlStringBuffer, Context, int)

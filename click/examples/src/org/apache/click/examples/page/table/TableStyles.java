@@ -31,14 +31,13 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.TableInlinePaginator;
 import org.apache.click.util.Bindable;
+import org.apache.click.util.DataProvider;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 /**
  * Provides an demonstration of Table control styles.
- *
- * @author Malcolm Edgar
  */
 public class TableStyles extends BorderPage implements ApplicationContextAware {
 
@@ -52,9 +51,11 @@ public class TableStyles extends BorderPage implements ApplicationContextAware {
 
     private transient ApplicationContext applicationContext;
 
-    // ----------------------------------------------------------- Constructor
+    // Constructor -----------------------------------------------------------
 
     public TableStyles() {
+        // Store form's selection data  in the session so is data will be
+        // available after table control GET requests have been processed
         setStateful(true);
 
         // Setup table style select.
@@ -104,9 +105,15 @@ public class TableStyles extends BorderPage implements ApplicationContextAware {
         column.setTextAlign("right");
         column.setWidth("100px;");
         table.addColumn(column);
+
+        table.setDataProvider(new DataProvider<Customer>() {
+            public List<Customer> getData() {
+                return getCustomerService().getCustomers();
+            }
+        });
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onRender()
@@ -115,10 +122,9 @@ public class TableStyles extends BorderPage implements ApplicationContextAware {
     public void onRender() {
         table.setClass(styleSelect.getValue());
         table.setHoverRows(hoverCheckbox.isChecked());
-
-        List<Customer> customers = getCustomerService().getCustomers();
-        table.setRowList(customers);
     }
+
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Return CustomerService instance from Spring application context.

@@ -35,9 +35,8 @@ import org.apache.click.control.Select;
  * </ul>
  * <p/>
  * The Investment options are statically loaded.
- *
- * @author Malcolm Edgar
  */
+@SuppressWarnings("unchecked")
 public class InvestmentSelect extends Select {
 
     private static final long serialVersionUID = 1L;

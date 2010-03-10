@@ -95,3 +95,6 @@ Steve Haywood, steve.haywood@timbercorp.com, 45, Stocks, 150000,  1998-10-09, tr
 Rove Apple, rove.apple@bignet.com, 31, Stocks, 34000,
 Greg Matherson, gregm@bubhub.com, 27, Stocks, 234000,
 Katie Lang, klang@rockit.net, 21, Stocks
+Mick Cooper, mcoper@gbh.com, 31, Stocks, 125000
+Albert Nicholes, albertn@gmail.com, 43, Stocks, 56000
+Emma Joslin, ejolin@gbh.com, 28, Stocks 34000

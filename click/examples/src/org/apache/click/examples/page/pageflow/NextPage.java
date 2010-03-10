@@ -32,11 +32,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides the next page of a multi page work flow.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class NextPage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private Form form = new Form("form");
     private HiddenField courseField;
@@ -48,7 +48,7 @@ public class NextPage extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public NextPage() {
         courseField = new HiddenField("courseField", CourseBooking.class);
@@ -60,7 +60,7 @@ public class NextPage extends BorderPage {
         addControl(form);
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onInit()
@@ -102,7 +102,7 @@ public class NextPage extends BorderPage {
         return true;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     public void setCourseBooking(CourseBooking courseBooking) {
         this.courseBooking = courseBooking;

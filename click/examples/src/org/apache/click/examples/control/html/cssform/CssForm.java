@@ -24,19 +24,16 @@ import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * A custom Form that adds the Html import, "cssform.css", to the page.
- *
- * @author Bob Schellink
  */
 public class CssForm extends HtmlForm {
 
-    // ---------------------------------------------------- Public Constructors
+    private static final long serialVersionUID = 1L;
 
     public CssForm(String name) {
         super(name);
     }
 
-    // --------------------------------------------------------- Public Methods
-
+    @Override
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(512);
 

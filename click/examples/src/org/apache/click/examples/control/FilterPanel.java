@@ -26,8 +26,6 @@ import org.apache.click.extras.control.DateField;
 
 /**
  * Provides a custom date FilterPanel.
- *
- * @author Malcolm Edgar
  */
 public class FilterPanel extends Panel {
 

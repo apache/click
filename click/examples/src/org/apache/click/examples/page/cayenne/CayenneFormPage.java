@@ -38,16 +38,16 @@ import org.springframework.stereotype.Component;
  * Provides a CayenneForm and QuerySelect control demonstration.
  *
  * @see FormTablePage
- *
- * @author Malcolm Edgar
  */
 @Component
 public class CayenneFormPage extends FormTablePage {
 
+    private static final long serialVersionUID = 1L;
+
     @Resource(name="clientService")
     private ClientService clientService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     /**
      * Create a CayenneFormPage object.
@@ -96,7 +96,7 @@ public class CayenneFormPage extends FormTablePage {
         table.addColumn(column);
     }
 
-    // -------------------------------------------------------- Public Methods
+    // Public Methods --------------------------------------------------------
 
     /**
      * @see FormTablePage#getDataObject(Object)

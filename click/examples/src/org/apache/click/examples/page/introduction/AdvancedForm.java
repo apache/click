@@ -39,11 +39,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides an advanced form example.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class AdvancedForm extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form = new Form();
     @Bindable protected String msg;
@@ -53,7 +53,7 @@ public class AdvancedForm extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public AdvancedForm() {
         FieldSet fieldSet = new FieldSet("Customer");
@@ -75,7 +75,7 @@ public class AdvancedForm extends BorderPage {
         form.add(new Submit("cancel", this, "onCancelClicked"));
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see Page#onInit()

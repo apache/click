@@ -26,15 +26,17 @@ import org.apache.click.util.Bindable;
 
 /**
  * Provides an ImageSubmit control example.
- *
- * @author Malcolm Edgar
  */
 public class ImageDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private ImageSubmit colorSubmit;
 
     @Bindable protected Form buttonsForm = new Form();
     @Bindable protected Form form = new Form();
+
+    // Constructor ------------------------------------------------------------
 
     public ImageDemo() {
         // Buttons Form
@@ -55,6 +57,8 @@ public class ImageDemo extends BorderPage {
         colorSubmit.setListener(this, "onColorClick");
         form.add(colorSubmit);
     }
+
+    // Event Handlers ---------------------------------------------------------
 
     public boolean onEditClick() {
         addModel("buttonMsg", "Edit");

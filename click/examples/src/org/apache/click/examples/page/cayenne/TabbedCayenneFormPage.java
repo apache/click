@@ -40,14 +40,16 @@ import org.springframework.stereotype.Component;
  * Provides a TabbedCayenneForm and QuerySelect control demonstration.
  *
  * @see FormTablePage
- *
- * @author Malcolm Edgar
  */
 @Component
 public class TabbedCayenneFormPage extends FormTablePage {
 
+    private static final long serialVersionUID = 1L;
+
     @Resource(name="clientService")
     private ClientService clientService;
+
+    // Constructor -----------------------------------------------------------
 
     /**
      * Create a TabbedCayenneFormPage object.
@@ -99,6 +101,8 @@ public class TabbedCayenneFormPage extends FormTablePage {
         column.setFormat("{0,date,dd MMM yyyy}");
         table.addColumn(column);
     }
+
+    // Public Methods ---------------------------------------------------------
 
     /**
      * @see FormTablePage#createForm()

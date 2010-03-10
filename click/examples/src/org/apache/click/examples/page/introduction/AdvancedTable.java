@@ -20,17 +20,18 @@ package org.apache.click.examples.page.introduction;
 
 import java.util.List;
 
-import org.apache.click.Page;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Column;
 import org.apache.click.control.PageLink;
 import org.apache.click.control.Table;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.EditCustomer;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.LinkDecorator;
 import org.apache.click.util.Bindable;
+import org.apache.click.util.DataProvider;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -40,8 +41,6 @@ import org.springframework.context.ApplicationContextAware;
  * <p/>
  * This example also demonstrates how a stateful Page can be used to preserve
  * the Table sort and paging state while editing customers.
- *
- * @author Malcolm Edgar
  */
 public class AdvancedTable extends BorderPage implements ApplicationContextAware {
 
@@ -57,7 +56,7 @@ public class AdvancedTable extends BorderPage implements ApplicationContextAware
      */
     private transient ApplicationContext applicationContext;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public AdvancedTable() {
         // Set Page to stateful to preserve Table sort and paging state while editing customers
@@ -93,9 +92,15 @@ public class AdvancedTable extends BorderPage implements ApplicationContextAware
         column.setDecorator(new LinkDecorator(table, links, "id"));
         column.setSortable(false);
         table.addColumn(column);
+
+        table.setDataProvider(new DataProvider<Customer>() {
+            public List<Customer> getData() {
+                return getCustomerService().getCustomers();
+            }
+        });
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     public boolean onDeleteClick() {
         Integer id = deleteLink.getValueInteger();
@@ -103,14 +108,7 @@ public class AdvancedTable extends BorderPage implements ApplicationContextAware
         return true;
     }
 
-    /**
-     * @see Page#onRender()
-     */
-    @Override
-    public void onRender() {
-        List list = getCustomerService().getCustomers();
-        table.setRowList(list);
-    }
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Return CustomerService instance from Spring application context.

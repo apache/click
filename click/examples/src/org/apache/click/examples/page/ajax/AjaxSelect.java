@@ -26,6 +26,7 @@ import javax.annotation.Resource;
 import org.apache.click.Context;
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.domain.Customer;
@@ -37,16 +38,18 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides an Ajax select example Page.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class AjaxSelect extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Select customerSelect = new Select("customerSelect");
 
     @Resource(name="customerService")
     private CustomerService customerService;
+
+    // Event Handlers ---------------------------------------------------------
 
     @Override
     public void onInit() {
@@ -61,7 +64,7 @@ public class AjaxSelect extends BorderPage {
     }
 
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

@@ -39,8 +39,6 @@ import org.apache.commons.lang.ClassUtils;
  * <p/>
  * In effect SimplePanel falls back to the default rendering of
  * AbstractContainer if the Panel template is not found.
- *
- * @author Bob Schellink
  */
 public class SimplePanel extends Panel {
 

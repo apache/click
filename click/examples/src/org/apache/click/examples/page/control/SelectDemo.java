@@ -34,10 +34,10 @@ import org.apache.click.util.Bindable;
 
 /**
  * Provides an Select example Page.
- *
- * @author Malcolm Edgar
  */
 public class SelectDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form = new Form();
 
@@ -46,6 +46,9 @@ public class SelectDemo extends BorderPage {
     private Select locationSelect;
     private Select countrySelect;
 
+    // Constructor ------------------------------------------------------------
+
+    @SuppressWarnings("unchecked")
     public SelectDemo() {
         form.setErrorsPosition(Form.POSITION_TOP);
 
@@ -95,6 +98,8 @@ public class SelectDemo extends BorderPage {
         form.add(new Submit("ok", "  OK  "));
         form.add(new PageSubmit("canel", HomePage.class));
     }
+
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onPost()

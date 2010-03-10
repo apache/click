@@ -25,10 +25,10 @@ import org.apache.click.util.Bindable;
 
 /**
  * Provides an user session logout Page.
- *
- * @author Malcolm Edgar
  */
 public class Logout extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected User user;
 

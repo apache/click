@@ -33,10 +33,10 @@ import org.apache.click.util.Bindable;
 
 /**
  * Provides a Velocity Macro example.
- *
- * @author Malcolm Edgar
  */
 public class VelocityMacro extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form = new Form();
 

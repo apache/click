@@ -18,9 +18,6 @@
  */
 package org.apache.click.examples.page.control;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
@@ -42,10 +39,10 @@ import org.apache.click.util.ContainerUtils;
 
 /**
  * Provides a form FieldSet example.
- *
- * @author Malcolm Edgar
  */
 public class FieldSetDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form = new Form();
 
@@ -54,6 +51,8 @@ public class FieldSetDemo extends BorderPage {
     private TextField cardHolder;
     private CreditCardField cardNumber;
     private IntegerField cardExpiry;
+
+    // Constructor -----------------------------------------------------------
 
     public FieldSetDemo() {
         form.setLabelAlign(Form.ALIGN_RIGHT);
@@ -108,16 +107,18 @@ public class FieldSetDemo extends BorderPage {
         form.add(new PageSubmit("cancel", HomePage.class));
     }
 
+    // Event Handlers ---------------------------------------------------------
+
     public boolean onOkClick() {
         if (isFormValid()) {
-            List fieldList = ContainerUtils.getInputFields(form);
-            for (Iterator i = fieldList.iterator(); i.hasNext(); ) {
-                Field field = (Field) i.next();
+            for (Field field : ContainerUtils.getInputFields(form)) {
                 System.out.println(field.getName() + "=" + field.getValue());
             }
         }
         return true;
     }
+
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Perform additional form cross field validation returning true if valid.

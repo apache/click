@@ -33,15 +33,16 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.EditCustomer;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.util.Bindable;
+import org.apache.click.util.DataProvider;
 import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table control paging.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class TableDecorator extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Table table = new Table();
     @Bindable protected Customer customerDetail;
@@ -53,7 +54,7 @@ public class TableDecorator extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public TableDecorator() {
         // Setup customers table
@@ -105,9 +106,15 @@ public class TableDecorator extends BorderPage {
             }
         });
         table.addColumn(column);
+
+        table.setDataProvider(new DataProvider<Customer>() {
+            public List<Customer> getData() {
+                return customerService.getCustomersSortedByName(12);
+            }
+        });
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     public boolean onViewClick() {
         Integer id = viewLink.getValueInteger();
@@ -119,15 +126,6 @@ public class TableDecorator extends BorderPage {
         Integer id = deleteLink.getValueInteger();
         customerService.deleteCustomer(id);
         return true;
-    }
-
-    /**
-     * @see org.apache.click.Page#onRender()
-     */
-    @Override
-    public void onRender() {
-        List customers = customerService.getCustomersSortedByName(12);
-        table.setRowList(customers);
     }
 
 }

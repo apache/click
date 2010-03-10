@@ -44,10 +44,10 @@ import org.quartz.impl.StdSchedulerFactory;
 
 /**
  * Provides a Quartz Job Schedule search page.
- *
- * @author Malcolm Edgar
  */
 public class QuartzJobSchedulerPage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private static final String DATE_FORMAT = "{0,date,hh:mm a d MMM yy }";
 
@@ -130,6 +130,8 @@ public class QuartzJobSchedulerPage extends BorderPage {
         pauseLink.setAttribute("class", "actionIcon");
         pauseLink.setTitle("Pause Job");
         pauseLink.setActionListener(new ActionListener(){
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 String name = pauseLink.getValue();
                 getSchedulerService().pauseJob(name);
@@ -142,6 +144,8 @@ public class QuartzJobSchedulerPage extends BorderPage {
         interruptLink.setAttribute("class", "actionIcon");
         interruptLink.setTitle("Interrupt Running Job");
         interruptLink.setActionListener(new ActionListener(){
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 String name = interruptLink.getValue();
                 if (getSchedulerService().interuptJob(name)) {
@@ -157,6 +161,8 @@ public class QuartzJobSchedulerPage extends BorderPage {
         triggerLink.setAttribute("class", "actionIcon");
         triggerLink.setTitle("Trigger Job");
         triggerLink.setActionListener(new ActionListener(){
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 String name = triggerLink.getValue();
                 getSchedulerService().triggerJob(name);
@@ -169,6 +175,8 @@ public class QuartzJobSchedulerPage extends BorderPage {
         resumeLink.setAttribute("class", "actionIcon");
         resumeLink.setTitle("Resume Job");
         resumeLink.setActionListener(new ActionListener(){
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 String name = resumeLink.getValue();
                 getSchedulerService().resumeJob(name);
@@ -183,6 +191,8 @@ public class QuartzJobSchedulerPage extends BorderPage {
         String confirmMessage = getMessage("deleteConfirm", "Job");
         deleteLink.setAttribute("onclick", "return window.confirm('" + confirmMessage + "')");
         deleteLink.setActionListener(new ActionListener(){
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 String name = deleteLink.getValue();
                 if (getSchedulerService().deleteJob(name)) {
@@ -246,6 +256,8 @@ public class QuartzJobSchedulerPage extends BorderPage {
         // Add Control Buttons.
 
         newJob.setActionListener(new ActionListener(){
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 setRedirect(QuartzJobAndTriggerPage.class);
                 return false;
@@ -265,7 +277,6 @@ public class QuartzJobSchedulerPage extends BorderPage {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onRender() {
         super.onRender();

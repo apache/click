@@ -31,9 +31,11 @@ import org.apache.click.extras.control.DoubleField;
 import org.apache.click.util.ClickUtils;
 
 /**
- * Demonstrates dynamic Form behavior using a Select control.
+ * Demonstrates dynamic Form behaviour using a Select control.
  */
 public class DynamicSelect extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private Form form = new Form("dynamicForm");
 
@@ -48,9 +50,12 @@ public class DynamicSelect extends BorderPage {
     private static final String STOCKS = "Stocks";
     private static final String[] INVESTMENTS = {PROPERTY, STOCKS};
 
+    // Constructor ------------------------------------------------------------
+
     public DynamicSelect() {
 
         form.setActionListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
 
             public boolean onAction(Control source) {
                 return onFormSubmit();
@@ -84,6 +89,8 @@ public class DynamicSelect extends BorderPage {
             form.add(address);
         }
     }
+
+    // Event Handlers ---------------------------------------------------------
 
     public boolean onFormSubmit() {
         // onFormSubmit listens on Form itself and will be invoked whenever the

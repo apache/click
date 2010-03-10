@@ -33,8 +33,6 @@ import junit.framework.TestCase;
 
 /**
  * Sanity checks for Mock package.
- *
- * @author Bob Schellink
  */
 public class MockTests extends TestCase {
 

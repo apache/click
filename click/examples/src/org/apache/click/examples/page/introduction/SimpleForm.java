@@ -33,15 +33,15 @@ import org.apache.click.util.Bindable;
  * <p/>
  * The form <tt>onSubmit</tt> control listener is invoked when the submit button
  * is clicked.
- *
- * @author Malcolm Edgar
  */
 public class SimpleForm extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form = new Form();
     @Bindable protected String msg;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public SimpleForm() {
         form.add(new TextField("name", true));
@@ -50,7 +50,7 @@ public class SimpleForm extends BorderPage {
         form.setListener(this, "onSubmit");
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * Handle the form submit event.

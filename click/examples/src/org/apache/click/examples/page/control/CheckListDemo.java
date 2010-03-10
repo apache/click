@@ -28,16 +28,16 @@ import org.apache.click.util.Bindable;
 
 /**
  * Provides CheckList control example.
- *
- * @author Christian Essel
  */
 public class CheckListDemo extends BorderPage{
 
-    private static final List STANDARD_OPTIONS;
-    private static final List SORTABLE_OPTIONS = new ArrayList();
+    private static final long serialVersionUID = 1L;
+
+    private static final List<Option> STANDARD_OPTIONS;
+    private static final List<Option> SORTABLE_OPTIONS = new ArrayList<Option>();
 
     static {
-        List list = new ArrayList();
+        List<Option> list = new ArrayList<Option>();
         for (int i = 1; i <= 4; i++) {
             list.add(new Option(Integer.toString(i),
                      "Tutam gallia deviso est in partes " + i));
@@ -54,6 +54,8 @@ public class CheckListDemo extends BorderPage{
 
     private CheckList standardCheckList;
     private CheckList sortableCheckList;
+
+    // Constructor ------------------------------------------------------------
 
     public CheckListDemo() {
         form.setFieldStyle("width:20em;");
@@ -72,6 +74,8 @@ public class CheckListDemo extends BorderPage{
         form.add(new Submit("ok", "  OK  ",  this, "onOkClick"));
         form.add(new PageSubmit("cancel", HomePage.class));
     }
+
+    // Event Handlers --------------------------------------------------------
 
     public boolean onOkClick() {
         if (form.isValid()) {

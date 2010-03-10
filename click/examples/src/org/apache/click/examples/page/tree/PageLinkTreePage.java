@@ -36,14 +36,14 @@ import org.apache.commons.lang.ClassUtils;
  * Demonstrates how to customize the rendering of tree nodes.
  * <p/>
  * In this example tree nodes render links to Pages.
- *
- * @author Bob Schellink
  */
 public class PageLinkTreePage extends TreePage {
 
+    private static final long serialVersionUID = 1L;
+
     public static final String TREE_NODES_SESSION_KEY = "pageLinkTreeNodes";
 
-    // --------------------------------------------------------- Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Creates and return a new tree instance.

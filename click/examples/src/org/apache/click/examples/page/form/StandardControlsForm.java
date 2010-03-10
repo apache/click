@@ -19,7 +19,6 @@
 package org.apache.click.examples.page.form;
 
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -52,11 +51,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides a form containing all the Standard Click Controls.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class StandardControlsForm extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     /** Form options holder. */
     public static class Options implements Serializable {
@@ -75,7 +74,7 @@ public class StandardControlsForm extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public StandardControlsForm() {
         form.setErrorsPosition(Form.POSITION_TOP);
@@ -119,7 +118,7 @@ public class StandardControlsForm extends BorderPage {
         optionsForm.setListener(this, "onOptionsSubmit");
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onInit()
@@ -143,15 +142,13 @@ public class StandardControlsForm extends BorderPage {
         return true;
     }
 
-    // -------------------------------------------------------- Private Methods
+    // Private Methods --------------------------------------------------------
 
     private void applyOptions() {
         Options options = (Options) ExampleUtils.getSessionObject(Options.class);
 
         form.setJavaScriptValidation(options.javaScriptValidate);
-        List formFiels = ContainerUtils.getInputFields(form);
-        for (Iterator i = formFiels.iterator(); i.hasNext();) {
-            Field field = (Field) i.next();
+        for (Field field : ContainerUtils.getInputFields(form)) {
             field.setRequired(options.allFieldsRequired);
         }
 

@@ -42,17 +42,17 @@ import org.apache.click.util.Bindable;
  * <li>{@link #getDataObject(Object)} &nbsp; - to look up the DataObject for the given id</li>
  * <li>{@link #getRowList()} &nbsp; - to provide the table the list of DataObject to display</li>
  * </ul>
- *
- * @author Malcolm Edgar
  */
 public abstract class FormTablePage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected CayenneForm form;
     @Bindable protected Table table = new Table();
     @Bindable protected ActionLink editLink = new ActionLink("edit", this, "onEditClick");
     @Bindable protected ActionLink removeLink = new ActionLink("remove", this, "onRemoveClick");
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     /**
      * Create a FormTablePage instance and initialize the form and table
@@ -73,7 +73,7 @@ public abstract class FormTablePage extends BorderPage {
         removeLink.setImageSrc("/assets/images/delete.gif");
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * Perform a form submission check to ensure the form was not double posted.

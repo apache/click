@@ -30,12 +30,14 @@ import org.apache.click.util.Bindable;
 
 /**
  * Demo a form submit using JSP as template.
- *
- * @author Bob Schellink
  */
 public class EditCustomerPage extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     @Bindable protected Form form = new Form("form");
+
+    // Constructor ------------------------------------------------------------
 
     public EditCustomerPage() {
         // Setup customers form
@@ -49,19 +51,11 @@ public class EditCustomerPage extends BorderPage {
         form.add(new Submit("cancel", this, "onCancelClick"));
     }
 
+    // Event Handlers ---------------------------------------------------------
+
     @Override
     public boolean onSecurityCheck() {
         return form.onSubmitCheck(this, EditCustomerPage.class);
-    }
-
-    /**
-     * Returns the name of the border template: &nbsp; <tt>"/border-template.jsp"</tt>
-     *
-     * @see org.apache.click.Page#getTemplate()
-     */
-    @Override
-    public String getTemplate() {
-        return "/border-template.jsp";
     }
 
     public boolean onSaveClick() {
@@ -77,5 +71,17 @@ public class EditCustomerPage extends BorderPage {
         form.clearErrors();
         form.clearValues();
         return true;
+    }
+
+    // Public Methods ---------------------------------------------------------
+
+    /**
+     * Returns the name of the border template: &nbsp; <tt>"/border-template.jsp"</tt>
+     *
+     * @see org.apache.click.Page#getTemplate()
+     */
+    @Override
+    public String getTemplate() {
+        return "/border-template.jsp";
     }
 }

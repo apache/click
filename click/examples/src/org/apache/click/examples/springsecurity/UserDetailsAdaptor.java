@@ -22,6 +22,10 @@ import org.apache.click.examples.domain.User;
 import org.springframework.security.GrantedAuthority;
 import org.springframework.security.userdetails.UserDetails;
 
+/**
+ * Provides a Spring Security (ACEGI) UserDetails adaptor class, which wraps the
+ * User class in the Spring Security UserDetails interface.
+ */
 public class UserDetailsAdaptor implements UserDetails {
 
     private static final long serialVersionUID = 1L;

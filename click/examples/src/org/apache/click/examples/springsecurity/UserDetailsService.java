@@ -27,6 +27,9 @@ import org.springframework.security.userdetails.UserDetails;
 import org.springframework.security.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+/**
+ * Provides a Spring Security (ACEGI) UserDetailsService for loading users.
+ */
 @Component
 public class UserDetailsService implements org.springframework.security.userdetails.UserDetailsService {
 

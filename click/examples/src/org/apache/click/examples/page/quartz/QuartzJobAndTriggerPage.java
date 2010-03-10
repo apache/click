@@ -38,10 +38,10 @@ import org.quartz.impl.StdSchedulerFactory;
 
 /**
  * Provides a Quartz Job and Simple Trigger edit page.
- *
- * @author Malcolm Edgar
  */
 public class QuartzJobAndTriggerPage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private Form form = new Form("form");
     private TextField nameField = new TextField("name", true);
@@ -53,6 +53,8 @@ public class QuartzJobAndTriggerPage extends BorderPage {
     private Select repeatIntervalField = new Select("repeatInterval");
 
     private SchedulerService schedulerService;
+
+    // Constructor ------------------------------------------------------------
 
     public QuartzJobAndTriggerPage() {
 
@@ -104,6 +106,8 @@ public class QuartzJobAndTriggerPage extends BorderPage {
 
         Submit saveSubmit = new Submit("Save");
         saveSubmit.setActionListener(new ActionListener(){
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 return onSaveClick();
             }
@@ -112,6 +116,8 @@ public class QuartzJobAndTriggerPage extends BorderPage {
 
         Submit cancelSubmit = new Submit("Cancel");
         cancelSubmit.setActionListener(new ActionListener(){
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 setRedirect(QuartzJobSchedulerPage.class);
                 return false;

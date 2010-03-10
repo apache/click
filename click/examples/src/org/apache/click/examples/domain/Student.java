@@ -20,6 +20,11 @@ package org.apache.click.examples.domain;
 
 import org.apache.click.examples.domain.auto._Student;
 
+/**
+ * Provides an Client entity class.
+ */
 public class Student extends _Student {
+
+    private static final long serialVersionUID = 1L;
 
 }

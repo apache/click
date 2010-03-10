@@ -22,47 +22,44 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.click.Page;
 import org.apache.click.control.Column;
 import org.apache.click.control.Table;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.util.Bindable;
+import org.apache.click.util.DataProvider;
 import org.springframework.stereotype.Component;
 
 /**
  * Provides an simple Table usage example Page.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class SimpleTablePage extends BorderPage {
 
-    @Bindable protected Table table = new Table();
+    private static final long serialVersionUID = 1L;
 
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public SimpleTablePage() {
+        Table table = new Table("table");
+
         table.setClass(Table.CLASS_ITS);
 
         table.addColumn(new Column("id"));
         table.addColumn(new Column("name"));
         table.addColumn(new Column("email"));
         table.addColumn(new Column("investments"));
+
+        table.setDataProvider(new DataProvider<Customer>() {
+            public List<Customer> getData() {
+                return customerService.getCustomersSortedByName(10);
+            }
+        });
+
+        addControl(table);
     }
 
-    // --------------------------------------------------------- Event Handlers
-
-    /**
-     * @see Page#onRender()
-     */
-    @Override
-    public void onRender() {
-        List<Customer> list = customerService.getCustomersSortedByName(10);
-        table.setRowList(list);
-    }
 }

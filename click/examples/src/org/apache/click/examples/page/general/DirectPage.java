@@ -32,10 +32,10 @@ import org.apache.click.util.ClickUtils;
 
 /**
  * Provides a example direct <tt>HttpServletResponse</tt> handling.
- *
- * @author Malcolm Edgar
  */
 public class DirectPage extends Page {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Render the Java source file as "text/plain".

@@ -38,16 +38,18 @@ import org.springframework.stereotype.Component;
  * A Student can take many Courses, and a Course can be taken by many Students.
  *
  * The relationship is managed by a PickList control.
- *
- * @author Bob Schellink
  */
 @Component
 public class EnrollmentDemo extends FormTablePage {
+
+    private static final long serialVersionUID = 1L;
 
     @Resource(name="studentService")
     private StudentService studentService;
 
     private PickList pickList;
+
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see FormTablePage#onInit()
@@ -104,6 +106,8 @@ public class EnrollmentDemo extends FormTablePage {
 
         return true;
     }
+
+    // Public Methods ---------------------------------------------------------
 
     /**
      * @see FormTablePage#clear()

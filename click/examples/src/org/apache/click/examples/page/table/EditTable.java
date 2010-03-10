@@ -39,16 +39,17 @@ import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.LinkDecorator;
 import org.apache.click.util.Bindable;
+import org.apache.click.util.DataProvider;
 import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table and Form editor pattern, and the use
  * CayenneForm and LinkDecorator classes.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class EditTable extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected CayenneForm form = new CayenneForm("form", Customer.class);
     @Bindable protected Table table = new Table();
@@ -58,7 +59,7 @@ public class EditTable extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public EditTable() {
         // Setup customers form
@@ -105,9 +106,15 @@ public class EditTable extends BorderPage {
         table.addColumn(column);
 
         deleteLink.setAttribute("onclick", "return window.confirm('Please confirm delete');");
+
+        table.setDataProvider(new DataProvider<Customer>() {
+            public List<Customer> getData() {
+                return customerService.getCustomers();
+            }
+        });
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     public boolean onEditClick() {
         Integer id = editLink.getValueInteger();
@@ -159,15 +166,6 @@ public class EditTable extends BorderPage {
         String pageNumber = form.getField(Table.PAGE).getValue();
         table.setPageNumber(Integer.parseInt(pageNumber));
         table.setSortedColumn(form.getField(Table.COLUMN).getValue());
-    }
-
-    /**
-     * @see org.apache.click.Page#onRender()
-     */
-    @Override
-    public void onRender() {
-        List<Customer> customers = customerService.getCustomers();
-        table.setRowList(customers);
     }
 
 }

@@ -41,16 +41,18 @@ import org.springframework.stereotype.Component;
  * in one Student House.
  *
  * The relationship is managed by a Select control.
- *
- * @author Bob Schellink
  */
 @Component
 public class AccommodationDemo extends FormTablePage {
+
+    private static final long serialVersionUID = 1L;
 
     @Resource(name="studentService")
     private StudentService studentService;
 
     private PropertySelect select;
+
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see FormTablePage#onInit()
@@ -86,6 +88,8 @@ public class AccommodationDemo extends FormTablePage {
         super.onInit();
     }
 
+    // Public Methods --------------------------------------------------------
+
     /**
      * @see FormTablePage#getDataObject(Object)
      */
@@ -106,7 +110,7 @@ public class AccommodationDemo extends FormTablePage {
      * @see FormTablePage#getRowList()
      */
     @Override
-    public List getRowList() {
+    public List<Student> getRowList() {
         return studentService.getStudentsByHouse();
     }
 }

@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.click.extras.cayenne.CayenneTemplate;
 import org.apache.commons.lang.Validate;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -35,10 +34,8 @@ import org.quartz.impl.StdSchedulerFactory;
 
 /**
  * Provides a service wrapper class around the Quartz scheduler class.
- *
- * @author Malcolm Edgar
  */
-public class SchedulerService extends CayenneTemplate {
+public class SchedulerService {
 
     /** The scheduler group name. */
     private static final String GROUP_NAME = "click-examples";

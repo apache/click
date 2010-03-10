@@ -22,9 +22,9 @@ import org.apache.click.examples.page.BorderPage;
 
 /**
  * Provides a Spring Security (Acegi) login page.
- *
- * @author Malcolm Edgar
  */
 public class LoginPage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
 }

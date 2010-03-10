@@ -19,15 +19,16 @@
 package org.apache.click.examples.control.html.list;
 
 import java.util.List;
+
 import org.apache.click.Control;
 import org.apache.click.control.AbstractContainer;
 
 /**
  * This control provides HTML ordered and unordered lists.
- *
- * @author Bob Schellink
  */
 public class HtmlList extends AbstractContainer {
+
+    private static final long serialVersionUID = 1L;
 
     public static final int UNORDERED_LIST = 0;
 
@@ -79,7 +80,7 @@ public class HtmlList extends AbstractContainer {
     }
 
     public ListItem getLast() {
-        List items = getControls();
+        List<Control> items = getControls();
         if (items.size() == 0) {
             throw new IllegalStateException("HtmlList is empty and contains no ListItems.");
         }

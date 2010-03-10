@@ -30,10 +30,10 @@ import org.apache.click.util.Bindable;
 
 /**
  * Provides File Upload example using the FileField control.
- *
- * @author Malcolm Edgar
  */
 public class FileUpload extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form = new Form();
 
@@ -42,6 +42,8 @@ public class FileUpload extends BorderPage {
 
     private FileField fileField2;
     private TextField descField2;
+
+    // Constructor ------------------------------------------------------------
 
     public FileUpload() {
         form.setLabelsPosition("top");
@@ -67,6 +69,8 @@ public class FileUpload extends BorderPage {
         form.add(new Submit("ok", "  OK  ", this, "onOkClick"));
         form.add(new PageSubmit("cancel", HomePage.class));
     }
+
+    // Event Handlers ---------------------------------------------------------
 
     public boolean onOkClick() {
 

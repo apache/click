@@ -26,7 +26,12 @@ import org.apache.click.Control;
 import org.apache.click.control.Renderable;
 import org.apache.click.util.HtmlStringBuffer;
 
+/**
+ * Provides a table container exporter class.
+ */
 public class TableExportContainer implements Renderable {
+
+    private static final long serialVersionUID = 1L;
 
     private List<AbstractTableExporter> exporters = new ArrayList<AbstractTableExporter>();
 

@@ -32,10 +32,10 @@ import org.apache.click.util.Bindable;
  * Provides an example page using the custom RichTextArea control.
  *
  * @see RichTextArea
- *
- * @author Malcolm Edgar
  */
 public class EmailForm extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form = new Form();
 

@@ -32,18 +32,16 @@ import org.apache.click.extras.control.HtmlFieldSet;
  */
 public class VerticalFieldSet extends HtmlFieldSet {
 
-    // -------------------------------------------------------------- Variables
+    private static final long serialVersionUID = 1L;
 
     private HtmlList htmlList = new HtmlList();
-
-    // ---------------------------------------------------- Public Constructors
 
     public VerticalFieldSet(String name) {
         super(name);
         add(htmlList);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     public Control insert(Control control, int index) {
         if (!(control instanceof HtmlList)) {

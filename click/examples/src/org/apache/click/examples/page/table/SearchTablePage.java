@@ -37,14 +37,13 @@ import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.LinkDecorator;
 import org.apache.click.extras.control.TableInlinePaginator;
 import org.apache.click.util.Bindable;
+import org.apache.click.util.DataProvider;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 /**
  * Provides an demonstration of Table control paging.
- *
- * @author Malcolm Edgar
  */
 public class SearchTablePage extends BorderPage implements ApplicationContextAware {
 
@@ -60,7 +59,7 @@ public class SearchTablePage extends BorderPage implements ApplicationContextAwa
 
     private transient ApplicationContext applicationContext;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructor ------------------------------------------------------------
 
     public SearchTablePage() {
         setStateful(true);
@@ -116,9 +115,16 @@ public class SearchTablePage extends BorderPage implements ApplicationContextAwa
         column.setDecorator(new LinkDecorator(table, links, "id"));
         column.setSortable(false);
         table.addColumn(column);
+
+        table.setDataProvider(new DataProvider<Customer>() {
+            public List<Customer> getData() {
+                return getCustomerService().getCustomers(nameField.getValue(),
+                                                         dateField.getDate());
+            }
+        });
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * Handle the clear button click event.
@@ -154,16 +160,7 @@ public class SearchTablePage extends BorderPage implements ApplicationContextAwa
         return true;
     }
 
-    /**
-     * @see org.apache.click.Page#onRender()
-     */
-    @Override
-    public void onRender() {
-        List customers =
-            getCustomerService().getCustomers(nameField.getValue(), dateField.getDate());
-
-        table.setRowList(customers);
-    }
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Return CustomerService instance from Spring application context.

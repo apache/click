@@ -52,6 +52,7 @@ public class ClientService extends CayenneTemplate {
         commitChanges();
     }
 
+    @SuppressWarnings("deprecation")
     public Client createClientInNestedContext() {
         return (Client) getDataContext().createChildDataContext().
             createAndRegisterNewObject(Client.class);

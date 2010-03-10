@@ -22,10 +22,10 @@ import org.apache.click.control.AbstractContainer;
 
 /**
  * This control provides HTML listitem for ordered and unordered lists.
- *
- * @author Bob Schellink
  */
 public class ListItem extends AbstractContainer {
+
+    private static final long serialVersionUID = 1L;
 
     public ListItem() {
     }

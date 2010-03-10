@@ -22,13 +22,11 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.springsecurity.secure.SecurePage;
 
 /**
- * Provides a Spring Security (Acegi) logout page.
- *
- * @author Malcolm Edgar
+ * Provides a Spring Security (ACEGI) logout page.
  */
 public class LogoutPage extends BorderPage {
 
-    // Event Handlers ---------------------------------------------------------
+    private static final long serialVersionUID = 1L;
 
     @Override
     public boolean onSecurityCheck() {

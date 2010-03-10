@@ -25,10 +25,10 @@ import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * This control associates an HTML <em>label</em> with a target field.
- *
- * @author Bob Schellink
  */
 public class FieldLabel extends AbstractControl {
+
+    private static final long serialVersionUID = 1L;
 
     private Field target;
 

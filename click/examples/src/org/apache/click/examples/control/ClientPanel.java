@@ -27,8 +27,6 @@ import org.apache.click.extras.control.DoubleField;
 
 /**
  * Provides a reusable Panel to capture Client details.
- *
- * @author Bob Schellink
  */
 public class ClientPanel extends Panel {
 

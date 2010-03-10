@@ -18,7 +18,6 @@
  */
 package org.apache.click.examples.page.table;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -28,22 +27,26 @@ import org.apache.click.control.Table;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
+import org.apache.click.extras.util.PaginatingList;
 import org.apache.click.util.Bindable;
+import org.apache.click.util.DataProvider;
 import org.springframework.stereotype.Component;
 
 /**
  * Provides a demonstration of a Table with a huge number of rows and how to
- * lazily page through the rows using a custom List implementation.
- *
- * @author Bob Schellink
+ * lazily page through the rows using a paginating list.
  */
 @Component
 public class LargeDatasetDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Table table;
 
     @Resource(name="customerService")
     private CustomerService customerService;
+
+    // Constructor ------------------------------------------------------------
 
     public LargeDatasetDemo() {
         table = new Table();
@@ -77,93 +80,34 @@ public class LargeDatasetDemo extends BorderPage {
         table.addColumn(column);
 
         table.setPageSize(5);
+
+        table.setDataProvider(new DataProvider<Customer>() {
+            public List<Customer> getData() {
+                return getPaginatingList();
+            }
+        });
     }
 
-    /**
-     * @see org.apache.click.Page#onRender()
-     */
-    @Override
-    public void onRender() {
-        // Create DataProvider for the specified table and total number of customers
-        DataProvider dataProvider = new DataProvider(table, getCustomerCount());
+    // Private Methods --------------------------------------------------------
 
-        // Set the DataProvider as the Table row list. Table is now able to
-        // calculate the last row value.
-        // NOTE: If table rowList is not set, table cannot calculate the last row
-        // and invoking #getLastRow will return 0.
-        table.setRowList(dataProvider);
+    private PaginatingList<Customer> getPaginatingList() {
 
-        // Retrieve customers given the firstRow, lastRow and pageSize
-        List customers = getCustomers(table.getFirstRow(), table.getPageSize(),
-            table.getSortedColumn(), table.isSortedAscending());
+        // Below we retrieve only those customers between:
+        //     first row .. (first row + page size)
+        // In a real application one would use an ORM or JDBC to only retrieve
+        // the needed rows
+        List<Customer> customerList =
+            customerService.getCustomersForPage(table.getFirstRow(),
+                                                table.getPageSize(),
+                                                table.getSortedColumn(),
+                                                table.isSortedAscending());
 
-        // Add the customers to the table dataProvider
-        dataProvider.addAll(customers);
-    }
+        int customerCount = customerService.getNumberOfCustomers();
 
-    // ---------------------------------------------------------- Inner Classes
-
-    /**
-     * Provides a custom List implementation which returns a pre-defined size,
-     * even if the underlying amount of entries is less.
-     *
-     * The List also returns correct row for a specified index by offsetting
-     * the index against the Table's firstRow value.
-     */
-    class DataProvider extends ArrayList {
-
-        /** The DataProvider Table instance. */
-        private Table table;
-
-        /** The total number of rows of the dataProvider. */
-        private int numOfRows;
-
-        /**
-         * Create a new DataProvider instance for the given Table and total number
-         * of rows.
-         *
-         * @param table this dataProvider Table instance
-         * @param numOfRows the total number of rows of the dataProvider
-         */
-        public DataProvider(Table table, int numOfRows) {
-            this.table = table;
-            this.numOfRows = numOfRows;
-        }
-
-        /**
-         * Returns the row at the specified index, offsetted by the current
-         * table first row value.
-         *
-         * @param index the index of the row as viewed in the Table
-         * @return the the row at the specified index, offsetted by the
-         * current table first row value.
-         */
-        public Object get(final int index) {
-            int realIndex = index - table.getFirstRow();
-            return super.get(realIndex);
-        }
-
-        /**
-         * Always return the total number of rows even if the number of entries
-         * are less.
-         */
-        public int size() {
-            return numOfRows;
-        }
-    }
-
-    // -------------------------------------------------------- Private Methods
-
-    private int getCustomerCount() {
-        return customerService.getNumberOfCustomers();
-    }
-
-    private List<Customer> getCustomers(int from, int pageSize, String sortedColumn,
-        boolean ascending) {
-        // Below we retrieve only those customers between the from and to
-        // args. In a real application one would use an ORM or JDBC to only
-        // retrieve the needed rows
-        return customerService.getCustomersForPage(from, pageSize, sortedColumn, ascending);
+        return new PaginatingList<Customer>(customerList,
+                                            table.getFirstRow(),
+                                            table.getPageSize(),
+                                            customerCount);
     }
 
 }

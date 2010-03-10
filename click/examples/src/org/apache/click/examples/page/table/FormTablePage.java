@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.BaseContext;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Column;
 import org.apache.click.control.Form;
@@ -30,23 +30,24 @@ import org.apache.click.control.Submit;
 import org.apache.click.control.Table;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.control.InvestmentSelect;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
+import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.FieldColumn;
 import org.apache.click.extras.control.FormTable;
 import org.apache.click.extras.control.NumberField;
-import org.apache.click.extras.control.DateField;
 import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table control paging.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class FormTablePage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private static final int NUM_ROWS = 20;
 
@@ -55,7 +56,7 @@ public class FormTablePage extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public FormTablePage() {
         // Setup customers table
@@ -99,7 +100,7 @@ public class FormTablePage extends BorderPage {
         table.getForm().add(new Submit("cancel", this, "onCancelClick"));
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onInit()
@@ -111,7 +112,7 @@ public class FormTablePage extends BorderPage {
         // Please note the FormTable rowList MUST be populated before the
         // control is processed, i.e. do not populate the FormTable in the
         // Pages onRender() method.
-        List customers = customerService.getCustomersSortedByName(NUM_ROWS);
+        List<Customer> customers = customerService.getCustomersSortedByName(NUM_ROWS);
         table.setRowList(customers);
     }
 
@@ -119,7 +120,7 @@ public class FormTablePage extends BorderPage {
         if (table.getForm().isValid()) {
             // Please note with Cayenne ORM this will persist any changes
             // to data objects submitted by the form.
-            DataContext.getThreadDataContext().commitChanges();
+            BaseContext.getThreadObjectContext().commitChanges();
 
             // With other ORM frameworks like Hibernate you would retrieve
             // rows for the table as persist those objects. For example:
@@ -137,9 +138,9 @@ public class FormTablePage extends BorderPage {
     public boolean onCancelClick() {
         // Rollback any changes made to the customers, which are stored in
         // the data context
-        DataContext.getThreadDataContext().rollbackChanges();
+        BaseContext.getThreadObjectContext().rollbackChanges();
 
-        List customers = customerService.getCustomersSortedByName(NUM_ROWS);
+        List<Customer> customers = customerService.getCustomersSortedByName(NUM_ROWS);
 
         table.setRowList(customers);
         table.setRenderSubmittedValues(false);

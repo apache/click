@@ -24,10 +24,10 @@ import org.apache.click.examples.page.BorderPage;
 /**
  * Provides example usage of a reusable ClientPanel, which contains a Form for
  * capturing Client details.
- *
- * @author Bob Schellink
  */
 public class ReusablePanelDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private ClientPanel clientPanel = new ClientPanel("panel");
 

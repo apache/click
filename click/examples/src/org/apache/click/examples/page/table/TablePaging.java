@@ -28,15 +28,16 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.util.Bindable;
+import org.apache.click.util.DataProvider;
 import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table control paging.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class TablePaging extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Table table = new Table();
 
@@ -69,14 +70,12 @@ public class TablePaging extends BorderPage {
         column.setTextAlign("right");
         column.setWidth("100px;");
         table.addColumn(column);
+
+        table.setDataProvider(new DataProvider<Customer>() {
+            public List<Customer> getData() {
+                return customerService.getCustomers();
+            }
+        });
     }
 
-    /**
-     * @see org.apache.click.Page#onRender()
-     */
-    @Override
-    public void onRender() {
-        List<Customer> customers = customerService.getCustomers();
-        table.setRowList(customers);
-    }
 }

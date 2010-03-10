@@ -25,14 +25,15 @@ import org.apache.click.examples.page.BorderPage;
 
 /**
  * Provides simple Table example which demonstrates Velocity #foreach directive.
- *
- * @author Malcolm Edgar
  */
 public class SimpleTable extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * @see Page#onRender()
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void onRender() {
         addModel("properties", new TreeMap(System.getProperties()));
