@@ -25,8 +25,6 @@ import org.quartz.JobExecutionException;
 /**
  * Provides a simple example Quartz Job class which writes 'Hello World' to
  * System.out and then counts to 10.
- *
- * @author Malcolm Edgar
  */
 public class ExampleJob implements Job {
 

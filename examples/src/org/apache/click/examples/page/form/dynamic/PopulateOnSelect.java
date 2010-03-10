@@ -25,6 +25,7 @@ import java.util.Map;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Select;
 import org.apache.click.control.Submit;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.control.TabbedForm;
@@ -37,6 +38,8 @@ import org.apache.commons.lang.StringUtils;
  */
 public class PopulateOnSelect extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     private static final String EASTERN_CAPE = "EC";
     private static final String FREE_STATE = "FS";
     private static final String GAUTENG_PROVINCE = "GP";
@@ -48,6 +51,8 @@ public class PopulateOnSelect extends BorderPage {
     private Select city = new Select("city", true);
     private Select suburb = new Select("suburb", true);
     private Submit save = new Submit("save");
+
+    // Event Handlers ---------------------------------------------------------
 
     @Override
     public void onInit() {
@@ -76,6 +81,8 @@ public class PopulateOnSelect extends BorderPage {
 
         form.add(save);
     }
+
+    // Public Methods ---------------------------------------------------------
 
     public void buildSelects() {
         state.add("---");
@@ -106,11 +113,11 @@ public class PopulateOnSelect extends BorderPage {
     }
 
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
-            Map model = new HashMap();
+            Map<String, Object> model = new HashMap<String, Object>();
             model.put("stateId", state.getId());
             model.put("cityId", city.getId());
             model.put("suburbId", suburb.getId());
@@ -123,10 +130,11 @@ public class PopulateOnSelect extends BorderPage {
         return headElements;
     }
 
-    // -------------------------------------------------------- Private Methods
+    // Private Methods --------------------------------------------------------
 
+    @SuppressWarnings("serial")
     private void populateStateData() {
-        Map map = new HashMap() {{
+        Map<String, String> map = new HashMap<String, String>() {{
                 put(EASTERN_CAPE, "Eastern Cape");
                 put(FREE_STATE, "Free State");
                 put(GAUTENG_PROVINCE, "Gauteng Province");

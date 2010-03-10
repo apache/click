@@ -38,13 +38,13 @@ import org.springframework.stereotype.Component;
  * In this example the controls are automatically added to the Page model
  * because they have public visiblity. The controls name is automatically set
  * to their field name.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class ActionTable extends BorderPage {
 
-    @Bindable protected List customers;
+    private static final long serialVersionUID = 1L;
+
+    @Bindable protected List<Customer> customers;
     @Bindable protected Customer customerDetail;
     @Bindable protected ActionLink viewLink = new ActionLink(this, "onViewClick");
     @Bindable protected PageLink editLink = new PageLink(EditCustomer.class);

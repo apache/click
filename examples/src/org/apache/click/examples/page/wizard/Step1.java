@@ -27,8 +27,6 @@ import org.apache.click.extras.control.EmailField;
  * The first step in the 3 step process is to capture the Client details.
  * <p/>
  * Note this Panel has no associated template.
- *
- * @author Bob Schellink
  */
 public class Step1 extends Step {
 
@@ -62,6 +60,7 @@ public class Step1 extends Step {
      *
      * @return true if page processing should continue or not
      */
+    @Override
     public boolean onNext() {
         // Set the page to stateful so the same Page is available throughout the
         // Wizard steps

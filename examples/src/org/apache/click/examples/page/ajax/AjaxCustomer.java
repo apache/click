@@ -38,11 +38,11 @@ import org.springframework.stereotype.Component;
  *    &lt;header name="Content-Type" value="text/xml"/&gt;
  * &lt;/page&gt;
  * </pre>
- *
- * @author Malcolm Edgar
  */
 @Component
 public class AjaxCustomer extends Page {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Customer customer;
 

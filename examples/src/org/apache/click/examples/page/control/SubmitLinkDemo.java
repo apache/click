@@ -32,10 +32,10 @@ import org.apache.click.util.Bindable;
 /**
  * This example demonstrates how to use a SubmitLink control together with the
  * Form control.
- *
- * @author Bob Schellink
  */
 public class SubmitLinkDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected String demo1Msg;
 
@@ -44,6 +44,8 @@ public class SubmitLinkDemo extends BorderPage {
     @Bindable protected String demo3Msg;
 
     @Bindable protected String demo4Msg;
+
+    // Constructor ------------------------------------------------------------
 
     public SubmitLinkDemo() {
         demo1();
@@ -54,6 +56,8 @@ public class SubmitLinkDemo extends BorderPage {
 
         demo4();
     }
+
+    // Public Methods --------------------------------------------------------
 
     public void demo1() {
         // Create a submit link.

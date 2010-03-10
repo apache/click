@@ -23,10 +23,10 @@ import org.apache.click.extras.control.IntegerField;
 /**
  * This IntegerField class preserves its value when it is copied from
  * an entity property that is null.
- *
- * @author Bob Schellink
  */
 public class CayenneIntegerField extends IntegerField {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Construct a new field for the specified name and label.

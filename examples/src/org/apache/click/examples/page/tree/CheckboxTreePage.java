@@ -37,10 +37,10 @@ import org.apache.click.extras.tree.TreeNode;
 
 /**
  * Example usage of the {@link CheckboxTree} control.
- *
- * @author Bob Schellink
  */
 public class CheckboxTreePage extends BorderPage implements TreeListener {
+
+    private static final long serialVersionUID = 1L;
 
     public static final String TREE_NODES_SESSION_KEY = "checkboxTreeNodes";
 
@@ -49,7 +49,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
     private Submit okSubmit;
     private Reset resetBtn;
 
-    // --------------------------------------------------------- Event Handlers
+    //  Event Handlers --------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onInit()
@@ -83,7 +83,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         buildOptionsUI();
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Creates and return a new tree instance.
@@ -175,7 +175,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         return tree;
     }
 
-    // -------------------------------------------------- TreeListener Support
+    // TreeListener Support ---------------------------------------------------
 
     /**
      * This method, which implements TreeListener, is called when a node is selected
@@ -222,7 +222,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         return list;
     }
 
-    // ------------------------------------------------------------------- NOTE
+    // NOTE -------------------------------------------------------------------
     //The code below is not specific to tree control usage.
 
     private Form optionsForm;

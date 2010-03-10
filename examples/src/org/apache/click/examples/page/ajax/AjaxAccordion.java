@@ -21,6 +21,7 @@ package org.apache.click.examples.page.ajax;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
@@ -28,13 +29,13 @@ import org.apache.click.examples.page.BorderPage;
 /**
  * Provides an Ajax demo of <a target="_blank" class="external" href="http://flowplayer.org/tools/demos/tabs/accordion.html">jQuery Tools</a>
  * Accordion.
- *
- * @author Malcolm Edgar
  */
 public class AjaxAccordion extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
 
         // Lazily load head elements
         if (headElements == null) {

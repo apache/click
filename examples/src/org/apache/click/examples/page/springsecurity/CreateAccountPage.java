@@ -41,8 +41,13 @@ import org.springframework.security.context.SecurityContextImpl;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
+/**
+ * Provides an Spring Security (ACEGI) enabled account creation page.
+ */
 @Component
 public class CreateAccountPage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private Form form = new Form("form");
     private TextField fullNameField = new TextField(User.FULLNAME_PROPERTY, "Full Name", true);
@@ -73,6 +78,8 @@ public class CreateAccountPage extends BorderPage {
 
         Submit submit = new Submit("create");
         submit.setActionListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 return onCreate();
             }

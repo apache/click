@@ -26,8 +26,6 @@ import org.apache.click.Context;
 
 /**
  * Provides examples helper methods.
- *
- * @author Malcolm Edgar
  */
 public class ExampleUtils {
 

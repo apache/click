@@ -34,10 +34,10 @@ import org.apache.click.util.Bindable;
 
 /**
  * Provides Form layout examples using the Form and FieldSet controls.
- *
- * @author Malcolm Edgar
  */
 public class FormLayout extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form1 = new Form();
     @Bindable protected Form form2 = new Form();

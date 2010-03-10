@@ -29,9 +29,11 @@ import org.apache.click.extras.control.EmailField;
 import org.apache.click.util.ClickUtils;
 
 /**
- * Demonstrates dynamic Form behavior.
+ * Demonstrates dynamic Form behaviour.
  */
 public class DynamicForm extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private Form form = new Form("dynamicForm");
 
@@ -40,6 +42,8 @@ public class DynamicForm extends BorderPage {
     private Checkbox checkbox = new Checkbox("subscribe");
 
     private Submit submit = new Submit("ok");
+
+    // Event Handlers ---------------------------------------------------------
 
     @Override
     public void onInit() {
@@ -72,6 +76,8 @@ public class DynamicForm extends BorderPage {
         }
 
         form.setActionListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 return onFormSubmit();
             }

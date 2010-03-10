@@ -31,12 +31,12 @@ import org.apache.commons.lang.ClassUtils;
 
 /**
  * Provides common functionality for each step in the wizard.
- *
- * @author Bob Schellink
  */
 public abstract class Step extends SimplePanel {
 
-    // -------------------------------------------------------------- Variables
+    private static final long serialVersionUID = 1L;
+
+    // Variables --------------------------------------------------------------
 
     /** Reference to the form. */
     private CayenneForm form = new NestedCayenneForm("form"
@@ -60,7 +60,7 @@ public abstract class Step extends SimplePanel {
     /** Reference to the cancel button. */
     private Button cancel;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     /**
      * Constructs a Step for the specified name and page.
@@ -77,7 +77,7 @@ public abstract class Step extends SimplePanel {
         setDescription(description);
     }
 
-    // ------------------------------------------------------ Public Properties
+    // Public Properties ------------------------------------------------------
 
     /**
      * Return the Step form instance.
@@ -189,7 +189,7 @@ public abstract class Step extends SimplePanel {
         return cancel;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * The onNext action. Subclasses can override this method to implement
@@ -243,6 +243,7 @@ public abstract class Step extends SimplePanel {
      * Setup and initializes the Step. This method must be called before
      * the Step can be used.
      */
+    @SuppressWarnings("serial")
     public final void init() {
         getForm().setButtonAlign(Form.ALIGN_RIGHT);
         getForm().setErrorsPosition(Form.POSITION_MIDDLE);

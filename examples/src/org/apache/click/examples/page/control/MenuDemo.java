@@ -22,9 +22,9 @@ import org.apache.click.examples.page.BorderPage;
 
 /**
  * Provides Menu control example documentation.
- *
- * @author Malcolm Edgar
  */
 public class MenuDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
 }

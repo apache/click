@@ -30,18 +30,17 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.util.Bindable;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.stereotype.Component;
 
 /**
  * Provides a search form example demonstrating how to layout a form manually
  * in the page template.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class SearchForm extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form = new Form();
 
@@ -50,6 +49,8 @@ public class SearchForm extends BorderPage {
 
     @Resource(name="customerService")
     private CustomerService customerService;
+
+    // Constructor ------------------------------------------------------------
 
     public SearchForm() {
         textField = new TextField("search");
@@ -63,6 +64,8 @@ public class SearchForm extends BorderPage {
 
         form.add(new Submit("go", " Go "));
     }
+
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onPost()

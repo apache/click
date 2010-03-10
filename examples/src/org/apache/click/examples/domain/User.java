@@ -22,8 +22,6 @@ import org.apache.click.examples.domain.auto._User;
 
 /**
  * Provides an User entity class.
- *
- * @author Malcolm Edgar
  */
 public class User extends _User {
 

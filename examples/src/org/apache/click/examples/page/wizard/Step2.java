@@ -29,8 +29,6 @@ import org.apache.click.extras.control.IntegerField;
  * The second step in the 3 step process is to capture the Client address.
  * <p/>
  * Note this Panel has no associated template.
- *
- * @author Bob Schellink
  */
 public class Step2 extends Step {
 
@@ -85,6 +83,7 @@ public class Step2 extends Step {
      * The onInit phase is overridden to check if the post code and state values
      * are passed in from the lookup table.
      */
+    @Override
     public void onInit() {
         // Invoke default onInit implementation
         super.onInit();
@@ -107,6 +106,7 @@ public class Step2 extends Step {
      *
      * @return true if page processing should continue or not
      */
+    @Override
     public boolean onNext() {
         if (getForm().isValid()) {
             // Pass client to next Step
@@ -122,6 +122,7 @@ public class Step2 extends Step {
      *
      * @return true if page processing should continue or not
      */
+    @Override
     public boolean onPrevious() {
         getWizardPage().previous();
         getForm().clearErrors();
@@ -132,6 +133,8 @@ public class Step2 extends Step {
      * Represents a Div HTML element.
      */
     class Div extends AbstractContainer {
+        private static final long serialVersionUID = 1L;
+
         public String getTag() {
             return "div";
         }

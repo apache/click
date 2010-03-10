@@ -29,24 +29,29 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.util.Bindable;
+import org.apache.click.util.DataProvider;
 import org.apache.click.util.HtmlStringBuffer;
 import org.springframework.stereotype.Component;
 
 /**
  * Provides an demonstration of Table control paging.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class TableFooter extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Table table;
 
     @Resource(name="customerService")
     private CustomerService customerService;
 
+    // Constructor ------------------------------------------------------------
+
     public TableFooter() {
         table = new Table() {
+            private static final long serialVersionUID = 1L;
+
             public void renderFooterRow(HtmlStringBuffer buffer) {
                 renderTotalHoldingsFooter(buffer);
             }
@@ -74,16 +79,15 @@ public class TableFooter extends BorderPage {
         column.setTextAlign("right");
         column.setWidth("100px;");
         table.addColumn(column);
+
+        table.setDataProvider(new DataProvider<Customer>() {
+            public List<Customer> getData() {
+                return customerService.getCustomersSortedByName(17);
+            }
+        });
     }
 
-    /**
-     * @see org.apache.click.Page#onRender()
-     */
-    @Override
-    public void onRender() {
-        List<Customer> customers = customerService.getCustomersSortedByName(17);
-        table.setRowList(customers);
-    }
+    // Private Methods --------------------------------------------------------
 
     /**
      * Render the total holdings footer.

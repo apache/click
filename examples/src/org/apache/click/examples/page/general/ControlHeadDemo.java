@@ -19,10 +19,12 @@
 package org.apache.click.examples.page.general;
 
 import java.util.List;
+
 import org.apache.click.control.Field;
 import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.util.HtmlStringBuffer;
@@ -30,10 +32,10 @@ import org.apache.click.util.HtmlStringBuffer;
 /**
  * This example demonstrates how to manipulate the Head elements of a
  * custom StarRating Control.
- *
- * @author Bob Schellink
  */
 public class ControlHeadDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     public ControlHeadDemo() {
 
@@ -52,6 +54,8 @@ public class ControlHeadDemo extends BorderPage {
      */
     public class StarRating extends Field {
 
+        private static final long serialVersionUID = 1L;
+
         private int maxStars;
 
         public StarRating(String name, int maxStars, int selectedValue) {
@@ -65,7 +69,8 @@ public class ControlHeadDemo extends BorderPage {
          *
          * @return list the list of HEAD elements
          */
-        public List getHeadElements() {
+        @Override
+        public List<Element> getHeadElements() {
             if (headElements == null) {
                 headElements = super.getHeadElements();
 
@@ -86,6 +91,7 @@ public class ControlHeadDemo extends BorderPage {
          *
          * @param buffer the buffer to render the output to
          */
+        @Override
         public void render(HtmlStringBuffer buffer) {
             // Render a radio button for each star
             for (int i = 1; i <= maxStars; i++) {

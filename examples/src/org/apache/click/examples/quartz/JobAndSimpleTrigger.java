@@ -29,8 +29,6 @@ import org.quartz.Trigger;
 
 /**
  * Provides a Quartz Job and Simple Trigger display class.
- *
- * @author Malcolm Edgar
  */
 public class JobAndSimpleTrigger {
 

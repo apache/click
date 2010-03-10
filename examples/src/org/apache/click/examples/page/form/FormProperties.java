@@ -38,10 +38,10 @@ import org.apache.click.extras.control.PageSubmit;
 
 /**
  * Provides a example Page to demonstrate Form properties and layout options.
- *
- * @author Malcolm Edgar
  */
 public class FormProperties extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     /** Form options holder. */
     public static class Options implements Serializable {
@@ -95,7 +95,7 @@ public class FormProperties extends BorderPage {
     private Checkbox validateCheckbox;
     private Checkbox javaScriptValidateCheckbox;
 
-    // ------------------------------------------------------------ Constructor
+    //  Constructor -----------------------------------------------------------
 
     public FormProperties() {
 
@@ -230,7 +230,7 @@ public class FormProperties extends BorderPage {
         getHeadElements().add(jsScript);
     }
 
-    // ---------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onInit()
@@ -300,7 +300,7 @@ public class FormProperties extends BorderPage {
         return true;
     }
 
-    // -------------------------------------------------------- Private Methods
+    // Private Methods --------------------------------------------------------
 
     private void applyOptions(Options options) {
         form.setButtonAlign(options.buttonAlign);

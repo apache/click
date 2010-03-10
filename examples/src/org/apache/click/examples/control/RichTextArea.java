@@ -32,8 +32,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * JavaScript libraries in the web apps root directory.
  *
  * @see TextArea
- *
- * @author Malcolm Edgar
  */
 public class RichTextArea extends TextArea {
 

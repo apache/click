@@ -20,6 +20,9 @@ package org.apache.click.examples.domain;
 
 import org.apache.click.examples.domain.auto._PostCode;
 
+/**
+ * Provides an Client entity class.
+ */
 public class PostCode extends _PostCode {
 
     private static final long serialVersionUID = 1L;

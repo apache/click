@@ -35,10 +35,10 @@ import org.apache.click.extras.control.PageSubmit;
 /**
  * This page demonstrates how to programmatically layout a form using
  * custom Controls and CSS.
- *
- * @author Bob Schellink
  */
 public class ContactDetailsPage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private CssForm form;
 

@@ -22,8 +22,6 @@ import org.apache.click.examples.domain.auto._SystemCode;
 
 /**
  * Provides an SystemCode entity class.
- *
- * @author Malcolm Edgar
  */
 public class SystemCode extends _SystemCode {
 

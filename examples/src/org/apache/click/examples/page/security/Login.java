@@ -36,12 +36,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides a user authentication login Page.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class Login extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
     @Bindable protected Form form = new Form();
     @Bindable protected HiddenField redirectField = new HiddenField("redirect", String.class);
 
@@ -51,7 +50,7 @@ public class Login extends BorderPage {
     @Resource(name="userService")
     private UserService userService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public Login() {
         usernameField.setMaxLength(20);
@@ -69,7 +68,7 @@ public class Login extends BorderPage {
         form.add(redirectField);
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     @Override
     public void onInit() {

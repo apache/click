@@ -21,6 +21,8 @@ package org.apache.click.examples.page.ajax;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
+
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
@@ -32,17 +34,19 @@ import org.springframework.stereotype.Component;
 /**
  * Demonstrates how to to dynamically load more customer while scrolling down
  * the Page.
- *
- * @author Bob Schellink
  */
 @Component
 public class AjaxLiveScroller extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Resource(name="customerService")
     private CustomerService customerService;
 
     // Specifies the number of customers to retrieve at a time
     private int pageSize = 10;
+
+    // Event Handlers --------------------------------------------------------
 
     @Override
     public void onGet() {
@@ -63,7 +67,7 @@ public class AjaxLiveScroller extends BorderPage {
     }
 
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         // Lazily load head elements and ensure they are only loaded once
         if (headElements == null) {
             headElements = super.getHeadElements();
@@ -82,6 +86,8 @@ public class AjaxLiveScroller extends BorderPage {
         }
         return headElements;
     }
+
+    // Public Methods ---------------------------------------------------------
 
     @Override
     public String getTemplate() {

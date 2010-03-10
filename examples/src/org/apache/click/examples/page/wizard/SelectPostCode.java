@@ -40,11 +40,11 @@ import org.springframework.stereotype.Component;
  * It also acts as a fork in step 2, to show how one can navigate away from
  * a stateful page and then go back, with the components on the WizardPage still
  * populated with their old values.
- *
- * @author Bob Schellink
  */
 @Component
 public class SelectPostCode extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     /** Reference to the table. */
     private Table table = new Table("table");
@@ -62,6 +62,8 @@ public class SelectPostCode extends BorderPage {
         PageLink selectState = new PageLink("select", WizardPage.class);
         Column action = new Column("action");
         LinkDecorator decorator = new LinkDecorator(table, selectState, "postCode") {
+
+            private static final long serialVersionUID = 1L;
 
             /**
              * Override default implementation to send parameters

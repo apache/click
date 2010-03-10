@@ -18,9 +18,6 @@
  */
 package org.apache.click.examples.page.form;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
@@ -45,10 +42,10 @@ import org.apache.click.util.ContainerUtils;
 
 /**
  * Provides an TabbedForm control example.
- *
- * @author Malcolm Edgar
  */
 public class TabbedFormDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private TabbedForm form = new TabbedForm("form");
     private RadioGroup paymentGroup = new RadioGroup("paymentOption", true);
@@ -57,6 +54,8 @@ public class TabbedFormDemo extends BorderPage {
     private TextField cardName = new TextField("cardName");
     private CreditCardField cardNumber = new CreditCardField("cardNumber");
     private IntegerField expiry = new IntegerField("expiry");
+
+    // Constructor ------------------------------------------------------------
 
     public TabbedFormDemo() {
 
@@ -124,12 +123,16 @@ public class TabbedFormDemo extends BorderPage {
         addControl(form);
     }
 
+    // Event Handlers ---------------------------------------------------------
+
     public boolean onOkClick() {
         if (isFormValid()) {
             processDelivery();
         }
         return true;
     }
+
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Perform additional form cross field validation returning true if valid.
@@ -154,10 +157,8 @@ public class TabbedFormDemo extends BorderPage {
         return form.isValid();
     }
 
-    private void processDelivery() {
-        List fieldList = ContainerUtils.getInputFields(form);
-        for (Iterator i = fieldList.iterator(); i.hasNext(); ) {
-            Field field = (Field) i.next();
+    protected void processDelivery() {
+        for (Field field : ContainerUtils.getInputFields(form)) {
             System.out.println(field.getName() + "=" + field.getValue());
         }
     }

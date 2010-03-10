@@ -25,8 +25,6 @@ import org.apache.cayenne.PersistenceState;
 /**
  * Provides an base entity CayenneDataObject class with id getter and isNew
  * methods. This class should be extended by the auto package classes.
- *
- * @author Malcolm Edgar
  */
 public class BaseEntity extends CayenneDataObject {
 

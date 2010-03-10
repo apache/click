@@ -28,8 +28,6 @@ import org.apache.click.control.Field;
  * If the field is required, FeedbackBorder will add a "required" css class.
  * <p/>
  * If the field is invalid, FeedbackBorder will display the field error message.
- *
- * @author Bob Schellink
  */
 public class FeedbackBorder extends AbstractContainer {
 
@@ -58,6 +56,7 @@ public class FeedbackBorder extends AbstractContainer {
         return control;
     }
 
+    @Override
     public void onRender() {
         super.onRender();
 

@@ -27,10 +27,10 @@ import org.apache.click.util.Bindable;
 
 /**
  * Provides an example of a flash session attribute.
- *
- * @author Malcolm Edgar
  */
 public class FlashPage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form = new Form();
 

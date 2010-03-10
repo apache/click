@@ -28,10 +28,10 @@ import org.apache.click.examples.page.BorderPage;
  * <p/>
  * Note the public scope time Date field is automatically added to the page's
  * model as a value named "time".
- *
- * @author Malcolm Edgar
  */
 public class HelloWorld extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private Date time = new Date();
 

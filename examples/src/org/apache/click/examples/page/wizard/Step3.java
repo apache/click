@@ -26,8 +26,6 @@ package org.apache.click.examples.page.wizard;
  * <p/>
  * Step3 uses a Velocity template (Step3.htm) to render client
  * information.
- *
- * @author Bob Schellink
  */
 public class Step3 extends Step {
 
@@ -52,6 +50,7 @@ public class Step3 extends Step {
      *
      * @return true if page processing should continue or not
      */
+    @Override
     public boolean onFinish() {
         if (getForm().isValid()) {
 
@@ -78,6 +77,7 @@ public class Step3 extends Step {
      *
      * @return true if page processing should continue or not
      */
+    @Override
     public boolean onPrevious() {
         getWizardPage().previous();
         getForm().clearValues();
@@ -88,6 +88,7 @@ public class Step3 extends Step {
      * Override onRender phase to add the client instance to the Template
      * model for rendering.
      */
+    @Override
     public void onRender() {
         // Invoke default onInit implementation
         super.onRender();

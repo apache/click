@@ -23,8 +23,6 @@ import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * Provides a button spacer control for adding spaces between buttons.
- *
- * @author Malcolm Edgar
  */
 public class SpacerButton extends Button {
 

@@ -19,7 +19,9 @@
 package org.apache.click.examples.page.general;
 
 import java.util.List;
+
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
@@ -35,6 +37,8 @@ import org.apache.click.examples.page.BorderPage;
  */
 public class PageImportsExample extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     public PageImportsExample() {
         // Indicate that Controls should not import their head elements
         setIncludeControlHeadElements(false);
@@ -46,7 +50,7 @@ public class PageImportsExample extends BorderPage {
      * @return the list of Page HEAD elements
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

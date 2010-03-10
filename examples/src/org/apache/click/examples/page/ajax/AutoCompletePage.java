@@ -32,11 +32,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides AJAX AutoCompleteTextField example page.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class AutoCompletePage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Form form = new Form();
 
@@ -51,6 +51,7 @@ public class AutoCompletePage extends BorderPage {
         form.add(fieldSet);
 
         AutoCompleteTextField locationField = new AutoCompleteTextField("location") {
+            private static final long serialVersionUID = 1L;
 
             public List getAutoCompleteList(String criteria) {
                 return postCodeService.getPostCodeLocations(criteria);

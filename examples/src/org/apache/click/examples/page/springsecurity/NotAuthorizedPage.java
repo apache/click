@@ -21,10 +21,10 @@ package org.apache.click.examples.page.springsecurity;
 import org.apache.click.examples.page.BorderPage;
 
 /**
- * Provides a Spring Security (Acegi) logout page.
- *
- * @author Malcolm Edgar
+ * Provides a Security Not Authorized message display page.
  */
 public class NotAuthorizedPage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
 }

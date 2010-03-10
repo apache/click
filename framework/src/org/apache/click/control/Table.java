@@ -28,9 +28,10 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.click.Control;
+import org.apache.click.element.Element;
 import org.apache.click.util.ClickUtils;
+import org.apache.click.util.DataProvider;
 import org.apache.click.util.HtmlStringBuffer;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -265,10 +266,10 @@ public class Table extends AbstractControl {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Set DARK_STYLES;
+    private static final Set<String> DARK_STYLES;
 
     static {
-        DARK_STYLES = new HashSet();
+        DARK_STYLES = new HashSet<String>();
         DARK_STYLES.add("isi");
         DARK_STYLES.add("nocol");
         DARK_STYLES.add("report");
@@ -369,19 +370,23 @@ public class Table extends AbstractControl {
     protected int bannerPosition = POSITION_BOTTOM;
 
     /** The map of table columns keyed by column name. */
-    protected Map columns = new HashMap();
+    protected Map<String, Column> columns = new HashMap<String, Column>();
 
     /** The list of table Columns. */
-    protected List columnList = new ArrayList();
+    protected List<Column> columnList = new ArrayList<Column>();
 
     /** The table paging and sorting control action link. */
     protected ActionLink controlLink;
 
     /** The list of table controls. */
-    protected List controlList;
+    protected List<Control> controlList;
 
     /** The table HTML &lt;td&gt; height attribute. */
     protected String height;
+
+    /** The table data provider. */
+    @SuppressWarnings("unchecked")
+    protected DataProvider dataProvider;
 
     /**
      * The table rows set 'hover' CSS class on mouseover events flag. By default
@@ -430,6 +435,7 @@ public class Table extends AbstractControl {
      * The list Table rows. Please note the rowList is cleared in table
      * {@link #onDestroy()} method at the end of each request.
      */
+    @SuppressWarnings("unchecked")
     protected List rowList;
 
     /**
@@ -611,7 +617,7 @@ public class Table extends AbstractControl {
      *
      * @param columnNames the list of column names to remove from the table
      */
-    public void removeColumns(List columnNames) {
+    public void removeColumns(List<String> columnNames) {
         if (columnNames != null) {
             for (int i = 0; i < columnNames.size(); i++) {
                 removeColumn(columnNames.get(i).toString());
@@ -661,7 +667,7 @@ public class Table extends AbstractControl {
      *
      * @return the list of table columns
      */
-    public List getColumnList() {
+    public List<Column> getColumnList() {
         return columnList;
     }
 
@@ -670,7 +676,7 @@ public class Table extends AbstractControl {
      *
      * @return the Map of table Columns, keyed on column name
      */
-    public Map getColumns() {
+    public Map<String, Column> getColumns() {
         return columns;
     }
 
@@ -710,9 +716,9 @@ public class Table extends AbstractControl {
      *
      * @return the list of table controls
      */
-    public List getControls() {
+    public List<Control> getControls() {
         if (controlList == null) {
-            controlList = new ArrayList();
+            controlList = new ArrayList<Control>();
         }
         return controlList;
     }
@@ -741,6 +747,26 @@ public class Table extends AbstractControl {
             controlLink = new ActionLink();
         }
         return controlLink;
+    }
+
+    /**
+     * Return the table row list DataProvider.
+     *
+     * @return the table row list DataProvider
+     */
+    @SuppressWarnings("unchecked")
+    public DataProvider getDataProvider() {
+        return dataProvider;
+    }
+
+    /**
+     * Set the table row list DataProvider.
+     *
+     * @param dataProvider the table row list DataProvider
+     */
+    @SuppressWarnings("unchecked")
+    public void setDataProvider(DataProvider dataProvider) {
+        this.dataProvider = dataProvider;
     }
 
     /**
@@ -800,6 +826,7 @@ public class Table extends AbstractControl {
      *
      * @return the HTML head import statements for the control stylesheet
      */
+    @SuppressWarnings("deprecation")
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(512);
 
@@ -847,7 +874,7 @@ public class Table extends AbstractControl {
      *
      * @return the list of HEAD elements for the Table
      */
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
             headElements.addAll(getControlLink().getHeadElements());
@@ -992,9 +1019,20 @@ public class Table extends AbstractControl {
      *
      * @return the list of table rows
      */
+    @SuppressWarnings("unchecked")
     public List getRowList() {
-        if (rowList == null) {
-            rowList = new ArrayList(0);
+        if (rowList == null || rowList.isEmpty()) {
+
+            if (getDataProvider() != null) {
+                rowList = getDataProvider().getData();
+
+                if (rowList == null) {
+                    throw new IllegalStateException("DataProvider provided null data");
+                }
+
+            } else {
+                rowList = new ArrayList();
+            }
         }
 
         return rowList;
@@ -1009,6 +1047,7 @@ public class Table extends AbstractControl {
      *
      * @param rowList the list of table rows to set
      */
+    @SuppressWarnings("unchecked")
     public void setRowList(List rowList) {
         this.rowList = rowList;
     }
@@ -1244,7 +1283,7 @@ public class Table extends AbstractControl {
 
     /**
      * This method will clear the <tt>rowList</tt>, if the property
-     * <tt>clearRowListOnDestroy</tt> is true, set the sorted flag to false and
+     * <tt>nullifyRowListOnDestroy</tt> is true, set the sorted flag to false and
      * will invoke the onDestroy() method of any child controls.
      *
      * @see org.apache.click.Control#onDestroy()
@@ -1312,9 +1351,9 @@ public class Table extends AbstractControl {
         // If table class not specified, look for message property
         // 'table-default-class' in the global click-page.properties messages bundle.
         if (!hasAttribute("class") && getPage() != null) {
-            Map messages = getPage().getMessages();
+            Map<String, String> messages = getPage().getMessages();
             if (messages.containsKey("table-default-class")) {
-                String htmlClass = (String) messages.get("table-default-class");
+                String htmlClass = messages.get("table-default-class");
                 setAttribute("class", htmlClass);
             }
         }
@@ -1360,9 +1399,9 @@ public class Table extends AbstractControl {
     protected void renderHeaderRow(HtmlStringBuffer buffer) {
         buffer.append("<thead>\n<tr>\n");
 
-        final List tableColumns = getColumnList();
+        List<Column> tableColumns = getColumnList();
         for (int j = 0; j < tableColumns.size(); j++) {
-            Column column = (Column) tableColumns.get(j);
+            Column column = tableColumns.get(j);
             column.renderTableHeader(buffer, getContext());
             if (j < tableColumns.size() - 1) {
                 buffer.append("\n");
@@ -1377,6 +1416,7 @@ public class Table extends AbstractControl {
      *
      * @param buffer the StringBuffer to render the table body rows in
      */
+    @SuppressWarnings("unchecked")
     protected void renderBodyRows(HtmlStringBuffer buffer) {
         buffer.append("<tbody>\n");
 
@@ -1401,7 +1441,7 @@ public class Table extends AbstractControl {
         if (lastRow == 0) {
             renderBodyNoRows(buffer);
         } else {
-            final List tableRows = getRowList();
+            List tableRows = getRowList();
 
             Map rowAttributes = new HashMap(3);
 
@@ -1524,7 +1564,7 @@ public class Table extends AbstractControl {
      * @param row the domain object currently being rendered
      * @param rowIndex the rows index
      */
-    protected void addRowAttributes(Map attributes, Object row, int rowIndex) {
+    protected void addRowAttributes(Map<String, String> attributes, Object row, int rowIndex) {
     }
 
     /**
@@ -1582,10 +1622,10 @@ public class Table extends AbstractControl {
     protected void renderBodyRowColumns(HtmlStringBuffer buffer, int rowIndex) {
         Object row = getRowList().get(rowIndex);
 
-        final List tableColumns = getColumnList();
+        List<Column> tableColumns = getColumnList();
 
         for (int j = 0; j < tableColumns.size(); j++) {
-            Column column = (Column) tableColumns.get(j);
+            Column column = tableColumns.get(j);
             column.renderTableData(row, buffer, getContext(), rowIndex);
             if (j < tableColumns.size() - 1) {
                 buffer.append("\n");
@@ -1759,6 +1799,7 @@ public class Table extends AbstractControl {
      * The default row list sorting method, which will sort the row list based
      * on the selected column if the row list is not already sorted.
      */
+    @SuppressWarnings("unchecked")
     protected void sortRowList() {
         if (!isSorted() && StringUtils.isNotBlank(getSortedColumn())) {
 

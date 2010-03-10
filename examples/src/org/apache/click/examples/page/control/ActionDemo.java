@@ -33,10 +33,10 @@ import org.apache.click.util.Bindable;
  * In this example public fields are automatically added to the Page model using
  * their field name. In the case of controls their name will be automatically
  * set to their field name.
- *
- * @author Malcolm Edgar
  */
 public class ActionDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected ActionLink link = new ActionLink();
     @Bindable protected ActionButton button = new ActionButton();
@@ -45,6 +45,8 @@ public class ActionDemo extends BorderPage {
     public ActionDemo() {
 
         link.setActionListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 clicked = source.getClass().getName() + ".onAction invoked at " + (new Date());
                 return true;

@@ -22,8 +22,6 @@ import org.apache.click.examples.domain.auto._Address;
 
 /**
  * Provides an Address entity class.
- *
- * @author Malcolm Edgar
  */
 public class Address extends _Address {
 

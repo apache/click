@@ -20,12 +20,14 @@ package org.apache.click.examples.page.general;
 
 import java.util.List;
 import java.util.Map;
+
 import org.apache.click.Context;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Field;
 import org.apache.click.control.TextField;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.CssStyle;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
@@ -33,13 +35,15 @@ import org.apache.click.util.ClickUtils;
 
 /**
  * This example demonstrates how to manipulate the Head elements of a Page.
- *
- * @author Bob Schellink
  */
 public class PageHeadDemo extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     private ActionLink link;
     private Field field;
+
+    // Constructor ------------------------------------------------------------
 
     public PageHeadDemo() {
         // When this link is clicked it will toggle the Field's disabled attribute
@@ -53,12 +57,15 @@ public class PageHeadDemo extends BorderPage {
         addControl(field);
     }
 
+    // Public Methods ---------------------------------------------------------
+
     /**
      * Return the Page list of HEAD elements.
      *
      * @return the Page list of HEAD elements
      */
-    public List getHeadElements() {
+    @Override
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

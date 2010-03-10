@@ -45,11 +45,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides a Excel Export page example using the Apache POI library.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class ExcelExportPage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -62,6 +62,8 @@ public class ExcelExportPage extends BorderPage {
 
         ActionLink link = new ActionLink("export");
         link.setActionListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 export();
                 return false;
@@ -115,6 +117,7 @@ public class ExcelExportPage extends BorderPage {
 
     // -------------------------------------------------------- Private Methods
 
+    @SuppressWarnings("deprecation")
     private HSSFWorkbook createWorkbook() {
         HSSFWorkbook wb = new HSSFWorkbook();
 

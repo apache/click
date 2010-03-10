@@ -24,16 +24,16 @@ import org.apache.click.extras.tree.TreeNode;
 
 /**
  * Example usage of the {@link Tree} control.
- *
- * @author Bob Schellink
  */
 public class TreePage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     public static final String TREE_NODES_SESSION_KEY = "treeNodes";
 
     protected Tree tree;
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onInit()
@@ -67,7 +67,7 @@ public class TreePage extends BorderPage {
         addModel("treeNode", node);
     }
 
-    // --------------------------------------------------------- Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Creates and return a new tree instance.

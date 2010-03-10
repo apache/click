@@ -23,15 +23,14 @@ import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * This control renders a string of text.
- *
- * @author Bob Schellink
  */
 public class Text extends AbstractControl {
+
+    private static final long serialVersionUID = 1L;
 
     private Object text;
 
     public Text() {
-
     }
 
     public Text(Object text) {
@@ -46,12 +45,14 @@ public class Text extends AbstractControl {
         this.text = text;
     }
 
+    @Override
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(20);
         render(buffer);
         return buffer.toString();
     }
 
+    @Override
     public void render(HtmlStringBuffer buffer) {
         if(getText() != null) {
             buffer.append(getText());

@@ -33,10 +33,10 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a Java source code, HTML and XML examples rendering page.
- *
- * @author Malcolm Edgar
  */
 public class SourceViewer extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private static final String[] JAVA_KEYWORDS = { "package", "import",
             "class", "public", "protected", "private", "extends", "implements",

@@ -25,17 +25,17 @@ import org.apache.click.util.Bindable;
 /**
  * Provides an navigation example Page demonstrating forward and redirect
  * page navigation.
- *
- * @author Malcolm Edgar
  */
 public class NavigationA extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected ActionLink forwardLink = new ActionLink("forwardLink", this, "onForwardClick");
     @Bindable protected ActionLink forwardParamLink = new ActionLink("forwardParamLink", this, "onForwardParamClick");
     @Bindable protected ActionLink redirectLink = new ActionLink("redirectLink", this, "onRedirectClick");
     @Bindable protected ActionLink redirectParamLink = new ActionLink("redirectParamLink", this, "onRedirectParamClick");
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onInit()
@@ -90,7 +90,7 @@ public class NavigationA extends BorderPage {
         return false;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Target template to forward to.

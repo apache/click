@@ -30,14 +30,12 @@ import org.apache.click.control.RadioGroup;
  * <li>Gift Wrap</li>
  * </ul>
  * <p/>
- *
- * @author Malcolm Edgar
  */
 public class PackagingRadioGroup extends RadioGroup {
 
     private static final long serialVersionUID = 1L;
 
-    static final Map OPTIONS = new LinkedHashMap();
+    static final Map<String, String> OPTIONS = new LinkedHashMap<String, String>();
 
     static {
         OPTIONS.put("STD", "Standard ");

@@ -20,6 +20,11 @@ package org.apache.click.examples.page.springsecurity.secure;
 
 import org.apache.click.examples.page.BorderPage;
 
+/**
+ * Provides a Spring Security (ACEGI) path protected secure page class.
+ */
 public class SecurePage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
 }

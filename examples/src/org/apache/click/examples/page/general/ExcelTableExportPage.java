@@ -44,6 +44,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExcelTableExportPage extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     private static final String ACTION_COLUMN = "action";
 
     private ExportTable table1 = new ExportTable("table1");
@@ -55,7 +57,7 @@ public class ExcelTableExportPage extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public ExcelTableExportPage() {
         addColumns(table1);
@@ -77,7 +79,7 @@ public class ExcelTableExportPage extends BorderPage {
         addControl(editLink);
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see Page#onRender()
@@ -90,7 +92,7 @@ public class ExcelTableExportPage extends BorderPage {
         table3.setRowList(customers);
     }
 
-    // -------------------------------------------------------- Private Methods
+    //  Private Methods --------------------------------------------------------
 
     private void setupExporter(ExportTable table) {
         // Setup table exporting

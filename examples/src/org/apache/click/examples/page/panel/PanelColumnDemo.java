@@ -36,11 +36,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Demonstrates usage of the Panel Column Control.
- *
- * @author rlecheta
  */
 @Component
 public class PanelColumnDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Panel panel = new Panel("panel", "/panel/customerDetailsPanel.htm");
     @Bindable protected Form form = new Form();
@@ -52,7 +52,7 @@ public class PanelColumnDemo extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public PanelColumnDemo() {
         form.setMethod("get");
@@ -66,7 +66,7 @@ public class PanelColumnDemo extends BorderPage {
         table.setPageSize(3);
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * Search button handler
@@ -97,7 +97,7 @@ public class PanelColumnDemo extends BorderPage {
         }
     }
 
-    // -------------------------------------------------------- Private Methods
+    // Private Methods --------------------------------------------------------
 
     /**
      * Search the Customer by name and create the Table control

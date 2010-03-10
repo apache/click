@@ -32,14 +32,12 @@ import org.apache.click.control.Select;
  * <li>Dr</li>
  * </ul>
  * <p/>
- *
- * @author Malcolm Edgar
  */
 public class TitleSelect extends Select {
 
     private static final long serialVersionUID = 1L;
 
-    static final Map OPTIONS = new LinkedHashMap();
+    static final Map<String, String> OPTIONS = new LinkedHashMap<String, String>();
 
     static {
         OPTIONS.put("", "");

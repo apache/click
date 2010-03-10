@@ -23,7 +23,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.BaseContext;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Column;
@@ -57,13 +57,11 @@ import org.springframework.stereotype.Component;
  * #2. By default FormTable creates an internal Form for submissions. However
  * it is possible to use the FormTable constructor which accepts a Form so that
  * FormTable can be added to this "external" Form.
- *
- *
- * @author Malcolm Edgar
- * @author Bob Schellink
  */
 @Component
 public class EditFormTablePage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     private static final int NUM_ROWS = 20;
 
@@ -74,6 +72,8 @@ public class EditFormTablePage extends BorderPage {
     private Form customerForm = new Form("customerForm");
 
     private Form form = new Form("form") {
+
+        private static final long serialVersionUID = 1L;
 
         /**
          * #1. PLEASE NOTE: FormTable will only be processed by form if the
@@ -96,7 +96,7 @@ public class EditFormTablePage extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     public EditFormTablePage() {
         // Setup customers form
@@ -111,7 +111,7 @@ public class EditFormTablePage extends BorderPage {
         customerForm.add(fieldSet);
         customerForm.add(new Submit("add", "Add Customer", this, "onAddClick"));
 
-        // * #2. Create the FormTable and pass in the existing Form into the
+        // #2. Create the FormTable and pass in the existing Form into the
         // constructor. FormTable now knows it should not create an internal
         // Form instance.
         table = new FormTable("table", form);
@@ -174,7 +174,7 @@ public class EditFormTablePage extends BorderPage {
         addControl(form);
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     @Override
     public boolean onSecurityCheck() {
@@ -203,7 +203,7 @@ public class EditFormTablePage extends BorderPage {
         if (form.isValid()) {
             // Please note with Cayenne ORM this will persist any changes
             // to data objects submitted by the form.
-            DataContext.getThreadDataContext().commitChanges();
+            BaseContext.getThreadObjectContext().commitChanges();
         }
         return true;
     }
@@ -211,7 +211,7 @@ public class EditFormTablePage extends BorderPage {
     public boolean onCancelClick() {
         // Rollback any changes made to the customers, which are stored in
         // the data context
-        DataContext.getThreadDataContext().rollbackChanges();
+         BaseContext.getThreadObjectContext().rollbackChanges();
 
         refreshTableCustomers();
 
@@ -258,6 +258,8 @@ public class EditFormTablePage extends BorderPage {
         }
         return true;
     }
+
+    // Private Methods --------------------------------------------------------
 
     private void refreshTableCustomers() {
         List<Customer> allCustomers = customerService.getCustomersSortedBy(Customer.DATE_JOINED_PROPERTY, false);

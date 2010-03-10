@@ -35,16 +35,16 @@ import org.apache.click.extras.tree.TreeNode;
 
 /**
  * Example usage of some extra functionality of the {@link Tree} control.
- *
- * @author Bob Schellink
  */
 public class AdvancedTreePage extends BorderPage implements TreeListener {
+
+    private static final long serialVersionUID = 1L;
 
     public static final String TREE_NODES_SESSION_KEY = "advancedTreeNodes";
 
     private Tree tree;
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Page#onInit()
@@ -82,7 +82,7 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
         return true;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Creates and return a new tree instance.
@@ -170,7 +170,7 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
         return tree;
     }
 
-    // --------------------------------------------------- TreeListener Support
+    // TreeListener Support ---------------------------------------------------
 
     /**
      * This method, which implements TreeListener, is called when a node is selected

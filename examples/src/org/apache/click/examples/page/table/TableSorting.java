@@ -27,7 +27,7 @@ import org.apache.click.control.Table;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.util.Bindable;
+import org.apache.click.util.DataProvider;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,14 +36,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class TableSorting extends BorderPage {
 
-    @Bindable protected Table table = new Table();
+    private static final long serialVersionUID = 1L;
 
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    // ------------------------------------------------------------ Constructor
-
     public TableSorting() {
+        final Table table = new Table("table");
+
         // Setup customers table
         table.setClass(Table.CLASS_SIMPLE);
         table.setHoverRows(true);
@@ -71,24 +71,18 @@ public class TableSorting extends BorderPage {
         column = new Column("active");
         column.setTextAlign("center");
         table.addColumn(column);
-    }
 
-    // --------------------------------------------------------- Event Handlers
+        // Return sorted data to the table.
+        table.setDataProvider(new DataProvider<Customer>() {
+            public List<Customer> getData() {
+                return customerService.getCustomersSortedBy(table.getSortedColumn(),
+                                                            table.isSortedAscending());
+            }
+        });
 
-    /**
-     * Load the Table rowList to render using the selected sorting column, and
-     * then set the Table status to sorted.
-     *
-     * @see org.apache.click.Page#onRender()
-     */
-    @Override
-    public void onRender() {
-        List<Customer> customers =
-            customerService.getCustomersSortedBy(table.getSortedColumn(),
-                                                 table.isSortedAscending());
-
-        table.setRowList(customers);
         table.setSorted(true);
+
+        addControl(table);
     }
 
 }

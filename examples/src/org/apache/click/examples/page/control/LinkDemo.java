@@ -30,10 +30,10 @@ import org.apache.click.util.Bindable;
 
 /**
  * Provides an ActionLink, ExternalLink and PageLink control examples Page.
- *
- * @author Malcolm Edgar
  */
 public class LinkDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
     @Bindable protected ActionLink disabledActionLink = new ActionLink("DisabledActionLink", this, "onLinkClick");
@@ -48,6 +48,8 @@ public class LinkDemo extends BorderPage {
     @Bindable protected PageButton disabledPageButton = new PageButton("DisabledPageButton", HomePage.class);
 
     @Bindable protected String clicked;
+
+    // Constructor ------------------------------------------------------------
 
     public LinkDemo() {
         iconActionLink.setRenderLabelAndImage(true);
@@ -64,6 +66,8 @@ public class LinkDemo extends BorderPage {
         disabledPageLink.setDisabled(true);
         disabledPageButton.setDisabled(true);
     }
+
+    // Event Handlers ---------------------------------------------------------
 
     public boolean onLinkClick() {
         clicked = getClass().getName() + ".onLinkClick invoked at " + (new Date());

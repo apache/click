@@ -29,11 +29,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides the last page of a multi page work flow.
- *
- * @author Malcolm Edgar
  */
 @Component
 public class LastPage extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Resource(name="bookingService")
     private BookingService bookingService;

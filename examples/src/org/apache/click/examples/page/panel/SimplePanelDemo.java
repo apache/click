@@ -24,10 +24,10 @@ import org.apache.click.util.Bindable;
 
 /**
  * Provides a simple Panel demonstration.
- *
- * @author Malcolm Edgar
  */
 public class SimplePanelDemo extends BorderPage {
+
+    private static final long serialVersionUID = 1L;
 
     @Bindable protected Panel panel = new Panel("panel", "/panel/simple-panel.htm");
 

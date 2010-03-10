@@ -756,6 +756,7 @@ public class Context {
      * @return rendered Velocity template merged with the model data
      * @throws RuntimeException if an error occurs
      */
+    @SuppressWarnings("unchecked")
     public String renderTemplate(Class templateClass, Map<String, Object> model) {
 
         if (templateClass == null) {
