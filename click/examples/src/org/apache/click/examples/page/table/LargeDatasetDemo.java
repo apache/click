@@ -102,8 +102,8 @@ public class LargeDatasetDemo extends BorderPage {
 
         int customerCount = customerService.getNumberOfCustomers();
 
-        // Return a paginating list of the Table control. The paginating list
-        // provides a wrapper around the "page" of customer data so that the
+        // Return a paginating list for the Table control. The paginating list
+        // provides a wrapper around the "page" of customer data, so that the
         // Table control thinks it is working will the full result set rather
         // than just a window.
         return new PaginatingList<Customer>(customerList,
