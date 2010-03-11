@@ -83,19 +83,17 @@ public class LargeDatasetDemo extends BorderPage {
 
         table.setDataProvider(new DataProvider<Customer>() {
             public List<Customer> getData() {
-                return getPaginatingList();
+                return getCustomerList();
             }
         });
     }
 
     // Private Methods --------------------------------------------------------
 
-    private PaginatingList<Customer> getPaginatingList() {
+    private List<Customer> getCustomerList() {
 
         // Below we retrieve only those customers between:
         //     first row .. (first row + page size)
-        // In a real application one would use an ORM or JDBC to only retrieve
-        // the needed rows
         List<Customer> customerList =
             customerService.getCustomersForPage(table.getFirstRow(),
                                                 table.getPageSize(),
@@ -104,6 +102,10 @@ public class LargeDatasetDemo extends BorderPage {
 
         int customerCount = customerService.getNumberOfCustomers();
 
+        // Return a paginating list of the Table control. The paginating list
+        // provides a wrapper around the "page" of customer data so that the
+        // Table control thinks it is working will the full result set rather
+        // than just a window.
         return new PaginatingList<Customer>(customerList,
                                             table.getFirstRow(),
                                             table.getPageSize(),
