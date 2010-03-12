@@ -55,8 +55,8 @@ public class LargeDatasetDemo extends BorderPage {
         table.setClass(Table.CLASS_ITS);
         table.setSortable(true);
 
-        // We will sort the data ourselves. We set table sorted attribute to true
-        // so the table doesn't attempt to sort the data
+        // VERY IMPORTANT: we will sort the data ourselves using the database,
+        // make sure the Table does not attempt to sort data set.
         table.setSorted(true);
 
         Column column = new Column("name");
