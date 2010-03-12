@@ -1024,7 +1024,16 @@ public class Table extends AbstractControl {
         if (rowList == null || rowList.isEmpty()) {
 
             if (getDataProvider() != null) {
-                rowList = getDataProvider().getData();
+                Iterable iterableData = getDataProvider().getData();
+
+                if (iterableData instanceof List) {
+                    rowList = (List) iterableData;
+
+                } else {
+                    for (Object row : iterableData) {
+                        rowList.add(row);
+                    }
+                }
 
                 if (rowList == null) {
                     throw new IllegalStateException("DataProvider provided null data");

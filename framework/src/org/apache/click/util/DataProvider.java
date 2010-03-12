@@ -18,18 +18,16 @@
  */
 package org.apache.click.util;
 
-import java.util.List;
-
 /**
  * An interface to provide data on demand to controls.
  */
 public interface DataProvider<T> {
 
     /**
-     * Return the list of data items supplied by the data provider.
+     * Return the iterable collection of data items supplied by the data provider.
      *
-     * @return the list of data items supplied by the data provider.
+     * @return the iterable collection of data items supplied by the data provider.
      */
-    public List<T> getData();
+    public Iterable<T> getData();
 
 }

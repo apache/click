@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 /**
  * Provides a paginating list for displaying a sliding window into a much larger
@@ -45,6 +46,9 @@ import java.util.ListIterator;
  *        // Setup table
  *        table.setPageSize(5);
  *        table.setSortable(true);
+ *
+ *        // VERY IMPORTANT: we will sort the data ourselves using the database,
+ *        // make sure the Table does not attempt to sort data set.
  *        table.setSorted(true);
  *
  *        table.addColumn(new Column("id"));
@@ -54,12 +58,12 @@ import java.util.ListIterator;
  *
  *        table.setDataProvider(new DataProvider<Customer>() {
  *            public List<Customer> getData() {
- *                return getPaginatingList();
+ *                return getCustomerList();
  *            }
  *        });
  *    }
  *
- *    private PaginatingList<Customer> getPaginatingList() {
+ *    private List<Customer> getCustomerList() {
  *
  *        // Below we retrieve only those customers between:
  *        //     first row .. (first row + page size)
@@ -71,6 +75,10 @@ import java.util.ListIterator;
  *
  *        int customerCount = customerService.getNumberOfCustomers();
  *
+ *        // Return a paginating list for the Table control. The paginating list
+ *        // provides a wrapper around the "page" of customer data, so that the
+ *        // Table control thinks it is working will the full result set rather
+ *        // than just a window.
  *        return new PaginatingList<Customer>(customerList,
  *                                            table.getFirstRow(),
  *                                            table.getPageSize(),
@@ -100,7 +108,7 @@ public class PaginatingList<E> implements List<E> {
      * Create a paginating list with the given pageData, first page item index,
      * page size and the total data set size.
      *
-     * @param pageData the page of data to display
+     * @param pageData the iterator page of data to display
      * @param pageSize the number of items read from the pageData and display
      * @param firstIndex the index of the first item to display
      * @param totalSize the total size of the paginated data set
@@ -126,6 +134,19 @@ public class PaginatingList<E> implements List<E> {
         this.firstIndex = firstIndex;
         this.pageSize = pageSize;
         this.totalSize = totalSize;
+    }
+
+    /**
+     * Create a paginating list with the given pageData, first page item index,
+     * page size and the total data set size.
+     *
+     * @param pageData the set of page of data to display
+     * @param pageSize the number of items read from the pageData and display
+     * @param firstIndex the index of the first item to display
+     * @param totalSize the total size of the paginated data set
+     */
+    public PaginatingList(Set<E> pageData, int firstIndex, int pageSize, int totalSize) {
+        this(pageData.iterator(), firstIndex, pageSize, totalSize);
     }
 
     /**
