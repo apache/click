@@ -242,7 +242,7 @@ public class PropertyUtils {
     /**
      * See DRY Performance article by Kirk Pepperdine.
      * <p/>
-     * http://www.javaspecialists.co.za/archive/newsletter.do?issue=134
+     * http://www.javaspecialists.eu/archive/Issue134.html
      */
     private static class CacheKey {
 
