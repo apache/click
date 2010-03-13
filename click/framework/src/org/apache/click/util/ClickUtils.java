@@ -20,6 +20,7 @@ package org.apache.click.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,7 +28,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
@@ -807,44 +807,15 @@ public class ClickUtils {
     }
 
     /**
-     * Close the given input stream and ignore any exceptions thrown.
+     * Close the given closeable (Reader, Writer, Stream) and ignore any
+     * exceptions thrown.
      *
-     * @param stream the stream, reader or writer to close.
+     * @param closeable the closeable (Reader, Writer, Stream) to close.
      */
-    public static void close(InputStream  stream) {
-        if (stream != null) {
+    public static void close(Closeable closeable) {
+        if (closeable != null) {
             try {
-                stream.close();
-            } catch (IOException ex) {
-                // Ignore.
-            }
-        }
-    }
-
-    /**
-     * Close the given output stream and ignore any exceptions thrown.
-     *
-     * @param stream the output stream to close.
-     */
-    public static void close(OutputStream stream) {
-        if (stream != null) {
-            try {
-                stream.close();
-            } catch (IOException ex) {
-                // Ignore.
-            }
-        }
-    }
-
-    /**
-     * Close the given reader and ignore any exceptions thrown.
-     *
-     * @param reader the reader to close.
-     */
-    public static void close(Reader reader) {
-        if (reader != null) {
-            try {
-                reader.close();
+                closeable.close();
             } catch (IOException ioe) {
                 // Ignore
             }
