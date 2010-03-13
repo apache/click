@@ -307,9 +307,9 @@ public class ActionLink extends AbstractLink {
         }
 
         if (hasParameters()) {
-            Iterator i = getParameters().keySet().iterator();
+            Iterator<String> i = getParameters().keySet().iterator();
             while (i.hasNext()) {
-                String paramName = i.next().toString();
+                String paramName = i.next();
                 if (!paramName.equals(ACTION_LINK) && !paramName.equals(VALUE)) {
                     Object paramValue = getParameters().get(paramName);
 
