@@ -34,15 +34,12 @@ import org.apache.click.util.HtmlStringBuffer;
 /**
  * Provides an abstract convenience class that implements Container and extend Field.
  * <p/>
- * AbstractContainerField delegates Contain specific actions to an internal
- * Container instance. You can access the Container instance through
- * {@link #getContainer()}.
- * <p/>
- * If you need to bind a request parameter to this fields value, please see
+ * If you need to bind a request parameter to this field's value, please see
  * {@link #bindRequestValue()}.
  * <p/>
  * Here is an example of a Border Control that can wrap a Button and render
  * a <tt>div</tt> border around it.
+ *
  * <pre class="prettyprint">
  * public class ButtonBorder extends AbstractContainerField {
  *     public ButtonBorder(String name) {
@@ -53,8 +50,8 @@ import org.apache.click.util.HtmlStringBuffer;
  *         return "div";
  *     }
  *
- *     public Control addControl(Button button) {
- *         return getContainer().addControl(button);
+ *     public Control add(Button button) {
+ *         return getContainer().add(button);
  *     }
  * } </pre>
  */
@@ -234,8 +231,8 @@ public abstract class AbstractContainerField extends Field implements Container 
     /**
      * This method does nothing by default.
      * <p/>
-     * Subclasses should override this method to binds the submitted request
-     * value to the Field's value. For example:
+     * Subclasses can override this method to binds the submitted request
+     * value to the Field value. For example:
      * <p/>
      * <pre class="prettyprint">
      * public CoolField extends AbstractContainerField {
@@ -247,23 +244,9 @@ public abstract class AbstractContainerField extends Field implements Container 
      *     public void bindRequestValue() {
      *         setValue(getRequestValue());
      *     }
+     * } </pre>
      *
-     *     // Below is the actual getRequestValue implementation as defined
-     *     // in Field. This is done solely to show how to retrieve the
-     *     // request parameter based on the fields name.
-     *     protected String getRequestValue() {
-     *         String value = getContext().getRequestParameter(getName());
-     *         if (value != null) {
-     *             return value.trim();
-     *         } else {
-     *             return "";
-     *         }
-     *     }
-     * }
-     * </pre>
-     *
-     * Note you can use method {@link #getRequestValue()} to retrieve the
-     * fields value if the request parameter is the fields name.
+     * @see org.apache.click.control.Field#getRequestValue()
      */
     public void bindRequestValue() {
     }
