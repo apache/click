@@ -251,8 +251,8 @@ public class MessagesMap implements Map<String, String> {
     private void ensureInitialized() {
         if (messages == null) {
 
-            String resourceKey =
-                globalBaseName + baseClass.getName() + locale.toString();
+            CacheKey resourceKey = new CacheKey(globalBaseName,
+                baseClass.getName(), locale.toString());
 
             messages = (Map) MESSAGES_CACHE.get(resourceKey);
 
@@ -317,4 +317,84 @@ public class MessagesMap implements Map<String, String> {
         }
     }
 
+    /**
+     * See DRY Performance article by Kirk Pepperdine.
+     * <p/>
+     * http://www.javaspecialists.eu/archive/Issue134.html
+     */
+    private static class CacheKey {
+
+        /** Global base name to encapsulate in cache key. */
+        private final String globalBaseName;
+
+        /** Base class name to encapsulate in cache key. */
+        private final String baseClass;
+
+        /** Locale to encapsulate in cache key. */
+        private final String locale;
+
+        /**
+         * Constructs a new CacheKey for the given baseName, baseClass and
+         * locale.
+         *
+         * @param globalBaseName the base name to build the cache key for
+         * @param baseClass the base class name to build the cache key for
+         * @param locale the request locale to build the cache key for
+         */
+        public CacheKey(String globalBaseName, String baseClass, String locale) {
+            if (globalBaseName == null) {
+                throw new IllegalArgumentException("Null globalBaseName parameter");
+            }
+            if (baseClass == null) {
+                throw new IllegalArgumentException("Null baseClass parameter");
+            }
+            if (locale == null) {
+                throw new IllegalArgumentException("Null locale parameter");
+            }
+            this.globalBaseName = globalBaseName;
+            this.baseClass = baseClass;
+            this.locale = locale;
+        }
+
+        /**
+         * @see Object#equals(Object)
+         *
+         * @param o the object with which to compare this instance with
+         * @return true if the specified object is the same as this object
+         */
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+
+            CacheKey that = (CacheKey) o;
+
+            if (!globalBaseName.equals(that.globalBaseName)) {
+                return false;
+            }
+
+            if (!baseClass.equals(that.baseClass)) {
+                return false;
+            }
+
+            if (!locale.equals(that.locale)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        /**
+         * @see Object#hashCode()
+         *
+         * @return a hash code value for this object.
+         */
+        @Override
+        public final int hashCode() {
+            return globalBaseName.hashCode()
+                * 31 + baseClass.hashCode()
+                * 31 + locale.hashCode();
+        }
+    }
 }
