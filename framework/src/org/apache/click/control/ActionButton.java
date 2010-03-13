@@ -80,7 +80,7 @@ public class ActionButton extends Button {
 
 
     /** The link parameters map. */
-    protected Map parameters;
+    protected Map<String, String> parameters;
 
     // ----------------------------------------------------------- Constructors
 
@@ -272,9 +272,9 @@ public class ActionButton extends Button {
         }
 
         if (hasParameters()) {
-            Iterator i = getParameters().keySet().iterator();
+            Iterator<String> i = getParameters().keySet().iterator();
             while (i.hasNext()) {
-                String name = i.next().toString();
+                String name = i.next();
                 if (!name.equals(ACTION_BUTTON) && !name.equals(VALUE)) {
                     Object paramValue = getParameters().get(name);
                     String encodedValue
@@ -340,9 +340,9 @@ public class ActionButton extends Button {
      *
      * @return the ActionButton parameters Map
      */
-    public Map getParameters() {
+    public Map<String, String> getParameters() {
         if (parameters == null) {
-            parameters = new HashMap(4);
+            parameters = new HashMap<String, String>(4);
         }
         return parameters;
     }
@@ -457,6 +457,7 @@ public class ActionButton extends Button {
      * This method binds the submitted request value to the ActionLink's
      * value.
      */
+    @SuppressWarnings("unchecked")
     public void bindRequestValue() {
         Context context = getContext();
         if (context.isMultipartRequest()) {

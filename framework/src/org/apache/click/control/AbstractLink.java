@@ -63,7 +63,7 @@ public abstract class AbstractLink extends AbstractControl {
     protected String label;
 
     /** The link parameters map. */
-    protected Map parameters;
+    protected Map<String, Object> parameters;
 
     /** The link 'tabindex' attribute. */
     protected int tabindex;
@@ -380,9 +380,9 @@ public abstract class AbstractLink extends AbstractControl {
      *
      * @return the AbstractLink parameters Map
      */
-    public Map getParameters() {
+    public Map<String, Object> getParameters() {
         if (parameters == null) {
-            parameters = new HashMap(4);
+            parameters = new HashMap<String, Object>(4);
         }
         return parameters;
     }
@@ -615,12 +615,12 @@ public abstract class AbstractLink extends AbstractControl {
      * @param parameters the parameters to render
      * @param context the request context
      */
-    protected void renderParameters(HtmlStringBuffer buffer, Map parameters,
+    protected void renderParameters(HtmlStringBuffer buffer, Map<String, Object> parameters,
         Context context) {
 
-        Iterator i = parameters.keySet().iterator();
+        Iterator<String> i = parameters.keySet().iterator();
         while (i.hasNext()) {
-            String paramName = i.next().toString();
+            String paramName = i.next();
             Object paramValue = getParameters().get(paramName);
 
             // Check for multivalued parameter
@@ -653,6 +653,7 @@ public abstract class AbstractLink extends AbstractControl {
      *
      * @param context the request context
      */
+    @SuppressWarnings("unchecked")
     protected void bindRequestParameters(Context context) {
         HttpServletRequest request = context.getRequest();
         Enumeration paramNames = request.getParameterNames();
