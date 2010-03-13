@@ -94,6 +94,9 @@ public class AdvancedTable extends BorderPage implements ApplicationContextAware
         table.addColumn(column);
 
         table.setDataProvider(new DataProvider<Customer>() {
+
+            private static final long serialVersionUID = 1L;
+
             public List<Customer> getData() {
                 return getCustomerService().getCustomers();
             }
