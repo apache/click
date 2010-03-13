@@ -18,10 +18,12 @@
  */
 package org.apache.click.util;
 
+import java.io.Serializable;
+
 /**
  * An interface to provide data on demand to controls.
  */
-public interface DataProvider<T> {
+public interface DataProvider<T> extends Serializable {
 
     /**
      * Return the iterable collection of data items supplied by the data provider.
