@@ -22,14 +22,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.click.control.Container;
+import java.util.TreeSet;
+
 import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.click.control.Button;
+import org.apache.click.control.Container;
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
@@ -87,7 +88,7 @@ public class ContainerUtils {
      * null
      */
     public static void copyContainerToObject(Container container,
-        Object object, List fieldList) {
+        Object object, List<Field> fieldList) {
 
         if (container == null) {
             throw new IllegalArgumentException("Null container parameter");
@@ -107,7 +108,7 @@ public class ContainerUtils {
                 String containerClassName =
                     ClassUtils.getShortClassName(container.getClass());
                 logService.debug("   " + containerClassName
-                    + " has no fields to copy from");
+                                 + " has no fields to copy from");
             }
             //Exit early.
             return;
@@ -127,11 +128,16 @@ public class ContainerUtils {
 
         LogService logService = ClickUtils.getLogService();
 
-        Set properties = getObjectPropertyNames(object);
+        Set<String> properties = getObjectPropertyNames(object);
         Map ognlContext = new HashMap();
 
-        for (int i = 0,  size = fieldList.size(); i < size; i++) {
-            Field field = (Field) fieldList.get(i);
+        for (Field field : fieldList) {
+
+            // Ignore disabled field as their values are not submitted in HTML
+            // forms
+            if (field.isDisabled()) {
+                continue;
+            }
 
             if (!hasMatchingProperty(field, properties)) {
                 continue;
@@ -175,7 +181,7 @@ public class ContainerUtils {
      */
     public static void copyContainerToObject(Container container,
         Object object) {
-        final List fieldList = getInputFields(container);
+        List<Field> fieldList = getInputFields(container);
         copyContainerToObject(container, object, fieldList);
     }
 
@@ -203,7 +209,7 @@ public class ContainerUtils {
      * attributes
      */
     public static void copyObjectToContainer(Object object,
-        Container container, List fieldList) {
+        Container container, List<Field> fieldList) {
         if (object == null) {
             throw new IllegalArgumentException("Null object parameter");
         }
@@ -241,12 +247,11 @@ public class ContainerUtils {
             return;
         }
 
-        Set properties = getObjectPropertyNames(object);
+        Set<String> properties = getObjectPropertyNames(object);
 
         LogService logService = ClickUtils.getLogService();
 
-        for (int i = 0,  size = fieldList.size(); i < size; i++) {
-            Field field = (Field) fieldList.get(i);
+        for (Field field : fieldList) {
 
             if (!hasMatchingProperty(field, properties)) {
                 continue;
@@ -287,7 +292,7 @@ public class ContainerUtils {
     public static void copyObjectToContainer(Object object,
         Container container) {
 
-        final List fieldList = getInputFields(container);
+        List<Field> fieldList = getInputFields(container);
         copyObjectToContainer(object, container, fieldList);
     }
 
@@ -304,14 +309,13 @@ public class ContainerUtils {
      * @return the control which name matched the given name
      */
     public static Control findControlByName(Container container, String name) {
-        Control control = (Control) container.getControl(name);
+        Control control = container.getControl(name);
 
         if (control != null) {
             return control;
 
         } else {
-            for (int i = 0; i < container.getControls().size(); i++) {
-                Control childControl = (Control) container.getControls().get(i);
+            for (Control childControl : container.getControls()) {
 
                 if (childControl instanceof Container) {
                     Container childContainer = (Container) childControl;
@@ -349,12 +353,12 @@ public class ContainerUtils {
      * @param container the container to obtain the buttons from
      * @return the list of contained buttons
      */
-    public static List getButtons(final Container container) {
+    public static List<Button> getButtons(Container container) {
         if (container == null) {
             throw new IllegalArgumentException("Null container parameter");
         }
 
-        final List buttons = new ArrayList();
+        List<Button> buttons = new ArrayList<Button>();
         addButtons(container, buttons);
         return buttons;
     }
@@ -369,12 +373,12 @@ public class ContainerUtils {
      * @return list of container fields which are not valid, not hidden and not
      * disabled
      */
-    public static List<Field> getErrorFields(final Container container) {
+    public static List<Field> getErrorFields(Container container) {
         if (container == null) {
             throw new IllegalArgumentException("Null container parameter");
         }
 
-        final List<Field> fields = new ArrayList<Field>();
+        List<Field> fields = new ArrayList<Field>();
         addErrorFields(container, fields);
         return fields;
     }
@@ -388,12 +392,12 @@ public class ContainerUtils {
      * @param container the container to obtain the fields from
      * @return the map of contained fields
      */
-    public static Map getFieldMap(final Container container) {
+    public static Map<String, Field> getFieldMap(Container container) {
         if (container == null) {
             throw new IllegalArgumentException("Null container parameter");
         }
 
-        final Map fields = new HashMap();
+        Map<String, Field> fields = new HashMap<String, Field>();
         addFields(container, fields);
         return fields;
     }
@@ -405,12 +409,12 @@ public class ContainerUtils {
      * @param container the container to obtain the fields from
      * @return the list of contained fields
      */
-    public static List getFields(final Container container) {
+    public static List<Field> getFields(Container container) {
         if (container == null) {
             throw new IllegalArgumentException("Null container parameter");
         }
 
-        final List fields = new ArrayList();
+        List<Field> fields = new ArrayList<Field>();
         addFields(container, fields);
         return fields;
     }
@@ -423,12 +427,12 @@ public class ContainerUtils {
      * @param container the container to obtain the fields from
      * @return the list of contained fields
      */
-    public static List getFieldsAndLabels(final Container container) {
+    public static List<Field> getFieldsAndLabels(Container container) {
         if (container == null) {
             throw new IllegalArgumentException("Null container parameter");
         }
 
-        final List fields = new ArrayList();
+        List<Field> fields = new ArrayList<Field>();
         addFieldsAndLabels(container, fields);
         return fields;
     }
@@ -447,7 +451,7 @@ public class ContainerUtils {
             throw new IllegalArgumentException("Null container parameter");
         }
 
-        final List<Field> fields = new ArrayList<Field>();
+        List<Field> fields = new ArrayList<Field>();
         addHiddenFields(container, fields);
         return fields;
     }
@@ -466,7 +470,7 @@ public class ContainerUtils {
             throw new IllegalArgumentException("Null container parameter");
         }
 
-        final List<Field> fields = new ArrayList<Field>();
+        List<Field> fields = new ArrayList<Field>();
         addInputFields(container, fields);
         return fields;
     }
@@ -516,7 +520,7 @@ public class ContainerUtils {
      * <tt>(index &lt; 0 || index &gt; container.getControls().size())</tt>
      */
     public static Control insert(Container container, Control control, int index,
-        Map controlMap) {
+        Map<String, Control> controlMap) {
 
         // Pre conditions start
         if (control == null) {
@@ -604,7 +608,7 @@ public class ContainerUtils {
      * @throws IllegalArgumentException if the control is null
      */
     public static boolean remove(Container container, Control control,
-        Map controlMap) {
+        Map<String, Control> controlMap) {
 
         if (control == null) {
             throw new IllegalArgumentException("Control cannot be null");
@@ -641,12 +645,12 @@ public class ContainerUtils {
      * @param object the object to extract property names from
      * @return the unique set of property names
      */
-    private static Set getObjectPropertyNames(Object object) {
+    private static Set<String> getObjectPropertyNames(Object object) {
         if (object instanceof Map) {
             return ((Map) object).keySet();
         }
 
-        HashSet hashSet = new HashSet();
+        Set<String> hashSet = new TreeSet<String>();
 
         Method[] methods = object.getClass().getMethods();
 
@@ -685,7 +689,7 @@ public class ContainerUtils {
      * @return true if the specified field name is contained in the properties,
      * false otherwise
      */
-    private static boolean hasMatchingProperty(Field field, Set properties) {
+    private static boolean hasMatchingProperty(Field field, Set<String> properties) {
         String fieldName = field.getName();
         if (fieldName.indexOf(".") != -1) {
             fieldName = fieldName.substring(0, fieldName.indexOf("."));
@@ -922,7 +926,7 @@ public class ContainerUtils {
     * @param fieldList the forms list of fields to obtain field values from
     * @param map the map to populate with field values
     */
-    private static void copyFieldsToMap(List fieldList, Map map) {
+    private static void copyFieldsToMap(List<Field> fieldList, Map<String, Object> map) {
 
         LogService logService = ClickUtils.getLogService();
 
@@ -930,8 +934,7 @@ public class ContainerUtils {
         objectClassname =
             objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
 
-        for (int i = 0, size = fieldList.size(); i < size; i++) {
-            Field field = (Field) fieldList.get(i);
+        for (Field field : fieldList) {
 
             // Check if the map contains the fields name. The fields name can
             // also be a path for example 'foo.bar'
@@ -959,7 +962,7 @@ public class ContainerUtils {
      * @param map the map containing values to populate the fields with
      * @param fieldList the forms list of fields to be populated
      */
-    private static void copyMapToFields(Map map, List<Field> fieldList) {
+    private static void copyMapToFields(Map<String, Object> map, List<Field> fieldList) {
 
         LogService logService = ClickUtils.getLogService();
 
