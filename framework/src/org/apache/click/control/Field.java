@@ -205,6 +205,18 @@ public abstract class Field extends AbstractControl {
     /** The Field label. */
     protected String label;
 
+    /** The field label "style" attribute value. */
+    protected String labelStyle;
+
+    /** The field label "class" attribute value. */
+    protected String labelStyleClass;
+
+    /** The field's parent element "style" attribute hint. */
+    protected String parentStyleHint;
+
+    /** The field's parent element "class" attribute hint. */
+    protected String parentStyleClassHint;
+
     /** The Field is readonly flag. */
     protected boolean readonly;
 
@@ -577,6 +589,112 @@ public abstract class Field extends AbstractControl {
      */
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    /**
+     * Return the field label "style" attribute value.
+     *
+     * @see #setLabelStyle(java.lang.String)
+     *
+     * @return the field label "style" attribute value
+     */
+    public String getLabelStyle() {
+        return labelStyle;
+    }
+
+    /**
+     * Set the field label "style" attribute value.
+     * <p/>
+     * <b>Please note</b>: the label is rendered by the containing Form
+     * or container, not the field itself. It is up to the parent Form
+     * (or container) on how to apply the label style.
+     * <p/>
+     * <pre class="prettyprint">
+     * nameField.setLabelStyle("color: green; font-weight: bold");</pre>
+     *
+     * @param value the field label "style" attribute value
+     */
+    public void setLabelStyle(String value) {
+        this.labelStyle = value;
+    }
+
+    /**
+     * Return the field label "class" attribute value.
+     *
+     * @see #setLabelStyleClass(java.lang.String)
+     *
+     * @return the field label "class" attribute value
+     */
+    public String getLabelStyleClass() {
+        return labelStyleClass;
+    }
+
+    /**
+     * Set the field label "class" attribute value.
+     * <p/>
+     * <b>Please note</b>: the label is rendered by the containing Form
+     * or container, not the field itself. It is up to the parent Form
+     * (or container) on how to apply the label style class.
+     *
+     * @param value the field label "class" attribute value
+     */
+    public void setLabelStyleClass(String value) {
+        this.labelStyleClass = value;
+    }
+
+    /**
+     * Return the field's parent "style" attribute hint.
+     *
+     * @see #setParentStyleHint(java.lang.String)
+     *
+     * @return the field's parent "style" attribute hint
+     */
+    public String getParentStyleHint() {
+        return parentStyleHint;
+    }
+
+    /**
+     * Set the field's parent "style" attribute hint.
+     * <p/>
+     * <pre class="prettyprint">
+     * nameField.setParentStyleHint("margin-bottom; 10px");</pre>
+     *
+     * <b>Please note:</b>The field's parent style provides a hint to Forms
+     * (or other containers) what style to render, but it is up to the
+     * Form (or container) implementation how the style will be applied.
+     * For example, Form will render the parent style on the table cells
+     * containing the field and label.
+     *
+     * @param styleHint the field's parent "style" attribute hint
+     */
+    public void setParentStyleHint(String styleHint) {
+        this.parentStyleHint = styleHint;
+    }
+
+    /**
+     * Return the field's parent "class" attribute hint.
+     *
+     * @see #setParentStyleClassHint(java.lang.String)
+     *
+     * @return the field's parent "class" attribute hint
+     */
+    public String getParentStyleClassHint() {
+        return parentStyleClassHint;
+    }
+
+    /**
+     * Set the field's parent "class" attribute hint.
+     * <p/>
+     * <b>Please note:</b>The parent style class provides a hint to Forms
+     * (or other containers) which CSS class to render, but it is up to the
+     * Form (or container) implementation how the style class will be applied.
+     * For example, Form will render the parent style class on the table cells
+     * containing the field and label.
+     *
+     * @param styleClassHint the field parent "class" attribute hint
+     */
+    public void setParentStyleClassHint(String styleClassHint) {
+        this.parentStyleClassHint = styleClassHint;
     }
 
     /**

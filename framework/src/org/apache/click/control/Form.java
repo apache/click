@@ -1504,7 +1504,11 @@ public class Form extends AbstractContainer {
     }
 
     /**
-     * Set the field &lt;td&gt; "style" attribute value.
+     * Set the field &lt;td&gt; "style" attribute value. Fields can override
+     * this value by providing a {@link Field#setParentStyleHint(java.lang.String)}.
+     *
+     * @see Field#setParentStyleHint(java.lang.String)
+     * @see Field#setParentStyleClassHint(java.lang.String)
      *
      * @param value the field &lt;td&gt; "style" attribute value
      */
@@ -2337,7 +2341,16 @@ public class Form extends AbstractContainer {
                 }
 
                 if (control instanceof FieldSet) {
-                    buffer.append("<td class=\"fields\"");
+                    FieldSet fieldSet = (FieldSet) control;
+                    buffer.append("<td class=\"fields");
+                    String cellStyleClass = fieldSet.getParentStyleClassHint();
+                    if (cellStyleClass != null) {
+                        buffer.append(" ");
+                        buffer.append(cellStyleClass);
+                    }
+                    buffer.append("\"");
+
+                    buffer.appendAttribute("style", fieldSet.getParentStyleHint());
 
                     if (width != null) {
                         int colspan = (width.intValue() * 2);
@@ -2352,9 +2365,18 @@ public class Form extends AbstractContainer {
 
                 } else if (control instanceof Label) {
                     Label label = (Label) control;
-                    buffer.append("<td class=\"fields\" align=\"");
+                    buffer.append("<td align=\"");
                     buffer.append(getLabelAlign());
+                    buffer.append("\" class=\"fields");
+
+                    String cellStyleClass = label.getParentStyleClassHint();
+                    if (cellStyleClass != null) {
+                        buffer.append(" ");
+                        buffer.append(cellStyleClass);
+                    }
                     buffer.append("\"");
+
+                    buffer.appendAttribute("style", label.getParentStyleHint());
 
                     if (width != null) {
                         int colspan = (width.intValue() * 2);
@@ -2385,13 +2407,33 @@ public class Form extends AbstractContainer {
                     Field field = (Field) control;
                     // Write out label
                     if (POSITION_LEFT.equals(getLabelsPosition())) {
-                        buffer.append("<td class=\"fields\"");
+                        buffer.append("<td class=\"fields");
+                        String cellStyleClass = field.getParentStyleClassHint();
+                        if (cellStyleClass != null) {
+                            buffer.append(" ");
+                            buffer.append(cellStyleClass);
+                        }
+                        buffer.append("\"");
                         buffer.appendAttribute("align", getLabelAlign());
-                        buffer.appendAttribute("style", getLabelStyle());
+                        String cellStyle = field.getParentStyleHint();
+                        if (cellStyle == null) {
+                            cellStyle = getLabelStyle();
+                        }
+                        buffer.appendAttribute("style", cellStyle);
                         buffer.append(">");
                     } else {
-                        buffer.append("<td class=\"fields\" valign=\"top\"");
-                        buffer.appendAttribute("style", getLabelStyle());
+                        buffer.append("<td valign=\"top\" class=\"fields");
+                        String cellStyleClass = field.getParentStyleClassHint();
+                        if (cellStyleClass != null) {
+                            buffer.append(" ");
+                            buffer.append(cellStyleClass);
+                        }
+                        buffer.append("\"");
+                        String cellStyle = field.getParentStyleHint();
+                        if (cellStyle == null) {
+                            cellStyle = getLabelStyle();
+                        }
+                        buffer.appendAttribute("style", cellStyle);
                         buffer.append(">");
                     }
 
@@ -2408,11 +2450,20 @@ public class Form extends AbstractContainer {
                         }
                         buffer.elementStart("label");
                         buffer.appendAttribute("for", fieldId);
+                        buffer.appendAttribute("style", field.getLabelStyle());
                         if (field.isDisabled()) {
                             buffer.appendAttributeDisabled();
                         }
-                        if (field.getError() != null) {
-                            buffer.appendAttribute("class", "error");
+                        String cellClass = field.getLabelStyleClass();
+                        if (field.getError() == null) {
+                            buffer.appendAttribute("class", cellClass);
+                        } else {
+                            buffer.append(" class=\"error");
+                            if (cellClass != null) {
+                                buffer.append(" ");
+                                buffer.append(cellClass);
+                            }
+                            buffer.append("\"");
                         }
                         buffer.closeTag();
                         buffer.append(fieldLabel);
@@ -2426,8 +2477,15 @@ public class Form extends AbstractContainer {
 
                     if (POSITION_LEFT.equals(getLabelsPosition())) {
                         buffer.append("</td>\n");
-                        buffer.append("<td align=\"left\"");
-                        buffer.appendAttribute("style", getFieldStyle());
+                        buffer.append("<td");
+                        buffer.appendAttribute("class", field.getParentStyleClassHint());
+                        buffer.appendAttribute("align", "left");
+
+                        String cellStyle = field.getParentStyleHint();
+                        if (cellStyle == null) {
+                            cellStyle = getFieldStyle();
+                        }
+                        buffer.appendAttribute("style", cellStyle);
 
                         if (width != null) {
                             int colspan = (width.intValue() * 2) - 1;
