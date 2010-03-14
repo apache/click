@@ -53,6 +53,7 @@ import org.apache.velocity.runtime.resource.loader.ResourceLoader;
  * @author <a href="mailto:claude@savoirweb.com">Claude Brisson</a>
  * @version $Id$
  */
+@SuppressWarnings("unchecked")
 public class WebappLoader extends ResourceLoader
 {
 

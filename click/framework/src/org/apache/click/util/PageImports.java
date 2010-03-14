@@ -19,11 +19,10 @@
 package org.apache.click.util;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.click.Control;
@@ -37,7 +36,6 @@ import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.element.ResourceElement;
 import org.apache.click.service.LogService;
-
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -108,24 +106,24 @@ public class PageImports {
     protected boolean initialized = false;
 
     /** The list of head elements. */
-    protected List headElements = new ArrayList();
+    protected List<Element> headElements = new ArrayList<Element>(5);
 
     /** The list of CSS import lines. */
-    protected List cssImports = new ArrayList();
+    protected List<CssImport> cssImports = new ArrayList<CssImport>(2);
 
     /** The list of JS import lines. */
-    protected List jsImports = new ArrayList();
+    protected List<JsImport> jsImports = new ArrayList<JsImport>(2);
 
     /** The list of JS script block lines. */
-    protected List jsScripts = new ArrayList();
+    protected List<JsScript> jsScripts = new ArrayList<JsScript>(2);
 
     /** The list of CSS styles. */
-    protected List cssStyles = new ArrayList();
+    protected List<CssStyle> cssStyles = new ArrayList<CssStyle>(2);
 
     /** The page instance. */
     protected final Page page;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     /**
      * Create a page control HTML includes object.
@@ -136,7 +134,7 @@ public class PageImports {
         this.page = page;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Add the given Element to the Page HEAD elements.
@@ -153,7 +151,7 @@ public class PageImports {
             if (jsImports.contains(element)) {
                 return;
             }
-            jsImports.add(element);
+            jsImports.add((JsImport) element);
 
         } else if (element instanceof JsScript) {
             if (((JsScript) element).isUnique()) {
@@ -161,13 +159,13 @@ public class PageImports {
                     return;
                 }
             }
-            jsScripts.add(element);
+            jsScripts.add((JsScript) element);
 
         } else if (element instanceof CssImport) {
             if (cssImports.contains(element)) {
                 return;
             }
-            cssImports.add(element);
+            cssImports.add((CssImport) element);
 
         } else if (element instanceof CssStyle) {
             if (((CssStyle) element).isUnique()) {
@@ -175,7 +173,7 @@ public class PageImports {
                     return;
                 }
             }
-            cssStyles.add(element);
+            cssStyles.add((CssStyle) element);
 
         } else {
             headElements.add(element);
@@ -271,7 +269,7 @@ public class PageImports {
      *
      * @param model the model to populate with html import keys
      */
-    public void populateTemplateModel(Map model) {
+    public void populateTemplateModel(Map<String, Object> model) {
         LogService logger = ClickUtils.getLogService();
 
         Object pop = model.put("headElements", new HeadElements());
@@ -329,7 +327,7 @@ public class PageImports {
      * @param request the http request to populate
      * @param model the model to populate with html import keys
      */
-    public void populateRequest(HttpServletRequest request, Map model) {
+    public void populateRequest(HttpServletRequest request, Map<String, Object> model) {
         LogService logger = ClickUtils.getLogService();
 
         request.setAttribute("headElements", new HeadElements());
@@ -391,9 +389,9 @@ public class PageImports {
      *
      * @param controls the list of Controls which HEAD elements to process
      */
-    public void processControls(List controls) {
-        for (int i = 0; i < controls.size(); i++) {
-            Control control = (Control) controls.get(i);
+    @SuppressWarnings("deprecation")
+    public void processControls(List<Control> controls) {
+        for (Control control : controls) {
 
             // import from getHtmlImports
             addImport(control.getHtmlImports());
@@ -420,18 +418,16 @@ public class PageImports {
         if (control instanceof Container) {
             Container container = (Container) control;
             if (container.hasControls()) {
-                List controls = container.getControls();
-                for (int i = 0, size = controls.size(); i < size; i++) {
-                    processControl((Control) controls.get(i));
+                for (Control childControl  : container.getControls()) {
+                    processControl(childControl);
                 }
             }
 
         } else if (control instanceof Table) {
             Table table = (Table) control;
             if (table.hasControls()) {
-                List controls = table.getControls();
-                for (int i = 0, size = controls.size(); i < size; i++) {
-                    processControl((Control) controls.get(i));
+                for (Control childControl : table.getControls()) {
+                    processControl(childControl);
                 }
             }
         }
@@ -444,8 +440,8 @@ public class PageImports {
      *
      * @return the list of processed HEAD elements
      */
-    public final List getHeadElements() {
-        List result = new ArrayList(headElements);
+    public final List<Element> getHeadElements() {
+        List<Element> result = new ArrayList<Element>(headElements);
         result.addAll(cssImports);
         result.addAll(cssStyles);
         return result;
@@ -456,8 +452,8 @@ public class PageImports {
      *
      * @return the list of processed JavaScript elements
      */
-    public final List getJsElements() {
-        List result = new ArrayList(jsImports);
+    public final List<Element> getJsElements() {
+        List<Element> result = new ArrayList<Element>(jsImports);
         result.addAll(jsScripts);
         return result;
     }
@@ -472,8 +468,7 @@ public class PageImports {
      */
     protected void renderHeadElements(HtmlStringBuffer buffer) {
         // First include miscellaneous elements e.g. Title and Meta elements.
-        for (Iterator it = headElements.iterator(); it.hasNext();) {
-            Element element = (Element) it.next();
+        for (Element element : headElements) {
             element.render(buffer);
             buffer.append('\n');
         }
@@ -504,15 +499,13 @@ public class PageImports {
      */
     protected void renderCssElements(HtmlStringBuffer buffer) {
         // First include all the imports e.g. <link href="...">
-        for (Iterator it = cssImports.iterator(); it.hasNext();) {
-            CssImport cssImport = (CssImport) it.next();
+        for (CssImport cssImport : cssImports) {
             cssImport.render(buffer);
             buffer.append('\n');
         }
 
         // Then include all the styles e.g. <style>...</style>
-        for (Iterator it = cssStyles.iterator(); it.hasNext();) {
-            CssStyle cssStyle = (CssStyle) it.next();
+        for (CssStyle cssStyle : cssStyles) {
             cssStyle.render(buffer);
             buffer.append('\n');
         }
@@ -526,15 +519,13 @@ public class PageImports {
      */
     protected void renderJsElements(HtmlStringBuffer buffer) {
         // First include all the imports e.g. <script src="...">
-        for (Iterator it = jsImports.iterator(); it.hasNext();) {
-            JsImport jsImport = (JsImport) it.next();
+        for (JsImport jsImport : jsImports) {
             jsImport.render(buffer);
             buffer.append('\n');
         }
 
         // Then include all the scripts e.g. <script>...</script>
-        for (Iterator it = jsScripts.iterator(); it.hasNext();) {
-            JsScript jsScript = (JsScript) it.next();
+        for (JsScript jsScript : jsScripts) {
             jsScript.render(buffer);
             buffer.append('\n');
         }
@@ -543,6 +534,7 @@ public class PageImports {
     /**
      * Process the Page's set of control HEAD elements.
      */
+    @SuppressWarnings("deprecation")
     protected void processPageControls() {
         if (isInitialized()) {
             return;
@@ -569,23 +561,15 @@ public class PageImports {
      *
      * @param elements the list of HEAD elements to process
      */
-    protected void processHeadElements(List elements) {
-        if (elements == null || elements.isEmpty()) {
-            return;
-        }
-
-        Iterator it = elements.iterator();
-        while (it.hasNext()) {
-            Object item = it.next();
-            if (!(item instanceof Element)) {
-                throw new IllegalStateException(item.getClass() + " is not"
-                    + " of type " + Element.class);
+    protected void processHeadElements(List<Element> elements) {
+        if (elements != null) {
+            for (Element element : elements) {
+                add(element);
             }
-            add((Element) item);
         }
     }
 
-    // ------------------------------------------------------- Internal Classes
+    // Internal Classes -------------------------------------------------------
 
     /**
      * This class enables lazy, on demand importing for

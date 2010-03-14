@@ -145,7 +145,7 @@ public class CssStyle extends ResourceElement {
 
     private static final long serialVersionUID = 1L;
 
-     // -------------------------------------------------------------- Variables
+     // Variables -------------------------------------------------------------
 
     /** The inline Css content. */
     private String content;
@@ -153,15 +153,15 @@ public class CssStyle extends ResourceElement {
     /**
      * Indicates if the HeadElement's content should be wrapped in a CDATA tag.
      */
-    private boolean characterData = false;
+    private boolean characterData;
 
     /** The path of the template to render. */
     private String template;
 
     /** The model of the template to render. */
-    private Map model;
+    private Map<String, Object> model;
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     /**
      * Construct a new Css style element.
@@ -211,13 +211,13 @@ public class CssStyle extends ResourceElement {
      * @param template the path of the template to render
      * @param model the template model
      */
-    public CssStyle(String template, Map model) {
+    public CssStyle(String template, Map<String, Object> model) {
         this(null);
         setTemplate(template);
         setModel(model);
     }
 
-    // ------------------------------------------------------ Public properties
+    // Public Properties ------------------------------------------------------
 
     /**
      * Returns the Css HTML tag: &lt;style&gt;.
@@ -300,7 +300,7 @@ public class CssStyle extends ResourceElement {
      *
      * @return the model of the template to render
      */
-    public Map getModel() {
+    public Map<String, Object> getModel() {
         return model;
     }
 
@@ -313,11 +313,11 @@ public class CssStyle extends ResourceElement {
      *
      * @param model the model of the template to render
      */
-    public void setModel(Map model) {
+    public void setModel(Map<String, Object> model) {
         this.model = model;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Render the HTML representation of the CssStyle element to the specified
@@ -357,8 +357,10 @@ public class CssStyle extends ResourceElement {
      * @see java.lang.Object#equals(java.lang.Object)
      *
      * @param o the object with which to compare this instance with
+     *
      * @return true if the specified object is the same as this object
      */
+    @Override
     public boolean equals(Object o) {
         if (!isUnique()) {
             return super.equals(o);
@@ -387,6 +389,7 @@ public class CssStyle extends ResourceElement {
      *
      * @return a hash code value for this object
      */
+    @Override
     public int hashCode() {
         if (!isUnique()) {
             return super.hashCode();
@@ -394,7 +397,7 @@ public class CssStyle extends ResourceElement {
         return new HashCodeBuilder(17, 37).append(getId()).toHashCode();
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Render the CssStyle {@link #setContent(java.lang.String) content}
@@ -413,9 +416,9 @@ public class CssStyle extends ResourceElement {
         if (getTemplate() != null) {
             Context context = getContext();
 
-            Map templateModel = getModel();
+            Map<String, Object> templateModel = getModel();
             if (templateModel == null) {
-                templateModel = new HashMap();
+                templateModel = new HashMap<String, Object>();
             }
             buffer.append(context.renderTemplate(getTemplate(), templateModel));
 
@@ -426,7 +429,7 @@ public class CssStyle extends ResourceElement {
         }
     }
 
-    // ------------------------------------------------ Package Private Methods
+    // Package Private Methods ------------------------------------------------
 
     /**
      * Render the CDATA tag prefix to the specified buffer if

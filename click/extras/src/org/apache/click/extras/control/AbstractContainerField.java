@@ -20,7 +20,6 @@ package org.apache.click.extras.control;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -57,19 +56,19 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public abstract class AbstractContainerField extends Field implements Container {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The list of controls. */
-    protected List controls;
+    protected List<Control> controls;
 
     /** The map of controls keyed by field name. */
-    protected Map controlMap;
+    protected Map<String, Control> controlMap;
 
-    // ---------------------------------------------------------- Constructorrs
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create an AbstractContainerField with no name defined.
@@ -96,7 +95,7 @@ public abstract class AbstractContainerField extends Field implements Container 
         super(name, label);
     }
 
-    // --------------------------------------------------------- Public methods
+    // Public methods ---------------------------------------------------------
 
     /**
      * @see org.apache.click.control.Container#add(org.apache.click.Control).
@@ -147,9 +146,9 @@ public abstract class AbstractContainerField extends Field implements Container 
      *
      * @return the sequential list of controls held by the container
      */
-    public List getControls() {
+    public List<Control> getControls() {
         if (controls == null) {
-            controls = new ArrayList();
+            controls = new ArrayList<Control>();
         }
         return controls;
     }
@@ -212,12 +211,12 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return the HTML includes statements for the contained control stylesheet
      * and JavaScript files
      */
+    @SuppressWarnings("deprecation")
     public String getHtmlImports() {
         if (hasControls()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(0);
 
-            for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
+            for (Control control : getControls()) {
                 String htmlImports = control.getHtmlImports();
                 if (htmlImports != null) {
                     buffer.append(htmlImports);
@@ -260,8 +259,7 @@ public abstract class AbstractContainerField extends Field implements Container 
         boolean continueProcessing = super.onProcess();
 
         if (hasControls()) {
-            for (Iterator it = getControls().iterator(); it.hasNext();) {
-                Control control = (Control) it.next();
+            for (Control control : getControls()) {
                 if (!control.onProcess()) {
                     continueProcessing = false;
                 }
@@ -359,7 +357,7 @@ public abstract class AbstractContainerField extends Field implements Container 
         return buffer.toString();
     }
 
-    //------------------------------------------------------- Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * @see org.apache.click.control.AbstractControl#renderTagEnd(java.lang.String, org.apache.click.util.HtmlStringBuffer)
@@ -412,9 +410,9 @@ public abstract class AbstractContainerField extends Field implements Container 
      *
      * @return the map of controls
      */
-    protected Map getControlMap() {
+    protected Map<String, Control> getControlMap() {
         if (controlMap == null) {
-            controlMap = new HashMap();
+            controlMap = new HashMap<String, Control>();
         }
         return controlMap;
     }

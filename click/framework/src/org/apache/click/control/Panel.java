@@ -239,7 +239,7 @@ public class Panel extends AbstractContainer {
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The panel disabled value. */
     protected boolean disabled;
@@ -251,15 +251,15 @@ public class Panel extends AbstractContainer {
     protected String label;
 
     /** A temporary storage for model objects until the Page is set. */
-    protected Map model;
+    protected Map<String, Object> model;
 
     /** The list of sub panels. */
-    protected List panels;
+    protected List<Panel> panels;
 
     /** The path of the template to render. */
     protected String template;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a Panel with the given name.
@@ -302,7 +302,7 @@ public class Panel extends AbstractContainer {
     public Panel() {
     }
 
-    // ------------------------------------------------------------- Properties
+    // Properties -------------------------------------------------------------
 
     /**
      * @see #add(org.apache.click.Control)
@@ -357,7 +357,7 @@ public class Panel extends AbstractContainer {
         }
 
         if (control instanceof Panel) {
-            getPanels().add(control);
+            getPanels().add((Panel) control);
         }
 
         return control;
@@ -551,9 +551,9 @@ public class Panel extends AbstractContainer {
      *
      * @return the Page's model map
      */
-    public Map getModel() {
+    public Map<String, Object> getModel() {
         if (model == null) {
-             model = new HashMap();
+             model = new HashMap<String, Object>();
         }
         return model;
     }
@@ -564,9 +564,9 @@ public class Panel extends AbstractContainer {
      *
      * @return the list of sub-panels, if any
      */
-    public List getPanels() {
+    public List<Panel> getPanels() {
         if (panels == null) {
-            panels = new ArrayList();
+            panels = new ArrayList<Panel>();
         }
         return panels;
     }
@@ -589,7 +589,7 @@ public class Panel extends AbstractContainer {
         this.template = template;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Render the HTML string representation of the Panel. The panel will be
@@ -614,7 +614,7 @@ public class Panel extends AbstractContainer {
         }
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Create a model to merge with the template. The model will
@@ -636,7 +636,7 @@ public class Panel extends AbstractContainer {
      *
      * @return a new model to merge with the template.
      */
-    protected Map createTemplateModel() {
+    protected Map<String, Object> createTemplateModel() {
 
         Context context = getContext();
 
@@ -644,7 +644,7 @@ public class Panel extends AbstractContainer {
 
         final Page page = ClickUtils.getParentPage(this);
 
-        final Map renderModel = new HashMap(page.getModel());
+        final Map<String, Object> renderModel = new HashMap<String, Object>(page.getModel());
 
         renderModel.putAll(getModel());
 
@@ -663,7 +663,7 @@ public class Panel extends AbstractContainer {
             renderModel.put("format", format);
         }
 
-        Map templateMessages = new HashMap(getMessages());
+        Map<String, String> templateMessages = new HashMap<String, String>(getMessages());
         templateMessages.putAll(page.getMessages());
         renderModel.put("messages", templateMessages);
 

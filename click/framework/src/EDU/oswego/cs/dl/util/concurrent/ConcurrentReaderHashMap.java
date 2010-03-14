@@ -143,6 +143,7 @@ import java.io.IOException;
  * href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html">
  * Introduction to this package. </a>]
  */
+@SuppressWarnings("unchecked")
 public class ConcurrentReaderHashMap extends AbstractMap implements Map,
         Cloneable, Serializable {
 

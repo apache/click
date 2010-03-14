@@ -171,7 +171,7 @@ public class ResourceElement extends Element {
 
     private static final long serialVersionUID = 1L;
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     /**
      * A predefined conditional comment to test if browser is IE. Value:
@@ -191,7 +191,7 @@ public class ResourceElement extends Element {
      */
     public static final String IF_IE7 = "[if IE 7]";
 
-    // -------------------------------------------------------------- Variables
+    // Variables --------------------------------------------------------------
 
     /**
      * The Internet Explorer conditional comment to wrap the Resource with.
@@ -270,7 +270,7 @@ public class ResourceElement extends Element {
         this.conditionalComment = conditionalComment;
     }
 
-    // --------------------------------------------------------- Public methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Render the HTML representation of the Resource element to the specified
@@ -294,7 +294,7 @@ public class ResourceElement extends Element {
         renderConditionalCommentSuffix(buffer);
     }
 
-    // ------------------------------------------------ Package Private Methods
+    // Package Private Methods ------------------------------------------------
 
     /**
      * Render the given attribute and resourcePath and append the

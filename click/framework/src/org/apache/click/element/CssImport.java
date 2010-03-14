@@ -54,7 +54,7 @@ public class CssImport extends ResourceElement {
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Constructs a new Css import element.
@@ -127,7 +127,7 @@ public class CssImport extends ResourceElement {
         setVersionIndicator(versionIndicator);
     }
 
-    // ------------------------------------------------------ Public Properties
+    // Public Properties ------------------------------------------------------
 
     /**
      * Returns the Css import HTML tag: &lt;link&gt;.
@@ -193,7 +193,7 @@ public class CssImport extends ResourceElement {
         return getAttribute("href");
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Render the HTML representation of the CssImport element to the specified
@@ -230,6 +230,7 @@ public class CssImport extends ResourceElement {
      * @param o the object with which to compare this instance with
      * @return true if the specified object is the same as this object
      */
+    @Override
     public boolean equals(Object o) {
         if (getHref() == null) {
             throw new IllegalStateException("'href' attribute is not defined.");
@@ -257,6 +258,7 @@ public class CssImport extends ResourceElement {
      *
      * @return a hash code value for this object
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(getHref()).toHashCode();
     }

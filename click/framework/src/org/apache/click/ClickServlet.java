@@ -375,7 +375,7 @@ public class ClickServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            Class pageClass =
+            Class<? extends Page> pageClass =
                 configService.getPageClass(ClickUtils.getResourcePath(request));
 
             handleException(request, response, isPost, e, pageClass);
@@ -384,7 +384,7 @@ public class ClickServlet extends HttpServlet {
             Throwable cause = eiie.getException();
             cause = (cause != null) ? cause : eiie;
 
-            Class pageClass =
+            Class<? extends Page> pageClass =
                 configService.getPageClass(ClickUtils.getResourcePath(request));
 
             handleException(request, response, isPost, cause, pageClass);
@@ -442,7 +442,7 @@ public class ClickServlet extends HttpServlet {
      */
     protected void handleException(HttpServletRequest request,
         HttpServletResponse response, boolean isPost, Throwable exception,
-        Class pageClass) {
+        Class<? extends Page> pageClass) {
 
         if (exception instanceof TemplateException == false) {
             logger.error("handleException: ", exception);
@@ -523,6 +523,7 @@ public class ClickServlet extends HttpServlet {
      * @param page the Page to process
      * @throws Exception if an error occurs
      */
+    @SuppressWarnings("deprecation")
     protected void processPage(Page page) throws Exception {
 
         final Context context = page.getContext();
@@ -593,10 +594,10 @@ public class ClickServlet extends HttpServlet {
         }
 
         if (page.hasControls()) {
-            List controls = page.getControls();
+            List<Control> controls = page.getControls();
 
             for (int i = 0, size = controls.size(); i < size; i++) {
-                Control control = (Control) controls.get(i);
+                Control control = controls.get(i);
                 control.onInit();
 
                 if (logger.isTraceEnabled()) {
@@ -627,10 +628,10 @@ public class ClickServlet extends HttpServlet {
 
         // Make sure don't process a forwarded request
         if (page.hasControls() && !context.isForward()) {
-            List controls = page.getControls();
+            List<Control> controls = page.getControls();
 
             for (int i = 0, size = controls.size(); i < size; i++) {
-                Control control = (Control) controls.get(i);
+                Control control = controls.get(i);
 
                 boolean onProcessResult = control.onProcess();
                 if (!onProcessResult) {
@@ -705,10 +706,10 @@ public class ClickServlet extends HttpServlet {
         }
 
         if (page.hasControls()) {
-            List controls = page.getControls();
+            List<Control> controls = page.getControls();
 
             for (int i = 0, size = controls.size(); i < size; i++) {
-                Control control = (Control) controls.get(i);
+                Control control = controls.get(i);
                 control.onRender();
 
                 if (logger.isTraceEnabled()) {
@@ -819,7 +820,7 @@ public class ClickServlet extends HttpServlet {
 
         long startTime = System.currentTimeMillis();
 
-        final Map model = createTemplateModel(page);
+        final Map<String, Object> model = createTemplateModel(page);
 
         Context context = page.getContext();
         HttpServletResponse response = context.getResponse();
@@ -909,13 +910,14 @@ public class ClickServlet extends HttpServlet {
      * @return a new Page instance for the given request, or null if an
      * PageInterceptor has aborted page creation
      */
+    @SuppressWarnings("unchecked")
     protected Page createPage(Context context) {
 
         HttpServletRequest request = context.getRequest();
 
         // Log request parameters
         if (logger.isTraceEnabled()) {
-            Map requestParams = new TreeMap();
+            Map<String, Object> requestParams = new TreeMap<String, Object>();
 
             Enumeration e = request.getParameterNames();
             while (e.hasMoreElements()) {
@@ -951,7 +953,7 @@ public class ClickServlet extends HttpServlet {
             return forwardPage;
         }
 
-        Class pageClass = configService.getPageClass(path);
+        Class<? extends Page> pageClass = configService.getPageClass(path);
 
         if (pageClass == null) {
             pageClass = configService.getNotFoundPageClass();
@@ -990,13 +992,14 @@ public class ClickServlet extends HttpServlet {
      * @param startTime the start time to log if greater than 0 and not in
      * production mode
      */
+    @SuppressWarnings("deprecation")
     protected void processPageOnDestroy(Page page, long startTime) {
         if (page.hasControls()) {
-            List controls = page.getControls();
+            List<Control> controls = page.getControls();
 
             for (int i = 0, size = controls.size(); i < size; i++) {
                 try {
-                    Control control = (Control) controls.get(i);
+                    Control control = controls.get(i);
                     control.onDestroy();
 
                     if (logger.isTraceEnabled()) {
@@ -1101,7 +1104,7 @@ public class ClickServlet extends HttpServlet {
      * @param request the page request
      * @return initialized page
      */
-    protected Page initPage(String path, Class pageClass,
+    protected Page initPage(String path, Class<? extends Page> pageClass,
             HttpServletRequest request) {
 
         try {
@@ -1184,14 +1187,14 @@ public class ClickServlet extends HttpServlet {
             return;
         }
 
-        Map ognlContext = null;
+        Map<?, ?> ognlContext = null;
 
         boolean customConverter =
             ! getTypeConverter().getClass().equals(RequestTypeConverter.class);
 
         HttpServletRequest request = page.getContext().getRequest();
 
-        for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
+        for (Enumeration<?> e = request.getParameterNames(); e.hasMoreElements();) {
             String name = e.nextElement().toString();
             String value = request.getParameter(name);
 
@@ -1200,7 +1203,7 @@ public class ClickServlet extends HttpServlet {
                 Field field = configService.getPageField(page.getClass(), name);
 
                 if (field != null) {
-                    Class type = field.getType();
+                    Class<?> type = field.getType();
 
                     if (customConverter
                         || (type.isPrimitive()
@@ -1265,7 +1268,7 @@ public class ClickServlet extends HttpServlet {
      * @return a new Page object
      * @throws Exception if an error occurs creating the Page
      */
-    protected Page newPageInstance(String path, Class pageClass,
+    protected Page newPageInstance(String path, Class<? extends Page> pageClass,
             HttpServletRequest request) throws Exception {
 
         return (Page) pageClass.newInstance();
@@ -1305,7 +1308,8 @@ public class ClickServlet extends HttpServlet {
      * @param page the page to create a VelocityContext for
      * @return a new VelocityContext
      */
-    protected Map createTemplateModel(final Page page) {
+    @SuppressWarnings("deprecation")
+    protected Map<String, Object> createTemplateModel(final Page page) {
 
         if (configService.getAutoBindingMode() != AutoBinding.NONE) {
 
@@ -1326,7 +1330,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         final Context context = page.getContext();
-        final Map model = ClickUtils.createTemplateModel(page, context);
+        final Map<String, Object> model = ClickUtils.createTemplateModel(page, context);
 
         PageImports pageImports = page.getPageImports();
         pageImports.populateTemplateModel(model);
@@ -1342,11 +1346,10 @@ public class ClickServlet extends HttpServlet {
      * @param headers the map of HTTP headers to set in the response
      */
     protected void setPageResponseHeaders(HttpServletResponse response,
-            Map headers) {
+            Map<String, Object> headers) {
 
-        for (Iterator i = headers.entrySet().iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry) i.next();
-            String name = entry.getKey().toString();
+        for (Map.Entry<String, Object> entry : headers.entrySet()) {
+            String name = entry.getKey();
             Object value = entry.getValue();
 
             if (value instanceof String) {
@@ -1382,6 +1385,7 @@ public class ClickServlet extends HttpServlet {
      *
      * @param page the page to set the request attributes on
      */
+    @SuppressWarnings("deprecation")
     protected void setRequestAttributes(final Page page) {
         final HttpServletRequest request = page.getContext().getRequest();
 
@@ -1399,10 +1403,9 @@ public class ClickServlet extends HttpServlet {
             }
         });
 
-        Map model = page.getModel();
-        for (Iterator i = model.entrySet().iterator(); i.hasNext();)  {
-            Map.Entry entry = (Map.Entry) i.next();
-            String name = entry.getKey().toString();
+        Map<String, Object> model = page.getModel();
+        for (Map.Entry<String, Object> entry : model.entrySet()) {
+            String name = entry.getKey();
             Object value = entry.getValue();
 
             request.setAttribute(name, value);
@@ -1468,9 +1471,10 @@ public class ClickServlet extends HttpServlet {
      * @return the request parameters OGNL <tt>TypeConverter</tt>
      * @throws RuntimeException if the TypeConverter instance could not be created
      */
+    @SuppressWarnings("unchecked")
     protected TypeConverter getTypeConverter() throws RuntimeException {
         if (typeConverter == null) {
-            Class converter = RequestTypeConverter.class;
+            Class<? extends TypeConverter> converter = RequestTypeConverter.class;
 
             try {
                 String classname = getInitParameter(TYPE_CONVERTER_CLASS);
@@ -1539,7 +1543,7 @@ public class ClickServlet extends HttpServlet {
      * @param exception the error causing exception
      * @return a new ErrorPage instance
      */
-    protected ErrorPage createErrorPage(Class pageClass, Throwable exception) {
+    protected ErrorPage createErrorPage(Class<? extends Page> pageClass, Throwable exception) {
         try {
             return (ErrorPage) configService.getErrorPageClass().newInstance();
         } catch (Exception e) {
@@ -1565,7 +1569,7 @@ public class ClickServlet extends HttpServlet {
      * @throws IllegalArgumentException if the Page is not found
      */
     protected Page createPage(String path, HttpServletRequest request) {
-        Class pageClass = getConfigService().getPageClass(path);
+        Class<? extends Page> pageClass = getConfigService().getPageClass(path);
 
         if (pageClass == null) {
             String msg = "No Page class configured for path: " + path;
@@ -1584,7 +1588,7 @@ public class ClickServlet extends HttpServlet {
      * @throws IllegalArgumentException if the Page Class is not configured
      * with a unique path
      */
-    protected Page createPage(Class pageClass, HttpServletRequest request) {
+    protected Page createPage(Class<? extends Page> pageClass, HttpServletRequest request) {
         String path = getConfigService().getPagePath(pageClass);
 
         if (path == null) {
@@ -1628,10 +1632,11 @@ public class ClickServlet extends HttpServlet {
     * @return a new application ConfigService instance
     * @throws Exception if an initialization error occurs
     */
+    @SuppressWarnings("unchecked")
     ConfigService createConfigService(ServletContext servletContext)
         throws Exception {
 
-        Class serviceClass = XmlConfigService.class;
+        Class<? extends ConfigService> serviceClass = XmlConfigService.class;
 
         String classname = servletContext.getInitParameter(CONFIG_SERVICE_CLASS);
         if (StringUtils.isNotBlank(classname)) {
