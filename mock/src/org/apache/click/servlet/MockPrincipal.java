@@ -104,7 +104,6 @@ public class MockPrincipal implements Principal {
      *
      * @return the name of this principal.
      */
-    @Override
     public String getName() {
         return name;
     }
