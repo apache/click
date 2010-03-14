@@ -19,6 +19,7 @@
 package org.apache.click;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -820,11 +821,12 @@ public class ClickServlet extends HttpServlet {
 
         final Map model = createTemplateModel(page);
 
-        HttpServletResponse response = page.getContext().getResponse();
+        Context context = page.getContext();
+        HttpServletResponse response = context.getResponse();
 
         response.setContentType(page.getContentType());
 
-        Writer writer = response.getWriter();
+        Writer writer = getWriter(context);
 
         if (page.getHeaders() != null) {
             setPageResponseHeaders(response, page.getHeaders());
@@ -1746,6 +1748,25 @@ public class ClickServlet extends HttpServlet {
 
     void setThreadLocalInterceptors(List<PageInterceptor> listeners) {
         THREAD_LOCAL_INTERCEPTORS.set(listeners);
+    }
+
+    /**
+     * Retrieve a writer instance for the given context.
+     *
+     * @param context the request context
+     * @return a writer instance
+     * @throws IOException if an input or output exception occurred
+     */
+    Writer getWriter(Context context) throws IOException {
+        try {
+
+            return context.getResponse().getWriter();
+
+        } catch (IllegalStateException ignore) {
+            // If writer cannot be retrieved fallback to OutputStream. CLK-644
+            return new OutputStreamWriter(context.getResponse().getOutputStream(),
+                 context.getResponse().getCharacterEncoding());
+        }
     }
 
     // ---------------------------------------------------------- Inner Classes
