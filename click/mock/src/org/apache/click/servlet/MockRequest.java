@@ -70,6 +70,9 @@ public class MockRequest implements HttpServletRequest {
     /** File attachment boundary indicator. */
     private static final String BOUNDARY = "--abcdefgABCDEFG";
 
+    /** The REMOTE_USER header. */
+    public static final String REMOTE_USER = "REMOTE_USER";
+
     // -------------------------------------------------------- Variables
 
     /** The request default locale. */
@@ -106,8 +109,7 @@ public class MockRequest implements HttpServletRequest {
      * Map of uploaded files, where the fieldname is the key and uploaded file
      * is the value.
      */
-    private Map /*<String, UploadedFile>*/ uploadedFiles =
-        new HashMap /*<String, UploadedFile>*/();
+    private Map <String, UploadedFile> uploadedFiles = new HashMap <String, UploadedFile>();
 
     /**
      * Indicates if this request is multipart (contains binary attachment) or
@@ -141,6 +143,9 @@ public class MockRequest implements HttpServletRequest {
 
     /** A random number generator to create unique session id's. */
     private Random random = new Random();
+
+    /** The user principal. */
+    private Principal userPrincipal;
 
     /**
      * Create new MockRequest.
@@ -278,8 +283,8 @@ public class MockRequest implements HttpServletRequest {
     /**
      * Add a header to the request.
      *
-     * @param name The name of the header to add
-     * @param value The value
+     * @param name the name of the header to add
+     * @param value the value
      */
     public void addHeader(String name, String value) {
         List list = (List) headers.get(name);
@@ -288,6 +293,30 @@ public class MockRequest implements HttpServletRequest {
             headers.put(name, list);
         }
         list.add(value);
+    }
+
+    /**
+     * Set request header value. The existing header value will be replaced.
+     *
+     * @param name the name of the header to set
+     * @param value the header value
+     */
+    public void setHeader(String name, String value) {
+        setHeader(name, new String[] {value});
+    }
+
+    /**
+     * Set request header values. The existing header values will be replaced.
+     *
+     * @param name the name of the header to set
+     * @param values the header values
+     */
+    public void setHeader(String name, String... values) {
+        List list = new ArrayList(values.length);
+        headers.put(name, list);
+        for (String value : values) {
+            list.add(value);
+        }
     }
 
     /**
@@ -698,12 +727,20 @@ public class MockRequest implements HttpServletRequest {
     }
 
     /**
-     * Get the name of the remote user from the REMOTE_USER header.
+     * Return the name of the {@link #userPrincipal} if set, otherwise
+     * the value of the {@value #REMOTE_USER} header.
+     * <p/>
+     * To set the remote user, create an instance of a {@link MockPrincipal}
+     * and set it on the request through the method
+     * {@link #setUserPrincipal(java.security.Principal)}.
      *
-     * @return The name of the remote user
+     * @return the name of the remote user
      */
     public String getRemoteUser() {
-        return getHeader("REMOTE_USER");
+        if (userPrincipal != null) {
+            return userPrincipal.getName();
+        }
+        return getHeader(REMOTE_USER);
     }
 
     /**
@@ -962,27 +999,42 @@ public class MockRequest implements HttpServletRequest {
     }
 
     /**
-     * Get the user principal.
+     * Get the user principal. If no user principal was set this method will
+     * create a user principal for the {@link #getRemoteUser()}.
      *
-     * @return A user principal
+     * @return the user principal
      */
     public Principal getUserPrincipal() {
-        final String user = getRemoteUser();
-        if (user == null) {
-            return null;
-        } else {
-            return new Principal() {
+        if (userPrincipal == null) {
+            final String user = getRemoteUser();
 
-                public String getName() {
-                    return user;
-                }
-            };
+            if (user == null) {
+                return null;
+            } else {
+                userPrincipal = new MockPrincipal() {
+
+                    @Override
+                    public String getName() {
+                        return user;
+                    }
+                };
+            }
         }
+        return userPrincipal;
+    }
+
+    /**
+     * Set the user principal.
+     *
+     * @param userPrincipal the user principal
+     */
+    public void setUserPrincipal(Principal userPrincipal) {
+        this.userPrincipal = userPrincipal;
     }
 
     /**
      * @return True if there has been added files to this request using
-     * {@link #addFile(String, File, String)}
+     * {@link #addFile(String, File, String)}.
      */
     public boolean hasUploadedFiles() {
         return uploadedFiles != null;
@@ -1055,12 +1107,21 @@ public class MockRequest implements HttpServletRequest {
     }
 
     /**
-     * NOT IMPLEMENTED.
+     * Returns true if the {@link #getUserPrincipal() authenticated user} is
+     * included in the given role, false otherwise.
+     * <p/>
+     * To mock up roles for a user, create a {@link MockPrincipal user principal}
+     * and set the necessary roles. See {@link MockPrincipal} for an example.
      *
-     * @param name The role name
-     * @return Always false
+     * @param role the role name
+     * @return true if the user is included in the specified role, false
+     * otherwise
      */
-    public boolean isUserInRole(String name) {
+    public boolean isUserInRole(String role) {
+        Principal principal = getUserPrincipal();
+        if (principal instanceof MockPrincipal) {
+            return ((MockPrincipal) principal).getRoles().contains(role);
+        }
         return false;
     }
 
