@@ -952,9 +952,18 @@ public class FieldSet extends Field implements Container {
 
                 if (control instanceof Label) {
                     Label label = (Label) control;
-                    buffer.append("<td class=\"fields\" align=\"");
+                    buffer.append("<td align=\"");
                     buffer.append(getForm().getLabelAlign());
+                    buffer.append("\" class=\"fields");
+
+                    String cellStyleClass = label.getParentStyleClassHint();
+                    if (cellStyleClass != null) {
+                        buffer.append(" ");
+                        buffer.append(cellStyleClass);
+                    }
                     buffer.append("\"");
+
+                    buffer.appendAttribute("style", label.getParentStyleHint());
 
                     if (width != null) {
                         int colspan = (width.intValue() * 2);
@@ -986,42 +995,84 @@ public class FieldSet extends Field implements Container {
                     Form form = getForm();
                     // Write out label
                     if (Form.POSITION_LEFT.equals(form.getLabelsPosition())) {
-                        buffer.append("<td class=\"fields\"");
+                        buffer.append("<td class=\"fields");
+                        String cellStyleClass = field.getParentStyleClassHint();
+                        if (cellStyleClass != null) {
+                            buffer.append(" ");
+                            buffer.append(cellStyleClass);
+                        }
+                        buffer.append("\"");
                         buffer.appendAttribute("align", form.getLabelAlign());
-                        buffer.appendAttribute("style", form.getLabelStyle());
+                        String cellStyle = field.getParentStyleHint();
+                        if (cellStyle == null) {
+                            cellStyle = form.getLabelStyle();
+                        }
+                        buffer.appendAttribute("style", cellStyle);
                         buffer.append(">");
                     } else {
-                        buffer.append("<td class=\"fields\" valign=\"top\"");
-                        buffer.appendAttribute("style", form.getLabelStyle());
+                        buffer.append("<td valign=\"top\" class=\"fields");
+                        String cellStyleClass = field.getParentStyleClassHint();
+                        if (cellStyleClass != null) {
+                            buffer.append(" ");
+                            buffer.append(cellStyleClass);
+                        }
+                        buffer.append("\"");
+                        String cellStyle = field.getParentStyleHint();
+                        if (cellStyle == null) {
+                            cellStyle = form.getLabelStyle();
+                        }
+                        buffer.appendAttribute("style", cellStyle);
                         buffer.append(">");
                     }
 
-                    if (field.isRequired()) {
-                        buffer.append(form.getMessage("label-required-prefix"));
-                    } else {
-                        buffer.append(form.getMessage("label-not-required-prefix"));
-                    }
-                    buffer.elementStart("label");
-                    buffer.appendAttribute("for", field.getId());
-                    if (field.isDisabled()) {
-                        buffer.appendAttributeDisabled();
-                    }
-                    if (field.getError() != null) {
-                        buffer.appendAttribute("class", "error");
-                    }
-                    buffer.closeTag();
-                    buffer.append(field.getLabel());
-                    buffer.elementEnd("label");
-                    if (field.isRequired()) {
-                        buffer.append(form.getMessage("label-required-suffix"));
-                    } else {
-                        buffer.append(form.getMessage("label-not-required-suffix"));
+                    // Store the field id and label (the values could be null)
+                    String fieldId = field.getId();
+                    String fieldLabel = field.getLabel();
+
+                    // Only render a label if the fieldId and fieldLabel is set
+                    if (fieldId != null && fieldLabel != null) {
+                        if (field.isRequired()) {
+                            buffer.append(form.getMessage("label-required-prefix"));
+                        } else {
+                            buffer.append(form.getMessage("label-not-required-prefix"));
+                        }
+                        buffer.elementStart("label");
+                        buffer.appendAttribute("for", field.getId());
+                        buffer.appendAttribute("style", field.getLabelStyle());
+                        if (field.isDisabled()) {
+                            buffer.appendAttributeDisabled();
+                        }
+                        String cellClass = field.getLabelStyleClass();
+                        if (field.getError() == null) {
+                            buffer.appendAttribute("class", cellClass);
+                        } else {
+                            buffer.append(" class=\"error");
+                            if (cellClass != null) {
+                                buffer.append(" ");
+                                buffer.append(cellClass);
+                            }
+                            buffer.append("\"");
+                        }
+                        buffer.closeTag();
+                        buffer.append(field.getLabel());
+                        buffer.elementEnd("label");
+                        if (field.isRequired()) {
+                            buffer.append(form.getMessage("label-required-suffix"));
+                        } else {
+                            buffer.append(form.getMessage("label-not-required-suffix"));
+                        }
                     }
 
                     if (Form.POSITION_LEFT.equals(form.getLabelsPosition())) {
                         buffer.append("</td>\n");
-                        buffer.append("<td align=\"left\"");
-                        buffer.appendAttribute("style", form.getFieldStyle());
+                        buffer.append("<td");
+                        buffer.appendAttribute("class", field.getParentStyleClassHint());
+                        buffer.appendAttribute("align", "left");
+                        String cellStyle = field.getParentStyleHint();
+                        if (cellStyle == null) {
+                            cellStyle = form.getFieldStyle();
+                        }
+                        buffer.appendAttribute("style", cellStyle);
 
                         if (width != null) {
                             int colspan = (width.intValue() * 2) - 1;
