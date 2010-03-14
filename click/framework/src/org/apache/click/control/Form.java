@@ -1597,6 +1597,9 @@ public class Form extends AbstractContainer {
 
     /**
      * Set the label &lt;td&gt; "style" attribute value.
+     * <p/>
+     * This value can be overriden by Fields through their
+     * {@link Field#setParentStyleHint(java.lang.String)} property.
      *
      * @param value the label &lt;td&gt; "style" attribute value
      */
