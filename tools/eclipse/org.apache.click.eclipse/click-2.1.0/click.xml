@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
    Licensed to the Apache Software Foundation (ASF) under one
    or more contributor license agreements.  See the NOTICE file
@@ -19,7 +19,7 @@
 -->
 <!DOCTYPE click-app PUBLIC
   "-//Apache Software Foundation//DTD Click Configuration 2.1//EN"
-  "http://click.apache.org/dtds/click_2_1.dtd">
+  "http://click.apache.org/dtds/click-2.1.dtd">
 
 <click-app charset="UTF-8">
 
