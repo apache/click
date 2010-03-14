@@ -21,6 +21,7 @@ package org.apache.click;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.click.control.Form;
+import org.apache.click.pages.BinaryPage;
 import org.apache.click.pages.ListenerPage;
 
 /**
@@ -45,6 +46,19 @@ public class ClickServletTest extends TestCase {
 
         // assert that the Page did successfully execute
         Assert.assertTrue(page.success);
+        container.stop();
+    }
+
+    /**
+     * Check that ClickServlet still renders an ErrorPage for cases where the
+     * response outputStream has been retrieved and an exception occurs.
+     */
+    public void testBinaryExceptionHandling() {
+        MockContainer container = new MockContainer("web");
+        container.start();
+
+        container.testPage(BinaryPage.class);
+
         container.stop();
     }
 }
