@@ -56,7 +56,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     /** The wrapped servlet request. */
     private final HttpServletRequest request;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * @see HttpServletRequestWrapper(HttpServletRequest)
@@ -132,7 +132,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
         }
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Returns a map of <tt>FileItem arrays</tt> keyed on request parameter
@@ -218,13 +218,14 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
         }
     }
 
-    // -------------------------------------------------------- Package private methods
+    // Package Private Methods ------------------------------------------------
 
     /**
      * Return the map of <tt>"multipart"</tt> request parameter map.
      *
      * @return the <tt>"multipart"</tt> request parameter map
      */
+    @SuppressWarnings("unchecked")
     Map getMultipartParameterMap() {
         if (request.getAttribute(ClickServlet.MOCK_MODE_ENABLED) == null) {
             return multipartParameterMap;
@@ -236,7 +237,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
         }
     }
 
-    // -------------------------------------------------------- Private methods
+    // Private Methods --------------------------------------------------------
 
     /**
      * Stores the specified value in a FileItem array in the map, under the
