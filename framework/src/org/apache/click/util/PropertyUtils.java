@@ -29,6 +29,7 @@ import ognl.OgnlException;
 /**
  * Provide property getter and setter utility methods.
  */
+@SuppressWarnings("unchecked")
 public class PropertyUtils {
 
     /** Provides a synchronized cache of OGNL expressions. */
