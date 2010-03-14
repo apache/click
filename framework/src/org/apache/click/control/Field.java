@@ -229,8 +229,11 @@ public abstract class Field extends AbstractControl {
     /** The Field 'title' attribute, which acts as a tooltip help message. */
     protected String title;
 
+    /** The Field is trimmed flag, default value is true. */
+    protected boolean trim = true;
+
     /**
-     * The validate Field value <tt>onProcess()</tt> invokation flag.
+     * The validate Field value <tt>onProcess()</tt> invocation flag.
      */
     protected Boolean validate;
 
@@ -856,6 +859,27 @@ public abstract class Field extends AbstractControl {
     }
 
     /**
+     * Return true if the Field request value should be trimmed, false otherwise.
+     * The default value is <tt>"true"</tt>.
+     *
+     * @return true if the Field request value should be trimmed, false otherwise
+     */
+    public boolean isTrim() {
+        return trim;
+    }
+
+    /**
+     * Set the trim flag to true if the Field request value should be trimmed,
+     * false otherwise.
+     *
+     * @param trim true if the Field request value should be trimmed, false
+     * otherwise
+     */
+    public void setTrim(boolean trim) {
+        this.trim = trim;
+    }
+
+    /**
      * Return true if the Field should validate itself when being processed.
      * <p/>
      * If the validate attribute for the Field is not explicity set, this
@@ -1173,7 +1197,11 @@ public abstract class Field extends AbstractControl {
     protected String getRequestValue() {
         String value = getContext().getRequestParameter(getName());
         if (value != null) {
-            return value.trim();
+            if (isTrim()) {
+                return value.trim();
+            } else {
+                return value;
+            }
         } else {
             return "";
         }
