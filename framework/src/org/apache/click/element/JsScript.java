@@ -146,7 +146,7 @@ public class JsScript extends ResourceElement {
 
     private static final long serialVersionUID = 1L;
 
-    // -------------------------------------------------------------- Variables
+    // Variables --------------------------------------------------------------
 
     /** The inline JavaScript content. */
     private String content;
@@ -166,9 +166,9 @@ public class JsScript extends ResourceElement {
     private String template;
 
     /** The model of the template to render. */
-    private Map model;
+    private Map<String, Object> model;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct a new inline JavaScript element.
@@ -218,13 +218,13 @@ public class JsScript extends ResourceElement {
      * @param template the path of the template to render
      * @param model the template model
      */
-    public JsScript(String template, Map model) {
+    public JsScript(String template, Map<String, Object> model) {
         this(null);
         setTemplate(template);
         setModel(model);
     }
 
-    // ------------------------------------------------------ Public Properties
+    // Public Properties ------------------------------------------------------
 
     /**
      * Returns the JavaScript HTML tag: &lt;script&gt;.
@@ -344,7 +344,7 @@ public class JsScript extends ResourceElement {
      *
      * @return the model of the template to render
      */
-    public Map getModel() {
+    public Map<String, Object> getModel() {
         return model;
     }
 
@@ -357,11 +357,11 @@ public class JsScript extends ResourceElement {
      *
      * @param model the model of the template to render
      */
-    public void setModel(Map model) {
+    public void setModel(Map<String, Object> model) {
         this.model = model;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Render the HTML representation of the JsScript element to the specified
@@ -418,6 +418,7 @@ public class JsScript extends ResourceElement {
      * @param o the object with which to compare this instance with
      * @return true if the specified object is the same as this object
      */
+    @Override
     public boolean equals(Object o) {
         if (!isUnique()) {
             return super.equals(o);
@@ -446,6 +447,7 @@ public class JsScript extends ResourceElement {
      *
      * @return a hash code value for this object
      */
+    @Override
     public int hashCode() {
         if (!isUnique()) {
             return super.hashCode();
@@ -453,7 +455,7 @@ public class JsScript extends ResourceElement {
         return new HashCodeBuilder(17, 37).append(getId()).toHashCode();
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Render the JsScript {@link #setContent(java.lang.String) content}
@@ -472,9 +474,9 @@ public class JsScript extends ResourceElement {
     protected void renderContent(HtmlStringBuffer buffer, Context context) {
         if (getTemplate() != null) {
 
-            Map templateModel = getModel();
+            Map<String, Object> templateModel = getModel();
             if (templateModel == null) {
-                templateModel = new HashMap();
+                templateModel = new HashMap<String, Object>();
             }
             buffer.append(context.renderTemplate(getTemplate(), templateModel));
 
@@ -516,7 +518,7 @@ public class JsScript extends ResourceElement {
         }
     }
 
-    // ------------------------------------------------ Package Private Methods
+    // Package Private Methods ------------------------------------------------
 
     /**
      * Render the CDATA tag prefix to the specified buffer if

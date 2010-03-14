@@ -54,7 +54,7 @@ public class JsImport extends ResourceElement {
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Constructs a new JavaScript import element.
@@ -126,7 +126,7 @@ public class JsImport extends ResourceElement {
         setVersionIndicator(versionIndicator);
     }
 
-    // ------------------------------------------------------ Public properties
+    // Public Properties ------------------------------------------------------
 
     /**
      * Returns the JavaScript import HTML tag: &lt;script&gt;.
@@ -192,7 +192,7 @@ public class JsImport extends ResourceElement {
         return getAttribute("src");
     }
 
-    // ------------------------------------------------ Package Private Methods
+    // Package Private Methods ------------------------------------------------
 
     /**
      * Render the HTML representation of the JsImport element to the specified
@@ -231,6 +231,7 @@ public class JsImport extends ResourceElement {
      * @param o the object with which to compare this instance with
      * @return true if the specified object is the same as this object
      */
+    @Override
     public boolean equals(Object o) {
         //1. Use the == operator to check if the argument is a reference to this object.
         if (o == this) {
@@ -245,8 +246,8 @@ public class JsImport extends ResourceElement {
         //3. Cast the argument to the correct type.
         JsImport that = (JsImport) o;
 
-        return getSrc() == null ? that.getSrc() == null
-            : getSrc().equals(that.getSrc());
+        return (getSrc() == null) ? (that.getSrc() == null)
+                                  : (getSrc().equals(that.getSrc()));
     }
 
     /**
@@ -254,6 +255,7 @@ public class JsImport extends ResourceElement {
      *
      * @return a hash code value for this object
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(getSrc()).toHashCode();
     }

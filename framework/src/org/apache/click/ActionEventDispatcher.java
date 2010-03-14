@@ -73,10 +73,7 @@ import org.apache.commons.lang.Validate;
  */
 public class ActionEventDispatcher {
 
-    // -------------------------------------------------------------- Constants
-
-    /** The thread local dispatcher holder. */
-    private static final ThreadLocal THREAD_LOCAL_DISPATCHER = new ThreadLocal();
+    // Constants --------------------------------------------------------------
 
     /**
      * Indicates the listener should fire <tt>AFTER</tt> the onProcess event.
@@ -85,12 +82,16 @@ public class ActionEventDispatcher {
      */
     public static final int POST_ON_PROCESS_EVENT = 300;
 
-    // -------------------------------------------------------------- Variables
+    // Variables --------------------------------------------------------------
+
+    /** The thread local dispatcher holder. */
+    private static final ThreadLocal<DispatcherStack> THREAD_LOCAL_DISPATCHER
+        = new ThreadLocal<DispatcherStack>();
 
     /** The POST_PROCESS events holder. */
     private EventHolder postProcessEventHolder;
 
-    // --------------------------------------------------------- Public Methods
+    //  Public Methods ---------------------------------------------------------
 
     /**
      * Register the event source and event ActionListener to be fired by the
@@ -127,7 +128,7 @@ public class ActionEventDispatcher {
         eventHolder.registerActionEvent(source, listener);
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Allow the dispatcher to handle the error that occurred.
@@ -176,14 +177,14 @@ public class ActionEventDispatcher {
      *
      * @return true if the page should continue processing or false otherwise
      */
-    protected boolean fireActionEvents(Context context, List eventSourceList,
-        List eventListenerList, int event) {
+    protected boolean fireActionEvents(Context context, List<Control> eventSourceList,
+        List<ActionListener> eventListenerList, int event) {
 
         boolean continueProcessing = true;
 
         for (int i = 0, size = eventSourceList.size(); i < size; i++) {
-            Control source = (Control) eventSourceList.get(0);
-            ActionListener listener = (ActionListener) eventListenerList.get(0);
+            Control source = eventSourceList.get(0);
+            ActionListener listener = eventListenerList.get(0);
 
             // Pop the first entry in the list
             eventSourceList.remove(0);
@@ -272,7 +273,7 @@ public class ActionEventDispatcher {
         return new EventHolder(event);
     }
 
-    // ------------------------------------------------ Package Private Methods
+    // Package Private Methods ------------------------------------------------
 
     /**
      * Return the {@link #POST_ON_PROCESS_EVENT} {@link EventHolder}.
@@ -318,7 +319,7 @@ public class ActionEventDispatcher {
      * @return stack data structure where ActionEventDispatcher are stored
      */
     static DispatcherStack getDispatcherStack() {
-        DispatcherStack dispatcherStack = (DispatcherStack) THREAD_LOCAL_DISPATCHER.get();
+        DispatcherStack dispatcherStack = THREAD_LOCAL_DISPATCHER.get();
 
         if (dispatcherStack == null) {
             dispatcherStack = new DispatcherStack(2);
@@ -328,7 +329,7 @@ public class ActionEventDispatcher {
         return dispatcherStack;
     }
 
-    // ---------------------------------------------------------- Inner Classes
+    // Inner Classes ----------------------------------------------------------
 
     /**
      * Holds the list of listeners and event sources.
@@ -339,10 +340,10 @@ public class ActionEventDispatcher {
         protected int event;
 
         /** The list of registered event sources. */
-        private List eventSourceList;
+        private List<Control> eventSourceList;
 
         /** The list of registered event listeners. */
-        private List eventListenerList;
+        private List<ActionListener> eventListenerList;
 
         // ------------------------------------------------------- Constructors
 
@@ -387,9 +388,9 @@ public class ActionEventDispatcher {
          *
          * @return list of event listeners
          */
-        public List getEventListenerList() {
+        public List<ActionListener> getEventListenerList() {
             if (eventListenerList == null) {
-                eventListenerList = new ArrayList();
+                eventListenerList = new ArrayList<ActionListener>();
             }
             return eventListenerList;
         }
@@ -399,9 +400,9 @@ public class ActionEventDispatcher {
          *
          * @return list of event sources
          */
-        public List getEventSourceList() {
+        public List<Control> getEventSourceList() {
             if (eventSourceList == null) {
-                eventSourceList = new ArrayList();
+                eventSourceList = new ArrayList<Control>();
             }
             return eventSourceList;
         }
@@ -437,7 +438,7 @@ public class ActionEventDispatcher {
     /**
      * Provides an unsynchronized Stack.
      */
-    static class DispatcherStack extends ArrayList {
+    static class DispatcherStack extends ArrayList<ActionEventDispatcher> {
 
         /** Serialization version indicator. */
         private static final long serialVersionUID = 1L;
@@ -490,7 +491,7 @@ public class ActionEventDispatcher {
                 throw new RuntimeException(msg);
             }
 
-            return (ActionEventDispatcher) get(length - 1);
+            return get(length - 1);
         }
     }
 }

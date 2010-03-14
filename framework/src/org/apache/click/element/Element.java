@@ -21,6 +21,7 @@ package org.apache.click.element;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.click.Context;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -35,12 +36,12 @@ public class Element implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // -------------------------------------------------------------- Variables
+    // Variables --------------------------------------------------------------
 
     /** The Element attributes Map. */
-    private Map attributes;
+    private Map<String, String> attributes;
 
-    // ------------------------------------------------------ Public properties
+    // Public Properties ------------------------------------------------------
 
     /**
      * Returns the Element HTML tag, the default value is <tt>null</tt>.
@@ -91,9 +92,9 @@ public class Element implements Serializable {
      *
      * @return the Element attributes Map.
      */
-    public Map getAttributes() {
+    public Map<String, String> getAttributes() {
         if (attributes == null) {
-            attributes = new HashMap();
+            attributes = new HashMap<String, String>();
         }
         return attributes;
     }
@@ -144,7 +145,7 @@ public class Element implements Serializable {
         }
     }
 
-    // --------------------------------------------------------- Public methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Return the thread local Context.
@@ -177,6 +178,7 @@ public class Element implements Serializable {
      *
      * @return the HTML string representation of the Element
      */
+    @Override
     public String toString() {
         if (getTag() == null) {
             return "";
@@ -186,7 +188,7 @@ public class Element implements Serializable {
         return buffer.toString();
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Append all the Element attributes to the specified buffer.
@@ -199,7 +201,7 @@ public class Element implements Serializable {
         }
     }
 
-    // ------------------------------------------------ Package Private Methods
+    // Package Private Methods ------------------------------------------------
 
     /**
      * Render the specified {@link #getTag() tag} and {@link #getAttributes()}.

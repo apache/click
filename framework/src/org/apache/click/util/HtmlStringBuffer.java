@@ -18,7 +18,6 @@
  */
 package org.apache.click.util;
 
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -343,16 +342,13 @@ public class HtmlStringBuffer {
      * @return a reference to this <tt>HtmlStringBuffer</tt> object
      * @throws IllegalArgumentException if attributes is null
      */
-    public HtmlStringBuffer appendAttributes(Map attributes) {
+    public HtmlStringBuffer appendAttributes(Map<String, String> attributes) {
         if (attributes == null) {
             throw new IllegalArgumentException("Null attributes parameter");
         }
-        for (Iterator i = attributes.entrySet().iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry) i.next();
-            String name = entry.getKey().toString();
-
+        for (String name : attributes.keySet()) {
             if (!name.equals("id")) {
-                Object value = entry.getValue();
+                Object value = attributes.get(name);
                 appendAttributeEscaped(name, value);
             }
         }
@@ -368,7 +364,7 @@ public class HtmlStringBuffer {
      * @return a reference to this <tt>HtmlStringBuffer</tt> object
      * @throws IllegalArgumentException if attributes is null
      */
-    public HtmlStringBuffer appendStyleAttributes(Map attributes) {
+    public HtmlStringBuffer appendStyleAttributes(Map<String, String> attributes) {
         if (attributes == null) {
             throw new IllegalArgumentException("Null attributes parameter");
         }
@@ -376,14 +372,10 @@ public class HtmlStringBuffer {
         if (!attributes.isEmpty()) {
             append(" style=\"");
 
-            for (Iterator i = attributes.entrySet().iterator(); i.hasNext();) {
-                Map.Entry entry = (Map.Entry) i.next();
-                String name = entry.getKey().toString();
-                String value = entry.getValue().toString();
-
+            for (String name : attributes.keySet()) {
                 append(name);
                 append(":");
-                append(value);
+                append(attributes.get(name));
                 append(";");
             }
 
