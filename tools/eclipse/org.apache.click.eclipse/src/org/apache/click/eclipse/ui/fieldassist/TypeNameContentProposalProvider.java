@@ -21,6 +21,7 @@ package org.apache.click.eclipse.ui.fieldassist;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.click.eclipse.ClickUtils;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.core.DefaultWorkingCopyOwner;
@@ -39,6 +40,7 @@ import org.eclipse.jface.fieldassist.IContentProposalProvider;
 public class TypeNameContentProposalProvider implements IContentProposalProvider {
 	
 	private IJavaProject project;
+	private String packageName;
 	
 	/**
 	 * Constructor.
@@ -46,25 +48,40 @@ public class TypeNameContentProposalProvider implements IContentProposalProvider
 	 * @param project the Java project
 	 */
 	public TypeNameContentProposalProvider(IJavaProject project){
-		this.project = project;
+		this(project, null);
 	}
 	
-	public void setJavaProject(IJavaProject project){
+	/**
+	 * Constructor.
+	 * 
+	 * @param project the Java project
+	 * @param packageName prefix of the package name
+	 */
+	public TypeNameContentProposalProvider(IJavaProject project, String packageName){
 		this.project = project;
+		this.packageName = packageName;
 	}
 	
 	public IContentProposal[] getProposals(String contents, int position) {
 		try {
+			String rawContents = contents;
+			
 			CompletionProposalCollector collector = new CompletionProposalCollector(project);
 			ICompilationUnit unit = FieldAssistUtils.getTemporaryCompilationUnit(project);
+			
 			contents = contents.substring(0, position);
+			if(ClickUtils.isNotEmpty(packageName)){
+				contents = packageName + "." + contents;
+			}
+			
 			String source = "public class _xxx { public static void hoge(){ " + contents + "}}";
+			
 			FieldAssistUtils.setContentsToCU(unit, source);
 			unit.codeComplete(source.length() - 2, collector, DefaultWorkingCopyOwner.PRIMARY);
 			IJavaCompletionProposal[] proposals = collector.getJavaCompletionProposals();
 			List<IContentProposal> result = new ArrayList<IContentProposal>();
 			
-			for(int j=0;j<proposals.length;j++){
+			for(int j = 0; j < proposals.length; j++){
 				if(proposals[j].getImage()!=null){
 					String replaceString = null;
 					if(proposals[j] instanceof LazyJavaTypeCompletionProposal){
@@ -74,8 +91,17 @@ public class TypeNameContentProposalProvider implements IContentProposalProvider
 						JavaCompletionProposal p = (JavaCompletionProposal)proposals[j];
 						replaceString = p.getReplacementString();
 					}
-					if(replaceString!=null && replaceString.startsWith(contents)){
-						result.add(new FieldAssistUtils.ContentProposalImpl(replaceString, position));
+					
+					if(ClickUtils.isNotEmpty(replaceString)){
+						if(replaceString.equals("_xxx")){
+							continue;
+						}
+						if(ClickUtils.isNotEmpty(packageName) && replaceString.startsWith(packageName)){
+							replaceString = replaceString.substring(packageName.length() + 1);
+						}
+						if(ClickUtils.isNotEmpty(replaceString) && replaceString.startsWith(rawContents)){
+							result.add(new FieldAssistUtils.ContentProposalImpl(replaceString, position));
+						}
 					}
 				}
 			}

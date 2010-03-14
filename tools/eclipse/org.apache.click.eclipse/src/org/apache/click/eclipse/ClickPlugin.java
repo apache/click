@@ -161,7 +161,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	 * @param substitutions the substitutions
 	 * @return the localized and formatted message
 	 */
-	public static String getString(String key, Object [] substitutions){
+	public static String getString(String key, Object... substitutions){
 		return MessageFormat.format(getString(key), substitutions);
 	}
 

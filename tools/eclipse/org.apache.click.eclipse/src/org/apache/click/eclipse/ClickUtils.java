@@ -751,6 +751,9 @@ public class ClickUtils {
 		return simpleName;
 	}
 	
+	/**
+	 * Copy data from <code>InputStream</code> to <code>OutputStream</code>.
+	 */
 	public static void copyStream(InputStream in, OutputStream out){
 		try {
 			byte[] buf = new byte[1024 * 8];
@@ -766,6 +769,9 @@ public class ClickUtils {
 		}
 	}
 	
+	/**
+	 * Read <code>InputStream</code> as UTF-8 text.
+	 */
 	public static String readStream(InputStream in){
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		copyStream(in, out);
@@ -784,6 +790,26 @@ public class ClickUtils {
 				;
 			}
 		}
+	}
+	
+	/**
+	 * Tests the given string is null or empty.
+	 * 
+	 * @param value test string
+	 * @return true if value is null or empty, false otherwise
+	 */
+	public static boolean isEmpty(String value){
+		return value == null || value.length() == 0;
+	}
+	
+	/**
+	 * Tests the given string is not null and empty.
+	 * 
+	 * @param value test string
+	 * @return true if value is not null and empty, false otherwise
+	 */
+	public static boolean isNotEmpty(String value){
+		return !isEmpty(value);
 	}
 	
 

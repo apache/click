@@ -78,9 +78,9 @@ public class AttributeEditorUtils {
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		if(element!=null){
+		if(element != null){
 			String initialValue = element.getAttribute(attrName);
-			if(initialValue!=null){
+			if(initialValue != null){
 				text.setText(initialValue);
 			}
 		}
@@ -108,9 +108,9 @@ public class AttributeEditorUtils {
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		if(element!=null){
+		if(element != null){
 			String initialValue = element.getAttribute(attrName);
-			if(initialValue!=null){
+			if(initialValue != null){
 				text.setText(initialValue);
 			}
 		}
@@ -135,10 +135,10 @@ public class AttributeEditorUtils {
 		Composite composite = FieldAssistUtils.createNullDecoratedPanel(parent, true);
 		final Combo combo = new Combo(composite, SWT.READ_ONLY);
 
-		for(int i=0;i<values.length;i++){
+		for(int i = 0; i < values.length; i++){
 			combo.add(values[i]);
 		}
-		if(element!=null){
+		if(element != null){
 			String initialValue = element.getAttribute(attrName);
 			if(initialValue!=null){
 				combo.setText(initialValue);
@@ -148,6 +148,8 @@ public class AttributeEditorUtils {
 		return combo;
 	}
 
+	
+	
 	/**
 	 * Creates the classname field editor.
 	 *
@@ -164,38 +166,40 @@ public class AttributeEditorUtils {
 			final IDOMElement element, String label, final String attrName,
 			final String superClass, final Text textFileName){
 
+		// packagename of page class
+		final String packageName = getPagePackageName(element, superClass);
+		
 		final Hyperlink link = toolkit.createHyperlink(parent, label, SWT.NULL);
 		link.addHyperlinkListener(new HyperlinkAdapter(){
 			public void linkActivated(HyperlinkEvent e){
 				try {
 					Control[] controls = parent.getChildren();
 					Text text = null;
-					for(int i=0;i<controls.length;i++){
-						if(i>0 && controls[i-1]==link && controls[i] instanceof Composite){
+					for(int i = 0; i < controls.length; i++){
+						if(i > 0 && controls[i-1] == link && controls[i] instanceof Composite){
 							Composite composite = (Composite)controls[i];
 							text = (Text)((Composite)composite.getChildren()[0]).getChildren()[0];
 						}
 					}
-					if(text!=null && !text.getText().equals("")){
+					if(text != null && !text.getText().equals("")){
 						String className = text.getText();
-						if(superClass!=null && superClass==ClickPlugin.CLICK_PAGE_CLASS){
-							String packageName = ((Element)element.getParentNode()).getAttribute(ClickPlugin.ATTR_PACKAGE);
-							if(packageName!=null && packageName.length()!=0){
+						if(superClass != null && superClass == ClickPlugin.CLICK_PAGE_CLASS){
+							if(ClickUtils.isNotEmpty(packageName)){
 								className = packageName + "." + className;
 							}
 						}
 						IFile file = (IFile)ClickUtils.getResource(element.getStructuredDocument());
 						IJavaProject project = JavaCore.create(file.getProject());
 						IType type = project.findType(className);
-						if(type!=null){
+						if(type != null){
 							JavaUI.revealInEditor(JavaUI.openInEditor(type), (IJavaElement)type);
 						} else {
-							if(superClass!=null && superClass==ClickPlugin.CLICK_PAGE_CLASS){
+							if(superClass != null && superClass == ClickPlugin.CLICK_PAGE_CLASS){
 								// Opens the new page creation wizard
 								NewClickPageWizard wizard = new NewClickPageWizard();
 								wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
 								wizard.setInitialClassName(className);
-								if(textFileName!=null){
+								if(textFileName != null){
 									wizard.setInitialPageName(textFileName.getText());
 								}
 								WizardDialog dialog = new WizardDialog(text.getShell(), wizard);
@@ -204,7 +208,7 @@ public class AttributeEditorUtils {
 								// Opens the new java class creation wizard
 								NewClassWizard wizard = new NewClassWizard();
 								wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
-								if(superClass!=null){
+								if(superClass != null){
 									if(superClass == ClickPlugin.CLICK_CONTROL_IF || superClass.endsWith("Service")){
 										wizard.addInterface(superClass);
 									} else {
@@ -227,18 +231,18 @@ public class AttributeEditorUtils {
 		Composite composite = toolkit.createComposite(parent);
 		composite.setLayout(FieldAssistUtils.createGridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
+		
 		ContentAssistField field = new ContentAssistField(composite, SWT.BORDER,
 				new TextControlCreator(), new TextContentAdapter(),
-				new TypeNameContentProposalProvider(project),
+				new TypeNameContentProposalProvider(project, packageName),
 				ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS,
 				new char[0]);
 
-		final Text text = (Text)field.getControl();
+		final Text text = (Text) field.getControl();
 		field.getLayoutControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		field.getLayoutControl().setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
-		if(element!=null){
+		if(element != null){
 			String initialValue = element.getAttribute(attrName);
 			if(initialValue!=null){
 				text.setText(initialValue);
@@ -255,9 +259,13 @@ public class AttributeEditorUtils {
 							SearchEngine.createJavaSearchScope(new IJavaElement[]{project}),
 							IJavaElementSearchConstants.CONSIDER_CLASSES,false);
 
-					if(dialog.open()==SelectionDialog.OK){
+					if(dialog.open() == SelectionDialog.OK){
 						Object[] result = dialog.getResult();
-						text.setText(((IType)result[0]).getFullyQualifiedName());
+						String className = ((IType)result[0]).getFullyQualifiedName();
+						if(ClickUtils.isNotEmpty(packageName) && className.startsWith(packageName)){
+							className = className.substring(packageName.length() + 1);
+						}
+						text.setText(className);
 					}
 				} catch(Exception ex){
 					ClickPlugin.log(ex);
@@ -266,6 +274,14 @@ public class AttributeEditorUtils {
 		});
 
 		return text;
+	}
+
+	private static String getPagePackageName(final IDOMElement element, final String superClass) {
+		String packageName = null;
+		if(superClass != null && superClass == ClickPlugin.CLICK_PAGE_CLASS){
+			packageName = ((Element) element.getParentNode()).getAttribute(ClickPlugin.ATTR_PACKAGE);
+		}
+		return packageName;
 	}
 
 }
