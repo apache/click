@@ -20,8 +20,8 @@ package org.apache.click.control;
 
 import org.apache.click.ActionListener;
 import org.apache.click.Context;
+import org.apache.click.Page;
 import org.apache.click.util.HtmlStringBuffer;
-
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -50,7 +50,7 @@ public class PageLink extends AbstractLink {
     // ----------------------------------------------------- Instance Variables
 
     /** The target page class. */
-    protected Class pageClass;
+    protected Class<? extends Page> pageClass;
 
     // ----------------------------------------------------------- Constructors
 
@@ -71,7 +71,7 @@ public class PageLink extends AbstractLink {
      * @param targetPage the target page class
      * @throws IllegalArgumentException if the name is null
      */
-    public PageLink(String name, Class targetPage) {
+    public PageLink(String name, Class<? extends Page> targetPage) {
         setName(name);
         if (targetPage == null) {
             throw new IllegalArgumentException("Null targetPage parameter");
@@ -87,7 +87,7 @@ public class PageLink extends AbstractLink {
      * @param targetPage the target page class
      * @throws IllegalArgumentException if the name is null
      */
-    public PageLink(String name, String label, Class targetPage) {
+    public PageLink(String name, String label, Class<? extends Page> targetPage) {
         setName(name);
         setLabel(label);
         if (targetPage == null) {
@@ -102,7 +102,7 @@ public class PageLink extends AbstractLink {
      * @param targetPage the target page class
      * @throws IllegalArgumentException if the name is null
      */
-    public PageLink(Class targetPage) {
+    public PageLink(Class<? extends Page> targetPage) {
         if (targetPage == null) {
             throw new IllegalArgumentException("Null targetPage parameter");
         }
@@ -180,7 +180,7 @@ public class PageLink extends AbstractLink {
      *
      * @return the target Page class
      */
-    public Class getPageClass() {
+    public Class<? extends Page> getPageClass() {
         return pageClass;
     }
 
@@ -190,7 +190,7 @@ public class PageLink extends AbstractLink {
      *
      * @param targetPage the target Page class
      */
-    public void setPageClass(Class targetPage) {
+    public void setPageClass(Class<? extends Page> targetPage) {
         pageClass = targetPage;
     }
 
