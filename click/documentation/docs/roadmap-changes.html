@@ -129,15 +129,24 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
       <li class="change">
         Added methods to Fields for styling their labels. See new methods
         <a href="click-api/org/apache/click/control/Field.html#setLabelStyle(java.lang.String)">Field.setLabelStyle(String)</a>
-        and <a href="click-api/org/apache/click/control/Field.html#setLabelStyleClass(java.lang.String)">Field.setLabelStyleClass(String)</a>
+        and <a href="click-api/org/apache/click/control/Field.html#setLabelStyleClass(java.lang.String)">Field.setLabelStyleClass(String)</a>.
+        This issue was raised by Stefax
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-595">CLK-595</a>].
       </li>
       <li class="change">
         Added methods to Fields for providing styling hints to their
         containing elements. See new methods
         <a href="click-api/org/apache/click/control/Field.html#setParentStyleHint(java.lang.String)">Field.setParentStyleHint(String)</a>
-        and <a href="click-api/org/apache/click/control/Field.html#setParentStyleClassHint(java.lang.String)">Field.setParentStyleClassHint(String)</a>
+        and <a href="click-api/org/apache/click/control/Field.html#setParentStyleClassHint(java.lang.String)">Field.setParentStyleClassHint(String)</a>.
+        This issue was raised by Stefax
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-595">CLK-595</a>].
+      </li>
+      <li class="change">
+        Added trim property to Field for controlling if the Field request
+        parameter is trimmed or not. See new method
+        <a href="click-api/org/apache/click/control/Field.html#setTrim(boolean)">Field.setTrim(boolean)</a>.
+        This issue was raised by Andrey Rybin
+        [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-627">CLK-627</a>].
       </li>
       <li class="change">
         Added new Context methods
@@ -150,7 +159,8 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
       </li>
       <li class="change">
         Replaced multiple ClickUtils close methods with a single method accepting
-        a <a href="click-api/org/apache/click/util/ClickUtils.html#close(java.io.Closeable)">Closeable</a>
+        a <a href="click-api/org/apache/click/util/ClickUtils.html#close(java.io.Closeable)">Closeable</a>.
+        This issue was raised by Andrey Rybin
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-620">CLK-620</a>].
       </li>
     </ul>
