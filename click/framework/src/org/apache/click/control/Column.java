@@ -203,7 +203,7 @@ public class Column implements Serializable {
     // ----------------------------------------------------- Instance Variables
 
     /** The Column attributes Map. */
-    protected Map attributes;
+    protected Map<String, String> attributes;
 
     /**
      * The automatically hyperlink column URL and email address values flag,
@@ -215,7 +215,7 @@ public class Column implements Serializable {
     protected String dataClass;
 
     /** The Map of column table data &lt;td&gt; CSS style attributes. */
-    protected Map dataStyles;
+    protected Map<String, String> dataStyles;
 
     /** The column row decorator. */
     protected Decorator decorator;
@@ -230,7 +230,7 @@ public class Column implements Serializable {
     protected String headerClass;
 
     /** The Map of column table header &lt;th&gt; CSS style attributes. */
-    protected Map headerStyles;
+    protected Map<String, String> headerStyles;
 
     /** The title of the column header. */
     protected String headerTitle;
@@ -258,7 +258,7 @@ public class Column implements Serializable {
     protected Boolean renderId;
 
     /** The method cached for rendering column values. */
-    protected transient Map methodCache;
+    protected transient Map<Object, Object> methodCache;
 
     /** The column sortable status. The default value is false. */
     protected Boolean sortable;
@@ -276,6 +276,7 @@ public class Column implements Serializable {
     protected String width;
 
     /** The column comparator object, which is used to sort column row values. */
+    @SuppressWarnings("unchecked")
     Comparator comparator;
 
     // ----------------------------------------------------------- Constructors
@@ -360,9 +361,9 @@ public class Column implements Serializable {
      *
      * @return the column attributes Map.
      */
-    public Map getAttributes() {
+    public Map<String, String> getAttributes() {
         if (attributes == null) {
-            attributes = new HashMap();
+            attributes = new HashMap<String, String>();
         }
         return attributes;
     }
@@ -403,6 +404,7 @@ public class Column implements Serializable {
      *
      * @return the column row data sorting comparator object.
      */
+    @SuppressWarnings("unchecked")
     public Comparator getComparator() {
         if (comparator == null) {
             comparator = new ColumnComparator(this);
@@ -416,6 +418,7 @@ public class Column implements Serializable {
      *
      * @param comparator the column row data sorting comparator object
      */
+    @SuppressWarnings("unchecked")
     public void setComparator(Comparator comparator) {
         this.comparator = comparator;
     }
@@ -485,9 +488,9 @@ public class Column implements Serializable {
      *
      * @return the Map of table data &lt;td&gt; CSS styles
      */
-    public Map getDataStyles() {
+    public Map<String, String> getDataStyles() {
         if (dataStyles == null) {
-            dataStyles = new HashMap();
+            dataStyles = new HashMap<String, String>();
         }
         return dataStyles;
     }
@@ -925,9 +928,9 @@ public class Column implements Serializable {
      *
      * @return the Map of table header &lt;th&gt; CSS styles
      */
-    public Map getHeaderStyles() {
+    public Map<String, String> getHeaderStyles() {
         if (headerStyles == null) {
-            headerStyles = new HashMap();
+            headerStyles = new HashMap<String, String>();
         }
         return headerStyles;
     }
@@ -1295,6 +1298,7 @@ public class Column implements Serializable {
      * @return the named row object property value
      * @throws RuntimeException if an error occurred obtaining the property
      */
+    @SuppressWarnings("unchecked")
     public Object getProperty(String name, Object row) {
         if (row instanceof Map) {
             Map map = (Map) row;
@@ -1320,7 +1324,7 @@ public class Column implements Serializable {
 
         } else {
             if (methodCache == null) {
-                methodCache = new HashMap();
+                methodCache = new HashMap<Object, Object>();
             }
 
             return PropertyUtils.getValue(row, name, methodCache);
@@ -1443,6 +1447,7 @@ public class Column implements Serializable {
      * @see org.apache.click.control.Column
      * @see org.apache.click.control.Table
      */
+    @SuppressWarnings("unchecked")
     static class ColumnComparator implements Comparator, Serializable {
 
         private static final long serialVersionUID = 1L;
