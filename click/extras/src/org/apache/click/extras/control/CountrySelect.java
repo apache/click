@@ -63,7 +63,7 @@ public class CountrySelect extends Select {
     /** The Select comparator locale. */
     private Locale locale;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a CountrySelect field with the given name.
@@ -126,7 +126,7 @@ public class CountrySelect extends Select {
         super();
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Return the locale for this control.
@@ -154,18 +154,19 @@ public class CountrySelect extends Select {
         this.locale = locale;
     }
  
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
-     * Bind the request value to the control.
+     * Validate the Select request submission.
      *
-     * @see Select#bindRequestValue()
+     * @see Select#validate()
      */
-    public void bindRequestValue() {
-
+    @Override
+    public void validate() {
+        // Ensure the option list is loaded before validation
         loadOptionList();
 
-        super.bindRequestValue();
+        super.validate();
     }
 
     /**
@@ -178,12 +179,13 @@ public class CountrySelect extends Select {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         loadOptionList();
         super.render(buffer);
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Load the Country Select options if not defined, using all the available
@@ -213,10 +215,10 @@ public class CountrySelect extends Select {
 
         for (int i = 0; i < availableLocales.length; i++) {
             final String iso = availableLocales[i].getCountry();
-            final String name = availableLocales[i].getDisplayCountry(getLocale());
+            final String country = availableLocales[i].getDisplayCountry(getLocale());
 
-            if (StringUtils.isNotEmpty(iso) && StringUtils.isNotEmpty(name)) {
-                countryList.add(new Option(iso, name));
+            if (StringUtils.isNotEmpty(iso) && StringUtils.isNotEmpty(country)) {
+                countryList.add(new Option(iso, country));
             }
         }
 
@@ -227,7 +229,7 @@ public class CountrySelect extends Select {
         addAll(countryList);
     }
 
-    // ---------------------------------------------------------- Inner Classes
+    // Inner Classes ----------------------------------------------------------
 
     /**
      * Provides a comparator for Option labels with locale-sensitive behaviour.
