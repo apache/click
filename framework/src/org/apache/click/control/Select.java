@@ -258,7 +258,7 @@ public class Select extends Field {
         + "   '}'\n"
         + "'}'\n";
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The multiple options selectable flag. The default value is false. */
     protected boolean multiple;
@@ -275,7 +275,7 @@ public class Select extends Field {
      */
     protected List selectedValues;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a Select field with the given name.
@@ -327,7 +327,7 @@ public class Select extends Field {
     public Select() {
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Return the select's html tag: <tt>select</tt>.
@@ -336,6 +336,7 @@ public class Select extends Field {
      *
      * @return this controls html tag
      */
+    @Override
     public String getTag() {
         return "select";
     }
@@ -407,25 +408,25 @@ public class Select extends Field {
 
         if (!options.isEmpty()) {
             for (Iterator i = options.iterator(); i.hasNext();) {
-                Object value = i.next();
-                if (value instanceof Option) {
-                    getOptionList().add(value);
+                Object option = i.next();
+                if (option instanceof Option) {
+                    getOptionList().add(option);
 
-                } else if (value instanceof OptionGroup) {
-                    getOptionList().add(value);
+                } else if (option instanceof OptionGroup) {
+                    getOptionList().add(option);
 
-                } else if (value instanceof String) {
-                    getOptionList().add(new Option(value.toString()));
+                } else if (option instanceof String) {
+                    getOptionList().add(new Option(option.toString()));
 
-                } else if (value instanceof Number) {
-                    getOptionList().add(new Option(value.toString()));
+                } else if (option instanceof Number) {
+                    getOptionList().add(new Option(option.toString()));
 
-                } else if (value instanceof Boolean) {
-                    getOptionList().add(new Option(value.toString()));
+                } else if (option instanceof Boolean) {
+                    getOptionList().add(new Option(option.toString()));
 
                 } else {
                     String message = "Unsupported options class "
-                        + value.getClass().getName() + ". Please use method "
+                        + option.getClass().getName() + ". Please use method "
                         + "Select.addAll(Collection, String, String) instead.";
                     throw new IllegalArgumentException(message);
                 }
@@ -474,8 +475,8 @@ public class Select extends Field {
             throw new IllegalArgumentException(msg);
         }
         for (int i = 0; i < options.length; i++) {
-            String value = options[i];
-            getOptionList().add(new Option(value, value));
+            String option = options[i];
+            getOptionList().add(new Option(option, option));
         }
         setInitialValue();
     }
@@ -649,6 +650,7 @@ public class Select extends Field {
      *
      * @return the field JavaScript client side validation function
      */
+    @Override
     public String getValidationJavaScript() {
         Object[] args = new Object[4];
         args[0] = getId();
@@ -665,18 +667,14 @@ public class Select extends Field {
         return MessageFormat.format(VALIDATE_SELECT_FUNCTION, args);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Bind the request submission, setting the {@link #value} or
      * {@link #selectedValues} property if defined in the request.
      */
+    @Override
     public void bindRequestValue() {
-
-        // Page developer has not initialized options
-        if (getOptionList().isEmpty()) {
-            return;
-        }
 
         selectedValues = new ArrayList(5);
 
@@ -706,6 +704,7 @@ public class Select extends Field {
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
         int bufferSize = 50;
         if (!getOptionList().isEmpty()) {
@@ -721,6 +720,7 @@ public class Select extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 
@@ -749,7 +749,7 @@ public class Select extends Field {
         buffer.closeTag();
 
         if (!getOptionList().isEmpty()) {
-            for (int i = 0, size = getOptionList().size(); i < size; i++) {
+            for (int i = 0, listSize = getOptionList().size(); i < listSize; i++) {
                 Object object = getOptionList().get(i);
 
                 if (object instanceof Option) {
@@ -801,6 +801,7 @@ public class Select extends Field {
      * <li>select-error</li>
      * </ul></blockquote>
      */
+    @Override
     public void validate() {
         setError(null);
 
@@ -838,7 +839,7 @@ public class Select extends Field {
         }
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Set the initial select option value.
