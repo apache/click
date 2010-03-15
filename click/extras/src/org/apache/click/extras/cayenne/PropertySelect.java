@@ -118,8 +118,7 @@ import org.apache.commons.lang.StringUtils;
  * public void onDestroy() {
  *     customerSelect.getOptionList().clear();
  *     super.onDestroy();
- * }
- * </pre>
+ * } </pre>
  *
  * @see CayenneForm
  * @see QuerySelect
@@ -128,7 +127,7 @@ public class PropertySelect extends Select {
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The option label rendering decorator. */
     protected Decorator decorator;
@@ -163,7 +162,7 @@ public class PropertySelect extends Select {
     /** The property value object. */
     protected DataObject valueObject;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a PropertySelect field with the given name.
@@ -220,7 +219,7 @@ public class PropertySelect extends Select {
         super();
     }
 
-    // ------------------------------------------------------------- Properties
+    // Properties -------------------------------------------------------------
 
     /**
      * Return the option label rendering decorator.
@@ -267,6 +266,7 @@ public class PropertySelect extends Select {
      *
      * @return false
      */
+    @Override
     public boolean isMultiple() {
         return false;
     }
@@ -278,6 +278,7 @@ public class PropertySelect extends Select {
      *
      * @param value the multiple options can be selected flag
      */
+    @Override
     public void setMultiple(boolean value) {
         String msg = "PropertySelect does not support multiple property values";
         throw new UnsupportedOperationException(msg);
@@ -390,6 +391,7 @@ public class PropertySelect extends Select {
      *
      * @return the property <tt>DataObject</tt> value
      */
+    @Override
     public Object getValueObject() {
         return valueObject;
     }
@@ -402,13 +404,14 @@ public class PropertySelect extends Select {
      *
      * @param object the object value to set
      */
+    @Override
     public void setValueObject(Object object) {
         if (object != null) {
             DataObject dataObject = (DataObject) object;
             valueObject = dataObject;
 
-            CayenneForm form = (CayenneForm) getForm();
-            String pkName = CayenneUtils.getPkName(form.getDataContext(),
+            CayenneForm cayenneForm = (CayenneForm) getForm();
+            String pkName = CayenneUtils.getPkName(cayenneForm.getDataContext(),
                                                    dataObject.getClass());
 
             Object pk = dataObject.getObjectId().getIdSnapshot().get(pkName);
@@ -419,50 +422,44 @@ public class PropertySelect extends Select {
         }
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
-     * Bind the request value to the control, looking up the <tt>DataObject</tt>
-     * based on the submitted primary key value and setting this object as
-     * the Select <tt>valueObject</tt>.
+     * Process the page request returning true to continue processing or false
+     * otherwise.
+     * <p/>
+     * This method delegates to {@link #loadDataObject()} to load the
+     * <tt>DataObject</tt>.
      *
-     * @see Select#bindRequestValue()
+     * @see org.apache.click.control.Select#onProcess()
      */
-    public void bindRequestValue() {
+    @Override
+    public boolean onProcess() {
+        boolean continueProcessing = super.onProcess();
+        loadDataObject();
+        return continueProcessing;
+    }
 
+    /**
+     * Clear the cached valueObject.
+     *
+     * @see org.apache.click.Control#onDestroy()
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        valueObject = null;
+    }
+
+    /**
+     * Validate the QuerySelect request submission.
+     */
+    @Override
+    public void validate() {
+        // Ensure the option list is loaded before validation
         loadOptionList();
 
-        super.bindRequestValue();
-
-        CayenneForm form = (CayenneForm) getForm();
-        Class doClass = form.getDataObjectClass();
-
-        if (StringUtils.isNotBlank(getValue())) {
-
-            String getterName = ClickUtils.toGetterName(getName());
-
-            try {
-                Method method = doClass.getMethod(getterName);
-
-                DataContext dataContext = form.getDataContext();
-
-                Class propertyClass = method.getReturnType();
-
-                String propertyPk = getValue();
-
-                valueObject = CayenneUtils.getObjectForPK(dataContext,
-                                                          propertyClass,
-                                                          propertyPk);
-
-                setValue(propertyPk.toString());
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-        } else {
-            valueObject = null;
-        }
+        super.validate();
     }
 
     /**
@@ -475,16 +472,17 @@ public class PropertySelect extends Select {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         loadOptionList();
 
         // Select option value if value defined and not form submission
         if (getValueObject() == null && !getForm().isFormSubmission()) {
 
-            CayenneForm form = (CayenneForm) getForm();
-            DataContext dataContext = form.getDataContext();
-            Class doClass = form.getDataObjectClass();
-            Object doPk = form.getDataObjectPk();
+            CayenneForm cayenneForm = (CayenneForm) getForm();
+            DataContext dataContext = cayenneForm.getDataContext();
+            Class doClass = cayenneForm.getDataObjectClass();
+            Object doPk = cayenneForm.getDataObjectPk();
 
             if (doPk != null) {
                 DataObject dataObject =
@@ -511,17 +509,43 @@ public class PropertySelect extends Select {
         super.render(buffer);
     }
 
-    /**
-     * Clear the cached valueObject.
-     *
-     * @see org.apache.click.Control#onDestroy()
-     */
-    public void onDestroy() {
-        super.onDestroy();
-        valueObject = null;
-    }
+    // Protected Methods ------------------------------------------------------
 
-    // ------------------------------------------------------ Protected Methods
+    /**
+     * Load the <tt>DataObject</tt> based on the submitted primary key value and
+     * setting this object as the Select <tt>valueObject</tt>.
+     */
+    protected void loadDataObject() {
+        CayenneForm cayenneForm = (CayenneForm) getForm();
+        Class doClass = cayenneForm.getDataObjectClass();
+
+        if (StringUtils.isNotBlank(getValue())) {
+
+            String getterName = ClickUtils.toGetterName(getName());
+
+            try {
+                Method method = doClass.getMethod(getterName);
+
+                DataContext dataContext = cayenneForm.getDataContext();
+
+                Class propertyClass = method.getReturnType();
+
+                String propertyPk = getValue();
+
+                valueObject = CayenneUtils.getObjectForPK(dataContext,
+                                                          propertyClass,
+                                                          propertyPk);
+
+                setValue(propertyPk.toString());
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        } else {
+            valueObject = null;
+        }
+    }
 
     /**
      * Load the Select options list. This method will attempt to select the
@@ -550,8 +574,8 @@ public class PropertySelect extends Select {
             return;
         }
 
-        CayenneForm form = (CayenneForm) getForm();
-        DataContext dataContext = form.getDataContext();
+        CayenneForm cayenneForm = (CayenneForm) getForm();
+        DataContext dataContext = cayenneForm.getDataContext();
 
         try {
             List list = null;
@@ -580,7 +604,7 @@ public class PropertySelect extends Select {
                  list = dataContext.performQuery(getQueryName(), false);
 
             } else {
-                Class doClass = form.getDataObjectClass();
+                Class doClass = cayenneForm.getDataObjectClass();
                 String getterName = ClickUtils.toGetterName(getName());
                 Method method = doClass.getMethod(getterName);
                 Class propertyClass = method.getReturnType();

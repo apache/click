@@ -135,7 +135,7 @@ public class QuerySelect extends Select {
     /** The option list Cayenne <tt>SelectQuery</tt>. */
     protected SelectQuery selectQuery;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a QuerySelect field with the given name.
@@ -192,7 +192,7 @@ public class QuerySelect extends Select {
         super();
     }
 
-    // ------------------------------------------------------------- Properties
+    // Properties -------------------------------------------------------------
 
     /**
      * Return the option label rendering decorator.
@@ -367,18 +367,17 @@ public class QuerySelect extends Select {
         this.selectQuery = selectQuery;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
-     * Bind the request value to the control.
-     *
-     * @see Select#bindRequestValue()
+     * Validate the QuerySelect request submission.
      */
-    public void bindRequestValue() {
-
+    @Override
+    public void validate() {
+        // Ensure the option list is loaded before validation
         loadOptionList();
 
-        super.bindRequestValue();
+        super.validate();
     }
 
     /**
@@ -391,12 +390,13 @@ public class QuerySelect extends Select {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         loadOptionList();
         super.render(buffer);
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Load the Select options list.
