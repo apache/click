@@ -453,6 +453,8 @@ public class PropertySelect extends Select {
 
     /**
      * Validate the QuerySelect request submission.
+     *
+     * @see Select#validate()
      */
     @Override
     public void validate() {
