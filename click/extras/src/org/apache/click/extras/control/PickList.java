@@ -111,7 +111,7 @@ public class PickList extends Field {
 
     private static final long serialVersionUID = 1L;
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     /** The PickList imports statement. */
     public static final String HTML_IMPORTS =
@@ -136,7 +136,7 @@ public class PickList extends Field {
         + "   '}'\n"
         + "'}'\n";
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /**
      * The list height. The default height is 8.
@@ -168,7 +168,7 @@ public class PickList extends Field {
      */
     protected String unselectedLabel;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a PickList field with the given name and label.
@@ -197,7 +197,7 @@ public class PickList extends Field {
     public PickList() {
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Add the given Option to the PickList.
@@ -265,8 +265,8 @@ public class PickList extends Field {
             throw new IllegalArgumentException(msg);
         }
         for (int i = 0; i < options.length; i++) {
-            String value = options[i];
-            getOptionList().add(new Option(value, value));
+            String option = options[i];
+            getOptionList().add(new Option(option, option));
         }
     }
 
@@ -389,6 +389,7 @@ public class PickList extends Field {
      *
      * @return the HTML head import statements for the control
      */
+    @Override
     public String getHtmlImports() {
         return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
@@ -514,6 +515,7 @@ public class PickList extends Field {
      *
      * @return selected values as a List of Strings
      */
+    @Override
     public Object getValueObject() {
         return getSelectedValues();
     }
@@ -531,6 +533,7 @@ public class PickList extends Field {
      *
      * @param object a List of Strings
      */
+    @Override
     public void setValueObject(Object object) {
         if (object instanceof List) {
             setSelectedValues((List) object);
@@ -564,6 +567,7 @@ public class PickList extends Field {
      *
      * @return the field JavaScript client side validation function
      */
+    @Override
     public String getValidationJavaScript() {
         Object[] args = new Object[3];
         args[0] = getId();
@@ -572,18 +576,14 @@ public class PickList extends Field {
         return MessageFormat.format(VALIDATE_PICKLIST_FUNCTION, args);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Bind the request submission, setting the {@link #selectedValues}
      * property if defined in the request.
      */
+    @Override
     public void bindRequestValue() {
-
-        // Page developer has not initialized options
-        if (getOptionList().isEmpty()) {
-            return;
-        }
 
         // Load the selected items.
         this.selectedValues = new ArrayList();
@@ -609,11 +609,12 @@ public class PickList extends Field {
      * <li>field-required-error</li>
      * </ul></blockquote>
      */
+    @Override
     public void validate() {
         setError(null);
-        List value = getSelectedValues();
+        List values = getSelectedValues();
 
-        if (value.size() > 0) {
+        if (values.size() > 0) {
             return;
 
         } else {
@@ -630,6 +631,7 @@ public class PickList extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         List optionList     = getOptionList();
         List selectedValues = getSelectedValues();
@@ -694,13 +696,14 @@ public class PickList extends Field {
      *
      * @return a HTML rendered PickList string
      */
+    @Override
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(2250);
         render(buffer);
         return buffer.toString();
     }
 
-    // -------------------------------------------------------- Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Render a Velocity template for the given data model.
