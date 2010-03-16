@@ -593,7 +593,7 @@ public class FieldSet extends Field implements Container {
         this.form = form;
 
         // Set the specified form on the fieldsSets children. This call is not
-        // recursive to childrens children
+        // recursive to children's children
         for (Iterator it = getControls().iterator(); it.hasNext();) {
             Control control = (Control) it.next();
             if (control instanceof Field) {

@@ -44,7 +44,7 @@ import org.apache.commons.lang.StringUtils;
  * <h3>Remove duplicates</h3>
  * Click will ensure that duplicate Resource elements are removed by checking
  * the {@link #isUnique()} property. Thus if the same Resource is imported
- * mutliple times by the Page or different Controls, only one Resource will be
+ * multiple times by the Page or different Controls, only one Resource will be
  * rendered, if {@link #isUnique()} returns <tt>true</tt>.
  * <p/>
  * The rules for defining a unique Resource is as follows:

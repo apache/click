@@ -197,10 +197,10 @@ public abstract class AbstractLink extends AbstractControl {
      * </blockquote>
      * If not found then the message will be looked up in the
      * <tt>/click-control.properties</tt> file using the same key.
-     * If a value still cannot be found then the ActinLink name will be converted
+     * If a value still cannot be found then the ActionLink name will be converted
      * into a label using the method: {@link ClickUtils#toLabel(String)}
      * <p/>
-     * For examle given a <tt>OrderPage</tt> with the properties file
+     * For example given a <tt>OrderPage</tt> with the properties file
      * <tt>OrderPage.properties</tt>:
      *
      * <pre class="codeConfig">
