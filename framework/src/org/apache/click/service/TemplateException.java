@@ -18,6 +18,9 @@
  */
 package org.apache.click.service;
 
+import org.apache.commons.lang.StringUtils;
+
+
 /**
  * Provides a template exception class for use by the template service. This is
  * used to wrap TemplateService exceptions.
@@ -92,6 +95,15 @@ public class TemplateException extends Exception {
      */
     public String getTemplateName() {
         return templateName;
+    }
+
+    /**
+     * Return true if a template parsing error.
+     *
+     * @return true if a template parsing error
+     */
+    public boolean isParseError() {
+        return StringUtils.isNotBlank(getTemplateName());
     }
 
     /**

@@ -28,7 +28,6 @@ import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -112,7 +111,7 @@ public class ErrorReport {
         this.servletContext = servletContext;
 
         if (error instanceof TemplateException
-            && ((TemplateException) error).getTemplateName() != null) {
+            && ((TemplateException) error).isParseError()) {
 
             TemplateException te = (TemplateException) error;
 
@@ -192,6 +191,7 @@ public class ErrorReport {
      *
      * @return a error HTML display string
      */
+    @SuppressWarnings("unchecked")
     public String toString() {
 
         if (isProductionMode()) {
@@ -642,9 +642,8 @@ public class ErrorReport {
      * @param buffer the string buffer to write out the values to
      */
     protected void writeMap(Map<String, Object> map, HtmlStringBuffer buffer) {
-        for (Iterator i = map.entrySet().iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry) i.next();
-            String key = entry.getKey().toString();
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            String key = entry.getKey();
             Object value = entry.getValue();
 
             buffer.append(key);

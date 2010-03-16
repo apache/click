@@ -444,7 +444,13 @@ public class ClickServlet extends HttpServlet {
         HttpServletResponse response, boolean isPost, Throwable exception,
         Class<? extends Page> pageClass) {
 
-        if (exception instanceof TemplateException == false) {
+        if (exception instanceof TemplateException) {
+            TemplateException te = (TemplateException) exception;
+            if (!te.isParseError()) {
+                logger.error("handleException: ", exception);
+            }
+
+        } else {
             logger.error("handleException: ", exception);
         }
 
