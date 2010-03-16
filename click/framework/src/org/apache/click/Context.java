@@ -427,7 +427,7 @@ public class Context {
     /**
      * This method will set the named object in the HttpSession.
      * <p/>
-     * This method will create a session if one does not alerady exist.
+     * This method will create a session if one does not already exist.
      *
      * @param name the storage name for the object in the session
      * @param value the object to store in the session
@@ -823,7 +823,7 @@ public class Context {
      *
      * @return stack data structure where Context's are stored
      */
-    static final ContextStack getContextStack() {
+    static ContextStack getContextStack() {
         ContextStack contextStack = (ContextStack) THREAD_LOCAL_CONTEXT.get();
 
         if (contextStack == null) {
