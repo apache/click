@@ -343,9 +343,9 @@ public class SchedulerService {
     // Private Methods --------------------------------------------------------
 
     /**
-     * Return the schduler instance.
+     * Return the scheduler instance.
      *
-     * @return the schduler instance
+     * @return the scheduler instance
      */
     private Scheduler getScheduler() {
         return scheduler;

@@ -64,7 +64,7 @@ public class SelectDemo extends BorderPage {
         List investmentOptions = new ArrayList();
 
         OptionGroup property = new OptionGroup("property");
-        property.add(new Option("Commerical Property", "Commercial"));
+        property.add(new Option("Commercial Property", "Commercial"));
         property.add(new Option("Residential Property", "Residential"));
         investmentOptions.add(property);
 
@@ -96,7 +96,7 @@ public class SelectDemo extends BorderPage {
         form.add(countrySelect);
 
         form.add(new Submit("ok", "  OK  "));
-        form.add(new PageSubmit("canel", HomePage.class));
+        form.add(new PageSubmit("cancel", HomePage.class));
     }
 
     // Event Handlers ---------------------------------------------------------

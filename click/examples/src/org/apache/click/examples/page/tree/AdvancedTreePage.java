@@ -121,7 +121,7 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
         //we do specify a id as the 2nd argument, so no id is generated.
         TreeNode dev = new TreeNode("dev","1", root);
 
-        //The follwing 3 nodes represent files in the directory, setting the
+        //The following 3 nodes represent files in the directory, setting the
         //dev node as their parent. Note the false argument to the constructor.
         //This means that the specific node does not support child nodes, and
         //it will be rendered as a leaf icon. If children are supported (the

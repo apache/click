@@ -85,7 +85,7 @@ public class ExceptionPage extends BorderPage {
     // Inner Classes ----------------------------------------------------------
 
     /**
-     * Provides a rendering ojbect which will throw a NPE when merged by
+     * Provides a rendering object which will throw a NPE when merged by
      * velocity in the template.
      */
     public static class BrokenRenderer {

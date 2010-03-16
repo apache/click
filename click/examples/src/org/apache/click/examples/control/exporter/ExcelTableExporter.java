@@ -44,7 +44,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.DataFormat;
 
 /**
- * Provides an Microsft Excel Table data exporter class.
+ * Provides an Microsoft Excel Table data exporter class.
  */
 public class ExcelTableExporter extends AbstractTableExporter {
 

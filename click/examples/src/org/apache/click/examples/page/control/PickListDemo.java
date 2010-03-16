@@ -57,7 +57,7 @@ public class PickListDemo extends BorderPage {
         form.add(pickList);
 
         form.add(new Submit("ok", " OK ", this, "onOkClick"));
-        form.add(new Submit("canel", this, "onCancelClick"));
+        form.add(new Submit("cancel", this, "onCancelClick"));
     }
 
     // Event Handlers ---------------------------------------------------------
