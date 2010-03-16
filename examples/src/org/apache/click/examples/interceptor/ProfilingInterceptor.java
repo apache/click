@@ -51,7 +51,7 @@ public class ProfilingInterceptor implements PageInterceptor {
     }
 
     /**
-     * @see PageInterceptor#pagePostCreate(Class, Context)
+     * @see PageInterceptor#postCreate(Page)
      */
     public boolean postCreate(Page page) {
         createDuration = System.currentTimeMillis() - checkpointTime;
