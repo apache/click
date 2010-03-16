@@ -148,7 +148,7 @@ public class QuartzJobSchedulerPage extends BorderPage {
 
             public boolean onAction(Control source) {
                 String name = interruptLink.getValue();
-                if (getSchedulerService().interuptJob(name)) {
+                if (getSchedulerService().interruptJob(name)) {
                     setFlashMessage("Interrupted job '" + name + "'");
                 } else {
                     setFlashMessage("Could not interrupt job '" + name + "'");

@@ -129,7 +129,7 @@ public class SchedulerService {
         try {
             for (Iterator i = scheduler.getCurrentlyExecutingJobs().iterator(); i.hasNext();) {
                 JobExecutionContext context = (JobExecutionContext) i.next();
-                interuptJob(context.getJobDetail().getName());
+                interruptJob(context.getJobDetail().getName());
             }
 
             getScheduler().pauseAll();
@@ -199,11 +199,11 @@ public class SchedulerService {
     }
 
     /**
-     * Interupt the job for the given name, return true if the job was found.
+     * Interrupt the job for the given name, return true if the job was found.
      *
-     * @param jobName the name of the job to interupt
+     * @param jobName the name of the job to interrupt
      */
-    public boolean interuptJob(String jobName) {
+    public boolean interruptJob(String jobName) {
         try {
             return getScheduler().interrupt(jobName, GROUP_NAME);
 
