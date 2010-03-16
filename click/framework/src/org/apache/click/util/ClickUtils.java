@@ -2678,7 +2678,6 @@ public class ClickUtils {
      *
      * @param aChar the character value to escape
      * @param buffer the string buffer to append the escaped value to
-     * @return the HTML escaped string for the given character value
      */
     static void appendEscapeChar(char aChar, HtmlStringBuffer buffer) {
         int index = aChar;
