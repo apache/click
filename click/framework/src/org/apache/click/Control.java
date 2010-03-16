@@ -290,7 +290,7 @@ public interface Control extends Serializable {
      * Set the controls event listener.
      * <p/>
      * The method signature of the listener is:<ul>
-     * <li>must hava a valid Java method name</li>
+     * <li>must have a valid Java method name</li>
      * <li>takes no arguments</li>
      * <li>returns a boolean value</li>
      * </ul>
