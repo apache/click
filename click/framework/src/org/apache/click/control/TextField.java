@@ -92,7 +92,7 @@ public class TextField extends Field {
      * The maximum field length validation constraint. If the value is zero this
      * validation constraint is not applied. The default value is zero.
      * <p/>
-     * If maxLenth is greater than zero, then maxLength is rendered as the
+     * If maxLength is greater than zero, then maxLength is rendered as the
      * HTML attribute 'maxlength'.
      */
     protected int maxLength = 0;

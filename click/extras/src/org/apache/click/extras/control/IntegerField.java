@@ -49,7 +49,7 @@ package org.apache.click.extras.control;
  * &lt;/body&gt;
  * &lt;/html&gt; </pre>
  *
- * The InteferField has left justified horizontal text alignment,
+ * The IntegerField has left justified horizontal text alignment,
  * {@link #setTextAlign(String)}.
  * <p/>
  *
@@ -151,7 +151,7 @@ public class IntegerField extends NumberField {
 
     /**
      * Return the field Integer value, or null if value was empty or a parsing
-     * error occured.
+     * error occurred.
      *
      * @return the field Integer value
      */

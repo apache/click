@@ -38,7 +38,7 @@ import java.util.Set;
  * the database query and returns a PaginatingList to the table.
  *
  * <pre class="prettyprint">
- * public class CustomerSearach extends Page {
+ * public class CustomerSearch extends Page {
  *
  *    private Table table = new Table("table");
  *
@@ -248,7 +248,7 @@ public class PaginatingList<E> implements List<E> {
      * This method is not supported and will throw
      * <tt>UnsupportedOperationException</tt> if invoked.
      *
-     * @see List#addAll(int, Collection)a
+     * @see List#addAll(int, Collection)
      *
      * @throws UnsupportedOperationException
      */

@@ -1091,7 +1091,7 @@ public class Tree extends AbstractControl {
             renderTreeNodeStart(buffer, child, indentation);
             renderTreeNode(buffer, child, indentation);
 
-            //check if the child node should be renderered
+            //check if the child node should be rendered
             if (shouldRenderChildren(child)) {
                 renderTree(buffer, child, indentation);
             }
