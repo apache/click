@@ -519,14 +519,14 @@ public class Page implements Serializable {
      *
      * To forward to the customer <tt class="wr">search.htm</tt> page from
      * the web app root you could set forward as
-     * <tt>setFoward(<span class="navy">"/customer/search.htm"</span>)</tt>
-     * or <tt>setFoward(<span class="navy">"customer/search.htm"</span>)</tt>.
+     * <tt>setForward(<span class="navy">"/customer/search.htm"</span>)</tt>
+     * or <tt>setForward(<span class="navy">"customer/search.htm"</span>)</tt>.
      * <p/>
      * If a user was currently viewing the <tt class="wr">add-customer.htm</tt>
      * to forward to customer <span class="wr">details.htm</span> you could
      * set forward as
-     * <tt>setFoward(<span class="navy">"/customer/details.htm"</span>)</tt>
-     * or <tt>setFoward(<span class="navy">"../details.htm"</span>)</tt>.
+     * <tt>setForward(<span class="navy">"/customer/details.htm"</span>)</tt>
+     * or <tt>setForward(<span class="navy">"../details.htm"</span>)</tt>.
      * <p/>
      * See also {@link #setPath(String)}, {@link #setRedirect(String)}
      *
