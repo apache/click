@@ -55,7 +55,7 @@ public class MockSession implements HttpSession {
      * Specifies the amount of time the session will remain active between
      * client requests.
      */
-    private int maxInactiveInerval = -1;
+    private int maxInactiveInterval = -1;
 
     // -------------------------------------------------------- Constructors
 
@@ -167,7 +167,7 @@ public class MockSession implements HttpSession {
      * open between client requests
      */
     public int getMaxInactiveInterval() {
-        return maxInactiveInerval;
+        return maxInactiveInterval;
     }
 
     /**
@@ -221,7 +221,7 @@ public class MockSession implements HttpSession {
      * @param maxInterval an integer specifying the number of seconds
      */
     public void setMaxInactiveInterval(int maxInterval) {
-        this.maxInactiveInerval = maxInterval;
+        this.maxInactiveInterval = maxInterval;
     }
 
     /**
