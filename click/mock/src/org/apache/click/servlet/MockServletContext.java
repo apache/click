@@ -221,7 +221,7 @@ public class MockServletContext implements ServletContext {
                 checkedPaths += ", " + webappRoot.getAbsolutePath();
             }
         } catch (Exception ex) {
-            String msg = "error occured while checking for existence of the web"
+            String msg = "error occurred while checking for existence of the web"
                 + " application root directory at : " + url;
             throw new RuntimeException(msg, ex);
         }

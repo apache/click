@@ -183,7 +183,7 @@ public class MockContext extends Context {
      * Creates and returns a new Context instance for the specified locale and
      * servletPath.
      *
-     * @param locale the requets locale
+     * @param locale the requests locale
      * @param servletPath the requests servletPath
      * @return new Context instance
      */

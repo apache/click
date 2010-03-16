@@ -126,7 +126,7 @@ public class MockRequest implements HttpServletRequest {
     /** The scheme used to make this request, defaults to "http". */
     private String scheme = "http";
 
-    /** The request context path, defaults to {@link MockServletContext.DEFAULT_CONTEXT_PATH}. */
+    /** The request context path, defaults to {@link MockServletContext#DEFAULT_CONTEXT_PATH}. */
     private String contextPath = MockServletContext.DEFAULT_CONTEXT_PATH;
 
     /** The request servlet path, defaults to an empty String "". */
