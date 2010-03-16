@@ -142,10 +142,7 @@
 
    <path id="classpath.examples"> 
       <pathelement location="lib/${jar.servlet}"/>
-      <pathelement location="lib/${jar.spring-beans}"/>
-      <pathelement location="lib/${jar.spring-context}"/>
-      <pathelement location="lib/${jar.spring-core}"/>
-      <pathelement location="lib/${jar.spring-web}"/>
+      <pathelement location="lib/${jar.spring}"/>
       <pathelement location="dist/${click}.jar"/>
       <pathelement location="dist/${click-extras}.jar"/>
    </path>
