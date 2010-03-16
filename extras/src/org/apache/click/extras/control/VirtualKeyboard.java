@@ -37,7 +37,7 @@ import org.apache.click.util.ClickUtils;
  * <p/>
  * <b>Virtual keyboard interfaces</b> are generally used in websites where the highest
  * level of security is a must like online banking applications.
- * Virtual keyboards help to prevent any keylogging activies and/or provide
+ * Virtual keyboards help to prevent any keylogging activities and/or provide
  * users a special keyboard which they don't already have (like a keyboard of
  * another language).
  *

@@ -420,7 +420,7 @@ public class Table extends AbstractControl {
 
     /**
      * The paginator attachment style:
-     * <tt>[ PAGINATOR_ATTACHED | PAGINATOR_DEATTACHED | PAGINATOR_INLINE ]</tt>.
+     * <tt>[ PAGINATOR_ATTACHED | PAGINATOR_DETACHED | PAGINATOR_INLINE ]</tt>.
      * The default paginator attachment type is <tt>PAGINATOR_ATTACHED</tt>.
      */
     protected int paginatorAttachment = PAGINATOR_ATTACHED;
@@ -803,7 +803,7 @@ public class Table extends AbstractControl {
      * Set whether the table row (&lt;tr&gt;) elements should have the
      * class="hover" attribute set on JavaScript mouseover events. This class
      * can be used to define mouse over :hover CSS pseudo classes to create
-     * table row highlite effects. For example:
+     * table row highlight effects. For example:
      *
      * <pre class="codeHtml">
      * hover:hover { color: navy } </pre>
@@ -965,7 +965,7 @@ public class Table extends AbstractControl {
 
     /**
      * Return the paginator attachment style. Renderable attachment style values:
-     * <tt>[ PAGINATOR_ATTACHED | PAGINATOR_DEATTACHED | PAGINATOR_INLINE ]</tt>.
+     * <tt>[ PAGINATOR_ATTACHED | PAGINATOR_DETACHED | PAGINATOR_INLINE ]</tt>.
      * The default paginator attachment type is <tt>PAGINATOR_ATTACHED</tt>.
      *
      * @return the paginator attachment style
@@ -976,7 +976,7 @@ public class Table extends AbstractControl {
 
     /**
      * Set Table pagination attachment style. Renderable attachment style values:
-     * <tt>[ PAGINATOR_ATTACHED | PAGINATOR_DEATTACHED | PAGINATOR_INLINE ]</tt>.
+     * <tt>[ PAGINATOR_ATTACHED | PAGINATOR_DETACHED | PAGINATOR_INLINE ]</tt>.
      *
      * @param value the table pagination attachment style
      */
@@ -1195,7 +1195,7 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Return the index of the last row to diplay. Index starts from 0.
+     * Return the index of the last row to display. Index starts from 0.
      * <p/>
      * <b>Note:</b> the Table {@link #setRowList(java.util.List) row list} and
      * {@link #setPageSize(int) page size} must be set for this method to

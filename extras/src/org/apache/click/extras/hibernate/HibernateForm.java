@@ -313,7 +313,7 @@ public class HibernateForm extends Form {
      * </ul>
      *
      * @return true if the object was saved or false otherwise
-     * @throws HibernateException if a persistence error occured
+     * @throws HibernateException if a persistence error occurred
      */
     public boolean saveChanges() throws HibernateException {
         Object valueObject = getValueObject();

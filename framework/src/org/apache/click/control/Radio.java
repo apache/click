@@ -31,8 +31,8 @@ import org.apache.click.util.HtmlStringBuffer;
  * </table>
  *
  * The Radio control is generally used within a RadioGroup, for an code example
- * pleasse see the {@link org.apache.click.control.RadioGroup} Javadoc example.
- * When used with a RadioGroup the Radio control will derrive its name from the
+ * please see the {@link org.apache.click.control.RadioGroup} Javadoc example.
+ * When used with a RadioGroup the Radio control will derive its name from the
  * parent RadioGroup, if the Radio's name is not defined.
  *
  * <p/>
@@ -197,7 +197,7 @@ public class Radio extends Field {
      * If a value still cannot be found then the Field name will be
      * the radio value.
      * <p/>
-     * For examle given a <tt>CustomerPage</tt> with the properties file
+     * For example given a <tt>CustomerPage</tt> with the properties file
      * <tt>CustomerPage.properties</tt>:
      *
      * <pre class="codeConfig">

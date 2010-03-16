@@ -193,7 +193,7 @@ public class FreemarkerTemplateService implements TemplateService {
         configuration.setTemplateExceptionHandler(
                 TemplateExceptionHandler.HTML_DEBUG_HANDLER);
 
-        // Use beans wrapper (recommmended for most applications)
+        // Use beans wrapper (recommended for most applications)
         configuration.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
 
         String charset = configService.getCharset();

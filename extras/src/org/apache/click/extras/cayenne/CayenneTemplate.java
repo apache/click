@@ -352,7 +352,7 @@ public class CayenneTemplate {
      * Returns an array of update counts.
      *
      * @param queryName the name of the query to perform
-     * @param parameters the Map of query paramater names and values
+     * @param parameters the Map of query parameter names and values
      * @return the array of update counts
      */
     protected int[] performNonSelectingQuery(String queryName, Map parameters) {

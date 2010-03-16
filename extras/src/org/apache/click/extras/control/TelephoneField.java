@@ -64,7 +64,7 @@ public class TelephoneField extends TextField {
 
     /**
      * Construct the TelephoneField with the given name. The default text field
-     * size is 20 characters and the minium valid length is 10 characters.
+     * size is 20 characters and the minimum valid length is 10 characters.
      *
      * @param name the name of the field
      */
@@ -117,7 +117,7 @@ public class TelephoneField extends TextField {
 
     /**
      * Construct the TelephoneField with the given name, label and size.
-     * The default the minium valid length is 10 characters.
+     * The default the minimum valid length is 10 characters.
      *
      * @param name the name of the field
      * @param label the label of the field

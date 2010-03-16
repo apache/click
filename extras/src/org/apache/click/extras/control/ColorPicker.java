@@ -100,7 +100,7 @@ public class ColorPicker extends Field {
         + "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype{1}.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/colorpicker/colorpicker{1}.js\"></script>\n";
 
-    /** The color validation hexidecimal pattern. */
+    /** The color validation hexadecimal pattern. */
     static final Pattern HEX_PATTERN =
         Pattern.compile("#[a-fA-F0-9]{3}([a-fA-F0-9]{3})?");
 
@@ -349,7 +349,7 @@ public class ColorPicker extends Field {
     }
 
     /**
-     * Validates the input to check wheter is required or not and that the
+     * Validates the input to check whether is required or not and that the
      * input contains a valid color hex value.
      *
      * @see org.apache.click.control.TextField#validate()

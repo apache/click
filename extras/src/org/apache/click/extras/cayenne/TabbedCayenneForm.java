@@ -116,7 +116,7 @@ public class TabbedCayenneForm extends CayenneForm {
     /**
      * Create a Tabbed Cayenne Form with no name or dataObjectClass.
      * <p/>
-     * <b>Important Note</b> the forms's name and dataObjectClass must be defined
+     * <b>Important Note</b> the form's name and dataObjectClass must be defined
      * before it is valid.
      */
     public TabbedCayenneForm() {
