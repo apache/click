@@ -886,7 +886,7 @@ public class Context {
     /**
      * Provides an unsynchronized Context Stack.
      */
-    static class ContextStack extends ArrayList<Context> {
+    static final class ContextStack extends ArrayList<Context> {
 
         /** Serialization version indicator. */
         private static final long serialVersionUID = 1L;
