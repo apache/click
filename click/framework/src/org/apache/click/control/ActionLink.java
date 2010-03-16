@@ -70,7 +70,7 @@ import org.apache.commons.lang.StringUtils;
  * <pre class="codeHtml">
  * &lt;a href="<span class="blue">$logoutLink</span>.href" title="Click to Logout"&gt;Logout&lt;/a&gt; </pre>
  *
- * ActionLink can also support a value parameter which is accessable
+ * ActionLink can also support a value parameter which is accessible
  * using {@link #getValue()}.
  * <p/>
  * For example a products table could include rows

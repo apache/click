@@ -882,7 +882,7 @@ public abstract class Field extends AbstractControl {
     /**
      * Return true if the Field should validate itself when being processed.
      * <p/>
-     * If the validate attribute for the Field is not explicity set, this
+     * If the validate attribute for the Field is not explicitly set, this
      * method will return the validation status of its parent Form, see
      * {@link Form#getValidate()}. If the Field validate attribute is not set
      * and the parent Form is not set this method will return true.

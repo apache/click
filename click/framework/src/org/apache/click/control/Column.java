@@ -1461,7 +1461,7 @@ public class Column implements Serializable {
         /**
          * Create a new Column based row comparator.
          *
-         * @param column the colum to sort on
+         * @param column the column to sort on
          */
         public ColumnComparator(Column column) {
             this.column = column;
