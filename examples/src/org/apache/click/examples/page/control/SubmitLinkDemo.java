@@ -97,14 +97,14 @@ public class SubmitLinkDemo extends BorderPage {
 
         fieldSet.add(new TextField("name"));
 
-        // Add some parameters to the parameterized submit link
+        // Add some parameters to the parametrized submit link
         paramLink.setValue("myValue");
         paramLink.setParameter("x", "100");
 
-        // Add the parameterized submit link to the FieldSet
+        // Add the parametrized submit link to the FieldSet
         fieldSet.add(paramLink);
 
-        // The Parameterized SubmitLink action listener
+        // The Parametrized SubmitLink action listener
         paramLink.setActionListener(new ActionListener() {
 
             public boolean onAction(Control source) {
@@ -154,7 +154,7 @@ public class SubmitLinkDemo extends BorderPage {
         String clickEvent = "return confirmSubmit(this, '" + form.getName() + "', 'Are you sure?');";
         confirmationLink.setOnClick(clickEvent);
 
-        // The Parameterized SubmitLink action listener
+        // The Parametrized SubmitLink action listener
         confirmationLink.setActionListener(new ActionListener() {
 
             public boolean onAction(Control source) {

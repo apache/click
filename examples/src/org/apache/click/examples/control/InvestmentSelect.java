@@ -47,7 +47,7 @@ public class InvestmentSelect extends Select {
         INVESTMENT_OPTIONS.add(new Option("None"));
 
         OptionGroup property = new OptionGroup("Property");
-        property.add(new Option("Commerical Property", "Commercial"));
+        property.add(new Option("Commercial Property", "Commercial"));
         property.add(new Option("Residential Property", "Residential"));
         INVESTMENT_OPTIONS.add(property);
 

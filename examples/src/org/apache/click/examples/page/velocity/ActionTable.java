@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
  * Provides a dynamic ActionLink and PageLink example in a HTML table.
  * <p/>
  * In this example the controls are automatically added to the Page model
- * because they have public visiblity. The controls name is automatically set
+ * because they have public visibility. The controls name is automatically set
  * to their field name.
  */
 @Component

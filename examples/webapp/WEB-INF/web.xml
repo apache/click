@@ -114,7 +114,7 @@
 	<!-- Listeners -->
 	
 	<!--  
-	The Quartz initialization listenger which loads the Quartz scheduler.  
+	The Quartz initialization listener which loads the Quartz scheduler.  
 	-->
 	<listener>
 		<listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
@@ -128,7 +128,7 @@
 	</listener>
 	
 	<!-- 
-	Provides an in memory databae initialization listener. In a production 
+	Provides an in memory database initialization listener. In a production 
 	application a separate database would be used, and this listener would not
 	be needed.
 	-->
@@ -164,7 +164,7 @@
 		<url-pattern>/click/*</url-pattern>
 	</servlet-mapping>-->
 	
-	<!-- Wecome Files -->
+	<!-- Welcome Files -->
 
 	<welcome-file-list>
 		<welcome-file>redirect.html</welcome-file>

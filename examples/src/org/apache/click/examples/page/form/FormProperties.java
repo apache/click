@@ -137,7 +137,7 @@ public class FormProperties extends BorderPage {
         optionsForm.setListener(this, "onApplyChanges");
         optionsForm.setLabelStyle("padding-left:2em;");
 
-        fieldSet = new FieldSet("props", "<b>Form Properites</b>");
+        fieldSet = new FieldSet("props", "<b>Form Properties</b>");
         optionsForm.add(fieldSet);
 
         buttonAlignSelect = new Select("buttonAlign");

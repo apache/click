@@ -27,8 +27,8 @@ import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
 
 /**
- * This page provides an example of how to programatically optimize your
- * PageImports for high traffic pages. You optimize your Page by combinding
+ * This page provides an example of how to programmatically optimize your
+ * PageImports for high traffic pages. You optimize your Page by combining
  * multiple CSS and JavaScript import files into a single file, which reduces
  * the number of HTTP requests required to serve the page.
  * <p/>
