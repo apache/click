@@ -75,8 +75,10 @@ public class TableSorting extends BorderPage {
         // Return sorted data to the table.
         table.setDataProvider(new DataProvider<Customer>() {
             public List<Customer> getData() {
+                boolean useSharedCache = true;
                 return customerService.getCustomersSortedBy(table.getSortedColumn(),
-                                                            table.isSortedAscending());
+                                                            table.isSortedAscending(),
+                                                            useSharedCache);
             }
         });
 
