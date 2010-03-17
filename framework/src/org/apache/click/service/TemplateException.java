@@ -18,12 +18,14 @@
  */
 package org.apache.click.service;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import org.apache.commons.lang.StringUtils;
-
 
 /**
  * Provides a template exception class for use by the template service. This is
- * used to wrap TemplateService exceptions.
+ * used to wrap TemplateService exceptions and provide error diagnostics
+ * such as line and column where error occurred.
  */
 public class TemplateException extends Exception {
 
@@ -107,6 +109,53 @@ public class TemplateException extends Exception {
     }
 
     /**
+     * Prints the cause and its backtrace to the specified print stream.
+     *
+     * @param printStream the printStream to print the stack trace to
+     */
+    @Override
+    public void printStackTrace (PrintStream printStream) {
+        synchronized(printStream) {
+            if(getCause() == this) {
+                super.printStackTrace(printStream);
+            } else {
+                getCause().printStackTrace(printStream);
+            }
+        }
+    }
+
+    /**
+     * Prints the cause and its backtrace to the specified print writer.
+     *
+     * @param printWriter the printWriter to writer the stack trace to
+     */
+    @Override
+    public void printStackTrace (PrintWriter printWriter) {
+        synchronized(printWriter) {
+            if(getCause() == this) {
+                super.printStackTrace(printWriter);
+            } else {
+                getCause().printStackTrace(printWriter);
+            }
+        }
+    }
+
+    /**
+     * Fills in the execution stack trace. This method records within this
+     * <code>Throwable</code> object information about the current state of
+     * the stack frames for the current thread.
+     *
+     * @return a reference to this Throwable instance
+     */
+    @Override
+    public Throwable fillInStackTrace() {
+        if(getCause() == this) {
+            return super.fillInStackTrace ();
+        }
+        return this;
+    }
+
+    /**
      * @see Object#toString()
      *
      * @return the string representation of this error
@@ -132,5 +181,4 @@ public class TemplateException extends Exception {
 
         return builder.toString();
     }
-
 }
