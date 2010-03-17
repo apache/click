@@ -505,7 +505,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Form extends AbstractContainer {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
@@ -542,15 +542,6 @@ public class Form extends AbstractContainer {
      */
     public static final String POSITION_LEFT = "left";
 
-    /** The Form set field focus JavaScript. */
-    protected static final String FOCUS_JAVASCRIPT =
-        "<script type=\"text/javascript\"><!--\n"
-        + "var field = document.getElementById('$id');\n"
-        + "if (field && field.focus && field.type != 'hidden' && field.disabled != true) { field.focus(); };\n"
-        + "//--></script>\n";
-
-    // ----------------------------------------------------- Instance Variables
-
     /**
      * The form name parameter for multiple forms: &nbsp; <tt>"form_name"</tt>.
      */
@@ -571,12 +562,19 @@ public class Form extends AbstractContainer {
      */
     public static final String SUBMIT_CHECK = "SUBMIT_CHECK_";
 
+    /** The Form set field focus JavaScript. */
+    protected static final String FOCUS_JAVASCRIPT =
+        "<script type=\"text/javascript\"><!--\n"
+        + "var field = document.getElementById('$id');\n"
+        + "if (field && field.focus && field.type != 'hidden' && field.disabled != true) { field.focus(); };\n"
+        + "//--></script>\n";
+
     /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/control{1}.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n";
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The form action URL. */
     protected String actionURL;
@@ -648,6 +646,9 @@ public class Form extends AbstractContainer {
     /** The map of field width values. */
     protected Map<String, Integer> fieldWidths = new HashMap<String, Integer>();
 
+    /** Flag indicating whether this form was submitted. */
+    protected Boolean formSubmission;
+
     /**
      * The JavaScript client side form fields validation flag. By default
      * JavaScript validation is not enabled.
@@ -675,7 +676,7 @@ public class Form extends AbstractContainer {
     /** Flag indicating whether validation is bypassed or not. */
     private Boolean bypassValidation = null;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a form with the given name.
@@ -695,7 +696,7 @@ public class Form extends AbstractContainer {
     public Form() {
     }
 
-    // --------------------------------------------------------- Container Impl
+    // Container Impl ---------------------------------------------------------
 
     /**
      * Add the control to the form at the specified index, and return the
@@ -734,6 +735,7 @@ public class Form extends AbstractContainer {
      * @throws IndexOutOfBoundsException if index is out of range
      * <tt>(index &lt; 0 || index &gt; getControls().size())</tt>
      */
+    @Override
     public Control insert(Control control, int index) {
 
         // Adjust index for hidden fields added by Form. CLK-447
@@ -791,6 +793,7 @@ public class Form extends AbstractContainer {
      * is not defined or the container already contains a control with the same
      * name
      */
+    @Override
     public Control add(Control control) {
         return super.add(control);
     }
@@ -883,6 +886,7 @@ public class Form extends AbstractContainer {
      * @return true if the control was removed from the container
      * @throws IllegalArgumentException if the control is null
      */
+    @Override
     public boolean remove(Control control) {
 
         boolean removed = super.remove(control);
@@ -936,7 +940,7 @@ public class Form extends AbstractContainer {
         }
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Return the form's html tag: <tt>form</tt>.
@@ -945,6 +949,7 @@ public class Form extends AbstractContainer {
      *
      * @return this controls html tag
      */
+    @Override
     public String getTag() {
         return "form";
     }
@@ -999,6 +1004,7 @@ public class Form extends AbstractContainer {
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
         return 400 + (getControls().size() * 350);
     }
@@ -1131,6 +1137,7 @@ public class Form extends AbstractContainer {
      * @return the HTML head import statements for the control stylesheet and
      * JavaScript files
      */
+    @Override
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(512);
 
@@ -1180,14 +1187,18 @@ public class Form extends AbstractContainer {
      * @return true if the page request is a submission from this form
      */
     public boolean isFormSubmission() {
-        Context context = getContext();
-        String requestMethod = context.getRequest().getMethod();
+        if (formSubmission == null) {
+            Context context = getContext();
+            String requestMethod = context.getRequest().getMethod();
 
-        if (!getMethod().equalsIgnoreCase(requestMethod)) {
-            return false;
+            if (!getMethod().equalsIgnoreCase(requestMethod)) {
+                return false;
+            }
+
+            formSubmission = Boolean.valueOf(
+                getName().equals(context.getRequestParameter(FORM_NAME)));
         }
-
-        return getName().equals(context.getRequestParameter(FORM_NAME));
+        return formSubmission.booleanValue();
     }
 
     /**
@@ -1218,6 +1229,7 @@ public class Form extends AbstractContainer {
      * @param name of the control
      * @throws IllegalArgumentException if the name is null
      */
+    @Override
     public void setName(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
@@ -1617,11 +1629,12 @@ public class Form extends AbstractContainer {
      * @param listener the listener object with the named method to invoke
      * @param method the name of the method to invoke
      */
+    @Override
     public void setListener(Object listener, String method) {
         super.setListener(listener, method);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Clear any form or field errors by setting them to null.
@@ -1807,6 +1820,7 @@ public class Form extends AbstractContainer {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
 
         validateFileUpload();
@@ -1851,10 +1865,12 @@ public class Form extends AbstractContainer {
      *
      * @see org.apache.click.Control#onDestroy()
      */
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
         bypassValidation = null;
+        formSubmission = null;
         setError(null);
     }
 
@@ -2093,6 +2109,7 @@ public class Form extends AbstractContainer {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         final boolean process =
             getContext().getRequest().getMethod().equalsIgnoreCase(getMethod());
@@ -2131,7 +2148,7 @@ public class Form extends AbstractContainer {
         renderTagEnd(formFields, buffer);
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Perform a back button submit check, returning true if the request is
@@ -2629,9 +2646,9 @@ public class Form extends AbstractContainer {
      */
     protected void renderButtons(HtmlStringBuffer buffer) {
 
-        List<Button> buttonList = getButtonList();
+        List<Button> buttons = getButtonList();
 
-        if (!buttonList.isEmpty()) {
+        if (!buttons.isEmpty()) {
             buffer.append("<tr><td");
             buffer.appendAttribute("align", getButtonAlign());
             buffer.append(">\n");
@@ -2641,7 +2658,7 @@ public class Form extends AbstractContainer {
             buffer.append("-buttons\"><tbody>\n");
             buffer.append("<tr class=\"buttons\">");
 
-            for (Button button : buttonList) {
+            for (Button button : buttons) {
                 buffer.append("<td class=\"buttons\"");
                 buffer.appendAttribute("style", getButtonStyle());
                 buffer.closeTag();
@@ -2866,7 +2883,7 @@ public class Form extends AbstractContainer {
         }
     }
 
-    // -------------------------------------------------------- Private Methods
+    // Private Methods --------------------------------------------------------
 
     /**
      * Return true if the control is hidden, false otherwise.
@@ -2883,7 +2900,7 @@ public class Form extends AbstractContainer {
         }
     }
 
-    // ---------------------------------------------------------- Inner Classes
+    // Inner Classes ----------------------------------------------------------
 
     /**
      * Provides a HiddenField which does not bind to incoming values.
