@@ -64,17 +64,25 @@ public class CustomerService extends CayenneTemplate {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Customer> getCustomersSortedBy(String property, boolean ascending) {
+    public List<Customer> getCustomersSortedBy(String property, boolean ascending,
+        boolean useSharedCache) {
 
         SelectQuery query = new SelectQuery(Customer.class);
         if (property != null) {
             query.addOrdering(property, ascending);
         }
 
-        // Example use of shared cache which is managed with oscache.properties
-        query.setCacheStrategy(QueryCacheStrategy.SHARED_CACHE);
+        if (useSharedCache) {
+            // Example use of shared cache which is managed with oscache.properties
+            query.setCacheStrategy(QueryCacheStrategy.SHARED_CACHE);
+        }
 
         return performQuery(query);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Customer> getCustomersSortedBy(String property, boolean ascending) {
+        return getCustomersSortedBy(property, ascending, false);
     }
 
     @SuppressWarnings("unchecked")
