@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +33,7 @@ import org.apache.click.element.Element;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.DataProvider;
 import org.apache.click.util.HtmlStringBuffer;
+import org.apache.click.util.PagingDataProvider;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -393,7 +395,7 @@ public class Table extends AbstractControl {
      * could be much larger than the number of entries in the {@link #rowList},
      * indicating that some rows have not been loaded yet.
      */
-    protected int totalRows;
+    protected int rowCount;
 
     /**
      * The table rows set 'hover' CSS class on mouseover events flag. By default
@@ -910,12 +912,12 @@ public class Table extends AbstractControl {
             return 1;
         }
 
-        int totalRows = getTotalRows();
-        if (totalRows == 0) {
+        int rowCount = getRowCount();
+        if (rowCount == 0) {
             return 1;
         }
 
-        double value = (double) totalRows / (double) getPageSize();
+        double value = (double) rowCount / (double) getPageSize();
 
         return (int) Math.ceil(value);
     }
@@ -1046,11 +1048,11 @@ public class Table extends AbstractControl {
                     }
                 }
 
-                this.totalRows = rowList.size();
+                this.rowCount = rowList.size();
 
             } else {
                 rowList = new ArrayList();
-                this.totalRows = 0;
+                this.rowCount = 0;
             }
         }
 
@@ -1070,9 +1072,9 @@ public class Table extends AbstractControl {
     public void setRowList(List rowList) {
         this.rowList = rowList;
         if (rowList == null) {
-            this.totalRows = 0;
+            this.rowCount = 0;
         } else {
-            this.totalRows = rowList.size();
+            this.rowCount = rowList.size();
         }
     }
 
@@ -1197,8 +1199,8 @@ public class Table extends AbstractControl {
      *
      * @return the total possible number of rows of the table
      */
-    public final int getTotalRows() {
-        return totalRows;
+    public final int getRowCount() {
+        return rowCount;
     }
 
     /**
@@ -1232,7 +1234,7 @@ public class Table extends AbstractControl {
      * @return the index of the last row to display
      */
     public int getLastRow() {
-        int numbRows = getTotalRows();
+        int numbRows = getRowCount();
         int lastRow = numbRows;
 
         if (getPageSize() > 0) {
@@ -1352,7 +1354,7 @@ public class Table extends AbstractControl {
         if (getPageSize() > 0) {
             bufferSize = (getColumnList().size() * 60) * (getPageSize() + 1) + 1792;
         } else {
-            bufferSize = (getColumnList().size() * 60) * (getTotalRows() + 1);
+            bufferSize = (getColumnList().size() * 60) * (getRowList().size() + 1);
         }
         return bufferSize;
     }
@@ -1366,11 +1368,11 @@ public class Table extends AbstractControl {
      */
     public void render(HtmlStringBuffer buffer) {
 
-        // Retrieve data before rendering table
+        // Retrieve data to ensure rowCount has correct value
         getRowList();
 
         // Range sanity check.
-        int pageNumber = Math.min(getPageNumber(), getTotalRows() - 1);
+        int pageNumber = Math.min(getPageNumber(), getRowCount() - 1);
         pageNumber = Math.max(pageNumber, 0);
         setPageNumber(pageNumber);
 
@@ -1580,8 +1582,8 @@ public class Table extends AbstractControl {
      *
      *     public void onInit() {
      *         table = new Table() {
-     *             public void addRowAttributes(Map attributes, Object domain, int rowIndex) {
-     *                 Customer customer = (Customer) customer;
+     *             public void addRowAttributes(Map attributes, Object row, int rowIndex) {
+     *                 Customer customer = (Customer) row;
      *                 if (customer.isDisabled()) {
      *                     // Set the row class to disabled. CSS can then be used
      *                     // to set disabled rows background to a different color.
@@ -1710,24 +1712,24 @@ public class Table extends AbstractControl {
      */
     protected void renderTableBanner(HtmlStringBuffer buffer) {
         if (getShowBanner()) {
-            int totalRows = getTotalRows();
-            String totalRowsStr = String.valueOf(totalRows);
+            int rowCount = getRowCount();
+            String rowCountStr = String.valueOf(rowCount);
 
             String firstRow = null;
-            if (totalRows == 0) {
+            if (getRowList().isEmpty()) {
                 firstRow = String.valueOf(0);
             } else {
                 firstRow = String.valueOf(getFirstRow() + 1);
             }
 
             String lastRow = null;
-            if (totalRows == 0) {
+            if (getRowList().isEmpty()) {
                 lastRow = String.valueOf(0);
             } else {
                 lastRow = String.valueOf(getLastRow());
             }
 
-            String[] args = { totalRowsStr, firstRow, lastRow};
+            String[] args = { rowCountStr, firstRow, lastRow};
 
             if (getPageSize() > 0) {
                 buffer.append(getMessage("table-page-banner", args));

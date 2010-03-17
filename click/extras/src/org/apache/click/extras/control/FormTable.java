@@ -523,8 +523,11 @@ public class FormTable extends Table {
             ascendingField.onProcess();
             setSortedAscending("true".equals(ascendingField.getValue()));
 
+            // Ensure data is retrieved before getRowCount can be called
+            getRowList();
+
             // Range sanity check
-            int pageNumber = Math.min(getPageNumber(), getRowList().size() - 1);
+            int pageNumber = Math.min(getPageNumber(), getRowCount() - 1);
             pageNumber = Math.max(pageNumber, 0);
             setPageNumber(pageNumber);
 
@@ -592,8 +595,15 @@ public class FormTable extends Table {
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
-        return (getColumnList().size() * 60) * (getRowList().size() + 1) + 256;
+        int bufferSize = 0;
+        if (getPageSize() > 0) {
+            bufferSize = (getColumnList().size() * 60) * (getPageSize() + 1) + 256;
+        } else {
+            bufferSize = (getColumnList().size() * 60) * (getRowList().size() + 1) + 256;
+        }
+        return bufferSize;
     }
 
     /**

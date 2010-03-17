@@ -83,24 +83,24 @@ public class TablePaginator implements Renderable {
         }
 
         if (table.getShowBanner()) {
-            int totalRows = table.getTotalRows();
-            String totalRowsStr = String.valueOf(totalRows);
+            int rowCount = table.getRowCount();
+            String rowCountStr = String.valueOf(rowCount);
 
             String firstRow = null;
-            if (totalRows == 0) {
+            if (table.getRowList().isEmpty()) {
                 firstRow = String.valueOf(0);
             } else {
                 firstRow = String.valueOf(table.getFirstRow() + 1);
             }
 
             String lastRow = null;
-            if (totalRows == 0) {
+            if (table.getRowList().isEmpty()) {
                 lastRow = String.valueOf(0);
             } else {
                 lastRow = String.valueOf(table.getLastRow());
             }
 
-            String[] args = { totalRowsStr, firstRow, lastRow};
+            String[] args = { rowCountStr, firstRow, lastRow};
 
             if (table.getPageSize() > 0) {
                 buffer.append(table.getMessage("table-page-banner", args));
