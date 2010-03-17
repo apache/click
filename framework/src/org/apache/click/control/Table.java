@@ -389,6 +389,13 @@ public class Table extends AbstractControl {
     protected DataProvider dataProvider;
 
     /**
+     * The total possible number of rows of the table. This value
+     * could be much larger than the number of entries in the {@link #rowList},
+     * indicating that some rows have not been loaded yet.
+     */
+    protected int totalRows;
+
+    /**
      * The table rows set 'hover' CSS class on mouseover events flag. By default
      * hoverRows is false.
      */
@@ -903,11 +910,12 @@ public class Table extends AbstractControl {
             return 1;
         }
 
-        if (getRowList().isEmpty()) {
+        int totalRows = getTotalRows();
+        if (totalRows == 0) {
             return 1;
         }
 
-        double value = (double) getRowList().size() / (double) getPageSize();
+        double value = (double) totalRows / (double) getPageSize();
 
         return (int) Math.ceil(value);
     }
@@ -1021,7 +1029,7 @@ public class Table extends AbstractControl {
      */
     @SuppressWarnings("unchecked")
     public List getRowList() {
-        if (rowList == null || rowList.isEmpty()) {
+        if (rowList == null) {
 
             if (getDataProvider() != null) {
                 Iterable iterableData = getDataProvider().getData();
@@ -1030,17 +1038,19 @@ public class Table extends AbstractControl {
                     rowList = (List) iterableData;
 
                 } else {
+                    // Create and populate the rowList from the Iterable data
+                    rowList = new ArrayList<Object>();
+
                     for (Object row : iterableData) {
                         rowList.add(row);
                     }
                 }
 
-                if (rowList == null) {
-                    throw new IllegalStateException("DataProvider provided null data");
-                }
+                this.totalRows = rowList.size();
 
             } else {
                 rowList = new ArrayList();
+                this.totalRows = 0;
             }
         }
 
@@ -1059,6 +1069,11 @@ public class Table extends AbstractControl {
     @SuppressWarnings("unchecked")
     public void setRowList(List rowList) {
         this.rowList = rowList;
+        if (rowList == null) {
+            this.totalRows = 0;
+        } else {
+            this.totalRows = rowList.size();
+        }
     }
 
     /**
@@ -1174,6 +1189,19 @@ public class Table extends AbstractControl {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * The total possible number of rows of the table. This value
+     * could be much larger than the number of entries in the {@link #rowList},
+     * indicating that some rows have not been loaded yet.
+     * <p/>
+     * This property is automatically set by the table to the approriate value.
+     *
+     * @return the total possible number of rows of the table
+     */
+    public final int getTotalRows() {
+        return totalRows;
+    }
+
+    /**
      * Return the index of the first row to display. Index starts from 0.
      * <p/>
      * <b>Note:</b> {@link #setPageSize(int) page size} must be set for this
@@ -1204,7 +1232,7 @@ public class Table extends AbstractControl {
      * @return the index of the last row to display
      */
     public int getLastRow() {
-        int numbRows = getRowList().size();
+        int numbRows = getTotalRows();
         int lastRow = numbRows;
 
         if (getPageSize() > 0) {
@@ -1324,7 +1352,7 @@ public class Table extends AbstractControl {
         if (getPageSize() > 0) {
             bufferSize = (getColumnList().size() * 60) * (getPageSize() + 1) + 1792;
         } else {
-            bufferSize = (getColumnList().size() * 60) * (getRowList().size() + 1);
+            bufferSize = (getColumnList().size() * 60) * (getTotalRows() + 1);
         }
         return bufferSize;
     }
@@ -1338,8 +1366,11 @@ public class Table extends AbstractControl {
      */
     public void render(HtmlStringBuffer buffer) {
 
+        // Retrieve data before rendering table
+        getRowList();
+
         // Range sanity check.
-        int pageNumber = Math.min(getPageNumber(), getRowList().size() - 1);
+        int pageNumber = Math.min(getPageNumber(), getTotalRows() - 1);
         pageNumber = Math.max(pageNumber, 0);
         setPageNumber(pageNumber);
 
@@ -1679,23 +1710,24 @@ public class Table extends AbstractControl {
      */
     protected void renderTableBanner(HtmlStringBuffer buffer) {
         if (getShowBanner()) {
-            String totalRows = String.valueOf(getRowList().size());
+            int totalRows = getTotalRows();
+            String totalRowsStr = String.valueOf(totalRows);
 
             String firstRow = null;
-            if (getRowList().isEmpty()) {
+            if (totalRows == 0) {
                 firstRow = String.valueOf(0);
             } else {
                 firstRow = String.valueOf(getFirstRow() + 1);
             }
 
             String lastRow = null;
-            if (getRowList().isEmpty()) {
+            if (totalRows == 0) {
                 lastRow = String.valueOf(0);
             } else {
                 lastRow = String.valueOf(getLastRow());
             }
 
-            String[] args = { totalRows, firstRow, lastRow};
+            String[] args = { totalRowsStr, firstRow, lastRow};
 
             if (getPageSize() > 0) {
                 buffer.append(getMessage("table-page-banner", args));
