@@ -48,7 +48,7 @@ public class Submit extends Button {
     /** The button is clicked. */
     protected boolean clicked;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a Submit button with the given name.
@@ -123,7 +123,7 @@ public class Submit extends Button {
         super();
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
 
     /**
@@ -133,9 +133,9 @@ public class Submit extends Button {
      * @return true if button will cancel JavaScript form validation
      */
     public boolean getCancelJavaScriptValidation() {
-        String value = getAttribute("onclick");
+        String attrValue = getAttribute("onclick");
 
-        return "form.onsubmit=null;".equals(value);
+        return "form.onsubmit=null;".equals(attrValue);
     }
 
     /**
@@ -166,16 +166,18 @@ public class Submit extends Button {
      *
      * @return the input type: '<tt>submit</tt>'
      */
+    @Override
     public String getType() {
         return "submit";
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Bind the request submission, setting the {@link Field#value} and
      * {@link #clicked} properties if defined.
      */
+    @Override
     public void bindRequestValue() {
         this.value = getContext().getRequestParameter(getName());
 
@@ -199,6 +201,7 @@ public class Submit extends Button {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
         bindRequestValue();
 
