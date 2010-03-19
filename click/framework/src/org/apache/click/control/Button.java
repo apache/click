@@ -58,11 +58,11 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class Button extends Field {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a button with the given name.
@@ -93,7 +93,7 @@ public class Button extends Field {
     public Button() {
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Return the button's html tag: <tt>input</tt>.
@@ -102,6 +102,7 @@ public class Button extends Field {
      *
      * @return this controls html tag
      */
+    @Override
     public String getTag() {
         return "input";
     }
@@ -137,7 +138,7 @@ public class Button extends Field {
         return "button";
     }
 
-    // -------------------------------------------------------- Public Methods
+    // Public Methods --------------------------------------------------------
 
     /**
      * Returns true, as buttons perform no server side logic.
@@ -146,6 +147,7 @@ public class Button extends Field {
      *
      * @return true
      */
+    @Override
     public boolean onProcess() {
         return true;
     }
@@ -155,6 +157,7 @@ public class Button extends Field {
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
         return 40;
     }
@@ -167,6 +170,7 @@ public class Button extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 
