@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.apache.click.Context;
 
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PropertyUtils;
@@ -114,7 +115,7 @@ public class RadioGroup extends Field {
         + "   '}'\n"
         + "'}'\n";
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The list of Radio controls. */
     protected List radioList;
@@ -126,7 +127,7 @@ public class RadioGroup extends Field {
      */
     protected boolean isVerticalLayout = true;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a RadioGroup with the given name.
@@ -179,7 +180,7 @@ public class RadioGroup extends Field {
         super();
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Add the given radio to the radio group. When the radio is added to the
@@ -306,6 +307,7 @@ public class RadioGroup extends Field {
      *
      * @return the RadioGroup focus JavaScript
      */
+    @Override
     public String getFocusJavaScript() {
         String id = "";
 
@@ -327,6 +329,7 @@ public class RadioGroup extends Field {
      *
      * @param form Field's parent <tt>Form</tt>
      */
+    @Override
     public void setForm(Form form) {
         super.setForm(form);
         if (hasRadios()) {
@@ -381,6 +384,7 @@ public class RadioGroup extends Field {
      *
      * @return the field JavaScript client side validation function
      */
+    @Override
     public String getValidationJavaScript() {
         Object[] args = new Object[5];
         args[0] = getId();
@@ -398,11 +402,12 @@ public class RadioGroup extends Field {
         return MessageFormat.format(VALIDATE_RADIOGROUP_FUNCTION, args);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * @see org.apache.click.Control#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
         for (int i = 0, size = getRadioList().size(); i < size; i++) {
@@ -419,7 +424,21 @@ public class RadioGroup extends Field {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
+        if (isDisabled()) {
+            Context context = getContext();
+
+            // Switch off disabled property if control has incoming request
+            // parameter. Normally this means the field was enabled via JS
+            if (context.hasRequestParameter(getName())) {
+                setDisabled(false);
+            } else {
+                // If field is disabled skip process event
+                return true;
+            }
+        }
+
         bindRequestValue();
 
         boolean continueProcessing = true;
@@ -442,6 +461,7 @@ public class RadioGroup extends Field {
     /**
      * @see org.apache.click.Control#onDestroy()
      */
+    @Override
     public void onDestroy() {
         for (int i = 0, size = getRadioList().size(); i < size; i++) {
             Radio radio = (Radio) getRadioList().get(i);
@@ -458,6 +478,7 @@ public class RadioGroup extends Field {
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
         return getRadioList().size() * 30;
     }
@@ -469,6 +490,7 @@ public class RadioGroup extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         String value = getValue();
 
@@ -507,6 +529,7 @@ public class RadioGroup extends Field {
      *
      * @return the HTML rendered RadioGroup string
      */
+    @Override
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
         render(buffer);
@@ -524,6 +547,7 @@ public class RadioGroup extends Field {
      * <li>select-error</li>
      * </ul></blockquote>
      */
+    @Override
     public void validate() {
         setError(null);
 

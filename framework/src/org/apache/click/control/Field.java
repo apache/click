@@ -18,6 +18,7 @@
  */
 package org.apache.click.control;
 
+import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.commons.lang.StringUtils;
@@ -296,10 +297,8 @@ public abstract class Field extends AbstractControl {
     /**
      * Return true if the Field is disabled. The Field will also be disabled
      * if the parent FieldSet or Form is disabled.
-     * <p/>
-     * <b>Important Note</b>: disabled fields will not submit their values in
-     * a HTML form POST. This may cause validation issues in a form submission.
-     * Please note this is a HTML limitation and is not due to Click.
+     *
+     * @see #setDisabled(boolean)
      *
      * @return true if the Field is disabled
      */
@@ -329,11 +328,23 @@ public abstract class Field extends AbstractControl {
     }
 
     /**
-     * Set the Field disabled flag.
+     * Set the Field disabled flag. Disabled fields are not processed nor
+     * validated and their action event is not fired.
      * <p/>
-     * <b>Important Note</b>: disabled fields will not submit their values in
-     * a HTML form POST. This may cause validation issues in a form submission.
-     * Please note this is a HTML limitation and is not due to Click.
+     * <b>Important Note</b>: an HTML form POST does not submit disabled fields
+     * values. Similarly disabled Click fields do not get processed or validated.
+     * However, JavaScript is often used to <tt>enable</tt> fields prior to
+     * submission. Click is smart enough to recognize when a field was enabled
+     * this way by checking if the field has an incoming request parameter.
+     * If a field is disabled but has an incoming request parameter, Click will
+     * <tt>"enable"</tt> the field and process it.
+     * <p/>
+     * <b>Caveat</b>: Unfortunately the above behavior does not apply to
+     * {@link Checkbox} and {@link Radio} buttons. An HTML form POST for a
+     * <tt>disabled</tt> checkbox/radio is the same as for an <tt>unchecked</tt>
+     * checkbox/radio. In neither case is a value submitted to the server and
+     * Click cannot make the distinction whether the checkbox/radio is disabled
+     * or unchecked.
      *
      * @param disabled the Field disabled flag
      */
@@ -1008,6 +1019,12 @@ public abstract class Field extends AbstractControl {
 
     /**
      * This method binds the submitted request value to the Field's value.
+     * <p/>
+     * <b>Please note:</b> while it is possible to explicitly bind the field
+     * value by invoking this method directly, it is recommended to use the
+     * "<tt>bind</tt>" utility methods in {@link org.apache.click.util.ClickUtils}
+     * instead. See {@link org.apache.click.util.ClickUtils#bind(org.apache.click.control.Field)}
+     * for more details.
      */
     public void bindRequestValue() {
         setValue(getRequestValue());
@@ -1031,7 +1048,8 @@ public abstract class Field extends AbstractControl {
      * <p/>
      * This method will bind the Field request parameter value to the field,
      * validate the submission and invoke its callback listener if defined.
-     * The code of this method is provided below:
+     * <p/>
+     * Below is a typical onProcess implementation:
      *
      * <pre class="codeJava">
      * <span class="kw">public boolean</span> onProcess() {
@@ -1049,6 +1067,19 @@ public abstract class Field extends AbstractControl {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
+        if (isDisabled()) {
+            Context context = getContext();
+
+            // Switch off disabled property if control has incoming request
+            // parameter. Normally this means the field was enabled via JS
+            if (context.hasRequestParameter(getName())) {
+                setDisabled(false);
+            } else {
+                // If field is disabled skip process event
+                return true;
+            }
+        }
+
         bindRequestValue();
 
         if (getValidate()) {
