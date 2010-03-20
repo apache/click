@@ -533,6 +533,11 @@ public class ClickUtils {
      * values are inspected during the <tt>"onInit"</tt> event to add or remove
      * specific Fields.
      * <p/>
+     * <b>Please note</b>: this method won't bind disabled fields, unless the
+     * field has an incoming request parameter matching its name. If an incoming
+     * request parameter is present, this method will switch off the Field's
+     * disabled property.
+     * <p/>
      * This method delegates to
      * {@link #canBind(org.apache.click.Control, org.apache.click.Context)}
      * to check if the Field value can be bound.
@@ -559,7 +564,7 @@ public class ClickUtils {
     public static void bind(Field field) {
         Context context = Context.getThreadLocalContext();
         if (canBind(field, context)) {
-            field.bindRequestValue();
+            bindField(field, context);
         }
     }
 
@@ -632,6 +637,11 @@ public class ClickUtils {
      * This method delegates to
      * {@link #canBind(org.apache.click.Control, org.apache.click.Context)}
      * to check if the Field value can be bound and validated.
+     * <p/>
+     * <b>Please note</b>: this method won't bind and validate disabled fields,
+     * unless the field has an incoming request parameter matching its name.
+     * If an incoming request parameter is present, this method will switch off
+     * the Field's disabled property.
      * <p/>
      * <pre class="prettyprint">
      * public void onInit() {
@@ -778,8 +788,6 @@ public class ClickUtils {
         }
 
         // This can cause issue with two fields inside a form with the same name.
-        // TODO: Fields can expose a isAjaxTarget which can check if the field
-        // is an Ajax target through getId, getName etc
         if (context.isAjaxRequest()) {
             return true;
         }
@@ -2717,6 +2725,9 @@ public class ClickUtils {
     /**
      * A helper method which binds the submitted request values of all Fields
      * and Links inside the given container or child containers.
+     * <p/>
+     * For Field controls, this method delegates to
+     * {@link #bindField(org.apache.click.control.Field, org.apache.click.Context)}.
      *
      * @param container the container which Fields and Links to bind
      * @param context the request context
@@ -2727,7 +2738,9 @@ public class ClickUtils {
             if (control instanceof Container) {
                 // Include fields but skip fieldSets
                 if (control instanceof Field) {
-                    ((Field) control).bindRequestValue();
+                    Field field = (Field) control;
+                    bindField(field, context);
+
                 } else if (control instanceof AbstractLink) {
                     ((AbstractLink) control).bindRequestValue();
                 }
@@ -2735,7 +2748,9 @@ public class ClickUtils {
                 bind(childContainer, context);
 
             } else if (control instanceof Field) {
-                ((Field) control).bindRequestValue();
+                Field field = (Field) control;
+                bindField(field, context);
+
             } else if (control instanceof AbstractLink) {
                 ((AbstractLink) control).bindRequestValue();
             }
@@ -2745,10 +2760,15 @@ public class ClickUtils {
     /**
      * A helper method which binds and validates the submitted request values
      * of all Fields and Links inside the given container or child containers.
+     * <p/>
+     * For Field controls, this method delegates to
+     * {@link #bindField(org.apache.click.control.Field, org.apache.click.Context)}.
      *
      * @param container the container which Fields and Links to bind and
      * validate
      * @param context the request context
+     * @return true if container fields and links was bound and valid, false
+     * otherwise
      */
     private static boolean bindAndValidate(Container container, Context context) {
         boolean valid = true;
@@ -2786,12 +2806,20 @@ public class ClickUtils {
     /**
      * A helper method which binds and validates the Field's submitted request
      * value.
+     * <p/>
+     * This method delegates to
+     * {@link #bindField(org.apache.click.control.Field, org.apache.click.Context)}
+     * to bind the field value.
      *
      * @param field the Field to bind and validate
      * @param context the request context
+     * @return true if field was bound and valid, or false otherwise
      */
     private static boolean bindAndValidate(Field field, Context context) {
-        field.bindRequestValue();
+        boolean continueProcessing = bindField(field, context);
+        if (!continueProcessing) {
+            return true;
+        }
 
         if (field.getValidate()) {
             // Keep reference to current error
@@ -2807,6 +2835,34 @@ public class ClickUtils {
 
             return valid;
         }
+        return true;
+    }
+
+    /**
+     * Bind the field to its incoming request parameter, returning true if the
+     * field value was bound, false otherwise.
+     * <p/>
+     * <b>Please note</b>: this method won't bind disabled fields,
+     * unless the field has an incoming request parameter matching its name.
+     * If an incoming request parameter is present, this method will switch off
+     * the Field's disabled property.
+     *
+     * @param field the field which value to bind to its request parameter
+     * @param context the request context
+     * @return true if the field was bound to its request parameter, false
+     * otherwise
+     */
+    private static boolean bindField(Field field, Context context) {
+        if (field.isDisabled()) {
+            // Switch off disabled property if control has incoming request
+            // parameter. Normally this means the field was enabled via JS
+            if (context.hasRequestParameter(field.getName())) {
+                field.setDisabled(false);
+            } else {
+                return false;
+            }
+        }
+        field.bindRequestValue();
         return true;
     }
 
