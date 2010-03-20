@@ -86,6 +86,8 @@
     <menu label="PickList" path="control/pick-list-demo.htm"/>
     <menu label="RegexField" path="control/regex-demo.htm"/>
     <menu label="RichTextArea" path="control/email-form.htm"/>
+    <menu separator="true"/>
+    <menu label="Disabled behavior" path="control/disabled-demo.htm"/>
   </menu>
   
   <menu label=" Forms" path="#" imageSrc="/assets/images/form.png">

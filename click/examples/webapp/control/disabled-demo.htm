@@ -1,0 +1,30 @@
+<style type="text/css">
+    td.fields {
+        width: 8em;
+    }
+</style>
+
+This example demonstrates the following features:
+<ul>
+    <li>
+        Disabled fields are not processed or validated
+    </li>
+    <li>
+        Disabled field values are not copied to domain objects
+    </li>
+    <li>
+        Disabled fields are automatically enabled if the field has an
+        incoming request parameter, indicating that the field was enabled
+        on the client using JavaScript.
+    </li>
+</ul>
+
+$form
+
+<div style="border: 1px solid black; padding: 10px;width: 300px">
+    <b><u>Customer details</u></b>
+    <p/>
+    <b>Name:</b> $customer.name
+    <br/>
+    <b>Investments: </b> $customer.investments
+</div>

@@ -59,6 +59,18 @@ public class InvestmentSelect extends Select {
     }
 
     /**
+     * Create the Investment option Select control with the given field name
+     * and required status.
+     *
+     * @param name the Selection option field name
+     * @param required the field required status
+     */
+    public InvestmentSelect(String name, boolean required) {
+        super(name, required);
+        setOptionList(INVESTMENT_OPTIONS);
+    }
+
+    /**
      * Create the Investment option Select control with the given field name.
      *
      * @param name the Selection option field name
