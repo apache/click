@@ -127,6 +127,25 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-638">CLK-638</a>].
       </li>
       <li class="change">
+        Added improved disabled behavior through the following changes:
+        <ul style="margin-top:10px">
+            <li>
+                Disabled fields are not processed or validated
+            </li>
+            <li>
+                Disabled field values are not copied to domain objects
+            </li>
+            <li>
+                Disabled fields are automatically enabled if the field has an
+                incoming request parameter indicating that the field was enabled
+                on the client using JavaScript. Please note that this behavior does
+                not apply to Checkbox or Radio fields. See the
+                <a href="click-api/org/apache/click/control/Field.html#setDisabled(boolean)">setDisabled()</a>
+                javadoc for details [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-646">CLK-646</a>].
+            </li>
+        </ul>
+      </li>
+      <li class="change">
         Added methods to Fields for styling their labels. See new methods
         <a href="click-api/org/apache/click/control/Field.html#setLabelStyle(java.lang.String)">Field.setLabelStyle(String)</a>
         and <a href="click-api/org/apache/click/control/Field.html#setLabelStyleClass(java.lang.String)">Field.setLabelStyleClass(String)</a>.

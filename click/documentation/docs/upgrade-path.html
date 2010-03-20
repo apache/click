@@ -83,8 +83,28 @@ versions please email the Click user group.
   <dd>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li class="change">
-      	  Click 2.2.0 is backward compatible with Click 2.1.0, but it is
-          recommended to recompile your project against the new jars.
+      	  Field disabled behavior has changed slightly. In previous versions,
+          disabled fields were processed and validated which isn't the desired
+          behavior since HTML form POSTs do not submit disabled fields values.
+          In addition Form copied disabled field values to domain objects.
+          <p/>
+          Starting from Click 2.2.0 the disabled behavior has changed as follows:
+          <ul>
+              <li>
+                  Disabled fields are not processed or validated
+              </li>
+              <li>
+                  Disabled field values are not copied to domain objects
+              </li>
+              <li>
+                  Disabled fields are automatically enabled if the field has an
+                  incoming request parameter indicating that the field was enabled
+                  on the client using JavaScript. Please note that this behavior does
+                  not apply to Checkbox or Radio fields. See the
+                  <a href="click-api/org/apache/click/control/Field.html#setDisabled(boolean)">setDisabled()</a>
+                  javadoc for details.
+              </li>
+          </ul>
       </li>
     </ul>
   </dd>
