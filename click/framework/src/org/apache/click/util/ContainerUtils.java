@@ -133,6 +133,12 @@ public class ContainerUtils {
 
         for (Field field : fieldList) {
 
+            // Ignore disabled field as their values are not submitted in HTML
+            // forms
+            if (field.isDisabled()) {
+                continue;
+            }
+
             if (!hasMatchingProperty(field, properties)) {
                 continue;
             }

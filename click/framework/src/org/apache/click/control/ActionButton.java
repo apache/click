@@ -484,11 +484,24 @@ public class ActionButton extends Button {
      * ActionButton was clicked, and if an action callback listener was set
      * this will be invoked.
      *
-     * @see org.apache.click.Control#onProcess()
+     * @see org.apache.click.control.Field#onProcess()
      *
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
+        if (isDisabled()) {
+            Context context = getContext();
+
+            // Switch off disabled property if control has incoming request
+            // parameter. Normally this means the field was enabled via JS
+            if (context.hasRequestParameter(getName())) {
+                setDisabled(false);
+            } else {
+                // If field is disabled skip process event
+                return true;
+            }
+        }
+
         bindRequestValue();
 
         if (isClicked()) {

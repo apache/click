@@ -18,6 +18,7 @@
  */
 package org.apache.click.control;
 
+import org.apache.click.Context;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -203,6 +204,19 @@ public class Submit extends Button {
      */
     @Override
     public boolean onProcess() {
+        if (isDisabled()) {
+            Context context = getContext();
+
+            // Switch off disabled property if control has incoming request
+            // parameter. Normally this means the field was enabled via JS
+            if (context.hasRequestParameter(getName())) {
+                setDisabled(false);
+            } else {
+                // If field is disabled skip process event
+                return true;
+            }
+        }
+
         bindRequestValue();
 
         if (isClicked()) {
