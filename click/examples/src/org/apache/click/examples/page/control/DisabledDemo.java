@@ -26,9 +26,8 @@ import org.apache.cayenne.access.DataContext;
 import org.apache.click.ActionListener;
 import org.apache.click.Control;
 import org.apache.click.control.Checkbox;
+import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
-import org.apache.click.control.Radio;
-import org.apache.click.control.RadioGroup;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
 import org.apache.click.element.JsImport;
@@ -55,6 +54,8 @@ public class DisabledDemo extends BorderPage {
 
     private Form form = new Form("form");
 
+    private FieldSet fieldSet = new FieldSet("customer");
+
     private TextField nameField = new TextField("name", true);
 
     private InvestmentSelect investmentSelect = new InvestmentSelect("investments", true);
@@ -73,16 +74,18 @@ public class DisabledDemo extends BorderPage {
 
         final Customer customer = loadCustomer();
 
+        form.add(fieldSet);
+
         // Disable fields
         nameField.setDisabled(true);
-        form.add(nameField);
+        fieldSet.add(nameField);
 
         investmentSelect.setDisabled(true);
-        form.add(investmentSelect);
+        fieldSet.add(investmentSelect);
 
-        form.add(toggle);
+        fieldSet.add(toggle);
 
-        form.add(submit);
+        fieldSet.add(submit);
         submit.setActionListener(new ActionListener() {
 
             public boolean onAction(Control source) {
