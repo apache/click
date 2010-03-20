@@ -109,7 +109,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * <pre class="codeConfig">
  *   &lt;filter&gt;
- *     &lt;filter-name&gt;<span class="blue">data-context-filter</span>&lt;/filter-name&gt;
+ *     &lt;filter-name&gt;<span class="blue">DataContextFilter</span>&lt;/filter-name&gt;
  *     &lt;filter-class&gt;<span class="red">org.apache.click.extras.cayenne.DataContextFilter</span>&lt;/filter-class&gt;
  *     &lt;init-param&gt;
  *       &lt;param-name&gt;<font color="blue">lifecycle-listener</font>&lt;/param-name&gt;
@@ -131,17 +131,18 @@ import org.apache.commons.lang.StringUtils;
  * &lt;web-app&gt;
  *
  *   &lt;filter&gt;
- *     &lt;filter-name&gt;<span class="blue">data-context-filter</span>&lt;/filter-name&gt;
+ *     &lt;filter-name&gt;<span class="blue">DataContextFilter</span>&lt;/filter-name&gt;
  *     &lt;filter-class&gt;<span class="red">org.apache.click.extras.cayenne.DataContextFilter</span>&lt;/filter-class&gt;
  *   &lt;/filter&gt;
  *
  *   &lt;filter-mapping&gt;
- *     &lt;filter-name&gt;<span class="blue">data-context-filter</span>&lt;/filter-name&gt;
- *     &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
+ *     &lt;filter-name&gt;<span class="blue">DataContextFilter</span>&lt;/filter-name&gt;
+ *     &lt;servlet-name&gt;<span class="green">ClickServlet</span>&lt;/servlet-name&gt;
  *   &lt;/filter-mapping&gt;
  *
  *   &lt;servlet&gt;
- *     &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
+ *     &lt;servlet-name&gt;<span class="green">ClickServlet</span>&lt;/servlet-name&gt;
+ *     &lt;servlet-class&gt;org.apache.click.ClickServlet&lt;/servlet-class&gt;
  *     ..
  *
  * &lt;/web-app&gt; </pre>
@@ -159,7 +160,7 @@ import org.apache.commons.lang.StringUtils;
  * &lt;web-app&gt;
  *
  *   &lt;filter&gt;
- *     &lt;filter-name&gt;<span class="blue">data-context-filter</span>&lt;/filter-name&gt;
+ *     &lt;filter-name&gt;<span class="blue">DataContextFilter</span>&lt;/filter-name&gt;
  *     &lt;filter-class&gt;<span class="red">org.apache.click.extras.cayenne.DataContextFilter</span>&lt;/filter-class&gt;
  *     &lt;init-param&gt;
  *       &lt;param-name&gt;<font color="blue">session-scope</font>&lt;/param-name&gt;
@@ -172,12 +173,13 @@ import org.apache.commons.lang.StringUtils;
  *   &lt;/filter&gt;
  *
  *   &lt;filter-mapping&gt;
- *     &lt;filter-name&gt;<span class="blue">data-context-filter</span>&lt;/filter-name&gt;
- *     &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
+ *     &lt;filter-name&gt;<span class="blue">DataContextFilter</span>&lt;/filter-name&gt;
+ *     &lt;servlet-name&gt;<span class="green">ClickServlet</span>&lt;/servlet-name&gt;
  *   &lt;/filter-mapping&gt;
  *
  *   &lt;servlet&gt;
- *     &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
+ *     &lt;servlet-name&gt;<span class="green">ClickServlet</span>&lt;/servlet-name&gt;
+ *     &lt;servlet-class&gt;org.apache.click.ClickServlet&lt;/servlet-class&gt;
  *     ..
  *
  * &lt;/web-app&gt; </pre>
