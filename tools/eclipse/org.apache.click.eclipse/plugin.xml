@@ -363,5 +363,15 @@
          </filter>
       </page>
   </extension>
+  <extension
+        point="org.eclipse.wst.xml.core.catalogContributions">
+     <catalogContribution>
+        <public
+              publicId="-//Apache Software Foundation//DTD Click Configuration 2.1//EN"
+              uri="click-2.1.0/click.dtd"
+              webURL="http://click.apache.org/dtds/click-2.1.dtd">
+        </public>
+     </catalogContribution>
+  </extension>
 
 </plugin>
