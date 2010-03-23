@@ -114,9 +114,9 @@ public class TemplateException extends Exception {
      * @param printStream the printStream to print the stack trace to
      */
     @Override
-    public void printStackTrace (PrintStream printStream) {
-        synchronized(printStream) {
-            if(getCause() == this) {
+    public void printStackTrace(PrintStream printStream) {
+        synchronized (printStream) {
+            if (getCause() == this) {
                 super.printStackTrace(printStream);
             } else {
                 getCause().printStackTrace(printStream);
@@ -130,9 +130,9 @@ public class TemplateException extends Exception {
      * @param printWriter the printWriter to writer the stack trace to
      */
     @Override
-    public void printStackTrace (PrintWriter printWriter) {
-        synchronized(printWriter) {
-            if(getCause() == this) {
+    public void printStackTrace(PrintWriter printWriter) {
+        synchronized (printWriter) {
+            if (getCause() == this) {
                 super.printStackTrace(printWriter);
             } else {
                 getCause().printStackTrace(printWriter);
@@ -149,8 +149,8 @@ public class TemplateException extends Exception {
      */
     @Override
     public Throwable fillInStackTrace() {
-        if(getCause() == this) {
-            return super.fillInStackTrace ();
+        if (getCause() == this) {
+            return super.fillInStackTrace();
         }
         return this;
     }
