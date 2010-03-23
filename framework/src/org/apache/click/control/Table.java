@@ -33,7 +33,6 @@ import org.apache.click.element.Element;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.DataProvider;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PagingDataProvider;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
