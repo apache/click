@@ -10,6 +10,8 @@ import org.apache.click.Page;
  */
 public class BasePage extends Page {
 
+    private static final long serialVersionUID = 1L;
+
     private Logger logger;
 
     /**

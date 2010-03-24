@@ -70,12 +70,20 @@ import org.w3c.dom.NodeList;
  *
  * To include the root menu item in your page, simply use the default Menu constructor:
  *
- * <pre class="codeJava">
- * <span class="kw">public class</span> MenuPage <span class="kw">extends</span> Page {
+ * <pre class="prettyprint">
+ * public class BorderPage extends Page {
  *
- *     <span class="kw">public</span> Menu rootMenu = Menu.getRootMenu();
+ *     &#64;Bindable public Menu rootMenu;
  *
- *     <span class="kw">public</span> ActionLink logoutLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, <span class="st">"onLogoutClick"</span>);
+ *     public BorderPage() {
+ *         MenuFactory menuFactory = new MenuFactory();
+ *         rootMenu = menuFactory.getRootMenu();
+ *     }
+ *
+ *     &#64;Override
+ *     public String getTemplate() {
+ *         return "/border-template.htm";
+ *     }
  *
  * } </pre>
  *
@@ -168,6 +176,8 @@ import org.w3c.dom.NodeList;
  * <pre class="codeConfig">
  * &lt;!-- The Menu (menu.xml) Document Type Definition. --&gt;
  * &lt;!ELEMENT <span class="red">menu</span> (<span class="st">menu</span>*)&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">id</span> ID #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">name</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">label</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">path</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">target</span> CDATA #IMPLIED&gt;
@@ -197,7 +207,7 @@ import org.w3c.dom.NodeList;
  */
 public class Menu extends AbstractControl {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
@@ -213,18 +223,18 @@ public class Menu extends AbstractControl {
         + "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n"
         + "<script type=\"text/javascript\">addLoadEvent(function() '{ initMenu();' });</script>\n";
 
-    // -------------------------------------------------------- Class Variables
+    // Class Variables --------------------------------------------------------
 
     /** The cached root Menu as defined in <tt>menu.xml</tt>. */
     protected static Menu rootMenu;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The menu security access controller. */
     protected transient AccessController accessController;
 
     /** The list of submenu items. */
-    protected List children = new ArrayList();
+    protected List<Menu> children = new ArrayList<Menu>();
 
     /**
      * The menu path is to an external page flag, by default this value is false.
@@ -248,13 +258,13 @@ public class Menu extends AbstractControl {
      * The list of valid page paths. If any of these page paths match the
      * current request then the Menu item will be selected.
      */
-    protected List pages = new ArrayList();
+    protected List<String> pages = new ArrayList<String>();
 
     /** The menu path. */
     protected String path;
 
     /** The list of valid role names. */
-    protected List roles = new ArrayList();
+    protected List<String> roles = new ArrayList<String>();
 
     /** The menu separator flag. */
     protected boolean separator;
@@ -265,13 +275,7 @@ public class Menu extends AbstractControl {
     /** The tooltip title attribute. */
     protected String title = "";
 
-    /** Visibility flag. Used to hide menu items at runtime */
-    protected boolean visible = true;
-
-    /** Enable flag. Used to disable menu items at runtime. Disabled menu items might be still visible */
-    protected boolean enabled = true;
-    
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a new Menu instance.
@@ -330,6 +334,7 @@ public class Menu extends AbstractControl {
      * @param menuElement the menu-item XML Element
      * @param accessController the menu access controller
      */
+    @Deprecated
     protected Menu(Element menuElement, AccessController accessController) {
         if (menuElement == null) {
             throw new IllegalArgumentException("Null menuElement parameter");
@@ -366,16 +371,6 @@ public class Menu extends AbstractControl {
             setSeparator(true);
         }
 
-        String visibilityAtr = menuElement.getAttribute("visible");
-        if ("false".equalsIgnoreCase(visibilityAtr)) {
-            setVisible(false);
-        }
-
-        String enablingAtr = menuElement.getAttribute("enabled");
-        if ("false".equalsIgnoreCase(enablingAtr)) {
-            setEnabled(false);
-        }
-        
         String pagesValue = menuElement.getAttribute("pages");
         if (!StringUtils.isBlank(pagesValue)) {
             StringTokenizer tokenizer = new StringTokenizer(pagesValue, ",");
@@ -404,17 +399,18 @@ public class Menu extends AbstractControl {
         }
     }
 
-    // ---------------------------------------------------- Constructor Methods
+    // Constructor Methods ----------------------------------------------------
 
     /**
      * Return root menu item defined in the WEB-INF/menu.xml or classpath
-     * menu.xml, and which uses JEE Role Based Access Control (RBAController).
+     * menu.xml, and which uses JEE Role Based Access Control (RoleAccessController).
      *
      * @see RoleAccessController
      *
      * @return the root menu item defined in the WEB-INF/menu.xml file or menu.xml
      * in the root classpath
      */
+    @Deprecated
     public static Menu getRootMenu() {
         return getRootMenu(new RoleAccessController());
     }
@@ -427,6 +423,7 @@ public class Menu extends AbstractControl {
      * @return the root menu item defined in the WEB-INF/menu.xml file or menu.xml
      * in the root classpath
      */
+    @Deprecated
     public static Menu getRootMenu(AccessController accessController) {
         if (accessController == null) {
             throw new IllegalArgumentException("Null accessController parameter");
@@ -450,27 +447,7 @@ public class Menu extends AbstractControl {
         return loadedMenu;
     }
 
-    /**
-     * Finds the first Menu item that has the specified path.
-     * 
-     * @param path the path to find the Menu item
-     * @return the first Menu item, or null if not found.
-     */
-    public static Menu findMenuItem(String path) {
-        if (rootMenu != null) {
-            List children = rootMenu.getChildren();
-            for (int i = 0; i < children.size(); i++) {
-                Menu menu = (Menu) children.get(i);
-                String itemPath = menu.getPath();
-                if (itemPath != null && itemPath.equals(path)) {
-                    return menu;
-                }
-            }
-        }
-        return null;
-    }
-
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Return the menu access controller.
@@ -495,7 +472,7 @@ public class Menu extends AbstractControl {
      *
      * @return the list of submenu items
      */
-    public List getChildren() {
+    public List<Menu> getChildren() {
         return children;
     }
 
@@ -566,7 +543,7 @@ public class Menu extends AbstractControl {
      *
      * @return the list of valid Page paths
      */
-    public List getPages() {
+    public List<String> getPages() {
         return pages;
     }
 
@@ -576,7 +553,7 @@ public class Menu extends AbstractControl {
      *
      * @param pages the list of valid Page paths
      */
-    public void setPages(List pages) {
+    public void setPages(List<String> pages) {
         this.pages = pages;
     }
 
@@ -603,7 +580,7 @@ public class Menu extends AbstractControl {
      *
      * @return the list of valid roles for the Menu item
      */
-    public List getRoles() {
+    public List<String> getRoles() {
         return roles;
     }
 
@@ -612,7 +589,7 @@ public class Menu extends AbstractControl {
      *
      * @param roles the list of valid roles for the Menu item
      */
-    public void setRoles(List roles) {
+    public void setRoles(List<String> roles) {
         this.roles = roles;
     }
 
@@ -644,13 +621,30 @@ public class Menu extends AbstractControl {
         }
 
         for (int i = 0, size = getChildren().size(); i < size; i++) {
-            Menu menu = (Menu) getChildren().get(i);
+            Menu menu = getChildren().get(i);
             if (menu.isSelected()) {
                 selected = true;
             }
         }
 
         return selected;
+    }
+
+    /**
+     * Return the selected child menu, or null if no child menu is selected.
+     *
+     * @return the selected child menu
+     */
+    public Menu getSelectedChild() {
+        if (isSelected()) {
+            for (int i = 0, size = getChildren().size(); i < size; i++) {
+                Menu menu = getChildren().get(i);
+                if (menu.isSelected()) {
+                    return menu;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -691,7 +685,7 @@ public class Menu extends AbstractControl {
         HttpServletRequest request = getContext().getRequest();
 
         for (int i = 0, size = getRoles().size(); i < size; i++) {
-            String rolename = (String) getRoles().get(i);
+            String rolename = getRoles().get(i);
             if (getAccessController().hasAccess(request, rolename)) {
                 return true;
             }
@@ -711,7 +705,7 @@ public class Menu extends AbstractControl {
      */
     public boolean isUserInChildMenuRoles() {
          for (int i = 0, size = getChildren().size(); i < size; i++) {
-            Menu child = (Menu) getChildren().get(i);
+            Menu child = getChildren().get(i);
             if (child.isUserInRoles()) {
                 return true;
             }
@@ -757,49 +751,6 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Return the visibility flag of the Menu item.<p/>
-     * <i>Note:</i> default, all Menu items are visible.
-     * 
-     * @return the visibility flag of the Menu item.
-     */
-    public boolean isVisible() {
-        return visible;
-    }
-
-    /**
-     * Set the visibility flag of the Menu item. <p/>
-     * <i>Note:</i> changing this flag won't trigger the visibility on the page. It is the duty of
-     * the rendering template for the Menu to take this flag in consideration when rendering.
-     *
-     * @param visible the visibility flag of the menu item.
-     */
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    /**
-     * Return the enabling flag of the Menu item. <p/>
-     * <i>Note:</i> default, all Menu items are enabled.
-     *
-     * @return he enabling flag of the Menu item.
-     */
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    /**
-     * Set the enabling flag of the Menu item. <p/>
-     * <i>Note:</i> changing this flag won't trigger the disabling on the page. It is the duty of
-     * the rendering template for the Menu to take this flag in consideration when rendering, and
-     * e.g. grey it out.
-     *
-     * @param enabled the enabling flag of the menu item.
-     */
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    /**
      * Return the Menu HTML head imports statements for the following
      * resources:
      * <p/>
@@ -842,24 +793,14 @@ public class Menu extends AbstractControl {
         }
     }
 
-    /**
-     * This method returns null.
-     *
-     * @see org.apache.click.Control#getId()
-     *
-     * @return null
-     */
-    public String getId() {
-        return null;
-    }
-
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * This sets the parent to be null.
      *
      * @see org.apache.click.Control#onDestroy()
      */
+    @Override
     public void onDestroy() {
         setParent(null);
     }
@@ -873,6 +814,7 @@ public class Menu extends AbstractControl {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         if (isSeparator()) {
@@ -880,6 +822,15 @@ public class Menu extends AbstractControl {
 
         } else {
             buffer.elementStart("a");
+
+            String id = getAttribute("id");
+            if (id != null) {
+                buffer.appendAttribute("id", id);
+            }
+
+            if (getName() != null) {
+                buffer.appendAttribute("name", getName());
+            }
 
             String href = getHref();
             buffer.appendAttribute("href", href);
@@ -950,32 +901,14 @@ public class Menu extends AbstractControl {
      *
      * @return an HTML anchor tag representation of the menu item
      */
+    @Override
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
         render(buffer);
         return buffer.toString();
     }
 
-    // --------------------------------------------------------- Public Methods
-
-    /**
-     * Return the selected child menu, or null if no child menu is selected.
-     *
-     * @return the selected child menu
-     */
-    public Menu getSelectedChild() {
-        if (isSelected()) {
-            for (int i = 0, size = getChildren().size(); i < size; i++) {
-                Menu menu = (Menu) getChildren().get(i);
-                if (menu.isSelected()) {
-                    return menu;
-                }
-            }
-        }
-        return null;
-    }
-
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Return a copy of the Applications root Menu as defined in the
@@ -987,6 +920,7 @@ public class Menu extends AbstractControl {
      * @param accessController the menu access controller
      * @return a copy of the application's root Menu
      */
+    @Deprecated
     protected static Menu loadRootMenu(AccessController accessController) {
         if (accessController == null) {
             throw new IllegalArgumentException("Null accessController parameter");
