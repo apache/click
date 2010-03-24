@@ -160,10 +160,13 @@ public class MessagesMap implements Map<String, String> {
      * @throws MissingResourceException if the given key was not found
      */
     public String get(Object key) {
-        if (containsKey(key)) {
-            return (String) messages.get(key);
+        String value = null;
+        if (key != null) {
+            ensureInitialized();
+            value = (String) messages.get(key);
+        }
 
-        } else {
+        if (value == null) {
             String msg =
                 "Message \"{0}\" not found in bundle \"{1}\" "
                 + "for locale \"{2}\"";
@@ -172,6 +175,7 @@ public class MessagesMap implements Map<String, String> {
             msg = MessageFormat.format(msg, args);
             throw new MissingResourceException(msg, baseClass.getName(), keyStr);
         }
+        return value;
     }
 
     /**
