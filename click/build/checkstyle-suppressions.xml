@@ -121,6 +121,10 @@
               lines="915"/>
 
 	<!-- Static Variable Name -->              
+              
+    <suppress checks="StaticVariableName"
+              files="MenuFactory.java"
+              lines="58,61"/>
 
     <suppress checks="StaticVariableName"
               files="MockRequest.java"

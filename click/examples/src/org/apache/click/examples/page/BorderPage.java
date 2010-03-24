@@ -20,6 +20,7 @@ package org.apache.click.examples.page;
 
 import org.apache.click.Page;
 import org.apache.click.extras.control.Menu;
+import org.apache.click.extras.control.MenuFactory;
 import org.apache.click.util.ClickUtils;
 
 /**
@@ -71,10 +72,11 @@ public class BorderPage extends Page {
     public void onInit() {
         super.onInit();
 
-        rootMenu = Menu.getRootMenu();
+        MenuFactory menuFactory = new MenuFactory();
+        rootMenu = menuFactory.getRootMenu();
 
         // Add rootMenu to Page control list. Note: rootMenu is removed in Page
-        // onDestroy() to ensure rootMenu is not Serialized to disk
+        // onDestroy() to ensure rootMenu is not serialized
         addControl(rootMenu);
     }
 
@@ -83,7 +85,7 @@ public class BorderPage extends Page {
      */
     @Override
     public void onDestroy() {
-        // Remove menu for when BorderPage is Serialized to disk
+        // Remove menu for when BorderPage is serialized
         if (rootMenu != null) {
             removeControl(rootMenu);
         }
