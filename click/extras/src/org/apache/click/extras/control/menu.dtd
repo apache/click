@@ -21,6 +21,8 @@
 
 <!-- The Menu (menu.xml) Document Type Definition. -->
 <!ELEMENT menu (menu*)>
+    <!ATTLIST menu id ID #IMPLIED>
+    <!ATTLIST menu name CDATA #IMPLIED>
     <!ATTLIST menu label CDATA #IMPLIED>
     <!ATTLIST menu path CDATA #IMPLIED>
     <!ATTLIST menu target CDATA #IMPLIED>
@@ -28,7 +30,5 @@
     <!ATTLIST menu imageSrc CDATA #IMPLIED>
     <!ATTLIST menu external (true|false) "false">
     <!ATTLIST menu separator (true|false) "false">
-    <!ATTLIST menu visible (true|false) "true">
-    <!ATTLIST menu enabled (true|false) "true">
     <!ATTLIST menu roles CDATA #IMPLIED>
     <!ATTLIST menu pages CDATA #IMPLIED>
