@@ -194,7 +194,7 @@ a.tb_label {
 
 /* Menu Control css */
 
-#menuTable #menu {
+.menustyle {
     font: 11px arial, helvetica, lucida-sans, sans-serif;
     line-height: 15px; 
     height: 28px; 
@@ -288,6 +288,7 @@ a.tb_label {
     padding: 4px; 
     display: block; 
     background: #d0d0d0;
+    zoom: 1;
 } 
 .menustyle li>ul {
     top: auto; left: auto;
