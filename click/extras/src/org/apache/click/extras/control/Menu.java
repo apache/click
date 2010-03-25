@@ -28,6 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.click.Context;
 import org.apache.click.control.AbstractControl;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 import org.apache.click.extras.security.AccessController;
 import org.apache.click.extras.security.RoleAccessController;
 import org.apache.click.service.ConfigService;
@@ -216,13 +219,6 @@ public class Menu extends AbstractControl {
      */
     protected static final String DEFAULT_CONFIG_FILE = "/WEB-INF/menu.xml";
 
-    /** The Menu imports statements. */
-    public static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/menu{1}.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\">addLoadEvent(function() '{ initMenu();' });</script>\n";
-
     // Class Variables --------------------------------------------------------
 
     /** The cached root Menu as defined in <tt>menu.xml</tt>. */
@@ -264,7 +260,7 @@ public class Menu extends AbstractControl {
     protected String path;
 
     /** The list of valid role names. */
-    protected List<String> roles = new ArrayList<String>();
+    protected List<String> roles;
 
     /** The menu separator flag. */
     protected boolean separator;
@@ -273,7 +269,7 @@ public class Menu extends AbstractControl {
     protected String target = "";
 
     /** The tooltip title attribute. */
-    protected String title = "";
+    protected String title;
 
     // Constructors -----------------------------------------------------------
 
@@ -316,7 +312,7 @@ public class Menu extends AbstractControl {
      *         subMenu.setAccessController(accessController);
      *         subMenu.setRoles(roles);
      *
-     *         menu.getChildren().add(subMenu);
+     *         menu.add(subMenu);
      *
      *         ...
      *     }
@@ -333,6 +329,10 @@ public class Menu extends AbstractControl {
      *
      * @param menuElement the menu-item XML Element
      * @param accessController the menu access controller
+     *
+     * @deprecated use
+     * {@link MenuFactory#createMenu(org.w3c.dom.Element, org.apache.click.extras.security.AccessController)}
+     * instead
      */
     @Deprecated
     protected Menu(Element menuElement, AccessController accessController) {
@@ -345,7 +345,15 @@ public class Menu extends AbstractControl {
 
         setAccessController(accessController);
 
-        setLabel(menuElement.getAttribute("label"));
+        String nameAtr = menuElement.getAttribute("name");
+        if (StringUtils.isNotBlank(nameAtr)) {
+            setName(nameAtr);
+        }
+
+        String labelAtr = menuElement.getAttribute("label");
+        if (StringUtils.isNotBlank(labelAtr)) {
+            setLabel(labelAtr);
+        }
 
         setImageSrc(menuElement.getAttribute("imageSrc"));
 
@@ -372,7 +380,7 @@ public class Menu extends AbstractControl {
         }
 
         String pagesValue = menuElement.getAttribute("pages");
-        if (!StringUtils.isBlank(pagesValue)) {
+        if (StringUtils.isNotBlank(pagesValue)) {
             StringTokenizer tokenizer = new StringTokenizer(pagesValue, ",");
             while (tokenizer.hasMoreTokens()) {
                 String path = tokenizer.nextToken().trim();
@@ -382,7 +390,7 @@ public class Menu extends AbstractControl {
         }
 
         String rolesValue = menuElement.getAttribute("roles");
-        if (!StringUtils.isBlank(rolesValue)) {
+        if (StringUtils.isNotBlank(rolesValue)) {
             StringTokenizer tokenizer = new StringTokenizer(rolesValue, ",");
             while (tokenizer.hasMoreTokens()) {
                 getRoles().add(tokenizer.nextToken().trim());
@@ -394,7 +402,7 @@ public class Menu extends AbstractControl {
             Node node = childElements.item(i);
             if (node instanceof Element) {
                 Menu childMenu = new Menu((Element) node, accessController);
-                getChildren().add(childMenu);
+                add(childMenu);
             }
         }
     }
@@ -407,6 +415,8 @@ public class Menu extends AbstractControl {
      *
      * @see RoleAccessController
      *
+     * @deprecated use {@link MenuFactory#getRootMenu()} instead
+     *
      * @return the root menu item defined in the WEB-INF/menu.xml file or menu.xml
      * in the root classpath
      */
@@ -418,6 +428,10 @@ public class Menu extends AbstractControl {
     /**
      * Return root menu item defined in the WEB-INF/menu.xml or classpath
      * menu.xml, and which uses the provided AccessController.
+     *
+     * @deprecated use
+     * {@link MenuFactory#getRootMenu(org.apache.click.extras.security.AccessController)}
+     * instead
      *
      * @param accessController the menu access controller
      * @return the root menu item defined in the WEB-INF/menu.xml file or menu.xml
@@ -465,6 +479,18 @@ public class Menu extends AbstractControl {
      */
     public void setAccessController(AccessController accessController) {
         this.accessController = accessController;
+    }
+
+    /**
+     * Return true if the menu contains any child submenus.
+     *
+     * @return true if the menu contains any child submenus
+     */
+    public boolean hasChildren() {
+        if (children == null || children.size() == 0) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -525,6 +551,14 @@ public class Menu extends AbstractControl {
      * @return the label of the Menu item
      */
     public String getLabel() {
+        // Return cached label, if set
+        if (label != null) {
+            return label;
+        }
+
+        if (getName() != null) {
+            label = ClickUtils.toLabel(getName());
+        }
         return label;
     }
 
@@ -576,11 +610,27 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Return the list of valid roles for the Menu item.
+     * Return true if the menu has roles defined, false otherwise.
      *
-     * @return the list of valid roles for the Menu item
+     * @return true if the menu has roles defined, false otherwise
+     */
+    public boolean hasRoles() {
+        if (roles != null) {
+            return !roles.isEmpty();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Return the list of roles for the Menu item.
+     *
+     * @return the list of roles for the Menu item
      */
     public List<String> getRoles() {
+        if (roles == null) {
+            roles = new ArrayList();
+        }
         return roles;
     }
 
@@ -751,23 +801,6 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Return the Menu HTML head imports statements for the following
-     * resources:
-     * <p/>
-     * <ul>
-     * <li><tt>click/menu.css</tt></li>
-     * <li><tt>click/extras-control.js</tt></li>
-     * </ul>
-     *
-     * @see org.apache.click.Control#getHtmlImports()
-     *
-     * @return the HTML head import statements for the control
-     */
-    public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
-    }
-
-    /**
      * Return the menu anchor HREF attribute. If the menu is referring
      * to an external path, this method will simply return the path,
      * otherwise it will return the menu path prefixed with the
@@ -781,19 +814,109 @@ public class Menu extends AbstractControl {
      * @return the menu anchor HREF attribute
      */
     public String getHref() {
+        String path = getPath();
         if (isExternal()) {
-            return getPath();
+            return path;
+        }
 
-        } else if ("#".equals(getPath())) {
-            return getContext().getResponse().encodeURL(getPath());
+        if ("#".equals(path)) {
+            return getContext().getResponse().encodeURL(path);
 
         } else {
             Context context = getContext();
-            return context.getResponse().encodeURL(context.getRequest().getContextPath() + "/" + getPath());
+            if (path == null) {
+                // Guard against rendering "null" in the url
+                path = "";
+            }
+            return context.getResponse().encodeURL(context.getRequest().getContextPath() + "/" + path);
         }
     }
 
+    /**
+     * Return the Menu HTML HEAD elements for the following
+     * resources:
+     * <p/>
+     * <ul>
+     * <li><tt>click/menu.css</tt></li>
+     * <li><tt>click/control.js</tt></li>
+     * <li><tt>click/menu-fix-ie6.js</tt> (fixes menu burnthrough and hover issues)</li>
+     * </ul>
+     *
+     * @see org.apache.click.Control#getHeadElements()
+     *
+     * @return the HTML HEAD elements for the control
+     */
+    @Override
+    public List getHeadElements() {
+        String id = getId();
+        if (id == null) {
+            throw new IllegalStateException("Menu name is not set");
+        }
+
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            CssImport cssImport = new CssImport("/click/menu.css");
+            headElements.add(cssImport);
+
+            JsImport jsImport = new JsImport("/click/control.js");
+            headElements.add(jsImport);
+
+            jsImport = new JsImport("/click/menu-fix-ie6.js");
+            jsImport.setConditionalComment(JsImport.IF_LESS_THAN_IE7);
+            headElements.add(jsImport);
+
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            buffer.append("addLoadEvent( function() {\n");
+            buffer.append(" if(typeof Click != 'undefined' && typeof Click.menu != 'undefined') {\n");
+            buffer.append("   if(typeof Click.menu.fixHiddenMenu != 'undefined') {\n");
+            buffer.append("     Click.menu.fixHiddenMenu(\"").append(id).append("\");\n");
+            buffer.append("     Click.menu.fixHover(\"").append(id).append("\");\n");
+            buffer.append("   }\n");
+            buffer.append(" }\n");
+            buffer.append("});\n");
+            JsScript jsScript = new JsScript(buffer.toString());
+            headElements.add(jsScript);
+        }
+        return headElements;
+    }
+
     // Public Methods ---------------------------------------------------------
+
+    /**
+     * Add the given menu as a submenu. The menu will also be set as the parent
+     * of the submenu.
+     *
+     * @param menu the submenu to add
+     */
+    public void add(Menu menu) {
+        getChildren().add(menu);
+        menu.setParent(this);
+    }
+
+    /**
+     * Find the root menu, or null if no root menu can be found.
+     *
+     * @return the root menu, or null if no root menu can be found.
+     */
+    public Menu findRootMenu() {
+        Menu root = this;
+        Object parentMenu = root.getParent();
+        while (parentMenu instanceof Menu) {
+            root = (Menu) parentMenu;
+            parentMenu = root.getParent();
+        }
+        return (Menu) root;
+    }
+
+    /**
+     * Return true if this is the root menu, false otherwise.
+     *
+     * @return true if this menu is the root menu, false otherwise
+     */
+    public boolean isRoot() {
+        return !(getParent() instanceof Menu);
+    }
 
     /**
      * This sets the parent to be null.
@@ -953,7 +1076,7 @@ public class Menu extends AbstractControl {
             Node node = list.item(i);
             if (node instanceof Element) {
                 Menu childMenu = new Menu((Element) node, accessController);
-                menu.getChildren().add(childMenu);
+                menu.add(childMenu);
             }
         }
 
