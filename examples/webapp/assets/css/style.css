@@ -93,9 +93,10 @@ div.header-color {
   width: 100%;
 }
 
-#menuTable {
+.menustyle {
     position: absolute;
     bottom: 0px;
+    width: 100%;
 }
 
 div.content {
