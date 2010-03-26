@@ -39,7 +39,67 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * TODO documentation.
+ * Provides a Menu factory for creating an application root menu from the
+ * default configuration file. By default application menus are created from
+ * the configuration file <tt>/WEB-INF/menu.xml</tt>, or the classpath resource
+ * <tt>/menu.xml</tt> if the WEB-INF menu was not resolved.
+ *
+ * <h3>MenuFactory Examples</h3>
+ *
+ * Below is an example of a MenuFactory being used to set the rootMenu on a
+ * border page. Typically a border page will define a page template which
+ * contain the surrounding page chrome including the header and the application
+ * menu. Application page classes will subclass the BorderPage an inherit
+ * the application rootMenu.
+ *
+ * <pre class="prettyprint">
+ * public abstract class BorderPage extends Page {
+ *
+ *     &#64;Bindable public Menu rootMenu;
+ *
+ *     public BorderPage() {
+ *         MenuFactory menuFactory = new MenuFactory();
+ *         rootMenu = menuFactory.getRootMenu();
+ *     }
+ *
+ *     &#64;Override
+ *     public String getTemplate() {
+ *         return "/border-template.htm";
+ *     }
+ *
+ * } </pre>
+ *
+ * Please note if you page is stateful and serialized you probably won't want
+ * your application menu being serialize to disk or across a cluster with you
+ * page as well. In these scenarios please follow the pattern below.
+ *
+ *
+ * <pre class="prettyprint">
+ * public abstract class BorderPage extends Page {
+ *
+ *     private transient Menu rootMenu;
+ *
+ *     &#64;Override
+ *     public void onInit() {
+ *         super.onInit();
+ *
+ *         MenuFactory menuFactory = new MenuFactory();
+ *         rootMenu = menuFactory.getRootMenu();
+ *         addControl(rootMenu);
+ *     }
+ *
+ *     &#64;Override
+ *     public void onDestroy() {
+ *            if (rootMenu != null) {
+ *             removeControl(rootMenu);
+ *         }
+ *
+ *         super.onDestroy();
+ *     }
+ *
+ * } </pre>
+ *
+ * @see Menu
  */
 public class MenuFactory {
 
@@ -77,17 +137,17 @@ public class MenuFactory {
     // Public Methods ---------------------------------------------------------
 
     /**
-    * Return root menu item defined in the WEB-INF/menu.xml or classpath
+    * Return cached root menu item defined in the WEB-INF/menu.xml or classpath
      * menu.xml, creating menu items using the Menu class and the JEE
      * RollAccessController.
      *
      * @see RoleAccessController
      *
-     * @return the root menu item defined in the WEB-INF/menu.xml file or menu.xml
-     * in the root classpath
+     * @return the cached root menu item defined in the WEB-INF/menu.xml file
+     * or menu.xml in the root classpath
      */
     public Menu getRootMenu() {
-        return getRootMenu(Menu.class, new RoleAccessController());
+        return getRootMenu(Menu.class, new RoleAccessController(), true);
     }
 
     /**
@@ -96,11 +156,11 @@ public class MenuFactory {
      * RollAccessController.
      *
      * @param menuClass the menu class to create new Menu instances from
-     * @return the root menu item defined in the WEB-INF/menu.xml file or menu.xml
-     * in the root classpath
+     * @return the cached root menu item defined in the WEB-INF/menu.xml file
+     * or menu.xml in the root classpath
      */
     public Menu getRootMenu(Class<? extends Menu> menuClass) {
-        return getRootMenu(new RoleAccessController());
+        return getRootMenu(menuClass, new RoleAccessController(), true);
     }
 
     /**
@@ -113,7 +173,7 @@ public class MenuFactory {
      * in the root classpath
      */
     public Menu getRootMenu(AccessController accessController) {
-        return getRootMenu(Menu.class, accessController);
+        return getRootMenu(Menu.class, accessController, true);
     }
 
     /**
@@ -123,16 +183,20 @@ public class MenuFactory {
      *
      * @param menuClass the menu class to create new Menu instances from
      * @param accessController the menu access controller
+     * @param cached return the cached menu if in production or profile mode,
+     * otherwise create and return a new root menu instance
      * @return the root menu item defined in the WEB-INF/menu.xml file or menu.xml
      * in the root classpath
      */
-    public Menu getRootMenu(Class<? extends Menu> menuClass, AccessController accessController) {
+    public Menu getRootMenu(Class<? extends Menu> menuClass,
+                            AccessController accessController,
+                            boolean cached) {
 
         Validate.notNull(menuClass, "Null menuClass parameter");
         Validate.notNull(accessController, "Null accessController parameter");
 
-        // If menu is cached return it
-        if (CACHED_ROOT_MENU != null) {
+        // If after cached menu and already loaded then get cached menu
+        if (cached && CACHED_ROOT_MENU != null) {
             return CACHED_ROOT_MENU;
         }
 
@@ -142,8 +206,9 @@ public class MenuFactory {
             ServletContext servletContext = Context.getThreadLocalContext().getServletContext();
             ConfigService configService = ClickUtils.getConfigService(servletContext);
 
-            if (configService.isProductionMode() || configService.isProfileMode()) {
-                // Cache menu in production modes
+            // Cache the menu if requested, and application in production or profile mode
+            if (cached && (configService.isProductionMode() || configService.isProfileMode())) {
+
                 CACHED_ROOT_MENU = loadedMenu;
             }
 
@@ -233,15 +298,25 @@ public class MenuFactory {
 
         Menu menu = menuClass.newInstance();
 
-        menu.setName(menuElement.getAttribute("name"));
+        String nameAtr = menuElement.getAttribute("name");
+        if (StringUtils.isNotBlank(nameAtr)) {
+            menu.setName(nameAtr);
+        }
 
-        menu.setAccessController(accessController);
+        String labelAtr = menuElement.getAttribute("label");
+        if (StringUtils.isNotBlank(labelAtr)) {
+            menu.setLabel(labelAtr);
+        }
 
-        menu.setLabel(menuElement.getAttribute("label"));
+        String imageSrcAtr = menuElement.getAttribute("imageSrc");
+        if (StringUtils.isNotBlank(imageSrcAtr)) {
+            menu.setImageSrc(imageSrcAtr);
+        }
 
-        menu.setImageSrc(menuElement.getAttribute("imageSrc"));
-
-        menu.setPath(menuElement.getAttribute("path"));
+        String pathAtr = menuElement.getAttribute("path");
+        if (StringUtils.isNotBlank(pathAtr)) {
+            menu.setPath(pathAtr);
+        }
 
         String titleAtr = menuElement.getAttribute("title");
         if (StringUtils.isNotBlank(titleAtr)) {
@@ -264,7 +339,7 @@ public class MenuFactory {
         }
 
         String pagesValue = menuElement.getAttribute("pages");
-        if (!StringUtils.isBlank(pagesValue)) {
+        if (StringUtils.isNotBlank(pagesValue)) {
             StringTokenizer tokenizer = new StringTokenizer(pagesValue, ",");
             while (tokenizer.hasMoreTokens()) {
                 String path = tokenizer.nextToken().trim();
@@ -274,7 +349,7 @@ public class MenuFactory {
         }
 
         String rolesValue = menuElement.getAttribute("roles");
-        if (!StringUtils.isBlank(rolesValue)) {
+        if (StringUtils.isNotBlank(rolesValue)) {
             StringTokenizer tokenizer = new StringTokenizer(rolesValue, ",");
             while (tokenizer.hasMoreTokens()) {
                 menu.getRoles().add(tokenizer.nextToken().trim());
@@ -297,7 +372,7 @@ public class MenuFactory {
             Node node = childElements.item(i);
             if (node instanceof Element) {
                 Menu childMenu = buildMenu((Element) node, menuClass, accessController);
-                menu.getChildren().add(childMenu);
+                menu.add(childMenu);
             }
         }
 
