@@ -1034,6 +1034,13 @@ public class Table extends AbstractControl {
             if (getDataProvider() != null) {
                 Iterable iterableData = getDataProvider().getData();
 
+                if (iterableData == null) {
+                    String msg = "DataProvider '"
+                        + getDataProvider().getClass().getSimpleName()
+                        + "' returned null data";
+                    throw new IllegalStateException(msg);
+                }
+
                 if (iterableData instanceof List) {
                     rowList = (List) iterableData;
 
