@@ -230,7 +230,7 @@ public class Menu extends AbstractControl {
     protected transient AccessController accessController;
 
     /** The list of submenu items. */
-    protected List<Menu> children = new ArrayList<Menu>();
+    protected List<Menu> children;
 
     /**
      * The menu path is to an external page flag, by default this value is false.
@@ -355,9 +355,15 @@ public class Menu extends AbstractControl {
             setLabel(labelAtr);
         }
 
-        setImageSrc(menuElement.getAttribute("imageSrc"));
+        String imageSrcAtr = menuElement.getAttribute("imageSrc");
+        if (StringUtils.isNotBlank(imageSrcAtr)) {
+            setImageSrc(imageSrcAtr);
+        }
 
-        setPath(menuElement.getAttribute("path"));
+        String pathAtr = menuElement.getAttribute("path");
+        if (StringUtils.isNotBlank(pathAtr)) {
+            setPath(pathAtr);
+        }
 
         String titleAtr = menuElement.getAttribute("title");
         if (StringUtils.isNotBlank(titleAtr)) {
@@ -499,6 +505,9 @@ public class Menu extends AbstractControl {
      * @return the list of submenu items
      */
     public List<Menu> getChildren() {
+        if (children == null) {
+            children = new ArrayList<Menu>();
+        }
         return children;
     }
 
@@ -629,7 +638,7 @@ public class Menu extends AbstractControl {
      */
     public List<String> getRoles() {
         if (roles == null) {
-            roles = new ArrayList();
+            roles = new ArrayList<String>();
         }
         return roles;
     }
@@ -847,7 +856,7 @@ public class Menu extends AbstractControl {
      * @return the HTML HEAD elements for the control
      */
     @Override
-    public List getHeadElements() {
+    public List<org.apache.click.element.Element> getHeadElements() {
         String id = getId();
         if (id == null) {
             throw new IllegalStateException("Menu name is not set");
