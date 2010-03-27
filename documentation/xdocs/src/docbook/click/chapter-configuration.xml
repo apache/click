@@ -293,7 +293,7 @@
       <literallayout>&lt;!ELEMENT <varname>pages</varname> (<symbol>page</symbol>*)&gt;
    &lt;!ATTLIST pages <varname>package</varname> CDATA #IMPLIED&gt;
    &lt;!ATTLIST pages <varname>automapping</varname> (true|false) "true"&gt;
-   &lt;!ATTLIST pages <varname>autobinding</varname> (true|false) "true"&gt;</literallayout>
+   &lt;!ATTLIST pages <varname>autobinding</varname> (default|annotation|public|none) "default"&gt;</literallayout>
 
       <para>The pages element can specify a default <varname>package</varname> name
       which is prepended to the classname of any pages defined.
@@ -482,31 +482,58 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
       <sect3 id="application-autobinding" remap="h4">
         <title>Page Autobinding</title>
 
-        <para>By default all pages have autobinding enabled. With autobinding
-        the ClickServlet will automatically:
+        <para>Autobinding is a feature that allows certain page fields to be
+        handled in a special way by the ClickServlet. The autobinding attribute
+        can be configured with one of the following values:
+        <itemizedlist>
+          <listitem>
+            <para> <varname>default</varname>: <literal>bindable</literal>
+            fields include both <varname>public</varname> page fields and fields
+            annotated with the
+            <ulink url="../../click-api/org/apache/click/util/Bindable.html">@Bindable</ulink>
+            annotation
+            </para>
+          </listitem>
+          <listitem>
+            <para> <varname>annotation</varname>: <literal>bindable</literal>
+            fields are fields annotated with the
+            <ulink url="../../click-api/org/apache/click/util/Bindable.html">@Bindable</ulink>
+            annotation
+            </para>
+          </listitem>
+          <listitem>
+            <para> <varname>none</varname>: disables the autobinding feature
+            </para>
+          </listitem>
+        </itemizedlist>
+        </para>
+
+        <para>By default all pages have autobinding enabled in
+        <varname>default</varname> mode. With autobinding the ClickServlet will
+        automatically:
         </para>
 
         <itemizedlist>
           <listitem>
-            <para> add any public controls to the page, after the page constructor
-            has been invoked
+            <para> add any <literal>bindable</literal> controls to the page,
+            after the page constructor has been invoked
             </para>
           </listitem>
           <listitem>
-            <para> if the public control name is not defined, its name will be
-            set to the value of its field name
+            <para> if the <literal>bindable</literal> control name is not defined,
+            its name will be set to the value of its field name
             </para>
           </listitem>
           <listitem>
-            <para> bind any request parameters to public page fields, after page
-            constructor has been invoked. See
+            <para> bind any request parameters to <literal>bindable</literal>
+            page fields, after page constructor has been invoked. See
             <ulink url="../../click-api/org/apache/click/ClickServlet.html#processPageRequestParams(org.apache.click.Page)">ClickServlet.processPageRequestParams(Page)</ulink>
             for more details
             </para>
           </listitem>
           <listitem>
-            <para> add any public page fields to the page model (this step occurs
-            right before the page is rendered)</para>
+            <para> add all <literal>bindable</literal> page fields to the page
+            model (this step occurs right before the page is rendered)</para>
           </listitem>
         </itemizedlist>
 
@@ -559,11 +586,11 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
 }</programlisting>
 
         <para>You can turn this behaviour off by setting the <symbol>autobinding</symbol>
-        attribute to false, for example:
+        attribute to <varname>none</varname> for example:
         </para>
 
         <programlisting language="xml">&lt;click-app&gt;
-  &lt;pages package="com.mycorp.page" <symbol>autobinding</symbol>="<varname>false</varname>"/&gt;
+  &lt;pages package="com.mycorp.page" <symbol>autobinding</symbol>="<varname>none</varname>"/&gt;
 &lt;/click-app&gt;</programlisting>
 
       </sect3>
@@ -573,15 +600,14 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         <para>Click provides the
         <ulink url="../../click-api/org/apache/click/util/Bindable.html">Bindable</ulink>
         annotation which enables autobinding of Page fields. The Bindable
-        annotation can bind private, protected and public Page fields.
-        However by default, Click's autobinding feature operates only on
-        <literal>public</literal> fields. The reason for this is keeping
-        backwards compatibility with earlier versions which did not support
-        the Bindable annotation.
+        annotation can bind <varname>private</varname>, <varname>protected</varname>
+        and <varname>public</varname> Page fields.
         </para>
 
-        <para>To enable Click to recognize the <symbol>@Bindable</symbol>
-        annotation you need to set the <symbol>autobinding</symbol>
+        <para>By default, Click's autobinding feature operates on both
+        <symbol>public</symbol> and <symbol>@Bindable</symbol> fields.
+        To instruct Click to operate only on <symbol>@Bindable</symbol>
+        annotated fields, you can set the <symbol>autobinding</symbol>
         attribute to <varname>annotation</varname>, for example:
         </para>
 
@@ -589,8 +615,11 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
   <pages package="com.mycorp.page" ]]><symbol>autobinding</symbol>="<varname>annotation</varname>"<![CDATA[/>
 </click-app>]]></programlisting>
 
-        <para>You can now use the <symbol>@Bindable</symbol> annotation in your
-        Pages:
+        <para>Click won't autobind <literal>public</literal> fields anymore.
+        </para>
+
+        <para>Below is an example using the <symbol>@Bindable</symbol>
+        annotation:
         </para>
 
         <programlisting language="java">public class EmployeePage extends Page {
