@@ -20,19 +20,19 @@ package org.apache.click.extras.control;
 
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
-import org.apache.click.control.Form;
+import org.apache.click.Page;
 
 public class MenuTest extends TestCase {
 
     /**
-     * Check that FileField value is escaped.
+     * Check that Menu value is escaped.
      */
     public void testEscapeValue() {
         MockContext.initContext();
 
-        Form form = new Form("form");
+        Menu rootMenu = new Menu("root");
         Menu menu = new Menu("menu");
-        form.add(menu);
+        rootMenu.add(menu);
 
         String value = "<script>";
         String expected = "title=\"&lt;script&gt;\"";
@@ -41,5 +41,25 @@ public class MenuTest extends TestCase {
         menu.setLabel(value);
 
         assertTrue(menu.toString().indexOf(expected) > 1);
+    }
+
+    public void testI18N() {
+        MockContext.initContext();
+
+        Page page = new Page();
+        Menu rootMenu = new MyMenu("root");
+        page.addControl(rootMenu);
+
+        Menu menu = new MyMenu("mymenu");
+        rootMenu.add(menu);
+
+        assertEquals("Root Label", menu.getLabel());
+        assertEquals("Root Title", menu.getTitle());
+    }
+
+    public class MyMenu extends Menu {
+        public MyMenu(String name) {
+            super(name);
+        }
     }
 }
