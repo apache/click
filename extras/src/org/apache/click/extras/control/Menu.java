@@ -964,19 +964,6 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Return the menu with the given name.
-     *
-     * @param controlName the name of the control to get from the container
-     * @return the named control from the container if found or null otherwise
-     */
-    public Menu findMenuByName(String Name) {
-        if (hasControls()) {
-            return (Control) getControlMap().get(controlName);
-        }
-        return null;
-    }
-
-    /**
      * Find the root menu, or null if no root menu can be found.
      *
      * @return the root menu, or null if no root menu can be found.
