@@ -39,7 +39,7 @@
   <!ELEMENT pages (page*, excludes*)>
     <!ATTLIST pages package CDATA #IMPLIED>
     <!ATTLIST pages automapping (true|false) "true">
-    <!ATTLIST pages autobinding (defualt|annotation|public|none) "annotation">
+    <!ATTLIST pages autobinding (default|annotation|public|none) "annotation">
 
     <!-- Page definition. -->
     <!ELEMENT page (header*)>
