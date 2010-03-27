@@ -954,13 +954,26 @@ public class Menu extends AbstractControl {
                 String childName = child.getName();
                 String menuName = menu.getName();
                 if (childName != null && menuName != null) {
-                    if (childName.equals(menu.getName())) {
+                    if (childName.equals(menuName)) {
                         return true;
                     }
                 }
             }
         }
         return false;
+    }
+
+    /**
+     * Return the menu with the given name.
+     *
+     * @param controlName the name of the control to get from the container
+     * @return the named control from the container if found or null otherwise
+     */
+    public Menu findMenuByName(String Name) {
+        if (hasControls()) {
+            return (Control) getControlMap().get(controlName);
+        }
+        return null;
     }
 
     /**
@@ -1304,6 +1317,10 @@ public class Menu extends AbstractControl {
      * name <tt>"rootMenu"</tt>.
      * <p/>
      * The returned root menu is always selected.
+     *
+     * @deprecated use
+     * {@link MenuFactory#loadRootMenu(java.lang.String, java.lang.String, org.apache.click.extras.security.AccessController, java.lang.Class)}
+     * instead
      *
      * @param accessController the menu access controller
      * @return a copy of the application's root Menu
