@@ -119,7 +119,7 @@ public interface ConfigService {
     public static final String NOT_FOUND_PATH = "/click/not-found.htm";
 
     /** The page auto binding mode. */
-    public enum AutoBinding { PUBLIC, ANNOTATION, NONE };
+    public enum AutoBinding { DEFAULT, PUBLIC, ANNOTATION, NONE };
 
     /**
      * The servlet context attribute name. The ClickServlet stores the
