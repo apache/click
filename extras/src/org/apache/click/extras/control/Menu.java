@@ -20,6 +20,7 @@ package org.apache.click.extras.control;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -565,10 +566,23 @@ public class Menu extends AbstractControl {
             return label;
         }
 
-        if (getName() != null) {
-            label = ClickUtils.toLabel(getName());
+        String name = getName();
+
+        if (name != null) {
+            Menu root = findRootMenu();
+
+            // Use root menu messages to lookup the label
+            String i18nLabel = root.getMessage(name + ".label");
+
+            if (i18nLabel == null) {
+                i18nLabel = ClickUtils.toLabel(name);
+            }
+
+            // NOTE: don't cache the i18nLabel, since menus are often cached
+            // statically
+            return i18nLabel;
         }
-        return label;
+        return null;
     }
 
     /**
@@ -797,7 +811,23 @@ public class Menu extends AbstractControl {
      * @return the title attribute of the Menu item
      */
     public String getTitle() {
-        return title;
+        // Return cached title if set
+        if (title != null) {
+            return title;
+        }
+
+        String name = getName();
+
+        if (name != null) {
+            // Use root menu messages to lookup the title
+            Menu root = findRootMenu();
+
+            // NOTE: don't cache the i18nTitle, since menus are often cached
+            // statically
+            return root.getMessage(name + ".title");
+        }
+
+        return null;
     }
 
     /**
@@ -834,7 +864,7 @@ public class Menu extends AbstractControl {
         } else {
             Context context = getContext();
             if (path == null) {
-                // Guard against rendering "null" in the url
+                // Guard against rendering "null" in the href
                 path = "";
             }
             return context.getResponse().encodeURL(context.getRequest().getContextPath() + "/" + path);
@@ -904,6 +934,36 @@ public class Menu extends AbstractControl {
     }
 
     /**
+     * Return true if this menu contains the given menu, false otherwise.
+     * <p/>
+     * To test if the given menu is contained, this method will test against
+     * both the menu object reference as well as the menu name.
+     *
+     * @return true if this menu contains the given menu, false otherwise
+     */
+    public boolean contains(Menu menu) {
+        if (hasChildren()) {
+            for (Menu child : getChildren()) {
+
+                // Test against object reference
+                if (child == menu) {
+                    return true;
+                }
+
+                // Test against menu name
+                String childName = child.getName();
+                String menuName = menu.getName();
+                if (childName != null && menuName != null) {
+                    if (childName.equals(menu.getName())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Find the root menu, or null if no root menu can be found.
      *
      * @return the root menu, or null if no root menu can be found.
@@ -938,9 +998,21 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Render an anchor tag HTML representation of the Menu. If the menu item
-     * is selected the anchor tag will be rendered with class="selected"
-     * attribute.
+     * Render an HTML representation of the Menu.
+     * <p/>
+     * If this menu is the root menu ({@link #isRoot()} returns true), the menu
+     * and all its submenus (recursively), will be rendered by delegating
+     * rendering to the method
+     * {@link #renderRootMenu(org.apache.click.util.HtmlStringBuffer)}. The menu
+     * structure will be rendered as an HTML List consisting of &lt;ul&gt; and
+     * &lt;li&gt; elements.
+     * <p/>
+     * If this menu is <tt>not</tt> the root menu, this menu will be rendered
+     * on its own by delegating rendering to the method
+     * {@link #renderMenuLink(org.apache.click.util.HtmlStringBuffer, org.apache.click.extras.control.Menu)}.
+     * <p/>
+     * By having two render modes one can render the entire menu
+     * automatically, or render each menu item manually using a Velocity macro.
      *
      * @see #toString()
      *
@@ -948,90 +1020,25 @@ public class Menu extends AbstractControl {
      */
     @Override
     public void render(HtmlStringBuffer buffer) {
+        if (isRoot()) {
 
-        if (isSeparator()) {
-            buffer.append("<hr/>");
-
+            renderRootMenu(buffer);
         } else {
-            buffer.elementStart("a");
 
-            String id = getAttribute("id");
-            if (id != null) {
-                buffer.appendAttribute("id", id);
-            }
-
-            if (getName() != null) {
-                buffer.appendAttribute("name", getName());
-            }
-
-            String href = getHref();
-            buffer.appendAttribute("href", href);
-
-            if ("#".equals(href)) {
-                //If hyperlink does not return false here, clicking on it will scroll
-                //to the top of the page.
-                buffer.appendAttribute("onclick", "return false;");
-            }
-
-            if (getTarget() != null && getTarget().length() > 0) {
-                buffer.appendAttribute("target", getTarget());
-            }
-
-            if (getTitle() != null && getTitle().length() > 0) {
-                buffer.appendAttributeEscaped("title", getTitle());
-            }
-
-            if (isSelected()) {
-                buffer.appendAttribute("class", "selected");
-            }
-
-            buffer.closeTag();
-
-            if (StringUtils.isNotBlank(getImageSrc())) {
-                buffer.elementStart("img");
-                buffer.appendAttribute("border", "0");
-                buffer.appendAttribute("class", "link");
-
-                if (getTitle() != null) {
-                    buffer.appendAttributeEscaped("alt", getTitle());
-                } else {
-                    buffer.appendAttributeEscaped("alt", getLabel());
-                }
-
-                String src = getImageSrc();
-                if (StringUtils.isNotBlank(src)) {
-                    if (src.charAt(0) == '/') {
-                        src = getContext().getRequest().getContextPath() + src;
-                    }
-                    buffer.appendAttribute("src", src);
-                }
-
-                buffer.elementEnd();
-
-                if (getLabel() != null) {
-                    buffer.append(getLabel());
-                }
-
+            if (isSeparator()) {
+                renderSeparator(buffer, this);
             } else {
-                buffer.append(getLabel());
+                renderMenuLink(buffer, this);
             }
-
-            buffer.elementEnd("a");
         }
     }
 
     /**
-     * Return an HTML anchor tag representation of the menu item. If the menu is
-     * a separator this method will return a HR tag &lt;hr/&gt;.  If the menu
-     * item is selected the anchor tag will be rendered with class="selected"
-     * attribute.
-     * <p/>
-     * Note for more fine grained rendering control you should use a Velocity
-     * #macro to render the menu item.
+     * Return an HTML representation of the menu.
      *
-     * @see Object#toString()
+     * @see {@link #render(org.apache.click.util.HtmlStringBuffer)}
      *
-     * @return an HTML anchor tag representation of the menu item
+     * @return an HTML anchor tag representation of the menu
      */
     @Override
     public String toString() {
@@ -1041,6 +1048,255 @@ public class Menu extends AbstractControl {
     }
 
     // Protected Methods ------------------------------------------------------
+
+    /**
+     * Render an HTML representation of the root menu.
+     *
+     * @param buffer the buffer to render to
+     */
+    protected void renderRootMenu(HtmlStringBuffer buffer) {
+        buffer.elementStart("div");
+        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("class", "menustyle");
+        buffer.closeTag();
+        buffer.append("\n");
+
+        int depth = 0;
+        renderMenuList(buffer, this, depth);
+        buffer.elementEnd("div");
+    }
+
+    /**
+     * Render an html represenatation of the menu list (&lt;ul&gt;) structure.
+     *
+     * @param buffer the buffer to render to
+     * @param menu the menu that is currently rendered
+     * @param depth the current depth in the menu hierarchy
+     */
+    protected void renderMenuList(HtmlStringBuffer buffer, Menu menu, int depth) {
+        buffer.elementStart("ul");
+        renderMenuListAttributes(buffer, menu, depth);
+        buffer.closeTag();
+        buffer.append("\n");
+
+        Iterator it = menu.getChildren().iterator();
+        while (it.hasNext()) {
+            Menu child = (Menu) it.next();
+
+            if (canRender(child, depth)) {
+
+                buffer.elementStart("li");
+                renderMenuListItemAttributes(buffer, child, depth);
+                buffer.closeTag();
+
+                if (menu.isSeparator()) {
+                    renderSeparator(buffer, menu);
+                } else {
+                    renderMenuLink(buffer, child);
+                }
+
+                if (child.hasChildren()) {
+                    buffer.append("\n");
+                    renderMenuList(buffer, child, depth + 1);
+                }
+                buffer.elementEnd("li");
+                buffer.append("\n");
+            }
+        }
+
+        buffer.elementEnd("ul");
+        buffer.append("\n");
+    }
+
+    /**
+     * Return true if the given menu can be rendered, false otherwise. If the
+     * menu {@link #hasRoles() has roles} defined, this method will return
+     * true if the user is in one of the menu roles, false otherwise.
+     * <p/>
+     * This method delegates to {@link #isUserInRoles()} if the menu has roles
+     * defined.
+     *
+     * @param menu the menu that should be rendered or not
+     * @param depth the current depth in the menu hierarchy
+     * @return true if the menu can be rendered, false otherwise
+     */
+    protected boolean canRender(Menu menu, int depth) {
+        // TODO add and check visible property
+        if (menu.hasRoles()) {
+            return menu.isUserInRoles();
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Render the attributes of the menu list (&gt;ul&lt;).
+     *
+     * @param buffer the buffer to render to
+     * @param menu the menu being rendered
+     * @param depth the current depth in the menu hierarchy
+     */
+    protected void renderMenuListAttributes(HtmlStringBuffer buffer, Menu menu,
+        int depth) {
+
+        if (depth == 0) {
+            buffer.appendAttribute("class", "menubar");
+        } else {
+            buffer.appendAttribute("class", "submenu");
+        }
+    }
+
+    /**
+     * Render the attributes of the menu list item (&gt;li&lt;).
+     *
+     * @param buffer the buffer to render to
+     * @param menu the menu being rendered
+     * @param depth the current depth in the menu hierarchy
+     */
+    protected void renderMenuListItemAttributes(HtmlStringBuffer buffer, Menu menu,
+        int depth) {
+
+        if (depth == 0) {
+            buffer.append(" class=\"menuitem topitem");
+        } else {
+            buffer.append(" class=\"menuitem");
+        }
+        if (menu.hasChildren()) {
+            buffer.append(" has-submenu");
+        }
+        buffer.append("\"");
+    }
+
+    /**
+     * Render an HTML link (&lt;a&gt;) representation of the given menu.
+     * <p/>
+     * If the menu item is selected the anchor tag will be rendered with
+     * class="selected" attribute.
+     *
+     * @param buffer the buffer to render to
+     * @param menu the menu to render
+     */
+    protected void renderMenuLink(HtmlStringBuffer buffer, Menu menu) {
+        buffer.elementStart("a");
+
+        String id = menu.getAttribute("id");
+        if (id != null) {
+            buffer.appendAttribute("id", id);
+        }
+
+        if (menu.getName() != null) {
+            buffer.appendAttribute("name", menu.getName());
+        }
+
+        menu.renderMenuHref(buffer);
+
+        if (menu.getTarget() != null && menu.getTarget().length() > 0) {
+            buffer.appendAttribute("target", menu.getTarget());
+        }
+
+        String menuTitle = menu.getTitle();
+        if (menuTitle != null && menuTitle.length() > 0) {
+            buffer.appendAttributeEscaped("title", menuTitle);
+        }
+
+        if (menu.isSelected()) {
+            buffer.appendAttribute("class", "selected");
+        }
+
+        // TODO need to re-add visible and enabled properties
+        if (menu.hasAttributes()) {
+            buffer.appendAttributes(menu.getAttributes());
+        }
+
+        buffer.closeTag();
+
+        String menuLabel = menu.getLabel();
+
+        if (StringUtils.isNotBlank(menu.getImageSrc())) {
+            buffer.elementStart("img");
+            buffer.appendAttribute("border", "0");
+            buffer.appendAttribute("class", "link");
+
+            if (menuTitle != null) {
+                buffer.appendAttributeEscaped("alt", menuTitle);
+            } else {
+                buffer.appendAttributeEscaped("alt", menuLabel);
+            }
+
+            String src = menu.getImageSrc();
+            if (StringUtils.isNotBlank(src)) {
+                if (src.charAt(0) == '/') {
+                    src = getContext().getRequest().getContextPath() + src;
+                }
+                buffer.appendAttribute("src", src);
+            }
+
+            buffer.elementEnd();
+
+            if (menuLabel != null) {
+                buffer.append(menuLabel);
+            }
+
+        } else {
+            if (menuLabel != null) {
+                buffer.append(menuLabel);
+            }
+        }
+
+        buffer.elementEnd("a");
+    }
+
+    /**
+     * Render an HTML represenatation of the menu as a separator.
+     *
+     * @param buffer the buffer to render to
+     * @param menu the menu to render as a separator
+     */
+    protected void renderSeparator(HtmlStringBuffer buffer, Menu menu) {
+        buffer.append("<hr/>");
+    }
+
+    /**
+     * Render the menu <tt>"href"</tt> attribute. This method can be overridden
+     * to render dynamic <tt>"href"</tt> parameters, for example:
+     *
+     * <pre class="prettyprint">
+     * public class MyPage extends BorderPage {
+     *
+     *     public MyPage() {
+     *         Menu rootMenu = new MenuFactory().getRootMenu();
+     *
+     *         final String contextPath = getContext().getRequest().getContextPath();
+     *
+     *         Menu menu = new Menu() {
+     *             &#64;Override
+     *             protected void renderMenuHref(HtmlStringBuffer buffer) {
+     *                 buffer.appendAttribute("href", contextPath + "/my-page.htm?customer=" + getCustomerId());
+     *             }
+     *         });
+     *
+     *         menu.setName("customer");
+     *         menu.setLabel("Customer Lookup");
+     *
+     *         // Guard against adding child menu more than once
+     *         if (!rootMenu.contains(menu)) {
+     *             rootMenu.add(menu);
+     *         }
+     *     }
+     * } </pre>
+     *
+     * @param buffer the buffer to render the href attribute to
+     */
+    protected void renderMenuHref(HtmlStringBuffer buffer) {
+        String href = getHref();
+        buffer.appendAttribute("href", href);
+
+        if ("#".equals(href)) {
+            // If hyperlink does not return false, clicking on it will
+            // scroll to the top of the page.
+            buffer.appendAttribute("onclick", "return false;");
+        }
+    }
 
     /**
      * Return a copy of the Applications root Menu as defined in the
