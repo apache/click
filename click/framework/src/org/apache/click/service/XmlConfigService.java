@@ -968,29 +968,31 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             // Determine whether to use autobinding.
             String autobindingStr = pagesElm.getAttribute("autobinding");
             if (StringUtils.isBlank(autobindingStr)) {
-                autobindingStr = "true";
-            }
-
-            if ("annotation".equalsIgnoreCase(autobindingStr)) {
-                autobinding = AutoBinding.ANNOTATION;
-
-            } else if ("public".equalsIgnoreCase(autobindingStr)) {
-                autobinding = AutoBinding.PUBLIC;
-
-            } else if ("none".equalsIgnoreCase(autobindingStr)) {
-                autobinding = AutoBinding.NONE;
-
-            // Provided for backward compatibility
-            } else if ("true".equalsIgnoreCase(autobindingStr)) {
-                autobinding = AutoBinding.PUBLIC;
-
-             // Provided for backward compatibility
-            } else if ("false".equalsIgnoreCase(autobindingStr)) {
-                autobinding = AutoBinding.NONE;
-
+                autobinding = AutoBinding.DEFAULT;
             } else {
-                String msg = "Invalid pages autobinding attribute: " + autobindingStr;
-                throw new RuntimeException(msg);
+
+                if ("annotation".equalsIgnoreCase(autobindingStr)) {
+                    autobinding = AutoBinding.ANNOTATION;
+
+                } else if ("public".equalsIgnoreCase(autobindingStr)) {
+                    autobinding = AutoBinding.PUBLIC;
+
+                } else if ("none".equalsIgnoreCase(autobindingStr)) {
+                    autobinding = AutoBinding.NONE;
+
+                    // Provided for backward compatibility
+                } else if ("true".equalsIgnoreCase(autobindingStr)) {
+                    autobinding = AutoBinding.DEFAULT;
+
+                    // Provided for backward compatibility
+                } else if ("false".equalsIgnoreCase(autobindingStr)) {
+                    autobinding = AutoBinding.NONE;
+
+                } else {
+                    String msg = "Invalid pages autobinding attribute: "
+                        + autobindingStr;
+                    throw new RuntimeException(msg);
+                }
             }
 
             // TODO: if autobinding is set to false an there are multiple pages how should this be handled
@@ -1750,46 +1752,42 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         return null;
     }
 
+    /**
+     * Return an array of bindable fields for the given page class based on
+     * the binding mode.
+     *
+     * @param pageClass the page class
+     * @param mode the binding mode
+     * @return the field array of bindable fields
+     */
     private static Field[] getBindablePageFields(Class pageClass, AutoBinding mode) {
-        if (mode == AutoBinding.PUBLIC) {
+        if (mode == AutoBinding.DEFAULT) {
+
+            // Get @Bindable fields
+            Map<String, Field> fieldMap = getAnnotatedBindableFields(pageClass);
+
+            // Add public fields
+            Field[] publicFields = pageClass.getFields();
+            for (Field field : publicFields) {
+                fieldMap.put(field.getName(), field);
+            }
+
+             // Copy the field map values into a field list
+            Field[] fieldArray = new Field[fieldMap.size()];
+
+            int i = 0;
+            for (Field field : fieldMap.values()) {
+                fieldArray[i++] = field;
+            }
+
+            return fieldArray;
+
+        } else if (mode == AutoBinding.PUBLIC) {
             return pageClass.getFields();
 
         } else if (mode == AutoBinding.ANNOTATION) {
 
-            List<Class> pageClassList = new ArrayList<Class>();
-            pageClassList.add(pageClass);
-
-            Class parentClass = pageClass.getSuperclass();
-            while (parentClass != null) {
-                // Include parent classes up to but excluding Page.class
-                if (parentClass.isAssignableFrom(Page.class)) {
-                    break;
-                }
-                pageClassList.add(parentClass);
-                parentClass = parentClass.getSuperclass();
-            }
-
-            // Reverse class list so parents are processed first, with the
-            // actual page class fields processed last. This will enable the
-            // page classes fields to override parent class fields
-            Collections.reverse(pageClassList);
-
-            Map<String, Field> fieldMap = new TreeMap<String, Field>();
-
-            for (Class aPageClass : pageClassList) {
-
-                for (Field field : aPageClass.getDeclaredFields()) {
-
-                    if (field.getAnnotation(Bindable.class) != null) {
-                        fieldMap.put(field.getName(), field);
-
-                        // If field is not public set accessibility true
-                        if (!Modifier.isPublic(field.getModifiers())) {
-                            field.setAccessible(true);
-                        }
-                    }
-                }
-            }
+            Map<String, Field> fieldMap = getAnnotatedBindableFields(pageClass);
 
             // Copy the field map values into a field list
             Field[] fieldArray = new Field[fieldMap.size()];
@@ -1804,6 +1802,52 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         } else {
             return new Field[0];
         }
+    }
+
+    /**
+     * Return the fields annotated with the Bindable annotation.
+     *
+     * @param pageClass the page class
+     * @return the map of bindable fields
+     */
+    private static Map getAnnotatedBindableFields(Class pageClass) {
+
+        List<Class> pageClassList = new ArrayList<Class>();
+        pageClassList.add(pageClass);
+
+        Class parentClass = pageClass.getSuperclass();
+        while (parentClass != null) {
+            // Include parent classes up to but excluding Page.class
+            if (parentClass.isAssignableFrom(Page.class)) {
+                break;
+            }
+            pageClassList.add(parentClass);
+            parentClass = parentClass.getSuperclass();
+        }
+
+        // Reverse class list so parents are processed first, with the
+        // actual page class fields processed last. This will enable the
+        // page classes fields to override parent class fields
+        Collections.reverse(pageClassList);
+
+        Map<String, Field> fieldMap = new TreeMap<String, Field>();
+
+        for (Class aPageClass : pageClassList) {
+
+            for (Field field : aPageClass.getDeclaredFields()) {
+
+                if (field.getAnnotation(Bindable.class) != null) {
+                    fieldMap.put(field.getName(), field);
+
+                    // If field is not public set accessibility true
+                    if (!Modifier.isPublic(field.getModifiers())) {
+                        field.setAccessible(true);
+                    }
+                }
+            }
+        }
+
+        return fieldMap;
     }
 
     // ---------------------------------------------------------- Inner Classes
@@ -1884,7 +1928,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
 
 
-            fieldArray = getBindablePageFields(pageClass, autobinding);
+            fieldArray = XmlConfigService.getBindablePageFields(pageClass, autobinding);
 
             fields = new HashMap();
             for (int i = 0; i < fieldArray.length; i++) {
