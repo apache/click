@@ -224,6 +224,7 @@ public class CssStyle extends ResourceElement {
      *
      * @return the Css HTML tag: &lt;style&gt;
      */
+    @Override
     public String getTag() {
         return "style";
     }
@@ -325,6 +326,7 @@ public class CssStyle extends ResourceElement {
      *
      * @param buffer the buffer to render output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         // Render IE conditional comment if conditional comment was set

@@ -133,6 +133,7 @@ public class JsImport extends ResourceElement {
      *
      * @return the JavaScript import HTML tag: &lt;script&gt;
      */
+    @Override
     public String getTag() {
         return "script";
     }
@@ -147,6 +148,7 @@ public class JsImport extends ResourceElement {
      * @return true because JavaScript import must unique based on its
      * <tt>src</tt> attribute
      */
+    @Override
     public boolean isUnique() {
         return true;
     }
@@ -200,6 +202,7 @@ public class JsImport extends ResourceElement {
      *
      * @param buffer the buffer to render output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         renderConditionalCommentPrefix(buffer);
 

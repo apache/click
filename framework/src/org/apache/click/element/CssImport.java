@@ -134,6 +134,7 @@ public class CssImport extends ResourceElement {
      *
      * @return the Css import HTML tag: &lt;link&gt;
      */
+    @Override
     public String getTag() {
         return "link";
     }
@@ -148,6 +149,7 @@ public class CssImport extends ResourceElement {
      * @return true because Css import must unique based on its <tt>href</tt>
      * attribute
      */
+    @Override
     public boolean isUnique() {
         return true;
     }
@@ -201,6 +203,7 @@ public class CssImport extends ResourceElement {
      *
      * @param buffer the buffer to render output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         renderConditionalCommentPrefix(buffer);
 

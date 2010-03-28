@@ -288,6 +288,7 @@ public class ResourceElement extends Element {
      * @param buffer the specified buffer to render the Resource element output
      * to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         renderConditionalCommentPrefix(buffer);
 
