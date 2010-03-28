@@ -832,6 +832,7 @@ public abstract class AbstractControl implements Control {
      *
      * @return the HTML representation of this control
      */
+    @Override
     public String toString() {
         if (getTag() == null) {
             return "";
