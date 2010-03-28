@@ -904,19 +904,28 @@ public class Menu extends AbstractControl {
             jsImport = new JsImport("/click/menu-fix-ie6.js");
             jsImport.setConditionalComment(JsImport.IF_LESS_THAN_IE7);
             headElements.add(jsImport);
+        }
+
+        // Note, the addLoadEvent script is recreated and checked if it
+        // is contained in the headElement.
+        String menuId = getId();
+        JsScript script = new JsScript();
+        script.setId(menuId + "_setup");
+        if (!headElements.contains(script)) {
+            // Script must be executed as soon as browser dom is ready
+            script.setExecuteOnDomReady(true);
 
             HtmlStringBuffer buffer = new HtmlStringBuffer();
-            buffer.append("addLoadEvent( function() {\n");
             buffer.append(" if(typeof Click != 'undefined' && typeof Click.menu != 'undefined') {\n");
             buffer.append("   if(typeof Click.menu.fixHiddenMenu != 'undefined') {\n");
             buffer.append("     Click.menu.fixHiddenMenu(\"").append(id).append("\");\n");
             buffer.append("     Click.menu.fixHover(\"").append(id).append("\");\n");
             buffer.append("   }\n");
             buffer.append(" }\n");
-            buffer.append("});\n");
-            JsScript jsScript = new JsScript(buffer.toString());
-            headElements.add(jsScript);
+            script.setContent(buffer.toString());
+            headElements.add(script);
         }
+
         return headElements;
     }
 
