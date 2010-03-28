@@ -32,6 +32,7 @@ import org.apache.click.element.Element;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.DataProvider;
 import org.apache.click.util.HtmlStringBuffer;
+import org.apache.click.util.PagingDataProvider;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -1030,35 +1031,7 @@ public class Table extends AbstractControl {
     @SuppressWarnings("unchecked")
     public List getRowList() {
         if (rowList == null) {
-
-            if (getDataProvider() != null) {
-                Iterable iterableData = getDataProvider().getData();
-
-                if (iterableData == null) {
-                    String msg = "DataProvider '"
-                        + getDataProvider().getClass().getSimpleName()
-                        + "' returned null data";
-                    throw new IllegalStateException(msg);
-                }
-
-                if (iterableData instanceof List) {
-                    rowList = (List) iterableData;
-
-                } else {
-                    // Create and populate the rowList from the Iterable data
-                    rowList = new ArrayList<Object>();
-
-                    for (Object row : iterableData) {
-                        rowList.add(row);
-                    }
-                }
-
-                this.rowCount = rowList.size();
-
-            } else {
-                rowList = new ArrayList();
-                this.rowCount = 0;
-            }
+            rowList = createRowList();
         }
 
         return rowList;
@@ -1076,10 +1049,10 @@ public class Table extends AbstractControl {
     @SuppressWarnings("unchecked")
     public void setRowList(List rowList) {
         this.rowList = rowList;
-        if (rowList == null) {
+        if (this.rowList == null) {
             this.rowCount = 0;
         } else {
-            this.rowCount = rowList.size();
+            this.rowCount = this.rowList.size();
         }
     }
 
@@ -1439,6 +1412,72 @@ public class Table extends AbstractControl {
     // ------------------------------------------------------ Protected Methods
 
     /**
+     * Create a new table row list. If a {@link #getDataProvider() dataProvider}
+     * is specified the new row list will be populated from the data provider.
+     *
+     * @return a new table row list
+     */
+    protected List createRowList() {
+        DataProvider dp = getDataProvider();
+
+        List<Object> rowList = null;
+
+        if (dp != null) {
+
+            boolean isPaginating = false;
+
+            if (dp instanceof PagingDataProvider) {
+                isPaginating = true;
+            }
+
+            if (isPaginating) {
+                // rowCount is provided by the paging data provider. Its
+                // important to set the rowCount *before* invoking dp.getData
+                // since the getData implementation could have a dependency
+                // on the methods getFirstRow, getLastRow etc all of which
+                // depends on the rowCount value
+                this.rowCount = ((PagingDataProvider) dp).size();
+
+                // paginated datasets cannot be sorted by the table since it
+                // has access to only a limited number of rows. The dataset has
+                // to be sorted by a database or other means. Set the sorted
+                // property to true indicating that the data is already in a
+                // sorted state
+                setSorted(true);
+            }
+
+            Iterable iterableData = dataProvider.getData();
+
+            // If dataProvider returns a list, use that as the rowList
+            if (iterableData instanceof List) {
+                rowList = (List) iterableData;
+
+            } else {
+
+                // Create and populate the rowList from the Iterable data
+                rowList = new ArrayList<Object>();
+                if (iterableData != null) {
+                    for (Object row : iterableData) {
+                        rowList.add(row);
+                    }
+                }
+            }
+
+            if (!isPaginating) {
+                // for non paginating data provider the row count equals
+                // the number of rows in the rowList
+                this.rowCount = rowList.size();
+            }
+        } else {
+            // Create empty list
+            rowList = new ArrayList<Object>();
+            this.rowCount = 0;
+        }
+
+        return rowList;
+    }
+
+    /**
      * Render the table header row of column names.
      *
      * @param buffer the StringBuffer to render the header row in
@@ -1482,8 +1521,15 @@ public class Table extends AbstractControl {
             }
         }
 
-        int firstRow = getFirstRow();
-        int lastRow = getLastRow();
+        int firstRow = 0;
+        int lastRow = 0;
+
+        if (getDataProvider() instanceof PagingDataProvider) {
+            lastRow = getRowList().size();
+        } else {
+            firstRow = getFirstRow();
+            lastRow = getLastRow();
+        }
 
         if (lastRow == 0) {
             renderBodyNoRows(buffer);
