@@ -231,6 +231,7 @@ public class JsScript extends ResourceElement {
      *
      * @return the JavaScript HTML tag: &lt;script&gt;
      */
+    @Override
     public String getTag() {
         return "script";
     }
@@ -369,6 +370,7 @@ public class JsScript extends ResourceElement {
      *
      * @param buffer the buffer to render output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         Context context = getContext();
