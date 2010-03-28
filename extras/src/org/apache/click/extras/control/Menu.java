@@ -1315,7 +1315,7 @@ public class Menu extends AbstractControl {
      * The returned root menu is always selected.
      *
      * @deprecated use
-     * {@link MenuFactory#loadRootMenu(java.lang.String, java.lang.String, org.apache.click.extras.security.AccessController, java.lang.Class)}
+     * {@link MenuFactory#loadFromMenuXml(java.lang.String, java.lang.String, org.apache.click.extras.security.AccessController, java.lang.Class)}
      * instead
      *
      * @param accessController the menu access controller
