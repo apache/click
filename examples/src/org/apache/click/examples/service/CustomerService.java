@@ -213,7 +213,7 @@ public class CustomerService extends CayenneTemplate {
         String sortColumn, boolean ascending) {
 
         SelectQuery query = new SelectQuery(Customer.class);
-        if (sortColumn != null) {
+        if (StringUtils.isNotBlank(sortColumn)) {
             query.addOrdering(sortColumn, ascending);
         }
         query.setFetchOffset(offset);
