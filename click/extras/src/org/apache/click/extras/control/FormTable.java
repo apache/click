@@ -29,6 +29,7 @@ import org.apache.click.control.Table;
 import org.apache.click.util.HtmlStringBuffer;
 
 import org.apache.click.control.ActionLink;
+import org.apache.click.util.PagingDataProvider;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -536,8 +537,15 @@ public class FormTable extends Table {
             //will not correspond to their rows in the rowList.
             sortRowList();
 
-            int firstRow = getFirstRow();
-            int lastRow = getLastRow();
+            int firstRow = 0;
+            int lastRow = 0;
+
+            if (getDataProvider() instanceof PagingDataProvider) {
+                lastRow = getRowList().size();
+            } else {
+                firstRow = getFirstRow();
+                lastRow = getLastRow();
+            }
 
             List rowList = getRowList();
             List columnList = getColumnList();
