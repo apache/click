@@ -30,6 +30,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.JsImport;
 import org.apache.click.service.FileUploadService;
 import org.apache.click.service.LogService;
 import org.apache.click.util.ClickUtils;
@@ -568,11 +570,6 @@ public class Form extends AbstractContainer {
         + "var field = document.getElementById('$id');\n"
         + "if (field && field.focus && field.type != 'hidden' && field.disabled != true) { field.focus(); };\n"
         + "//--></script>\n";
-
-    /** The HTML imports statements. */
-    protected static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/control{1}.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n";
 
     // Instance Variables -----------------------------------------------------
 
@@ -1122,35 +1119,29 @@ public class Form extends AbstractContainer {
     }
 
     /**
-     * Return the Form HTML head imports statements for the following resources:
-     * <p/>
+     * Return the Form HTML HEAD elements for the following resources:
+     *
      * <ul>
      * <li><tt>click/control.css</tt></li>
      * <li><tt>click/control.js</tt></li>
      * </ul>
-     * <p/>
-     * Additionally all {@link #getControls() controls} import statements are
-     * also returned.
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the HTML head import statements for the control stylesheet and
-     * JavaScript files
+     * @return the form list of HEAD elements to be included in the page
      */
     @Override
-    public String getHtmlImports() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
 
-        buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, getContext()));
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
 
-        for (Control control : getControls()) {
-            String htmlImports = control.getHtmlImports();
-            if (htmlImports != null) {
-                buffer.append(htmlImports);
-            }
+            headElements.add(new CssImport("/click/control.css", versionIndicator));
+            headElements.add(new JsImport("/click/control.js", versionIndicator));
         }
-
-        return buffer.toString();
+        return headElements;
     }
 
     /**
