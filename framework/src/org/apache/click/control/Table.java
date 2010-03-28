@@ -828,63 +828,64 @@ public class Table extends AbstractControl {
      */
     @Override
     public List<Element> getHeadElements() {
+        Context context = getContext();
+        String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
         if (headElements == null) {
             headElements = super.getHeadElements();
 
-            boolean isDarkStyle = isDarkStyle();
-
-            Context context = getContext();
-            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
             headElements.add(new CssImport("/click/table.css", versionIndicator));
 
-            String tableId = getId();
-            CssStyle cssStyle = new CssStyle();
-            cssStyle.setId(tableId + "_css_setup");
-
-            if (!headElements.contains(cssStyle)) {
-                String contextPath = context.getRequest().getContextPath();
-                HtmlStringBuffer buffer = new HtmlStringBuffer(100);
-                buffer.append("th.sortable a {\n");
-                buffer.append("background: url(");
-                buffer.append(contextPath);
-                buffer.append("/click/column-sortable-");
-                if (isDarkStyle) {
-                    buffer.append("dark");
-                } else {
-                    buffer.append("light");
-                }
-                buffer.append(versionIndicator);
-                buffer.append(".gif)");
-                buffer.append(" center right no-repeat;}\n");
-                buffer.append("th.ascending a {\n");
-                buffer.append("background: url(");
-                buffer.append(contextPath);
-                buffer.append("/click/column-ascending-");
-                if (isDarkStyle) {
-                    buffer.append("dark");
-                } else {
-                    buffer.append("light");
-                }
-                buffer.append(versionIndicator);
-                buffer.append(".gif)");
-                buffer.append(" center right no-repeat;}\n");
-                buffer.append("th.descending a {\n");
-                buffer.append("background: url(");
-                buffer.append(contextPath);
-                buffer.append("/click/column-descending-");
-                if (isDarkStyle) {
-                    buffer.append("dark");
-                } else {
-                    buffer.append("light");
-                }
-                buffer.append(versionIndicator);
-                buffer.append(".gif)");
-                buffer.append(" center right no-repeat;}");
-                cssStyle.setContent(buffer.toString());
-                headElements.add(cssStyle);
-            }
-
             headElements.addAll(getControlLink().getHeadElements());
+        }
+
+        String tableId = getId();
+        CssStyle cssStyle = new CssStyle();
+        cssStyle.setId(tableId + "_css_setup");
+
+        if (!headElements.contains(cssStyle)) {
+            boolean isDarkStyle = isDarkStyle();
+
+            String contextPath = context.getRequest().getContextPath();
+            HtmlStringBuffer buffer = new HtmlStringBuffer(300);
+            buffer.append("th.sortable a {\n");
+            buffer.append("background: url(");
+            buffer.append(contextPath);
+            buffer.append("/click/column-sortable-");
+            if (isDarkStyle) {
+                buffer.append("dark");
+            } else {
+                buffer.append("light");
+            }
+            buffer.append(versionIndicator);
+            buffer.append(".gif)");
+            buffer.append(" center right no-repeat;}\n");
+            buffer.append("th.ascending a {\n");
+            buffer.append("background: url(");
+            buffer.append(contextPath);
+            buffer.append("/click/column-ascending-");
+            if (isDarkStyle) {
+                buffer.append("dark");
+            } else {
+                buffer.append("light");
+            }
+            buffer.append(versionIndicator);
+            buffer.append(".gif)");
+            buffer.append(" center right no-repeat;}\n");
+            buffer.append("th.descending a {\n");
+            buffer.append("background: url(");
+            buffer.append(contextPath);
+            buffer.append("/click/column-descending-");
+            if (isDarkStyle) {
+                buffer.append("dark");
+            } else {
+                buffer.append("light");
+            }
+            buffer.append(versionIndicator);
+            buffer.append(".gif)");
+            buffer.append(" center right no-repeat;}");
+            cssStyle.setContent(buffer.toString());
+            headElements.add(cssStyle);
         }
         return headElements;
     }
