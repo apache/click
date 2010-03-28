@@ -27,14 +27,13 @@ import org.apache.click.control.Table;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.extras.util.PaginatingList;
 import org.apache.click.util.Bindable;
-import org.apache.click.util.DataProvider;
+import org.apache.click.util.PagingDataProvider;
 import org.springframework.stereotype.Component;
 
 /**
  * Provides a demonstration of a Table with a huge number of rows and how to
- * lazily page through the rows using a paginating list.
+ * lazily page through the rows using a PagingDataProvider.
  */
 @Component
 public class LargeDatasetDemo extends BorderPage {
@@ -54,10 +53,6 @@ public class LargeDatasetDemo extends BorderPage {
         // Setup customers table
         table.setClass(Table.CLASS_ITS);
         table.setSortable(true);
-
-        // VERY IMPORTANT: we will sort the data ourselves using the database,
-        // make sure the Table does not attempt to sort data set.
-        table.setSorted(true);
 
         Column column = new Column("name");
         column.setWidth("140px;");
@@ -81,35 +76,22 @@ public class LargeDatasetDemo extends BorderPage {
 
         table.setPageSize(5);
 
-        table.setDataProvider(new DataProvider<Customer>() {
+        table.setDataProvider(new PagingDataProvider<Customer>() {
+
             public List<Customer> getData() {
-                return getCustomerList();
-            }
-        });
-    }
-
-    // Private Methods --------------------------------------------------------
-
-    private List<Customer> getCustomerList() {
-
-        // Below we retrieve only those customers between:
-        //     first row .. (first row + page size)
-        List<Customer> customerList =
-            customerService.getCustomersForPage(table.getFirstRow(),
+                List customers = customerService.getCustomersForPage(
+                                                table.getFirstRow(),
                                                 table.getPageSize(),
                                                 table.getSortedColumn(),
                                                 table.isSortedAscending());
 
-        int customerCount = customerService.getNumberOfCustomers();
+                return customers;
+            }
 
-        // Return a paginating list for the Table control. The paginating list
-        // provides a wrapper around the "page" of customer data, so that the
-        // Table control thinks it is working will the full result set rather
-        // than just a window.
-        return new PaginatingList<Customer>(customerList,
-                                            table.getFirstRow(),
-                                            table.getPageSize(),
-                                            customerCount);
+            public int size() {
+                return customerService.getNumberOfCustomers();
+            }
+        });
     }
 
 }
