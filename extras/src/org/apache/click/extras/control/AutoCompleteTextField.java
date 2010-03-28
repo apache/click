@@ -83,11 +83,11 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public abstract class AutoCompleteTextField extends TextField {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /**
      * The JavaScript 'script.aculo.us' Autocompleter initialization options,
@@ -95,7 +95,7 @@ public abstract class AutoCompleteTextField extends TextField {
      */
     protected String autoCompleteOptions = "{minChars:1}";
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct the AutoCompleteTextField with the given name. The default text field size
@@ -163,7 +163,7 @@ public abstract class AutoCompleteTextField extends TextField {
     public AutoCompleteTextField() {
     }
 
-    // ------------------------------------------------------- Abstract Methods
+    // Abstract Methods -------------------------------------------------------
 
     /**
      * Return the list of suggested values for the given search criteria.
@@ -173,7 +173,7 @@ public abstract class AutoCompleteTextField extends TextField {
      */
     abstract public List getAutoCompleteList(String criteria);
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Return the JavaScript 'script.aculo.us' Autocompleter initialization
@@ -228,6 +228,7 @@ public abstract class AutoCompleteTextField extends TextField {
      * @throws IllegalArgumentException if the given parent instance is
      * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
      */
+    @Override
     public void setParent(Object parent) {
         if (parent == null) {
             // If the field parent control is set to null (indicating the field
@@ -259,6 +260,7 @@ public abstract class AutoCompleteTextField extends TextField {
      * @throws IllegalStateException if the field's name has not been set
      * @throws IllegalStateException if the field is not attached to the Page
      */
+    @Override
     public List getHeadElements() {
         // Check that the field name and parent Page has been set
         String fieldName = getName();
@@ -325,6 +327,7 @@ public abstract class AutoCompleteTextField extends TextField {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         super.render(buffer);
 
@@ -335,7 +338,7 @@ public abstract class AutoCompleteTextField extends TextField {
         buffer.elementEnd("div");
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * Register the field with the parent page to intercept POST autocompletion
@@ -343,6 +346,7 @@ public abstract class AutoCompleteTextField extends TextField {
      *
      * @see org.apache.click.Control#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -380,6 +384,7 @@ public abstract class AutoCompleteTextField extends TextField {
      *
      * @return false if an auto complete request, otherwise returns true
      */
+    @Override
     public boolean onProcess() {
         Context context = getContext();
         if (context.isPost()) {
@@ -399,7 +404,7 @@ public abstract class AutoCompleteTextField extends TextField {
         return true;
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Render the suggested auto completion list to the servlet response.
