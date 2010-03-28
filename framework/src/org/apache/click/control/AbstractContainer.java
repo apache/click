@@ -192,6 +192,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
         int size = 20;
 
@@ -211,6 +212,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
 
         boolean continueProcessing = true;
@@ -229,6 +231,7 @@ public abstract class AbstractContainer extends AbstractControl implements
     /**
      * @see org.apache.click.Control#onDestroy()
      */
+    @Override
     public void onDestroy() {
         for (Control control : getControls()) {
             try {
@@ -242,6 +245,7 @@ public abstract class AbstractContainer extends AbstractControl implements
    /**
     * @see org.apache.click.Control#onInit()
     */
+    @Override
     public void onInit() {
         super.onInit();
         for (Control control : getControls()) {
@@ -252,6 +256,7 @@ public abstract class AbstractContainer extends AbstractControl implements
    /**
     * @see org.apache.click.Control#onRender()
     */
+    @Override
     public void onRender() {
         for (Control control : getControls()) {
             control.onRender();
@@ -266,6 +271,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      * @return the HTML includes statements for the container and child Controls,
      * or null if no includes are available
      */
+    @Override
     public String getHtmlImports() {
         if (hasControls()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(0);
@@ -291,6 +297,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         //If tag is set, render it
@@ -321,6 +328,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      *
      * @return the HTML representation of this control
      */
+    @Override
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
         render(buffer);
@@ -335,6 +343,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      * @param tagName the name of the tag to close
      * @param buffer the buffer to append the output to
      */
+    @Override
     protected void renderTagEnd(String tagName, HtmlStringBuffer buffer) {
         buffer.elementEnd(tagName);
     }

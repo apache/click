@@ -94,11 +94,11 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class FieldSet extends Field implements Container {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The list of controls. */
     protected List controls;
@@ -129,7 +129,7 @@ public class FieldSet extends Field implements Container {
      */
     protected Integer columns;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a FieldSet with the given name.
@@ -159,7 +159,7 @@ public class FieldSet extends Field implements Container {
     public FieldSet() {
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Add a Field to the FieldSet at the specified index and return the added
@@ -424,6 +424,7 @@ public class FieldSet extends Field implements Container {
      *
      * @return this controls html tag
      */
+    @Override
     public String getTag() {
         return "fieldset";
     }
@@ -439,6 +440,7 @@ public class FieldSet extends Field implements Container {
      *
      * @return true if the Field is disabled
      */
+    @Override
     public boolean isDisabled() {
         Form form = getForm();
         if (form != null && form.isDisabled()) {
@@ -458,6 +460,7 @@ public class FieldSet extends Field implements Container {
      *
      * @param disabled the Field disabled flag
      */
+    @Override
     public void setDisabled(boolean disabled) {
         super.setDisabled(disabled);
     }
@@ -468,6 +471,7 @@ public class FieldSet extends Field implements Container {
      *
      * @return true if the FieldSet is a readonly
      */
+    @Override
     public boolean isReadonly() {
         Form form = getForm();
         if (form != null && form.isReadonly()) {
@@ -483,6 +487,7 @@ public class FieldSet extends Field implements Container {
      *
      * @param readonly the FieldSet readonly flag
      */
+    @Override
     public void setReadonly(boolean readonly) {
         super.setReadonly(readonly);
     }
@@ -589,6 +594,7 @@ public class FieldSet extends Field implements Container {
      *
      * @param form FieldSet's parent <tt>Form</tt>
      */
+    @Override
     public void setForm(Form form) {
         this.form = form;
 
@@ -607,9 +613,12 @@ public class FieldSet extends Field implements Container {
      *
      * @see org.apache.click.Control#getHtmlImports()
      *
+     * @deprecated use {@link #getHeadElements()} instead
+     *
      * @return the HTML head import statements for the contained field stylesheet
      * and JavaScript files
      */
+    @Override
     public String getHtmlImports() {
         if (hasControls()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(512);
@@ -738,6 +747,7 @@ public class FieldSet extends Field implements Container {
      * @return true if all Controls were processed, or false if any Control
      * returned false
      */
+    @Override
     public boolean onProcess() {
         if (hasControls()) {
             for (Iterator it = getControls().iterator(); it.hasNext();) {
@@ -759,6 +769,7 @@ public class FieldSet extends Field implements Container {
     /**
      * @see org.apache.click.Control#onDestroy()
      */
+    @Override
     public void onDestroy() {
         if (hasControls()) {
             for (int i = 0, size = getControls().size(); i < size; i++) {
@@ -775,6 +786,7 @@ public class FieldSet extends Field implements Container {
    /**
     * @see org.apache.click.Control#onInit()
     */
+    @Override
     public void onInit() {
         super.onInit();
         if (hasControls()) {
@@ -788,6 +800,7 @@ public class FieldSet extends Field implements Container {
    /**
     * @see org.apache.click.Control#onRender()
     */
+    @Override
     public void onRender() {
         if (hasControls()) {
             for (int i = 0, size = getControls().size(); i < size; i++) {
@@ -804,6 +817,7 @@ public class FieldSet extends Field implements Container {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         if (getShowBorder()) {
@@ -864,13 +878,14 @@ public class FieldSet extends Field implements Container {
      *
      * @return the HTML representation of this control
      */
+    @Override
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
         render(buffer);
         return buffer.toString();
     }
 
-    //------------------------------------------------------- protected methods
+    // Protected methods -------------------------------------------------------
 
     /**
      * Return the map of controls where each map's key / value pair will consist
@@ -892,6 +907,7 @@ public class FieldSet extends Field implements Container {
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     protected int getControlSizeEst() {
         int size = 20;
 
@@ -1162,7 +1178,7 @@ public class FieldSet extends Field implements Container {
         }
     }
 
-    // -------------------------------------------------------- Private Methods
+    // Private Methods --------------------------------------------------------
 
     /**
      * Return true if the control is hidden, false otherwise.
