@@ -895,13 +895,16 @@ public class Menu extends AbstractControl {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
-            CssImport cssImport = new CssImport("/click/menu.css");
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+            CssImport cssImport = new CssImport("/click/menu.css", versionIndicator);
             headElements.add(cssImport);
 
-            JsImport jsImport = new JsImport("/click/control.js");
+            JsImport jsImport = new JsImport("/click/control.js", versionIndicator);
             headElements.add(jsImport);
 
-            jsImport = new JsImport("/click/menu-fix-ie6.js");
+            jsImport = new JsImport("/click/menu-fix-ie6.js", versionIndicator);
             jsImport.setConditionalComment(JsImport.IF_LESS_THAN_IE7);
             headElements.add(jsImport);
         }
