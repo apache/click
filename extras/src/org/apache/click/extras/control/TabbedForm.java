@@ -22,10 +22,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.click.Context;
 
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -131,15 +134,11 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class TabbedForm extends Form {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
-    /** The TabbedForm imports statement. */
-    public static final String HTML_IMPORTS = Form.HTML_IMPORTS
-        + "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/extras-control{1}.css\"/>\n";
-
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /**
      * The form HTML background color. The default background color is
@@ -168,7 +167,7 @@ public class TabbedForm extends Form {
      */
     protected String template = "/org/apache/click/extras/control/TabbedForm.htm";
 
-    // ---------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a new tabbed form instance with the given name.
@@ -191,7 +190,7 @@ public class TabbedForm extends Form {
         setButtonStyle("");
     }
 
-    // ------------------------------------------------------------ Properities
+    // Properities ------------------------------------------------------------
 
     /**
      * Add the given FieldSet tab sheet to the form.
@@ -244,25 +243,30 @@ public class TabbedForm extends Form {
     }
 
     /**
-     * Return the TabbedForm HTML head imports statements for the following
-     * resources:
-     * <p/>
+     * Return the TabbedForm HTML HEAD elements for the following resource:
+     *
      * <ul>
      * <li><tt>click/extras-control.css</tt></li>
      * </ul>
-     * <p/>
-     * Additionally all the {@link org.apache.click.control.Form#getHtmlImports()
+     *
+     * Additionally all the {@link org.apache.click.control.Form#getHeadElements()
      * Form import statements} are also returned.
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the HTML head import statements for the control
+     * @return the control list of HEAD elements to be included in the page
      */
-    public String getHtmlImports() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
-        buffer.append(super.getHtmlImports());
-        buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, getContext()));
-        return buffer.toString();
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+            headElements.add(new CssImport("/click/extras-control.css", versionIndicator));
+        }
+        return headElements;
     }
 
     /**
@@ -345,7 +349,7 @@ public class TabbedForm extends Form {
         this.template = template;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Process the Form request. In addition to the normal Form
@@ -354,6 +358,7 @@ public class TabbedForm extends Form {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
         boolean result = super.onProcess();
 
@@ -376,6 +381,7 @@ public class TabbedForm extends Form {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         Map model = new HashMap();
         model.put("form", this);
@@ -395,6 +401,7 @@ public class TabbedForm extends Form {
      *
      * @return the HTML string representation of the form
      */
+    @Override
     public String toString() {
         return super.toString();
     }
