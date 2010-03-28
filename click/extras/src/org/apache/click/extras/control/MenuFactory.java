@@ -19,9 +19,12 @@
 package org.apache.click.extras.control;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 
@@ -39,10 +42,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Provides a Menu factory for creating an application root menu from the
- * default configuration file. By default application menus are created from
- * the configuration file <tt>/WEB-INF/menu.xml</tt>, or the classpath resource
- * <tt>/menu.xml</tt> if the WEB-INF menu was not resolved.
+ * Provides a Menu factory for creating application menus from configuration
+ * files. Menu factory provides a variety of <tt>getRootMenu</tt> methods for
+ * loading the menu. The default {@link #getRootMenu()} method creates menus
+ * from the configuration file <tt>/WEB-INF/menu.xml</tt>, or the classpath
+ * resource <tt>/menu.xml</tt> if the WEB-INF menu was not resolved. To load
+ * menus from an alternate configuration file use one of the <tt>getRootMenu</tt>
+ * methods that accept a configuration file name.
  *
  * <h3>MenuFactory Examples</h3>
  *
@@ -55,11 +61,12 @@ import org.w3c.dom.NodeList;
  * <pre class="prettyprint">
  * public abstract class BorderPage extends Page {
  *
- *     &#64;Bindable public Menu rootMenu;
+ *     private Menu rootMenu;
  *
  *     public BorderPage() {
  *         MenuFactory menuFactory = new MenuFactory();
  *         rootMenu = menuFactory.getRootMenu();
+ *         addControl(rootMenu);
  *     }
  *
  *     &#64;Override
@@ -69,14 +76,14 @@ import org.w3c.dom.NodeList;
  *
  * } </pre>
  *
- * Please note if you page is stateful and serialized you probably won't want
- * your application menu being serialize to disk or across a cluster with you
- * page as well. In these scenarios please follow the pattern below.
- *
+ * Please note if you use stateful pages that are serialized, you probably
+ * won't want your application menu being serialized to disk or across a cluster
+ * with your page as well. In these scenarios please follow the pattern below.
  *
  * <pre class="prettyprint">
  * public abstract class BorderPage extends Page {
  *
+ *     // Note the transient keyword
  *     private transient Menu rootMenu;
  *
  *     &#64;Override
@@ -90,7 +97,7 @@ import org.w3c.dom.NodeList;
  *
  *     &#64;Override
  *     public void onDestroy() {
- *            if (rootMenu != null) {
+ *         if (rootMenu != null) {
  *             removeControl(rootMenu);
  *         }
  *
@@ -101,16 +108,21 @@ import org.w3c.dom.NodeList;
  *
  * @see Menu
  */
-public class MenuFactory {
+public class MenuFactory implements Serializable {
 
     // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * The menu configuration filename: &nbsp; "<tt>/WEB-INF/menu.xml</tt>".
+     * The default root menu name: &nbsp; "<tt>rootMenu</tt>".
      */
-    protected static final String DEFAULT_CONFIG_FILE = "/WEB-INF/menu.xml";
+    public final static String DEFAULT_ROOT_MENU_NAME = "rootMenu";
+
+    /**
+     * The menu configuration filename: &nbsp; "<tt>menu.xml</tt>".
+     */
+    protected static final String DEFAULT_CONFIG_FILE = "menu.xml";
 
     // Class Variables --------------------------------------------------------
 
@@ -119,6 +131,9 @@ public class MenuFactory {
 
     /** The default Menu XML attributes loaded into menu properties. */
     protected static Set<String> DEFAULT_ATTRIBUTES;
+
+    /** The menu cache. */
+    protected static Map<String, Menu> menuCache;
 
     static {
         DEFAULT_ATTRIBUTES = new HashSet<String>();
@@ -139,7 +154,7 @@ public class MenuFactory {
     /**
     * Return cached root menu item defined in the WEB-INF/menu.xml or classpath
      * menu.xml, creating menu items using the Menu class and the JEE
-     * RollAccessController.
+     * RoleAccessController.
      *
      * @see RoleAccessController
      *
@@ -147,24 +162,25 @@ public class MenuFactory {
      * or menu.xml in the root classpath
      */
     public Menu getRootMenu() {
-        return getRootMenu(Menu.class, new RoleAccessController(), true);
+        return getRootMenu(DEFAULT_ROOT_MENU_NAME, DEFAULT_CONFIG_FILE);
     }
 
     /**
-    * Return root menu item defined in the WEB-INF/menu.xml or classpath
+     * Return root menu item defined in the WEB-INF/menu.xml or classpath
      * menu.xml, creating menu items using the provided Menu class and the JEE
-     * RollAccessController.
+     * RoleAccessController.
      *
      * @param menuClass the menu class to create new Menu instances from
      * @return the cached root menu item defined in the WEB-INF/menu.xml file
      * or menu.xml in the root classpath
      */
     public Menu getRootMenu(Class<? extends Menu> menuClass) {
-        return getRootMenu(menuClass, new RoleAccessController(), true);
+        return getRootMenu(DEFAULT_ROOT_MENU_NAME, DEFAULT_CONFIG_FILE,
+            new RoleAccessController(), true, menuClass);
     }
 
     /**
-    * Return root menu item defined in the WEB-INF/menu.xml or classpath
+     * Return root menu item defined in the WEB-INF/menu.xml or classpath
      * menu.xml, creating menu items using the Menu class and the provided
      * AccessController.
      *
@@ -173,130 +189,110 @@ public class MenuFactory {
      * in the root classpath
      */
     public Menu getRootMenu(AccessController accessController) {
-        return getRootMenu(Menu.class, accessController, true);
+        return getRootMenu(DEFAULT_ROOT_MENU_NAME, DEFAULT_CONFIG_FILE,
+            accessController, true, null);
     }
 
     /**
-    * Return root menu item defined in the WEB-INF/menu.xml or classpath
-     * menu.xml, creating menu items using the provided Menu class and the
-     * AccessController.
+     * Return root menu item defined in the WEB-INF/menu.xml or classpath
+     * menu.xml, creating menu items using the Menu class and the JEE
+     * RoleAccessController.
      *
-     * @param menuClass the menu class to create new Menu instances from
-     * @param accessController the menu access controller
      * @param cached return the cached menu if in production or profile mode,
      * otherwise create and return a new root menu instance
      * @return the root menu item defined in the WEB-INF/menu.xml file or menu.xml
      * in the root classpath
      */
-    public Menu getRootMenu(Class<? extends Menu> menuClass,
-                            AccessController accessController,
-                            boolean cached) {
-
-        Validate.notNull(menuClass, "Null menuClass parameter");
-        Validate.notNull(accessController, "Null accessController parameter");
-
-        // If after cached menu and already loaded then get cached menu
-        if (cached && CACHED_ROOT_MENU != null) {
-            return CACHED_ROOT_MENU;
-        }
-
-        try {
-            Menu loadedMenu = loadFromMenuXml(menuClass, accessController);
-
-            ServletContext servletContext = Context.getThreadLocalContext().getServletContext();
-            ConfigService configService = ClickUtils.getConfigService(servletContext);
-
-            // Cache the menu if requested, and application in production or profile mode
-            if (cached && (configService.isProductionMode() || configService.isProfileMode())) {
-
-                CACHED_ROOT_MENU = loadedMenu;
-            }
-
-            return loadedMenu;
-
-        } catch (Exception e) {
-            String msg = "Error initializing rootMenu for class: " + menuClass;
-            throw new RuntimeException(msg, e);
-        }
+    public Menu getRootMenu(boolean cached) {
+        return getRootMenu(DEFAULT_ROOT_MENU_NAME, DEFAULT_CONFIG_FILE,
+            new RoleAccessController(), cached, null);
     }
 
-    // Protected Methods ------------------------------------------------------
+    /**
+     * Return root menu item defined by the given fileName under WEB-INF or the
+     * classpath, creating menu items using the Menu class and the JEE
+     * RoleAccessController.
+     *
+     * @param name the name of the root menu
+     * @param fileName the fileName defining the menu definitions
+     * @return the root menu item defined by the fileName under WEB-INF or the
+     * classpath
+     */
+    public Menu getRootMenu(String name, String fileName) {
+        return getRootMenu(name, fileName, new RoleAccessController(),
+            true, null);
+    }
 
     /**
-     * Return a copy of the Applications root Menu as defined in the
-     * configuration file "<tt>/WEB-INF/menu.xml</tt>", with the Control
-     * name <tt>"rootMenu"</tt>.
-     * <p/>
-     * The returned root menu is always selected.
+     * Return root menu item defined by the given fileName under WEB-INF or the
+     * classpath, creating menu items using the Menu class and the JEE
+     * RoleAccessController.
      *
-     * @param menuClass the menu class to instantiate
+     * @param name the name of the root menu
+     * @param fileName the fileName defining the menu definitions
      * @param accessController the menu access controller
-     * @return a copy of the application's root Menu
-     * @throws InstantiationException if the menu instance could not be created
-     * @throws IllegalAccessException if the menu instance could not be created
+     * @param cached return the cached menu if in production or profile mode,
+     * otherwise create and return a new root menu instance
+     * @param menuClass the menu class to create new Menu instances from
+     * @return the root menu item defined by the fileName under WEB-INF or the
+     * classpath
      */
-    protected Menu loadFromMenuXml(Class<? extends Menu> menuClass,
-            AccessController accessController)
-            throws InstantiationException, IllegalAccessException {
+    public Menu getRootMenu(String name, String fileName,
+        AccessController accessController, boolean cached,
+        Class<? extends Menu> menuClass) {
 
-        Validate.notNull(menuClass, "Null menuClass parameter");
+        Validate.notNull(name, "Null name parameter");
+        Validate.notNull(fileName, "Null fileName parameter");
         Validate.notNull(accessController, "Null accessController parameter");
 
-        Context context = Context.getThreadLocalContext();
+        if (cached) {
 
-        Menu rootMenu = menuClass.newInstance();
-        rootMenu.setName("rootMenu");
-        rootMenu.setAccessController(accessController);
-
-        ServletContext servletContext = context.getServletContext();
-        InputStream inputStream =
-            servletContext.getResourceAsStream(DEFAULT_CONFIG_FILE);
-
-        if (inputStream == null) {
-            inputStream = ClickUtils.getResourceAsStream("/menu.xml", Menu.class);
-            String msg =
-                "could not find configuration file:" + DEFAULT_CONFIG_FILE
-                + " or menu.xml on classpath";
-            throw new RuntimeException(msg);
+            Menu cachedMenu = retrieveRootMenu(name);
+            if (cachedMenu != null) {
+                return cachedMenu;
+            }
         }
 
-        Document document = ClickUtils.buildDocument(inputStream);
+        Menu rootMenu = loadFromMenuXml(name, fileName, accessController, menuClass);
 
-        Element rootElm = document.getDocumentElement();
+        ServletContext servletContext = Context.getThreadLocalContext().getServletContext();
+        ConfigService configService = ClickUtils.getConfigService(servletContext);
 
-        NodeList list = rootElm.getChildNodes();
-
-        for (int i = 0; i < list.getLength(); i++) {
-            Node node = list.item(i);
-            if (node instanceof Element) {
-                Menu childMenu = buildMenu((Element) node, menuClass, accessController);
-                rootMenu.getChildren().add(childMenu);
-            }
+        if (configService.isProductionMode() || configService.isProfileMode()) {
+            // Cache menu in production modes
+            cacheRootMenu(rootMenu);
         }
 
         return rootMenu;
     }
 
+    // Protected Methods ------------------------------------------------------
+
     /**
      * Build a new Menu from the given menu item XML Element and recurse through
-     * all the menu-items children.
+     * all the menu-items children. If the menuClass is specified, menus will
+     * be created of that type, otherwise an instance of {@link Menu} will be
+     * created.
      *
      * @param menuElement the menu item XML Element
-     * @param menuClass the menu class to instantiate
      * @param accessController the menu access controller
+     * @param menuClass the menu class to instantiate
      * @return new Menu instance for the given XML menuElement
-     * @throws InstantiationException if the menu instance could not be created
-     * @throws IllegalAccessException if the menu instance could not be created
      */
-    protected Menu buildMenu(Element menuElement, Class<? extends Menu> menuClass,
-            AccessController accessController)
-            throws InstantiationException, IllegalAccessException {
+    protected Menu buildMenu(Element menuElement, AccessController accessController,
+        Class<? extends Menu> menuClass) {
 
         Validate.notNull(menuElement, "Null menuElement parameter");
-        Validate.notNull(menuClass, "Null menuClass parameter");
         Validate.notNull(accessController, "Null accessController parameter");
 
-        Menu menu = menuClass.newInstance();
+        Menu menu = null;
+        if (menuClass == null) {
+            menu = new Menu();
+        } else {
+            menu = createMenu(menuClass);
+        }
+
+        menu.setAccessController(accessController);
 
         String nameAtr = menuElement.getAttribute("name");
         if (StringUtils.isNotBlank(nameAtr)) {
@@ -338,6 +334,17 @@ public class MenuFactory {
             menu.setSeparator(true);
         }
 
+        /*
+        String visibilityAtr = menuElement.getAttribute("visible");
+        if ("false".equalsIgnoreCase(visibilityAtr)) {
+            menu.setVisible(false);
+        }
+
+        String enablingAtr = menuElement.getAttribute("enabled");
+        if ("false".equalsIgnoreCase(enablingAtr)) {
+            menu.setEnabled(false);
+        }*/
+
         String pagesValue = menuElement.getAttribute("pages");
         if (StringUtils.isNotBlank(pagesValue)) {
             StringTokenizer tokenizer = new StringTokenizer(pagesValue, ",");
@@ -371,7 +378,124 @@ public class MenuFactory {
         for (int i = 0, size = childElements.getLength(); i < size; i++) {
             Node node = childElements.item(i);
             if (node instanceof Element) {
-                Menu childMenu = buildMenu((Element) node, menuClass, accessController);
+                Menu childMenu = buildMenu((Element) node, accessController, menuClass);
+                menu.add(childMenu);
+            }
+        }
+        return menu;
+    }
+
+    /**
+     * Create a new menu instance of the given menu class.
+     *
+     * @param menuClass the menu class to instantiate
+     * @return a new menu instance of the given menu class
+     */
+    protected Menu createMenu(Class<? extends Menu> menuClass) {
+        try {
+            return menuClass.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException("Error occurred create new menu of type "
+                + menuClass);
+        }
+    }
+
+    /**
+     * Return a copy of the Applications root Menu as defined by the
+     * configuration file.
+     * <p/>
+     * If the fileName starts with a '/' character it is assumed to be an
+     * absolute path and Click will attempt to load the file from the Servlet
+     * context path and if not found from the classpath.
+     * <p/>
+     * If the fileName does not start with a '/' character it is assumed to be
+     * a relative path and Click will load the file from the Servlet context
+     * by <tt>prefixing</tt> the fileName with '/WEB-INF'. If not found the
+     * file will be loaded from the classpath.
+     * <p/>
+     * The returned root menu is always selected.
+     *
+     * @param name the name of the root menu
+     * @param fileName the configuration fileName defining the menu definitions
+     * @param accessController the menu access controller
+     * @param menuClass the menu class to instantiate
+     * @return a copy of the application's root Menu
+     */
+    protected Menu loadFromMenuXml(String rootMenuName, String fileName,
+        AccessController accessController, Class<? extends Menu> menuClass) {
+
+        if (rootMenuName == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        if (fileName == null) {
+            throw new IllegalArgumentException("Null fileName parameter");
+        }
+
+        if (accessController == null) {
+            throw new IllegalArgumentException("Null accessController parameter");
+        }
+
+        String webinfFileName = null;
+        boolean absolute = fileName.startsWith("/");
+        if(!absolute) {
+            fileName = '/' + fileName;
+            webinfFileName = "/WEB-INF" + fileName;
+        }
+
+        Context context = Context.getThreadLocalContext();
+
+        Menu menu = null;
+        if (menuClass == null) {
+            menu = new Menu();
+        } else {
+            menu = createMenu(menuClass);
+        }
+
+        menu.setName(rootMenuName);
+        menu.setAccessController(accessController);
+
+        ServletContext servletContext = context.getServletContext();
+        InputStream inputStream = null;
+
+        if (absolute) {
+            inputStream =
+                servletContext.getResourceAsStream(fileName);
+        } else {
+            inputStream =
+                servletContext.getResourceAsStream(webinfFileName);
+        }
+
+        if (inputStream == null) {
+            if (absolute) {
+                inputStream = ClickUtils.getResourceAsStream(fileName, MenuFactory.class);
+                if (inputStream == null) {
+                    String msg =
+                        "could not find configuration file:" + fileName
+                        + " on classpath";
+                    throw new RuntimeException(msg);
+                }
+            } else {
+                inputStream = ClickUtils.getResourceAsStream(fileName, MenuFactory.class);
+                if (inputStream == null) {
+                    String msg =
+                        "could not find configuration file:" + webinfFileName
+                        + " or " + fileName + " on classpath";
+                    throw new RuntimeException(msg);
+                }
+            }
+        }
+
+        Document document = ClickUtils.buildDocument(inputStream);
+
+        Element rootElm = document.getDocumentElement();
+
+        NodeList list = rootElm.getChildNodes();
+
+        for (int i = 0; i < list.getLength(); i++) {
+            Node node = list.item(i);
+            if (node instanceof Element) {
+                Menu childMenu = buildMenu((Element) node, accessController, menuClass);
                 menu.add(childMenu);
             }
         }
@@ -379,4 +503,46 @@ public class MenuFactory {
         return menu;
     }
 
+    /**
+     * Return the map containing menus cached by name.
+     *
+     * @return the map containing menus cached by name
+     */
+    protected Map<String, Menu> getMenuCache() {
+        if (menuCache == null) {
+            menuCache = new ConcurrentHashMap<String, Menu>();
+        }
+        return menuCache;
+    }
+
+    /**
+     * Return the cached root menu from the
+     * {@link #getMenuCache() menu cache}.
+     *
+     * @param name the name of the root menu to retrieve
+     * @return the cache root menu from the menu cache
+     */
+    protected Menu retrieveRootMenu(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+        return getMenuCache().get(name);
+    }
+
+    /**
+     * Cache the given menu in the {@link #getMenuCache() menu cache}.
+     *
+     * @param menu the menu to store in the cache
+     */
+    protected void cacheRootMenu(Menu menu) {
+        if (menu == null) {
+            throw new IllegalArgumentException("Null menu parameter");
+        }
+
+        if (menu.getName() == null) {
+            throw new IllegalArgumentException("Menu name cannot be null");
+        }
+
+        getMenuCache().put(menu.getName(), menu);
+    }
 }
