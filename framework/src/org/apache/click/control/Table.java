@@ -263,7 +263,7 @@ import org.apache.commons.lang.math.NumberUtils;
  */
 public class Table extends AbstractControl {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
@@ -361,7 +361,7 @@ public class Table extends AbstractControl {
         Table.CLASS_SIMPLE
     };
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /**
      * The table pagination banner position:
@@ -470,7 +470,7 @@ public class Table extends AbstractControl {
     /** The table HTML &lt;td&gt; width attribute. */
     protected String width;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create an Table for the given name.
@@ -491,7 +491,7 @@ public class Table extends AbstractControl {
         super();
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Return the table's html tag: <tt>table</tt>.
@@ -500,6 +500,7 @@ public class Table extends AbstractControl {
      *
      * @return this controls html tag
      */
+    @Override
      public String getTag() {
         return "table";
      }
@@ -514,6 +515,7 @@ public class Table extends AbstractControl {
      * @throws IllegalArgumentException if the given parent instance is
      * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
      */
+    @Override
     public void setParent(Object parent) {
         if (parent == this) {
             throw new IllegalArgumentException("Cannot set parent to itself");
@@ -834,6 +836,7 @@ public class Table extends AbstractControl {
      *
      * @return the HTML head import statements for the control stylesheet
      */
+    @Override
     @SuppressWarnings("deprecation")
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(512);
@@ -882,6 +885,7 @@ public class Table extends AbstractControl {
      *
      * @return the list of HEAD elements for the Table
      */
+    @Override
     public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
@@ -896,6 +900,7 @@ public class Table extends AbstractControl {
      * @param name of the control
      * @throws IllegalArgumentException if the name is null
      */
+    @Override
     public void setName(String name) {
         super.setName(name);
         getControlLink().setName(getName() + "-controlLink");
@@ -1166,7 +1171,7 @@ public class Table extends AbstractControl {
         width = value;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * The total possible number of rows of the table. This value
@@ -1227,6 +1232,7 @@ public class Table extends AbstractControl {
      *
      * @see org.apache.click.Control#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
         getControlLink().onInit();
@@ -1241,6 +1247,7 @@ public class Table extends AbstractControl {
      *
      * @see org.apache.click.Control#onRender()
      */
+    @Override
     public void onRender() {
         getControlLink().onRender();
         for (int i = 0, size = getControls().size(); i < size; i++) {
@@ -1257,6 +1264,7 @@ public class Table extends AbstractControl {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
         ActionLink controlLink = getControlLink();
         controlLink.onProcess();
@@ -1305,6 +1313,7 @@ public class Table extends AbstractControl {
      *
      * @see org.apache.click.Control#onDestroy()
      */
+    @Override
     public void onDestroy() {
         sorted = false;
 
@@ -1327,6 +1336,7 @@ public class Table extends AbstractControl {
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
         int bufferSize = 0;
         if (getPageSize() > 0) {
@@ -1344,6 +1354,7 @@ public class Table extends AbstractControl {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         // Retrieve data to ensure rowCount has correct value
@@ -1409,7 +1420,7 @@ public class Table extends AbstractControl {
         }
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Create a new table row list. If a {@link #getDataProvider() dataProvider}
