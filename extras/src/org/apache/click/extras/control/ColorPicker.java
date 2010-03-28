@@ -20,12 +20,15 @@ package org.apache.click.extras.control;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.click.Context;
 import org.apache.click.control.Field;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -90,15 +93,9 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class ColorPicker extends Field {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
-
-    /** The ColorPicker imports statements. */
-    static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/colorpicker/colorpicker{1}.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/colorpicker/colorpicker{1}.js\"></script>\n";
 
     /** The color validation hexadecimal pattern. */
     static final Pattern HEX_PATTERN =
@@ -124,7 +121,7 @@ public class ColorPicker extends Field {
         + "   '}'\n"
         + "'}'\n";
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /**
      * The show text field option for entering a color hex value. The default
@@ -135,7 +132,7 @@ public class ColorPicker extends Field {
     /** The text field size attribute. The default size is 7. */
     protected int size = 7;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct a ColorPicker with the given name. The color picker will show
@@ -190,10 +187,10 @@ public class ColorPicker extends Field {
         super();
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
-     * Return the ColorPicker HTML head imports statements for the following
+     * Return the ColorPicker HTML HEAD elements for the following
      * resources:
      * <p/>
      * <ul>
@@ -202,12 +199,23 @@ public class ColorPicker extends Field {
      * <li><tt>click/colorpicker/colorpicker.js</tt></li>
      * </ul>
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the HTML head import statements for the control
+     * @return the HTML HEAD elements for the control
      */
-    public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+            headElements.add(new CssImport("/click/colorpicker/colorpicker.css", versionIndicator));
+            headElements.add(new JsImport("/click/prototype/prototype.js", versionIndicator));
+            headElements.add(new JsImport("/click/colorpicker/colorpicker.js", versionIndicator));
+        }
+        return headElements;
     }
 
     /**
@@ -258,6 +266,7 @@ public class ColorPicker extends Field {
      *
      * @return the field JavaScript client side validation function
      */
+    @Override
     public String getValidationJavaScript() {
         Object[] args = new Object[9];
         args[0] = getId();
@@ -267,13 +276,14 @@ public class ColorPicker extends Field {
         return MessageFormat.format(VALIDATE_COLORPICKER_FUNCTION, args);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * @see org.apache.click.control.AbstractControl#getControlSizeEst()
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
         return 96;
     }
@@ -285,6 +295,7 @@ public class ColorPicker extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         Context context = getContext();
         Map values = new HashMap();
@@ -342,6 +353,7 @@ public class ColorPicker extends Field {
      *
      * @return a HTML rendered ColorPicker string
      */
+    @Override
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
         render(buffer);
@@ -354,6 +366,7 @@ public class ColorPicker extends Field {
      *
      * @see org.apache.click.control.TextField#validate()
      */
+    @Override
     public void validate() {
         setError(null);
 
@@ -372,7 +385,7 @@ public class ColorPicker extends Field {
         }
     }
 
-    // -------------------------------------------------------- Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Render a Velocity template for the given data model.
@@ -384,7 +397,7 @@ public class ColorPicker extends Field {
         buffer.append(getContext().renderTemplate(ColorPicker.class, model));
     }
 
-    // -------------------------------------------------------- Private Methods
+    // Private Methods --------------------------------------------------------
 
     private boolean isColor(String value) {
         if (value == null) {
