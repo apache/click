@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.click.Context;
 
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
+import org.apache.click.element.CssImport;
 import org.apache.click.extras.control.TabbedForm;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -58,7 +60,7 @@ public class TabbedCayenneForm extends CayenneForm {
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /**
      * The form HTML background color. The default background color is
@@ -87,7 +89,7 @@ public class TabbedCayenneForm extends CayenneForm {
      */
     protected String template = "/org/apache/click/extras/control/TabbedForm.htm";
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a Tabbed Cayenne Form with the given form name and
@@ -124,7 +126,7 @@ public class TabbedCayenneForm extends CayenneForm {
         setButtonStyle("");
     }
 
-    // ------------------------------------------------------------ Properities
+    // Properities ------------------------------------------------------------
 
     /**
      * Add the given FieldSet tab sheet to the form.
@@ -168,25 +170,30 @@ public class TabbedCayenneForm extends CayenneForm {
     }
 
     /**
-     * Return the TabbedCayenneForm HTML head imports statements for the
-     * following resources:
-     * <p/>
+     * Return the TabbedCayenneForm HTML HEAD elements for the following resource:
+     *
      * <ul>
      * <li><tt>click/extras-control.css</tt></li>
      * </ul>
-     * <p/>
-     * Additionally all the {@link org.apache.click.control.Form#getHtmlImports()
+     *
+     * Additionally all the {@link org.apache.click.control.Form#getHeadElements()
      * Form import statements} are also returned.
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the HTML head import statements for the control
+     * @return the control list of HEAD elements to be included in the page
      */
-     public String getHtmlImports() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
-        buffer.append(super.getHtmlImports());
-        buffer.append(ClickUtils.createHtmlImport(TabbedForm.HTML_IMPORTS, getContext()));
-        return buffer.toString();
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+            headElements.add(new CssImport("/click/extras-control.css", versionIndicator));
+        }
+        return headElements;
     }
 
     /**
@@ -278,7 +285,7 @@ public class TabbedCayenneForm extends CayenneForm {
         this.template = template;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Process the Form request. In addition to the normal Form
@@ -287,6 +294,7 @@ public class TabbedCayenneForm extends CayenneForm {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
         boolean result = super.onProcess();
 
@@ -317,6 +325,7 @@ public class TabbedCayenneForm extends CayenneForm {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         applyMetaData();
 
