@@ -26,8 +26,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import org.apache.click.Context;
 
 import org.apache.click.Control;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.CssStyle;
 import org.apache.click.element.Element;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.DataProvider;
@@ -275,20 +278,6 @@ public class Table extends AbstractControl {
         DARK_STYLES.add("nocol");
         DARK_STYLES.add("report");
     }
-
-    /**
-     * The table.css style sheet import link with a light contract sortable icon.
-     */
-    public static final String TABLE_IMPORTS_LIGHT =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table{1}.css\"/>\n"
-        + "<style type=\"text/css\"> th.sortable a '{'background: url({0}/click/column-sortable-light{1}.gif) center right no-repeat;'}' th.ascending a '{'background: url({0}/click/column-ascending-light{1}.gif) center right no-repeat;'}' th.descending a '{'background: url({0}/click/column-descending-light{1}.gif) center right no-repeat;'}' </style>\n";
-
-    /**
-     * The table.css style sheet import link with a dark contract sortable icon.
-     */
-    public static final String TABLE_IMPORTS_DARK =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table{1}.css\"/>\n"
-        + "<style type=\"text/css\"> th.sortable a '{'background: url({0}/click/column-sortable-dark{1}.gif) center right no-repeat;'}' th.ascending a '{'background: url({0}/click/column-ascending-dark{1}.gif) center right no-repeat;'}' th.descending a '{'background: url({0}/click/column-descending-dark{1}.gif) center right no-repeat;'}' </style>\n";
 
     /** The attached style pagination banner position. */
     public static final int PAGINATOR_ATTACHED = 1;
@@ -818,70 +807,22 @@ public class Table extends AbstractControl {
      * <pre class="codeHtml">
      * hover:hover { color: navy } </pre>
      *
-     * @param hoverRows specify whether class 'hover' rows attribute is rendered (default false).
+     * @param hoverRows specify whether class 'hover' rows attribute is rendered
+     * (default false).
      */
     public void setHoverRows(boolean hoverRows) {
         this.hoverRows = hoverRows;
     }
 
     /**
-     * Return the Table HTML head import statements for the following resources:
-     * <p/>
+     * Return the Table HTML HEAD elements for the following resource:
+     *
      * <ul>
      * <li><tt>click/table.css</tt></li>
      * </ul>
-     * <p/>
-     * Additionally all {@link #getControls() controls} import statements are
-     * also returned.
      *
-     * @return the HTML head import statements for the control stylesheet
-     */
-    @Override
-    @SuppressWarnings("deprecation")
-    public String getHtmlImports() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
-
-        // Flag indicating which import style to return
-        boolean useDarkStyle = false;
-        if (hasAttribute("class")) {
-
-            String styleClasses = getAttribute("class");
-
-            StringTokenizer tokens = new StringTokenizer(styleClasses, " ");
-            while (tokens.hasMoreTokens()) {
-                String token = tokens.nextToken();
-                if (DARK_STYLES.contains(token)) {
-                    useDarkStyle = true;
-                    break;
-                }
-            }
-        }
-
-        if (useDarkStyle) {
-            buffer.append(ClickUtils.createHtmlImport(TABLE_IMPORTS_DARK, getContext()));
-
-        } else {
-            buffer.append(ClickUtils.createHtmlImport(TABLE_IMPORTS_LIGHT, getContext()));
-        }
-
-        if (hasControls()) {
-            for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
-                String htmlImports = control.getHtmlImports();
-                if (htmlImports != null) {
-                    buffer.append(htmlImports);
-                }
-            }
-        }
-
-        return buffer.toString();
-    }
-
-    /**
-     * Return the HEAD elements for the Table. The HEAD elements of the
-     * {@link #getControlLink()} will also be included.
-     *
-     * @see org.apache.click.Control#getHtmlImports()
+     * Additionally, the HEAD elements of the {@link #getControlLink()} will
+     * also be returned.
      *
      * @return the list of HEAD elements for the Table
      */
@@ -889,6 +830,60 @@ public class Table extends AbstractControl {
     public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
+
+            boolean isDarkStyle = isDarkStyle();
+
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+            headElements.add(new CssImport("/click/table.css", versionIndicator));
+
+            String tableId = getId();
+            CssStyle cssStyle = new CssStyle();
+            cssStyle.setId(tableId + "_css_setup");
+
+            if (!headElements.contains(cssStyle)) {
+                String contextPath = context.getRequest().getContextPath();
+                HtmlStringBuffer buffer = new HtmlStringBuffer(100);
+                buffer.append("th.sortable a {\n");
+                buffer.append("background: url(");
+                buffer.append(contextPath);
+                buffer.append("/click/column-sortable-");
+                if (isDarkStyle) {
+                    buffer.append("dark");
+                } else {
+                    buffer.append("light");
+                }
+                buffer.append(versionIndicator);
+                buffer.append(".gif)");
+                buffer.append(" center right no-repeat;}\n");
+                buffer.append("th.ascending a {\n");
+                buffer.append("background: url(");
+                buffer.append(contextPath);
+                buffer.append("/click/column-ascending-");
+                if (isDarkStyle) {
+                    buffer.append("dark");
+                } else {
+                    buffer.append("light");
+                }
+                buffer.append(versionIndicator);
+                buffer.append(".gif)");
+                buffer.append(" center right no-repeat;}\n");
+                buffer.append("th.descending a {\n");
+                buffer.append("background: url(");
+                buffer.append(contextPath);
+                buffer.append("/click/column-descending-");
+                if (isDarkStyle) {
+                    buffer.append("dark");
+                } else {
+                    buffer.append("light");
+                }
+                buffer.append(versionIndicator);
+                buffer.append(".gif)");
+                buffer.append(" center right no-repeat;}");
+                cssStyle.setContent(buffer.toString());
+                headElements.add(cssStyle);
+            }
+
             headElements.addAll(getControlLink().getHeadElements());
         }
         return headElements;
@@ -1916,4 +1911,30 @@ public class Table extends AbstractControl {
         }
     }
 
+    // Private Methods --------------------------------------------------------
+
+    /**
+     * Return true if a dark table style is selected, false otherwise.
+     *
+     * @return true if a dark table style is selectd, false otherwise
+     */
+    private boolean isDarkStyle() {
+
+        // Flag indicating which import style to return
+        boolean isDarkStyle = false;
+        if (hasAttribute("class")) {
+
+            String styleClasses = getAttribute("class");
+
+            StringTokenizer tokens = new StringTokenizer(styleClasses, " ");
+            while (tokens.hasMoreTokens()) {
+                String token = tokens.nextToken();
+                if (DARK_STYLES.contains(token)) {
+                    isDarkStyle = true;
+                    break;
+                }
+            }
+        }
+        return isDarkStyle;
+    }
 }
