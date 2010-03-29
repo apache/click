@@ -19,8 +19,11 @@
 package org.apache.click.extras.control;
 
 import java.text.MessageFormat;
+import java.util.List;
+import org.apache.click.Context;
 
 import org.apache.click.control.TextField;
+import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 
 /**
@@ -59,7 +62,7 @@ public class EmailField extends TextField {
 
     private static final long serialVersionUID = 1L;
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     /**
      * The field validation JavaScript function template.
@@ -85,11 +88,7 @@ public class EmailField extends TextField {
         + "   '}'\n"
         + "'}'\n";
 
-    /** The EmailField.js imports statement. */
-    public static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n";
-
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct an Email Field with the given name. The default email field
@@ -175,7 +174,7 @@ public class EmailField extends TextField {
         setSize(30);
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Return the EmailField HTML head imports statements for the following
@@ -189,8 +188,17 @@ public class EmailField extends TextField {
      *
      * @return the HTML head import statements for the control
      */
-    public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+            headElements.add(new JsImport("/click/extras-control.js", versionIndicator));
+        }
+        return headElements;
     }
 
     /**
@@ -202,6 +210,7 @@ public class EmailField extends TextField {
      *
      * @return the field JavaScript client side validation function
      */
+    @Override
     public String getValidationJavaScript() {
         Object[] args = new Object[8];
         args[0] = getId();
@@ -218,7 +227,7 @@ public class EmailField extends TextField {
         return MessageFormat.format(VALIDATE_EMAILFIELD_FUNCTION, args);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Process the EmailField request submission.
@@ -242,6 +251,7 @@ public class EmailField extends TextField {
      * </ul>
      * </blockquote>
      */
+    @Override
     public void validate() {
         setError(null);
 
