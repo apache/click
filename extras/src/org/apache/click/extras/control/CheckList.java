@@ -30,11 +30,14 @@ import java.util.Map;
 import org.apache.click.Context;
 import org.apache.click.control.Field;
 import org.apache.click.control.Option;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PropertyUtils;
-
 import org.apache.commons.lang.StringEscapeUtils;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -115,23 +118,9 @@ import org.apache.commons.lang.StringUtils;
  */
 public class CheckList extends Field {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
-
-    /** The CheckList import statements. */
-    public static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/checklist/checklist{1}.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/checklist/checklist{1}.js\"></script>\n";
-
-    /** The JavaScript sorting HTML import statements. */
-    public static final String JS_SORT_HTML_IMPORTS =
-          "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/builder{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/effects{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/dragdrop{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/controls{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/slider{1}.js\"></script>\n";
 
     /** The style class which is always set on this element (checkList). */
     protected static final String STYLE_CLASS = "checkList";
@@ -156,7 +145,7 @@ public class CheckList extends Field {
         + "   '}'\n"
         + "'}'\n";
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The height if null not scrollable. */
     protected String height;
@@ -176,7 +165,7 @@ public class CheckList extends Field {
     /** The selected values. */
     protected List selectedValues;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a CheckList field with the given name.
@@ -228,13 +217,14 @@ public class CheckList extends Field {
     public CheckList() {
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * @see org.apache.click.control.AbstractControl#getTag()
      *
      * @return this controls html tag
      */
+    @Override
     public String getTag() {
         return "div";
     }
@@ -320,9 +310,8 @@ public class CheckList extends Field {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        for (int i = 0; i < options.length; i++) {
-            String value = options[i];
-            getOptionList().add(new Option(value, value));
+        for (String option : options) {
+            getOptionList().add(new Option(option, option));
         }
     }
 
@@ -423,6 +412,7 @@ public class CheckList extends Field {
      *
      * @return the Field focus JavaScript
      */
+    @Override
     public String getFocusJavaScript() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
@@ -497,46 +487,72 @@ public class CheckList extends Field {
      *
      * @return the HTML head import statements for the control
      */
-    public String getHtmlImports() {
-        Context context = getContext();
-        HtmlStringBuffer buffer = new HtmlStringBuffer(400);
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
 
-        buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, context));
+            headElements = super.getHeadElements();
 
-        if (isSortable()) {
-            buffer.append(ClickUtils.createHtmlImport(JS_SORT_HTML_IMPORTS,
-                context));
+            headElements.add(new CssImport("/click/checklist/checklist.css",
+                versionIndicator));
+            headElements.add(new JsImport("/click/checklist/checklist.js",
+                versionIndicator));
 
-            // Script to execute
-            HtmlStringBuffer script = new HtmlStringBuffer(50);
-            script.append("Sortable.create('");
-            script.append(StringEscapeUtils.escapeJavaScript(getId()));
-            script.append("_ul'");
-
-            if (getHeight() != null) {
-                script.append(", { scroll : '");
-                script.append(StringEscapeUtils.escapeJavaScript(getId()));
-                script.append("'}");
+            if (isSortable()) {
+                headElements.add(new JsImport("/click/prototype/prototype.js",
+                    versionIndicator));
+                headElements.add(new JsImport("/click/prototype/builder.js",
+                    versionIndicator));
+                headElements.add(new JsImport("/click/prototype/effects.js",
+                    versionIndicator));
+                headElements.add(new JsImport("/click/prototype/dragdrop.js",
+                    versionIndicator));
+                headElements.add(new JsImport("/click/prototype/controls.js",
+                    versionIndicator));
+                headElements.add(new JsImport("/click/prototype/slider.js",
+                    versionIndicator));
             }
-            script.append(");");
-
-            buffer.append("<script type=\"text/javascript\">");
-            if (getHeight() != null) {
-                buffer.append("Position.includeScrollOffset = true;");
-            }
-
-            buffer.append("addLoadEvent(function() { ");
-            buffer.append(script);
-            buffer.append(" });</script>\n");
-
-        } else {
-            buffer.append("<script type=\"text/javascript\">");
-            buffer.append("addLoadEvent(function() { initChecklist('");
-            buffer.append(StringEscapeUtils.escapeJavaScript(getId()));
-            buffer.append("_ul'); });</script>\n");
         }
 
-        return buffer.toString();
+        // Note, the addLoadEvent script is recreated and checked if it
+        // is contained in the headElement.
+        String checkListId = getId();
+        JsScript script = new JsScript();
+        script.setId(checkListId + "_js_setup");
+
+        if (!headElements.contains(script)) {
+            script.setExecuteOnDomReady(true);
+
+            HtmlStringBuffer buffer = new HtmlStringBuffer(50);
+
+            if (isSortable()) {
+                if (getHeight() != null) {
+                    buffer.append("Position.includeScrollOffset = true;\n");
+                }
+                // Script to execute
+                buffer.append("Sortable.create('");
+                buffer.append(StringEscapeUtils.escapeJavaScript(checkListId));
+                buffer.append("_ul'");
+
+                if (getHeight() != null) {
+                    buffer.append(", { scroll : '");
+                    buffer.append(StringEscapeUtils.escapeJavaScript(checkListId));
+                    buffer.append("'}");
+                }
+                buffer.append(");");
+
+            } else {
+                buffer.append("initChecklist('");
+                buffer.append(StringEscapeUtils.escapeJavaScript(checkListId));
+                buffer.append("_ul');\n");
+            }
+            script.setContent(buffer.toString());
+            headElements.add(script);
+        }
+
+        return headElements;
     }
 
     /**
@@ -671,6 +687,7 @@ public class CheckList extends Field {
      *
      * @return selected values as a List of Strings
      */
+    @Override
     public Object getValueObject() {
         return getSelectedValues();
     }
@@ -687,6 +704,7 @@ public class CheckList extends Field {
      *
      * @param object a List of Strings
      */
+    @Override
     public void setValueObject(Object object) {
         if (object instanceof List) {
             setSelectedValues((List) object);
@@ -698,6 +716,7 @@ public class CheckList extends Field {
      *
      * @return the field JavaScript client side validation function
      */
+    @Override
     public String getValidationJavaScript() {
         Object[] args = new Object[4];
         args[0] = getId();
@@ -708,12 +727,13 @@ public class CheckList extends Field {
         return MessageFormat.format(VALIDATE_CHECKLIST_FUNCTION, args);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Bind the request submission, setting the {@link #selectedValues} and
      * sort order if the checkList is sortable.
      */
+    @Override
     public void bindRequestValue() {
 
         Context context = getContext();
@@ -785,6 +805,7 @@ public class CheckList extends Field {
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
         int bufferSize = 50;
         if (!getOptionList().isEmpty()) {
@@ -800,6 +821,7 @@ public class CheckList extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         final boolean sortable = isSortable();
 
@@ -923,6 +945,7 @@ public class CheckList extends Field {
      * </ul>
      * </blockquote>
      */
+    @Override
     public void validate() {
         if (isRequired()) {
             if (getSelectedValues().isEmpty()) {

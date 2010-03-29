@@ -21,10 +21,12 @@ package org.apache.click.extras.control;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.click.Context;
 
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
 import org.apache.click.control.TextField;
+import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -123,7 +125,7 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class CreditCardField extends TextField {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
@@ -156,7 +158,7 @@ public class CreditCardField extends TextField {
         CARD_OPTIONS.add(new Option(DISCOVER, "Discover"));
     }
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     /**
      * The field validation JavaScript function template.
@@ -183,11 +185,7 @@ public class CreditCardField extends TextField {
         + "   '}'\n"
         + "'}'\n";
 
-    /** The CreditCardField imports statement. */
-    public static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n";
-
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /**
      * The type of credit card: <tt>["VISA" | "MASTER" | "AMEX" | "DINERS" |
@@ -198,7 +196,7 @@ public class CreditCardField extends TextField {
     /** The card type Select. */
     protected Select cardTypeSelect = new Select(SELECT_NAME);
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct the credit card field with the given name.
@@ -265,7 +263,7 @@ public class CreditCardField extends TextField {
         cardTypeSelect.addAll(CARD_OPTIONS);
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Return the selected Credit Card type: &nbsp;
@@ -303,16 +301,26 @@ public class CreditCardField extends TextField {
      *
      * @return the HTML head import statements for the control
      */
-    public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+            headElements.add(new JsImport("/click/extras-control.js", versionIndicator));
+        }
+        return headElements;
     }
 
-    // -------------------------------------------------------- Public Methods
+    // Public Methods --------------------------------------------------------
 
     /**
      * Bind the request submission, setting the value property and
      * {@link #cardType} property if defined in the request.
      */
+    @Override
     public void bindRequestValue() {
         super.bindRequestValue();
 
@@ -324,6 +332,7 @@ public class CreditCardField extends TextField {
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
         return 400;
     }
@@ -335,6 +344,7 @@ public class CreditCardField extends TextField {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         // Render card number field
         super.render(buffer);
@@ -354,6 +364,7 @@ public class CreditCardField extends TextField {
      *
      * @return the field JavaScript client side validation function
      */
+    @Override
     public String getValidationJavaScript() {
         Object[] args = new Object[9];
         args[0] = getId();
@@ -381,7 +392,7 @@ public class CreditCardField extends TextField {
      * <ul>
      *   <li>/click-control.properties
      *     <ul>
-     *       <li>field-maxlenght-error</li>
+     *       <li>field-maxlength-error</li>
      *       <li>field-minlength-error</li>
      *       <li>field-required-error</li>
      *     </ul>
@@ -394,6 +405,7 @@ public class CreditCardField extends TextField {
      * </ul>
      * </blockquote>
      */
+    @Override
     public void validate() {
         super.validate();
 
