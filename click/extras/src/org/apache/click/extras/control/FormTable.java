@@ -200,7 +200,7 @@ public class FormTable extends Table {
     /** The render the posted form values flag, default value is true. */
     protected boolean renderSubmittedValues = true;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create an FormTable for the given name and Form.
@@ -250,7 +250,7 @@ public class FormTable extends Table {
         init();
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Return the form buttons HTML string representation.
@@ -276,6 +276,7 @@ public class FormTable extends Table {
      * @throws IllegalArgumentException if the table already contains a column
      * with the same name
      */
+    @Override
     public Column addColumn(Column column) {
         super.addColumn(column);
 
@@ -315,6 +316,7 @@ public class FormTable extends Table {
      *
      * @return the HTML head element import string
      */
+    @Override
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(255);
 
@@ -356,6 +358,7 @@ public class FormTable extends Table {
      *
      * @return the list of HEAD elements
      */
+    @Override
     public List getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
@@ -387,6 +390,7 @@ public class FormTable extends Table {
      * @param name of the control
      * @throws IllegalArgumentException if the name is null
      */
+    @Override
     public void setName(String name) {
         super.setName(name);
 
@@ -406,6 +410,7 @@ public class FormTable extends Table {
      * @throws IllegalArgumentException if the given parent instance is
      * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
      */
+    @Override
     public void setParent(Object parent) {
         super.setParent(parent);
 
@@ -448,6 +453,7 @@ public class FormTable extends Table {
      *
      * @param rowList the list of table rows to set
      */
+    @Override
     public void setRowList(List rowList) {
         super.setRowList(rowList);
     }
@@ -457,6 +463,7 @@ public class FormTable extends Table {
      *
      * @param columnName the name of the sorted column
      */
+    @Override
     public void setSortedColumn(String columnName) {
         Field field = (Field) getForm().getFields().get(COLUMN);
         if (field != null) {
@@ -471,6 +478,7 @@ public class FormTable extends Table {
      *
      * @param ascending the ascending sort order status
      */
+    @Override
     public void setSortedAscending(boolean ascending) {
         Field field = (Field) getForm().getFields().get(ASCENDING);
         if (field != null) {
@@ -485,6 +493,7 @@ public class FormTable extends Table {
      *
      * @param pageNumber set the currently displayed page number
      */
+    @Override
     public void setPageNumber(int pageNumber) {
         Field field = (Field) getForm().getFields().get(PAGE);
         if (field != null) {
@@ -493,7 +502,7 @@ public class FormTable extends Table {
         super.setPageNumber(pageNumber);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Process the FormTable control. This method will process the submitted
@@ -504,6 +513,7 @@ public class FormTable extends Table {
      *
      * @return true if further processing should continue or false otherwise
      */
+    @Override
     public boolean onProcess() {
         ActionLink controlLink = getControlLink();
 
@@ -621,6 +631,7 @@ public class FormTable extends Table {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         if (useInternalForm) {
             buffer.append(getForm().startTag());
@@ -637,7 +648,7 @@ public class FormTable extends Table {
         }
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Render the Form Buttons to the string buffer.
@@ -679,7 +690,7 @@ public class FormTable extends Table {
         }
     }
 
-    // -------------------------------------------------------- Private Methods
+    // Private Methods --------------------------------------------------------
 
     /**
      * Initialize the FormTable.
