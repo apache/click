@@ -17,14 +17,14 @@
 
 /*
  * This script provides expand/collapse functionality to the Click Tree control.
- * When user click on a expand or collapse icon, the stylesheet class of the 
+ * When user click on a expand or collapse icon, the stylesheet class of the
  * element must be dynamically swapped. So if a expand icon is clicked, the
  * class 'expanded' must be swapped with 'collapsed' so that the new icon
  * can be displayed.
- * 
- * Also when the expand/collapse icon is clicked, the tree should be hidden 
+ *
+ * Also when the expand/collapse icon is clicked, the tree should be hidden
  * or made visible, by swapping the class of the <ul> element from 'show'
- * to 'hide' and vice versa. 
+ * to 'hide' and vice versa.
  *
  * This script must also handle the fact that some nodes are leaf nodes and
  * should be ignored.
@@ -43,7 +43,7 @@ var leafString = "leaf";
 var lastNodeString = "LastNode";
 
 /*
- * Adds the class to the specified objects class list, if the class is not 
+ * Adds the class to the specified objects class list, if the class is not
  * already present in the class list of the object.
  */
 function addClass(object,clazz){
@@ -95,11 +95,7 @@ function stopPropagation(event) {
 function isClassExpanded(object) {
 
     currentClassName = object.className;
-    isLastNode = currentClassName.indexOf(lastNodeString) > 0 ? true : false;
-    if(isLastNode) {
-        currentClassName = removeString(currentClassName, lastNodeString);
-    }
-    if(currentClassName == expansionArray[1]) {
+    if (currentClassName.indexOf(expansionArray[1]) >= 0) {
         return false;
     }
     return true;
@@ -117,16 +113,23 @@ function handleNodeExpansion(objectArg, event, expandId, iconId) {
     if(isLeaf(span)) {
         return;
     }
-    
-    var index = isClassExpanded(span) == false ? 1 : 0;
 
-    newClassName = expansionArray[1 - index];
+    var index = isClassExpanded(span) ? 0 : 1;
+
+    var newClassName = expansionArray[1 - index];
+    var oldClassName = expansionArray[index];
 
     handleIcons(iconId, newClassName);
+
+    var currentClassName = span.className;
+    var isLastNode = currentClassName.indexOf(lastNodeString) > 0 ? true : false;
     if(isLastNode) {
         newClassName = newClassName + lastNodeString;
+        oldClassName = oldClassName + lastNodeString;
     }
-    span.className = newClassName;
+
+    removeClass(span, oldClassName);
+    addClass(span, newClassName);
     handleChildMenuIfExists(span, index);
 }
 
@@ -139,7 +142,7 @@ function handleChildMenuIfExists(objectArg, newIndex) {
         return;
     }
     var childMenu = menuList[0];
-    
+
     if(classExists(childMenu, visibilityArray[newIndex])) {
         removeClass(childMenu, visibilityArray[newIndex]);
     }
@@ -160,7 +163,7 @@ function handleIcons(iconId, newClassName) {
     }
     var currentClassName = span.className;
     removeClass(span, currentClassName);
-    addClass(span, newClassName + "Icon");    
+    addClass(span, newClassName + "Icon");
 }
 
 /*
