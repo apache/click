@@ -18,8 +18,14 @@
  */
 package org.apache.click.extras.control;
 
+import java.util.List;
+import org.apache.click.Context;
 import org.apache.click.control.TextField;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 import org.apache.click.util.ClickUtils;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * Provides a graphical Virtual Keyboard interface text field control: &nbsp; &lt;input type='text'&gt;.
@@ -71,12 +77,6 @@ public class VirtualKeyboard extends TextField {
 
     private static final long serialVersionUID = 1L;
 
-     /** The VirtualKeyboard imports statement. */
-    public static final String HTML_IMPORTS =
-          "<script type=\"text/javascript\">var keyboard_png_path=\"{0}/click/keyboard{1}.png\";</script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/keyboard{1}.js\" charset=\"UTF-8\"></script>\n"
-        + "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/keyboard{1}.css\"/>\n";
-
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -113,7 +113,7 @@ public class VirtualKeyboard extends TextField {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Return the VirtualKeyboard HTML head imports statements for the following
+     * Return the VirtualKeyboard HTML HEAD elements for the following
      * resources:
      * <p/>
      * <ul>
@@ -122,11 +122,38 @@ public class VirtualKeyboard extends TextField {
      * <li><tt>click/keyboard.png</tt></li>
      * </ul>
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the HTML head import statements for the control
+     * @return the HTML HEAD elements for the control
      */
-    public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+    @Override
+    public List getHeadElements() {
+        Context context = getContext();
+        String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            JsImport jsImport = new JsImport("/click/keyboard.js", versionIndicator);
+            jsImport.setAttribute("charset", "UTF-8");
+            headElements.add(jsImport);
+            headElements.add(new CssImport("/click/keyboard.css", versionIndicator));
+        }
+
+        String fieldId = getId();
+        JsScript script = new JsScript();
+        script.setId(fieldId + "_js_setup");
+
+        if (!headElements.contains(script)) {
+            HtmlStringBuffer buffer = new HtmlStringBuffer(150);
+            buffer.append("var keyboard_png_path=\"");
+            buffer.append(context.getRequest().getContextPath());
+            buffer.append("/click/keyboard");
+            buffer.append(versionIndicator);
+            buffer.append(".png\"");
+            script.setContent(buffer.toString());
+            headElements.add(script);
+        }
+        return headElements;
     }
 }

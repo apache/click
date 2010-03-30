@@ -39,6 +39,8 @@ import org.apache.click.ActionEventDispatcher;
 import org.apache.click.control.AbstractControl;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Decorator;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.JsImport;
 import org.apache.click.extras.control.SubmitLink;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -164,25 +166,13 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Tree extends AbstractControl {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     /** The tree's expand/collapse parameter name: <tt>"expandTreeNode"</tt>. */
     public static final String EXPAND_TREE_NODE_PARAM = "expandTreeNode";
 
     /** The tree's select/deselect parameter name: <tt>"selectTreeNode"</tt>. */
     public static final String SELECT_TREE_NODE_PARAM = "selectTreeNode";
-
-    /** The Tree imports statement. */
-    public static final String TREE_IMPORTS =
-            "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/tree/tree{1}.css\"/>\n";
-
-    /** Client side javascript imports statement. */
-    public static final String JAVASCRIPT_IMPORTS =
-            "<script type=\"text/javascript\" src=\"{0}/click/tree/tree{1}.js\"></script>\n";
-
-    /** Client side javascript cookie imports statement. */
-    public static final String JAVASCRIPT_COOKIE_IMPORTS =
-            "<script type=\"text/javascript\" src=\"{0}/click/tree/cookie-helper{1}.js\"></script>\n";
 
     /** Indicator for using cookies to implement client side behavior. */
     public final static int JAVASCRIPT_COOKIE_POLICY = 1;
@@ -202,7 +192,7 @@ public class Tree extends AbstractControl {
     /** default serial version id. */
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The tree's hierarchical data model. */
     protected TreeNode rootNode;
@@ -240,7 +230,7 @@ public class Tree extends AbstractControl {
     /** Flag indicates if listeners should be notified of any state changes. */
     private boolean notifyListeners = true;
 
-    // ---------------------------------------------------- Public Constructors
+    // Public Constructors ----------------------------------------------------
 
     /**
      * Create an Tree control for the given name.
@@ -277,7 +267,7 @@ public class Tree extends AbstractControl {
         setAttribute("class", "treestyle");
     }
 
-    // --------------------------------------------- Public Getters and Setters
+    // Public Properties ------------------------------------------------------
 
     /**
      * @see Control#setName(String)
@@ -285,6 +275,7 @@ public class Tree extends AbstractControl {
      * @param name of the control
      * @throws IllegalArgumentException if the name is null
      */
+    @Override
     public void setName(String name) {
         super.setName(name);
         getExpandLink().setName(name + "-expandLink");
@@ -495,8 +486,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Return the Tree HTML head imports statements for the following
-     * resources:
+     * Return the Tree HTML HEAD elements for the following resources:
      * <p/>
      * <ul>
      * <li><tt>click/tree/tree.css</tt></li>
@@ -504,36 +494,34 @@ public class Tree extends AbstractControl {
      * <li><tt>click/tree/cookie-helper.js</tt></li>
      * </ul>
      *
-     * @see org.apache.click.Control#getHtmlImports()
-     *
-     * @return the HTML head import statements for the control
-     */
-    public String getHtmlImports() {
-        Context context = getContext();
-        HtmlStringBuffer buffer = new HtmlStringBuffer(256);
-        if (isJavascriptEnabled()) {
-            buffer.append(ClickUtils.createHtmlImport(JAVASCRIPT_IMPORTS,
-                context));
-            if (javascriptPolicy == JAVASCRIPT_COOKIE_POLICY) {
-                buffer.append(ClickUtils.createHtmlImport(JAVASCRIPT_COOKIE_IMPORTS,
-                    context));
-            }
-        }
-        buffer.append(ClickUtils.createHtmlImport(TREE_IMPORTS, context));
-        return buffer.toString();
-    }
-
-   /**
      * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the list of HEAD elements to be included in the page
+     * @return the HTML HEAD elements for the control
      */
+    @Override
     public List getHeadElements() {
+
         if (headElements == null) {
             headElements = super.getHeadElements();
+
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+            headElements.add(new CssImport("/click/tree/tree.css", versionIndicator));
+
+            if (isJavascriptEnabled()) {
+                headElements.add(new JsImport("/click/tree/tree.js", versionIndicator));
+
+                if (javascriptPolicy == JAVASCRIPT_COOKIE_POLICY) {
+                    headElements.add(new JsImport("/click/tree/cookie-helper.js",
+                        versionIndicator));
+                }
+            }
+
             headElements.addAll(getExpandLink().getHeadElements());
             headElements.addAll(getSelectLink().getHeadElements());
         }
+
         return headElements;
     }
 
@@ -569,7 +557,7 @@ public class Tree extends AbstractControl {
         return selectLink;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * This method binds the users request of expanded and collapsed nodes to
@@ -901,6 +889,7 @@ public class Tree extends AbstractControl {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
         getExpandLink().onProcess();
         getSelectLink().onProcess();
@@ -918,6 +907,7 @@ public class Tree extends AbstractControl {
      * This method cleans up the {@link #expandLink} and {@link #selectLink}.
      * @see org.apache.click.Control#onDestroy()
      */
+    @Override
     public void onDestroy() {
         super.onDestroy();
         getExpandLink().onDestroy();
@@ -933,6 +923,7 @@ public class Tree extends AbstractControl {
      * @param listener the listener object with the named method to invoke
      * @param method the name of the method to invoke
      */
+    @Override
     public void setListener(Object listener, String method) {
         super.setListener(listener, method);
     }
@@ -945,6 +936,7 @@ public class Tree extends AbstractControl {
      *
      * @param listener the control's action listener
      */
+    @Override
     public void setActionListener(ActionListener listener) {
         super.setActionListener(listener);
     }
@@ -967,13 +959,14 @@ public class Tree extends AbstractControl {
         listeners.remove(listener);
     }
 
-    // ------------------------------------------------------ Default Rendering
+    // Default Rendering ------------------------------------------------------
 
     /**
      * @see AbstractControl#getControlSizeEst()
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
         return 256;
     }
@@ -999,6 +992,7 @@ public class Tree extends AbstractControl {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart("div");
         buffer.appendAttribute("id", getId());
@@ -1038,6 +1032,7 @@ public class Tree extends AbstractControl {
      * @see java.lang.Object#toString()
      * @return a HTML rendered Tree string
      */
+    @Override
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
         render(buffer);
@@ -1334,7 +1329,7 @@ public class Tree extends AbstractControl {
         return (treeNode.isExpanded() && treeNode.hasChildren());
     }
 
-    // -------------------------------------------- Protected observer behavior
+    // Protected observer behavior --------------------------------------------
 
     /**
      * Notifies all listeners currently registered with the tree, about any
@@ -1392,7 +1387,7 @@ public class Tree extends AbstractControl {
         }
     }
 
-    // ----------------------------------------------------- Protected behavior
+    // Protected behavior -----------------------------------------------------
 
     /**
      * Sets the TreeNode expand state to the new value.
@@ -1640,7 +1635,7 @@ public class Tree extends AbstractControl {
         return context.getResponse().encodeURL(buffer.toString());
     }
 
-    // ------------------------------------------------ Package Private Methods
+    // Package Private Methods ------------------------------------------------
 
     /**
      * Expand / collapse and select / deselect the tree nodes.
@@ -1664,7 +1659,7 @@ public class Tree extends AbstractControl {
         return true;
     }
 
-    //----------------------------------------------------------- Inner classes
+    // Inner classes ----------------------------------------------------------
 
     /**
      * Iterate over all the nodes in the tree in a breadth first manner.
@@ -1775,7 +1770,7 @@ public class Tree extends AbstractControl {
         }
     }
 
-    // ------------------------------------------------------- Private behavior
+    // Private behavior -------------------------------------------------------
 
     /**
      * Returns whether the specified node is visible. The semantics of visible
@@ -1816,7 +1811,7 @@ public class Tree extends AbstractControl {
         return nodes;
     }
 
-    // ------------------------------------------- Javascript specific behavior
+    // Javascript behavior ----------------------------------------------------
 
     /**
      * Creates a new JavascriptHandler based on the specified policy.
@@ -2015,6 +2010,7 @@ public class Tree extends AbstractControl {
          * @param treeNode the current node rendered
          * @see #init(TreeNode)
          */
+        @Override
         public void init(TreeNode treeNode) {
             super.init(treeNode);
             StringBuffer tmp = new StringBuffer();
@@ -2042,6 +2038,7 @@ public class Tree extends AbstractControl {
          * @param treeNode the current node rendered
          * @see #init(TreeNode)
          */
+        @Override
         public void init(TreeNode treeNode) {
             super.init(treeNode);
             String tmp = buildString("handleNodeExpansion(this,event,'", expandId, "','");
@@ -2700,24 +2697,6 @@ public class Tree extends AbstractControl {
          */
         public void nodeCollapsed(Tree tree, TreeNode node, Context context,
                 boolean oldValue) { /*noop*/ }
-
-        /**
-         * Provides debug information about the map storing the tracked paths.
-         */
-//        private void dumpPathTracker() {
-//            System.out.println("--------------------------------------Printing Path Tracker map\n");
-//            if (selectTracker == null) {
-//                System.out.println("Path tracker is null");
-//                return;
-//            }
-//            for (Iterator it = selectTracker.keySet().iterator(); it.hasNext();) {
-//                String key = (String) it.next();
-//                System.out.println("ids -> [" + key + "]  value count -> ["
-//                        + ((Entry) selectTracker.get(key)).count + "] : last node -> ["
-//                        + ((Entry) selectTracker.get(key)).lastNodeInPath + "]");
-//            }
-//            System.out.println("--------------------------------------Done");
-//        }
     }
 
     /**
@@ -2745,6 +2724,7 @@ public class Tree extends AbstractControl {
          *
          * @return a string representation
          */
+        @Override
         public String toString() {
             StringBuffer buffer = new StringBuffer("Entry value -> (").append(count).
                     append(")");

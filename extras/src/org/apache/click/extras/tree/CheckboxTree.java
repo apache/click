@@ -30,6 +30,7 @@ import java.util.Set;
 import org.apache.click.Context;
 import org.apache.click.control.Decorator;
 import org.apache.click.control.Form;
+import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ContainerUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -125,16 +126,12 @@ import org.apache.commons.lang.ArrayUtils;
  */
 public class CheckboxTree extends Tree {
 
-    // -------------------------------------------------------------- Constants
-
-    /** Client side javascript import. This extends on the functions available in {@link Tree}. */
-    public static final String HTML_IMPORTS =
-            "<script type=\"text/javascript\" src=\"{0}/click/tree/checkbox-tree{1}.js\"></script>\n";
+    // Constants --------------------------------------------------------------
 
     /** default serial version id. */
     private static final long serialVersionUID = 1L;
 
-    // ---------------------------------------------------- Private variables
+    // Private variables ----------------------------------------------------
 
     /**
      * Determines if the checkboxes of child nodes should also be
@@ -142,7 +139,7 @@ public class CheckboxTree extends Tree {
      */
     private boolean selectChildNodes = false;
 
-   // ---------------------------------------------------- Public Constructors
+   // Public Constructors ----------------------------------------------------
 
     /**
      * Create an Tree control for the given name.
@@ -162,7 +159,7 @@ public class CheckboxTree extends Tree {
     public CheckboxTree() {
     }
 
-    // --------------------------------------------------------- Public getters and setters
+    // Public Properties ------------------------------------------------------
 
     /**
      * Create and set the Tree's decorator that will render a Checkbox for
@@ -171,6 +168,7 @@ public class CheckboxTree extends Tree {
      * @see #createDecorator()
      * @see org.apache.click.Control#onInit()
      */
+    @Override
     public void onInit() {
         setDecorator(createDecorator());
     }
@@ -197,31 +195,38 @@ public class CheckboxTree extends Tree {
         this.selectChildNodes = selectChildNodes;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
-     * Return the CheckboxTree HTML head imports statements for the following
-     * resources:
-     * <p/>
+     * Return the CheckboxTree HTML HEAD elements for the following resource:
+     *
      * <ul>
      * <li><tt>click/tree/checkbox-tree.js</tt></li>
      * </ul>
-     * <p/>
-     * Additionally all the {@link Tree#getHtmlImports() Tree import statements}
+     *
+     * Additionally all the {@link Tree#getHeadElements() Tree import statements}
      * are also returned.
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the HTML head import statements for the control
+     * @return the HTML HEAD elements for the control
      */
-    public String getHtmlImports() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(256);
-        if (isJavascriptEnabled()) {
-            buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS,
-                getContext()));
+    @Override
+    public List getHeadElements() {
+
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+            if (isJavascriptEnabled()) {
+                headElements.add(new JsImport("/click/tree/checkbox-tree.js",
+                    versionIndicator));
+            }
         }
-        buffer.append(super.getHtmlImports());
-        return buffer.toString();
+
+        return headElements;
     }
 
     /**
@@ -258,6 +263,7 @@ public class CheckboxTree extends Tree {
      *     addControl(form);
      * } </pre>
      */
+    @Override
     public void bindSelectOrDeselectValues() {
         // With html forms, only "checked" checkbox values are submitted
         // to the server. So the request does not supply us the information
@@ -314,6 +320,7 @@ public class CheckboxTree extends Tree {
      *
      * @see #bindExpandOrCollapseValues()
      */
+    @Override
     public void bindRequestValue() {
         bindExpandOrCollapseValues();
     }
@@ -328,7 +335,7 @@ public class CheckboxTree extends Tree {
         bindSelectOrDeselectValues();
     }
 
-    //------------------------------------------------------------Inner classes
+    // Inner classes ----------------------------------------------------------
 
     /**
      * Creates and returns a custom {@link Decorator} that will render a Checkbox
@@ -560,6 +567,7 @@ public class CheckboxTree extends Tree {
          *
          * @param treeNode the current node rendered
          */
+        @Override
         public void init(TreeNode treeNode) {
             super.init(treeNode);
             selectId = buildString("s_", treeNode.getId(), "");
@@ -628,6 +636,7 @@ public class CheckboxTree extends Tree {
          *
          * @param treeNode the current node rendered
          */
+        @Override
         public void init(TreeNode treeNode) {
             super.init(treeNode);
             checkboxRenderer.init(treeNode);
@@ -689,6 +698,7 @@ public class CheckboxTree extends Tree {
          *
          * @param treeNode the current node rendered
          */
+        @Override
         public void init(TreeNode treeNode) {
             super.init(treeNode);
             checkboxRenderer.init(treeNode);
@@ -717,6 +727,7 @@ public class CheckboxTree extends Tree {
          *
          * @return currently installed javascript renderer
          */
+        @Override
         public JavascriptRenderer getJavascriptRenderer() {
             if (javascriptRenderer == null) {
                 javascriptRenderer = new CheckboxSessionJavascriptRenderer();
@@ -747,6 +758,7 @@ public class CheckboxTree extends Tree {
          *
          * @return currently installed javascript renderer
          */
+        @Override
         public JavascriptRenderer getJavascriptRenderer() {
             if (javascriptRenderer == null) {
                 javascriptRenderer = new CheckboxCookieJavascriptRenderer(expandedCookieName, collapsedCookieName);
@@ -763,6 +775,7 @@ public class CheckboxTree extends Tree {
      * @param javascriptPolicy the current javascript policy
      * @return newly created JavascriptHandler
      */
+    @Override
     protected JavascriptHandler createJavascriptHandler(int javascriptPolicy) {
         if (javascriptPolicy == JAVASCRIPT_SESSION_POLICY) {
             return new CheckboxSessionHandler(getContext());
@@ -771,13 +784,14 @@ public class CheckboxTree extends Tree {
         }
     }
 
-    // ------------------------------------------------ Package Private Methods
+    // Package Private Methods ------------------------------------------------
 
     /**
      * Expand / collapse the tree nodes.
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     boolean postProcess() {
         if (isJavascriptEnabled()) {
             javascriptHandler.init(getContext());
