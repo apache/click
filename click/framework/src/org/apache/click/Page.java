@@ -826,24 +826,6 @@ public class Page implements Serializable {
     }
 
     /**
-     * Return the formatted page message for the given resource name
-     * and message format argument or null if no message was found. The resource
-     * message returned will use the Locale obtained from the Context.
-     * <p/>
-     * {@link #getMessage(java.lang.String, java.lang.Object[])} is invoked to
-     * retrieve the message for the specified name.
-     *
-     * @param name resource name of the message
-     * @param arg the message argument to format
-     * @return the named localized message for the page or null if no message
-     * was found
-     */
-    public String getMessage(String name, Object arg) {
-        Object[] args = new Object[] { arg };
-        return getMessage(name, args);
-    }
-
-    /**
      * Return the formatted page message for the given resource name and
      * message format arguments or null if no message was found. The resource
      * message returned will use the Locale obtained from the Context.
@@ -856,7 +838,7 @@ public class Page implements Serializable {
      * @return the named localized message for the page or null if no message
      * was found
      */
-    public String getMessage(String name, Object[] args) {
+    public String getMessage(String name, Object... args) {
         String value = getMessage(name);
 
         return MessageFormat.format(value, args);

@@ -18,9 +18,11 @@
  */
 package org.apache.click.control;
 
+import com.sun.java_cup.internal.version;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
+import org.apache.click.Page;
 
 /**
  * Miscellaneous Control tests.
@@ -106,5 +108,36 @@ public class ControlTest extends TestCase {
         } catch (RuntimeException expected) {
             Assert.assertTrue(true);
         }
+    }
+
+    /**
+     * Test getMessage variations.
+     */
+    public void testGetMessage() {
+        MockContext.initContext();
+
+        String expected = "Version 0.21";
+
+        Page page = new Page();
+        Field field = new TextField("field");
+        page.addControl(field);
+
+        String version = field.getMessage("version");
+        System.out.println("V " + version);
+        assertEquals(expected, version);
+
+        version = field.getMessage("version", "arg");
+        assertEquals(expected, version);
+
+        version = field.getMessage("version", "arg1", "arg2");
+        assertEquals(expected, version);
+
+        version = field.getMessage("version", (String) null);
+        assertEquals(expected, version);
+
+        Object args[] = new Object[1];
+        args[0] = null;
+        version = field.getMessage("version", args);
+        assertEquals(expected, version);
     }
 }

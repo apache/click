@@ -139,4 +139,31 @@ public class PageTest extends TestCase {
 
         container.stop();
     }
+
+    /**
+     * Test getMessage variations.
+     */
+    public void testGetMessage() {
+        MockContext.initContext();
+
+        String expected = "Version 0.21";
+
+        Page page = new Page();
+        String version = page.getMessage("version");
+        assertEquals(expected, version);
+
+        version = page.getMessage("version", "arg");
+        assertEquals(expected, version);
+
+        version = page.getMessage("version", "arg1", "arg2");
+        assertEquals(expected, version);
+
+        version = page.getMessage("version", (String) null);
+        assertEquals(expected, version);
+
+        Object args[] = new Object[1];
+        args[0] = null;
+        version = page.getMessage("version", args);
+        assertEquals(expected, version);
+    }
 }
