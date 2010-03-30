@@ -403,24 +403,6 @@ public abstract class AbstractControl implements Control {
 
     /**
      * Return the formatted message for the given resource name and message
-     * format argument or null if no message was found. The resource message
-     * returned will use the Locale obtained from the Context.
-     * <p/>
-     * {@link #getMessage(java.lang.String, java.lang.Object[])} is invoked to
-     * retrieve the message for the specified name.
-     *
-     * @param name resource name of the message
-     * @param arg the message argument to format
-     * @return the named localized message for the control or null if no message
-     * was found
-     */
-    public String getMessage(String name, Object arg) {
-        Object[] args = new Object[] { arg };
-        return getMessage(name, args);
-    }
-
-    /**
-     * Return the formatted message for the given resource name and message
      * format arguments or null if no message was found. The resource
      * message returned will use the Locale obtained from the Context.
      * <p/>
@@ -432,7 +414,7 @@ public abstract class AbstractControl implements Control {
      * @return the named localized message for the control or null if no message
      * was found
      */
-    public String getMessage(String name, Object[] args) {
+    public String getMessage(String name, Object... args) {
         String value = getMessage(name);
         if (value == null) {
             return null;
