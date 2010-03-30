@@ -19,9 +19,12 @@
 package org.apache.click.extras.control;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.regex.Pattern;
+import org.apache.click.Context;
 
 import org.apache.click.control.TextField;
+import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 
 /**
@@ -83,7 +86,7 @@ public class RegexField extends TextField {
 
     private static final long serialVersionUID = 1L;
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     /**
      * The field validation JavaScript function template.
@@ -110,11 +113,7 @@ public class RegexField extends TextField {
         + "   '}'\n"
         + "'}'\n";
 
-    /** The RegexField imports statement. */
-    public static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n";
-
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /**
      * The field pattern based on regular expression.
@@ -122,7 +121,7 @@ public class RegexField extends TextField {
      */
     protected String pattern;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct the RegexField with the given name.
@@ -197,7 +196,7 @@ public class RegexField extends TextField {
         super();
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Sets the field pattern as regular expression.
@@ -220,18 +219,26 @@ public class RegexField extends TextField {
     }
 
     /**
-     * Return the RegexField HTML head imports statements for the following
-     * resources:
+     * Return the RegexField HTML HEAD elements for the following resource:
      * <ul>
      * <li><tt>click/extras-control.js</tt></li>
      * </ul>
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the HTML head import statements for the control
+     * @return the HTML HEAD elements for the control
      */
-    public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+            headElements.add(new JsImport("/click/extras-control.js", versionIndicator));
+        }
+        return headElements;
     }
 
     /**
@@ -243,6 +250,7 @@ public class RegexField extends TextField {
      *
      * @return the field JavaScript client side validation function
      */
+    @Override
     public String getValidationJavaScript() {
         Object[] args = new Object[9];
         args[0] = getId();
@@ -260,7 +268,7 @@ public class RegexField extends TextField {
         return MessageFormat.format(VALIDATE_REGEXFIELD_FUNCTION, args);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Validate the RegexField request submission.
@@ -287,6 +295,7 @@ public class RegexField extends TextField {
      * @throws java.util.regex.PatternSyntaxException if the pattern has a
      *      syntax error
      */
+    @Override
     public void validate() {
         super.validate();
 
@@ -300,7 +309,7 @@ public class RegexField extends TextField {
         }
     }
 
-    // ------------------------------------------------------ Private Methods
+    // Private Methods ------------------------------------------------------
 
     /**
      * Escape the JavaScript string.

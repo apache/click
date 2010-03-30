@@ -178,8 +178,8 @@ public class EmailField extends TextField {
 
     /**
      * Return the EmailField HTML head imports statements for the following
-     * resources:
-     * <p/>
+     * resource:
+     *
      * <ul>
      * <li><tt>click/extras-control.js</tt></li>
      * </ul>

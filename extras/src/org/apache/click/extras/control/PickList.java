@@ -25,9 +25,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.apache.click.Context;
 
 import org.apache.click.control.Field;
 import org.apache.click.control.Option;
+import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
@@ -112,10 +114,6 @@ public class PickList extends Field {
     private static final long serialVersionUID = 1L;
 
     // Constants --------------------------------------------------------------
-
-    /** The PickList imports statement. */
-    public static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n";
 
     /**
      * The field validation JavaScript function template.
@@ -378,20 +376,27 @@ public class PickList extends Field {
     }
 
     /**
-     * Return the PickList HTML head imports statements for the following
-     * resources:
+     * Return the PickList HTML HEAD elements for the following resource:
      * <p/>
      * <ul>
      * <li><tt>click/extras-control.js</tt></li>
      * </ul>
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the HTML head import statements for the control
+     * @return the HTML HEAD elements for the control
      */
     @Override
-    public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+            headElements.add(new JsImport("/click/extras-control.js", versionIndicator));
+        }
+        return headElements;
     }
 
     /**
