@@ -448,6 +448,7 @@ public class DateField extends TextField {
      * @param name of the control
      * @throws IllegalArgumentException if the name is null
      */
+    @Override
     public void setName(String name) {
         super.setName(name);
         setAttribute("id", getName() + "_field");
@@ -474,6 +475,7 @@ public class DateField extends TextField {
      *
      * @param value the DateField value
      */
+    @Override
     public void setValue(String value) {
         if (value != null && value.length() > 0) {
             try {
@@ -498,6 +500,7 @@ public class DateField extends TextField {
      *
      * @return the Date object representation of the Field value
      */
+    @Override
     public Object getValueObject() {
         return getDate();
     }
@@ -507,6 +510,7 @@ public class DateField extends TextField {
      *
      * @param object the object value to set
      */
+    @Override
     public void setValueObject(Object object) {
         if (object != null) {
             if (Date.class.isAssignableFrom(object.getClass())) {
@@ -531,17 +535,6 @@ public class DateField extends TextField {
     }
 
     /**
-     * This method returns null.
-     *
-     * @see #getHeadElements()
-     *
-     * @return the HTML head import statements for the control
-     */
-    public String getHtmlImports() {
-        return null;
-    }
-
-    /**
      * Return the DateField HTML head imports statements for the following
      * resources:
      *
@@ -559,6 +552,7 @@ public class DateField extends TextField {
      *
      * @return the HTML head import statements for the control
      */
+    @Override
     public List getHeadElements() {
         // CLK-309. Skip imports if dateField is disabled, readonly or calendar
         // should not be displayed.
@@ -708,6 +702,7 @@ public class DateField extends TextField {
      *
      * @return the help text of the Field
      */
+    @Override
     public String getHelp() {
         // Conditionally render help property, otherwise return null.
         if (renderHelp) {
@@ -740,6 +735,7 @@ public class DateField extends TextField {
      * </ul>
      * </blockquote>
      */
+    @Override
     public void validate() {
         if (formatPattern == null) {
             String msg = "dateFormat attribute is null for field: " + getName();
@@ -772,6 +768,7 @@ public class DateField extends TextField {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         // Set default title
