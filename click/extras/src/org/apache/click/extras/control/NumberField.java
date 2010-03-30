@@ -22,9 +22,12 @@ import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Locale;
+import org.apache.click.Context;
 
 import org.apache.click.control.TextField;
+import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 
 /**
@@ -100,7 +103,7 @@ public class NumberField extends TextField {
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     /**
      * The field validation JavaScript function template.
@@ -125,11 +128,7 @@ public class NumberField extends TextField {
         + "   '}'\n"
         + "'}'\n";
 
-    /** The NumberField imports statement. */
-    public static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n";
-
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The maximum field value. */
     protected double maxvalue = Double.POSITIVE_INFINITY;
@@ -143,7 +142,7 @@ public class NumberField extends TextField {
     /** The decimal pattern to use for a NumberFormat. */
     protected String pattern;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct a NumberField with the given name.
@@ -227,7 +226,7 @@ public class NumberField extends TextField {
         setTextAlign("right");
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Return the maximum valid double field value.
@@ -379,6 +378,7 @@ public class NumberField extends TextField {
      *
      * @return the Number object representation of the Field value
      */
+    @Override
     public Object getValueObject() {
         return getNumber();
     }
@@ -388,6 +388,7 @@ public class NumberField extends TextField {
      *
      * @param object the object value to set
      */
+    @Override
     public void setValueObject(Object object) {
         if (object instanceof Number) {
             setNumber((Number) object);
@@ -403,19 +404,27 @@ public class NumberField extends TextField {
     }
 
     /**
-     * Return the NumberField HTML head imports statements for the following
-     * resources:
+     * Return the NumberField HTML HEAD elements for the following resource:
      * <p/>
      * <ul>
      * <li><tt>click/extras-control.js</tt></li>
      * </ul>
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the HTML head import statements for the control
+     * @return the HTML HEAD elements for the control
      */
-    public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
+
+            headElements.add(new JsImport("/click/extras-control.js", versionIndicator));
+        }
+        return headElements;
     }
 
     /**
@@ -427,6 +436,7 @@ public class NumberField extends TextField {
      *
      * @return the field JavaScript client side validation function
      */
+    @Override
     public String getValidationJavaScript() {
         Object[] args = new Object[7];
         args[0] = getId();
@@ -442,7 +452,7 @@ public class NumberField extends TextField {
         return MessageFormat.format(VALIDATE_NUMBER_FIELD_FUNCTION, args);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Validates the NumberField request submission. If the value entered
@@ -465,6 +475,7 @@ public class NumberField extends TextField {
      * </ul>
      * </blockquote>
      */
+    @Override
     public void validate() {
         setError(null);
 
