@@ -38,7 +38,10 @@ public class CssForm extends HtmlForm {
         HtmlStringBuffer buffer = new HtmlStringBuffer(512);
 
         // Include the Form default imports
-        buffer.append(super.getHtmlImports());
+        String htmlImports = super.getHtmlImports();
+        if (htmlImports != null) {
+            buffer.append(htmlImports);
+        }
 
         // Include CSS for ContactDetailsForm
         String imports = "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/assets/css/cssform{1}.css\"/>\n";

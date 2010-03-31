@@ -320,8 +320,12 @@ public class FormTable extends Table {
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(255);
 
-        buffer.append(super.getHtmlImports());
-        String htmlImports = getControlLink().getHtmlImports();
+        String htmlImports = super.getHtmlImports();
+        if (htmlImports != null) {
+            buffer.append(htmlImports);
+        }
+
+        htmlImports = getControlLink().getHtmlImports();
         if (htmlImports != null) {
             buffer.append(htmlImports);
         }
