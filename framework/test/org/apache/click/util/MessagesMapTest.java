@@ -178,6 +178,8 @@ public class MessagesMapTest extends TestCase {
      * CLK-269
      */
     public void testBasePropertiesUsingNonExistentDefaultLocale() {
+        Locale defaultLocale = Locale.getDefault();
+
         Locale locale = new Locale("xx", "XX");//bogus locale
 
         //Set bogus as the default locale
@@ -199,6 +201,9 @@ public class MessagesMapTest extends TestCase {
           "click-control");
         assertFalse(englishMessages.isEmpty());
         assertEquals("First", englishMessages.get("table-first-label"));
+
+        // Restore default locale
+        Locale.setDefault(defaultLocale);
     }
 
     /**
@@ -208,6 +213,8 @@ public class MessagesMapTest extends TestCase {
      * CLK-269
      */
     public void testEnglishMessagesUsingFrenchDefaultLocale() {
+        Locale defaultLocale = Locale.getDefault();
+
         Locale locale = new Locale("fr", "FR");
 
         //Set French as default locale
@@ -228,6 +235,9 @@ public class MessagesMapTest extends TestCase {
           "click-control");
         assertFalse(englishMessages.isEmpty());
         assertEquals("First", englishMessages.get("table-first-label"));
+
+        // Restore default locale
+        Locale.setDefault(defaultLocale);
     }
 
     /**
