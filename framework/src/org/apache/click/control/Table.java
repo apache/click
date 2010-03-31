@@ -760,12 +760,18 @@ public class Table extends AbstractControl {
 
     /**
      * Set the table row list DataProvider.
+     * <p/>
+     * <b>Please note</b>: setting the dataProvider will nullify the table
+     * {@link #setRowList(java.util.List) rowList}.
      *
      * @param dataProvider the table row list DataProvider
      */
     @SuppressWarnings("unchecked")
     public void setDataProvider(DataProvider dataProvider) {
         this.dataProvider = dataProvider;
+        if (dataProvider != null) {
+            setRowList(null);
+        }
     }
 
     /**
@@ -1453,7 +1459,7 @@ public class Table extends AbstractControl {
                 setSorted(true);
             }
 
-            Iterable iterableData = dataProvider.getData();
+            Iterable iterableData = dp.getData();
 
             // If dataProvider returns a list, use that as the rowList
             if (iterableData instanceof List) {
