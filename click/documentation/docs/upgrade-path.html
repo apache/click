@@ -107,9 +107,13 @@ versions please email the Click user group.
           </ul>
       </li>
       <li class="change">
-        In previous releases, the default autobinding mode, binded only
-        public Page fields. In 2.2.0 the default autobinding mode binds
-        both public fields and fields annotated with @Bindable.
+        In previous releases, the default autobinding mode (<tt>public</tt>)
+        binded only public Page fields. In 2.2.0 the default autobinding mode
+        has been replaced with a new <tt>default</tt> mode which binds both
+        public fields and fields annotated with the @Bindable annotation.
+        <p/>
+        Please note, for backward compatibility the autobinding attribute still
+        accepts the <tt>public</tt> value.
       </li>
     </ul>
   </dd>
