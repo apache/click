@@ -293,7 +293,7 @@
       <literallayout>&lt;!ELEMENT <varname>pages</varname> (<symbol>page</symbol>*)&gt;
    &lt;!ATTLIST pages <varname>package</varname> CDATA #IMPLIED&gt;
    &lt;!ATTLIST pages <varname>automapping</varname> (true|false) "true"&gt;
-   &lt;!ATTLIST pages <varname>autobinding</varname> (default|annotation|public|none) "default"&gt;</literallayout>
+   &lt;!ATTLIST pages <varname>autobinding</varname> (default|annotation|none) "default"&gt;</literallayout>
 
       <para>The pages element can specify a default <varname>package</varname> name
       which is prepended to the classname of any pages defined.
@@ -548,23 +548,23 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
 
 }</programlisting>
 
-        <para>In the example above the <varname>employeeForm</varname> and
-        <varname>myTable</varname> controls were not added to the page. Also note
-        that Form and Table do not have their names defined.
+        <para>Note in the above example that the <varname>employeeForm</varname>
+        and <varname>myTable</varname> controls were not added to the page. Also
+        note that Form and Table do not have their names defined.
         </para>
 
-        <para>When autobinding is enabled, ClickServlet will create a new Page and
-        add the public controls to the page. In the example above the
+        <para>When autobinding is enabled, ClickServlet will create a new Page
+        and add the public controls to the page. Following the example above the
         <varname>employeeForm</varname> and <varname>myTable</varname> will be
-        added to the page, as if you had invoked,
+        added to the page, similar to calling
         <methodname>addControl(employeeForm)</methodname> and
         <methodname>addControl(myTable)</methodname>.
         </para>
 
-        <para>The control's names were not defined so ClickServlet will set their
-        names to the value of their field/variable name. In this case the Form
-        name will be set to <varname>employeeForm</varname> while the Table name
-        will set to <varname>myTable</varname>.
+        <para>Furthermore, the control names were not defined so ClickServlet
+        will set their names to the value of their field/variable name. In this
+        case the Form name will be set to <varname>employeeForm</varname> while
+        the Table name will set to <varname>myTable</varname>.
         </para>
 
         <para>The above example is thus a shorthand way of writing the following:

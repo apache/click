@@ -975,7 +975,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                     autobinding = AutoBinding.ANNOTATION;
 
                 } else if ("public".equalsIgnoreCase(autobindingStr)) {
-                    autobinding = AutoBinding.PUBLIC;
+                    autobinding = AutoBinding.DEFAULT;
 
                 } else if ("none".equalsIgnoreCase(autobindingStr)) {
                     autobinding = AutoBinding.NONE;
@@ -1781,9 +1781,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
 
             return fieldArray;
-
-        } else if (mode == AutoBinding.PUBLIC) {
-            return pageClass.getFields();
 
         } else if (mode == AutoBinding.ANNOTATION) {
 
