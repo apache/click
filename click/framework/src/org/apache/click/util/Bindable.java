@@ -39,8 +39,9 @@ import java.lang.annotation.Target;
  * policy.
  *
  * <h3>Configuration</h3>
- * By default Click only binds public page fields. In order for Click to
- * recognize the &#64;Bindable annotation you need to set the autobinding
+ * By default "<tt>autobinding</tt>" will bind both public page
+ * fields and fields annotated with the &#64;Bindable annotations. If you do not
+ * want <tt>"public"</tt> fields to be bindable you can set the autobinding
  * attribute to "<tt>annotation</tt>" in your <tt>click.xml</tt> config file:
  *
  * <pre class="prettyprint">
@@ -50,8 +51,8 @@ import java.lang.annotation.Target;
  *
  * <h3>Bindable Example</h3>
  *
- * With the above configuration in place, Click will bind all page fields
- * annotated with the &#64;Bindable annotation:
+ * Below is an example using of page fields annotated with the &#64;Bindable
+ * annotation:
  *
  * <pre class="prettyprint">
  * public class BindableDemo extends Page {
