@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1793,7 +1794,7 @@ public class Table extends AbstractControl {
                 lastRow = String.valueOf(getLastRow());
             }
 
-            String[] args = { rowCountStr, firstRow, lastRow};
+            Object[] args = { rowCountStr, firstRow, lastRow};
 
             if (getPageSize() > 0) {
                 buffer.append(getMessage("table-page-banner", args));
@@ -1891,7 +1892,7 @@ public class Table extends AbstractControl {
                 lastLabel = link.toString();
             }
 
-            String[] args =
+            Object[] args =
                 { firstLabel, previousLabel, pageLinks, nextLabel, lastLabel };
 
             if (getShowBanner()) {
