@@ -18,12 +18,14 @@
  */
 package org.apache.click.extras.panel;
 
+import java.util.List;
 import org.apache.click.ActionListener;
+import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Panel;
+import org.apache.click.element.CssImport;
 import org.apache.click.util.ClickUtils;
-import org.apache.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -52,7 +54,7 @@ import org.apache.commons.lang.math.NumberUtils;
  *      &lt;td class="<span class="green">tp_tab_space</span>"&gt;&lt;/td&gt;
  *     <span class="red">#else</span>
  *      &lt;td class="<span class="green">tp_tab_off</span>"&gt;
- *       &lt;a href="<span class="blue">$this.tabLink.getHref($panel.name)</span>"
+ *       &lt;a href="<span class="blue">$this.link.getHref($panel.name)</span>"
  *          id="<span class="blue">$panel.id</span>"
  *          class="<span class="green">tp_tab_link</span>"&gt;<span class="blue">$panel.label</span>&lt;/a&gt;
  *      &lt;/td&gt;
@@ -70,7 +72,7 @@ import org.apache.commons.lang.math.NumberUtils;
  *  &lt;/table&gt;
  * &lt;/div&gt; </pre>
  *
- * Also, as show above, there are a number of CSS attributes that allow some
+ * Also, as shown above, there are a number of CSS attributes that allow some
  * customization of the output. These CSS attributes are defined in the
  * auto deployed <tt>TabbedPanel.css</tt>. The TabbedPanel CSS attributes
  * are:
@@ -136,10 +138,6 @@ import org.apache.commons.lang.math.NumberUtils;
 public class TabbedPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
-
-    /** The TabbedPanel imports statements. */
-    public static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/TabbedPanel{1}.css\"/>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -209,6 +207,7 @@ public class TabbedPanel extends Panel {
      *     of the control is not defined or the container already contains a
      *     control with the same name
      */
+    @Override
     public Control add(Control control) {
         super.add(control);
 
@@ -229,57 +228,48 @@ public class TabbedPanel extends Panel {
     }
 
     /**
-     * Set the currently active panel to the given panel.
+     * Set the currently active panel to the given panel. In addition the given
+     * panel's {@link org.apache.click.control.Panel#setActive(boolean) active}
+     * property will be set to true, while the previous active panel will be
+     * deactivated.
      *
      * @param panel the panel to set as the current active panel
      */
     public void setActivePanel(Panel panel) {
+        if (activePanel != null) {
+            activePanel.setActive(false);
+        }
         activePanel = panel;
+        activePanel.setActive(true);
     }
 
     /**
-     * Return the TabbedPanel HTML head imports statements for the following
-     * resources:
-     * <p/>
+     * Return the TabbedPanel HTML HEAD elements for the following resource:
+     *
      * <ul>
      * <li><tt>click/TabbedPanel.css</tt></li>
      * </ul>
-     * <p/>
-     * Additionally all {@link #getControls() controls} import statements are
+     *
+     * Additionally all {@link #getControls() controls} HEAD elements are
      * also returned.
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
-     * @return the HTML head import statements for the control
+     * @return the HTML HEAD elements for the control
      */
-    public String getHtmlImports() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
+    @Override
+    public List getHeadElements() {
 
-        buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, getContext()));
+        if (headElements == null) {
+            headElements = super.getHeadElements();
 
-        if (hasControls()) {
-            for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
+            Context context = getContext();
+            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
 
-                if (control instanceof Panel) {
-                    Panel panel = (Panel) control;
-                    if (panel == getActivePanel()) {
-                        String htmlImports = panel.getHtmlImports();
-                        if (htmlImports != null) {
-                            buffer.append(htmlImports);
-                        }
-                    }
-
-                } else {
-                    String htmlImports = control.getHtmlImports();
-                    if (htmlImports != null) {
-                        buffer.append(htmlImports);
-                    }
-                }
-            }
+            headElements.add(new CssImport("/click/TabbedPanel.css", versionIndicator));
         }
 
-        return buffer.toString();
+        return headElements;
     }
 
     /**
@@ -288,6 +278,7 @@ public class TabbedPanel extends Panel {
      * @param listener the listener object with the named method to invoke
      * @param listenerMethod the name of the method to invoke
      */
+    @Override
     public void setListener(Object listener, String listenerMethod) {
         setTabListener(listener, listenerMethod);
     }
@@ -308,6 +299,7 @@ public class TabbedPanel extends Panel {
      *
      * @param actionListener the control's action listener
      */
+    @Override
     public void setActionListener(ActionListener actionListener) {
         setTabListener(actionListener);
     }
@@ -380,6 +372,7 @@ public class TabbedPanel extends Panel {
      *
      * @see org.apache.click.Control#onInit()
      */
+    @Override
     public void onInit() {
         initActivePanel();
 
@@ -404,25 +397,28 @@ public class TabbedPanel extends Panel {
      *
      * @return true or false to abort further processing
      */
+    @Override
     public boolean onProcess() {
+        boolean continueProcessing = true;
+
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
             if (control instanceof Panel) {
                 if (control == getActivePanel()) {
                     if (!control.onProcess()) {
-                        return false;
+                        continueProcessing = false;
                     }
                 }
             } else {
                 if (!control.onProcess()) {
-                    return false;
+                    continueProcessing = false;
                 }
             }
         }
-        if (tabLink.isClicked()) {
+        if (getTabLink().isClicked()) {
             dispatchActionEvent();
         }
-        return true;
+        return continueProcessing;
     }
 
     /**
@@ -432,6 +428,7 @@ public class TabbedPanel extends Panel {
      *
      * @see org.apache.click.Control#onRender()
      */
+    @Override
     public void onRender() {
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
@@ -467,22 +464,31 @@ public class TabbedPanel extends Panel {
         if (NumberUtils.isNumber(tabPanelIndex)) {
             int tabIndex = Integer.parseInt(tabPanelIndex);
             if (tabIndex >= 0 && tabIndex < getPanels().size()) {
-                Panel panel = (Panel) getPanels().get(tabIndex);
-                if (!panel.isDisabled()) {
-                    setActivePanel(panel);
+                Panel targetPanel = (Panel) getPanels().get(tabIndex);
+                if (!targetPanel.isDisabled()) {
+                    // Deactive panels
+                    for (Panel panel : getPanels()) {
+                        panel.setActive(false);
+                    }
+
+                    setActivePanel(targetPanel);
                 }
             }
         } else {
-            // Explicitly bind the tabLink to the request and check if the
-            // tabLink was clicked
-            tabLink.bindRequestValue();
-            if (tabLink.isClicked()) {
+            // Explicitly bind the link to the request and check if the
+            // link was clicked
+            ActionLink link = getTabLink();
+            link.bindRequestValue();
+            if (link.isClicked()) {
 
                 // Check which panel user selected and set that Panel as active
                 for (int i = 0; i < getPanels().size(); i++) {
                     Panel panel = (Panel) getPanels().get(i);
 
-                    if (tabLink.getValue().equals(panel.getName())
+                    // Deactivate panel
+                    panel.setActive(false);
+
+                    if (link.getValue().equals(panel.getName())
                         && !panel.isDisabled()) {
 
                         setActivePanel(panel);
