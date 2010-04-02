@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.click.control.Container;
+import org.apache.click.control.Panel;
 import org.apache.click.control.Table;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.CssStyle;
@@ -413,12 +414,20 @@ public class PageImports {
      * @param control the control to process
      */
     public void processControl(Control control) {
+        // Don't process inactive panels
+        if (control instanceof Panel) {
+            Panel panel = (Panel) control;
+            if (!panel.isActive()) {
+                return;
+            }
+        }
+
         processHeadElements(control.getHeadElements());
 
         if (control instanceof Container) {
             Container container = (Container) control;
             if (container.hasControls()) {
-                for (Control childControl  : container.getControls()) {
+                for (Control childControl : container.getControls()) {
                     processControl(childControl);
                 }
             }

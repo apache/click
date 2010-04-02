@@ -259,6 +259,9 @@ public class Panel extends AbstractContainer {
     /** The path of the template to render. */
     protected String template;
 
+    /** The panel active value, <tt>"true"</tt> by default. */
+    protected boolean active = true;
+
     // Constructors -----------------------------------------------------------
 
     /**
@@ -347,6 +350,7 @@ public class Panel extends AbstractContainer {
      * @throws IllegalArgumentException if the control is null or the container
      *     already contains a control with the same name
      */
+    @Override
     public Control add(Control control) {
         super.add(control);
 
@@ -392,6 +396,7 @@ public class Panel extends AbstractContainer {
      * @return true if the control was removed from the container
      * @throws IllegalArgumentException if the control is null
      */
+    @Override
     public boolean remove(Control control) {
         boolean contains = super.remove(control);
 
@@ -418,7 +423,8 @@ public class Panel extends AbstractContainer {
     }
 
     /**
-     * Set whether the panel is disabled.
+     * Set the panel disabled flag. Disabled panels are not processed nor
+     * is their action event fired.
      *
      * @param disabled the disabled flag
      */
@@ -427,14 +433,38 @@ public class Panel extends AbstractContainer {
     }
 
     /**
+     * Return true if the panel is active.
+     *
+     * @return true if the panel is active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Set the panel active flag. The active property is normally managed and
+     * set by Panel containers.
+     *
+     * <b>Please note</b>: inactive panels do not have their page events
+     * ({@link #onInit}, {@link #onProcess(), {@link #onRender}) processed.
+     *
+     * @param active the active flag
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    /**
      * Return the panel id value. If no id attribute is defined then this method
      * will return the panel name. If no name is defined this method will return
      * <tt>null</tt>.
      *
+     * @see #setActive(boolean)
      * @see org.apache.click.Control#getId()
      *
      * @return the panel HTML id attribute value
      */
+    @Override
     public String getId() {
         if (id != null) {
             return id;
@@ -470,6 +500,7 @@ public class Panel extends AbstractContainer {
      *
      * @param id the id attribute for this panel
      */
+    @Override
     public void setId(String id) {
         this.id = id;
     }
@@ -592,6 +623,60 @@ public class Panel extends AbstractContainer {
     // Public Methods ---------------------------------------------------------
 
     /**
+     * Initialize the panel.
+     * <p/>
+     * <b>Please note</b>: {@link #isActive() inactive} panels are not
+     * initialized.
+     *
+     * @see org.apache.click.Control#onInit()
+     */
+    @Override
+    public void onInit() {
+        if (isActive()) {
+            super.onInit();
+        }
+    }
+
+    /**
+     * This method processes the Panel request returning true to continue
+     * processing or false otherwise.
+     * <p/>
+     * <b>Please note</b>: {@link #isDisabled() Disabled} and
+     * {@link #isActive() inactive} panels are not processed.
+     *
+     * @see org.apache.click.Control#onProcess().
+     *
+     * @return true to continue Panel event processing, false otherwise
+     */
+    @Override
+    public boolean onProcess() {
+        if (isDisabled()) {
+            return true;
+        }
+
+        if (!isActive()) {
+            return true;
+        }
+
+        return super.onProcess();
+    }
+
+    /**
+     * Perform any pre rendering logic and invoke the <tt>onRender()</tt> method
+     * of any child controls.
+     * <p/>
+     * <b>Please note</b>: {@link #isActive() inactive} panels are not rendered.
+     *
+     * @see org.apache.click.Control#onRender()
+     */
+    @Override
+    public void onRender() {
+        if (isActive()) {
+            super.onRender();
+        }
+    }
+
+    /**
      * Render the HTML string representation of the Panel. The panel will be
      * rendered by merging the {@link #template} with the template
      * model. The template model is created using {@link #createTemplateModel()}.
@@ -603,6 +688,7 @@ public class Panel extends AbstractContainer {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         Context context = getContext();
 
