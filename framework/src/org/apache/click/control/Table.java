@@ -1033,6 +1033,9 @@ public class Table extends AbstractControl {
     /**
      * Return the list of table rows. Please note the rowList is cleared in
      * table {@link #onDestroy()} method at the end of each request.
+     * <p/>
+     * If the rowList is null, this method delegates to {@link #createRowList()}
+     * to create a new row list.
      *
      * @return the list of table rows
      */
