@@ -446,7 +446,7 @@ public class Panel extends AbstractContainer {
      * set by Panel containers.
      *
      * <b>Please note</b>: inactive panels do not have their page events
-     * ({@link #onInit}, {@link #onProcess(), {@link #onRender}) processed.
+     * ({@link #onInit()}, {@link #onProcess()}, {@link #onRender()}) processed.
      *
      * @param active the active flag
      */
