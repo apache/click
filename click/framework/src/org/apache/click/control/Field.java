@@ -113,7 +113,6 @@ import org.apache.click.util.HtmlStringBuffer;
  *
  * <ul>
  * <li>{@link #getMessage(String)}</li>
- * <li>{@link #getMessage(String, Object)}</li>
  * <li>{@link #getMessage(String, Object[])}</li>
  * <li>{@link #getMessages()}</li>
  * <li>{@link #setErrorMessage(String)}</li>
