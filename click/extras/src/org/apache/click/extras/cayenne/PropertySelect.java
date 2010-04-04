@@ -36,6 +36,7 @@ import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.query.NamedQuery;
 import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.click.Context;
 import org.apache.commons.lang.StringUtils;
 
 /**
