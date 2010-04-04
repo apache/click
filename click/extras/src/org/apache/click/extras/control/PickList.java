@@ -687,7 +687,9 @@ public class PickList extends Field {
         model.put("selectedLabel", selectedLabel);
         model.put("unselectedLabel", unselectedLabel);
         model.put("format", new Format());
-        model.put("size", new Integer(getSize()));
+        if (getSize() != 0) {
+            model.put("size", new Integer(getSize()));
+        }
         model.put("height", new Integer(getHeight()));
         model.put("valid", new Boolean(isValid()));
         model.put("disabled", new Boolean(isDisabled()));
