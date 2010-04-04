@@ -33,6 +33,7 @@ import org.apache.cayenne.DataRow;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.query.NamedQuery;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.click.Context;
 
 /**
  * Provides a Cayenne Query Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
@@ -447,6 +448,7 @@ public class QuerySelect extends Select {
             getOptionList().add(Option.EMPTY_OPTION);
         }
 
+        Context context = getContext();
         Map cache = new HashMap();
 
         for (int i = 0; i < list.size(); i++) {
@@ -479,7 +481,7 @@ public class QuerySelect extends Select {
                     }
 
                 } else {
-                    label = getDecorator().render(dataRow, getContext());
+                    label = getDecorator().render(dataRow, context);
                 }
 
             } else {
@@ -492,7 +494,7 @@ public class QuerySelect extends Select {
                         label = PropertyUtils.getValue(row, getOptionLabel(), cache);
 
                     } else {
-                        label = getDecorator().render(row, getContext());
+                        label = getDecorator().render(row, context);
                     }
 
                 } catch (Exception e) {
