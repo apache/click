@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.DataProvider;
 
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PropertyUtils;
@@ -51,6 +53,7 @@ import org.apache.click.util.PropertyUtils;
  *
  * <h3>Select Examples</h3>
  *
+ * <a name="single-select-example"></a>
  * <h4>Single Item Select</h4>
  * A single item Select, will only allow users to select one item from the list.
  * By default the Select {@link #multiple} item property is false.
@@ -61,25 +64,25 @@ import org.apache.click.util.PropertyUtils;
  * An example of a single item Select is provided below along with the
  * rendered HTML.
  *
- * <pre class="codeJava">
- * <span class="kw">public class</span> GenderPage <span class="kw">extends</span> Page {
+ * <pre class="prettyprint">
+ * public class GenderPage extends Page {
  *
- *     <span class="kw">public</span> Form form = <span class="kw">new</span> Form();
+ *     public Form form = new Form();
  *
- *     <span class="kw">private</span> Select genderSelect = <span class="kw">new</span> Select(<span class="st">"Gender"</span>);
+ *     private Select genderSelect = new Select("Gender");
  *
- *     <span class="kw">public</span> GenderPage() {
- *         genderSelect.setRequired(<span class="kw">true</span>);
- *         genderSelect.add(<span class="kw">new</span> Option(<span class="st">"U"</span>, <span class="st">""</span>);
- *         genderSelect.add(<span class="kw">new</span> Option(<span class="st">"M"</span>, <span class="st">"Male"</span>));
- *         genderSelect.add(<span class="kw">new</span> Option(<span class="st">"F"</span>, <span class="st">"Female"</span>));
+ *     public GenderPage() {
+ *         genderSelect.setRequired(true);
+ *         genderSelect.add(new Option("U", "");
+ *         genderSelect.add(new Option("M", "Male"));
+ *         genderSelect.add(new Option("F", "Female"));
  *         form.add(genderSelect);
  *
- *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>));
+ *         form.add(new Submit("ok", "  OK  "));
  *     }
  *
- *     <span class="kw">public void</span> onPost() {
- *         <span class="kw">if</span> (form.isValid()) {
+ *     public void onPost() {
+ *         if (form.isValid()) {
  *             String gender = genderSelect.getValue();
  *             ..
  *         }
@@ -104,6 +107,7 @@ import org.apache.click.util.PropertyUtils;
  * example the "U" option will not be a valid selection, as it is the first
  * item in the option list.
  *
+ * <a name="multiple-select-example"></a>
  * <h4>Multiple Item Select</h4>
  * A multiple item Select, will allow users to select multiple items from the list.
  * By default the Select {@link #multiple} item property is false, and must be
@@ -116,31 +120,31 @@ import org.apache.click.util.PropertyUtils;
  * An example of a single item Select is provided below along with the
  * rendered HTML.
  *
- * <pre class="codeJava">
- * <span class="kw">public class</span> LocationPage <span class="kw">extends</span> Page {
+ * <pre class="prettyprint">
+ * public class LocationPage extends Page {
  *
- *     <span class="kw">public</span> Form form = <span class="kw">new</span> Form();
+ *     public Form form = new Form();
  *
- *     <span class="kw">private</span> Select locationSelect = <span class="kw">new</span> Select(<span class="st">"location"</span>);
+ *     private Select locationSelect = new Select("location");
  *
- *     <span class="kw">public</span> LocationPage() {
- *         locationSelect.setMutliple(<span class="kw">true</span>);
- *         locationSelect.setRequired(<span class="kw">true</span>);
+ *     public LocationPage() {
+ *         locationSelect.setMutliple(true);
+ *         locationSelect.setRequired(true);
  *         locationSelect.setSize(7);
- *         locationSelect.add(<span class="st">"QLD"</span>);
- *         locationSelect.add(<span class="st">"NSW"</span>);
- *         locationSelect.add(<span class="st">"NT"</span>);
- *         locationSelect.add(<span class="st">"SA"</span>);
- *         locationSelect.add(<span class="st">"TAS"</span>);
- *         locationSelect.add(<span class="st">"VIC"</span>);
- *         locationSelect.add(<span class="st">"WA"</span>);
+ *         locationSelect.add("QLD");
+ *         locationSelect.add("NSW");
+ *         locationSelect.add("NT");
+ *         locationSelect.add("SA");
+ *         locationSelect.add("TAS");
+ *         locationSelect.add("VIC");
+ *         locationSelect.add("WA");
  *         form.add(locationSelect);
  *
- *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>));
+ *         form.add(new Submit("ok", "  OK  "));
  *     }
  *
- *     <span class="kw">public void</span> onPost() {
- *         <span class="kw">if</span> (form.isValid()) {
+ *     public void onPost() {
+ *         if (form.isValid()) {
  *             String location = locationSelect.getValue();
  *             ..
  *         }
@@ -163,6 +167,7 @@ import org.apache.click.util.PropertyUtils;
  * Note in this example the {@link #add(String)} method is used to add an Option
  * item to the Select.
  *
+ * <a name="required-behaviour"></a>
  * <h3>Required Behaviour</h3>
  *
  * When a Select control's required property is set to true, then the user has
@@ -190,12 +195,13 @@ import org.apache.click.util.PropertyUtils;
  *     }
  *
  *     ..
- * }
- * </pre>
+ * } </pre>
  *
- * Remember always populate the Select option list before it is processed. Do
- * not populate the option list in a Page's onRender() methods.
+ * Unless you use a <a href="#dataprovider">DataProvider</a>, remember to always
+ * populate the Select option list before it is processed. Do not populate the
+ * option list in a Page's onRender() methods.
  *
+ * <a name="readonly-behaviour"></a>
  * <h3>Readonly Behaviour</h3>
  *
  * Note the &lt;select&gt; HTML element does not support the "readonly" attribute.
@@ -204,15 +210,62 @@ import org.apache.click.util.PropertyUtils;
  * readonly field, and will render a hidden field of the same name so that its
  * value will be submitted with the form.
  *
+ * <a name="dataprovider"></a>
+ * <h3>DataProvider</h3>
+ * A common issue new Click users face is which page event (onInit or onRender)
+ * to populate the Select {@link #getOptionList() optionList} in. To alleviate
+ * this problem you can set a
+ * {@link #setDataProvider(org.apache.click.util.DataProvider) dataProvider}
+ * which allows the Select to fetch data when needed. This is
+ * particularly useful if retrieveing Select data is expensive e.g. loading
+ * from a database.
  * <p/>
- * See also the W3C HTML reference:
- * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
- *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.6">SELECT</a>
+ * Below is a simple example:
  *
- * <h3>Specify a default value</h3>
+ * <pre class="prettyprint">
+ * public class GenderPage extends Page {
  *
- * It is often necessary to set a default selected value. This is best done in
- * the {@link org.apache.click.Page#onRender()} method:
+ *     public Form form = new Form();
+ *
+ *     private Select genderSelect = new Select("Gender");
+ *
+ *     public GenderPage() {
+ *
+ *         // Set the Select default "non-selection" option
+ *         genderSelect.setDefaultOption(new Option("U", "");
+ *
+ *         // Set a DataProvider which "getData" method will be called to populate the
+ *         // optionList. The "getData" method is only called when the optionList
+ *         // data is needed
+ *         genderSelect.setDataProvider(new DataProvider() {
+ *             public List getData() {
+ *                 List options = new ArrayList();
+ *                 options.add(new Option("M", "Male"));
+ *                 options.add(new Option("F", "Female"));
+ *                 return options;
+ *             }
+ *         });
+ *
+ *         form.add(genderSelect);
+ *
+ *         form.add(new Submit("ok", "  OK  "));
+ *     }
+ *
+ *     public void onPost() {
+ *         if (form.isValid()) {
+ *             String gender = genderSelect.getValue();
+ *             ..
+ *         }
+ *     }
+ * } </pre>
+ *
+ * <a name="default-value"></a>
+ * <h3>Specify the default selected value</h3>
+ *
+ * If you need to set the selected value to something other than the first
+ * option, set the Select {@link #setValue(java.lang.String) value} to the
+ * option value you want to select:
+ *
  * <pre class="prettyprint">
  * public MyPage extends Page {
  *     private Select mySelect;
@@ -221,16 +274,15 @@ import org.apache.click.util.PropertyUtils;
  *         mySelect = new Select("mySelect");
  *         mySelect.add("YES");
  *         mySelect.add("NO");
- *     }
  *
- *     public void onRender() {
- *         // Only specify a default value if the current value is null
- *         if (mySelect.getValue() == null) {
- *             mySelect.setValue("YES");
- *         }
+ *         // If you want NO to be selected by default, set the value to "NO"
+ *         mySelect.setValue("NO");
  *     }
- * }
- * </pre>
+ * } </pre>
+ *
+ * See also the W3C HTML reference:
+ * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
+ *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.6">SELECT</a>
  *
  * @see Option
  * @see OptionGroup
@@ -274,6 +326,19 @@ public class Select extends Field {
      * {@link #multiple} is true.
      */
     protected List selectedValues;
+
+    /** The select data provider. */
+    @SuppressWarnings("unchecked")
+    protected DataProvider dataProvider;
+
+    /**
+     * The default option will be the first option added to the Select.
+     * This property is often used when populating the Select from a
+     * {@link #setDataProvider(org.apache.click.util.DataProvider)}, where
+     * the DataProvider does not return a sensible default option e.g. an
+     * empty ("") option.
+     */
+    protected Option defaultOption;
 
     // Constructors -----------------------------------------------------------
 
@@ -392,6 +457,42 @@ public class Select extends Field {
     }
 
     /**
+     * Add the given Option/OptionGroup/String/Number/Boolean to the Select.
+     *
+     * @param option one of either Option/OptionGroup/String/Number/Boolean
+     *     to add
+     * @throws IllegalArgumentException if option is null, or the option
+     *     is an unsupported class
+     */
+    public void add(Object option) {
+        if (option instanceof Option) {
+            getOptionList().add(option);
+
+        } else if (option instanceof OptionGroup) {
+            getOptionList().add(option);
+
+        } else if (option instanceof String) {
+            getOptionList().add(new Option(option.toString()));
+
+        } else if (option instanceof Number) {
+            getOptionList().add(new Option(option.toString()));
+
+        } else if (option instanceof Boolean) {
+            getOptionList().add(new Option(option.toString()));
+
+        } else {
+            String message = "Unsupported options class "
+                + option.getClass().getName() + ". Please use method "
+                + "Select.addAll(Collection, String, String) instead.";
+            throw new IllegalArgumentException(message);
+        }
+
+        if (getOptionList().size() == 1) {
+            setInitialValue();
+        }
+    }
+
+    /**
      * Add the given Option/OptionGroup/String/Number/Boolean collection to the
      * Select.
      *
@@ -400,38 +501,16 @@ public class Select extends Field {
      * @throws IllegalArgumentException if options is null, or the collection
      *     contains an unsupported class
      */
-    public void addAll(Collection options) {
+    public void addAll(Collection<? extends Object> options) {
         if (options == null) {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
 
         if (!options.isEmpty()) {
-            for (Iterator i = options.iterator(); i.hasNext();) {
-                Object option = i.next();
-                if (option instanceof Option) {
-                    getOptionList().add(option);
-
-                } else if (option instanceof OptionGroup) {
-                    getOptionList().add(option);
-
-                } else if (option instanceof String) {
-                    getOptionList().add(new Option(option.toString()));
-
-                } else if (option instanceof Number) {
-                    getOptionList().add(new Option(option.toString()));
-
-                } else if (option instanceof Boolean) {
-                    getOptionList().add(new Option(option.toString()));
-
-                } else {
-                    String message = "Unsupported options class "
-                        + option.getClass().getName() + ". Please use method "
-                        + "Select.addAll(Collection, String, String) instead.";
-                    throw new IllegalArgumentException(message);
-                }
+            for (Object option : options) {
+                add(option);
             }
-            setInitialValue();
         }
     }
 
@@ -483,45 +562,67 @@ public class Select extends Field {
 
     /**
      * Add the given collection of objects to the Select, creating new Option
-     * instances based on the object properties specified by value and label.
+     * instances based on the object properties specified by optionValueProperty
+     * and optionLabelProperty. If the optionLabelProperty is null, the
+     * optionValueProperty will be used as both the value and label of the
+     * options.
+     * <p/>
+     * The collection objects can either be POJOs (plain old java objects) or
+     * {@link java.util.Map} instances.
+     * <p/>
+     * Example usage:
      *
      * <pre class="prettyprint">
      * Select select = new Select("type", "Type:");
      * select.addAll(getCustomerService().getCustomerTypes(), "id", "name");
      * form.add(select); </pre>
      *
+     * This method will iterate over all customerTypes and for each customerType
+     * create a new Option, setting the option value to the customerType
+     * <tt>"id"</tt>, and the option label to the customerType <tt>"name"</tt>.
+     *
      * @param objects the collection of objects to render as options
-     * @param value the name of the object property to render as the Option value
-     * @param label the name of the object property to render as the Option label
-     * @throws IllegalArgumentException if options, value or label parameter is null
+     * @param optionValueProperty the name of the object property to render as
+     * the Option value
+     * @param optionLabelProperty the name of the object property to render as
+     * the Option label
+     * @throws IllegalArgumentException if objects or valueProperty parameter is
+     * null
      */
-    public void addAll(Collection objects, String value, String label) {
+    public void addAll(Collection objects, String optionValueProperty,
+        String optionLabelProperty) {
+
         if (objects == null) {
             String msg = "objects parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        if (value == null) {
-            String msg = "value parameter cannot be null";
-            throw new IllegalArgumentException(msg);
-        }
-        if (label == null) {
-            String msg = "label parameter cannot be null";
+        if (optionValueProperty == null) {
+            String msg = "optionValueProperty parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
 
         if (objects.isEmpty()) {
             return;
         }
- 
+
         Map methodCache = new HashMap();
 
         for (Iterator i = objects.iterator(); i.hasNext();) {
             Object object = i.next();
 
             try {
-                Object valueResult = PropertyUtils.getValue(object, value, methodCache);
+                Object valueResult = PropertyUtils.getValue(object,
+                    optionValueProperty, methodCache);
 
-                Object labelResult = PropertyUtils.getValue(object, label, methodCache);
+                // Default labelResult to valueResult
+                Object labelResult = valueResult;
+
+                // If optionLabelProperty is specified, lookup the labelResult
+                // from the object
+                if (optionLabelProperty != null) {
+                    labelResult = PropertyUtils.getValue(object,
+                        optionLabelProperty, methodCache);
+                }
 
                 Option option = null;
 
@@ -539,6 +640,51 @@ public class Select extends Field {
         }
 
         setInitialValue();
+    }
+
+    /**
+     * Return the select row list DataProvider.
+     *
+     * @return the select row list DataProvider
+     */
+    @SuppressWarnings("unchecked")
+    public DataProvider getDataProvider() {
+        return dataProvider;
+    }
+
+    /**
+     * Set the select row list DataProvider. The dataProvider can return any
+     * mixture of Option/OptionGroup/String/Number/Boolean values.
+     * <p/>
+     * Example usage:
+     *
+     * <pre class="prettyprint">
+     * Select select = new Select("name", "Name");
+     *
+     * // Set the Select default "non-selection" option
+     * select.setDefaultOption(new Option("U", ""));
+     *
+     * select.setDataProvider(new DataProvider() {
+     *     public List getData() {
+     *         List options = new ArrayList();
+     *         options.add(new Option("M", "Male"));
+     *         options.add(new Option("F", "Female"));
+     *         return options;
+     *     }
+     * }); </pre>
+     *
+     * @param dataProvider the select row list DataProvider
+     */
+    @SuppressWarnings("unchecked")
+    public void setDataProvider(DataProvider dataProvider) {
+        this.dataProvider = dataProvider;
+        if (dataProvider != null) {
+            if (optionList != null) {
+                ClickUtils.getLogService().warn("please note that setting a"
+                    + " dataProvider will nullify the optionList");
+            }
+            setOptionList(null);
+        }
     }
 
     /**
@@ -625,13 +771,86 @@ public class Select extends Field {
     }
 
     /**
+     * Set the Select default option. The default option will be the first option
+     * added to the Select {@link #getOptionList() optionList}.
+     * <p/>
+     * <b>Please note</b>: this property is used in conjunction with the Select
+     * {@link #setDataProvider(org.apache.click.util.DataProvider) dataProvider},
+     * where the DataProvider does not return a sensible default, non-selecting
+     * option. For example if the DataProvider returns a list of Authors from the
+     * database, the list won't include a default empty ("") option to choose
+     * from. By setting the defaultOption property, the Select will add this
+     * Option as the first option of the Select {@link #getOptionList() optionList}.
+     * <p/>
+     * In addition, if the Select is {@link #setRequired(boolean) required},
+     * the defaultOption is used to check whether the Select is valid or not.
+     * In other words, if the user's selected value equals the defaultOption value,
+     * the Select won't be valid since no selection was made by the user.
+     * <p/>
+     * Example usage:
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *     authorSelect.setDefaultOption(Option.EMPTY_OPTION);
+     *
+     *     authorSelect.setDataProvider(new DataProvider() {
+     *         public List<Author> getData() {
+     *             return getAuthorDao().getAuthors();
+     *         }
+     *     });
+     *     form.add(authorSelect);
+     * } </pre>
+     *
+     * @param option the Select default option
+     */
+    public void setDefaultOption(Option option) {
+        this.defaultOption = option;
+    }
+
+    /**
+     * Return the Select default option or null if no default option is set
+     *
+     * @see #setDefaultOption(org.apache.click.control.Option)
+     *
+     * @return the Select default option or null if no default option is set
+     */
+    public Option getDefaultOption() {
+        return defaultOption;
+    }
+
+    /**
      * Return the Option list.
      *
      * @return the Option list
      */
     public List getOptionList() {
         if (optionList == null) {
+
             optionList = new ArrayList();
+
+            Option defaultOption = getDefaultOption();
+            if (defaultOption != null) {
+                optionList.add(defaultOption);
+            }
+
+            DataProvider dp = getDataProvider();
+
+            if (dp != null) {
+                Iterable iterableData = dp.getData();
+
+                // Create and populate the optionList from the Iterable data
+                if (iterableData instanceof Collection) {
+                    // Popuplate optionList from options
+                    addAll((Collection) iterableData);
+
+                } else {
+                    if (iterableData != null) {
+                        // Popuplate optionList from options
+                        for (Object option : iterableData) {
+                            add(option);
+                        }
+                    }
+                }
+            }
         }
         return optionList;
     }
@@ -818,20 +1037,33 @@ public class Select extends Field {
                     setErrorMessage("select-error");
 
                 } else {
-                    if (getOptionList().isEmpty()) {
-                        String msg = "Mandatory Select field " + getName()
-                        + " has no options to validate the request against";
-                        throw new RuntimeException(msg);
+                    String defaultValue = getDefaultOptionValue();
+
+                    // if no defaultValue is present, lookup value from OptionList
+                    if (defaultValue == null) {
+                        if (getOptionList().isEmpty()) {
+                            String msg =
+                                "Mandatory Select field " + getName()
+                                + " has no options to validate the request"
+                                + " against. Solutions are to either set the"
+                                + " Select defaultOption(), use a DataProvider"
+                                + " or set the optionList in the Page onInit()"
+                                + " page event";
+                            throw new RuntimeException(msg);
+                        }
+
+                        Object firstEntry = getOptionList().get(0);
+                        if (firstEntry instanceof Option) {
+                            Option option = (Option) firstEntry;
+                            defaultValue = option.getValue();
+                        }
                     }
 
-                    String firstValue = "";
-                    Object firstEntry = getOptionList().get(0);
-                    if (firstEntry instanceof Option) {
-                        Option option = (Option) firstEntry;
-                        firstValue = option.getValue();
-
+                    if (defaultValue == null) {
+                        defaultValue = "";
                     }
-                    if (firstValue.equals(getValue())) {
+
+                    if (defaultValue.equals(getValue())) {
                         setErrorMessage("select-error");
                     }
                 }
@@ -840,6 +1072,23 @@ public class Select extends Field {
     }
 
     // Protected Methods ------------------------------------------------------
+
+    /**
+     * Return the Select {@link #getDefaultOption() defaultOption} value, or
+     * null if no defaultOption is set.
+     *
+     * @see #getDefaultOption()
+     * @see #setDefaultOption(org.apache.click.control.Option)
+     *
+     * @return the Select defaultOption value, or null if no defaultOption is set
+     */
+    protected String getDefaultOptionValue() {
+        Option defaultOption = getDefaultOption();
+        if (defaultOption != null) {
+            return defaultOption.getValue();
+        }
+        return null;
+    }
 
     /**
      * Set the initial select option value.
