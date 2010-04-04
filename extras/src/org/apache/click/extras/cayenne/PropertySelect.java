@@ -630,6 +630,7 @@ public class PropertySelect extends Select {
                 getOptionList().add(Option.EMPTY_OPTION);
             }
 
+            Context context = getContext();
             Map cache = new HashMap();
 
             for (int i = 0; i < list.size(); i++) {
@@ -639,7 +640,7 @@ public class PropertySelect extends Select {
                 Object label = null;
 
                 if (getDecorator() != null) {
-                    label = getDecorator().render(dataObject, getContext());
+                    label = getDecorator().render(dataObject, context);
 
                 } else {
                     if (getOptionLabel() == null) {
