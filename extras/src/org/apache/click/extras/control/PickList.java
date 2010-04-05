@@ -381,13 +381,13 @@ public class PickList extends Field {
      *   list.addAll(getCustomerService().getCustomerTypes(), "id", "name);
      *   form.add(list); </pre>
      *
-     * For example given the Collection of CustomerType <tt>objects</tt>,
-     * <tt>value</tt> "id" and <tt>label</tt> "name", the <tt>id</tt> and
-     * <tt>name</tt> properties of each CustomerType will be retrieved. For each
-     * CustomerType in the Collection a new {@link org.apache.click.control.Option}
-     * instance is created and its <tt>value</tt> and <tt>label</tt> is set to
-     * the <tt>value</tt> and <tt>label</tt> retrieved from the CustomerType
-     * instance.
+     * For example, given a Collection of CustomerType <tt>objects</tt>,
+     * <tt>optionValueProperty</tt> "id" and <tt>optionLabelProperty</tt> "name",
+     * the <tt>id</tt> and <tt>name</tt> properties of each CustomerType will
+     * be retrieved. For each CustomerType in the Collection a new
+     * {@link org.apache.click.control.Option} instance is created and its
+     * <tt>value</tt> and <tt>label</tt> is set to the <tt>id</tt>
+     * and <tt>name</tt> retrieved from the CustomerType instance.
      *
      * @param objects the collection of objects to render as options
      * @param optionValueProperty the name of the object property to render as
