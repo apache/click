@@ -563,7 +563,7 @@ public class DateField extends TextField {
         // Check that the field id has been set
         String fieldName = getName();
         if (fieldName == null) {
-            throw new IllegalStateException("CalendarField name"
+            throw new IllegalStateException("DateField name"
                 + " is not defined. Set the name before calling"
                 + " getHeadElements().");
         }
