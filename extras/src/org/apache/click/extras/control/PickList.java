@@ -373,7 +373,8 @@ public class PickList extends Field {
 
     /**
      * Add the given collection of objects to the PickList, creating new Option
-     * instances based on the object properties specified by value and label.
+     * instances based on the object properties specified by optionValueProperty
+     * and optionLabelProperty.
      *
      * <pre class="prettyprint">
      *   PickList list = new PickList("type", "Type:");
