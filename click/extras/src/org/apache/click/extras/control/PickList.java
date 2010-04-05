@@ -31,6 +31,7 @@ import org.apache.click.control.Field;
 import org.apache.click.control.Option;
 import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
+import org.apache.click.util.DataProvider;
 import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PropertyUtils;
@@ -69,34 +70,97 @@ import org.apache.click.util.PropertyUtils;
  * </td></tr></table>
  *
  * The values of the <code>PickList</code> are provided by <code>Option</code>
- * objects like for a <code>Select</code>.
+ * objects similar to a <code>Select</code> field.
  *
  * <h3>PickList Examples</h3>
  *
- * The following code shows the previous rendering example:
+ * The following code shows how the previous example was rendered:
+ * <p/>
  *
  * <a name="picklist-example"></a>
  * <pre class="prettyprint">
- * PickList pickList = new PickList("languages");
- * pickList.setHeaderLabel("Languages", "Selected");
+ * public class MyPage extends Page {
  *
- * pickList.add(new Option("001", "Java"));
- * pickList.add(new Option("002", "Ruby"));
- * pickList.add(new Option("003", "Perl"));
+ *     public void onInit() {
  *
- * pickList.addSelectedValue("001"); </pre>
+ *         PickList pickList = new PickList("languages");
+ *         pickList.setHeaderLabel("Languages", "Selected");
+ *
+ *         pickList.add(new Option("001", "Java"));
+ *         pickList.add(new Option("002", "Ruby"));
+ *         pickList.add(new Option("003", "Perl"));
+ *
+ *         // Set the Java as a selected option
+ *         pickList.addSelectedValue("001");
+ *     }
+ * } </pre>
+ *
+ * Unless you use a <a href="#dataprovider">DataProvider</a>, remember to always
+ * populate the PickList option list before it is processed. Do not populate the
+ * option list in a Page's onRender() method.
+ *
+ * <h3><a name="dataprovider"></a>DataProvider</h3>
+ * A common issue new Click users face is which page event (onInit or onRender)
+ * to populate the PickList {@link #getOptionList() optionList} in. To alleviate
+ * this problem you can set a
+ * {@link #setDataProvider(org.apache.click.util.DataProvider) dataProvider}
+ * which allows the PickList to fetch data when needed. This is
+ * particularly useful if retrieveing PickList data is expensive e.g. loading
+ * from a database.
+ * <p/>
+ * Below is a simple example:
+ *
+ * <pre class="prettyprint">
+ * public class LanguagePage extends Page {
+ *
+ *     public Form form = new Form();
+ *
+ *     private Select languagePickList = new PickList("languages");
+ *
+ *     public LanguagePage() {
+ *
+ *         // Set a DataProvider which "getData" method will be called to
+ *         // populate the optionList. The "getData" method is only called when
+ *         // the optionList data is needed
+ *         languagePickList.setDataProvider(new DataProvider() {
+ *             public List getData() {
+ *                 List options = new ArrayList();
+ *                 options.add(new Option("001", "Java"));
+ *                 options.add(new Option("002", "Ruby"));
+ *                 options.add(new Option("003", "Perl"));
+ *                 return options;
+ *             }
+ *         });
+ *
+ *         form.add(languagePickList);
+ *
+ *         form.add(new Submit("ok", "  OK  "));
+ *     }
+ * } </pre>
+ *
+ * <h3><a name="selected-values"></a>Retrieving selected values</h3>
  *
  * The selected values can be retrieved from {@link #getSelectedValues()}.
  *
  * <pre class="prettyprint">
- * Set selectedValues = pickList.getSelectedValues();
- *
- * for (Object value : selectedValues) {
+ * public void onInit() {
  *     ...
+ *     form.add(pickList);
+ *
+ *     // Add a submit button with a listener
+ *     form.add(new Submit("OK", this, "onSubmitClick"));
+ * }
+ *
+ * public boolean onSubmitClick() {
+ *     if (form.isValid()) {
+ *         Set selectedValues = languagePickList.getSelectedValues();
+ *         for (Object languageValue : selectedValues) {
+ *             ...
+ *         }
+ *     }
  * } </pre>
  *
- * <a name="resources"></a>
- * <h3>CSS and JavaScript resources</h3>
+ * <h3><a name="resources"></a>CSS and JavaScript resources</h3>
  *
  * The PickList control makes use of the following resources
  * (which Click automatically deploys to the application directory, <tt>/click</tt>):
@@ -135,6 +199,10 @@ public class PickList extends Field {
         + "'}'\n";
 
     // Instance Variables -----------------------------------------------------
+
+    /** The select data provider. */
+    @SuppressWarnings("unchecked")
+    protected DataProvider dataProvider;
 
     /**
      * The list height. The default height is 8.
@@ -321,21 +389,21 @@ public class PickList extends Field {
      * instance.
      *
      * @param objects the collection of objects to render as options
-     * @param value the name of the object property to render as the Option value
-     * @param label the name of the object property to render as the Option label
-     * @throws IllegalArgumentException if options, value or label parameter is null
+     * @param optionValueProperty the name of the object property to render as
+     * the Option value
+     * @param optionLabelProperty the name of the object property to render as
+     * the Option label
+     * @throws IllegalArgumentException if objects or optionValueProperty
+     * parameter is null
      */
-    public void addAll(Collection objects, String value, String label) {
+    public void addAll(Collection objects, String optionValueProperty,
+        String optionLabelProperty) {
         if (objects == null) {
             String msg = "objects parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        if (value == null) {
-            String msg = "value parameter cannot be null";
-            throw new IllegalArgumentException(msg);
-        }
-        if (label == null) {
-            String msg = "label parameter cannot be null";
+        if (optionValueProperty == null) {
+            String msg = "optionValueProperty parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
 
@@ -343,14 +411,24 @@ public class PickList extends Field {
             return;
         }
 
-        Map cache = new HashMap();
+        Map methodCache = new HashMap();
 
         for (Iterator i = objects.iterator(); i.hasNext();) {
             Object object = i.next();
 
             try {
-                Object valueResult = PropertyUtils.getValue(object, value, cache);
-                Object labelResult = PropertyUtils.getValue(object, label, cache);
+                Object valueResult = PropertyUtils.getValue(object,
+                    optionValueProperty, methodCache);
+
+                // Default labelResult to valueResult
+                Object labelResult = valueResult;
+
+                // If optionLabelProperty is specified, lookup the labelResult
+                // from the object
+                if (optionLabelProperty != null) {
+                    labelResult = PropertyUtils.getValue(object,
+                        optionLabelProperty, methodCache);
+                }
 
                 Option option = null;
 
@@ -365,6 +443,50 @@ public class PickList extends Field {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    /**
+     * Return the PickList optionList DataProvider.
+     *
+     * @return the PickList optionList DataProvider
+     */
+    @SuppressWarnings("unchecked")
+    public DataProvider getDataProvider() {
+        return dataProvider;
+    }
+
+    /**
+     * Set the PickList option list DataProvider. The dataProvider can return
+     * any mixture of Option/String/Number/Boolean values.
+     * <p/>
+     * Example usage:
+     *
+     * <pre class="prettyprint">
+     * PickList pickList = new PickList("languages");
+     * pickList.setHeaderLabel("Languages", "Selected");
+     *
+     * select.setDataProvider(new DataProvider() {
+     *     public List getData() {
+     *         List options = new ArrayList();
+     *         options.add(new Option("001", "Java"));
+     *         options.add(new Option("002", "Ruby"));
+     *         options.add(new Option("003", "Perl"));
+     *         return options;
+     *     }
+     * }); </pre>
+     *
+     * @param dataProvider the PickList option list DataProvider
+     */
+    @SuppressWarnings("unchecked")
+    public void setDataProvider(DataProvider dataProvider) {
+        this.dataProvider = dataProvider;
+        if (dataProvider != null) {
+            if (optionList != null) {
+                ClickUtils.getLogService().warn("please note that setting a"
+                    + " dataProvider will nullify the optionList");
+            }
+            setOptionList(null);
         }
     }
 
@@ -387,9 +509,39 @@ public class PickList extends Field {
      */
     public List getOptionList() {
         if (optionList == null) {
+
             optionList = new ArrayList();
+
+            DataProvider dp = getDataProvider();
+
+            if (dp != null) {
+                Iterable iterableData = dp.getData();
+
+                // Create and populate the optionList from the Iterable data
+                if (iterableData instanceof Collection) {
+                    // Popuplate optionList from options
+                    addAll((Collection) iterableData);
+
+                } else {
+                    if (iterableData != null) {
+                        // Popuplate optionList from options
+                        for (Object option : iterableData) {
+                            add(option);
+                        }
+                    }
+                }
+            }
         }
         return optionList;
+    }
+
+    /**
+     * Set the Option list.
+     *
+     * @param options the Option list
+     */
+    public void setOptionList(List options) {
+        optionList = options;
     }
 
     /**
