@@ -539,11 +539,14 @@ public class DateField extends TextField {
      * resources:
      *
      * <ul>
-     * <li><tt>click/calendar/{style}.css</tt> - where {style} is a specific Calendar style e.g. <tt>default</tt>, <tt>red</tt>, <tt>blue</tt> etc.</li>
+     * <li><tt>click/calendar/{style}.css</tt> - where {style} is a specific
+     * Calendar style e.g. <tt>default</tt>, <tt>red</tt>, <tt>blue</tt> etc.</li>
      * <li><tt>click/control.js</tt></li>
      * <li><tt>click/prototype/prototype.js</tt></li>
      * <li><tt>click/calendar/calendar_date_select.js</tt></li>
-     * <li><tt>click/calendar/{lang}.js</tt> - where {lang} is the language specified by the browser e.g. <tt>fr</tt> (French), <tt>de</tt> (German) etc.</li>
+     * <li><tt>click/calendar/{lang}.js</tt> - where {lang} is the language
+     * specified by the browser e.g. <tt>fr</tt> (French), <tt>de</tt> (German)
+     * etc.</li>
      * </ul>
      *
      * This method delegates to {@link #addCalendarOptions(java.util.List)} to
