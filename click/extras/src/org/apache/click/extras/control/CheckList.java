@@ -34,6 +34,7 @@ import org.apache.click.element.CssImport;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.util.ClickUtils;
+import org.apache.click.util.DataProvider;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PropertyUtils;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -41,14 +42,75 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provides a scrollable check list. This is an implementation of the Checklist
+ * Provides a check list control. This is an implementation of the Checklist
  * from <a href="http://c82.net/article.php?ID=25">Check it don't select it</a>
  * <p/>
- * A scrollable check list is a more user friendly substitution for
+ * A check list is a more user friendly substitution for
  * multiple-select-boxes. It is a scrollabe div which has many select-boxes.
+ *
+ * <h3><a name="checklist-example"></a>CheckList Examples</h3>
+ *
+ * <pre class="prettyprint">
+ * public class MyPage extends Page {
+ *
+ *     public void onInit() {
+ *
+ *         CheckList checkList = new ChecList("languages");
+ *
+ *         checkList.add(new Option("001", "Java"));
+ *         checkList.add(new Option("002", "Ruby"));
+ *         checkList.add(new Option("003", "Perl"));
+ *
+ *         // Set the Java as a selected option
+ *         checkList.addSelectedValue("001");
+ *     }
+ * } </pre>
+ *
+ * Unless you use a <a href="#dataprovider">DataProvider</a>, remember to always
+ * populate the CheckList option list before it is processed. Do not populate the
+ * option list in a Page's onRender() method.
+ *
+ * <h3><a name="dataprovider"></a>DataProvider</h3>
+ * A common issue new Click users face is which page event (onInit or onRender)
+ * to populate the CheckList {@link #getOptionList() optionList} in. To alleviate
+ * this problem you can set a
+ * {@link #setDataProvider(org.apache.click.util.DataProvider) dataProvider}
+ * which allows the CheckList to fetch data when needed. This is
+ * particularly useful if retrieveing CheckList data is expensive e.g. loading
+ * from a database.
  * <p/>
- * To make the CheckList scrollable, set the height of the CheckList through
- * {@link #setHeight(String)}.
+ * Below is a simple example:
+ *
+ * <pre class="prettyprint">
+ * public class LanguagePage extends Page {
+ *
+ *     public Form form = new Form();
+ *
+ *     private Select languageCheckList = new CheckList("languages");
+ *
+ *     public LanguagePage() {
+ *
+ *         // Set a DataProvider which "getData" method will be called to
+ *         // populate the optionList. The "getData" method is only called when
+ *         // the optionList data is needed
+ *         languageCheckList.setDataProvider(new DataProvider() {
+ *             public List getData() {
+ *                 List options = new ArrayList();
+ *                 options.add(new Option("001", "Java"));
+ *                 options.add(new Option("002", "Ruby"));
+ *                 options.add(new Option("003", "Perl"));
+ *                 return options;
+ *             }
+ *         });
+ *
+ *         form.add(languageCheckList);
+ *
+ *         form.add(new Submit("ok", "  OK  "));
+ *     }
+ * } </pre>
+ *
+ * CheckList also supports a scrollable mode. To make the CheckList scrollable,
+ * set the height of the CheckList through {@link #setHeight(String)}.
  * <p/>
  * <b>Note</b> when setting the height it is recommended that the CheckList
  * should not be sortable, because of browser incompatibilities.
@@ -146,6 +208,10 @@ public class CheckList extends Field {
         + "'}'\n";
 
     // Instance Variables -----------------------------------------------------
+
+    /** The select data provider. */
+    @SuppressWarnings("unchecked")
+    protected DataProvider dataProvider;
 
     /** The height if null not scrollable. */
     protected String height;
@@ -260,17 +326,52 @@ public class CheckList extends Field {
     }
 
     /**
-     * Add the given Option collection to the CheckList.
+     * Add the given Option/String/Number/Boolean to the CheckList.
      *
-     * @param options the collection of Option objects to add
-     * @throws IllegalArgumentException if options is null
+     * @param option one of either Option/String/Number/Boolean to add
+     * @throws IllegalArgumentException if option is null, or the option
+     * is an unsupported class
      */
-    public void addAll(Collection options) {
+    public void add(Object option) {
+        if (option instanceof Option) {
+            getOptionList().add(option);
+
+        } else if (option instanceof String) {
+            getOptionList().add(new Option(option.toString()));
+
+        } else if (option instanceof Number) {
+            getOptionList().add(new Option(option.toString()));
+
+        } else if (option instanceof Boolean) {
+            getOptionList().add(new Option(option.toString()));
+
+        } else {
+            String message = "Unsupported options class "
+                + option.getClass().getName() + ". Please use method "
+                + "CheckList.addAll(Collection, String, String) instead.";
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Add the given Option/String/Number/Boolean collection to the CheckList.
+     *
+     * @param options the collection of Option/String/Number/Boolean
+     * objects to add
+     * @throws IllegalArgumentException if options is null, or the collection
+     * contains an unsupported class
+     */
+    public void addAll(Collection<? extends Object> options) {
         if (options == null) {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        getOptionList().addAll(options);
+
+        if (!options.isEmpty()) {
+            for (Object option : options) {
+                add(option);
+            }
+        }
     }
 
     /**
@@ -317,29 +418,38 @@ public class CheckList extends Field {
 
     /**
      * Add the given collection of objects to the CheckList, creating new Option
-     * instances based on the object properties specified by value and label.
+     * instances based on the object properties specified by optionValueProperty
+     * and optionLabelProperty.
      *
-     * <pre class="codeJava">
-     *   CheckList list = <span class="kw">new</span> CheckList(<span class="st">"type"</span>, <span class="st">"Type:"</span>);
-     *   list.addAll(getCustomerService().getCustomerTypes(), <span class="st">"id"</span>, <span class="st">"name"</span>);
+     * <pre class="prettyprint">
+     *   CheckList list = new CheckList("type", "Type:");
+     *   list.addAll(getCustomerService().getCustomerTypes(), "id", "name");
      *   form.add(select); </pre>
      *
+     * For example given the Collection of CustomerType <tt>objects</tt>,
+     * <tt>optionValueProperty</tt> "id" and <tt>optionLabelProperty</tt> "name",
+     * the <tt>id</tt> and <tt>name</tt> properties of each CustomerType will be
+     * retrieved. For each CustomerType in the Collection a new
+     * {@link org.apache.click.control.Option} instance is created and its
+     * <tt>value</tt> and <tt>label</tt> is set to the <tt>id</tt> and
+     * <tt>name</tt> retrieved from the CustomerType instance.
+     *
      * @param objects the collection of objects to render as options
-     * @param value the name of the object property to render as the Option value
-     * @param label the name of the object property to render as the Option label
-     * @throws IllegalArgumentException if options, value or label parameter is null
+     * @param optionValueProperty the name of the object property to render as
+     * the Option value
+     * @param optionLabelProperty the name of the object property to render as
+     * the Option label
+     * @throws IllegalArgumentException if objects or optionValueProperty
+     * parameter is null
      */
-    public void addAll(Collection objects, String value, String label) {
+    public void addAll(Collection objects, String optionValueProperty,
+        String optionLabelProperty) {
         if (objects == null) {
             String msg = "objects parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        if (value == null) {
-            String msg = "value parameter cannot be null";
-            throw new IllegalArgumentException(msg);
-        }
-        if (label == null) {
-            String msg = "label parameter cannot be null";
+        if (optionValueProperty == null) {
+            String msg = "optionValueProperty parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
 
@@ -347,14 +457,24 @@ public class CheckList extends Field {
             return;
         }
 
-        Map cache = new HashMap();
+        Map methodCache = new HashMap();
 
         for (Iterator i = objects.iterator(); i.hasNext();) {
             Object object = i.next();
 
             try {
-                Object valueResult = PropertyUtils.getValue(object, value, cache);
-                Object labelResult = PropertyUtils.getValue(object, label, cache);
+                Object valueResult = PropertyUtils.getValue(object,
+                    optionValueProperty, methodCache);
+
+                // Default labelResult to valueResult
+                Object labelResult = valueResult;
+
+                // If optionLabelProperty is specified, lookup the labelResult
+                // from the object
+                if (optionLabelProperty != null) {
+                    labelResult = PropertyUtils.getValue(object,
+                        optionLabelProperty, methodCache);
+                }
 
                 Option option = null;
 
@@ -369,6 +489,49 @@ public class CheckList extends Field {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    /**
+     * Return the CheckList optionList DataProvider.
+     *
+     * @return the CheckList optionList DataProvider
+     */
+    @SuppressWarnings("unchecked")
+    public DataProvider getDataProvider() {
+        return dataProvider;
+    }
+
+    /**
+     * Set the CheckList option list DataProvider. The dataProvider can return
+     * any mixture of Option/String/Number/Boolean values.
+     * <p/>
+     * Example usage:
+     *
+     * <pre class="prettyprint">
+     * CheckList checkList = new CheckList("languages");
+     *
+     * select.setDataProvider(new DataProvider() {
+     *     public List getData() {
+     *         List options = new ArrayList();
+     *         options.add(new Option("001", "Java"));
+     *         options.add(new Option("002", "Ruby"));
+     *         options.add(new Option("003", "Perl"));
+     *         return options;
+     *     }
+     * }); </pre>
+     *
+     * @param dataProvider the CheckList option list DataProvider
+     */
+    @SuppressWarnings("unchecked")
+    public void setDataProvider(DataProvider dataProvider) {
+        this.dataProvider = dataProvider;
+        if (dataProvider != null) {
+            if (optionList != null) {
+                ClickUtils.getLogService().warn("please note that setting a"
+                    + " dataProvider will nullify the optionList");
+            }
+            setOptionList(null);
         }
     }
 
@@ -558,11 +721,32 @@ public class CheckList extends Field {
     /**
      * Return the Option list.
      *
-     * @return a list of Option objects
+     * @return the Option list
      */
     public List getOptionList() {
         if (optionList == null) {
+
             optionList = new ArrayList();
+
+            DataProvider dp = getDataProvider();
+
+            if (dp != null) {
+                Iterable iterableData = dp.getData();
+
+                // Create and populate the optionList from the Iterable data
+                if (iterableData instanceof Collection) {
+                    // Popuplate optionList from options
+                    addAll((Collection) iterableData);
+
+                } else {
+                    if (iterableData != null) {
+                        // Popuplate optionList from options
+                        for (Object option : iterableData) {
+                            add(option);
+                        }
+                    }
+                }
+            }
         }
         return optionList;
     }
