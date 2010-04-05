@@ -861,7 +861,7 @@ public class DateField extends TextField {
         String imgId = fieldId + "-button";
 
         JsScript script = new JsScript();
-        script.setId(fieldId + "_calendar_date_select");
+        script.setId(fieldId + "_js_setup");
 
         // Note the Calendar options script is recreated and checked if it
         // is contained in the headElement. This caters for when the field is
