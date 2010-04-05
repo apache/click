@@ -18,9 +18,12 @@
  */
 package org.apache.click.extras.control;
 
+import java.util.List;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
+import org.apache.click.Page;
 import org.apache.click.control.Form;
+import org.apache.click.util.PageImports;
 import org.apache.commons.lang.StringUtils;
 
 public class FormTableTest extends TestCase {
@@ -31,24 +34,36 @@ public class FormTableTest extends TestCase {
      */
     public void testGetHtmlImports() {
         MockContext.initContext();
-        
+
+        Page page = new Page();
+        PageImports pageImports = new PageImports(page);
+
         // Check imports using an internal Form Control
         FormTable table = new FormTable("table");
 
-        String imports = table.getHtmlImports();
-        assertEquals(1, StringUtils.countMatches(imports, "/table.css"));
-        assertEquals(1, StringUtils.countMatches(imports, "/control.js"));
-        assertEquals(1, StringUtils.countMatches(imports, "/control.css"));
+        pageImports.processControl(table);
+        List headElements = pageImports.getHeadElements();
+        List jsElements = pageImports.getJsElements();
+
+        assertTrue(headElements.get(0).toString().contains("/table.css"));
+        assertTrue(headElements.get(1).toString().contains("/control.css"));
+        assertTrue(jsElements.get(0).toString().contains("/control.js"));
 
 
         // Check imports using an external Form Control
+        page = new Page();
+        pageImports = new PageImports(page);
+
         Form form = new Form("form");
         table = new FormTable("table", form);
         form.add(table);
 
-        imports = form.getHtmlImports();
-        assertEquals(1, StringUtils.countMatches(imports, "/table.css"));
-        assertEquals(1, StringUtils.countMatches(imports, "/control.js"));
-        assertEquals(1, StringUtils.countMatches(imports, "/control.css"));
+        pageImports.processControl(form);
+        headElements = pageImports.getHeadElements();
+        jsElements = pageImports.getJsElements();
+
+        assertTrue(headElements.get(0).toString().contains("/control.css"));
+        assertTrue(headElements.get(1).toString().contains("/table.css"));
+        assertTrue(jsElements.get(0).toString().contains("/control.js"));
     }
 }
