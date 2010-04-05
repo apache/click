@@ -540,6 +540,7 @@ public class DateField extends TextField {
      *
      * <ul>
      * <li><tt>click/calendar/{style}.css</tt> - where {style} is a specific Calendar style e.g. <tt>default</tt>, <tt>red</tt>, <tt>blue</tt> etc.</li>
+     * <li><tt>click/control.js</tt></li>
      * <li><tt>click/prototype/prototype.js</tt></li>
      * <li><tt>click/calendar/calendar_date_select.js</tt></li>
      * <li><tt>click/calendar/{lang}.js</tt> - where {lang} is the language specified by the browser e.g. <tt>fr</tt> (French), <tt>de</tt> (German) etc.</li>
@@ -577,6 +578,8 @@ public class DateField extends TextField {
 
             headElements.add(new CssImport("/click/calendar/" + getStyle()
                 + ".css", versionIndicator));
+            headElements.add(new JsImport("/click/control.js",
+                versionIndicator));
             headElements.add(new JsImport("/click/prototype/prototype.js",
                 versionIndicator));
             headElements.add(new JsImport("/click/calendar/calendar_date_select.js",
