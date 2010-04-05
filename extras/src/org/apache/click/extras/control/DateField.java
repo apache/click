@@ -592,7 +592,7 @@ public class DateField extends TextField {
             // than English
             if (!"en".equals(language)) {
                 JsImport jsImport = new JsImport("/click/calendar/"
-                    + getLocale().getLanguage() + ".js", versionIndicator);
+                    + language + ".js", versionIndicator);
                 jsImport.setAttribute("charset", "UTF-8");
                 headElements.add(jsImport);
             }
