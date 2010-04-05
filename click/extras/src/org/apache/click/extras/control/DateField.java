@@ -135,9 +135,6 @@ public class DateField extends TextField {
 
     // -------------------------------------------------------------- Constants
 
-    /** The date default format pattern: "<tt>dd MMM yyyy</tt>". */
-    public static String defaultFormatPattern = "dd MMM yyyy";
-
     private static final long serialVersionUID = 1L;
 
     /** Supported locales. */
@@ -188,34 +185,46 @@ public class DateField extends TextField {
     /**
      * Construct the Date Field with the given name.
      * <p/>
-     * The date format pattern will be set to <tt>dd MMM yyyy</tt>.
+     * The date format pattern will be set to the message
+     * <tt>"date-format-pattern"</tt> defined in the resource bundle
+     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
+     * <p/>
+     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
      *
      * @param name the name of the field
      */
     public DateField(String name) {
         super(name);
-        setAttribute("id", getName() + "_field");
-        setFormatPattern(defaultFormatPattern);
+        String dateFormatPattern = getMessage("date-format-pattern");
+        setFormatPattern(dateFormatPattern);
     }
 
     /**
      * Construct the Date Field with the given name and label.
      * <p/>
-     * The date format pattern will be set to <tt>dd MMM yyyy</tt>.
+     * The date format pattern will be set to the message
+     * <tt>"date-format-pattern"</tt> defined in the resource bundle
+     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
+     * <p/>
+     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
      *
      * @param name the name of the field
      * @param label the label of the field
      */
     public DateField(String name, String label) {
         super(name, label);
-        setAttribute("id", getName() + "_field");
-        setFormatPattern(defaultFormatPattern);
+        String dateFormatPattern = getMessage("date-format-pattern");
+        setFormatPattern(dateFormatPattern);
     }
 
     /**
      * Construct the Date Field with the given name and required status.
      * <p/>
-     * The date format pattern will be set to <tt>dd MMM yyyy</tt>.
+     * The date format pattern will be set to the message
+     * <tt>"date-format-pattern"</tt> defined in the resource bundle
+     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
+     * <p/>
+     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
      *
      * @param name the name of the field
      * @param required the field required status
@@ -228,7 +237,11 @@ public class DateField extends TextField {
     /**
      * Construct the Date Field with the given name, label and required status.
      * <p/>
-     * The date format pattern will be set to <tt>dd MMM yyyy</tt>.
+     * The date format pattern will be set to the message
+     * <tt>"date-format-pattern"</tt> defined in the resource bundle
+     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
+     * <p/>
+     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
      *
      * @param name the name of the field
      * @param label the label of the field
@@ -236,12 +249,18 @@ public class DateField extends TextField {
      */
     public DateField(String name, String label, boolean required) {
         super(name, label, required);
-        setAttribute("id", getName() + "_field");
-        setFormatPattern(defaultFormatPattern);
+        String dateFormatPattern = getMessage("date-format-pattern");
+        setFormatPattern(dateFormatPattern);
     }
 
     /**
      * Construct the Date Field with the given name, label and size.
+     * <p/>
+     * The date format pattern will be set to the message
+     * <tt>"date-format-pattern"</tt> defined in the resource bundle
+     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
+     * <p/>
+     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
      *
      * @param name the name of the field
      * @param label the label of the field
@@ -255,6 +274,12 @@ public class DateField extends TextField {
     /**
      * Construct the Date Field with the given name, label, size and
      * required status.
+     * <p/>
+     * The date format pattern will be set to the message
+     * <tt>"date-format-pattern"</tt> defined in the resource bundle
+     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
+     * <p/>
+     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
      *
      * @param name the name of the field
      * @param label the label of the field
@@ -269,11 +294,18 @@ public class DateField extends TextField {
     /**
      * Create a Date Field with no name defined.
      * <p/>
+     * The date format pattern will be set to the message
+     * <tt>"date-format-pattern"</tt> defined in the resource bundle
+     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
+     * <p/>
+     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
+     * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public DateField() {
         super();
-        setFormatPattern(defaultFormatPattern);
+        String dateFormatPattern = getMessage("date-format-pattern");
+        setFormatPattern(dateFormatPattern);
     }
 
     // ------------------------------------------------------ Public Attributes
@@ -451,7 +483,6 @@ public class DateField extends TextField {
     @Override
     public void setName(String name) {
         super.setName(name);
-        setAttribute("id", getName() + "_field");
     }
 
     /**
@@ -728,8 +759,6 @@ public class DateField extends TextField {
      * <ul>
      *   <li>/click-control.properties
      *     <ul>
-     *       <li>field-maxlength-error</li>
-     *       <li>field-minlength-error</li>
      *       <li>field-required-error</li>
      *     </ul>
      *   </li>
