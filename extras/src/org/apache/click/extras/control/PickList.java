@@ -75,23 +75,23 @@ import org.apache.click.util.PropertyUtils;
  *
  * The following code shows the previous rendering example:
  *
- * <pre class="codeJava">
- * PickList pickList = <span class="kw">new</span> PickList(<span class="st">"languages"</span>);
- * pickList.setHeaderLabel(<span class="st">"Languages"</span>, <span class="st">"Selected"</span>);
+ * <a name="picklist-example"></a>
+ * <pre class="prettyprint">
+ * PickList pickList = new PickList("languages");
+ * pickList.setHeaderLabel("Languages", "Selected");
  *
- * pickList.add(<span class="kw">new</span> Option(<span class="st">"001"</span>, <span class="st">"Java"</span>));
- * pickList.add(<span class="kw">new</span> Option(<span class="st">"002"</span>, <span class="st">"Ruby"</span>));
- * pickList.add(<span class="kw">new</span> Option(<span class="st">"003"</span>, <span class="st">"Perl"</span>));
+ * pickList.add(new Option("001", "Java"));
+ * pickList.add(new Option("002", "Ruby"));
+ * pickList.add(new Option("003", "Perl"));
  *
- * pickList.addSelectedValue(<span class="st">"001"</span>); </pre>
+ * pickList.addSelectedValue("001"); </pre>
  *
  * The selected values can be retrieved from {@link #getSelectedValues()}.
  *
- * <pre class="codeJava">
+ * <pre class="prettyprint">
  * Set selectedValues = pickList.getSelectedValues();
  *
- * <span class="kw">for</span> (Iterator i = selectedValues.iterator(); i.hasNext();){
- *     String value = (String) i.next();
+ * for (Object value : selectedValues) {
  *     ...
  * } </pre>
  *
@@ -212,17 +212,52 @@ public class PickList extends Field {
     }
 
     /**
-     * Add the given Option collection to the PickList.
+     * Add the given Option/String/Number/Boolean to the PickList.
      *
-     * @param options the collection of Option objects to add
-     * @throws IllegalArgumentException if options is null
+     * @param option one of either Option/String/Number/Boolean to add
+     * @throws IllegalArgumentException if option is null, or the option
+     * is an unsupported class
      */
-    public void addAll(Collection options) {
+    public void add(Object option) {
+        if (option instanceof Option) {
+            getOptionList().add(option);
+
+        } else if (option instanceof String) {
+            getOptionList().add(new Option(option.toString()));
+
+        } else if (option instanceof Number) {
+            getOptionList().add(new Option(option.toString()));
+
+        } else if (option instanceof Boolean) {
+            getOptionList().add(new Option(option.toString()));
+
+        } else {
+            String message = "Unsupported options class "
+                + option.getClass().getName() + ". Please use method "
+                + "PickList.addAll(Collection, String, String) instead.";
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Add the given Option/String/Number/Boolean collection to the PickList.
+     *
+     * @param options the collection of Option/String/Number/Boolean
+     * objects to add
+     * @throws IllegalArgumentException if options is null, or the collection
+     * contains an unsupported class
+     */
+    public void addAll(Collection<? extends Object> options) {
         if (options == null) {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        getOptionList().addAll(options);
+
+        if (!options.isEmpty()) {
+            for (Object option : options) {
+                add(option);
+            }
+        }
     }
 
     /**
