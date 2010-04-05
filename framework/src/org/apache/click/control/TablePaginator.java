@@ -38,7 +38,7 @@ public class TablePaginator implements Renderable {
     /** The parent table to provide paginator for. */
     protected Table table;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a Paginator for the given Table.
@@ -49,7 +49,7 @@ public class TablePaginator implements Renderable {
         setTable(table);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Return the parent Table for this Paginator.
@@ -100,7 +100,7 @@ public class TablePaginator implements Renderable {
                 lastRow = String.valueOf(table.getLastRow());
             }
 
-            String[] args = { rowCountStr, firstRow, lastRow};
+            Object[] args = { rowCountStr, firstRow, lastRow};
 
             if (table.getPageSize() > 0) {
                 buffer.append(table.getMessage("table-page-banner", args));
@@ -184,7 +184,7 @@ public class TablePaginator implements Renderable {
                 lastLabel = controlLink.toString();
             }
 
-            String[] args =
+            Object[] args =
                 { firstLabel, previousLabel, pageLinks, nextLabel, lastLabel };
 
             if (table.getShowBanner()) {
@@ -205,6 +205,7 @@ public class TablePaginator implements Renderable {
      *
      * @return the HTML representation of this paginator
      */
+    @Override
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
