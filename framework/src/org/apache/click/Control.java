@@ -39,31 +39,30 @@ import org.apache.click.util.HtmlStringBuffer;
  * <p/>
  * <img src="control-post-sequence-diagram.png"/>
  *
- * <h4>HTML Header Imports</h4>
+ * <h4>HTML HEAD Elements</h4>
  *
- * Control HTML header imports can be exposed by overriding the
- * {@link #getHtmlImports()} method.
+ * Control HTML HEAD elements can be included in the Page by overriding the
+ * {@link #getHeadElements()} method.
  * <p/>
- * For example a custom TextField control specifies that the
- * <tt>custom.js</tt> file should be included in the HTML header imports:
+ * Below is an example of a custom TextField control specifying that the
+ * <tt>custom.js</tt> file should be included in the HTML HEADer:
  *
- * <pre class="codeJava">
- * <span class="kw">public class</span> CustomField <span class="kw">extends</span> TextField {
+ * <pre class="prettyprint">
+ * public class CustomField extends TextField {
  *
- *     <span class="kw">protected static final</span> String HTML_IMPORT =
- *         <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;\n"</span>;
+ *     <span class="kw">public</span> List getHeadElements() {
+ *         if(headElements == null) {
+ *             // If headElements is null, create default headElements
+ *             headElements = super.getHeadElements();
  *
- *     <span class="kw">public</span> String getHtmlImports() {
- *         String[] args = { getContext().getRequest().getContextPath() };
- *         <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
+ *             // Add a new JavaScript Import Element for the "/custom.js" script
+ *             headElements.add(new JsImport("/click/custom.js"));
+ *         }
+ *         return headElements;
  *     }
  *
  *     ..
  * } </pre>
- *
- * Please note multiple import lines should be separated by a <tt>'\n'</tt> char,
- * as the {@link org.apache.click.util.PageImports} will parse multiple import lines
- * on the <tt>'\n'</tt> char and ensure that imports are not included twice.
  *
  * <a name="on-deploy"></a>
  * <h4>Deploying Resources</h4>
@@ -71,14 +70,24 @@ import org.apache.click.util.HtmlStringBuffer;
  * The Click framework uses the Velocity Tools <tt>WebappLoader</tt> for loading templates.
  * This avoids issues associate with using the Velocity <tt>ClasspathResourceLoader</tt> and
  * <tt>FileResourceLoader</tt> on J2EE application servers.
- * To make preconfigured resources (templates, stylesheets, etc.) available to web applications
- * Click automatically deploys configured classpath resources to the <tt class="blue">/click</tt>
- * directory at startup (existing files will not be overwritten).
+ * To make preconfigured resources (templates, JavaScript, stylesheets, etc.)
+ * available to web applications Click automatically deploys configured classpath
+ * resources to the <tt class="blue">/click</tt> directory at startup
+ * (existing files will not be overwritten).
  * <p/>
- * To enable Controls to deploy static resources on startup this interface
- * provides an {@link #onDeploy(ServletContext)} method.
+ * Click supports two ways of deploying pre-configured resources. The recommended
+ * deployment strategy (which also the simplest) relies on packaging resources
+ * into a special folder of the JAR, called <tt>'META-INF/resources'</tt>. At
+ * startup time Click will scan this folder for resources and deploy them to the
+ * web application. This deployment strategy is the same approach taken by the
+ * Servlet 3.0 specification. Please see the section
+ * <a href="../../../../user-guide/html/ch04s03.html#deploying-custom-resources">Deploying Custom Resources</a>
+ * for more details.
  * <p/>
- * Continuing our example the <tt>CustomField</tt> control deploys its
+ * An alternative approach to deploying static resources on startup is provided
+ * by the Control interface through the {@link #onDeploy(ServletContext)} method.
+ * <p/>
+ * Continuing our example, the <tt>CustomField</tt> control deploys its
  * <tt>custom.js</tt> file to the <tt>/click</tt> directory:
  *
  * <pre class="codeJava">
@@ -111,14 +120,7 @@ import org.apache.click.util.HtmlStringBuffer;
  *  <li><tt>/extras-controls.xml</tt>
  *  <li><tt>WEB-INF/click.xml</tt>
  * </ul>
- * <p/>
- * Click also supports an alternative deployment strategy which relies on
- * packaging resource (stylesheets, JavaScript, images etc.) following a
- * specific convention. See the section
- * <a href="../../../../user-guide/html/ch04s03.html#deploying-custom-resources">Deploying Custom Resources</a>
- * for further details.
  *
- * <p/>
  * <b>Please note</b> {@link org.apache.click.control.AbstractControl} provides
  * a default implementation of the Control interface to make it easier for
  * developers to create their own controls.
