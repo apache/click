@@ -229,20 +229,6 @@ public class NumberField extends TextField {
     // Public Attributes ------------------------------------------------------
 
     /**
-     * Operation not supported by NumberField, use {@link #setMaxValue(double)}
-     * instead.
-     *
-     * @param maxLength the maximum field length validation constraint
-     * @throws UnsupportedOperationException use {@link #setMaxValue(double)}
-     * instead
-     */
-    @Override
-    public void setMaxLength(int value) {
-        throw new UnsupportedOperationException("NumberField does not support"
-            + " maxLength(int), use setMaxValue(double) instead.");
-    }
-
-    /**
      * Return the maximum valid double field value.
      *
      * @return the maximum valid double field value
@@ -258,20 +244,6 @@ public class NumberField extends TextField {
      */
     public void setMaxValue(double value) {
         maxvalue = value;
-    }
-
-    /**
-     * Operation not supported by NumberField, use {@link #setMinValue(double)}
-     * instead.
-     *
-     * @param minLength the minimum field length validation constraint
-     * @throws UnsupportedOperationException use {@link #setMinValue(double)}
-     * instead
-     */
-    @Override
-    public void setMinLength(int value) {
-        throw new UnsupportedOperationException("NumberField does not support"
-            + " minLength(int), use setMinValue(double) instead.");
     }
 
     /**
