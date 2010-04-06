@@ -28,7 +28,7 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.util.Bindable;
-import org.apache.click.util.PagingDataProvider;
+import org.apache.click.dataprovider.PagingDataProvider;
 import org.springframework.stereotype.Component;
 
 /**
@@ -79,13 +79,12 @@ public class LargeDatasetDemo extends BorderPage {
         table.setDataProvider(new PagingDataProvider<Customer>() {
 
             public List<Customer> getData() {
-                List customers = customerService.getCustomersForPage(
-                                                table.getFirstRow(),
-                                                table.getPageSize(),
-                                                table.getSortedColumn(),
-                                                table.isSortedAscending());
-
-                return customers;
+                int start = table.getFirstRow();
+                int count = table.getPageSize();
+                String sortColumn = table.getSortedColumn();
+                boolean ascending = table.isSortedAscending();
+ 
+                return customerService.getCustomersForPage(start, count, sortColumn, ascending);
             }
 
             public int size() {
