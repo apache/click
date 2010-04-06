@@ -39,7 +39,7 @@ import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.LinkDecorator;
 import org.apache.click.util.Bindable;
-import org.apache.click.util.DataProvider;
+import org.apache.click.dataprovider.DataProvider;
 import org.springframework.stereotype.Component;
 
 /**

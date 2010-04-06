@@ -31,7 +31,7 @@ import org.apache.click.examples.page.EditCustomer;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.LinkDecorator;
 import org.apache.click.util.Bindable;
-import org.apache.click.util.DataProvider;
+import org.apache.click.dataprovider.DataProvider;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
