@@ -198,9 +198,20 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-610">CLK-610</a>].
       </li>
       <li class="change">
+        Added Polish resource bundle for DateField. This issue was raised and
+        fixed by Rafal Rusin
+        [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-624">CLK-624</a>].
+      </li>
+      <li class="change">
         Migrated controls to import resources through Elements and the
         <tt>getHeadElements</tt> method
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-647">CLK-647</a>].
+      </li>
+      <li class="change">
+        Fixed issue where RadioGroup label referenced a non-existing ID. RadioGroup
+        is now wrapped inside a span tag with the given ID. This issue was raised
+        and fixed by Finn Bock
+        [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-577">CLK-577</a>].
       </li>
       <li class="change">
         Replaced Page and Control getMessage methods with varargs equivalents

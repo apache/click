@@ -492,6 +492,11 @@ public class RadioGroup extends Field {
      */
     @Override
     public void render(HtmlStringBuffer buffer) {
+        buffer.elementStart("span");
+        buffer.appendAttribute("id", getId());
+        appendAttributes(buffer);
+        buffer.closeTag();
+
         String value = getValue();
 
         final int size = getRadioList().size();
@@ -520,6 +525,8 @@ public class RadioGroup extends Field {
                 buffer.append("<br/>");
             }
         }
+
+        buffer.elementEnd("span");
     }
 
     /**
