@@ -39,6 +39,7 @@ import org.apache.click.extras.control.FieldColumn;
 import org.apache.click.extras.control.FormTable;
 import org.apache.click.extras.control.NumberField;
 import org.apache.click.util.Bindable;
+import org.apache.click.util.DataProvider;
 import org.springframework.stereotype.Component;
 
 /**
@@ -109,11 +110,7 @@ public class FormTablePage extends BorderPage {
     public void onInit() {
         super.onInit();
 
-        // Please note the FormTable rowList MUST be populated before the
-        // control is processed, i.e. do not populate the FormTable in the
-        // Pages onRender() method.
-        List<Customer> customers = customerService.getCustomersSortedByName(NUM_ROWS);
-        table.setRowList(customers);
+        table.setDataProvider(createDataProvider());
     }
 
     public boolean onOkClick() {
@@ -140,12 +137,22 @@ public class FormTablePage extends BorderPage {
         // the data context
         BaseContext.getThreadObjectContext().rollbackChanges();
 
-        List<Customer> customers = customerService.getCustomersSortedByName(NUM_ROWS);
+        // Refresh the FormTable rowList by setting a new DataProvider
+        table.setDataProvider(createDataProvider());
 
-        table.setRowList(customers);
+        // As form was cancelled, don't render the user submitted values
         table.setRenderSubmittedValues(false);
 
         return true;
     }
 
+    public DataProvider createDataProvider() {
+        DataProvider dp = new DataProvider() {
+            public List<Customer> getData() {
+                return customerService.getCustomersSortedByName(NUM_ROWS);
+            }
+        };
+
+        return dp;
+    }
 }
