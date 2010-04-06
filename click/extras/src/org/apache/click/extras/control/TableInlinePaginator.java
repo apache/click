@@ -50,6 +50,7 @@ public class TableInlinePaginator extends TablePaginator {
          * Messages are defined in the resource bundle:
          * <tt>org/apache/click/extras/control/TableInlinePaginator.properties</tt>.
          */
+        @Override
         public Map getMessages() {
             if (messages == null) {
                 messages = new MessagesMap(TableInlinePaginator.class, "");
@@ -58,7 +59,7 @@ public class TableInlinePaginator extends TablePaginator {
         }
     };
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a Paginator for the given Table.
@@ -74,6 +75,7 @@ public class TableInlinePaginator extends TablePaginator {
      *
      * @param buffer the string buffer to render the paginator to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         final Table table = getTable();
 
@@ -189,7 +191,7 @@ public class TableInlinePaginator extends TablePaginator {
 
         final String pageLinks = pagesBuffer.toString();
 
-        final String[] args =
+        final Object[] args =
             { firstLabel, previousLabel, pageLinks, nextLabel, lastLabel };
 
         buffer.append(paginatorMessages.getMessage("table-inline-page-links", args));
