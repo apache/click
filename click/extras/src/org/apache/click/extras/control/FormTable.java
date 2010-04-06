@@ -29,7 +29,7 @@ import org.apache.click.control.Table;
 import org.apache.click.util.HtmlStringBuffer;
 
 import org.apache.click.control.ActionLink;
-import org.apache.click.util.PagingDataProvider;
+import org.apache.click.dataprovider.PagingDataProvider;
 import org.apache.commons.lang.StringUtils;
 
 /**

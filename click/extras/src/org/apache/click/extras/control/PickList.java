@@ -31,7 +31,7 @@ import org.apache.click.control.Field;
 import org.apache.click.control.Option;
 import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
-import org.apache.click.util.DataProvider;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PropertyUtils;
@@ -103,7 +103,7 @@ import org.apache.click.util.PropertyUtils;
  * A common issue new Click users face is which page event (onInit or onRender)
  * to populate the PickList {@link #getOptionList() optionList} in. To alleviate
  * this problem you can set a
- * {@link #setDataProvider(org.apache.click.util.DataProvider) dataProvider}
+ * {@link #setDataProvider(org.apache.click.dataprovider.DataProvider) dataProvider}
  * which allows the PickList to fetch data when needed. This is
  * particularly useful if retrieveing PickList data is expensive e.g. loading
  * from a database.
