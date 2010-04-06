@@ -332,7 +332,7 @@ public class Menu extends AbstractControl {
      * @param accessController the menu access controller
      *
      * @deprecated use
-     * {@link MenuFactory#createMenu(org.w3c.dom.Element, org.apache.click.extras.security.AccessController)}
+     * {@link MenuFactory#buildMenu(org.w3c.dom.Element, org.apache.click.extras.security.AccessController, java.lang.Class)}
      * instead
      */
     @Deprecated
@@ -1048,7 +1048,7 @@ public class Menu extends AbstractControl {
     /**
      * Return an HTML representation of the menu.
      *
-     * @see {@link #render(org.apache.click.util.HtmlStringBuffer)}
+     * @see #render(org.apache.click.util.HtmlStringBuffer)
      *
      * @return an HTML anchor tag representation of the menu
      */

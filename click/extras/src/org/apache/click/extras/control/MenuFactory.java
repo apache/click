@@ -421,10 +421,10 @@ public class MenuFactory implements Serializable {
      * @param menuClass the menu class to instantiate
      * @return a copy of the application's root Menu
      */
-    protected Menu loadFromMenuXml(String rootMenuName, String fileName,
+    protected Menu loadFromMenuXml(String name, String fileName,
         AccessController accessController, Class<? extends Menu> menuClass) {
 
-        if (rootMenuName == null) {
+        if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
 
@@ -452,7 +452,7 @@ public class MenuFactory implements Serializable {
             menu = createMenu(menuClass);
         }
 
-        menu.setName(rootMenuName);
+        menu.setName(name);
         menu.setAccessController(accessController);
 
         ServletContext servletContext = context.getServletContext();
