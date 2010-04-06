@@ -24,7 +24,6 @@ import org.apache.click.MockContext;
 import org.apache.click.Page;
 import org.apache.click.control.Form;
 import org.apache.click.util.PageImports;
-import org.apache.commons.lang.StringUtils;
 
 public class FormTableTest extends TestCase {
 
@@ -32,7 +31,7 @@ public class FormTableTest extends TestCase {
      * Check that both Table and Form imports are included.
      * CLK-453
      */
-    public void testGetHtmlImports() {
+    public void testGetHeadElements() {
         MockContext.initContext();
 
         Page page = new Page();
