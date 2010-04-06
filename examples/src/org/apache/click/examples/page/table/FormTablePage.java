@@ -39,7 +39,7 @@ import org.apache.click.extras.control.FieldColumn;
 import org.apache.click.extras.control.FormTable;
 import org.apache.click.extras.control.NumberField;
 import org.apache.click.util.Bindable;
-import org.apache.click.util.DataProvider;
+import org.apache.click.dataprovider.DataProvider;
 import org.springframework.stereotype.Component;
 
 /**
