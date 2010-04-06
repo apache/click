@@ -583,7 +583,7 @@ public class DateField extends TextField {
      * This method delegates to {@link #addCalendarOptions(java.util.List)} to
      * include the Calendar Options script.
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
      * @return the HTML head import statements for the control
      */

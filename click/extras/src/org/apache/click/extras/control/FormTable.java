@@ -358,7 +358,7 @@ public class FormTable extends Table {
      * Return the HEAD elements for the Control. This method will include the
      * HEAD elements of the contained fields.
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
      * @return the list of HEAD elements
      */

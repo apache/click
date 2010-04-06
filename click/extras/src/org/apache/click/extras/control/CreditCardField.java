@@ -297,7 +297,7 @@ public class CreditCardField extends TextField {
      * <li><tt>click/extras-control.js</tt></li>
      * </ul>
      *
-     * @see org.apache.click.Control#getHtmlImports()
+     * @see org.apache.click.Control#getHeadElements()
      *
      * @return the HTML head import statements for the control
      */
