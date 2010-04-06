@@ -24,8 +24,8 @@
 <table id="menuTable" border="0" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 2px;">
  <tr>
   <td>
- <div class="menustyle" id="menu">
-  <ul class="menubar" id="dmenu">
+ <div class="menustyle" id="$rootMenu.id">
+  <ul class="menubar">
     #foreach ($topMenu in $rootMenu.children)
       #if ($topMenu.children.empty)
         <li class="topitem">$topMenu</li>
