@@ -53,8 +53,7 @@ import org.apache.click.util.PropertyUtils;
  *
  * <h3>Select Examples</h3>
  *
- * <a name="single-select-example"></a>
- * <h4>Single Item Select</h4>
+ * <h4><a name="single-select-example"></a>Single Item Select</h4>
  * A single item Select, will only allow users to select one item from the list.
  * By default the Select {@link #multiple} item property is false.
  * <p/>
@@ -107,8 +106,7 @@ import org.apache.click.util.PropertyUtils;
  * example the "U" option will not be a valid selection, as it is the first
  * item in the option list.
  *
- * <a name="multiple-select-example"></a>
- * <h4>Multiple Item Select</h4>
+ * <h4><a name="multiple-select-example"></a>Multiple Item Select</h4>
  * A multiple item Select, will allow users to select multiple items from the list.
  * By default the Select {@link #multiple} item property is false, and must be
  * enabled for multiple item selects.
@@ -167,8 +165,7 @@ import org.apache.click.util.PropertyUtils;
  * Note in this example the {@link #add(String)} method is used to add an Option
  * item to the Select.
  *
- * <a name="required-behaviour"></a>
- * <h3>Required Behaviour</h3>
+ * <h3><a name="required-behaviour"></a>Required Behaviour</h3>
  *
  * When a Select control's required property is set to true, then the user has
  * to select a value other than the first value in the option list. The  first
@@ -199,10 +196,9 @@ import org.apache.click.util.PropertyUtils;
  *
  * Unless you use a <a href="#dataprovider">DataProvider</a>, remember to always
  * populate the Select option list before it is processed. Do not populate the
- * option list in a Page's onRender() methods.
+ * option list in a Page's onRender() method.
  *
- * <a name="readonly-behaviour"></a>
- * <h3>Readonly Behaviour</h3>
+ * <h3><a name="readonly-behaviour"></a>Readonly Behaviour</h3>
  *
  * Note the &lt;select&gt; HTML element does not support the "readonly" attribute.
  * To provide readonly style behaviour, the Select control will render the
@@ -210,8 +206,7 @@ import org.apache.click.util.PropertyUtils;
  * readonly field, and will render a hidden field of the same name so that its
  * value will be submitted with the form.
  *
- * <a name="dataprovider"></a>
- * <h3>DataProvider</h3>
+ * <h3><a name="dataprovider"></a>DataProvider</h3>
  * A common issue new Click users face is which page event (onInit or onRender)
  * to populate the Select {@link #getOptionList() optionList} in. To alleviate
  * this problem you can set a
@@ -259,8 +254,7 @@ import org.apache.click.util.PropertyUtils;
  *     }
  * } </pre>
  *
- * <a name="default-value"></a>
- * <h3>Specify the default selected value</h3>
+ * <h3><a name="default-value"></a>Specify the default selected value</h3>
  *
  * If you need to set the selected value to something other than the first
  * option, set the Select {@link #setValue(java.lang.String) value} to the
@@ -586,8 +580,8 @@ public class Select extends Field {
      * the Option value
      * @param optionLabelProperty the name of the object property to render as
      * the Option label
-     * @throws IllegalArgumentException if objects or valueProperty parameter is
-     * null
+     * @throws IllegalArgumentException if objects or optionValueProperty
+     * parameter is null
      */
     public void addAll(Collection objects, String optionValueProperty,
         String optionLabelProperty) {
@@ -643,9 +637,9 @@ public class Select extends Field {
     }
 
     /**
-     * Return the select row list DataProvider.
+     * Return the select option list DataProvider.
      *
-     * @return the select row list DataProvider
+     * @return the select option list DataProvider
      */
     @SuppressWarnings("unchecked")
     public DataProvider getDataProvider() {
@@ -653,7 +647,7 @@ public class Select extends Field {
     }
 
     /**
-     * Set the select row list DataProvider. The dataProvider can return any
+     * Set the select option list DataProvider. The dataProvider can return any
      * mixture of Option/OptionGroup/String/Number/Boolean values.
      * <p/>
      * Example usage:
@@ -673,7 +667,7 @@ public class Select extends Field {
      *     }
      * }); </pre>
      *
-     * @param dataProvider the select row list DataProvider
+     * @param dataProvider the select option list DataProvider
      */
     @SuppressWarnings("unchecked")
     public void setDataProvider(DataProvider dataProvider) {
@@ -793,8 +787,13 @@ public class Select extends Field {
      *     authorSelect.setDefaultOption(Option.EMPTY_OPTION);
      *
      *     authorSelect.setDataProvider(new DataProvider() {
-     *         public List<Author> getData() {
-     *             return getAuthorDao().getAuthors();
+     *         public List getData() {
+     *             List options = new ArrayList();
+     *             List<Author> authors = getAuthorDao().getAuthors();
+     *             for (Author author : authors) {
+     *                 options.add(new Option(author.getId(), author.getName()));
+     *             }
+     *             return options;
      *         }
      *     });
      *     form.add(authorSelect);
