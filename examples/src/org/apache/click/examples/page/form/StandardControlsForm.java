@@ -19,6 +19,7 @@
 package org.apache.click.examples.page.form;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -47,6 +48,7 @@ import org.apache.click.examples.service.CustomerService;
 import org.apache.click.examples.util.ExampleUtils;
 import org.apache.click.util.Bindable;
 import org.apache.click.util.ContainerUtils;
+import org.apache.click.dataprovider.DataProvider;
 import org.springframework.stereotype.Component;
 
 /**
@@ -127,9 +129,17 @@ public class StandardControlsForm extends BorderPage {
     public void onInit() {
         super.onInit();
 
-        List<Customer> customers = customerService.getCustomers();
-        select.add(new Option("[Select]"));
-        select.addAll(customers, "id", "name");
+        // Set default non-selecting option
+        select.setDefaultOption(new Option("[Select]"));
+
+        // Create dataprovider for Select
+        DataProvider dp = new DataProvider() {
+            public Iterable getData() {
+                return createOptionList(customerService.getCustomers());
+            }
+        };
+        select.setDataProvider(dp);
+
         applyOptions();
     }
 
@@ -143,6 +153,14 @@ public class StandardControlsForm extends BorderPage {
     }
 
     // Private Methods --------------------------------------------------------
+
+    private List createOptionList(List<Customer> customers) {
+        List optionList = new ArrayList();
+        for (Customer customer : customers) {
+            optionList.add(new Option(customer.getId(), customer.getName()));
+        }
+        return optionList;
+    }
 
     private void applyOptions() {
         Options options = (Options) ExampleUtils.getSessionObject(Options.class);
