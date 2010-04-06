@@ -34,7 +34,7 @@ import org.apache.click.element.CssImport;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.util.ClickUtils;
-import org.apache.click.util.DataProvider;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PropertyUtils;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -74,7 +74,7 @@ import org.apache.commons.lang.StringUtils;
  * A common issue new Click users face is which page event (onInit or onRender)
  * to populate the CheckList {@link #getOptionList() optionList} in. To alleviate
  * this problem you can set a
- * {@link #setDataProvider(org.apache.click.util.DataProvider) dataProvider}
+ * {@link #setDataProvider(org.apache.click.dataprovider.DataProvider) dataProvider}
  * which allows the CheckList to fetch data when needed. This is
  * particularly useful if retrieveing CheckList data is expensive e.g. loading
  * from a database.
