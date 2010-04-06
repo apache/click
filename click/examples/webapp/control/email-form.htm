@@ -26,55 +26,25 @@ $form
 <p>&nbsp;</p>
 
 The form demonstrates a custom 
-<a href="$context/javadoc/org/apache/click/examples/control/RichTextArea.html">RichTextArea</a>
+<a href="$context/source-viewer.htm?filename=WEB-INF/classes/org/apache/click/examples/control/RichTextArea.java">RichTextArea</a>
 control using the 
 <a target="blank" href="http://developer.yahoo.com/yui/editor/">YUI editor</a>.
-The control overrides the Field method <tt>getHtmlImports()</tt> to include its 
+The control overrides the Field method <tt>getHeadElements()</tt> to include its
 JavaScript imports automatically:
 
 <pre class="codeJava">
+<span class="kw">public</span> List getHeadElements() {
+    if (headElements == <span class="kw">null</span>) {
+        headElements = <span class="kw">super</span>.getHeadElements();
+        headElements.add(<span class="kw">new</span> CssImport(<span class="st">"/yui/fonts/fonts-min.css"</span>));
+        headElements.add(<span class="kw">new</span> CssImport(<span class="st">"/yui/editor/skins/sam/simpleeditor.css"</span>));
+        headElements.add(<span class="kw">new</span> JsImport(<span class="st">"/yui/yahoo-dom-event/yahoo-dom-event.js"</span>));
+        headElements.add(<span class="kw">new</span> JsImport(<span class="st">"/yui/element/element-beta-min.js"</span>));
+        headElements.add(<span class="kw">new</span> JsImport(<span class="st">"/yui/container/container_core-min.js"</span>));
+        headElements.add(<span class="kw">new</span> JsImport(<span class="st">"/yui/editor/simpleeditor-min.js"</span>));
+    }
 
-<span class="kw">protected static final</span> String HTML_IMPORTS =
-          <span class="st">"&lt;link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/yui/fonts/fonts-min.css\"/&gt;\n"</span>
-        + <span class="st">"&lt;link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/yui/editor/skins/sam/simpleeditor.css\"/&gt;\n"</span>
-        + <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/yui/yahoo-dom-event/yahoo-dom-event.js\"&gt;&lt;/script&gt;\n"</span>
-        + <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/yui/element/element-beta-min.js\"&gt;&lt;/script&gt;\n"</span>
-        + <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/yui/container/container_core-min.js\"&gt;&lt;/script&gt;\n"</span>
-        + <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/yui/editor/simpleeditor-min.js\"&gt;&lt;/script&gt;\n";</span>
+    ...
 
-<span class="kw">public</span> String getHtmlImports() {
-    String[] args = { getContext().getRequest().getContextPath() };
-    <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
+    <span class="kw">return</span> headElements;
 } </pre>
-
-The control is rendered using a Velocity template 
-<tt>(/examples/control/RichTextArea.htm)</tt> which is loaded from the classpath:
-
-<pre class="codeHtml">
-<span class="st">${textArea}</span>
-&lt;script type="text/javascript"&gt;
-(function() {
-  var myConfig = {
-    <span class="st">${config}</span>
-  };
-
-  var myEditor = new YAHOO.widget.SimpleEditor('<span class="st">${id}</span>', myConfig);
-  myEditor.render();
-})();
-&lt;/script&gt;
-</pre>
-
-The control's <tt>toString()</tt> method merges the <tt>RichTextArea.htm</tt>
-template and the model returning rendred HTML.
-
-<pre class="codeJava">
-<span class="kw">public</span> String toString() {
-    Map model = <span class="kw">new</span> HashMap();
-    model.put(<span class="st">"textArea"</span>, super.toString());
-    model.put(<span class="st">"config"</span>, getConfig());
-    model.put(<span class="st">"id"</span>, getId());
-
-    <span class="kw">return</span> getContext().renderTemplate(getClass(), model);
-} </pre>
-
-

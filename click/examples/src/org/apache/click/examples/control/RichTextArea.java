@@ -18,10 +18,12 @@
  */
 package org.apache.click.examples.control;
 
-import java.text.MessageFormat;
-import java.util.Map;
+import java.util.List;
 
 import org.apache.click.control.TextArea;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
@@ -36,15 +38,6 @@ import org.apache.click.util.HtmlStringBuffer;
 public class RichTextArea extends TextArea {
 
     private static final long serialVersionUID = 1L;
-
-    /** The YUI editor JavaScript import. */
-    protected static final String HTML_IMPORTS =
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/yui/fonts/fonts-min.css\"/>\n"
-        + "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/yui/editor/skins/sam/simpleeditor.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/yui/yahoo-dom-event/yahoo-dom-event.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/yui/element/element-beta-min.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/yui/container/container_core-min.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/yui/editor/simpleeditor-min.js\"></script>\n";
 
     /**
      * The textarea YUI editor theme [<tt>yui-skin-sam</tt>].
@@ -106,24 +99,41 @@ public class RichTextArea extends TextArea {
     }
 
     /**
-     * Return the JavaScript include: &nbsp; {@link #HTML_IMPORTS}, and YUI
+     * Return the Control HEAD elements for YUI libraries and YUI
      * editor JavaScript initialization code.
      *
-     * @see org.apache.click.control.Field#getHtmlImports()
+     * @see org.apache.click.control.Field#getHeadElements()
      */
-    public String getHtmlImports() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+            headElements.add(new CssImport("/yui/fonts/fonts-min.css"));
+            headElements.add(new CssImport("/yui/editor/skins/sam/simpleeditor.css"));
+            headElements.add(new JsImport("/yui/yahoo-dom-event/yahoo-dom-event.js"));
+            headElements.add(new JsImport("/yui/element/element-beta-min.js"));
+            headElements.add(new JsImport("/yui/container/container_core-min.js"));
+            headElements.add(new JsImport("/yui/editor/simpleeditor-min.js"));
+        }
 
-        Object[] args = { getContext().getRequest().getContextPath() };
-        buffer.append(MessageFormat.format(HTML_IMPORTS, args));
+        JsScript script = new JsScript();
+        script.setId(getId() + "_js_setup");
 
-        args = new String[] { getId(), getConfig() };
-        String javascript = "<script type=\"text/javascript\">(function() '{' " +
-            "var myConfig = '{' {1} '}'; var myEditor = new YAHOO.widget.SimpleEditor(''{0}'', myConfig);" +
-            "if(myConfig.titlebar) '{' myEditor._defaultToolbar.titlebar=myConfig.titlebar; '}'" +
-            "myEditor.render(); '}')();</script>\n";
-        buffer.append(MessageFormat.format(javascript, args));
-        return buffer.toString();
+        if (!headElements.contains(script)) {
+            script.setExecuteOnDomReady(true);
+
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            buffer.append("var myConfig = {").append(getConfig()).append("};\n");
+            buffer.append("var myEditor = new YAHOO.widget.SimpleEditor('");
+            buffer.append(getId()).append("', myConfig);\n");
+            buffer.append("if(myConfig.titlebar) {");
+            buffer.append(" myEditor._defaultToolbar.titlebar=myConfig.titlebar; }\n");
+            buffer.append("myEditor.render();\n");
+            script.setContent(buffer.toString());
+            headElements.add(script);
+        }
+
+        return headElements;
     }
 
     /**
@@ -136,6 +146,7 @@ public class RichTextArea extends TextArea {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart("span");
         buffer.appendAttribute("class", getTheme());
@@ -144,17 +155,4 @@ public class RichTextArea extends TextArea {
         super.render(buffer);
         buffer.elementEnd("span");
     }
-
-    // -------------------------------------------------------- Protected Methods
-
-    /**
-     * Render a Velocity template for the given data model.
-     *
-     * @param buffer the specified buffer to render the template output to
-     * @param model the model data to merge with the template
-     */
-    protected void renderTemplate(HtmlStringBuffer buffer, Map model) {
-        buffer.append(getContext().renderTemplate(RichTextArea.class, model));
-    }
-
 }
