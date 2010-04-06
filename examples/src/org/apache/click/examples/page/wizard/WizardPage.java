@@ -21,6 +21,7 @@ package org.apache.click.examples.page.wizard;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.click.element.CssImport;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -147,9 +148,12 @@ public class WizardPage extends BorderPage {
      * @return the page stylesheet
      */
     @Override
-    public String getHtmlImports() {
-        String contextPath = getContext().getRequest().getContextPath();
-        return "<link type=\"text/css\" rel=\"stylesheet\" href=\"" + contextPath + "/wizard/wizard.css\"/>";
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+            headElements.add(new CssImport("/wizard/wizard.css"));
+        }
+        return headElements;
     }
 
     // Private Methods --------------------------------------------------------
