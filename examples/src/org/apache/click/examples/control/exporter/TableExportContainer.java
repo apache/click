@@ -108,6 +108,7 @@ public class TableExportContainer implements Renderable {
         exporter.export(table, context);
     }
 
+    @Override
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
@@ -139,7 +140,7 @@ public class TableExportContainer implements Renderable {
                 banner.append(getSeparator());
             }
         }
-        String[] args = { getStyleClass(), banner.toString()};
+        Object[] args = { getStyleClass(), banner.toString()};
         buffer.append(table.getMessage("table-export-banner", args));
     }
 
