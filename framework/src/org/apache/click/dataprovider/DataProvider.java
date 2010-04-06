@@ -16,12 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.click.util;
+package org.apache.click.dataprovider;
 
 import java.io.Serializable;
 
 /**
  * An interface to provide data on demand to controls.
+ * <p/>
+ * Example usage:
+ *
+ * <pre class="prettyprint">
+ * public class MyPage extends Page {
+ *
+ *     private Table table = new Table("table");
+ *
+ *     public MyPage() {
+ *
+ *         ...
+ *
+ *         table.setDataProvider(new DataProvider<Customer>() {
+ *
+ *             // Return a list of customers
+ *             public List<Customer> getData() {
+ *
+ *                 return getCustomerService().getCustomers();
+ *             }
+ *         });
+ *     }
+ * } </pre>
  */
 public interface DataProvider<T> extends Serializable {
 

@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.click.util.ClickUtils;
-import org.apache.click.util.DataProvider;
+import org.apache.click.dataprovider.DataProvider;
 
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PropertyUtils;
@@ -210,7 +210,7 @@ import org.apache.click.util.PropertyUtils;
  * A common issue new Click users face is which page event (onInit or onRender)
  * to populate the Select {@link #getOptionList() optionList} in. To alleviate
  * this problem you can set a
- * {@link #setDataProvider(org.apache.click.util.DataProvider) dataProvider}
+ * {@link #setDataProvider(org.apache.click.dataprovider.DataProvider) dataProvider}
  * which allows the Select to fetch data when needed. This is
  * particularly useful if retrieveing Select data is expensive e.g. loading
  * from a database.
@@ -328,7 +328,7 @@ public class Select extends Field {
     /**
      * The default option will be the first option added to the Select.
      * This property is often used when populating the Select from a
-     * {@link #setDataProvider(org.apache.click.util.DataProvider)}, where
+     * {@link #setDataProvider(org.apache.click.dataprovider.DataProvider)}, where
      * the DataProvider does not return a sensible default option e.g. an
      * empty ("") option.
      */
@@ -769,7 +769,7 @@ public class Select extends Field {
      * added to the Select {@link #getOptionList() optionList}.
      * <p/>
      * <b>Please note</b>: this property is used in conjunction with the Select
-     * {@link #setDataProvider(org.apache.click.util.DataProvider) dataProvider},
+     * {@link #setDataProvider(org.apache.click.dataprovider.DataProvider) dataProvider},
      * where the DataProvider does not return a sensible default, non-selecting
      * option. For example if the DataProvider returns a list of Authors from the
      * database, the list won't include a default empty ("") option to choose
