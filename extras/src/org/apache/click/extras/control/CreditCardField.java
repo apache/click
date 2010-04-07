@@ -251,6 +251,32 @@ public class CreditCardField extends TextField {
     }
 
     /**
+     * Construct a CreditCardField with the given name, label and size.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param size the size of the field
+     */
+    public CreditCardField(String name, String label, int size) {
+        this(name, label);
+        setSize(size);
+    }
+
+    /**
+     * Construct the CreditCardField with the given name, label, size and required
+     * status.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param size the size of the field
+     * @param required the field required status
+     */
+    public CreditCardField(String name, String label, int size, boolean required) {
+        this(name, label, size);
+        setRequired(required);
+    }
+
+    /**
      * Create a credit card field with no name defined.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
