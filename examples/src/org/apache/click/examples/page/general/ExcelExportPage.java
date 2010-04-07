@@ -125,22 +125,22 @@ public class ExcelExportPage extends BorderPage {
         font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 
         HSSFSheet worksheet = wb.createSheet("Customers");
-        worksheet.setColumnWidth((short) 0, (short)(20 * 256));
-        worksheet.setColumnWidth((short) 1, (short)(30 * 256));
-        worksheet.setColumnWidth((short) 4, (short)(20 * 256));
+        worksheet.setColumnWidth(0, (20 * 256));
+        worksheet.setColumnWidth(1, (30 * 256));
+        worksheet.setColumnWidth(4, (20 * 256));
 
-        HSSFRow row = worksheet.createRow((short)0);
+        HSSFRow row = worksheet.createRow(0);
 
         HSSFRichTextString value = new HSSFRichTextString("Customers");
         value.applyFont(font);
-        row.createCell((short)0).setCellValue(value);
+        row.createCell(0).setCellValue(value);
 
-        row = worksheet.createRow((short)1);
-        row.createCell((short)0).setCellValue(new HSSFRichTextString("Customer Account Details"));
+        row = worksheet.createRow(1);
+        row.createCell(0).setCellValue(new HSSFRichTextString("Customer Account Details"));
 
-        worksheet.createRow((short)2);
+        worksheet.createRow(2);
 
-        row = worksheet.createRow((short)3);
+        row = worksheet.createRow(3);
 
         HSSFCellStyle style = wb.createCellStyle();
         style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
@@ -149,31 +149,31 @@ public class ExcelExportPage extends BorderPage {
 
         value = new HSSFRichTextString("Name");
         value.applyFont(font);
-        HSSFCell cell = row.createCell((short)0);
+        HSSFCell cell = row.createCell(0);
         cell.setCellValue(value);
         cell.setCellStyle(style);
 
         value = new HSSFRichTextString("Email");
         value.applyFont(font);
-        cell = row.createCell((short)1);
+        cell = row.createCell(1);
         cell.setCellValue(value);
         cell.setCellStyle(style);
 
         value = new HSSFRichTextString("Age");
         value.applyFont(font);
-        cell = row.createCell((short)2);
+        cell = row.createCell(2);
         cell.setCellValue(value);
         cell.setCellStyle(style);
 
         value = new HSSFRichTextString("Holdings");
         value.applyFont(font);
-        cell = row.createCell((short)3);
+        cell = row.createCell(3);
         cell.setCellValue(value);
         cell.setCellStyle(style);
 
         value = new HSSFRichTextString("Investments");
         value.applyFont(font);
-        cell = row.createCell((short)4);
+        cell = row.createCell(4);
         cell.setCellValue(value);
         cell.setCellStyle(style);
 
@@ -183,20 +183,20 @@ public class ExcelExportPage extends BorderPage {
         for (int i = 0; i < customers.size(); i++) {
             Customer customer = (Customer) customers.get(i);
 
-            row = worksheet.createRow((short) rowIndex++);
+            row = worksheet.createRow(rowIndex++);
 
-            row.createCell((short) 0).setCellValue(new HSSFRichTextString(customer.getName()));
-            row.createCell((short) 1).setCellValue(new HSSFRichTextString(customer.getEmail()));
+            row.createCell(0).setCellValue(new HSSFRichTextString(customer.getName()));
+            row.createCell(1).setCellValue(new HSSFRichTextString(customer.getEmail()));
 
             if (customer.getAge() != null) {
-                row.createCell((short) 2).setCellValue(customer.getAge().intValue());
+                row.createCell(2).setCellValue(customer.getAge().intValue());
             }
 
             if (customer.getHoldings() != null) {
-                row.createCell((short) 3).setCellValue(customer.getHoldings().doubleValue());
+                row.createCell(3).setCellValue(customer.getHoldings().doubleValue());
             }
 
-            row.createCell((short) 4).setCellValue(new HSSFRichTextString(customer.getInvestments()));
+            row.createCell(4).setCellValue(new HSSFRichTextString(customer.getInvestments()));
         }
 
         return wb;
