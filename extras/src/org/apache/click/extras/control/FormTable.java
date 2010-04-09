@@ -307,54 +307,6 @@ public class FormTable extends Table {
     }
 
     /**
-     * Return the HTML head element import string. This method will also include
-     * the imports of the form and the contained fields.
-     *
-     * @deprecated use the new {@link #getHeadElements()} instead
-     *
-     * @see org.apache.click.Control#getHtmlImports()
-     *
-     * @return the HTML head element import string
-     */
-    @Override
-    public String getHtmlImports() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(255);
-
-        String htmlImports = super.getHtmlImports();
-        if (htmlImports != null) {
-            buffer.append(htmlImports);
-        }
-
-        htmlImports = getControlLink().getHtmlImports();
-        if (htmlImports != null) {
-            buffer.append(htmlImports);
-        }
-
-        int firstRow = getFirstRow();
-        int lastRow = getLastRow();
-
-        for (int i = 0; i < getColumnList().size(); i++) {
-            Column column = (Column) getColumnList().get(i);
-            if (column instanceof FieldColumn) {
-                Field field = ((FieldColumn) column).getField();
-
-                if (field != null) {
-                    for (int j = firstRow; j < lastRow; j++) {
-                        field.setName(column.getName() + "_" + j);
-
-                        htmlImports = field.getHtmlImports();
-                        if (htmlImports != null) {
-                            buffer.append(htmlImports);
-                        }
-                    }
-                }
-            }
-        }
-
-        return buffer.toString();
-    }
-
-    /**
      * Return the HEAD elements for the Control. This method will include the
      * HEAD elements of the contained fields.
      *

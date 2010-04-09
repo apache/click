@@ -205,31 +205,6 @@ public abstract class AbstractContainerField extends Field implements Container 
     }
 
     /**
-     * Return the HTML head import statements for contained controls.
-     *
-     * @see org.apache.click.Control#getHtmlImports()
-     *
-     * @return the HTML includes statements for the contained control stylesheet
-     * and JavaScript files
-     */
-    @Override
-    @SuppressWarnings("deprecation")
-    public String getHtmlImports() {
-        if (hasControls()) {
-            HtmlStringBuffer buffer = new HtmlStringBuffer(0);
-
-            for (Control control : getControls()) {
-                String htmlImports = control.getHtmlImports();
-                if (htmlImports != null) {
-                    buffer.append(htmlImports);
-                }
-            }
-            return buffer.toString();
-        }
-        return null;
-    }
-
-    /**
      * This method does nothing by default.
      * <p/>
      * Subclasses can override this method to binds the submitted request
