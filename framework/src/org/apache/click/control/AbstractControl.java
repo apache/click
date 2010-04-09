@@ -533,15 +533,13 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * @see org.apache.click.Control#getHtmlImports()
-     *
      * @deprecated use the new {@link #getHeadElements()} instead
      *
      * @return the HTML includes statements for the control stylesheet and
      * JavaScript files
      */
-    public String getHtmlImports() {
-        return null;
+    public final String getHtmlImports() {
+        throw new UnsupportedOperationException("Use getHeadElements instead");
     }
 
     /**
@@ -951,9 +949,9 @@ public abstract class AbstractControl implements Control {
             if (token.charAt(keyEnd + 1) == ';') {
                 continue;
             }
-            String name = token.substring(0, keyEnd);
-            String value = token.substring(keyEnd + 1);
-            stylesMap.put(name, value);
+            String styleName = token.substring(0, keyEnd);
+            String styleValue = token.substring(keyEnd + 1);
+            stylesMap.put(styleName, styleValue);
         }
 
         return stylesMap;

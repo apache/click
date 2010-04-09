@@ -37,7 +37,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -93,12 +92,11 @@ public class ClickUtils {
      * <tt>enable-resource-version</tt>.
      * <p/>
      * If this attribute is set to <tt>true</tt> and Click is running in
-     * <tt>production</tt> or <tt>profile</tt> mode, resources returned from
-     * {@link org.apache.click.Control#getHtmlImports()} will have a
+     * <tt>production</tt> or <tt>profile</tt> mode, Click resources returned
+     * from {@link org.apache.click.Control#getHeadElements()} will have a
      * <tt>version indicator</tt> added to their path.
      *
-     * @see org.apache.click.Control#getHtmlImports()
-     * @see org.apache.click.util.ClickUtils#createHtmlImport(String, Context)
+     * @see org.apache.click.Control#getHeadElements()
      * @see org.apache.click.util.ClickUtils#getResourceVersionIndicator(Context)
      */
     public static final String ENABLE_RESOURCE_VERSION = "enable-resource-version";
@@ -828,28 +826,6 @@ public class ClickUtils {
                 // Ignore
             }
         }
-    }
-
-    /**
-     * Create an HTML import statement from the given string pattern and
-     * versionIndicator, formatted with the request context path.
-     * <p/>
-     * <b>Remember</b>: the version indicator will only be added in
-     * <tt>production</tt> and <tt>profile</tt> modes, and only if the
-     * request attribute {@link #ENABLE_RESOURCE_VERSION}
-     * is set to <tt>"true"</tt>.
-     *
-     * @param pattern the HTML import pattern string to format
-     * @param context the request context
-     * @return the formatted HTML import statement
-     */
-    public static String createHtmlImport(String pattern, Context context) {
-        Object[] args = {
-            context.getRequest().getContextPath(),
-            getResourceVersionIndicator(context)
-        };
-
-        return MessageFormat.format(pattern, args);
     }
 
     /**

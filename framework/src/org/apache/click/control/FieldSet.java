@@ -609,34 +609,6 @@ public class FieldSet extends Field implements Container {
     }
 
     /**
-     * Return the HTML head import statements for contained fields.
-     *
-     * @see org.apache.click.Control#getHtmlImports()
-     *
-     * @deprecated use {@link #getHeadElements()} instead
-     *
-     * @return the HTML head import statements for the contained field stylesheet
-     * and JavaScript files
-     */
-    @Override
-    public String getHtmlImports() {
-        if (hasControls()) {
-            HtmlStringBuffer buffer = new HtmlStringBuffer(512);
-
-            for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
-                String htmlImports = control.getHtmlImports();
-                if (htmlImports != null) {
-                    buffer.append(htmlImports);
-                }
-            }
-            return buffer.toString();
-        }
-
-        return null;
-    }
-
-    /**
      * Return the fieldset Legend element value: &lt;legend&gt;
      * <p/>
      * If the legend value is null, this method will attempt to find a
