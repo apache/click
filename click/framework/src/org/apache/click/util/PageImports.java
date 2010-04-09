@@ -21,7 +21,6 @@ package org.apache.click.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,9 +34,7 @@ import org.apache.click.element.CssStyle;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
-import org.apache.click.element.ResourceElement;
 import org.apache.click.service.LogService;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a utility object for rendering a Page's HEAD elements and
@@ -198,56 +195,6 @@ public class PageImports {
     }
 
     /**
-     * Add the given HTML import line to the Page HTML imports.
-     *
-     * @deprecated use the new {@link #add(org.apache.click.element.Element)}
-     * instead
-     *
-     * @param value the HTML import line to add
-     */
-    public void addImport(String value) {
-        if (value == null || value.length() == 0) {
-            return;
-        }
-
-        String[] lines = StringUtils.split(value, '\n');
-
-        for (int i = 0; i  < lines.length; i++) {
-            String line = lines[i].trim().toLowerCase();
-            if (line.startsWith("<link") && line.indexOf("text/css") != -1) {
-                CssImport cssImport = asCssImport(lines[i]);
-
-                // Remove Click's version indicator from src attribute
-                removeVersionIndicator(cssImport, "href");
-
-                add(cssImport);
-
-            } else if (line.startsWith("<style") && line.indexOf("text/css") != -1) {
-                CssStyle cssStyle = asCssStyle(lines[i]);
-                setUnique(cssStyle, cssStyle.getContent().toString());
-                add(cssStyle);
-
-            } else if (line.startsWith("<script")) {
-                if (line.indexOf(" src=") != -1) {
-                    JsImport jsImport = asJsImport(lines[i]);
-
-                    // Remove Click's version indicator from src attribute
-                    removeVersionIndicator(jsImport, "src");
-                    add(jsImport);
-
-                } else {
-                    JsScript jsScript = asJsScript(lines[i]);
-                    setUnique(jsScript, jsScript.getContent().toString());
-                    add(jsScript);
-
-                }
-            } else {
-                throw new IllegalArgumentException("Unknown include type: " + lines[i]);
-            }
-        }
-    }
-
-    /**
      * Return true if the page imports have been initialized.
      *
      * @return true if the page imports have been initialized
@@ -393,9 +340,6 @@ public class PageImports {
     @SuppressWarnings("deprecation")
     public void processControls(List<Control> controls) {
         for (Control control : controls) {
-
-            // import from getHtmlImports
-            addImport(control.getHtmlImports());
 
             // import from getHeadElement
             processControl(control);
@@ -557,8 +501,6 @@ public class PageImports {
             }
         }
 
-        addImport(page.getHtmlImports());
-
         processHeadElements(page.getHeadElements());
     }
 
@@ -591,6 +533,7 @@ public class PageImports {
          *
          * @return a string representing miscellaneous head and CSS elements
          */
+        @Override
         public String toString() {
             processPageControls();
             HtmlStringBuffer buffer = new HtmlStringBuffer(
@@ -615,6 +558,7 @@ public class PageImports {
          *
          * @return a string representing all includes
          */
+        @Override
         public String toString() {
             processPageControls();
             HtmlStringBuffer buffer = new HtmlStringBuffer(
@@ -638,6 +582,7 @@ public class PageImports {
          *
          * @return a string representing all JavaScript elements
          */
+        @Override
         public String toString() {
             processPageControls();
             HtmlStringBuffer buffer = new HtmlStringBuffer(
@@ -661,6 +606,7 @@ public class PageImports {
          *
          * @return a string representing all CSS elements
          */
+        @Override
         public String toString() {
             processPageControls();
             HtmlStringBuffer buffer = new HtmlStringBuffer(
@@ -668,216 +614,6 @@ public class PageImports {
 
             PageImports.this.renderCssElements(buffer);
             return buffer.toString();
-        }
-    }
-
-    // -------------------------------------------------------- Private Methods
-
-    /**
-     * Convert the given HTML import line to a {@link CssImport} instance.
-     *
-     * @param line the HTML import line to convert to a CssImport instance
-     * @return a CssImport instance
-     */
-    private CssImport asCssImport(String line) {
-        CssImport cssImport = new CssImport();
-        copyAttributes(cssImport, line);
-        return cssImport;
-    }
-
-    /**
-     * Convert the given HTML import line to a {@link CssStyle} instance.
-     *
-     * @param line the HTML import line to convert to a Css instance
-     * @return a Css instance
-     */
-    private CssStyle asCssStyle(String line) {
-        CssStyle cssStyle = new CssStyle();
-        copyAttributes(cssStyle, line);
-        cssStyle.setContent(extractCssContent(line));
-        return cssStyle;
-    }
-
-    /**
-     * Convert the given HTML import line to a {@link JsImport} instance.
-     *
-     * @param line the HTML import line to convert to a JavaScriptImport instance
-     * @return a JsImport instance
-     */
-    private JsImport asJsImport(String line) {
-        JsImport jsImport = new JsImport();
-        copyAttributes(jsImport, line);
-        return jsImport;
-    }
-
-    /**
-     * Convert the given HTML import line to a {@link JsScript} instance.
-     *
-     * @param line the HTML import line to convert to a JavaScript instance
-     * @return a JsScript instance
-     */
-    private JsScript asJsScript(String line) {
-        JsScript jsScript = new JsScript();
-        copyAttributes(jsScript, line);
-        jsScript.setContent(extractJsContent(line, jsScript));
-        return jsScript;
-    }
-
-    /**
-     * Extract the CSS content from the given HTML import line.
-     *
-     * @param line the HTML import line
-     * @return the CSS content contained in the HTML import line
-     */
-    private String extractCssContent(String line) {
-        if (line.endsWith("/>")) {
-            // If tag has no content, exit early
-            return "";
-        }
-
-        // Find index where tag ends
-        int start = line.indexOf('>');
-        if (start == -1) {
-            throw new IllegalArgumentException(line + " is not a valid element");
-        }
-        int end = line.lastIndexOf("</style>");
-        if (end == -1) {
-            return "";
-        }
-        return line.substring(start + 1, end);
-    }
-
-    /**
-     * Extract the JavaScript content from the given HTML import line.
-     *
-     * @param line the HTML import line
-     * @param jsScript the JsScript to replace the line with
-     */
-    private String extractJsContent(String line, JsScript jsScript) {
-        if (line.endsWith("/>")) {
-            // If tag has no content, exit early
-            return "";
-        }
-
-        // Find index where tag ends
-        int start = line.indexOf('>');
-        if (start == -1) {
-            throw new IllegalArgumentException(line + " is not a valid element");
-        }
-        int end = line.lastIndexOf("</script>");
-        if (end == -1) {
-            return "";
-        }
-        line = line.substring(start + 1, end).trim();
-
-        // Strip addLoadEvent function
-        int addLoadEventStart = line.indexOf("addLoadEvent");
-        if (addLoadEventStart == 0) {
-            start = line.indexOf("{", addLoadEventStart);
-            line = line.substring(start + 1);
-            end = line.lastIndexOf("});");
-            line = line.substring(0, end);
-            jsScript.setExecuteOnDomReady(true);
-        }
-
-        return line;
-    }
-
-    /**
-     * Copy all available attributes from HTML import line to the Element
-     * instance.
-     *
-     * @param element the HTML head element to copy the attributes to
-     * @param line the HTML import line to copy attributes from
-     */
-    private void copyAttributes(Element element, String line) {
-        // Find index where attributes start: the first space
-        int start = line.indexOf(' ');
-        if (start == -1) {
-            // If no attributes found, exit early
-            return;
-        }
-
-        // Find index where attributes end: closing tag
-        int end = line.indexOf("/>");
-        if (end == -1) {
-            end = line.indexOf(">");
-        }
-        if (end == -1) {
-            throw new IllegalArgumentException(line + " is not a valid HTML import");
-        }
-
-        line = line.substring(start, end);
-        StringTokenizer tokens = new StringTokenizer(line, " ");
-        while (tokens.hasMoreTokens()) {
-            String token = tokens.nextToken();
-            StringTokenizer attribute = new StringTokenizer(token, "=");
-            String key = attribute.nextToken();
-            String value = attribute.nextToken();
-            element.setAttribute(key, StringUtils.strip(value, "'\""));
-        }
-    }
-
-    /**
-     * Ensure the given element and content will be unique.
-     *
-     * @deprecated use {@link org.apache.click.element.Element#setId(java.lang.String) ID}
-     * instead
-     *
-     * @param element sets whether the HEAD element should be unique or not
-     * @param content sets whether the HEAD element should be unique or not
-     */
-    private void setUnique(Element element, String content) {
-        String id = element.getId();
-        // If Element is unique and ID is not defined, derive the ID from the
-        // content
-        if (StringUtils.isBlank(id) && content.length() > 0) {
-            int hash = Math.abs(content.hashCode());
-            element.setId("c_" + Integer.toString(hash));
-        }
-    }
-
-    /**
-     * Removes all occurrences of a substring from within the source string.
-     *
-     * @deprecated use {@link org.apache.click.element.Element)} instead
-     *
-     * @param source the source String to search
-     * @param remove the string to remove
-     * @return the substring with the string removed if found
-     */
-    private String remove(String source, String remove) {
-        int start = source.lastIndexOf(remove);
-        if (start == -1) {
-            return source;
-        }
-        int end = start + remove.length();
-        HtmlStringBuffer buffer = new HtmlStringBuffer(source.length());
-        buffer.append(source.substring(0, start));
-        buffer.append(source.substring(end));
-        return buffer.toString();
-    }
-
-    /**
-     * Remove Click's version indicator from the attribute of the given element.
-     *
-     * @deprecated use {@link org.apache.click.element.Element)} instead
-     *
-     * @param element the element
-     * @param attribute the attribute to remove the version indicator from
-     */
-    private void removeVersionIndicator(ResourceElement element, String attribute) {
-        String value = element.getAttribute(attribute);
-
-        // Store current length of value before removing version indicator
-        int length = value.length();
-
-        value = remove(value, ClickUtils.RESOURCE_VERSION_INDICATOR);
-
-        // Check if Click version indicator was removed from value
-        if (value.length() != length) {
-            element.setAttribute(attribute, value);
-            element.setVersionIndicator(ClickUtils.RESOURCE_VERSION_INDICATOR);
         }
     }
 }

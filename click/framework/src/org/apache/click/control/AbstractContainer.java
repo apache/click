@@ -264,29 +264,6 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * @see org.apache.click.Control#getHtmlImports()
-     *
-     * @deprecated use the new {@link #getHeadElements()} instead
-     *
-     * @return the HTML includes statements for the container and child Controls,
-     * or null if no includes are available
-     */
-    @Override
-    public String getHtmlImports() {
-        if (hasControls()) {
-            HtmlStringBuffer buffer = new HtmlStringBuffer(0);
-            for (Control control : getControls()) {
-                String htmlImports = control.getHtmlImports();
-                if (htmlImports != null) {
-                    buffer.append(htmlImports);
-                }
-            }
-            return buffer.toString();
-        }
-        return null;
-    }
-
-    /**
      * Render the HTML representation of the container and all its child
      * controls to the specified buffer.
      * <p/>

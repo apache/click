@@ -146,39 +146,6 @@ public interface Control extends Serializable {
     public Context getContext();
 
     /**
-     * Return the HTML import string to be included in the page.
-     * <p/>
-     * Implement this method to specify JavaScript and CSS includes for the
-     * page. For example:
-     *
-     * <pre class="codeJava">
-     * <span class="kw">protected static final</span> String HTML_IMPORT =
-     *     <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;"</span>;
-     *
-     * <span class="kw">public</span> String getHtmlImports() {
-     *     <span class="kw">return</span> ClickUtils.createHtmlImport(HTML_IMPORTS, getResourceVersionIndicator(), getContext());
-     * } </pre>
-     *
-     * <b>Note</b> multiple import lines should be separated by a
-     * <tt>'\n'</tt> char, as the {@link org.apache.click.util.PageImports} will
-     * parse multiple import lines on the <tt>'\n'</tt> char and ensure that
-     * imports are not included twice.
-     * <p/>
-     * The order in which JS and CSS files are included will be preserved in the
-     * page.
-     * <p/>
-     * <b>Also note:</b> a common problem when overriding getHtmlImports in
-     * subclasses is forgetting to call <em>super.getHtmlImports</em>. Consider
-     * carefully whether you should call <em>super.getHtmlImports</em> or not.
-     *
-     * @deprecated use the new {@link #getHeadElements()} instead
-     *
-     * @return the HTML includes statements for the control stylesheet and
-     * JavaScript files, or null if no includes are available
-     */
-    public String getHtmlImports();
-
-    /**
      * Return the list of HEAD {@link org.apache.click.element.Element elements}
      * to be included in the page. Example HEAD elements include
      * {@link org.apache.click.element.JsImport JsImport},
