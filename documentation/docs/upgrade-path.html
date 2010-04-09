@@ -82,6 +82,64 @@ versions please email the Click user group.
   <div class="release-header">Version 2.2.0 Upgrade</div></dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change"><a name="migrate-imports"></a>
+        Migrated Click Controls from the old string based
+        <a href="click-api/org/apache/click/Control.html#getHtmlImports()">HTML imports</a>
+        to the new <a href="click-api/org/apache/click/element/Element.html">Element</a>
+        based <a href="click-api/org/apache/click/Control.html#getHeadElements()">HEAD elements</a>.
+        <p/>
+        Unfortunately this change can lead to runtime behavioral errors for
+        applications using the string based <tt>getHtmlImports</tt> approach.
+        <p/>
+        As runtime errors are often more expensive to fix than compile time errors,
+        we have decided to remove the <tt>getHtmlImports</tt> method from the
+        Page and Control classes. In addition we have set <tt>getHtmlImports</tt>
+        to <tt>final</tt> in Page and Control. This ensures existing codebases
+        don't accidentally override this method in custom controls and pages.
+        In a future release of Click these final methods will be removed as well.
+        <p/>
+        This means Click 2.2.0 will force you to migrate from <tt>getHtmlImports</tt>
+        to <tt>getHeadElements</tt>.
+        <p/>
+        Here is a typical example of converting a <tt>getHtmlImports</tt> method
+        to <tt>getHeadElements</tt>.
+        <p/>
+        Before:
+
+        <pre class="prettyprint">
+public class MyPage extends BorderPage {
+     protected static final String HTML_IMPORT =
+         "&lt;link rel=\"stylesheet\" type=\"text/css\" src=\"{0}/js/mylib.css\"/&gt;\n"
+         + "&lt;script type=\"text/javascript\" src=\"{0}/js/mylib.js\"&gt;&lt;/script&gt;\n"
+         + "&lt;script type=\"text/javascript\"&gt;alert('Hello World!');&lt;/script&gt;\n";
+
+     public String getHtmlImports() {
+         String[] args = { getContext().getRequest().getContextPath() };
+         return MessageFormat.format(HTML_IMPORTS, args);
+     }
+}
+</pre>
+
+        After:
+        <pre class="prettyprint">
+public class MyPage extends BorderPage {
+
+    public List getHeadElements() {
+        // Cater for stateful pages. If you don't use stateful pages you don't need this check
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+            headElements.add(new CssImport("/js/mylib.css"));
+            headElements.add(new JsImport("/js/mylib.js"));
+
+            JsScript script = new JsScript();
+            script.setContent("alert('Hello World!');");
+            headElements.add(script);
+        }
+        return headElements;
+    }
+}
+</pre>
+      </li>
       <li class="change">
       	  Field disabled behavior has changed slightly. In previous versions,
           disabled fields were processed and validated which isn't the desired

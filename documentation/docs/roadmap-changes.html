@@ -76,12 +76,18 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
 
 <dl>
   <dt><a name="2.2.0"></a>
-    <div class="release-header">Development Release - Version 2.2.0 RC1 - 31 March 2010</div>
+    <div class="release-header">Development Release - Version 2.2.0 RC1 - ?? April 2010</div>
   </dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
-      IMPORTANT be sure to read the <a href="upgrade-path.html">upgrade path</a>
+        <b>IMPORTANT:</b> be sure to read the <a href="upgrade-path.html#2.2.0">upgrade path</a>
       when upgrading from previous releases.
+      <p/>
+      Its worth highlighting that in this release we have removed the deprecated methods
+      <tt>Page.getHtmlImports</tt> and <tt>Control.getHtmlImports</tt>. Users
+      will have to migrate their code to use the new <tt>getHeadElements</tt> instead.
+      Please see the section, <a href="upgrade-path.html#migrate-imports">migrating imports</a>,
+      for more details.
     </div>
     <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
       <b>New examples:</b>
