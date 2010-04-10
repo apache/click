@@ -27,7 +27,7 @@
 
      <!DOCTYPE click-app PUBLIC
        "-//Apache Software Foundation//DTD Click Configuration 2.2//EN"
-       "http://click.apache.org/dtds/click_2_2.dtd">
+       "http://click.apache.org/dtds/click-2.2.dtd">
 -->
 
 <!-- The Click Application (click.xml) Document Type Definition. -->
