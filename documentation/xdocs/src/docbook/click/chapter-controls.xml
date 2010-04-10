@@ -438,9 +438,9 @@ production-error-message=
     <sect2 id="accessing-messages" remap="h3">
       <title>Accessing Messages</title>
 
-      <para>Field classes support a hierarchy of resource bundles for displaying
+      <para>Controls support a hierarchy of resource bundles for displaying
       validation error messages and display messages. These localized messages
-      can be accessed through the Field methods:
+      can be accessed through the AbstractControl methods:
       </para>
 
       <itemizedlist>
@@ -451,12 +451,7 @@ production-error-message=
         </listitem>
         <listitem>
           <para>
-            <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#getMessage(java.lang.String,%20java.lang.Object)">getMessage(String, Object)</ulink>
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#getMessage(java.lang.String,%20java.lang.Object[])">getMessage(String, Object[])</ulink>
+            <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#getMessage(java.lang.String,%20java.lang.Object...)">getMessage(String, Object...)</ulink>
           </para>
         </listitem>
         <listitem>
@@ -467,11 +462,13 @@ production-error-message=
         <listitem>
           <para>
             <ulink url="../../click-api/org/apache/click/control/Field.html#setErrorMessage(java.lang.String)">setErrorMessage(String)</ulink>
+            - this method is defined on the Field class
           </para>
         </listitem>
         <listitem>
           <para>
             <ulink url="../../click-api/org/apache/click/control/Field.html#setErrorMessage(java.lang.String,%20java.lang.Object)">setErrorMessage(String, Object)</ulink>
+            - this method is defined on the Field class
           </para>
         </listitem>
       </itemizedlist>
