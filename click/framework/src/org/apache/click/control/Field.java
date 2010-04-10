@@ -105,7 +105,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * To assist with rendering valid HTML Field subclasses can use the
  * {@link org.apache.click.util.HtmlStringBuffer} class.
  *
- * <h3>Message Resources</h3>
+ * <h3><a name="message-resources"></a>Message Resources and Internationalization(i18n)</h3>
  *
  * Fields support a hierarchy of resource bundles for displaying validation
  * error messages and display messages. These localized messages can be accessed
@@ -113,7 +113,7 @@ import org.apache.click.util.HtmlStringBuffer;
  *
  * <ul>
  * <li>{@link #getMessage(String)}</li>
- * <li>{@link #getMessage(String, Object[])}</li>
+ * <li>{@link #getMessage(String, Object...)}</li>
  * <li>{@link #getMessages()}</li>
  * <li>{@link #setErrorMessage(String)}</li>
  * <li>{@link #setErrorMessage(String, Object)}</li>
