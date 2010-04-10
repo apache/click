@@ -17,21 +17,27 @@
    under the License.*#
 -->
 
-In Click a applications menu is in the configuration file 
+In Click, an application menu can be defined in the configuration file
 <a href="$context/source-viewer.htm?filename=WEB-INF/menu.xml">/WEB-INF/menu.xml</a>.
 <p/>
-This JavaScript drop down menu is rendered using the Velocity Macro <tt>writeMenu()</tt>,
-defined in <a href="$context/source-viewer.htm?filename=macro.vm">macro.vm</a>.
+This JavaScript drop down menu can be rendered by referencing the root Menu in
+the Page template.
+<pre class="codeHtml">
+#36;rootMenu </pre>
+
+The menu can also be rendered using a Velocity Macro, such as the
+<tt>writeMenu()</tt> macro defined in
+<a href="$context/source-viewer.htm?filename=macro.vm">macro.vm</a>.
 
 <pre class="codeHtml">
 &#35;writeMenu(&#36;rootMenu) </pre>
 
-The example menu pages all extend <tt>MenuPage</tt> which defines a <span class="st">"rootMenu"</span>
+The example menu pages all extend <tt>BorderPage</tt> which defines a <span class="st">"rootMenu"</span>
 control.
 
 <pre class="codeJava">
 <span class="kw">public class</span> MenuPage <span class="kw">extends</span> BorderedPage {
 
-     @Bindable <span class="kw">public</span> Menu rootMenu = Menu.getRootMenu();
+     @Bindable <span class="kw">protected</span> Menu rootMenu = new MenuFactory().getRootMenu();
 
 }</pre>
