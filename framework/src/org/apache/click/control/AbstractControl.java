@@ -119,6 +119,17 @@ import org.apache.click.util.MessagesMap;
  *
  * Also see {@link org.apache.click.Control} javadoc for an explanation of the
  * Control execution sequence.
+ *
+ * <h3><a name="message-resources"></a>Message Resources and Internationalization(i18n)</h3>
+ *
+ * Controls support a hierarchy of resource bundles for displaying messages.
+ * These localized messages can be accessed through the methods:
+ *
+ * <ul>
+ * <li>{@link #getMessage(String)}</li>
+ * <li>{@link #getMessage(String, Object...)}</li>
+ * <li>{@link #getMessages()}</li>
+ * </ul>
  */
 public abstract class AbstractControl implements Control {
 
