@@ -33,9 +33,9 @@ import org.apache.click.util.HtmlStringBuffer;
  * rendering of the contained fields. All Form field controls must extend this
  * abstract class.
  *
- * <h3>Field Processing</h3>
+ * <h3><a name="field-processing"></a>Field Processing</h3>
  *
- * <h4>Post Requests</h4>
+ * <h4><a name="post-requests"></a>Post Requests</h4>
  *
  * When processing POST requests forms typically invoke the {@link #onProcess()}
  * method on all its fields. The Field <tt>onProcess()</tt> method is used
@@ -85,12 +85,12 @@ import org.apache.click.util.HtmlStringBuffer;
  * method, and possibly the <tt>bindRequestValue()</tt> method, to provide their
  * own behaviour.
  *
- * <h4>Get Requests</h4>
+ * <h4><a name="get-requests"></a>Get Requests</h4>
  *
  * When processing GET requests a Page's Form will typically perform no
  * processing and simply render itself and its Fields.
  *
- * <h3>Rendering</h3>
+ * <h3><a name="rendering"></a>Rendering</h3>
  *
  * Field subclasses must override the {@link #render(org.apache.click.util.HtmlStringBuffer)}
  * method to enable themselves to be rendered as HTML. With the increasing use of
@@ -105,7 +105,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * To assist with rendering valid HTML Field subclasses can use the
  * {@link org.apache.click.util.HtmlStringBuffer} class.
  *
- * <h3><a name="message-resources"></a>Message Resources and Internationalization(i18n)</h3>
+ * <h3><a name="message-resources"></a>Message Resources and Internationalization (i18n)</h3>
  *
  * Fields support a hierarchy of resource bundles for displaying validation
  * error messages and display messages. These localized messages can be accessed

@@ -48,17 +48,10 @@ import org.apache.click.util.MessagesMap;
  * to make it easier for developers to create their own controls.
  * <p/>
  * Subclasses are expected to at least override {@link #getTag()}
- * to differentiate the control. However some controls does not map cleanly
+ * to differentiate the control. However some controls do not map cleanly
  * to an html <em>tag</em>, in which case you can override
  * {@link #render(org.apache.click.util.HtmlStringBuffer)} for complete control
  * over the output.
- * <p/>
- * Subclasses are also expected to provide a default no-arg constructor <tt>if</tt>
- * the control deploys its JavaScript and CSS resources through Click's
- * {@link org.apache.click.Control#onDeploy(javax.servlet.ServletContext)} mechanism.
- * However if JavaScript and CSS resources are deployed through Click's
- * <a href="../../../../user-guide/html/ch04s03.html#deploying-custom-resources">convention based</a>
- * mechanism, a default constructor is <tt>not</tt> needed.
  * <p/>
  * Below is an example of creating a new control called MyField:
  * <pre class="prettyprint">
@@ -120,7 +113,7 @@ import org.apache.click.util.MessagesMap;
  * Also see {@link org.apache.click.Control} javadoc for an explanation of the
  * Control execution sequence.
  *
- * <h3><a name="message-resources"></a>Message Resources and Internationalization(i18n)</h3>
+ * <h3><a name="message-resources"></a>Message Resources and Internationalization (i18n)</h3>
  *
  * Controls support a hierarchy of resource bundles for displaying messages.
  * These localized messages can be accessed through the methods:
@@ -130,6 +123,9 @@ import org.apache.click.util.MessagesMap;
  * <li>{@link #getMessage(String, Object...)}</li>
  * <li>{@link #getMessages()}</li>
  * </ul>
+ *
+ * The order in which localized messages resolve are descibed in the
+ * <a href="../../../../../user-guide/html/ch03s04.html#message-resolution">user guide</a>.
  */
 public abstract class AbstractControl implements Control {
 
