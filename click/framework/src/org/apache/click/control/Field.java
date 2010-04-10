@@ -823,7 +823,7 @@ public abstract class Field extends AbstractControl {
      * attribute acts like tooltip message over the Field.
      * <p/>
      * If the title value is null, this method will attempt to find a
-     * localized label message in the parent messages using the key:
+     * localized title message in the parent messages using the key:
      * <blockquote>
      * <tt>getName() + ".title"</tt>
      * </blockquote>
