@@ -59,47 +59,56 @@ import org.apache.commons.lang.math.NumberUtils;
  *
  * An example Table usage is provided below:
  *
- * <pre class="codeJava">
- * <span class="kw">public class</span> CustomersPage <span class="kw">extends</span> BorderPage {
+ * <pre class="prettyprint">
+ * public class CustomersPage extends BorderPage {
  *
- *     <span class="kw">public</span> Table table = <span class="kw">new</span> Table();
- *     <span class="kw">public</span> ActionLink deleteLink = <span class="kw">new</span> ActionLink(<span class="st">"Delete"</span>, <span class="kw">this</span>, <span class="st">"onDeleteClick"</span>);
+ *     public Table table = new Table();
+ *     public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
  *
- *     <span class="kw">public</span> CustomersPage() {
+ *     public CustomersPage() {
  *         table.setClass(Table.CLASS_ITS);
  *         table.setPageSize(4);
- *         table.setShowBanner(<span class="kw">true</span>);
- *         table.setSortable(<span class="kw">true</span>);
+ *         table.setShowBanner(true);
+ *         table.setSortable(true);
  *
- *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
- *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
+ *         table.addColumn(new Column("id"));
+ *         table.addColumn(new Column("name"));
  *
- *         Column column = <span class="kw">new</span> Column(<span class="st">"email"</span>);
- *         column.setAutolink(<span class="kw">true</span>);
+ *         Column column = new Column("email");
+ *         column.setAutolink(true);
  *         table.addColumn(column);
  *
- *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"investments"</span>));
+ *         table.addColumn(new Column("investments"));
  *
- *         column = <span class="kw">new</span> Column(<span class="st">"Action"</span>);
- *         column.setDecorator(<span class="kw">new</span> LinkDecorator(table, deleteLink, <span class="st">"id"</span>));
- *         column.setSortable(<span class="kw">false</span>);
+ *         column = new Column("Action");
+ *         column.setDecorator(new LinkDecorator(table, deleteLink, "id"));
+ *         column.setSortable(false);
  *         table.addColumn(column);
+ *
+ *         // Set data provider to populate the table row list from
+ *         table.setDataProvider(new DataProvider() {
+ *             public List getData() {
+ *                 return getCustomerService().getCustomersSortedByName();
+ *             }
+ *         });
  *     }
  *
  *     public boolean onDeleteClick() {
  *         Integer id = deleteLink.getValueInteger();
  *         getCustomerService().deleteCustomer(id);
- *         return <span class="kw">true</span>;
- *     }
- *
- *     <span class="kw">public void</span> onRender() {
- *         List customers = getCustomerService().getCustomersSortedByName();
- *         table.setRowList(customers);
+ *         return true;
  *     }
  * } </pre>
  *
- * <a name="resources"></a>
- * <h3>CSS and JavaScript resources</h3>
+ * <h3><a name="dataprovider"></a>DataProvider</h3>
+ * In the example above a {@link org.apache.click.dataprovider.DataProvider}
+ * is used to populate the Table {@link #setRowList(java.util.List) row list}
+ * from. DataProviders are used to provide data on demand to controls. For very
+ * <tt>large data sets</tt> use a {@link org.apache.click.dataprovider.PagingDataProvider}
+ * instead. See the section <a href="#large-datasets">large data sets</a> for
+ * details.
+ *
+ * <h3><a name="resources"></a>CSS and JavaScript resources</h3>
  *
  * The Table control makes use of the following resources (which Click automatically
  * deploys to the application directory, <tt>/click</tt>):
@@ -125,8 +134,7 @@ import org.apache.commons.lang.math.NumberUtils;
  * &lt;/body&gt;
  * &lt;/html&gt; </pre>
  *
- * <a name="styles"></a>
- * <h4>Table Styles</h4>
+ * <h3><a name="styles"></a>Table Styles</h3>
  *
  * The table CSS style sheet is adapted from the DisplayTag <tt>screen.css</tt>
  * style sheet and includes the styles:
@@ -148,9 +156,9 @@ import org.apache.commons.lang.math.NumberUtils;
  * To use one of these CSS styles set the table <span class="st">"class"</span>
  * attribute. For example in a page constructor:
  *
- * <pre class="codeJava">
- * <span class="kw">public</span> LineItemsPage() {
- *     Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
+ * <pre class="prettyprint">
+ * public LineItemsPage() {
+ *     Table table = new Table("table");
  *     table.setClass(Table.CLASS_SIMPLE);
  *     ..
  * } </pre>
@@ -162,26 +170,23 @@ import org.apache.commons.lang.math.NumberUtils;
  * <pre class="codeConfig">
  * table-default-class=blue2 </pre>
  *
- * <a name="paging"></a>
- * <h4>Paging</h4>
+ * <h3><a name="paging"></a>Paging</h3>
  *
  * Table provides out-of-the-box paging.
  * <p/>
  * To enable Paging set the table's page size: {@link #setPageSize(int)} and
- * make the Table Banner visible: {@link #setShowBanner(boolean)}.
+ * optionally make the Table Banner visible: {@link #setShowBanner(boolean)}.
  * <p/>
  * Table supports rendering different paginators through the method
  * {@link #setPaginator(org.apache.click.control.Renderable) setPaginator}.
  * The default Table Paginator is {@link TablePaginator}.
  *
- * <a name="sorting"></a>
- * <h4>Sorting</h4>
+ * <h3><a name="sorting"></a>Sorting</h3>
  * Table also has built in column sorting.
  * <p/>
  * To enable/disable sorting use {@link #setSortable(boolean)}.
  *
- * <a name="custom-parameters"></a>
- * <h4>Custom Parameters - preserve state when paging and sorting</h4>
+ * <h3><a name="custom-parameters"></a>Custom Parameters - preserve state when paging and sorting</h3>
  *
  * Its often necessary to add extra parameters on the Table links in order to
  * preserve state when navigating between pages or sorting columns.
@@ -206,55 +211,77 @@ import org.apache.commons.lang.math.NumberUtils;
  *          // output rendered by Table note that the companyId parameter
  *          // is rendered for each Paging and Sorting link.
  *          table.getControlLink().setParameter("companyId", companyId);
+ *
+ *          // Set data provider to populate the table row list from
+ *          table.setDataProvider(new DataProvider() {
+ *              public List getData() {
+ *                  return getCompanyDao().getCompanyClients(companyId);
+ *              }
+ *          });
  *      }
  *
  *      ...
- *
- *      public void onRender() {
- *          // Select only clients for the specified companyId
- *          List rowList = getCompanyDao().getCompanyClients(companyId);
- *          table.setRowList(rowList);
- *      }
  * } </pre>
  *
- * <a name="row-attributes"></a>
- * <h4>Row Attributes</h4>
+ * <h3><a name="row-attributes"></a>Row Attributes</h3>
  *
  * Sometimes it is useful to add HTML attributes on individual rows. For these
  * cases one can override the method {@link #addRowAttributes(java.util.Map, java.lang.Object, int)}
  * and add custom attributes to the row's attribute Map.
  *
- * <a name="large-datasets"></a>
- * <h4>Large Datasets</h4>
+ * <h3><a name="large-datasets"></a>Large Datasets</h3>
  *
- * For large datasets Table provides automatic pagination to display a
- * limited number of rows per page. However the Table's
- * {@link #setRowList(java.util.List) row list} must still contain all the
- * dataset entries. With very large datasets (e.g. 100,000 rows), its not
- * possible to retrieve that many rows from the database.
+ * For large data sets use a {@link org.apache.click.dataprovider.PagingDataProvider}.
  * <p/>
- * For these rarer cases a custom List implementation can be used as the
- * Table's {@link #setRowList(java.util.List) row list}. The custom List will
- * only be populated with the rows that must be displayed for the selected page.
+ * A PagingDataProvider has two responsibilities. First, it must load
+ * only those rows to be displayed on the current page e.g. rows 50 - 59.
+ * Second, it must return the <tt>total number of rows</tt> represented by the
+ * PagingDataProvider.
  * <p/>
- * A custom List has two responsibilities: it must override {@link java.util.List#size()
- * List.size()} to return the <tt>total number of rows</tt> and it must override
- * {@link java.util.List#get(int) List.get(index)} to ensure the List returns the
- * correct row for the specified index.
+ * The Table methods {@link #getFirstRow()}, {@link #getLastRow()}
+ * and {@link #getPageSize()} provides the necessary information to limit
+ * the rows to the selected page. For sorting, the Table methods
+ * {@link #getSortedColumn()} and {@link #isSortedAscending()} provides the
+ * necessary information to sort the data.
  * <p/>
- * A prerequisite for this strategy is that the <tt>total number of rows</tt>
- * must be available beforehand, otherwise it won't be possible to calculate the
- * {@link #getLastRow() last row} value.
+ * <b>Please note</b>: when using a PagingDataProvider, you are responsible
+ * for sorting the data, as the Table does not have access to all the data.
  * <p/>
- * The methods {@link #getFirstRow()}, {@link #getLastRow()} and
- * {@link #getPageSize()} provides you with the necessary information to limit
- * the database rows to the selected page.
- * <p/>
- * Please see the <a href="http://www.avoka.com/click-examples/table/large-dataset-demo.htm">Large Dataset Demo</a>
- * which provides a custom List implementation as described above.
+ * Example usage:
+ *
+ * <pre class="prettyprint">
+ * public CustomerPage() {
+ *     Table table = new Table("table");
+ *     table.setPageSize(10);
+ *     table.setShowBanner(true);
+ *     table.setSortable(true);
+ *
+ *     table.addColumn(new Column("id"));
+ *     table.addColumn(new Column("name"));
+ *     table.addColumn(new Column("investments"));
+ *
+ *     table.setDataProvider(new PagingDataProvider() {
+ *
+ *         public List getData() {
+ *             int start = table.getFirstRow();
+ *             int count = table.getPageSize();
+ *             String sortColumn = table.getSortedColumn();
+ *             boolean ascending = table.isSortedAscending();
+ *
+ *             return getCustomerService().getCustomersForPage(start, count, sortColumn, ascending);
+ *         }
+ *
+ *         public int size() {
+ *             return getCustomerService().getNumberOfCustomers();
+ *         }
+ *     });
+ * } </pre>
+ *
+ * For a live demonstration see the
+ * <a href="http://www.avoka.com/click-examples/table/large-dataset-demo.htm">Large Dataset Demo</a>.
  * <p/>
  *
- * See also W3C HTML reference
+ * See the W3C HTML reference
  * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
  *    href="http://www.w3.org/TR/html401/struct/tables.html">Tables</a>
  * and the W3C CSS reference
@@ -436,7 +463,7 @@ public class Table extends AbstractControl {
     protected List rowList;
 
     /**
-     * The show table banner flag detailing number of rows and rows
+     * The show table banner flag detailing number of rows and current rows
      * displayed.
      */
     protected boolean showBanner;
@@ -759,10 +786,71 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Set the table row list DataProvider.
+     * Set the table row list {@link org.apache.click.dataprovider.DataProvider}.
+     * The Table will retrieve its data from the DataProvider on demand.
      * <p/>
      * <b>Please note</b>: setting the dataProvider will nullify the table
      * {@link #setRowList(java.util.List) rowList}.
+     * <p/>
+     * Example usage:
+     *
+     * <pre class="prettyprint">
+     * public CustomerPage() {
+     *     Table table = new Table("table");
+     *     table.addColumn(new Column("id"));
+     *     table.addColumn(new Column("name"));
+     *     table.addColumn(new Column("investments"));
+     *
+     *     table.setDataProvider(new DataProvider() {
+     *         public List getData() {
+     *              return getCustomerService().getCustomers();
+     *         }
+     *     });
+     * } </pre>
+     *
+     * For <b>large</b> data sets use a {@link org.apache.click.dataprovider.PagingDataProvider}
+     * instead.
+     * <p/>
+     * The Table methods {@link #getFirstRow()}, {@link #getLastRow()}
+     * and {@link #getPageSize()} provides the necessary information to limit
+     * the rows to the selected page. For sorting, the Table methods
+     * {@link #getSortedColumn()} and {@link #isSortedAscending()} provides the
+     * necessary information to sort the data.
+     * <p/>
+     * <b>Please note</b>: when using a PagingDataProvider, you are responsible
+     * for sorting the data, as the Table does not have access to all the data.
+     * <p/>
+     * Example usage:
+     *
+     * <pre class="prettyprint">
+     * public CustomerPage() {
+     *     Table table = new Table("table");
+     *     table.setPageSize(10);
+     *     table.setShowBanner(true);
+     *     table.setSortable(true);
+     *
+     *     table.addColumn(new Column("id"));
+     *     table.addColumn(new Column("name"));
+     *     table.addColumn(new Column("investments"));
+     *
+     *     table.setDataProvider(new PagingDataProvider() {
+     *
+     *         public List getData() {
+     *             int start = table.getFirstRow();
+     *             int count = table.getPageSize();
+     *             String sortColumn = table.getSortedColumn();
+     *             boolean ascending = table.isSortedAscending();
+     *
+     *             return getCustomerService().getCustomersForPage(start, count, sortColumn, ascending);
+     *         }
+     *
+     *         public int size() {
+     *             return getCustomerService().getNumberOfCustomers();
+     *         }
+     *     });
+     * } </pre>
+     *
+     * @see #setRowList(java.util.List)
      *
      * @param dataProvider the table row list DataProvider
      */
@@ -1051,6 +1139,10 @@ public class Table extends AbstractControl {
      * Set the list of table rows. Each row can either be a value object
      * (JavaBean) or an instance of a <tt>Map</tt>.
      * <p/>
+     * Although possible to set the table rows directly with this method, best
+     * practice is to use a {@link #setDataProvider(org.apache.click.dataprovider.DataProvider)}
+     * instead.
+     * <p/>
      * Please note the rowList is cleared in table {@link #onDestroy()} method
      * at the end of each request.
      *
@@ -1067,7 +1159,7 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Return the show Table banner flag detailing number of rows and rows
+     * Return the show Table banner flag detailing number of rows and current rows
      * displayed.
      *
      * @return the show Table banner flag
@@ -1077,7 +1169,7 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Set the show Table banner flag detailing number of rows and rows
+     * Set the show Table banner flag detailing number of rows and current rows
      * displayed.
      *
      * @param showBanner the show Table banner flag
