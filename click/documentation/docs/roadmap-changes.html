@@ -146,6 +146,12 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-591">CLK-591</a>].
       </li>
       <li class="change">
+        Added a <a href="click-api/org/apache/click/PageInterceptor.html">Page Interceptor</a>
+        facility that provides an extension point for code which can listen to
+        key page events and also interrupt normal page processing flow.
+        [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-598">CLK-598</a>].
+      </li>
+      <li class="change">
         Added improved dynamic Form support. Forms can now optionally bypass
         validation for JavaScript based submissions using the new JavaScript
         function <tt>"Click.submit(formName, validate)"</tt>
@@ -153,8 +159,9 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
       </li>
       <li class="change">
         Added improved dynamic Page and Form behaviour through new helper methods
-        that can bind and validate Fields and Forms during the <tt>"onInit"</tt>
-        page event. The new methods are:
+        that can bind and validate Forms and Fields <tt>before</tt> the onProcess
+        page event e.g. in the Page constructor or <tt>"onInit"</tt> event.
+        The new methods are:
         <a href="click-api/org/apache/click/util/ClickUtils.html#bind(org.apache.click.control.Field)">ClickUtils.bind(Field)</a>,
         <a href="click-api/org/apache/click/util/ClickUtils.html#bind(org.apache.click.control.Form)">ClickUtils.bind(Form)</a>,
         <a href="click-api/org/apache/click/util/ClickUtils.html#bind(org.apache.click.control.AbstractLink)">ClickUtils.bind(AbstractLink)</a>,
@@ -274,6 +281,15 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
           <pre class="prettyprint">&lt;!DOCTYPE menu PUBLIC
        "-//Apache Software Foundation//DTD Click Menu 2.2//EN"
        "http://click.apache.org/dtds/menu-2.2.dtd"&gt; </pre>
+      </li>
+      <li class="change">
+          The new click-2.2.dtd has been published to
+          <a href="http://click.apache.org/dtds/click-2.2.dtd">http://click.apache.org/dtds/click-2.2.dtd</a>.
+          If you want your configuration to conform to the click.dtd, include
+          the following declaration in your click.xml:
+          <pre class="prettyprint">&lt;!DOCTYPE click-app PUBLIC
+       "-//Apache Software Foundation//DTD Click Configuration 2.2//EN"
+       "http://click.apache.org/dtds/click-2.2.dtd"&gt; </pre>
       </li>
     </ul>
   </dd>

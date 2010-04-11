@@ -1,3 +1,21 @@
+This example demonstrates how to dynamically add fields to a form.
+<ul>
+    <li>
+        The JavaScript function <tt>Click.submit(form, validate)</tt> is set as
+        the checkbox <tt>onclick</tt> handler. Clicking the checkbox will submit
+        the form, but bypass form validation.
+    </li>
+    <li>
+        The utility method <tt>ClickUtils.bind(Control)</tt> is used to bind
+        and inspect the checkbox value <tt>before</tt> the page onProcess event.
+    </li>
+    <li>
+        If the checkbox is checked, the email field is added to the form
+    </li>
+</ul>
+
+<hr/>
+
 $dynamicForm
 
 #if ($msg)
