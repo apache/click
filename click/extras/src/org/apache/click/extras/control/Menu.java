@@ -54,11 +54,13 @@ import org.w3c.dom.NodeList;
  * </tr>
  * </table>
  *
- * Application menus are defined using a <tt>/WEB-INF</tt> configuration
- * file located under the <tt>/WEB-INF</tt> directory or the root classpath.
- * An example Menu configuration files is provided below.
+ * <h3><a name="configuration"></a>Configuration</h3>
  *
- * <pre class="codeConfig">
+ * Application menus are normally defined using a configuration file
+ * (<tt>menu.xml</tt> by default) located under the <tt>/WEB-INF</tt> directory
+ * or the root classpath. An example Menu configuration file is provided below.
+ *
+ * <pre class="prettyprint">
  * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
  * &lt;menu&gt;
  *    &lt;menu label="Home" path="user/home.htm" roles="tomcat, role1"/&gt;
@@ -72,16 +74,18 @@ import org.w3c.dom.NodeList;
  *    &lt;/menu&gt;
  * &lt;/menu&gt; </pre>
  *
- * To include the root menu item in your page, simply use the default Menu constructor:
+ * Use a {@link MenuFactory} to load the Menu items and include the root menu
+ * item in your page:
  *
  * <pre class="prettyprint">
  * public class BorderPage extends Page {
  *
- *     &#64;Bindable public Menu rootMenu;
+ *     private Menu rootMenu;
  *
  *     public BorderPage() {
  *         MenuFactory menuFactory = new MenuFactory();
  *         rootMenu = menuFactory.getRootMenu();
+ *         addControl(rootMenu);
  *     }
  *
  *     &#64;Override
@@ -91,8 +95,65 @@ import org.w3c.dom.NodeList;
  *
  * } </pre>
  *
- * To render the configured Menu hierarchy you will need to use a Velocity
- * #macro or Velocity code in your page. For example:
+ * <h3><a name="programmatic"></a>Programmatically defined menus</h3>
+ *
+ * It is also possible to create Menus programmatically, for example:
+ *
+ * <pre class="prettyprint">
+ * public class BorderPage extends Page {
+ *
+ *     private static class Menu rootMenu;
+ *
+ *     public BorderPage() {
+ *
+ *         if (rootMenu == null) {
+ *             rootMenu = new MenuBuilder().buildMenu();
+ *         }
+ *
+ *         addControl(rootMenu);
+ *     }
+ * } </pre>
+ *
+ * <pre class="prettyprint">
+ * public class MenuBuilder() {
+ *
+ *     public Menu buildMenu() {
+ *
+ *         Menu rootMenu = new Menu("rootMenu");
+ *         rootMenu.add(createMenu("Home", "home.htm"));
+ *
+ *         Menu customerMenu = createMenu("Home", "home.htm");
+ *         rootMenu.add(customerMenu);
+ *
+ *         customerMenu.add(createMenu("Search Customers", "search-customers.htm"));
+ *         customerMenu.add(createMenu("Edit Customer", "edit-customer.htm"));
+ *
+ *         ...
+ *
+ *         return rootMenu;
+ *     }
+ *
+ *     private Menu createMenu(String label, String path) {
+ *         Menu menu = new Menu();
+ *         menu.setLabel(label);
+ *         menu.setPath(path);
+ *         menu.setTitle(label);
+ *         return menu;
+ *     }
+ * }</pre>
+ *
+ * <h3><a name="rendering"></a>Rendering</h3>
+ *
+ * To render the configured Menu hierarchy you can reference the root menu by
+ * its name in the Velocity template. For example:
+ * <pre class="codeHtml">
+ * <span class="st">$rootMenu</span> </pre>
+ *
+ * The hierarchical Menu structure is rendered as an HTML list: &lt;ul&gt;.
+ * <p/>
+ *
+ * Alternatively, you can render the menu using a Velocity #macro or Velocity
+ * code in your template. For example:
  *
  * <pre class="codeHtml">
  * <span class="red">#</span>writeMenu(<span class="st">$rootMenu</span>) </pre>
@@ -140,21 +201,21 @@ import org.w3c.dom.NodeList;
  * <span class="red">#end</span> </pre>
  *
  * This example uses role path based security to only display the menu items
- * the user is authorized to see. If you not using this security feature in your
- * application you should remove the macro {@link #isUserInRoles()} checks so
+ * the user is authorized to see. If you are not using this security feature in
+ * your application you should remove the macro {@link #isUserInRoles()} checks so
  * the menu items will be rendered.
  * <p/>
  * Note individual menu items will render themselves as simple anchor tags using
  * their {@link #toString()} method. For more fine grain control you should
  * extend your Velocity macro to render individual menu items.
  *
- * <h3>Security</h3>
+ * <h3><a name="security"></a>Security</h3>
  *
  * Menus support role based security via the {@link #isUserInRoles()}
  * method. When creating secure menus define the valid roles in the menu items.
  * For example:
  *
- * <pre class="codeConfig">
+ * <pre class="prettyprint">
  * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
  * &lt;menu&gt;
  *    &lt;menu label="Home" path="user/home.htm" roles="user,admin"&gt;
@@ -170,10 +231,10 @@ import org.w3c.dom.NodeList;
  * {@link AccessController} interface. The default AccessController is provided
  * by the {@link RoleAccessController} which uses the JEE container is user in
  * role facility. By providing your own AccessController you can have menu
- * access control using other security frameworks such as JSecurity or Spring
- * Security (Acegi).
+ * access control using other security frameworks such as Spring
+ * Security (Acegi) or Apache Shiro.
  *
- * <h3>Menu Configuration DTD</h3>
+ * <h3><a name="config-dtd"></a>Menu Configuration DTD</h3>
  *
  * The Menu config file DTD is provided below:
  *
@@ -192,8 +253,19 @@ import org.w3c.dom.NodeList;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">roles</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">pages</span> CDATA #IMPLIED&gt; </pre>
  *
- * <a name="resources"></a>
- * <h3>CSS and JavaScript resources</h3>
+ * The Menu DTD is also published online at
+ * <a href="http://click.apache.org/dtds/menu-2.2.dtd">http://click.apache.org/dtds/menu-2.2.dtd</a>.
+ *
+ * <h3><a name="message-resources"></a>Message Resources and Internationalization (i18n)</h3>
+ *
+ * Menus automatically pick up localized messages where applicable. Please see
+ * the following methods on how to customize these messages:
+ * <ul>
+ * <li>{@link #getLabel()}</li>
+ * <li>{@link #getTitle()}</li>
+ * </ul>
+ *
+ * <h3><a name="resources"></a>CSS and JavaScript resources</h3>
  *
  * The Menu control makes use of the following resources
  * (which Click automatically deploys to the application directory, <tt>/click</tt>):
@@ -556,9 +628,60 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Return the label of the Menu item.
+     * Return the menu item display label.
+     * <p/>
+     * If the label value is null, this method will attempt to find a
+     * localized label message in the parent messages of the root menu using the
+     * key:
      *
-     * @return the label of the Menu item
+     * <blockquote>
+     * <tt>getName() + ".label"</tt>
+     * </blockquote>
+     *
+     * If not found then the message will be looked up in the
+     * <tt>/click-control.properties</tt> file using the same key.
+     * If a value is still not found, the Menu name will be converted
+     * into a label using the method: {@link ClickUtils#toLabel(String)}
+     * <p/>
+     * For example given the properties file <tt>src/click-page.properties</tt>:
+     *
+     * <pre class="codeConfig">
+     * <span class="st">customers</span>.label=<span class="red">Customers</span>
+     * <span class="st">customers</span>.title=<span class="red">Find a specific customer</span> </pre>
+     *
+     * The menu.xml (<b>note</b> that no label attribute is present):
+     * <pre class="prettyprint">
+     * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+     * &lt;menu&gt;
+     *    &lt;menu name="customers" path="customers.htm" roles="view-customers"/&gt;
+     *
+     *    ...
+     * &lt;/menu&gt; </pre>
+     *
+     * Will render the Menu label and title properties as:
+     *
+     * <pre class="codeHtml">
+     * &lt;li&gt;&lt;a title="<span class="red">Find a specific customer</span>" ... &gt;<span class="red">Customers</span>&lt;/a&gt;&lt;/li&gt; </pre>
+     *
+     * When a label value is not set, or defined in any properties files, then
+     * its value will be created from the Menu name.
+     * <p/>
+     * For example given the <tt>menu.xml</tt> file:
+     *
+     * <pre class="prettyprint">
+     * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+     * &lt;menu&gt;
+     *    &lt;menu name="product" path="product.htm" roles="view-product"/&gt;
+     *
+     *    ...
+     * &lt;/menu&gt; </pre>
+     *
+     * Will render the Menu label as:
+     *
+     * <pre class="codeHtml">
+     * &lt;li&gt;&lt;a ... &gt;<span class="red">Product</span>&lt;/a&gt;&lt;/li&gt; </pre>
+     *
+     * @return the display label of the Menu item
      */
     public String getLabel() {
         // Return cached label, if set
@@ -806,9 +929,41 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Return the title attribute of the Menu item.
+     * Return the 'title' attribute of the Menu item, or null if not defined.
+     * <p/>
+     * If the title value is null, this method will attempt to find a
+     * localized title message in the parent messages of the root menu using the
+     * key:
      *
-     * @return the title attribute of the Menu item
+     * <blockquote>
+     * <tt>getName() + ".title"</tt>
+     * </blockquote>
+     *
+     * If not found then the message will be looked up in the
+     * <tt>/click-control.properties</tt> file using the same key. If still
+     * not found the title will be left as null and will not be rendered.
+     * <p/>
+     * For example given the properties file <tt>src/click-page.properties</tt>:
+     *
+     * <pre class="codeConfig">
+     * <span class="st">customers</span>.label=<span class="red">Customers</span>
+     * <span class="st">customers</span>.title=<span class="red">Find a specific customer</span> </pre>
+     *
+     * The menu.xml (<b>note</b> that no title attribute is present):
+     * <pre class="prettyprint">
+     * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+     * &lt;menu&gt;
+     *    &lt;menu name="customers" path="customers.htm" roles="view-customers"/&gt;
+     *
+     *    ...
+     * &lt;/menu&gt; </pre>
+     *
+     * Will render the Menu label and title properties as:
+     *
+     * <pre class="codeHtml">
+     * &lt;li&gt;&lt;a title="<span class="red">Find a specific customer</span>" ... &gt;<span class="red">Customers</span>&lt;/a&gt;&lt;/li&gt; </pre>
+     *
+     * @return the 'title' attribute of the Menu item
      */
     public String getTitle() {
         // Return cached title if set
@@ -1012,16 +1167,17 @@ public class Menu extends AbstractControl {
     /**
      * Render an HTML representation of the Menu.
      * <p/>
-     * If this menu is the root menu ({@link #isRoot()} returns true), the menu
-     * and all its submenus (recursively), will be rendered by delegating
-     * rendering to the method
-     * {@link #renderRootMenu(org.apache.click.util.HtmlStringBuffer)}. The menu
-     * structure will be rendered as an HTML List consisting of &lt;ul&gt; and
-     * &lt;li&gt; elements.
+     * If <tt>this</tt> menu instance is the root menu
+     * ({@link #isRoot()} returns true), the menu and all its submenus
+     * (recursively), will be rendered by delegating rendering to the method
+     * {@link #renderRootMenu(org.apache.click.util.HtmlStringBuffer) renderRootMenu}.
+     * The menu structure will be rendered as an HTML List consisting of &lt;ul&gt;
+     * and &lt;li&gt; elements.
      * <p/>
-     * If this menu is <tt>not</tt> the root menu, this menu will be rendered
-     * on its own by delegating rendering to the method
+     * If <tt>this</tt> menu instance is <tt>not</tt> the root menu, this menu
+     * will be rendered by delegating rendering to the method
      * {@link #renderMenuLink(org.apache.click.util.HtmlStringBuffer, org.apache.click.extras.control.Menu)}.
+     * The menu will be rendered as a link: &lt;a&gt;.
      * <p/>
      * By having two render modes one can render the entire menu
      * automatically, or render each menu item manually using a Velocity macro.
@@ -1080,6 +1236,13 @@ public class Menu extends AbstractControl {
 
     /**
      * Render an html represenatation of the menu list (&lt;ul&gt;) structure.
+     * <p/>
+     * <b>Please note</b>: the method
+     * {@link #canRender(org.apache.click.extras.control.Menu, int) canRender(menu)}
+     * controls whether menu items are rendered or not. If <tt>canRender</tt>
+     * returns true, the menu item is rendered, otherwise it is skipped.
+     *
+     * @see #canRender(org.apache.click.extras.control.Menu, int)
      *
      * @param buffer the buffer to render to
      * @param menu the menu that is currently rendered
@@ -1121,12 +1284,13 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Return true if the given menu can be rendered, false otherwise. If the
-     * menu {@link #hasRoles() has roles} defined, this method will return
-     * true if the user is in one of the menu roles, false otherwise.
+     * Return true if the given menu can be rendered, false otherwise.
      * <p/>
-     * This method delegates to {@link #isUserInRoles()} if the menu has roles
-     * defined.
+     * If the menu {@link #hasRoles() has roles} defined, this method will return
+     * true if the user is in one of the menu roles, false otherwise. This method
+     * delegates to {@link #isUserInRoles()} if the menu has roles defined.
+     * <p/>
+     * If the menu has no roles defined, this method returns true.
      *
      * @param menu the menu that should be rendered or not
      * @param depth the current depth in the menu hierarchy

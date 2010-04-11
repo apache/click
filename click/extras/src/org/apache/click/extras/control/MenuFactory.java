@@ -43,14 +43,35 @@ import org.w3c.dom.NodeList;
 
 /**
  * Provides a Menu factory for creating application menus from configuration
- * files. Menu factory provides a variety of <tt>getRootMenu</tt> methods for
- * loading the menu. The default {@link #getRootMenu()} method creates menus
+ * files.
+ * <p/>
+ * Menu factory provides a variety of <tt>getRootMenu()</tt> methods for
+ * loading the menus. The default {@link #getRootMenu()} method creates menus
  * from the configuration file <tt>/WEB-INF/menu.xml</tt>, or the classpath
- * resource <tt>/menu.xml</tt> if the WEB-INF menu was not resolved. To load
- * menus from an alternate configuration file use one of the <tt>getRootMenu</tt>
- * methods that accept a configuration file name.
+ * resource <tt>/menu.xml</tt> if <tt>WEB-INF/menu.xml</tt> was not resolved.
+ * <p/>
+ * Below is an example <tt>menu.xml</tt> configuration file:
  *
- * <h3>MenuFactory Examples</h3>
+ * <pre class="prettyprint">
+ * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+ * &lt;menu&gt;
+ *    &lt;menu label="Home" path="user/home.htm" roles="tomcat, role1"/&gt;
+ *    &lt;menu label="User" path="user/home.htm" roles="tomcat, role1"&gt;
+ *        &lt;menu label="User Page 1" path="user/user-1.htm" roles="tomcat, role1"/&gt;
+ *        &lt;menu label="User Page 2" path="user/user-2.htm" roles="tomcat, role1"/&gt;
+ *    &lt;/menu&gt;
+ *    &lt;menu label="Admin" path="admin/admin-1.htm" roles="role1"&gt;
+ *        &lt;menu label="Admin Page 1" path="admin/admin-1.htm" roles="tomcat, role1"/&gt;
+ *        &lt;menu label="Admin Page 2" path="admin/admin-2.htm" roles="tomcat, role1"/&gt;
+ *    &lt;/menu&gt;
+ * &lt;/menu&gt; </pre>
+ *
+ * You can also specify an alternative configuration file name to load your
+ * menus from. Just use one of the <tt>getRootMenu</tt> methods that accept a
+ * configuration file name, for example {@link #getRootMenu(java.lang.String, java.lang.String)
+ * getRootMenu(name, fileName)}.
+ *
+ * <h3><a name="examples"></a>MenuFactory Examples</h3>
  *
  * Below is an example of a MenuFactory being used to set the rootMenu on a
  * border page. Typically a border page will define a page template which
@@ -76,6 +97,7 @@ import org.w3c.dom.NodeList;
  *
  * } </pre>
  *
+ * <h3><a name="stateful-pages"></a>Stateful pages</h3>
  * Please note if you use stateful pages that are serialized, you probably
  * won't want your application menu being serialized to disk or across a cluster
  * with your page as well. In these scenarios please follow the pattern below.
@@ -105,6 +127,20 @@ import org.w3c.dom.NodeList;
  *     }
  *
  * } </pre>
+ *
+ * <h3><a name="caching"></a>Caching</h3>
+ * Loading Menus using {@link #getRootMenu()} will automatically cache the
+ * menus for improved performance (technically the menus are only cached when
+ * Click is in <tt>production</tt> or <tt>profile</tt> mode).
+ * <p/>
+ * If you want to manage Menu caching yourself, use one of the
+ * {@link #getRootMenu(boolean) getRootMenu} methods that accepts a boolean
+ * controlling whether or not the menus are cached.
+ * <p/>
+ * A common use case for caching menus yourself is when you need to customize
+ * the menus based on the logged in user. For this scenario you would load the
+ * Menus using {@link #getRootMenu(boolean) getRootMenu(false)}, customize the
+ * menus according to the user profile, and cache the menus in the HttpSession.
  *
  * @see Menu
  */
@@ -167,7 +203,7 @@ public class MenuFactory implements Serializable {
 
     /**
      * Return root menu item defined in the WEB-INF/menu.xml or classpath
-     * menu.xml, creating menu items using the provided Menu class and the JEE
+     * menu.xml, creating menu items using the provided menu class and the JEE
      * RoleAccessController.
      *
      * @param menuClass the menu class to create new Menu instances from
@@ -209,9 +245,9 @@ public class MenuFactory implements Serializable {
     }
 
     /**
-     * Return root menu item defined by the given fileName under WEB-INF or the
-     * classpath, creating menu items using the Menu class and the JEE
-     * RoleAccessController.
+     * Return root menu item defined by the given name and fileName under
+     * WEB-INF or the classpath, creating menu items using the Menu class and
+     * the JEE RoleAccessController.
      *
      * @param name the name of the root menu
      * @param fileName the fileName defining the menu definitions
@@ -224,9 +260,21 @@ public class MenuFactory implements Serializable {
     }
 
     /**
-     * Return root menu item defined by the given fileName under WEB-INF or the
-     * classpath, creating menu items using the Menu class and the JEE
-     * RoleAccessController.
+     * Return root menu item defined by the given name and fileName under WEB-INF
+     * or the classpath, creating menu items using the provided menu class and
+     * AccessController.
+     * <p/>
+     * Example usage:
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *     MenuFactory factory = new MenuFactory();
+     *     String menuName = "mymenu";
+     *     String fileName = "mymenu.xml";
+     *     AccessController accessController = new RoleAccessController();
+     *     boolean cached = true;
+     *
+     *     factory.getRootMenu(menuName, fileName, accessController, cached, MyMenu.class);
+     * } </pre>
      *
      * @param name the name of the root menu
      * @param fileName the fileName defining the menu definitions
@@ -258,9 +306,12 @@ public class MenuFactory implements Serializable {
         ServletContext servletContext = Context.getThreadLocalContext().getServletContext();
         ConfigService configService = ClickUtils.getConfigService(servletContext);
 
-        if (configService.isProductionMode() || configService.isProfileMode()) {
-            // Cache menu in production modes
-            cacheRootMenu(rootMenu);
+        if (cached) {
+
+            if (configService.isProductionMode() || configService.isProfileMode()) {
+                // Cache menu in production modes
+                cacheRootMenu(rootMenu);
+            }
         }
 
         return rootMenu;
