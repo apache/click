@@ -232,7 +232,8 @@ public class MenuFactory implements Serializable {
     /**
      * Return root menu item defined in the WEB-INF/menu.xml or classpath
      * menu.xml, creating menu items using the Menu class and the JEE
-     * RoleAccessController.
+     * RoleAccessController. The cached option specifies whether the loaded
+     * menus will be cached or not.
      *
      * @param cached return the cached menu if in production or profile mode,
      * otherwise create and return a new root menu instance
@@ -262,7 +263,8 @@ public class MenuFactory implements Serializable {
     /**
      * Return root menu item defined by the given name and fileName under WEB-INF
      * or the classpath, creating menu items using the provided menu class and
-     * AccessController.
+     * AccessController. The cached option specifies whether the loaded
+     * menus will be cached or not.
      * <p/>
      * Example usage:
      * <pre class="prettyprint">

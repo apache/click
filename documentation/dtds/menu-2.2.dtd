@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+
+<!--
+     DTD for the Click Menu Configuration File, Version 2.2
+
+     To support validation of your configuration file, include the following
+     DOCTYPE element at the beginning (after the "xml" declaration):
+
+     <!DOCTYPE menu PUBLIC
+       "-//Apache Software Foundation//DTD Click Menu 2.2//EN"
+       "http://click.apache.org/dtds/menu-2.2.dtd">
+-->
+
+<!-- The Menu (menu.xml) Document Type Definition. -->
+<!ELEMENT menu (menu*)>
+    <!ATTLIST menu id ID #IMPLIED>
+    <!ATTLIST menu name CDATA #IMPLIED>
+    <!ATTLIST menu label CDATA #IMPLIED>
+    <!ATTLIST menu path CDATA #IMPLIED>
+    <!ATTLIST menu target CDATA #IMPLIED>
+    <!ATTLIST menu title CDATA #IMPLIED>
+    <!ATTLIST menu imageSrc CDATA #IMPLIED>
+    <!ATTLIST menu external (true|false) "false">
+    <!ATTLIST menu separator (true|false) "false">
+    <!ATTLIST menu roles CDATA #IMPLIED>
+    <!ATTLIST menu pages CDATA #IMPLIED>
