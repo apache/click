@@ -743,8 +743,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         List<PageInterceptor> interceptorList =
             new ArrayList<PageInterceptor>(pageInterceptorConfigList.size());
 
-        for (PageInterceptorConfig pageListenerConfig : pageInterceptorConfigList) {
-            interceptorList.add(pageListenerConfig.getPageInterceptor());
+        for (PageInterceptorConfig pageInterceptorConfig : pageInterceptorConfigList) {
+            interceptorList.add(pageInterceptorConfig.getPageInterceptor());
         }
 
         return interceptorList;
@@ -1574,10 +1574,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 propertyList.add(new Property(name, value));
             }
 
-            PageInterceptorConfig pageListenerConfig =
+            PageInterceptorConfig pageInterceptorConfig =
                 new PageInterceptorConfig(interceptorClass, applicationScope, propertyList);
 
-            pageInterceptorConfigList.add(pageListenerConfig);
+            pageInterceptorConfigList.add(pageInterceptorConfig);
         }
     }
 

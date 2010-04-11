@@ -51,12 +51,17 @@ Provides an example of all <a href="click-dtd.html">DTD</a> ELEMENTS and ATTRIBU
           &lt;!-- Specify headers to cache the page for 1 hour, after which it should be reloaded --&gt;
           &lt;header name="Pragma" value="no-cache"/&gt;
           &lt;header name="Expires" value="1" type="Date"/&gt;
-      &lt;/page&gt; 
+      &lt;/page&gt;
 
   &lt;/pages&gt;
 
   &lt;!-- Another automatically mapped Page package --&gt;
   &lt;pages package="com.mycorp.common.page"/&gt;
+
+  &lt;page-interceptor classname="com.mycorp.PageSecurityInterceptor" scope="application"&gt;
+     &lt;property name="notAuthenticatedPath" value="/not-authenticated.htm"/&gt;
+     &lt;property name="notAuthorizedPath" value="/not-authorized.htm"/&gt;
+  &lt;/page-interceptor&gt;
 
   &lt;!-- Setup global headers. The headers shown below is the default used by Click --&gt;
   &lt;headers&gt;
