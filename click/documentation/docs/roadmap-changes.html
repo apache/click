@@ -116,13 +116,34 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li class="change">
         Added <a href="click-api/org/apache/click/dataprovider/DataProvider.html">DataProvider</a>
-        interface and support in Table class for on demand loading of list data
+        interface and support in Table, Select, PickList and CheckList for
+        on demand loading of data. With DataProviders, users won't have to be
+        concerned about which page event (onInit or onRender) to set the data on
+        the control
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-640">CLK-640</a>].
       </li>
       <li class="change">
         Added <a href="click-api/org/apache/click/dataprovider/PagingDataProvider.html">PagingDataProvider</a>
-        interface to support paginated result sets
+        interface to support large paginated result sets for Tables
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-640">CLK-640</a>].
+      </li>
+      <li class="change">
+        Added a <a href="extras-api/org/apache/click/extras/control/MenuFactory.html">MenuFactory</a>
+        for creating and loading Menus from <tt>configuration</tt> files. All the
+        static Menu methods have been deprecated and will be removed in a future release.
+      </li>
+      <li class="change">
+        Added an <a href="extras-api/org/apache/click/extras/control/MenuFactory.html#getRootMenu(boolean)">option</a>
+        for MenuFactory to not statically cache menus. This allows
+        developers to cache menus in different scopes such as HttpSession.
+        [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-405">CLK-405</a>].
+      </li>
+      <li class="change">
+        Added i18n support for Menus loaded from <tt>menu.xml</tt>. The menu
+        DTD now includes a new <tt>name</tt> attribute. By specifying
+        a <tt>name</tt> attribute in <tt>menu.xml</tt>, the Menu will attempt to
+        load its <tt>label</tt> and <tt>title</tt> from resource bundles
+        [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-591">CLK-591</a>].
       </li>
       <li class="change">
         Added improved dynamic Form support. Forms can now optionally bypass
@@ -188,6 +209,13 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
         and <a href="click-api/org/apache/click/Context.html#hasRequestAttribute(java.lang.String)">Context.hasRequestAttribute(String)</a>.
       </li>
       <li class="change">
+        Added support to Select for a <a href="click-api/org/apache/click/control/Select.html#setDefaultOption(org.apache.click.control.Option)">default option</a>
+        that can be used to validate non selection against and allows the Select
+        to only populate its optionList at rendering time, instead of during
+        <tt>onProcess</tt> event.
+        [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-???">CLK-???</a>].
+      </li>
+      <li class="change">
         Improved default autobinding mode to bind both public fields and fields
         annotated with @Bindable. In previous versions the default autobinding
         mode only binded public Page fields
@@ -237,6 +265,15 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
         Improved ClickServlet to use the response's OutputStream if the Writer
         cannot be retrieved
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-644">CLK-644</a>].
+      </li>
+      <li class="change">
+          The menu.dtd has been published to
+          <a href="http://click.apache.org/dtds/menu-2.2.dtd">http://click.apache.org/dtds/menu-2.2.dtd</a>.
+          If you want your configuration to conform to the menu.dtd, include
+          the following declaration in your menu.xml:
+          <pre class="prettyprint">&lt;!DOCTYPE menu PUBLIC
+       "-//Apache Software Foundation//DTD Click Menu 2.2//EN"
+       "http://click.apache.org/dtds/menu-2.2.dtd"&gt; </pre>
       </li>
     </ul>
   </dd>
@@ -500,7 +537,7 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
           the following declaration in your click.xml:
           <pre class="prettyprint">&lt;!DOCTYPE click-app PUBLIC
        "-//Apache Software Foundation//DTD Click Configuration 2.1//EN"
-       "http://click.apache.org/dtds/click_2_1.dtd"&gt; </pre>
+       "http://click.apache.org/dtds/click-2.1.dtd"&gt; </pre>
       </li>
       <li class="change">
           Improved Form validation to allow Form subclasses to override the
