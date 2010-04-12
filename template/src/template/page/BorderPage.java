@@ -7,11 +7,12 @@ public class BorderPage extends BasePage {
 
     private static final long serialVersionUID = 1L;
 
-    public Menu rootMenu;
+    private Menu rootMenu;
 
     public BorderPage() {
         MenuFactory menuFactory = new MenuFactory();
         rootMenu = menuFactory.getRootMenu();
+        addControl(rootMenu);
     }
 
     /**

@@ -49,7 +49,7 @@
              destdir="WebContent/WEB-INF/classes" 
              debug="true"
              encoding="ISO-8859-1"
-             source="1.4">
+             source="1.5">
          <classpath refid="classpath"/>
       </javac> 
    </target>
