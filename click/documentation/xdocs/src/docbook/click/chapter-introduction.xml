@@ -481,6 +481,15 @@ public HelloWorld extends Page {
         column.setDecorator(new LinkDecorator(table, links, "id"));
         column.setSortable(false);
         table.addColumn(column);
+
+        // Table rowList will be populated through a DataProvider which loads
+        // data on demand.
+        table.setDataProvider(new DataProvider() {
+
+            public List getData() {
+                return getCustomerService().getCustomers();
+            }
+        });
     }
     
     // ---------------------------------- Event Handlers
@@ -492,15 +501,6 @@ public HelloWorld extends Page {
         Integer id = deleteLink.getValueInteger();
         getCustomerService().deleteCustomer(id);
         return true;
-    }
-    
-    /**
-     * @see Page#onRender()
-     */
-    @Override
-    public void onRender() {
-        List list = getCustomerService().getCustomersByName();
-        table.setRowList(list);
     }
 }</programlisting>
 
@@ -517,15 +517,17 @@ public HelloWorld extends Page {
 
     <para>In this Page code example a Table control is declared and a number of
     <ulink url="../../click-api/org/apache/click/control/Column.html">Column</ulink>
-    objects are added. An editLink
-    <ulink url="../../click-api/org/apache/click/control/PageLink.html">PageLink</ulink>
+    objects are added. We set the Table's
+    <ulink url="../../click-api/org/apache/click/dataprovider/DataProvider.html">DataProvider</ulink>
+    instance which provides data on demand to the table. Data retrieved from the
+    dataProvider will be used to populate the Table rowList before it is rendered.
+    An editLink <ulink url="../../click-api/org/apache/click/control/PageLink.html">PageLink</ulink>
     control is used as decorator for the "Action" column. This control navigates
     to the <classname>EditCustomer</classname> page. A deleteLink
     <ulink url="../../click-api/org/apache/click/control/ActionLink.html">ActionLink</ulink>
     control is also used as a decorator for the "Action" column. This control will
     invoke the Page <methodname>onDeleteClick()</methodname> method when it is
-    clicked. Finally we have the Page <methodname>onRender()</methodname> method
-    which is used to populate the Table control with rows before it is rendered.
+    clicked.
     </para>
 
     <para>In our Page template we simply reference the <varname>$table</varname>

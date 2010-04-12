@@ -41,10 +41,12 @@ public class SimpleTablePage extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
+    private Table table;
+
     // Constructor ------------------------------------------------------------
 
     public SimpleTablePage() {
-        Table table = new Table("table");
+        table = new Table("table");
 
         table.setClass(Table.CLASS_ITS);
 
@@ -53,13 +55,15 @@ public class SimpleTablePage extends BorderPage {
         table.addColumn(new Column("email"));
         table.addColumn(new Column("investments"));
 
-        table.setDataProvider(new DataProvider<Customer>() {
-            public List<Customer> getData() {
-                return customerService.getCustomersSortedByName(10);
-            }
-        });
-
         addControl(table);
     }
 
+    /**
+     * @see Page#onRender()
+     */
+    @Override
+    public void onRender() {
+        List list = customerService.getCustomersSortedByName(10);
+        table.setRowList(list);
+    }
 }
