@@ -30,26 +30,26 @@ import org.springframework.context.annotation.ScopeMetadataResolver;
  * Provides a Spring bean scope resolver when using Spring
  * instantiated pages with the &#64;Component annotation.
  * <p/>
- * This scope meta data resolver will resolve "prototype" scope for any Click Page bean,
- * otherwise it will resolve "singleton" scope.
+ * This scope meta data resolver will resolve "prototype" scope for any Click
+ * Page bean, and "singleton" scope for any other bean.
  *
  * <h3>Example &#64;Component Page</h3>
  * An example Page class is provided below which uses the Spring &#64;Component annotation.
  *
- * <pre class="codeJava">
- * <span class="kw">package</span> com.mycorp.page;
+ * <pre class="prettyprint">
+ * package com.mycorp.page;
  *
- * <span class="kw">import</span> javax.annotation.Resource;
- * <span class="kw">import</span> org.apache.click.Page;
- * <span class="kw">import</span> org.springframework.stereotype.Component;
+ * import javax.annotation.Resource;
+ * import org.apache.click.Page;
+ * import org.springframework.stereotype.Component;
  *
- * <span class="kw">import</span> comp.mycorp.service.CustomerService;
+ * import comp.mycorp.service.CustomerService;
  *
- * <span class="green">&#64;Component</span>
- * <span class="kw">public class</span> CustomerEditPage <span class="kw">extends</span> Page {
+ * &#64;Component
+ * public class CustomerEditPage extends Page {
  *
- *     <span class="green">&#64;Resource</span>(name=<span class="st">"customerService"</span>)
- *     <span class="kw">private</span> CustomerService customerService;
+ *     &#64;Resource(name="customerService")
+ *     private CustomerService customerService;
  *
  *     ..
  * } </pre>
@@ -82,8 +82,8 @@ public class PageScopeResolver implements ScopeMetadataResolver {
 
     /**
      * Return the scope meta data for the given bean definition. This scope meta
-     * data resolver will resolve "prototype" scope for any Click Page bean or will
-     * resolve "singleton" scope otherwise.
+     * data resolver will resolve "prototype" scope for any Click Page bean
+     * and will resolve "singleton" scope for other beans.
      *
      * @see ScopeMetadataResolver#resolveScopeMetadata(BeanDefinition)
      *
