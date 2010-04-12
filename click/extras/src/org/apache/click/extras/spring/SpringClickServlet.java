@@ -41,7 +41,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
- * Provides an Spring framework integration <tt>SpringClickServlet</tt>.
+ * Provides a Spring framework integration <tt>SpringClickServlet</tt>.
  * <p/>
  * This Spring integration servlet provides a number of integration options
  * using Spring with Click pages. These options detailed below.
@@ -311,6 +311,7 @@ public class SpringClickServlet extends ClickServlet {
      *
      * @throws ServletException if the click app could not be initialized
      */
+    @Override
     public void init() throws ServletException {
         super.init();
 
@@ -375,7 +376,7 @@ public class SpringClickServlet extends ClickServlet {
      * Create a new Spring Page bean if defined in the application context, or
      * a new Page instance otherwise.
      * <p/>
-     * If the "inject-paget-beans" option is enable this method will inject
+     * If the "inject-page-beans" option is enabled this method will inject
      * any Spring beans matching the Page's properties.
      *
      * @see ClickServlet#newPageInstance(String, Class, HttpServletRequest)
@@ -386,6 +387,7 @@ public class SpringClickServlet extends ClickServlet {
      * @return a new Page object
      * @throws Exception if an error occurs creating the Page
      */
+    @Override
     protected Page newPageInstance(String path, Class pageClass,
             HttpServletRequest request) throws Exception {
 
@@ -443,6 +445,7 @@ public class SpringClickServlet extends ClickServlet {
      *
      * @param page the page instance to activate
      */
+    @Override
     protected void activatePageInstance(Page page) {
         if (page instanceof ApplicationContextAware) {
             ApplicationContextAware aware =
