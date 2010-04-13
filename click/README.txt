@@ -105,4 +105,3 @@ To build the documentation (both PDF and HTML formats) please see:
 Further information on building Click is available here:
 
    documentation/docs/developer-guide/building.html
-
