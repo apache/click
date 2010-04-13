@@ -134,7 +134,7 @@ public class StandardControlsForm extends BorderPage {
 
         // Create dataprovider for Select
         DataProvider dp = new DataProvider() {
-            public Iterable getData() {
+            public List getData() {
                 return createOptionList(customerService.getCustomers());
             }
         };

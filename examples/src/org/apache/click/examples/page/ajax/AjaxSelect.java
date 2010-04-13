@@ -18,6 +18,7 @@
  */
 package org.apache.click.examples.page.ajax;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Map;
@@ -26,6 +27,7 @@ import javax.annotation.Resource;
 import org.apache.click.Context;
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
@@ -55,12 +57,19 @@ public class AjaxSelect extends BorderPage {
     public void onInit() {
         super.onInit();
 
-        List<Customer> customerList = customerService.getCustomersSortedByName(8);
-        for (Customer customer : customerList) {
-            customerSelect.add(new Option(customer.getId(), customer.getName()));
-        }
+        customerSelect.setSize(8);
 
-        customerSelect.setSize(customerList.size());
+        customerSelect.setDataProvider(new DataProvider() {
+
+            public List getData() {
+                List<Option> optionList = new ArrayList();
+                List<Customer> customerList = customerService.getCustomersSortedByName(8);
+                for (Customer customer : customerList) {
+                    optionList.add(new Option(customer.getId(), customer.getName()));
+                }
+                return optionList;
+            }
+        });
     }
 
     @Override
