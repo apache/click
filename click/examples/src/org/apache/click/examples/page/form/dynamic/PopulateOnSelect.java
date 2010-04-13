@@ -18,13 +18,16 @@
  */
 package org.apache.click.examples.page.form.dynamic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.click.control.FieldSet;
+import org.apache.click.control.Option;
 import org.apache.click.control.Select;
 import org.apache.click.control.Submit;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
@@ -85,9 +88,9 @@ public class PopulateOnSelect extends BorderPage {
     // Public Methods ---------------------------------------------------------
 
     public void buildSelects() {
-        state.add("---");
-        city.add("---");
-        suburb.add("---");
+        state.setDefaultOption(new Option("---"));
+        city.setDefaultOption(new Option("---"));
+        suburb.setDefaultOption(new Option("---"));
 
         // Populate the States. Do this before binding requests
         populateStateData();
@@ -134,52 +137,87 @@ public class PopulateOnSelect extends BorderPage {
 
     @SuppressWarnings("serial")
     private void populateStateData() {
-        Map<String, String> map = new HashMap<String, String>() {{
-                put(EASTERN_CAPE, "Eastern Cape");
-                put(FREE_STATE, "Free State");
-                put(GAUTENG_PROVINCE, "Gauteng Province");
-                put(WESTERN_CAPE, "Western Cape");
-            }};
-        state.addAll(map);
+        state.setDataProvider(new DataProvider() {
+
+            public List getData() {
+                List optionList = new ArrayList();
+                optionList.add(new Option(EASTERN_CAPE, "Eastern Cape"));
+                optionList.add(new Option(FREE_STATE, "Free State"));
+                optionList.add(new Option(GAUTENG_PROVINCE, "Gauteng Province"));
+                optionList.add(new Option(WESTERN_CAPE, "Western Cape"));
+                return optionList;
+            }
+        });
     }
 
-    private void populateCityData(String stateCode) {
-        String[] cities = null;
-        if (EASTERN_CAPE.equals(stateCode)) {
-            cities = new String[] {"Port Elizabeth", "East London"};
-        } else if (FREE_STATE.equals(stateCode)) {
-            cities = new String[] {"Bloemfontein", "Welkom"};
-        } else if (GAUTENG_PROVINCE.equals(stateCode)) {
-            cities = new String[] {"Johannesburg", "Pretoria"};
-        } else if (WESTERN_CAPE.equals(stateCode)) {
-            cities = new String[] {"Cape Town", "George"};
-        }
-        if (cities != null) {
-            city.addAll(cities);
-        }
+    private void populateCityData(final String stateCode) {
+        city.setDataProvider(new DataProvider() {
+
+            public List getData() {
+                List optionList = new ArrayList();
+
+                if (EASTERN_CAPE.equals(stateCode)) {
+                    optionList.add(new Option("Port Elizabeth"));
+                    optionList.add(new Option("East London"));
+
+                } else if (FREE_STATE.equals(stateCode)) {
+                    optionList.add(new Option("Bloemfontein"));
+                    optionList.add(new Option("Welkom"));
+
+                } else if (GAUTENG_PROVINCE.equals(stateCode)) {
+                    optionList.add(new Option("Johannesburg"));
+                    optionList.add(new Option("Pretoria"));
+
+                } else if (WESTERN_CAPE.equals(stateCode)) {
+                    optionList.add(new Option("Cape Town"));
+                    optionList.add(new Option("George"));
+                }
+                return optionList;
+            }
+        });
     }
 
-    private void populateSuburbData(String cityCode) {
-        String[] suburbs = null;
-        if (cityCode.equals("Port Elizabeth")) {
-            suburbs = new String[] {"Humewood", "Summerstrand"};
-        } else if (cityCode.equals("East London")) {
-            suburbs = new String[] {"Beacon Bay", "Cinta East"};
-        } else if (cityCode.equals("Bloemfontein")) {
-            suburbs = new String[] {"Fichardpark", "Wilgehof"};
-        } else if (cityCode.equals("Welkom")) {
-            suburbs = new String[] {"Dagbreek", "Eerstemyn"};
-        } else if (cityCode.equals("Johannesburg")) {
-            suburbs = new String[] {"Rivonia", "Sandton"};
-        } else if (cityCode.equals("Pretoria")) {
-            suburbs = new String[] {"Garsfontein", "Sunnyside"};
-        } else if (cityCode.equals("Cape Town")) {
-            suburbs = new String[] {"Milnerton", "Blaauwberg"};
-        } else if (cityCode.equals("George")) {
-            suburbs = new String[] {"Panorama", "Fernridge"};
-        }
-        if (suburbs != null) {
-            suburb.addAll(suburbs);
-        }
+    private void populateSuburbData(final String cityCode) {
+        suburb.setDataProvider(new DataProvider() {
+
+            public List getData() {
+                List optionList = new ArrayList();
+
+                if (cityCode.equals("Port Elizabeth")) {
+                    optionList.add(new Option("Humewood"));
+                    optionList.add(new Option("Summerstrand"));
+
+                } else if (cityCode.equals("East London")) {
+                    optionList.add(new Option("Beacon Bay"));
+                    optionList.add(new Option("Cinta East"));
+
+                } else if (cityCode.equals("Bloemfontein")) {
+                    optionList.add(new Option("Fichardpark"));
+                    optionList.add(new Option("Wilgehof"));
+
+                } else if (cityCode.equals("Welkom")) {
+                    optionList.add(new Option("Dagbreek"));
+                    optionList.add(new Option("Eerstemyn"));
+
+                } else if (cityCode.equals("Johannesburg")) {
+                    optionList.add(new Option("Rivonia"));
+                    optionList.add(new Option("Sandton"));
+
+                } else if (cityCode.equals("Pretoria")) {
+                    optionList.add(new Option("Garsfontein"));
+                    optionList.add(new Option("Sunnyside"));
+
+                } else if (cityCode.equals("Cape Town")) {
+                    optionList.add(new Option("Milnerton"));
+                    optionList.add(new Option("Blaauwberg"));
+
+                } else if (cityCode.equals("George")) {
+                    optionList.add(new Option("Panorama"));
+                    optionList.add(new Option("Fernridge"));
+                }
+
+                return optionList;
+            }
+        });
     }
 }

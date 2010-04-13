@@ -18,6 +18,7 @@
  */
 package org.apache.click.examples.page.introduction;
 
+import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.click.Page;
@@ -28,6 +29,7 @@ import org.apache.click.control.Option;
 import org.apache.click.control.Select;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
@@ -84,8 +86,14 @@ public class AdvancedForm extends BorderPage {
     public void onInit() {
         super.onInit();
 
-        investmentSelect.add(Option.EMPTY_OPTION);
-        investmentSelect.addAll(customerService.getInvestmentCatetories());
+        investmentSelect.setDefaultOption(Option.EMPTY_OPTION);
+        investmentSelect.setDataProvider(new DataProvider() {
+
+            public List getData() {
+                List categories = customerService.getInvestmentCatetories();
+                return categories;
+            }
+        });
     }
 
     /**

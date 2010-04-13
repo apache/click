@@ -26,6 +26,7 @@ import org.apache.click.control.Option;
 import org.apache.click.control.OptionGroup;
 import org.apache.click.control.Select;
 import org.apache.click.control.Submit;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.CountrySelect;
@@ -52,15 +53,24 @@ public class SelectDemo extends BorderPage {
     public SelectDemo() {
         form.setErrorsPosition(Form.POSITION_TOP);
 
-        // Gender Select
+        // Gender Select - populated through a DataProvider
         genderSelect = new Select("gender");
         genderSelect.setRequired(true);
-        genderSelect.add(new Option("U", ""));
-        genderSelect.add(new Option("M", "Male"));
-        genderSelect.add(new Option("F", "Female"));
+
+        genderSelect.setDefaultOption(new Option("U", ""));
+        genderSelect.setDataProvider(new DataProvider() {
+
+            public List getData() {
+                List optionList = new ArrayList(3);
+                optionList.add(new Option("M", "Male"));
+                optionList.add(new Option("F", "Female"));
+                return optionList;
+            }
+        });
+
         form.add(genderSelect);
 
-        // Investment Select
+        // Investment Select - populated through Select.add methods
         List investmentOptions = new ArrayList();
 
         OptionGroup property = new OptionGroup("property");

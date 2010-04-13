@@ -18,6 +18,7 @@
  */
 package org.apache.click.examples.page.pageflow;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import org.apache.click.control.Option;
 import org.apache.click.control.Select;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextArea;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
@@ -73,6 +75,20 @@ public class StartPage extends BorderPage {
         customerSelect.setRequired(true);
         form.add(customerSelect);
 
+        customerSelect.setDefaultOption(Option.EMPTY_OPTION);
+        customerSelect.setDataProvider(new DataProvider() {
+
+            public List getData() {
+                List optionList = new ArrayList();
+                List<Customer> customerList = customerService.getCustomers();
+                for (Customer customer : customerList) {
+                    optionList.add(new Option(customer.getId(),
+                                                  customer.getName()));
+                }
+                return optionList;
+            }
+        });
+
         dateField = new DateField("Booking Date");
         dateField.setRequired(true);
         form.add(dateField);
@@ -105,12 +121,6 @@ public class StartPage extends BorderPage {
     @Override
     public void onInit() {
         super.onInit();
-
-        List<Customer> customerList = customerService.getCustomers();
-        customerSelect.add(Option.EMPTY_OPTION);
-        for (Customer customer : customerList) {
-            customerSelect.add(new Option(customer.getId(), customer.getName()));
-        }
 
         if (getContext().isForward() && courseBooking != null) {
             customerSelect.setValueObject(courseBooking.getCustomerId());
