@@ -562,9 +562,11 @@ public class PropertySelect extends Select {
      */
     protected void loadOptionList() {
 
+        List optionList = getOptionList();
+
         // Determine whether option list should be loaded
-        if (getOptionList().size() == 1) {
-            Option option = (Option) getOptionList().get(0);
+        if (optionList.size() == 1) {
+            Option option = (Option) optionList.get(0);
             if (option.getValue().equals(Option.EMPTY_OPTION.getValue())) {
                 // continue and load option list
 
@@ -573,7 +575,7 @@ public class PropertySelect extends Select {
                 return;
             }
 
-        } else if (getOptionList().size() > 1) {
+        } else if (optionList.size() > 1) {
             // Don't load list
             return;
         }
@@ -627,8 +629,8 @@ public class PropertySelect extends Select {
                 list = dataContext.performQuery(query);
             }
 
-            if (isRequired() && getOptionList().isEmpty() || isOptional()) {
-                getOptionList().add(Option.EMPTY_OPTION);
+            if (isRequired() && optionList.isEmpty() || isOptional()) {
+                optionList.add(Option.EMPTY_OPTION);
             }
 
             Context context = getContext();

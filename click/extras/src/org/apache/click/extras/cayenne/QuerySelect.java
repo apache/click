@@ -414,9 +414,11 @@ public class QuerySelect extends Select {
             throw new IllegalStateException(msg);
         }
 
+        List optionList = getOptionList();
+
         // Determine whether option list should be loaded
-        if (getOptionList().size() == 1) {
-            Option option = (Option) getOptionList().get(0);
+        if (optionList.size() == 1) {
+            Option option = (Option) optionList.get(0);
             if (option.getValue().equals(Option.EMPTY_OPTION.getValue())) {
                 // continue and load option list
 
@@ -425,7 +427,7 @@ public class QuerySelect extends Select {
                 return;
             }
 
-        } else if (getOptionList().size() > 1) {
+        } else if (optionList.size() > 1) {
             // Don't load list
             return;
         }
@@ -444,8 +446,8 @@ public class QuerySelect extends Select {
             list = dataContext.performQuery(getQueryName(), getExpireCache());
         }
 
-        if (isRequired() && getOptionList().isEmpty() || isOptional()) {
-            getOptionList().add(Option.EMPTY_OPTION);
+        if (isRequired() && optionList.isEmpty() || isOptional()) {
+            optionList.add(Option.EMPTY_OPTION);
         }
 
         Context context = getContext();
@@ -505,7 +507,7 @@ public class QuerySelect extends Select {
             value = (value != null) ? value : "";
             label = (label != null) ? label : "";
 
-            getOptionList().add(new Option(value.toString(), label.toString()));
+            optionList.add(new Option(value.toString(), label.toString()));
         }
     }
 
