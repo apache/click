@@ -243,7 +243,7 @@ public class CustomerService extends CayenneTemplate {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Customer> getInvestmentCatetories() {
+    public List<String> getInvestmentCatetories() {
         List categories = new ArrayList();
 
         categories.add("Bonds");
