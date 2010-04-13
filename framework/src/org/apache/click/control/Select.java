@@ -411,8 +411,9 @@ public class Select extends Field {
             String msg = "option parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        getOptionList().add(option);
-        if (getOptionList().size() == 1) {
+        List optionList = getOptionList();
+        optionList.add(option);
+        if (optionList.size() == 1) {
             setInitialValue();
         }
     }
@@ -444,8 +445,9 @@ public class Select extends Field {
             String msg = "value parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        getOptionList().add(new Option(value));
-        if (getOptionList().size() == 1) {
+        List optionList = getOptionList();
+        optionList.add(new Option(value));
+        if (optionList.size() == 1) {
             setInitialValue();
         }
     }
@@ -459,20 +461,21 @@ public class Select extends Field {
      *     is an unsupported class
      */
     public void add(Object option) {
+        List optionList = getOptionList();
         if (option instanceof Option) {
-            getOptionList().add(option);
+            optionList.add(option);
 
         } else if (option instanceof OptionGroup) {
-            getOptionList().add(option);
+            optionList.add(option);
 
         } else if (option instanceof String) {
-            getOptionList().add(new Option(option.toString()));
+            optionList.add(new Option(option.toString()));
 
         } else if (option instanceof Number) {
-            getOptionList().add(new Option(option.toString()));
+            optionList.add(new Option(option.toString()));
 
         } else if (option instanceof Boolean) {
-            getOptionList().add(new Option(option.toString()));
+            optionList.add(new Option(option.toString()));
 
         } else {
             String message = "Unsupported options class "
@@ -481,7 +484,7 @@ public class Select extends Field {
             throw new IllegalArgumentException(message);
         }
 
-        if (getOptionList().size() == 1) {
+        if (optionList.size() == 1) {
             setInitialValue();
         }
     }
@@ -875,8 +878,9 @@ public class Select extends Field {
         args[1] = String.valueOf(isRequired());
         args[2] = getMessage("select-error", getErrorLabel());
 
-        if (!getOptionList().isEmpty()) {
-            Option option = (Option) getOptionList().get(0);
+        List optionList = getOptionList();
+        if (!optionList.isEmpty()) {
+            Option option = (Option) optionList.get(0);
             args[3] = option.getValue();
         } else {
             args[3] = "";
@@ -925,8 +929,9 @@ public class Select extends Field {
     @Override
     public int getControlSizeEst() {
         int bufferSize = 50;
-        if (!getOptionList().isEmpty()) {
-            bufferSize = bufferSize + (getOptionList().size() * 48);
+        List optionList = getOptionList();
+        if (!optionList.isEmpty()) {
+            bufferSize = bufferSize + (optionList.size() * 48);
         }
         return bufferSize;
     }
@@ -966,9 +971,11 @@ public class Select extends Field {
 
         buffer.closeTag();
 
-        if (!getOptionList().isEmpty()) {
-            for (int i = 0, listSize = getOptionList().size(); i < listSize; i++) {
-                Object object = getOptionList().get(i);
+        List optionList = getOptionList();
+
+        if (!optionList.isEmpty()) {
+            for (int i = 0, listSize = optionList.size(); i < listSize; i++) {
+                Object object = optionList.get(i);
 
                 if (object instanceof Option) {
                     Option option = (Option) object;
@@ -1040,7 +1047,9 @@ public class Select extends Field {
 
                     // if no defaultValue is present, lookup value from OptionList
                     if (defaultValue == null) {
-                        if (getOptionList().isEmpty()) {
+                        List optionList = getOptionList();
+
+                        if (optionList.isEmpty()) {
                             String msg =
                                 "Mandatory Select field " + getName()
                                 + " has no options to validate the request"
@@ -1051,7 +1060,7 @@ public class Select extends Field {
                             throw new RuntimeException(msg);
                         }
 
-                        Object firstEntry = getOptionList().get(0);
+                        Object firstEntry = optionList.get(0);
                         if (firstEntry instanceof Option) {
                             Option option = (Option) firstEntry;
                             defaultValue = option.getValue();
