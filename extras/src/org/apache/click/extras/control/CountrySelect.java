@@ -20,6 +20,7 @@ package org.apache.click.extras.control;
 
 import java.text.Collator;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 import java.util.Set;
@@ -193,9 +194,11 @@ public class CountrySelect extends Select {
      * the country as the value and the localized country name as the label.
      */
     protected void loadOptionList() {
+        List optionList = getOptionList();
+
         // Determine whether option list should be loaded
-        if (getOptionList().size() == 1) {
-            Option option = (Option) getOptionList().get(0);
+        if (optionList.size() == 1) {
+            Option option = (Option) optionList.get(0);
             if (option.getValue().equals(Option.EMPTY_OPTION.getValue())) {
                 // Continue and load option list
 
@@ -204,7 +207,7 @@ public class CountrySelect extends Select {
                 return;
             }
 
-        } else if (getOptionList().size() > 1) {
+        } else if (optionList.size() > 1) {
             // Don't load list
             return;
         }
@@ -222,7 +225,7 @@ public class CountrySelect extends Select {
             }
         }
 
-        if (isRequired() && getOptionList().isEmpty()) {
+        if (isRequired() && optionList.isEmpty()) {
             add(Option.EMPTY_OPTION);
         }
 
