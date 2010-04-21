@@ -25,8 +25,8 @@
                 exclude-result-prefixes="xslthl"
                 version='1.0'>
 
-  <xsl:import href="file:///@dbf.xsl@/highlighting/common.xsl"/>
-  <xsl:import href="file:///@dbf.xsl@/fo/highlight.xsl"/>
+  <xsl:import href="@file.prefix@@dbf.xsl@/highlighting/common.xsl"/>
+  <xsl:import href="@file.prefix@@dbf.xsl@/fo/highlight.xsl"/>
 
   <!-- Use nice graphics for admonitions -->
   <xsl:param name="admon.graphics">'1'</xsl:param>
@@ -391,7 +391,7 @@
   Ant will automatically replace @dbf.xsl@ with the path to
   the config at runtime
   -->
-  <xsl:param name="highlight.xslthl.config">file:///@dbf.xsl@/highlighting/xslthl-config.xml</xsl:param>
+  <xsl:param name="highlight.xslthl.config">@file.prefix@@dbf.xsl@/highlighting/xslthl-config.xml</xsl:param>
 
   <xsl:template match='xslthl:keyword' mode="xslthl">
     <fo:inline font-weight="bold" color="#7F0055">
