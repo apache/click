@@ -19,13 +19,13 @@
 Date.months = new Array('Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь');
 
 // Month abbreviations
-Date.monthAbbreviations = new Array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+Date.monthAbbreviations = new Array('Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек');
 
 // Full day names
-Date.dayNames = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+Date.dayNames = new Array('Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота');
 
 // Day abbreviations
-Date.dayAbbreviations = new Array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+Date.dayAbbreviations = new Array('Вс','Пн','Вт','Ср','Чт','Пт','Сб');
 
 // Weekdays displayed by popup calendar
 Date.weekdays = new Array('Пн','Вт','Ср','Чт','Пт','Сб','Вс');
