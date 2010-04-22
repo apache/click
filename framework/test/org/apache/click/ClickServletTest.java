@@ -54,7 +54,7 @@ public class ClickServletTest extends TestCase {
      * response outputStream has been retrieved and an exception occurs.
      */
     public void testBinaryExceptionHandling() {
-        MockContainer container = new MockContainer("web");
+        MockContainer container = new ockContainer("web");
         container.start();
 
         container.testPage(BinaryPage.class);
