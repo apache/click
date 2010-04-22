@@ -18,7 +18,6 @@
  */
 package org.apache.click.control;
 
-import com.sun.java_cup.internal.version;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
