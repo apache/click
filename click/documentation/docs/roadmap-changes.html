@@ -249,12 +249,6 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-647">CLK-647</a>].
       </li>
       <li class="change">
-        Fixed issue where RadioGroup label referenced a non-existing ID. RadioGroup
-        is now wrapped inside a span tag with the given ID. This issue was raised
-        and fixed by Finn Bock
-        [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-577">CLK-577</a>].
-      </li>
-      <li class="change">
         Replaced Page and Control getMessage methods with varargs equivalents
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-604">CLK-604</a>].
       </li>
@@ -272,6 +266,16 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
         Improved ClickServlet to use the response's OutputStream if the Writer
         cannot be retrieved
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-644">CLK-644</a>].
+      </li>
+      <li class="change">
+        Fixed issue where RadioGroup label referenced a non-existing ID. RadioGroup
+        is now wrapped inside a span tag with the given ID. This issue was raised
+        and fixed by Finn Bock
+        [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-577">CLK-577</a>].
+      </li>
+      <li class="change">
+        Fixed DateField to set seconds back to zero. This issue was raised by Andrey Rybin
+        [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-664">CLK-664</a>].
       </li>
       <li class="change">
           The menu.dtd has been published to
