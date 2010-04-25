@@ -710,6 +710,8 @@ public class Table extends AbstractControl {
      * Add the given Control to the table. The control will be processed when
      * the Table is processed.
      *
+     * @deprecated use {@link #add(org.apache.click.Control)} instead
+     *
      * @param control the Control to add to the table
      * @return the added control
      */

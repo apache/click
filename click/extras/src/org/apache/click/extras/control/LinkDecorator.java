@@ -232,7 +232,7 @@ public class LinkDecorator implements Decorator, Serializable {
         this.linksArray[0] = link;
         this.idProperty = idProperty;
 
-        table.addControl(new LinkDecorator.PageNumberControl(table));
+        table.add(new LinkDecorator.PageNumberControl(table));
     }
 
     /**
@@ -259,7 +259,7 @@ public class LinkDecorator implements Decorator, Serializable {
         this.linksArray = links;
         this.idProperty = idProperty;
 
-        table.addControl(new LinkDecorator.PageNumberControl(table));
+        table.add(new LinkDecorator.PageNumberControl(table));
     }
 
     /**
@@ -331,7 +331,7 @@ public class LinkDecorator implements Decorator, Serializable {
         this.idProperty = idProperty;
         this.linkSeparator = " ";
 
-        table.addControl(new LinkDecorator.PageNumberControl(table));
+        table.add(new LinkDecorator.PageNumberControl(table));
     }
 
     /**
@@ -402,7 +402,7 @@ public class LinkDecorator implements Decorator, Serializable {
         this.idProperty = idProperty;
         this.linkSeparator = " ";
 
-        table.addControl(new LinkDecorator.PageNumberControl(table));
+        table.add(new LinkDecorator.PageNumberControl(table));
     }
 
     /**
@@ -466,7 +466,7 @@ public class LinkDecorator implements Decorator, Serializable {
             }
         }
 
-        table.addControl(new LinkDecorator.PageNumberControl(table));
+        table.add(new LinkDecorator.PageNumberControl(table));
     }
 
     // ------------------------------------------------------ Public Properties
