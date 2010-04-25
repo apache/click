@@ -757,7 +757,7 @@ public class Context {
      * @throws RuntimeException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public String renderTemplate(Class templateClass, Map<String, Object> model) {
+    public String renderTemplate(Class templateClass, Map<String, ? extends Object> model) {
 
         if (templateClass == null) {
             String msg = "Null templateClass parameter";
@@ -785,7 +785,7 @@ public class Context {
      * @return rendered Velocity template merged with the model data
      * @throws RuntimeException if an error occurs
      */
-    public String renderTemplate(String templatePath, Map<String, Object> model) {
+    public String renderTemplate(String templatePath, Map<String, ? extends Object> model) {
 
         if (templatePath == null) {
             String msg = "Null templatePath parameter";
