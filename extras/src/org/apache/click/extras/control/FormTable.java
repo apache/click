@@ -661,7 +661,7 @@ public class FormTable extends Table {
 
         // If Form is internal add it to table
         if (useInternalForm) {
-            addControl(form);
+            add(form);
         }
     }
 }
