@@ -242,7 +242,7 @@ public class FreemarkerTemplateService implements TemplateService {
      * @throws IOException if an IO error occurs
      * @throws TemplateException if template error occurs
      */
-    public void renderTemplate(Page page, Map<String, Object> model, Writer writer)
+    public void renderTemplate(Page page, Map<String, ? extends Object> model, Writer writer)
         throws IOException, TemplateException {
 
         String templatePath = page.getTemplate();
@@ -275,7 +275,7 @@ public class FreemarkerTemplateService implements TemplateService {
      * @throws IOException if an IO error occurs
      * @throws TemplateException if template error occurs
      */
-    public void renderTemplate(String templatePath, Map<String, Object> model, Writer writer)
+    public void renderTemplate(String templatePath, Map<String, ? extends Object> model, Writer writer)
             throws IOException, TemplateException {
 
         // Get the template object
