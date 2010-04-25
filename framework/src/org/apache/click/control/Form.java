@@ -78,37 +78,36 @@ import org.apache.commons.lang.StringUtils;
  *
  * The example below illustrates a Form being used in a login Page.
  *
- * <pre class="codeJava">
- * <span class="kw">public class</span> Login <span class="kw">extends</span> Page {
+ * <pre class="prettyprint">
+ * public class Login extends Page {
  *
- *     <span class="kw">public</span> Form form = <span class="kw">new</span> Form();
+ *     public Form form = new Form();
  *
- *     <span class="kw">public</span> Login() {
- *         form.add(<span class="kw">new</span> TextField(<span class="st">"username"</span>, <span class="kw">true</span>));
- *         form.add(<span class="kw">new</span> PasswordField(<span class="st">"password"</span>, <span class="kw">true</span>));
- *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>, <span class="kw">this</span>, <span class="st">"onOkClick"</span>));
- *         form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClick"</span>));
+ *     public Login() {
+ *         form.add(new TextField("username", true));
+ *         form.add(new PasswordField("password", true));
+ *         form.add(new Submit("ok", "  OK  ", this, "onOkClick"));
+ *         form.add(new Submit("cancel", this, "onCancelClick"));
  *     }
  *
- *     <span class="kw">public boolean</span> onOkClick() {
- *         <span class="kw">if</span> (form.isValid()) {
+ *     public boolean onOkClick() {
+ *         if (form.isValid()) {
  *             User user = new User();
  *             form.copyTo(user);
  *
- *             <span class="kw">if</span> (getUserService().isAuthenticatedUser(user)) {
- *                 getContext().setSessionAttribute(<span class="st">"user"</span>, user);
- *                 setRedirect(HomePage.<span class="kw">class</span>);
- *             }
- *             <span class="kw">else</span> {
- *                 form.setError(getMessage(<span class="st">"authentication-error"</span>));
+ *             if (getUserService().isAuthenticatedUser(user)) {
+ *                 getContext().setSessionAttribute("user", user);
+ *                 setRedirect(HomePage.class);
+ *             } else {
+ *                 form.setError(getMessage("authentication-error"));
  *             }
  *         }
- *         <span class="kw">return true</span>;
+ *         return true;
  *     }
  *
- *     <span class="kw">public boolean</span> onCancelClick() {
- *         setRedirect(WelcomePage.<span class="kw">class</span>);
- *         <span class="kw">return false</span>;
+ *     public boolean onCancelClick() {
+ *         setRedirect(WelcomePage.class);
+ *         return false;
  *     }
  * } </pre>
  *
@@ -143,19 +142,19 @@ import org.apache.commons.lang.StringUtils;
  * <p/>
  * For example:
  *
- * <pre class="codeJava">
- * <span class="cm">// The customer.address.state field</span>
- * TextField stateField = <span class="kw">new</span> TextField(<span class="st">"address.state"</span>);
+ * <pre class="prettyprint">
+ * // The customer.address.state field
+ * TextField stateField = new TextField("address.state");
  * form.add(stateField);
  * ..
  *
- * <span class="cm">// Loads the customer address state into the form stateField</span>
+ * // Loads the customer address state into the form stateField
  * Customer customer = getCustomer();
  * form.copyFrom(customer);
  * ..
  *
- * <span class="cm">// Copies form stateField value into the customer address state</span>
- * Customer customer = <span class="kw">new</span> Customer();
+ * // Copies form stateField value into the customer address state
+ * Customer customer = new Customer();
  * form.copyTo(customer); </pre>
  *
  * When populating an object from a form post Click will automatically create
@@ -196,17 +195,17 @@ import org.apache.commons.lang.StringUtils;
  * JavaScript validation is not enabled. To enable JavaScript validation set
  * {@link #setJavaScriptValidation(boolean)} to true. For example:
  *
- * <pre class="codeJava">
- * Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
- * form.setJavaScriptValidation(<span class="kw">true</span>);
+ * <pre class="prettyprint">
+ * Form form = new Form("form");
+ * form.setJavaScriptValidation(true);
  *
- * <span class="cm">// Add form fields</span>
+ * // Add form fields
  * ..
  *
- * form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">" OK "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
+ * form.add(new Submit("ok", " OK ", this, "onOkClicked");
  *
- * Submit cancel = <span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="st">"Cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>);
- * cancel.setCancelJavaScriptValidation(<span class="kw">true</span>);
+ * Submit cancel = new Submit("cancel", "Cancel", this, "onCancelClicked");
+ * cancel.setCancelJavaScriptValidation(true);
  *
  * addControl(form); </pre>
  *
@@ -457,12 +456,12 @@ import org.apache.commons.lang.StringUtils;
  * To prevent multiple form posts from use of the browser back button use one
  * of the Form {@link #onSubmitCheck(org.apache.click.Page, String)} methods. For example:
  *
- * <pre class="codeJava">
- * <span class="kw">public class</span> Purchase <span class="kw">extends</span> Page {
+ * <pre class="prettyprint">
+ * public class Purchase extends Page {
  *     ..
  *
- *     <span class="kw">public boolean</span> onSecurityCheck() {
- *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="st">"/invalid-submit.html"</span>);
+ *     public boolean onSecurityCheck() {
+ *         return form.onSubmitCheck(this, "/invalid-submit.html");
  *     }
  * } </pre>
  *
@@ -494,8 +493,7 @@ import org.apache.commons.lang.StringUtils;
  * checkbox.setAttribute("onclick", "Click.submit(myform, false)");
  *
  * // For a Select field use the "onchange" JavaScript event instead
- * select.setAttribute("onchange", "Click.submit(myform, false)");
- * </pre>
+ * select.setAttribute("onchange", "Click.submit(myform, false)"); </pre>
  *
  * <p>&nbsp;<p/>
  * See also the W3C HTML reference:
@@ -1658,13 +1656,12 @@ public class Form extends AbstractContainer {
      * The following example populates the Form field with Customer
      * attributes:
      *
-     * <pre class="codeJava">
-     *  <span class="kw">public void</span> onGet() {
+     * <pre class="prettyprint">
+     * public void onGet() {
      *     Long customerId = ..
      *     Customer customer = CustomerDAO.findByPK(customerId);
      *     form.copyFrom(customer);
-     *  }
-     * </pre>
+     * } </pre>
      *
      * copyForm also supports <tt>java.util.Map</tt> as an argument.
      * <p/>
@@ -1675,20 +1672,20 @@ public class Form extends AbstractContainer {
      * The following example populates the Form fields with a map's
      * key/value pairs:
      *
-     * <pre class="codeJava">
-     *  <span class="kw">public void</span> onInit() {
-     *     form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
-     *     form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>));
-     *     form.add(<span class="kw">new</span> TextField(<span class="st">"address.street"</span>));
-     *  }
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *     form = new Form("form");
+     *     form.add(new TextField("name"));
+     *     form.add(new TextField("address.street"));
+     * }
      *
-     *  <span class="kw">public void</span> onGet() {
-     *     Map map = <span class="kw">new</span> HashMap();
-     *     map.put(<span class="st">"name"</span>, <span class="st">"Steve"</span>);
-     *     map.put(<span class="st">"address.street"</span>, <span class="st">"12 Long street"</span>);
+     * public void onGet() {
+     *     Map map = new HashMap();
+     *     map.put("name", "Steve");
+     *     map.put("address.street", "12 Long street");
      *     form.copyFrom(map);
-     *  }
-     * </pre>
+     * } </pre>
+     *
      * For more information on how Fields and Objects are copied see
      * {@link org.apache.click.util.ContainerUtils#copyObjectToContainer(java.lang.Object, org.apache.click.control.Container)}.
      *
@@ -1725,16 +1722,15 @@ public class Form extends AbstractContainer {
      * The following example populates the Customer attributes with the
      * Form's field values:
      *
-     * <pre class="codeJava">
-     *  <span class="kw">public void</span> onPost() {
-     *      <span class="kw">if</span> (form.isValid()) {
-     *         Customer customer = <span class="kw">new</span> Customer();
+     * <pre class="prettyprint">
+     * public void onPost() {
+     *     if (form.isValid()) {
+     *         Customer customer = new Customer();
      *         form.copyTo(customer);
      *         ..
-     *      }
-     *      <span class="kw">return true</span>;
-     *  }
-     * </pre>
+     *     }
+     *     return true;
+     * } </pre>
      *
      * copyTo also supports <tt>java.util.Map</tt> as an argument.
      * <p/>
@@ -1744,20 +1740,20 @@ public class Form extends AbstractContainer {
      * <p/>
      * The following example populates the map with the Form field values:
      *
-     * <pre class="codeJava">
-     *  <span class="kw">public void</span> onInit() {
-     *     form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
-     *     form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>));
-     *     form.add(<span class="kw">new</span> TextField(<span class="st">"address.street"</span>));
-     *  }
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *     form = new Form("form");
+     *     form.add(new TextField("name"));
+     *     form.add(new TextField("address.street"));
+     * }
      *
-     *  <span class="kw">public void</span> onGet() {
-     *     Map map = <span class="kw">new</span> HashMap();
-     *     map.put(<span class="st">"name"</span>, null);
-     *     map.put(<span class="st">"address.street"</span>, null);
+     * public void onGet() {
+     *     Map map = new HashMap();
+     *     map.put("name", null);
+     *     map.put("address.street", null);
      *     form.copyTo(map);
-     *  }
-     * </pre>
+     * } </pre>
+     *
      * Note that the map acts as a template to specify which fields to populate
      * from.
      *
@@ -1954,12 +1950,12 @@ public class Form extends AbstractContainer {
      * Form submit checks should be performed before the pages controls are
      * processed in the Page onSecurityCheck method. For example:
      *
-     * <pre class="codeJava">
-     * <span class="kw">public class</span> Order <span class="kw">extends</span> Page {
+     * <pre class="prettyprint">
+     * public class Order extends Page {
      *     ..
      *
-     *     <span class="kw">public boolean</span> onSecurityCheck() {
-     *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, InvalidSubmitPage.<span class="kw">class</span>);
+     *     public boolean onSecurityCheck() {
+     *         return form.onSubmitCheck(this, InvalidSubmitPage.class);
      *     }
      * } </pre>
      *
@@ -2004,18 +2000,18 @@ public class Form extends AbstractContainer {
      * Form submit checks should be performed before the pages controls are
      * processed in the Page onSecurityCheck method. For example:
      *
-     * <pre class="codeJava">
-     * <span class="kw">public class</span> Order <span class="kw">extends</span> Page {
+     * <pre class="prettyprint">
+     * public class Order extends Page {
      *     ..
      *
-     *     <span class="kw">public boolean</span> onSecurityCheck() {
-     *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="kw">this</span>, <span class="st">"onInvalidSubmit"</span>);
+     *     public boolean onSecurityCheck() {
+     *         return form.onSubmitCheck(his, this, "onInvalidSubmit");
      *     }
      *
-     *     <span class="kw">public boolean</span> onInvalidSubmit() {
-     *        getContext().setRequestAttribute(<span class="st">"invalidPath"</span>, getPath());
-     *        setForward(<span class="st">"invalid-submit.htm"</span>);
-     *        <span class="kw">return false</span>;
+     *     public boolean onInvalidSubmit() {
+     *        getContext().setRequestAttribute("invalidPath", getPath());
+     *        setForward("invalid-submit.htm");
+     *        return false;
      *     }
      * } </pre>
      *
