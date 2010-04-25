@@ -187,6 +187,7 @@ public class ClickServlet extends HttpServlet {
      * @throws ServletException if the application configuration service could
      * not be initialized
      */
+    @Override
     public void init() throws ServletException {
 
         try {
@@ -197,8 +198,9 @@ public class ClickServlet extends HttpServlet {
             logger = configService.getLogService();
 
             if (logger.isInfoEnabled()) {
-                logger.info("initialized in " + configService.getApplicationMode()
-                            + " mode");
+                logger.info("Click " + ClickUtils.getClickVersion()
+                    + " initialized in " + configService.getApplicationMode()
+                    + " mode");
             }
 
             resourceService = configService.getResourceService();
@@ -224,6 +226,7 @@ public class ClickServlet extends HttpServlet {
     /**
      * @see javax.servlet.GenericServlet#destroy()
      */
+    @Override
     public void destroy() {
 
         try {
@@ -266,6 +269,7 @@ public class ClickServlet extends HttpServlet {
      * @throws ServletException if click app has not been initialized
      * @throws IOException if an I/O error occurs
      */
+    @Override
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 
@@ -283,6 +287,7 @@ public class ClickServlet extends HttpServlet {
      * @throws ServletException if click app has not been initialized
      * @throws IOException if an I/O error occurs
      */
+    @Override
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 

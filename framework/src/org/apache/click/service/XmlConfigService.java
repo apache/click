@@ -1407,7 +1407,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         } else if (modeValue.equalsIgnoreCase("trace")) {
             mode = TRACE;
         } else {
-            logService.error("invalid application mode: " + modeValue);
+            logService.error("invalid application mode: '" + modeValue
+                + "' - defaulted to '" + MODE_VALUES[DEBUG] + "'");
             mode = DEBUG;
         }
 
@@ -1545,11 +1546,12 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
         logService.onInit(getServletContext());
 
-        if (getLogService().isDebugEnabled()) {
-            String msg = "initialized LogService: "
-                + logService.getClass().getName();
-            getLogService().debug(msg);
-        }
+        logService.info("***  Initializing Click " + ClickUtils.getClickVersion()
+            + "  ***");
+
+        String msg = "initialized LogService: "
+            + logService.getClass().getName();
+        getLogService().info(msg);
     }
 
     private void loadPageInterceptors(Element rootElm) throws Exception {
