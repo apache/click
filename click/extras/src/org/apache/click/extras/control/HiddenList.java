@@ -55,12 +55,12 @@ public class HiddenList extends Field {
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The hidden values. */
     protected List valueObject;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a HiddenList with the given name.
@@ -79,13 +79,14 @@ public class HiddenList extends Field {
     public HiddenList() {
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Set the list of hidden values.
      *
      * @param valueObject a list of Strings
      */
+    @Override
     public void setValueObject(Object valueObject) {
         if (!(valueObject instanceof List)) {
             throw new IllegalArgumentException("the valueObject must be a"
@@ -99,6 +100,7 @@ public class HiddenList extends Field {
      *
      * @return a list of Strings
      */
+    @Override
     public Object getValueObject() {
         if (this.valueObject == null) {
             this.valueObject = new ArrayList();
@@ -125,11 +127,18 @@ public class HiddenList extends Field {
         getValues().add(value);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * This method binds the submitted request values to the HiddenList values.
+     * <p/>
+     * <b>Please note:</b> while it is possible to explicitly bind the field
+     * value by invoking this method directly, it is recommended to use the
+     * "<tt>bind</tt>" utility methods in {@link org.apache.click.util.ClickUtils}
+     * instead. See {@link org.apache.click.util.ClickUtils#bind(org.apache.click.control.Field)}
+     * for more details.
      */
+    @Override
     public void bindRequestValue() {
         String[] values = getContext().getRequestParameterValues(getName());
 
@@ -149,6 +158,7 @@ public class HiddenList extends Field {
      *
      * @return true
      */
+    @Override
     public boolean isHidden() {
         return true;
     }
@@ -160,6 +170,7 @@ public class HiddenList extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         List values = getValues();
 
