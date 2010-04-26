@@ -135,6 +135,7 @@ public class Step2 extends Step {
     class Div extends AbstractContainer {
         private static final long serialVersionUID = 1L;
 
+        @Override
         public String getTag() {
             return "div";
         }
