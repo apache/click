@@ -48,7 +48,7 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class HtmlForm extends Form {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
@@ -67,7 +67,7 @@ public class HtmlForm extends Form {
     public HtmlForm() {
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * This method is not supported and throws an UnsupportedOperationException
@@ -78,6 +78,7 @@ public class HtmlForm extends Form {
      * @return the field added to this form
      * @throws UnsupportedOperationException if invoked
      */
+    @Override
     public Field add(Field field, int width) {
         throw new UnsupportedOperationException("Not supported by HtmlForm.");
     }
@@ -91,6 +92,7 @@ public class HtmlForm extends Form {
      * @return the control added to this form
      * @throws UnsupportedOperationException if invoked
      */
+    @Override
     public Control add(Control control, int width) {
         throw new UnsupportedOperationException("Not supported by HtmlForm.");
     }
@@ -100,6 +102,7 @@ public class HtmlForm extends Form {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
 
         if (getValidate()) {
@@ -147,6 +150,7 @@ public class HtmlForm extends Form {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         //If tag is set, render it
@@ -166,7 +170,7 @@ public class HtmlForm extends Form {
         }
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * @see org.apache.click.control.AbstractControl#renderTagBegin(java.lang.String, org.apache.click.util.HtmlStringBuffer)
@@ -174,6 +178,7 @@ public class HtmlForm extends Form {
      * @param tagName the name of the tag to render
      * @param buffer the buffer to append the output to
      */
+    @Override
     protected void renderTagBegin(String tagName, HtmlStringBuffer buffer) {
         if (tagName == null) {
             throw new IllegalStateException("Tag cannot be null");
@@ -194,6 +199,7 @@ public class HtmlForm extends Form {
      *
      * @param buffer the buffer to append the output to
      */
+    @Override
     protected void renderContent(HtmlStringBuffer buffer) {
         // Render hidden fields
         List fields = ContainerUtils.getInputFields(this);
@@ -212,6 +218,7 @@ public class HtmlForm extends Form {
      *
      * @param buffer the buffer to append the output to
      */
+    @Override
     protected void renderChildren(HtmlStringBuffer buffer) {
         if (hasControls()) {
             for (int i = 0; i < getControls().size(); i++) {
@@ -240,6 +247,7 @@ public class HtmlForm extends Form {
      * @param formFields the list of form fields
      * @return the estimated rendered control size in characters
      */
+    @Override
     protected int getFormSizeEst(List formFields) {
         return 400 + (getControls().size() * 350);
     }

@@ -41,11 +41,11 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class HtmlFieldSet extends FieldSet {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a HtmlFieldSet with the given name.
@@ -74,7 +74,7 @@ public class HtmlFieldSet extends FieldSet {
     public HtmlFieldSet() {
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * This method is not supported and throws an UnsupportedOperationException
@@ -85,6 +85,7 @@ public class HtmlFieldSet extends FieldSet {
      * @return the field added to this fieldSet
      * @throws UnsupportedOperationException if invoked
      */
+    @Override
     public Field add(Field field, int width) {
         throw new UnsupportedOperationException("Not supported by HtmlFieldSet.");
     }
@@ -98,6 +99,7 @@ public class HtmlFieldSet extends FieldSet {
      * @return the control added to this fieldSet
      * @throws UnsupportedOperationException if invoked
      */
+    @Override
     public Control add(Control control, int width) {
         throw new UnsupportedOperationException("Not supported by HtmlFieldSet.");
     }
@@ -109,6 +111,7 @@ public class HtmlFieldSet extends FieldSet {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         if (getShowBorder()) {
@@ -137,11 +140,12 @@ public class HtmlFieldSet extends FieldSet {
      *
      * @return the HTML representation of this control
      */
+    @Override
     public String toString() {
         return super.toString();
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * @see org.apache.click.control.AbstractControl#renderTagBegin(java.lang.String, org.apache.click.util.HtmlStringBuffer)
@@ -149,6 +153,7 @@ public class HtmlFieldSet extends FieldSet {
      * @param tagName the name of the tag to render
      * @param buffer the buffer to append the output to
      */
+    @Override
     protected void renderTagBegin(String tagName, HtmlStringBuffer buffer) {
         if (tagName == null) {
             throw new IllegalStateException("Tag cannot be null");
@@ -170,6 +175,7 @@ public class HtmlFieldSet extends FieldSet {
      * @param tagName the name of the tag to close
      * @param buffer the buffer to append the output to
      */
+    @Override
     protected void renderTagEnd(String tagName, HtmlStringBuffer buffer) {
         buffer.elementEnd(tagName);
     }
