@@ -46,12 +46,9 @@ import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provides a servlet filter which binds DataContext objects to the request.
- * This filter will automatically rollback any uncommitted changes at
- *
- * which binds the user's session scope DataContext to the
- * current thread. This filter will automatically rollback any uncommitted
- * changes at the end of each request.
+ * Provides a servlet filter which binds DataContext objects to the current
+ * request thread and optionally the users HttpSession. This filter will
+ * automatically rollback any uncommitted changes at the end of each request.
  * <p/>
  * When the click application is in <tt>debug</tt> or <tt>trace</tt> mode this
  * filter will log any uncommitted data objects at the end of each request.
