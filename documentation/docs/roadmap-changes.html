@@ -189,6 +189,13 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
         </ul>
       </li>
       <li class="change">
+        Added improved stateful page support when adding controls to containers.
+        In previous releases an exception was raised if the control is
+        already present in the container or page. The new behavior is to silently
+        replace the existing control
+        [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-666">CLK-666</a>].
+      </li>
+      <li class="change">
         Added methods to Fields for styling their labels. See new methods
         <a href="click-api/org/apache/click/control/Field.html#setLabelStyle(java.lang.String)">Field.setLabelStyle(String)</a>
         and <a href="click-api/org/apache/click/control/Field.html#setLabelStyleClass(java.lang.String)">Field.setLabelStyleClass(String)</a>.
@@ -247,6 +254,12 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
         Migrated controls to import resources through Elements and the
         <tt>getHeadElements</tt> method
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-647">CLK-647</a>].
+      </li>
+      <li class="change">
+        Improved SpringClickServlet to re-inject transient beans after stateful
+        page deserialization. This feature is only supported when the stateful
+        page instance is created by Click, not Spring
+        [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-667">CLK-667</a>].
       </li>
       <li class="change">
         Replaced Page and Control getMessage methods with varargs equivalents

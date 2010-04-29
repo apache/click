@@ -32,9 +32,6 @@ import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.LinkDecorator;
 import org.apache.click.util.Bindable;
 import org.apache.click.dataprovider.DataProvider;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 /**
  * Provides an advanced Table usage example Page.
@@ -42,7 +39,7 @@ import org.springframework.context.ApplicationContextAware;
  * This example also demonstrates how a stateful Page can be used to preserve
  * the Table sort and paging state while editing customers.
  */
-public class AdvancedTable extends BorderPage implements ApplicationContextAware {
+public class AdvancedTable extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,10 +48,11 @@ public class AdvancedTable extends BorderPage implements ApplicationContextAware
     @Bindable protected ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
     /**
-     * Spring's application context from where a CustomerService instance can be
-     * retrieved.
+     * Spring injected CustomerService bean. The service is marked as transient
+     * since the page is stateful and we don't want to serialize the service
+     * along with the page.
      */
-    private transient ApplicationContext applicationContext;
+    private transient CustomerService customerService;
 
     // Constructor ------------------------------------------------------------
 
@@ -119,17 +117,15 @@ public class AdvancedTable extends BorderPage implements ApplicationContextAware
      * @return CustomerService instance
      */
     public CustomerService getCustomerService() {
-        return (CustomerService) applicationContext.getBean("customerService");
+        return customerService;
     }
 
     /**
-     * Set Spring application context as defined by
-     * {@link org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)}.
+     * Set the CustomerService instance from Spring application context.
      *
-     * @param applicationContext set Spring application context
+     * @param customerService the customerService instance to inject
      */
-    public void setApplicationContext(ApplicationContext applicationContext)
-        throws BeansException {
-        this.applicationContext = applicationContext;
+    public void setCustomerService(CustomerService customerService) {
+        this.customerService = customerService;
     }
 }

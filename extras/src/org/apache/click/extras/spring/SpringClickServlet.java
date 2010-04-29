@@ -44,9 +44,13 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * Provides a Spring framework integration <tt>SpringClickServlet</tt>.
  * <p/>
  * This Spring integration servlet provides a number of integration options
- * using Spring with Click pages. These options detailed below.
+ * using Spring with Click pages. These options are detailed below.
+ * <p/>
+ * <b>Stateful pages caveat:</b> please note that stateful pages do not work
+ * with all options.
  *
- * <h3>1. Spring instantiated Pages with &#64;Component configuration</h3>
+ * <h3><a name="option1"></a>1. Spring instantiated Pages with &#64;Component
+ * configuration</h3>
  *
  * With this option Page classes are configured with Spring using the
  * &#64;Component annotation. When the SpringClickServlet receives a page
@@ -85,9 +89,20 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * } </pre>
  *
  * This is the most powerful and convenient Spring integration option, but does
- * require Spring 2.5.x and Java 1.5 or later.
+ * require Spring 2.5.x or later.
  *
- * <h3>2. Spring instantiated Pages with Spring XML configuration</h3>
+ * <p/>
+ * <b><a name="stateful-page-caveat"></a>Stateful page caveat:</b> Spring beans
+ * injected on stateful pages will be serialized along with the page, meaning
+ * those beans must implement the Serializable interface. If you do
+ * not want the beans to be serialized, they need to be marked as
+ * <tt>transient</tt>. Transient beans won't be serialized but when the page
+ * is deserialized, the transient beans won't be re-injected, causing a
+ * NullPointerException when invoked. If you want to use transient beans on
+ * stateful pages, see <a href="#option3">option 3</a> below.
+ *
+ * <h3><a name="option2"></a>2. Spring instantiated Pages with Spring XML
+ * configuration</h3>
  *
  * With this option Page classes are configured using Spring XML configuration.
  * When the SpringClickServlet receives a page request it converts the auto-mapped
@@ -107,10 +122,10 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * This integration option requires you to configure all your Spring Page beans
  * in your Spring XML configuration. While this may be quite laborious, it does
- * support Spring 1.x and Java 1.4. An example page bean configuration is
+ * support Spring 1.x or later. An example page bean configuration is
  * provided below:
  *
- * <pre class="codeConfig">
+ * <pre class="prettyprint">
  * &lt;?xml version="1.0" encoding="UTF-8"?&gt;
  * &lt;beans&gt;
  *
@@ -121,15 +136,23 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * <b>Please Note</b> ensure the page beans scope is set to "prototype" so a new
  * page instance will be created with every HTTP request. Otherwise Spring will
  * default to using singletons and your code will not be thread safe.
+ * <p/>
+ * <b>Stateful page caveat:</b> option 2 has the same caveat as
+ * <a href="#stateful-page-caveat">option 1</a>.
  *
- * <h3>3. Click instantiated Pages with injected Spring beans and/or ApplicationContext</h3>
+ * <h3><a name="option3"></a>3. Click instantiated Pages with injected Spring
+ * beans and/or ApplicationContext</h3>
  *
  * With this integration option Click will instantiate page instances and
  * automatically inject any page properties which match Spring beans defined in
- * the ApplicationContext.
+ * the ApplicationContext. In order to enable bean injection, you need to
+ * configure the SpringClickServlet init parameter:
+ * <a href="#inject-page-beans">inject-page-beans</a>.
  * <p/>
  * While this option is not as powerful as &#64;Component configured pages it is
- * much more convenient than Spring XML configured pages and supports Spring 1.x and Java 1.4.
+ * much more convenient than Spring XML configured pages and supports Spring 1.x.
+ * You can also use annotation based injection which requires Spring 2.5.x
+ * or later.
  * <p/>
  * An example Page class is provided below which has the customerService property
  * automatically injected by the SpringClickServlet. Note the customerService
@@ -157,7 +180,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * configuration. Continuing our example the Spring XML configuration is provided
  * below:
  *
- * <pre class="codeConfig">
+ * <pre class="prettyprint">
  * &lt;?xml version="1.0" encoding="UTF-8"?&gt;
  * &lt;beans&gt;
  *
@@ -165,7 +188,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * &lt;/beans&gt; </pre>
  *
- * This option will also automatically inject the ApplicationContext into new
+ * This option will also automatically inject the ApplicationContext into
  * page instances which implement the {@link org.springframework.context.ApplicationContextAware}
  * interface. Using the applicationContext you can lookup Spring beans manually
  * in your pages. For example:
@@ -185,6 +208,54 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * } </pre>
  *
  * This last strategy is probably the least convenient integration option.
+ *
+ * <h4><a name="option31"></a>3.1 Spring beans and Stateful pages</h4>
+ *
+ * Stateful pages are stored in the HttpSession and Spring beans referenced
+ * by a stateful page must implement the Serializable interface. If you do not
+ * want beans to be serialized they can be marked as <tt>transient</tt>.
+ * Transient beans won't be serialized to disk. However once the page is
+ * deserialized the transient beans will need to be injected again.
+ * <p/>
+ * <a href="#option3">Option 3</a> will re-inject Spring beans and the
+ * ApplicationContext after every request. This allows beans to be marked as
+ * <tt>transient</tt> and still function properly when used with stateful pages.
+ *
+ * <pre class="prettyprint">
+ * package com.mycorp.page;
+ *
+ * import org.apache.click.Page;
+ *
+ * import com.mycorp.service.CustomerService;
+ *
+ * public class CustomerListPage extends Page implements ApplicationContextAware {
+ *
+ *     // Note the transient keyword
+ *     private transient CustomerService customerService;
+ *
+ *     protected transient ApplicationContext applicationContext;
+ *
+ *     public CustomerListPage {
+ *         // Page is marked as stateful
+ *         setStateful(true);
+ *     }
+ *
+ *     // Inject the customer service
+ *     public void setCustomerService(CustomerService customerService) {
+ *         this.customerService = customerService;
+ *     }
+ *
+ *     public CustomerService getCustomerService() {
+ *         return (CustomerService) applicationContext.getBean("customerService");
+ *     }
+ *
+ *     // Inject Spring's ApplicationContext
+ *     public void setApplicationContext(ApplicationContext applicationContext)  {
+ *         this.applicationContext = applicationContext;
+ *     }
+ *
+ *     ..
+ * } </pre>
  *
  * <h3>Servlet Configuration</h3>
  *
@@ -233,9 +304,9 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * &lt;/web-app&gt; </pre>
  *
- * To configure page Spring bean injection (option 3 above), you need to configure
- * the <span class="blue">inject-page-beans</span> servlet init parameter. For
- * example:
+ * <a name="inject-page-beans"></a>To configure page Spring bean injection
+ * (<a href="#option3">option 3</a> above), you need to configure the
+ * <span class="blue">inject-page-beans</span> servlet init parameter. For example:
  *
  * <pre class="codeConfig">
  * &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -403,25 +474,6 @@ public class SpringClickServlet extends ClickServlet {
 
         } else {
             page = (Page) pageClass.newInstance();
-
-            // Inject any Spring beans into the page instance
-            if (!pageSetterBeansMap.isEmpty()) {
-                List beanList = (List) pageSetterBeansMap.get(page.getClass());
-                if (beanList != null) {
-                    for (int i = 0; i < beanList.size(); i++) {
-                        BeanNameAndMethod bnam = (BeanNameAndMethod) beanList.get(i);
-                        Object bean = getApplicationContext().getBean(bnam.beanName);
-
-                        try {
-                            Object[] args = { bean };
-                            bnam.method.invoke(page, args);
-
-                        } catch (Exception error) {
-                            throw new RuntimeException(error);
-                        }
-                    }
-                }
-            }
         }
 
         return page;
@@ -438,8 +490,8 @@ public class SpringClickServlet extends ClickServlet {
 
     /**
      * This method associates the <tt>ApplicationContext</tt> with any
-     * <tt>ApplicationContextAware</tt> pages and supports the deserialized of
-     * stateful pages.
+     * <tt>ApplicationContextAware</tt> pages and supports the deserialization
+     * of stateful pages.
      *
      * @see ClickServlet#activatePageInstance(Page)
      *
@@ -447,10 +499,43 @@ public class SpringClickServlet extends ClickServlet {
      */
     @Override
     protected void activatePageInstance(Page page) {
+        ApplicationContext applicationContext = getApplicationContext();
+
         if (page instanceof ApplicationContextAware) {
             ApplicationContextAware aware =
                 (ApplicationContextAware) page;
-            aware.setApplicationContext(getApplicationContext());
+            aware.setApplicationContext(applicationContext);
+        }
+
+        Class pageClass = page.getClass();
+        String beanName = toBeanName(pageClass);
+
+        if (applicationContext.containsBean(beanName)
+            || applicationContext.containsBean(pageClass.getName())) {
+
+            // Beans are injected through Spring
+        } else {
+
+            // Inject any Spring beans into the page instance
+            if (!pageSetterBeansMap.isEmpty()) {
+                // TODO in development mode, lazily loaded page instances won't
+                // have their setters mapped
+                List beanList = (List) pageSetterBeansMap.get(page.getClass());
+                if (beanList != null) {
+                    for (int i = 0; i < beanList.size(); i++) {
+                        BeanNameAndMethod bnam = (BeanNameAndMethod) beanList.get(i);
+                        Object bean = applicationContext.getBean(bnam.beanName);
+
+                        try {
+                            Object[] args = { bean };
+                            bnam.method.invoke(page, args);
+
+                        } catch (Exception error) {
+                            throw new RuntimeException(error);
+                        }
+                    }
+                }
+            }
         }
     }
 

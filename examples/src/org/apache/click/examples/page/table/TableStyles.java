@@ -32,14 +32,11 @@ import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.TableInlinePaginator;
 import org.apache.click.util.Bindable;
 import org.apache.click.dataprovider.DataProvider;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 /**
  * Provides an demonstration of Table control styles.
  */
-public class TableStyles extends BorderPage implements ApplicationContextAware {
+public class TableStyles extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,7 +46,12 @@ public class TableStyles extends BorderPage implements ApplicationContextAware {
     private Select styleSelect = new Select("style", "Table Style:");
     private Checkbox hoverCheckbox = new Checkbox("hover", "Hover Rows:");
 
-    private transient ApplicationContext applicationContext;
+    /**
+     * Spring injected CustomerService bean. The service is marked as transient
+     * since the page is stateful and we don't want to serialize the service
+     * along with the page.
+     */
+    private transient CustomerService customerService;
 
     // Constructor -----------------------------------------------------------
 
@@ -132,17 +134,15 @@ public class TableStyles extends BorderPage implements ApplicationContextAware {
      * @return CustomerService instance
      */
     public CustomerService getCustomerService() {
-        return (CustomerService) applicationContext.getBean("customerService");
+        return customerService;
     }
 
     /**
-     * Set Spring application context as defined by
-     * {@link org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)}.
+     * Set the CustomerService instance from Spring application context.
      *
-     * @param applicationContext set Spring application context
+     * @param customerService the customerService instance to inject
      */
-    public void setApplicationContext(ApplicationContext applicationContext)
-        throws BeansException {
-        this.applicationContext = applicationContext;
+    public void setCustomerService(CustomerService customerService) {
+        this.customerService = customerService;
     }
 }
