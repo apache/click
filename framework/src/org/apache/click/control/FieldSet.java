@@ -255,7 +255,6 @@ public class FieldSet extends Field implements Container {
      * @throws IllegalStateException if the currentControl is not contained in
      * the fieldset
      */
-    @Override
     public Control replace(Control currentControl, Control newControl) {
         // Current and new control is the same instance - exit early
         if (currentControl == newControl) {
