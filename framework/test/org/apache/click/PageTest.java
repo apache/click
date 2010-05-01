@@ -19,6 +19,7 @@
 package org.apache.click;
 
 import junit.framework.TestCase;
+import org.apache.click.control.Form;
 import org.apache.click.pages.JspRedirectPage;
 import org.apache.click.pages.RedirectToHtm;
 import org.apache.click.pages.RedirectToJsp;
@@ -165,5 +166,37 @@ public class PageTest extends TestCase {
         args[0] = null;
         version = page.getMessage("version", args);
         assertEquals(expected, version);
+    }
+
+    /**
+     * Check that adding controls replace existing controls with the same name.
+     *
+     * CLK-666
+     */
+    public void testReplace() {
+        MockContext.initContext();
+
+        Page page = new Page();
+
+        // Add two controls named child1 and child2
+        Form child1 = new Form("child1");
+        Form child2 = new Form("child2");
+        page.addControl(child1);
+        page.addControl(child2);
+        assertEquals(2, page.getModel().size());
+        assertEquals(2, page.getControls().size());
+        assertSame(child1, page.getControls().get(0));
+        assertSame(child2, page.getControls().get(1));
+
+        // Add another two controls named child1 and child2 and test that these
+        // controls replaces the previous controls
+        child1 = new Form("child1");
+        child2 = new Form("child2");
+        page.addControl(child1);
+        page.addControl(child2);
+        assertEquals(2, page.getModel().size());
+        assertEquals(2, page.getControls().size());
+        assertSame(child1, page.getControls().get(0));
+        assertSame(child2, page.getControls().get(1));
     }
 }

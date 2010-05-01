@@ -162,7 +162,7 @@ public class FormTest extends TestCase {
     }
 
     /** Form which index position to test. */
-    private Form form;
+    private Form testForm;
     
     /** Field which position is tracked in the Form. */
     private HiddenField trackField;
@@ -171,9 +171,10 @@ public class FormTest extends TestCase {
      * Setup the form and trackField instances for testing the Control index
      * positions after being added or inserted.
      */
+    @Override
     public void setUp() {
         // Create form.
-        form = new Form("form");
+        testForm = new Form("form");
         
         // Form automatically creates and adds two HiddenFields. One for storing
         // the form anem between requests and one for tracking if form validation
@@ -181,12 +182,12 @@ public class FormTest extends TestCase {
         // of each test.
         // The tests below checks the trackField index position in the Form
         // for the lists Form#controls, Form#fieldList and Form#buttonList
-        trackField = (HiddenField) form.getField(Form.FORM_NAME);
+        trackField = (HiddenField) testForm.getField(Form.FORM_NAME);
 
         // trackField index: #controls=0
-        assertTrue(form.getControls().indexOf(trackField) == 0);
+        assertTrue(testForm.getControls().indexOf(trackField) == 0);
         // trackField index: #fieldList=0
-        assertTrue(form.getFieldList().indexOf(trackField) == 0);
+        assertTrue(testForm.getFieldList().indexOf(trackField) == 0);
     }
 
     /**
@@ -199,17 +200,17 @@ public class FormTest extends TestCase {
         TextField nameField = new TextField("name");
 
         // Add new field
-        form.add(nameField);
+        testForm.add(nameField);
 
         // nameField index: #controls=0
-        assertTrue(form.getControls().indexOf(nameField) == 0);
+        assertTrue(testForm.getControls().indexOf(nameField) == 0);
         // nameField index: #fieldList=0
-        assertTrue(form.getFieldList().indexOf(nameField) == 0);
+        assertTrue(testForm.getFieldList().indexOf(nameField) == 0);
         
         // trackField index: #controls=1
-        assertTrue(form.getControls().indexOf(trackField) == 1);
+        assertTrue(testForm.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=1
-        assertTrue(form.getFieldList().indexOf(trackField) == 1);
+        assertTrue(testForm.getFieldList().indexOf(trackField) == 1);
     }
 
     /**
@@ -222,17 +223,17 @@ public class FormTest extends TestCase {
         TextField nameField = new TextField("name");
 
         // Insert field at index 0
-        form.insert(nameField, 0);
+        testForm.insert(nameField, 0);
 
         // nameField index: #controls=0
-        assertTrue(form.getControls().indexOf(nameField) == 0);
+        assertTrue(testForm.getControls().indexOf(nameField) == 0);
         // nameField index: #fieldList=0
-        assertTrue(form.getFieldList().indexOf(nameField) == 0);
+        assertTrue(testForm.getFieldList().indexOf(nameField) == 0);
         
         // trackField index: #controls=1
-        assertTrue(form.getControls().indexOf(trackField) == 1);
+        assertTrue(testForm.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=1
-        assertTrue(form.getFieldList().indexOf(trackField) == 1);
+        assertTrue(testForm.getFieldList().indexOf(trackField) == 1);
     }
 
     /**
@@ -245,17 +246,17 @@ public class FormTest extends TestCase {
         Table table = new Table("table");
 
         // Insert table at index 0
-        form.insert(table, 0);
+        testForm.insert(table, 0);
 
         // table index: #controls=0
-        assertTrue(form.getControls().indexOf(table) == 0);
+        assertTrue(testForm.getControls().indexOf(table) == 0);
         // table index: #fieldList=-1
-        assertTrue(form.getFieldList().indexOf(table) == -1);
+        assertTrue(testForm.getFieldList().indexOf(table) == -1);
         
         // trackField index: #controls=1
-        assertTrue(form.getControls().indexOf(trackField) == 1);
+        assertTrue(testForm.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=0
-        assertTrue(form.getFieldList().indexOf(trackField) == 0);
+        assertTrue(testForm.getFieldList().indexOf(trackField) == 0);
     }
 
     /**
@@ -267,18 +268,18 @@ public class FormTest extends TestCase {
     public void testInsertOrderAfterInsertingButton() {
         // Check that the fieldList includes only two hidden fields (FORM_NAME
         // and BYPASS_VALIDATION) thus size is 2
-        assertTrue(form.getFieldList().size() == 2);
+        assertTrue(testForm.getFieldList().size() == 2);
 
         Button button = new Button("button1");
 
-        form.insert(button, 0);
+        testForm.insert(button, 0);
 
         // button index: #controls=0
-        assertTrue(form.getControls().indexOf(button) == 0);
+        assertTrue(testForm.getControls().indexOf(button) == 0);
         // button index: #buttonList=0
-        assertTrue(form.getButtonList().indexOf(button) == 0);
+        assertTrue(testForm.getButtonList().indexOf(button) == 0);
         // Check that button was not added to fieldList accidentally
-        assertTrue(form.getFieldList().size() == 2);
+        assertTrue(testForm.getFieldList().size() == 2);
     }
 
     /**
@@ -291,17 +292,17 @@ public class FormTest extends TestCase {
         HiddenField hidden = new HiddenField("hidden", Boolean.class);
 
         // Insert hidden at index 0
-        form.insert(hidden, 0);
+        testForm.insert(hidden, 0);
 
         // hidden index: #controls=0
-        assertTrue(form.getControls().indexOf(hidden) == 0);
+        assertTrue(testForm.getControls().indexOf(hidden) == 0);
         // hidden index: #fieldList=0
-        assertTrue(form.getFieldList().indexOf(hidden) == 0);
+        assertTrue(testForm.getFieldList().indexOf(hidden) == 0);
         
         // trackField index: #controls=1
-        assertTrue(form.getControls().indexOf(trackField) == 1);
+        assertTrue(testForm.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=1
-        assertTrue(form.getFieldList().indexOf(trackField) == 1);
+        assertTrue(testForm.getFieldList().indexOf(trackField) == 1);
     }
 
     /**
@@ -310,35 +311,35 @@ public class FormTest extends TestCase {
     public void testRemove() {
         TextField field = new TextField("field");
 
-        form.insert(field, 0);
+        testForm.insert(field, 0);
 
         // field index: #controls=0
-        assertTrue(form.getControls().indexOf(field) == 0);
+        assertTrue(testForm.getControls().indexOf(field) == 0);
         // field index: #fieldList=0
-        assertTrue(form.getFieldList().indexOf(field) == 0);
+        assertTrue(testForm.getFieldList().indexOf(field) == 0);
 
         // trackField index: #controls=1
-        assertTrue(form.getControls().indexOf(trackField) == 1);
+        assertTrue(testForm.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=1
-        assertTrue(form.getFieldList().indexOf(trackField) == 1);
+        assertTrue(testForm.getFieldList().indexOf(trackField) == 1);
         
         int expectedSize = 3;
         // Check the list sizes to be 3
-        assertTrue(form.getControls().size() == expectedSize);
-        assertTrue(form.getFieldList().size() == expectedSize);
+        assertTrue(testForm.getControls().size() == expectedSize);
+        assertTrue(testForm.getFieldList().size() == expectedSize);
         
         // Removing field should shift up trackField index
-        form.remove(field);
+        testForm.remove(field);
 
         expectedSize = 2;
         // Check the list sizes to be 2
-        assertTrue(form.getControls().size() == expectedSize);
-        assertTrue(form.getFieldList().size() == expectedSize);
+        assertTrue(testForm.getControls().size() == expectedSize);
+        assertTrue(testForm.getFieldList().size() == expectedSize);
         
         // trackField index: #controls=0
-        assertTrue(form.getControls().indexOf(trackField) == 0);
+        assertTrue(testForm.getControls().indexOf(trackField) == 0);
         // trackField index: #fieldList=0
-        assertTrue(form.getFieldList().indexOf(trackField) == 0);
+        assertTrue(testForm.getFieldList().indexOf(trackField) == 0);
     }
 
     /**
@@ -349,21 +350,21 @@ public class FormTest extends TestCase {
         TextField field = new TextField("field");
 
         // Check that fieldWidth is empty
-        assertTrue(form.getFieldWidths().isEmpty());
+        assertTrue(testForm.getFieldWidths().isEmpty());
             
         int colspan = 4;
-        form.add(field, colspan);
+        testForm.add(field, colspan);
 
         // Check that fieldWidth has entry for field
-        assertTrue(form.getFieldWidths().size() == 1);
+        assertTrue(testForm.getFieldWidths().size() == 1);
         
-        Integer width = (Integer) form.getFieldWidths().get(field.getName());
+        Integer width = (Integer) testForm.getFieldWidths().get(field.getName());
         assertEquals(4, width.intValue());
 
-        form.remove(field);
+        testForm.remove(field);
         
         // Check that fieldWidth is empty
-        assertTrue(form.getFieldWidths().isEmpty());
+        assertTrue(testForm.getFieldWidths().isEmpty());
     }
 
     /**
@@ -374,21 +375,21 @@ public class FormTest extends TestCase {
         Table table = new Table("table");
 
         // Check that fieldWidth is empty
-        assertTrue(form.getFieldWidths().isEmpty());
+        assertTrue(testForm.getFieldWidths().isEmpty());
             
         int colspan = 4;
-        form.add(table, colspan);
+        testForm.add(table, colspan);
 
         // Check that fieldWidth has entry for table
-        assertTrue(form.getFieldWidths().size() == 1);
+        assertTrue(testForm.getFieldWidths().size() == 1);
         
-        Integer width = (Integer) form.getFieldWidths().get(table.getName());
+        Integer width = (Integer) testForm.getFieldWidths().get(table.getName());
         assertEquals(4, width.intValue());
 
-        form.remove(table);
+        testForm.remove(table);
         
         // Check that fieldWidth is empty
-        assertTrue(form.getFieldWidths().isEmpty());
+        assertTrue(testForm.getFieldWidths().isEmpty());
     }
 
     /**
@@ -715,13 +716,13 @@ public class FormTest extends TestCase {
      */
     public void testIsDisabled() {
         // Form is not disabled.
-        assertFalse(this.form.isDisabled());
+        assertFalse(this.testForm.isDisabled());
 
         // Hiddenfield inside is not disabled.
         assertFalse(this.trackField.isDisabled());
 
         // Change form state.
-        this.form.setDisabled(true);
+        this.testForm.setDisabled(true);
 
         // Hiddenfield is now disabled too.
         assertTrue(this.trackField.isDisabled());
@@ -733,16 +734,88 @@ public class FormTest extends TestCase {
      */
     public void testIsReadonly() {
         // Form is not disabled.
-        assertFalse(this.form.isReadonly());
+        assertFalse(this.testForm.isReadonly());
 
         // Hiddenfield inside is not disabled.
         assertFalse(this.trackField.isReadonly());
 
         // Change form state.
-        this.form.setReadonly(true);
+        this.testForm.setReadonly(true);
 
         // Hiddenfield is now disabled too.
         assertTrue(this.trackField.isReadonly());
+    }
+
+    /**
+     * Check that adding fields replace existing fields with the same name.
+     *
+     * CLK-666
+     */
+    public void testReplaceFields() {
+        Form form = new Form("form");
+
+        // Add two fields named child1 and child2
+        Field child1 = new TextField("child1");
+        Field child2 = new TextField("child2");
+        form.add(child1);
+        form.add(child2);
+        assertEquals(4, form.getControlMap().size());
+        assertEquals(4, form.getControls().size());
+        assertEquals(4, form.getFields().size());
+        assertSame(child1, form.getControls().get(0));
+        assertSame(child2, form.getControls().get(1));
+        assertSame(child1, form.getFieldList().get(0));
+        assertSame(child2, form.getFieldList().get(1));
+
+        // Add another two fields named child1 and child2 and test that these
+        // panels replaces the previous fields
+        child1 = new TextField("child1");
+        child2 = new TextField("child2");
+        form.add(child1);
+        form.add(child2);
+        assertEquals(4, form.getControlMap().size());
+        assertEquals(4, form.getControls().size());
+        assertEquals(4, form.getFields().size());
+        assertSame(child1, form.getControls().get(0));
+        assertSame(child2, form.getControls().get(1));
+        assertSame(child1, form.getFieldList().get(0));
+        assertSame(child2, form.getFieldList().get(1));
+    }
+
+    /**
+     * Check that adding buttons replace existing buttons with the same name.
+     *
+     * CLK-666
+     */
+    public void testReplaceButtons() {
+        Form form = new Form("form");
+
+        // Add two fields named child1 and child2
+        Button child1 = new Button("child1");
+        Button child2 = new Button("child2");
+        form.add(child1);
+        form.add(child2);
+        assertEquals(4, form.getControlMap().size());
+        assertEquals(4, form.getControls().size());
+        assertEquals(4, form.getFields().size());
+        assertSame(child1, form.getControls().get(0));
+        assertSame(child2, form.getControls().get(1));
+        assertSame(child1, form.getButtonList().get(0));
+        assertSame(child2, form.getButtonList().get(1));
+
+        // Add another two fields named child1 and child2 and test that these
+        // panels replaces the previous fields
+        child1 = new Button("child1");
+        child2 = new Button("child2");
+        form.add(child1);
+        form.add(child2);
+        assertEquals(4, form.getControlMap().size());
+        assertEquals(4, form.getControls().size());
+        assertEquals(4, form.getFields().size());
+        assertSame(child1, form.getControls().get(0));
+        assertSame(child2, form.getControls().get(1));
+        assertSame(child1, form.getButtonList().get(0));
+        assertSame(child2, form.getButtonList().get(1));
     }
 
     /**
@@ -778,6 +851,7 @@ public class FormTest extends TestCase {
         /**
          * @return div tag
          */
+        @Override
         public String getTag() {
             return "div";
         }

@@ -40,4 +40,38 @@ public class PanelTest extends TestCase {
         panel = new Panel(name);
         assertEquals(name, panel.getId());
     }
+
+    /**
+     * Check that adding controls replace existing controls with the same name.
+     *
+     * CLK-666
+     */
+    public void testReplace() {
+        Panel panel = new Panel("panel");
+
+        // Add two panels named child1 and child2
+        Panel child1 = new Panel("child1");
+        Panel child2 = new Panel("child2");
+        panel.add(child1);
+        panel.add(child2);
+        assertEquals(2, panel.getControlMap().size());
+        assertEquals(2, panel.getControls().size());
+        assertSame(child1, panel.getControls().get(0));
+        assertSame(child2, panel.getControls().get(1));
+        assertSame(child1, panel.getPanels().get(0));
+        assertSame(child2, panel.getPanels().get(1));
+
+        // Add another two panels named child1 and child2 and test that these
+        // panels replaces the previous panels
+        child1 = new Panel("child1");
+        child2 = new Panel("child2");
+        panel.add(child1);
+        panel.add(child2);
+        assertEquals(2, panel.getControlMap().size());
+        assertEquals(2, panel.getControls().size());
+        assertSame(child1, panel.getControls().get(0));
+        assertSame(child2, panel.getControls().get(1));
+        assertSame(child1, panel.getPanels().get(0));
+        assertSame(child2, panel.getPanels().get(1));
+    }
 }

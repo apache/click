@@ -28,30 +28,31 @@ import org.apache.click.MockContext;
 public class FieldSetTest extends TestCase {
 
     /** FieldSet which index position to test. */
-    private FieldSet fieldSet;
+    private FieldSet testFieldSet;
     
     /** TextField which position is tracked in the FieldSet. */
     private TextField trackField;
 
     /**
-     * Setup the fieldSet and trackField instances for testing the Control index
+     * Setup the testFieldSet and trackField instances for testing the Control index
      * positions after being added or inserted.
      */
+    @Override
     public void setUp() {
-        // Create form and fieldSet.
+        // Create form and testFieldSet.
         Form form = new Form("form");
-        fieldSet = new FieldSet("fieldSet");
-        form.add(fieldSet);
+        testFieldSet = new FieldSet("fieldSet");
+        form.add(testFieldSet);
 
-        // Create the trackField at index 0 and check the fieldSet index
+        // Create the trackField at index 0 and check the testFieldSet index
         // position for the lists FieldSet#controls and FieldSet#fieldList
         trackField = new TextField("track");
-        fieldSet.add(trackField);
+        testFieldSet.add(trackField);
 
         // trackField index: #controls=0
-        assertTrue(fieldSet.getControls().indexOf(trackField) == 0);
+        assertTrue(testFieldSet.getControls().indexOf(trackField) == 0);
         // trackField index: #fieldList=0
-        assertTrue(fieldSet.getFieldList().indexOf(trackField) == 0);
+        assertTrue(testFieldSet.getFieldList().indexOf(trackField) == 0);
     }
 
     /**
@@ -62,17 +63,17 @@ public class FieldSetTest extends TestCase {
      */
     public void testInsertOrderAfterAddingField() {
         TextField nameField = new TextField("score");
-        fieldSet.add(nameField);
+        testFieldSet.add(nameField);
 
         // nameField index: #controls=1
-        assertTrue(fieldSet.getControls().indexOf(nameField) == 1);
+        assertTrue(testFieldSet.getControls().indexOf(nameField) == 1);
         // nameField index: #fieldList=1
-        assertTrue(fieldSet.getFieldList().indexOf(nameField) == 1);
+        assertTrue(testFieldSet.getFieldList().indexOf(nameField) == 1);
         
        // trackField index: #controls=0
-        assertTrue(fieldSet.getControls().indexOf(trackField) == 0);
+        assertTrue(testFieldSet.getControls().indexOf(trackField) == 0);
         // trackField index: #fieldList=0
-        assertTrue(fieldSet.getFieldList().indexOf(trackField) == 0);
+        assertTrue(testFieldSet.getFieldList().indexOf(trackField) == 0);
     }
 
     /**
@@ -83,17 +84,17 @@ public class FieldSetTest extends TestCase {
      */
     public void testInsertOrderAfterInsertingField() {
         TextField nameField = new TextField("name");
-        fieldSet.insert(nameField, 0);
+        testFieldSet.insert(nameField, 0);
 
         // nameindex: #controls=0
-        assertTrue(fieldSet.getControls().indexOf(nameField) == 0);
+        assertTrue(testFieldSet.getControls().indexOf(nameField) == 0);
         // nameindex: #fieldList=1
-        assertTrue(fieldSet.getFieldList().indexOf(nameField) == 1);
+        assertTrue(testFieldSet.getFieldList().indexOf(nameField) == 1);
         
        // trackField index: #controls=1
-        assertTrue(fieldSet.getControls().indexOf(trackField) == 1);
+        assertTrue(testFieldSet.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=0
-        assertTrue(fieldSet.getFieldList().indexOf(trackField) == 0);
+        assertTrue(testFieldSet.getFieldList().indexOf(trackField) == 0);
     }
 
     /**
@@ -106,17 +107,17 @@ public class FieldSetTest extends TestCase {
         Table table = new Table("table");
 
         // Insert table at index 0
-        fieldSet.insert(table, 0);
+        testFieldSet.insert(table, 0);
 
         // table: #controls=0
-        assertTrue(fieldSet.getControls().indexOf(table) == 0);
+        assertTrue(testFieldSet.getControls().indexOf(table) == 0);
         // table: #fieldList=-1
-        assertTrue(fieldSet.getFieldList().indexOf(table) == -1);
+        assertTrue(testFieldSet.getFieldList().indexOf(table) == -1);
         
        // trackField index: #controls=1
-        assertTrue(fieldSet.getControls().indexOf(trackField) == 1);
+        assertTrue(testFieldSet.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=0
-        assertTrue(fieldSet.getFieldList().indexOf(trackField) == 0);
+        assertTrue(testFieldSet.getFieldList().indexOf(trackField) == 0);
     }
 
     /**
@@ -127,15 +128,15 @@ public class FieldSetTest extends TestCase {
      */
     public void testInsertOrderAfterInsertingButton() {
         // Check that the fieldList contains only one item -> trackField
-        assertTrue(fieldSet.getFieldList().size() == 1);
+        assertTrue(testFieldSet.getFieldList().size() == 1);
 
         Button button = new Button("button1");
-        fieldSet.insert(button, 0);
+        testFieldSet.insert(button, 0);
 
         // button: #controls=0
-        assertTrue(fieldSet.getControls().indexOf(button) == 0);
+        assertTrue(testFieldSet.getControls().indexOf(button) == 0);
         // Check that fieldList still only contains one item
-        assertTrue(fieldSet.getFieldList().size() == 1);
+        assertTrue(testFieldSet.getFieldList().size() == 1);
     }
 
     /**
@@ -149,17 +150,17 @@ public class FieldSetTest extends TestCase {
         HiddenField hidden = new HiddenField("hidden", Boolean.class);
 
         // Insert hidden at index 0
-        fieldSet.insert(hidden, 0);
+        testFieldSet.insert(hidden, 0);
 
         // button: #controls=0
-        assertTrue(fieldSet.getControls().indexOf(hidden) == 0);
+        assertTrue(testFieldSet.getControls().indexOf(hidden) == 0);
         // hidden index: #fieldList=1
-        assertTrue(fieldSet.getFieldList().indexOf(hidden) == 1);
+        assertTrue(testFieldSet.getFieldList().indexOf(hidden) == 1);
         
         // trackField index: #controls=1
-        assertTrue(fieldSet.getControls().indexOf(trackField) == 1);
+        assertTrue(testFieldSet.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=0
-        assertTrue(fieldSet.getFieldList().indexOf(trackField) == 0);
+        assertTrue(testFieldSet.getFieldList().indexOf(trackField) == 0);
     }
 
     /**
@@ -168,35 +169,35 @@ public class FieldSetTest extends TestCase {
     public void testRemove() {
         TextField field = new TextField("field");
 
-        fieldSet.insert(field, 0);
+        testFieldSet.insert(field, 0);
 
         // field index: #controls=0
-        assertTrue(fieldSet.getControls().indexOf(field) == 0);
+        assertTrue(testFieldSet.getControls().indexOf(field) == 0);
         // field index: #fieldList=1
-        assertTrue(fieldSet.getFieldList().indexOf(field) == 1);
+        assertTrue(testFieldSet.getFieldList().indexOf(field) == 1);
 
         // trackField index: #controls=1
-        assertTrue(fieldSet.getControls().indexOf(trackField) == 1);
+        assertTrue(testFieldSet.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=0
-        assertTrue(fieldSet.getFieldList().indexOf(trackField) == 0);
+        assertTrue(testFieldSet.getFieldList().indexOf(trackField) == 0);
         
         int expectedSize = 2;
         // Check the list sizes to be 2
-        assertTrue(fieldSet.getControls().size() == expectedSize);
-        assertTrue(fieldSet.getFieldList().size() == expectedSize);
+        assertTrue(testFieldSet.getControls().size() == expectedSize);
+        assertTrue(testFieldSet.getFieldList().size() == expectedSize);
         
         // Removing field should shift up trackField index
-        fieldSet.remove(field);
+        testFieldSet.remove(field);
 
         expectedSize = 1;
         // Check the list sizes to be 1
-        assertTrue(fieldSet.getControls().size() == expectedSize);
-        assertTrue(fieldSet.getFieldList().size() == expectedSize);
+        assertTrue(testFieldSet.getControls().size() == expectedSize);
+        assertTrue(testFieldSet.getFieldList().size() == expectedSize);
         
         // trackField index: #controls=0
-        assertTrue(fieldSet.getControls().indexOf(trackField) == 0);
+        assertTrue(testFieldSet.getControls().indexOf(trackField) == 0);
         // trackField index: #fieldList=0
-        assertTrue(fieldSet.getFieldList().indexOf(trackField) == 0);
+        assertTrue(testFieldSet.getFieldList().indexOf(trackField) == 0);
     }
     
     /**
@@ -207,21 +208,21 @@ public class FieldSetTest extends TestCase {
         TextField field = new TextField("field");
 
         // Check that fieldWidth is empty
-        assertTrue(fieldSet.getFieldWidths().isEmpty());
+        assertTrue(testFieldSet.getFieldWidths().isEmpty());
             
         int colspan = 4;
-        fieldSet.add(field, colspan);
+        testFieldSet.add(field, colspan);
 
         // Check that fieldWidth has entry for field
-        assertTrue(fieldSet.getFieldWidths().size() == 1);
+        assertTrue(testFieldSet.getFieldWidths().size() == 1);
         
-        Integer width = (Integer) fieldSet.getFieldWidths().get(field.getName());
+        Integer width = (Integer) testFieldSet.getFieldWidths().get(field.getName());
         assertEquals(4, width.intValue());
 
-        fieldSet.remove(field);
+        testFieldSet.remove(field);
         
         // Check that fieldWidth is empty
-        assertTrue(fieldSet.getFieldWidths().isEmpty());
+        assertTrue(testFieldSet.getFieldWidths().isEmpty());
     }
 
     /**
@@ -232,21 +233,21 @@ public class FieldSetTest extends TestCase {
         Table table = new Table("table");
 
         // Check that fieldWidth is empty
-        assertTrue(fieldSet.getFieldWidths().isEmpty());
+        assertTrue(testFieldSet.getFieldWidths().isEmpty());
             
         int colspan = 4;
-        fieldSet.add(table, colspan);
+        testFieldSet.add(table, colspan);
 
         // Check that fieldWidth has entry for table
-        assertTrue(fieldSet.getFieldWidths().size() == 1);
+        assertTrue(testFieldSet.getFieldWidths().size() == 1);
         
-        Integer width = (Integer) fieldSet.getFieldWidths().get(table.getName());
+        Integer width = (Integer) testFieldSet.getFieldWidths().get(table.getName());
         assertEquals(4, width.intValue());
 
-        fieldSet.remove(table);
+        testFieldSet.remove(table);
         
         // Check that fieldWidth is empty
-        assertTrue(fieldSet.getFieldWidths().isEmpty());
+        assertTrue(testFieldSet.getFieldWidths().isEmpty());
     }
 
     /**
@@ -310,10 +311,10 @@ public class FieldSetTest extends TestCase {
         assertFalse(fieldSet.getFieldList().contains(button));
 
         // Check that list contains other FieldSet
-        //assertTrue(fieldSet.getFieldList().contains(anotherFieldSet));
+        //assertTrue(testFieldSet.getFieldList().contains(anotherFieldSet));
         
         // Check that list does *not* contains the other FieldSet's Field
-        //assertFalse(fieldSet.getFieldList().contains(anotherFieldSetField));
+        //assertFalse(testFieldSet.getFieldList().contains(anotherFieldSetField));
 
         // Check that field list is cached
         assertSame(fieldSet.getFieldList(), fieldSet.getFieldList());
@@ -326,9 +327,9 @@ public class FieldSetTest extends TestCase {
      * The main use case for FieldSet.getFields() is that it enables one to use
      * Velocity to render Controls and Fields e.g.:
      *
-     * $form.fieldSet.fields.name   <- name this is a TextField
-     * $form.fieldSet.fields.div    <- div is a AbstractContainer
-     * $form.fieldSet.fields.button <- button is a Submit
+     * $form.testFieldSet.fields.name   <- name this is a TextField
+     * $form.testFieldSet.fields.div    <- div is a AbstractContainer
+     * $form.testFieldSet.fields.button <- button is a Submit
      * 
      * Also check that FieldSet.getFields() returns a cached Map so that access to
      * FieldSet.getFields() is fast.
@@ -384,21 +385,21 @@ public class FieldSetTest extends TestCase {
      * CLK-497
      */
     public void testFieldParent() {
-        // Initially fieldSet contains 1 hidden field
-        assertTrue(fieldSet.getControls().size() == 1);
+        // Initially testFieldSet contains 1 hidden field
+        assertTrue(testFieldSet.getControls().size() == 1);
 
         TextField nameField = new TextField("score");
-        fieldSet.add(nameField);
+        testFieldSet.add(nameField);
 
-        assertTrue(fieldSet.getControls().size() == 2);
+        assertTrue(testFieldSet.getControls().size() == 2);
 
         // Test that Field parent is a FieldSet
         assertEquals(FieldSet.class, nameField.getParent().getClass());
 
-        assertTrue(fieldSet.remove((Control) nameField));
+        assertTrue(testFieldSet.remove((Control) nameField));
 
         assertTrue(nameField.getParent() == null);
-        assertTrue(fieldSet.getControls().size() == 1);
+        assertTrue(testFieldSet.getControls().size() == 1);
     }
 
     /**
@@ -407,13 +408,13 @@ public class FieldSetTest extends TestCase {
      */
     public void testIsDisabled() {
     	// Fieldset is not disabled.
-    	assertFalse(this.fieldSet.isDisabled());
+    	assertFalse(this.testFieldSet.isDisabled());
 
     	// Textfield inside is not disabled.
     	assertFalse(this.trackField.isDisabled());
 
     	// Change fieldset state.
-    	this.fieldSet.setDisabled(true);
+    	this.testFieldSet.setDisabled(true);
 
     	// Textfield is now disabled too.
     	assertTrue(this.trackField.isDisabled());
@@ -425,16 +426,52 @@ public class FieldSetTest extends TestCase {
      */
     public void testIsReadonly() {
     	  // Fieldset is not disabled.
-   	    assertFalse(this.fieldSet.isReadonly());
+   	    assertFalse(this.testFieldSet.isReadonly());
 
     	  // Textfield inside is not disabled.
     	  assertFalse(this.trackField.isReadonly());
 
     	  // Change fieldset state.
-    	  this.fieldSet.setReadonly(true);
+    	  this.testFieldSet.setReadonly(true);
 
     	  // Textfield is now disabled too.
     	  assertTrue(this.trackField.isReadonly());
+    }
+
+    /**
+     * Check that adding controls replace existing controls with the same name.
+     *
+     * CLK-666
+     */
+    public void testReplace() {
+        FieldSet fieldset = new FieldSet("fieldset");
+
+        // Add two fields named child1 and child2
+        Field child1 = new TextField("child1");
+        Field child2 = new TextField("child2");
+        fieldset.add(child1);
+        fieldset.add(child2);
+        assertEquals(2, fieldset.getControlMap().size());
+        assertEquals(2, fieldset.getControls().size());
+        assertEquals(2, fieldset.getFields().size());
+        assertSame(child1, fieldset.getControls().get(0));
+        assertSame(child2, fieldset.getControls().get(1));
+        assertSame(child1, fieldset.getFieldList().get(0));
+        assertSame(child2, fieldset.getFieldList().get(1));
+
+        // Add another two fields named child1 and child2 and test that these
+        // panels replaces the previous fields
+        child1 = new TextField("child1");
+        child2 = new TextField("child2");
+        fieldset.add(child1);
+        fieldset.add(child2);
+        assertEquals(2, fieldset.getControlMap().size());
+        assertEquals(2, fieldset.getControls().size());
+        assertEquals(2, fieldset.getFields().size());
+        assertSame(child1, fieldset.getControls().get(0));
+        assertSame(child2, fieldset.getControls().get(1));
+        assertSame(child1, fieldset.getFieldList().get(0));
+        assertSame(child2, fieldset.getFieldList().get(1));
     }
 
     /**
@@ -456,6 +493,7 @@ public class FieldSetTest extends TestCase {
          * 
          * @return the div tag
          */
+        @Override
         public String getTag() {
             return "div";
         }
