@@ -209,12 +209,19 @@ public class TabbedPanel extends Panel {
      */
     @Override
     public Control insert(Control control, int index) {
-        super.insert(control, index);
-
-        if (control instanceof Panel && getPanels().size() == 1) {
-            setActivePanel((Panel) control);
+        Panel panel = null;
+        if (control instanceof Panel) {
+            panel = (Panel) control;
+            panel.setActive(false);
         }
 
+        super.insert(control, index);
+
+        if (panel != null) {
+            if (getPanels().size() == 1) {
+                setActivePanel(panel);
+            }
+        }
         return control;
     }
 
@@ -234,8 +241,11 @@ public class TabbedPanel extends Panel {
     public Control replace(Control currentControl, Control newControl) {
         super.replace(currentControl, newControl);
 
-        if (newControl instanceof Panel && getPanels().size() == 1) {
-            setActivePanel((Panel) newControl);
+        if (currentControl instanceof Panel) {
+            Panel currentPanel = (Panel) currentControl;
+            if (currentPanel == getActivePanel()) {
+                setActivePanel((Panel) newControl);
+            }
         }
         return newControl;
     }

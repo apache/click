@@ -22,6 +22,7 @@ import junit.framework.TestCase;
 import org.apache.click.ActionListener;
 import org.apache.click.Control;
 import org.apache.click.MockContext;
+import org.apache.click.Page;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Panel;
 
@@ -35,18 +36,18 @@ public class TabbedPanelTest extends TestCase {
         tabbedPanel.add(new Panel("panel2"));
         tabbedPanel.onInit();
         String activePanelName = tabbedPanel.getActivePanel().getName();
-        
+
         // By default panel1 should be the active panel
         assertEquals("panel1", activePanelName);
     }
-    
+
     /**
      * Test that the request parameter <tt>tabPanelIndex</tt> sets the new
      * active panel correctly.
      */
     public void testTabPanelIndexParameter() {
         MockContext context = MockContext.initContext();
-        
+
         // Since tabbedPanel is zero index based, setting tabPanelIndex to 1
         // should set the active panel to panel2
         context.getMockRequest().setParameter("tabPanelIndex", "1");
@@ -56,17 +57,17 @@ public class TabbedPanelTest extends TestCase {
         tabbedPanel.add(new Panel("panel2"));
         tabbedPanel.onInit();
         String activePanelName = tabbedPanel.getActivePanel().getName();
-        
+
         // By default panel2 should be the active panel
         assertEquals("panel2", activePanelName);
     }
-    
+
     /**
      * Test that if user selects panel2, panel2 becomes the active panel.
      */
     public void testTabLinkClicked() {
         MockContext context = MockContext.initContext();
-        
+
         // Simulate user selecting panel2
         context.getMockRequest().setParameter(ActionLink.ACTION_LINK, "tabLink");
         context.getMockRequest().setParameter(ActionLink.VALUE, "panel2");
@@ -76,11 +77,11 @@ public class TabbedPanelTest extends TestCase {
         tabbedPanel.add(new Panel("panel2"));
         tabbedPanel.onInit();
         String activePanelName = tabbedPanel.getActivePanel().getName();
-        
+
         // By default panel2 should be the active panel
         assertEquals("panel2", activePanelName);
     }
-    
+
     /**
      * Test that registered tab listener is fired.
      *
@@ -110,5 +111,51 @@ public class TabbedPanelTest extends TestCase {
 
         // If tab listener was triggered the actionResult should be false
         assertFalse(actionResult);
+    }
+
+    /**
+     * Check that adding controls replace existing controls with the same name.
+     *
+     * CLK-666
+     */
+    public void testReplace() {
+        MockContext.initContext();
+
+        Page page = new Page();
+        TabbedPanel panel = new TabbedPanel("panel");
+        page.addControl(panel);
+
+        // Add two panels named child1 and child2
+        Panel child1 = new Panel("child1");
+        Panel child2 = new Panel("child2");
+        panel.add(child1);
+        panel.add(child2);
+
+        // Execute onInit event
+        panel.onInit();
+
+        assertEquals(3, panel.getControlMap().size());
+        assertEquals(3, panel.getControls().size());
+        assertSame(child1, panel.getControls().get(1));
+        assertSame(child2, panel.getControls().get(2));
+        assertSame(child1, panel.getPanels().get(0));
+        assertSame(child2, panel.getPanels().get(1));
+        assertTrue(child1.isActive());
+        assertFalse(child2.isActive());
+
+        // Add another two panels named child1 and child2 and test that these
+        // panels replaces the previous panels
+        child1 = new Panel("child1");
+        child2 = new Panel("child2");
+        panel.add(child1);
+        panel.add(child2);
+        assertEquals(3, panel.getControlMap().size());
+        assertEquals(3, panel.getControls().size());
+        assertSame(child1, panel.getControls().get(1));
+        assertSame(child2, panel.getControls().get(2));
+        assertSame(child1, panel.getPanels().get(0));
+        assertSame(child2, panel.getPanels().get(1));
+        assertTrue(child1.isActive());
+        assertFalse(child2.isActive());
     }
 }
