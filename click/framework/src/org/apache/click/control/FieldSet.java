@@ -165,6 +165,11 @@ public class FieldSet extends Field implements Container {
      * Add a Field to the FieldSet at the specified index and return the added
      * instance.
      * <p/>
+     * <b>Please note</b>: if the FieldSet contains a control with the same name
+     * as the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
+     * <p/>
      * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
      * where the key is the Control name and value is the Control instance.
      * <p/>
@@ -185,10 +190,30 @@ public class FieldSet extends Field implements Container {
      * @param index the index at which the control is to be inserted
      * @return the control that was added to the FieldSet
      * @throws IllegalArgumentException if the control is null, the Field's name
-     * is not defined, the container already contains a control with the same
-     * name or if the control is neither a Field nor FieldSet
+     * is not defined or if the control is neither a Field nor FieldSet
      */
     public Control insert(Control control, int index) {
+        // Check if container already contains the control
+        String controlName = control.getName();
+        if (controlName != null) {
+            Control currentControl = getControlMap().get(controlName);
+
+            // If container already contains the control do a replace
+            if (currentControl != null
+                && !(control instanceof Label)) {
+
+                // Current control and new control are referencing the same object
+                // so we exit early
+                if (currentControl == control) {
+                    return control;
+                }
+
+                // If the two controls are different objects, we remove the current
+                // control and add the given control
+                return replace(currentControl, control);
+            }
+        }
+
         ContainerUtils.insert(this, control, index, getControlMap());
 
         if (control instanceof Field) {
@@ -219,7 +244,69 @@ public class FieldSet extends Field implements Container {
     }
 
     /**
+     * Replace the current control with the new control.
+     *
+     * @param currentControl the current control container in the fieldset
+     * @param newControl the control to replace the current control
+     * @return the new control that replaced the current control
+     *
+     * @throws IllegalArgumentException if the currentControl or newControl is
+     * null
+     * @throws IllegalStateException if the currentControl is not contained in
+     * the fieldset
+     */
+    @Override
+    public Control replace(Control currentControl, Control newControl) {
+        // Current and new control is the same instance - exit early
+        if (currentControl == newControl) {
+            return newControl;
+        }
+
+        int controlIndex = getControls().indexOf(currentControl);
+        Control result = ContainerUtils.replace(this, currentControl, newControl,
+            controlIndex, getControlMap());
+
+        if (newControl instanceof Field) {
+            Field field = (Field) newControl;
+
+            // Replace field in fieldList for fast access
+            if (!(field instanceof Button)) {
+                int fieldIndex = getFieldList().indexOf(currentControl);
+                getFieldList().set(fieldIndex, field);
+            }
+
+            // Set parent form
+            Form form = getForm();
+            field.setForm(form);
+
+            if (currentControl instanceof Field) {
+                // Remove form reference from current control
+                ((Field) currentControl).setForm(null);
+            }
+
+            if (form != null && form.getDefaultFieldSize() > 0) {
+                if (field instanceof TextField) {
+                    ((TextField) field).setSize(form.getDefaultFieldSize());
+
+                } else if (field instanceof FileField) {
+                    ((FileField) field).setSize(form.getDefaultFieldSize());
+
+                } else if (field instanceof TextArea) {
+                    ((TextArea) field).setCols(form.getDefaultFieldSize());
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Add a Control to the fieldset and return the added instance.
+     * <p/>
+     * <b>Please note</b>: if the FieldSet contains a control with the same name
+     * as the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
      * <p/>
      * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
      * where the key is the Control name and value is the Control instance.
@@ -234,8 +321,7 @@ public class FieldSet extends Field implements Container {
      * @return the control that was added to the container
      *
      * @throws IllegalArgumentException if the control is null, the Field's name
-     * is not defined, the container already contains a control with the same
-     * name or if the control is neither a Field nor FieldSet
+     * is not defined or if the control is neither a Field nor FieldSet
      */
     public Control add(Control control) {
         return insert(control, getControls().size());
@@ -243,6 +329,11 @@ public class FieldSet extends Field implements Container {
 
     /**
      * Add the field to the fieldSet, and set the fields form property.
+     * <p/>
+     * <b>Please note</b>: if the FieldSet contains a control with the same name
+     * as the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
      * <p/>
      * Fields can be retrieved from the Map {@link #getFields() fields} where
      * the key is the Field name and value is the Field instance.
@@ -253,9 +344,8 @@ public class FieldSet extends Field implements Container {
      *
      * @param field the field to add to the fieldSet
      * @return the field added to this fieldSet
-     * @throws IllegalArgumentException if the field is null, the field name
-     * is not defined or the fieldSet already contains a control with the same
-     * name
+     * @throws IllegalArgumentException if the field is null or the field name
+     * is not defined
      */
     public Field add(Field field) {
         add((Control) field);
@@ -264,6 +354,11 @@ public class FieldSet extends Field implements Container {
 
     /**
      * Add the field to the fieldset and specify the field width in columns.
+     * <p/>
+     * <b>Please note</b>: if the FieldSet contains a control with the same name
+     * as the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
      * <p/>
      * Fields can be retrieved from the Map {@link #getFields() fields} where
      * the key is the Field name and value is the Field instance.
@@ -276,8 +371,7 @@ public class FieldSet extends Field implements Container {
      * @param width the width of the field in table columns
      * @return the field added to this fieldset
      * @throws IllegalArgumentException if the field is null, field name is
-     * not defined, field is a Button or HiddenField, the fieldset already
-     * contains a field with the same name or the width &lt; 1
+     * not defined, field is a Button or HiddenField or the width &lt; 1
      */
     public Field add(Field field, int width) {
         add((Control) field, width);
@@ -286,6 +380,11 @@ public class FieldSet extends Field implements Container {
 
     /**
      * Add the control to the fieldset and specify the control's width in columns.
+     * <p/>
+     * <b>Please note</b>: if the FieldSet contains a control with the same name
+     * as the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
      * <p/>
      * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
      * where the key is the Control name and value is the Control instance.
@@ -298,8 +397,7 @@ public class FieldSet extends Field implements Container {
      * @param width the width of the control in table columns
      * @return the control added to this fieldSet
      * @throws IllegalArgumentException if the control is null, control is a
-     * Button or HiddenField, the fieldSet already contains a control with the
-     * same name or the width &lt; 1
+     * Button or HiddenField or the width &lt; 1
      */
     public Control add(Control control, int width) {
         if (control instanceof Button || control instanceof HiddenField) {
@@ -376,7 +474,7 @@ public class FieldSet extends Field implements Container {
      *
      * @return the sequential list of controls held by the container
      */
-    public List getControls() {
+    public List<Control> getControls() {
         if (controls == null) {
             controls = new ArrayList();
         }
@@ -867,7 +965,7 @@ public class FieldSet extends Field implements Container {
      *
      * @return the map of controls
      */
-    protected Map getControlMap() {
+    protected Map<String, Control> getControlMap() {
         if (controlMap == null) {
             controlMap = new HashMap();
         }
