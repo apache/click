@@ -145,7 +145,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class ActionLink extends AbstractLink {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
@@ -155,12 +155,12 @@ public class ActionLink extends AbstractLink {
     /** The value parameter name: &nbsp; <tt>value</tt>. */
     public static final String VALUE = "value";
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The link is clicked. */
     protected boolean clicked;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create an ActionLink for the given name.
@@ -268,7 +268,7 @@ public class ActionLink extends AbstractLink {
     public ActionLink() {
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Returns true if the ActionLink was clicked, otherwise returns false.
@@ -360,6 +360,7 @@ public class ActionLink extends AbstractLink {
      * @param name of the control
      * @throws IllegalArgumentException if the name is null
      */
+    @Override
     public void setName(String name) {
         if (ACTION_LINK.equals(name)) {
             String msg = "Invalid name '" + ACTION_LINK + "'. This name is "
@@ -379,6 +380,7 @@ public class ActionLink extends AbstractLink {
      * @throws IllegalArgumentException if the given parent instance is
      * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
      */
+    @Override
     public void setParent(Object parent) {
         if (parent == this) {
             throw new IllegalArgumentException("Cannot set parent to itself");
@@ -477,6 +479,7 @@ public class ActionLink extends AbstractLink {
      * This method binds the submitted request value to the ActionLink's
      * value.
      */
+    @Override
     public void bindRequestValue() {
         Context context = getContext();
         if (context.isMultipartRequest()) {
@@ -490,7 +493,7 @@ public class ActionLink extends AbstractLink {
         }
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * This method will set the {@link #isClicked()} property to true if the
@@ -501,6 +504,7 @@ public class ActionLink extends AbstractLink {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
         bindRequestValue();
 
