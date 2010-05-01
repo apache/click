@@ -189,10 +189,14 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
         </ul>
       </li>
       <li class="change">
-        Added improved stateful page support when adding controls to containers.
-        In previous releases an exception was raised if the control is
-        already present in the container or page. The new behavior is to silently
-        replace the existing control
+        Added new method <a href="click-api/org/apache/click/control/Container.html#replace(org.apache.click.control Control, org.apache.click.control Control)">Container.replace</a>
+        for replacing an existing control with a new control. In previous releases,
+        an exception would be raised if a page or container already contained a
+        control with the same name as the newly added control. In 2.2.0 the
+        replace method is automatically called when adding a control which name
+        matches that of an existing control in the page or container. This behavior
+        will likely only benefit <tt>stateful</tt> pages since <tt>stateless</tt>
+        pages are recreated each request
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-666">CLK-666</a>].
       </li>
       <li class="change">
