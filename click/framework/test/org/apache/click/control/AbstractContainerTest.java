@@ -74,7 +74,8 @@ public class AbstractContainerTest extends TestCase {
             fail("Field has name defined and is valid");
         }
 
-        // Check that adding TextField without name fails
+        // Check that adding TextField without name fails because Field#setParent
+        // ensures that Field name is set
         try {
             container.add(new TextField());
             fail("Field must define a name");
