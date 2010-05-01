@@ -30,6 +30,7 @@ import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.click.util.ClickUtils;
+import org.apache.click.util.ContainerUtils;
 import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.SessionMap;
@@ -314,9 +315,8 @@ public class Panel extends AbstractContainer {
      *
      * @param control the control to add to the container
      * @return the control that was added to the container
-     * @throws IllegalArgumentException if the control is null, if the name
-     *     of the control is not defined or the container already contains a
-     *     control with the same name
+     * @throws IllegalArgumentException if the control is null or if the name
+     *     of the control is not defined
      */
     public Control addControl(Control control) {
         return add(control);
@@ -325,21 +325,22 @@ public class Panel extends AbstractContainer {
     /**
      * Add the control to the panel and return the specified control.
      * <p/>
+     * <b>Please note</b>: if the Panel contains a control with the same name as
+     * the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
+     * <p/>
      * In addition to the requirements specified by
-     * {@link Container#add(org.apache.click.Control)}, note
-     * the following:
+     * {@link Container#add(org.apache.click.Control)}, note the following:
      * <ul>
      *  <li>
-     *   The control's name must be set when adding to a panel.
-     *  </li>
-     *  <li>
-     *   The control will be added to the Panel model using the controls name as
-     *   the key and can be accessed through {@link #getModel()}. This allows
-     *   one to reference the control in the Panels template.
+     *   If the control name is defined, it will be added to the Panel
+     *   {@link #getModel() model} using the control name as the key. The control
+     *   can be referenced via it's name from the Panel template.
      *  </li>
      *  <li>
      *   If the specified control is an <tt>instanceof</tt> a Panel, it will
-     *   also be added to a list of panels and can be accessed through
+     *   be added to the list of panels and can be accessed through
      *   {@link #getPanels()}.
      *  </li>
      * </ul>
@@ -347,14 +348,33 @@ public class Panel extends AbstractContainer {
      *
      * @param control the control to add to the container
      * @return the control that was added to the container
-     * @throws IllegalArgumentException if the control is null or the container
-     *     already contains a control with the same name
+     * @throws IllegalArgumentException if the control is null
      */
     @Override
-    public Control add(Control control) {
-        super.add(control);
-
+    public Control insert(Control control, int index) {
+        // Check if panel already contains the control
         String controlName = control.getName();
+        if (controlName != null) {
+            // Check if container already contains the control
+            Control currentControl = getControlMap().get(controlName);
+
+            // If container already contains the control do a replace
+            if (currentControl != null) {
+
+                // Current control and new control are referencing the same object
+                // so we exit early
+                if (currentControl == control) {
+                    return control;
+                }
+
+                // If the two controls are different objects, we remove the current
+                // control and add the given control
+                return replace(currentControl, control);
+            }
+        }
+
+        ContainerUtils.insert(this, control, index, getControlMap());
+
         if (controlName != null) {
             // If controls name is set, add control to the model
             addModel(controlName, control);
@@ -365,6 +385,43 @@ public class Panel extends AbstractContainer {
         }
 
         return control;
+    }
+
+    /**
+     * Replace the current control with the new control.
+     *
+     * @param currentControl the current control container in the panel
+     * @param newControl the control to replace the current control
+     * @return the new control that replaced the current control
+     *
+     * @throws IllegalArgumentException if the currentControl or newControl is
+     * null
+     * @throws IllegalStateException if the currentControl is not contained in
+     * the panel
+     */
+    @Override
+    public Control replace(Control currentControl, Control newControl) {
+        // Current and new control is the same instance - exit early
+        if (currentControl == newControl) {
+            return newControl;
+        }
+
+        int controlIndex = getControls().indexOf(currentControl);
+        Control result = ContainerUtils.replace(this, currentControl, newControl,
+            controlIndex, getControlMap());
+
+        String controlName = newControl.getName();
+        if (controlName != null) {
+            // If controls name is set, add control to the model
+            addModel(controlName, newControl);
+        }
+
+        if (newControl instanceof Panel) {
+            int panelIndex = getPanels().indexOf(currentControl);
+            getPanels().set(panelIndex, (Panel) newControl);
+        }
+
+        return result;
     }
 
     /**
@@ -445,7 +502,7 @@ public class Panel extends AbstractContainer {
      * Set the panel active flag. The active property is normally managed and
      * set by Panel containers.
      *
-     * <b>Please note</b>: inactive panels do not have their page events
+     * <b>Please note</b>: inactive panels do not have their events
      * ({@link #onInit()}, {@link #onProcess()}, {@link #onRender()}) processed.
      *
      * @param active the active flag
@@ -550,11 +607,14 @@ public class Panel extends AbstractContainer {
 
     /**
      * Add the named object value to the Panels model map.
+     * <p/>
+     * <b>Please note</b>: if the Panel contains an object with a matching name,
+     * that object will be replaced by the given value.
      *
      * @param name the key name of the object to add
      * @param value the object to add
      * @throws IllegalArgumentException if the name or value parameters are
-     * null, or if there is already a named value in the model
+     * null
      */
     public void addModel(String name, Object value) {
         if (name == null) {
@@ -567,13 +627,7 @@ public class Panel extends AbstractContainer {
                          + "to " + getClass().getName() + " model";
             throw new IllegalArgumentException(msg);
         }
-        if (getModel().containsKey(name)) {
-            String msg = getClass().getName() + " model already contains "
-                         + "value named " + name;
-            throw new IllegalArgumentException(msg);
-        } else {
-            getModel().put(name, value);
-        }
+        getModel().put(name, value);
     }
 
     /**

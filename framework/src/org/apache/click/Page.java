@@ -359,13 +359,17 @@ public class Page implements Serializable {
     // Public Methods ---------------------------------------------------------
 
     /**
-     * Add the control to the page. The control will be added to the pages model
-     * using the controls name as the key. The Controls parent property will
+     * Add the control to the page. The control will be added to the page model
+     * using the control name as the key. The Controls parent property will
      * also be set to the page instance.
+     * <p/>
+     * <b>Please note</b>: if the page contains a control with the same name as
+     * the given control, that control will be replaced by the given control.
+     * If a control has no name defined it cannot be replaced.
      *
-     * @param control the control to add
-     * @throws IllegalArgumentException if the control is null, or if the name
-     *      of the control is not defined
+     * @param control the control to add to the page
+     * @throws IllegalArgumentException if the control is null or if the name
+     * of the control is not defined
      */
     public void addControl(Control control) {
         if (control == null) {
@@ -374,6 +378,14 @@ public class Page implements Serializable {
         if (StringUtils.isBlank(control.getName())) {
             throw new IllegalArgumentException("Control name not defined: "
                 + control.getClass());
+        }
+
+        // Check if page already contains a named value
+        Object currentValue = getModel().get(control.getName());
+        if (currentValue != null && currentValue instanceof Control) {
+            Control currentControl = (Control) currentValue;
+            replaceControl(currentControl, control);
+            return;
         }
 
         // Note: set parent first as setParent might veto further processing
@@ -831,11 +843,14 @@ public class Page implements Serializable {
 
     /**
      * Add the named object value to the Pages model map.
+     * <p/>
+     * <b>Please note</b>: if the Page contains an object with a matching name,
+     * that object will be replaced by the given value.
      *
      * @param name the key name of the object to add
      * @param value the object to add
      * @throws IllegalArgumentException if the name or value parameters are
-     * null, or if there is already a named value in the model
+     * null
      */
     public void addModel(String name, Object value) {
         if (name == null) {
@@ -848,13 +863,8 @@ public class Page implements Serializable {
                     + "to " + getClass().getName() + " model";
             throw new IllegalArgumentException(msg);
         }
-        if (getModel().containsKey(name)) {
-            String msg = getClass().getName() + " model already contains "
-                    + "value named " + name;
-            throw new IllegalArgumentException(msg);
-        } else {
-            getModel().put(name, value);
-        }
+
+        getModel().put(name, value);
     }
 
     /**
@@ -1190,7 +1200,7 @@ public class Page implements Serializable {
      * @param location the path to redirect the request to
      * @param params the map of request parameter name and value pairs
      */
-    public void setRedirect(String location, Map<String, Object> params) {
+    public void setRedirect(String location, Map<String, ? extends Object> params) {
         Context context = getContext();
         if (StringUtils.isNotBlank(location)) {
             if (location.charAt(0) == '/') {
@@ -1260,7 +1270,9 @@ public class Page implements Serializable {
      * @throws IllegalArgumentException if the Page Class is not configured
      * with a unique path
      */
-    public void setRedirect(Class<? extends Page> pageClass, Map<String, Object> params) {
+    public void setRedirect(Class<? extends Page> pageClass,
+        Map<String, ? extends Object> params) {
+
         String target = getContext().getPagePath(pageClass);
 
         // If page class maps to a jsp, convert to htm which allows ClickServlet
@@ -1336,4 +1348,39 @@ public class Page implements Serializable {
         this.template = template;
     }
 
+    // Private methods --------------------------------------------------------
+
+    /**
+     * Replace the current control with the new control.
+     *
+     * @param currentControl the control currently contained in the page
+     * @param newControl the control to replace the current control container in
+     * the page
+     *
+     * @throws IllegalStateException if the currentControl is not contained in
+     * the page
+     */
+    private void replaceControl(Control currentControl, Control newControl) {
+
+        // Current control and new control are referencing the same object
+        // so we exit early
+        if (currentControl == newControl) {
+            return;
+        }
+
+        int controlIndex = getControls().indexOf(currentControl);
+        if (controlIndex == -1) {
+            throw new IllegalStateException("Cannot replace the given control"
+                + " because it is not present in the page");
+        }
+
+        // Note: set parent first since setParent might veto further processing
+        newControl.setParent(this);
+        currentControl.setParent(null);
+
+        // Set control to current control index
+        getControls().set(controlIndex, newControl);
+
+        addModel(newControl.getName(), newControl);
+    }
 }

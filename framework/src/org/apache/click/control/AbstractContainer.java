@@ -81,11 +81,15 @@ public abstract class AbstractContainer extends AbstractControl implements
 
     /**
      * @see org.apache.click.control.Container#add(org.apache.click.Control).
+     * <p/>
+     * <b>Please note</b>: if the container contains a control with the same name
+     * as the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
      *
      * @param control the control to add to the container
      * @return the control that was added to the container
-     * @throws IllegalArgumentException if the control is null or the container
-     * already contains a control with the same name
+     * @throws IllegalArgumentException if the control is null
      */
     public Control add(Control control) {
         return insert(control, getControls().size());
@@ -95,7 +99,12 @@ public abstract class AbstractContainer extends AbstractControl implements
      * Add the control to the container at the specified index, and return the
      * added instance.
      * <p/>
-     * <b>Please note</b> if the specified control already has a parent assigned,
+     * <b>Please note</b>: if the container contains a control with the same name
+     * as the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
+     * <p/>
+     * <b>Also note</b> if the specified control already has a parent assigned,
      * it will automatically be removed from that parent and inserted into this
      * container.
      *
@@ -106,13 +115,33 @@ public abstract class AbstractContainer extends AbstractControl implements
      * @return the control that was added to the container
      *
      * @throws IllegalArgumentException if the control is null or if the control
-     * and container is the same instance or the container already contains
-     * a control with the same name or if a Field name is not defined
+     * and container is the same instance
      *
      * @throws IndexOutOfBoundsException if index is out of range
      * <tt>(index &lt; 0 || index &gt; getControls().size())</tt>
      */
     public Control insert(Control control, int index) {
+        // Check if panel already contains the control
+        String controlName = control.getName();
+        if (controlName != null) {
+            // Check if container already contains the control
+            Control currentControl = getControlMap().get(control.getName());
+
+            // If container already contains the control do a replace
+            if (currentControl != null) {
+
+                // Current control and new control are referencing the same object
+                // so we exit early
+                if (currentControl == control) {
+                    return control;
+                }
+
+                // If the two controls are different objects, we remove the current
+                // control and add the given control
+                return replace(currentControl, control);
+            }
+        }
+
         return ContainerUtils.insert(this, control, index, getControlMap());
     }
 
@@ -125,6 +154,28 @@ public abstract class AbstractContainer extends AbstractControl implements
      */
     public boolean remove(Control control) {
         return ContainerUtils.remove(this, control, getControlMap());
+    }
+
+    /**
+     * Replace the control in the container at the specified index, and return
+     * the newly added control.
+     *
+     * @see org.apache.click.control.Container#replace(org.apache.click.Control, org.apache.click.Control)
+     *
+     * @param currentControl the control currently contained in the container
+     * @param newControl the control to replace the current control contained in
+     * the container
+     * @return the new control that replaced the current control
+     *
+     * @throws IllegalArgumentException if the currentControl or newControl is
+     * null
+     * @throws IllegalStateException if the currentControl is not contained in
+     * the container
+     */
+    public Control replace(Control currentControl, Control newControl) {
+        int controlIndex = getControls().indexOf(currentControl);
+        return ContainerUtils.replace(this, currentControl, newControl,
+            controlIndex, getControlMap());
     }
 
     /**

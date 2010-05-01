@@ -58,6 +58,17 @@ public interface Container extends Control {
     Control insert(Control control, int index);
 
     /**
+     * Replace the current control with the new control, and return the newly
+     * added control.
+     *
+     * @param currentControl the control currently contained in the container
+     * @param newControl the control to replace the current control contained in
+     * the container
+     * @return the new control that replaced the current control
+     */
+    Control replace(Control currentControl, Control newControl);
+
+    /**
      * Remove the given control from the container, returning true if the
      * control was found in the container and removed, or false if the control
      * was not found.

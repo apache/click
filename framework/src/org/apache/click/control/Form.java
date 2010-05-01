@@ -697,6 +697,11 @@ public class Form extends AbstractContainer {
      * Add the control to the form at the specified index, and return the
      * added instance.
      * <p/>
+     * <b>Please note</b>: if the form contains a control with the same name as
+     * the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
+     * <p/>
      * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
      * where the key is the Control name and value is the Control instance.
      * <p/>
@@ -711,11 +716,6 @@ public class Form extends AbstractContainer {
      * <b>Please note</b> if the specified control already has a parent assigned,
      * it will automatically be removed from that parent and inserted into the
      * form.
-     * <p/>
-     * <b>Also note:</b> Form automatically adds hidden fields to preserve
-     * state across requests. Be aware of this when using <tt>insert</tt> as the
-     * hidden fields might influence the position of the Control you insert.
-     * <em>This restriction might be removed in a future version of Click.</em>
      *
      * @see Container#insert(org.apache.click.Control, int)
      *
@@ -724,8 +724,7 @@ public class Form extends AbstractContainer {
      * @return the control that was added to the container
      *
      * @throws IllegalArgumentException if the control is null or if the control
-     * and container is the same instance or the container already contains
-     * a control with the same name or if the Field name is not defined
+     * and container is the same instance or if the Field name is not defined
      *
      * @throws IndexOutOfBoundsException if index is out of range
      * <tt>(index &lt; 0 || index &gt; getControls().size())</tt>
@@ -733,10 +732,31 @@ public class Form extends AbstractContainer {
     @Override
     public Control insert(Control control, int index) {
 
+        // Check if container already contains the control
+        String controlName = control.getName();
+        if (controlName != null) {
+            Control currentControl = getControlMap().get(controlName);
+
+            // If container already contains the control do a replace
+            if (currentControl != null
+                && !(control instanceof Label)) {
+
+                // Current control and new control are referencing the same object
+                // so we exit early
+                if (currentControl == control) {
+                    return control;
+                }
+
+                // If the two controls are different objects, replace the current
+                // control with the given control
+                return replace(currentControl, control);
+            }
+        }
+
         // Adjust index for hidden fields added by Form. CLK-447
         int realIndex = Math.min(index, getControls().size() - insertIndexOffset);
 
-        super.insert(control, realIndex);
+        ContainerUtils.insert(this, control, realIndex, getControlMap());
 
         if (control instanceof Field) {
             Field field = (Field) control;
@@ -772,6 +792,11 @@ public class Form extends AbstractContainer {
     /**
      * Add a Control to the form and return the added instance.
      * <p/>
+     * <b>Please note</b>: if the form contains a control with the same name as
+     * the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
+     * <p/>
      * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
      * where the key is the Control name and value is the Control instance.
      * <p/>
@@ -796,6 +821,11 @@ public class Form extends AbstractContainer {
     /**
      * Add the field to the form, and set the fields form property.
      * <p/>
+     * <b>Please note</b>: if the form contains a control with the same name as
+     * the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
+     * <p/>
      * Fields can be retrieved from the Map {@link #getFields() fields} where
      * the key is the Field name and value is the Field instance.
      * <p/>
@@ -816,6 +846,11 @@ public class Form extends AbstractContainer {
 
     /**
      * Add the field to the form and specify the field's width in columns.
+     * <p/>
+     * <b>Please note</b>: if the form contains a control with the same name as
+     * the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
      * <p/>
      * Fields can be retrieved from the Map {@link #getFields() fields} where
      * the key is the Field name and value is the Field instance.
@@ -840,6 +875,11 @@ public class Form extends AbstractContainer {
 
     /**
      * Add the control to the form and specify the control's width in columns.
+     * <p/>
+     * <b>Please note</b>: if the form contains a control with the same name as
+     * the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
      * <p/>
      * Controls can be retrieved from the Map {@link #getControlMap() controlMap}
      * where the key is the Control name and value is the Control instance.
@@ -872,6 +912,71 @@ public class Form extends AbstractContainer {
             getFieldWidths().put(control.getName(), new Integer(width));
         }
         return control;
+    }
+
+    /**
+     * Replace the control in the form at the specified index, and return
+     * the newly added control.
+     *
+     * @see org.apache.click.control.Container#replace(org.apache.click.Control, org.apache.click.Control)
+     *
+     * @param currentControl the control currently contained in the form
+     * @param newControl the control to replace the current control contained in
+     * the form
+     * @return the new control that replaced the current control
+     *
+     * @throws IllegalArgumentException if the currentControl or newControl is
+     * null
+     * @throws IllegalStateException if the currentControl is not contained in
+     * the form
+     */
+    @Override
+    public Control replace(Control currentControl, Control newControl) {
+        // Current and new control is the same instance - exit early
+        if (currentControl == newControl) {
+            return newControl;
+        }
+
+        int controlIndex = getControls().indexOf(currentControl);
+        Control result = ContainerUtils.replace(this, currentControl, newControl,
+            controlIndex, getControlMap());
+
+        if (newControl instanceof Field) {
+            Field field = (Field) newControl;
+
+            if (field instanceof Button) {
+                // Replace field in buttonList for fast access
+                int buttonIndex = getButtonList().indexOf(currentControl);
+                getButtonList().set(buttonIndex, (Button) field);
+
+            } else {
+                // Replace field in fieldList for fast access
+                int fieldIndex = getFieldList().indexOf(currentControl);
+                getFieldList().set(fieldIndex, field);
+            }
+
+            // Set parent form
+            field.setForm(this);
+
+            if (currentControl instanceof Field) {
+                // Remove form reference from current control
+                ((Field) currentControl).setForm(null);
+            }
+
+            if (getDefaultFieldSize() > 0) {
+                if (field instanceof TextField) {
+                    ((TextField) field).setSize(getDefaultFieldSize());
+
+                } else if (field instanceof FileField) {
+                    ((FileField) field).setSize(getDefaultFieldSize());
+
+                } else if (field instanceof TextArea) {
+                    ((TextArea) field).setCols(getDefaultFieldSize());
+                }
+            }
+        }
+
+        return result;
     }
 
     /**

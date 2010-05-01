@@ -479,9 +479,13 @@ public class ContainerUtils {
      * Add the given control to the container at the specified index, and return
      * the added instance.
      * <p/>
-     * <b>Please note</b> if the specified control already has a parent assigned,
-     * it will automatically be removed from that parent and inserted into the
-     * container.
+     * <b>Please note</b>: an exception is raised if the container contains a
+     * control with the same name as the given control. It is the responsibility
+     * of the caller to replace existing controls.
+     * <p/>
+     * <b>Also note</b> if the specified control already has a parent assigned,
+     * it will automatically be removed from that parent and inserted as a child
+     * of the container instead.
      * <p/>
      * This method is useful for developers needing to implement the
      * {@link org.apache.click.control.Container} interface but cannot for one
@@ -503,8 +507,7 @@ public class ContainerUtils {
      *     }
      *
      *     ...
-     * }
-     * </pre>
+     * } </pre>
      *
      * @param container the container to insert the given control into
      * @param control the control to add to the container
@@ -513,8 +516,7 @@ public class ContainerUtils {
      * @return the control that was added to the container
      *
      * @throws IllegalArgumentException if the control is null or if the control
-     * and container is the same instance or the container already contains
-     * a control with the same name or if a Field name is not defined
+     * and container is the same instance
      *
      * @throws IndexOutOfBoundsException if index is out of range
      * <tt>(index &lt; 0 || index &gt; container.getControls().size())</tt>
@@ -573,6 +575,113 @@ public class ContainerUtils {
     }
 
     /**
+     * Replace the current control in the container at the specified index, and
+     * return the newly added control.
+     * <p/>
+     * <b>Please note</b> if the new control already has a parent assigned,
+     * it will automatically be removed from that parent and inserted as a child
+     * of the container instead.
+     * <p/>
+     * This method is useful for developers needing to implement the
+     * {@link org.apache.click.control.Container} interface but cannot for one
+     * reason or another extend from {@link org.apache.click.control.AbstractContainer}.
+     * For example if the Container already extends from an existing <tt>Control</tt>
+     * such as a <tt>Field</tt>, it won't be possible to extend
+     * <tt>AbstractContainer</tt> as well. In such scenarios instead of
+     * reimplementing {@link org.apache.click.control.Container#replace(org.apache.click.Control, org.apache.click.Control) replace},
+     * one can delegate to this method.
+     * <p/>
+     * For example, a custom Container that extends <tt>Field</tt> and
+     * implements <tt>Container</tt> could implement the <tt>replace</tt> method
+     * as follows:
+     *
+     * <pre class="prettyprint">
+     * public class MyContainer extends Field implements Container {
+     *
+     *     public Control replace(Control currentControl, Control newControl) {
+     *         int controlIndex = getControls().indexOf(currentControl);
+     *         return ContainerUtils.replace(this, currentControl, newControl,
+     *             controlIndex, getControlMap());
+     *     }
+     *
+     *     ...
+     * } </pre>
+     *
+     * @param container the container to insert the new control into
+     * @param currentControl the control currently contained in the container
+     * @param newControl the control to replace the current control contained in
+     * the container
+     * @param controlIndex the index of the current control in the container
+     * @param controlMap the container's map of controls keyed on control name
+     * @return the new control that replaced the current control
+     *
+     * @throws IllegalArgumentException if the currentControl or newControl is
+     * null
+     * @throws IllegalStateException if the controlIndex = -1
+     */
+    public static Control replace(Container container, Control currentControl,
+        Control newControl, int controlIndex, Map<String, Control> controlMap) {
+
+        // Pre conditions start
+
+        // Current and new control is the same instance - exit early
+        if (currentControl == newControl) {
+            return newControl;
+        }
+
+        if (currentControl == null) {
+            throw new IllegalArgumentException("Null current control parameter");
+        }
+        if (newControl == null) {
+            throw new IllegalArgumentException("Null new control parameter");
+        }
+
+        if (controlIndex == -1) {
+            throw new IllegalStateException("Cannot replace the given control"
+                + " because it is not present in the container");
+        }
+
+        // Pre conditions end
+
+        // Check if control already has parent
+        // If parent references the given container, there is no need to remove it
+        Object currentParent = newControl.getParent();
+        if (currentParent != null && currentParent != container) {
+
+            // Remove new control from parent Page or Container
+            if (currentParent instanceof Page) {
+                ((Page) currentParent).removeControl(newControl);
+
+            } else if (currentParent instanceof Container) {
+                ((Container) currentParent).remove(newControl);
+            }
+
+            // Create warning message to users that the parent has been reset
+            logParentReset(container, newControl, currentParent);
+        }
+
+        // Note: set parent first since setParent might veto further processing
+        newControl.setParent(container);
+        currentControl.setParent(null);
+
+        // Replace currentControl with newControl
+        container.getControls().set(controlIndex, newControl);
+
+        // Update controlMap
+        String controlName = newControl.getName();
+        if (controlName != null) {
+            controlMap.put(controlName, newControl);
+        } else {
+            controlName = currentControl.getName();
+
+            if (controlName != null) {
+                controlMap.remove(controlName);
+            }
+        }
+        return newControl;
+    }
+
+    /**
      * Remove the given control from the container, returning <tt>true</tt> if
      * the control was found in the container and removed, or <tt>false</tt> if
      * the control was not found.
@@ -597,8 +706,7 @@ public class ContainerUtils {
      *     }
      *
      *     ...
-     * }
-     * </pre>
+     * } </pre>
      *
      * @param container the container to remove the given control from
      * @param control the control to remove from the container
