@@ -54,7 +54,7 @@ import org.apache.click.util.HtmlStringBuffer;
  *     }
  * } </pre>
  */
-public class AbstractContainerField extends Field implements Container {
+public abstract class AbstractContainerField extends Field implements Container {
 
     // Constants --------------------------------------------------------------
 
