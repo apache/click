@@ -74,14 +74,6 @@ public class AbstractContainerTest extends TestCase {
             fail("Field has name defined and is valid");
         }
 
-        // Check that adding TextField with duplicate name fails
-        try {
-            container.add(new TextField("field"));
-            fail("Field with name 'field' already exists on Form");
-        } catch (Exception expected) {
-            // Should fail since field with name 'field' already exist on container
-        }
-
         // Check that adding TextField without name fails
         try {
             container.add(new TextField());
@@ -113,14 +105,6 @@ public class AbstractContainerTest extends TestCase {
         } catch (Exception e) {
             e.printStackTrace();
             fail("FieldSet has name defined and is valid");
-        }
-
-        // Check that adding FieldSet with duplicate name fails
-        try {
-            container.add(new FieldSet("fieldSet"));
-            fail("FieldSet with name 'fieldSet' already exists on Form");
-        } catch (Exception expected) {
-            // Should fail since fieldSet with name 'fieldSet' already exist on container
         }
 
         // Check that adding FieldSet without name fails
@@ -162,5 +146,36 @@ public class AbstractContainerTest extends TestCase {
         } catch (Exception expected) {
             // Should fail since container cannot be added to itself
         }
+    }
+
+    /**
+     * Check that adding controls replace existing controls with the same name.
+     *
+     * CLK-666
+     */
+    public void testReplace() {
+        AbstractContainer container = new AbstractContainer("container") {
+        };
+
+        // Add two fields named child1 and child2
+        Field child1 = new TextField("child1");
+        Field child2 = new TextField("child2");
+        container.add(child1);
+        container.add(child2);
+        assertEquals(2, container.getControlMap().size());
+        assertEquals(2, container.getControls().size());
+        assertSame(child1, container.getControls().get(0));
+        assertSame(child2, container.getControls().get(1));
+
+        // Add another two fields named child1 and child2 and test that these
+        // panels replaces the previous fields
+        child1 = new TextField("child1");
+        child2 = new TextField("child2");
+        container.add(child1);
+        container.add(child2);
+        assertEquals(2, container.getControlMap().size());
+        assertEquals(2, container.getControls().size());
+        assertSame(child1, container.getControls().get(0));
+        assertSame(child2, container.getControls().get(1));
     }
 }
