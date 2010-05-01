@@ -208,14 +208,36 @@ public class TabbedPanel extends Panel {
      *     control with the same name
      */
     @Override
-    public Control add(Control control) {
-        super.add(control);
+    public Control insert(Control control, int index) {
+        super.insert(control, index);
 
         if (control instanceof Panel && getPanels().size() == 1) {
             setActivePanel((Panel) control);
         }
 
         return control;
+    }
+
+    /**
+     * Replace the current control with the new control.
+     *
+     * @param currentControl the current control container in the panel
+     * @param newControl the control to replace the current control
+     * @return the new control that replaced the current control
+     *
+     * @throws IllegalArgumentException if the currentControl or newControl is
+     * null
+     * @throws IllegalStateException if the currentControl is not contained in
+     * the panel
+     */
+    @Override
+    public Control replace(Control currentControl, Control newControl) {
+        super.replace(currentControl, newControl);
+
+        if (newControl instanceof Panel && getPanels().size() == 1) {
+            setActivePanel((Panel) newControl);
+        }
+        return newControl;
     }
 
     /**

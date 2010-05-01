@@ -54,7 +54,7 @@ import org.apache.click.util.HtmlStringBuffer;
  *     }
  * } </pre>
  */
-public abstract class AbstractContainerField extends Field implements Container {
+public class AbstractContainerField extends Field implements Container {
 
     // Constants --------------------------------------------------------------
 
@@ -100,21 +100,59 @@ public abstract class AbstractContainerField extends Field implements Container 
     /**
      * @see org.apache.click.control.Container#add(org.apache.click.Control).
      *
+     * <b>Please note</b>: if the container contains a control with the same name
+     * as the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
+     *
      * @param control the control to add to the container and return
      * @return the control that was added to the container
+     * @throws IllegalArgumentException if the control is null
      */
     public Control add(Control control) {
         return insert(control, getControls().size());
     }
 
     /**
+     * Add the control to the container at the specified index, and return the
+     * added instance.
+     * <p/>
+     * <b>Please note</b>: if the container contains a control with the same name
+     * as the given control, that control will be
+     * {@link #replace(org.apache.click.Control, org.apache.click.Control) replaced}
+     * by the given control. If a control has no name defined it cannot be replaced.
+     *
      * @see org.apache.click.control.Container#insert(org.apache.click.Control, int).
      *
      * @param control the control to add to the container and return
      * @param index the index at which the control is to be inserted
      * @return the control that was added to the container
+     *
+     * @throws IllegalArgumentException if the control is null or if the control
+     * and container is the same instance
      */
     public Control insert(Control control, int index) {
+        // Check if panel already contains the control
+        String controlName = control.getName();
+        if (controlName != null) {
+            // Check if container already contains the control
+            Control currentControl = getControlMap().get(control.getName());
+
+            // If container already contains the control do a replace
+            if (currentControl != null) {
+
+                // Current control and new control are referencing the same object
+                // so we exit early
+                if (currentControl == control) {
+                    return control;
+                }
+
+                // If the two controls are different objects, we remove the current
+                // control and add the given control
+                return replace(currentControl, control);
+            }
+        }
+
         return ContainerUtils.insert(this, control, index, getControlMap());
     }
 
@@ -126,6 +164,28 @@ public abstract class AbstractContainerField extends Field implements Container 
      */
     public boolean remove(Control control) {
         return ContainerUtils.remove(this, control, getControlMap());
+    }
+
+    /**
+     * Replace the control in the container at the specified index, and return
+     * the newly added control.
+     *
+     * @see org.apache.click.control.Container#replace(org.apache.click.Control, org.apache.click.Control)
+     *
+     * @param currentControl the control currently contained in the container
+     * @param newControl the control to replace the current control contained in
+     * the container
+     * @return the new control that replaced the current control
+     *
+     * @throws IllegalArgumentException if the currentControl or newControl is
+     * null
+     * @throws IllegalStateException if the currentControl is not contained in
+     * the container
+     */
+    public Control replace(Control currentControl, Control newControl) {
+        int controlIndex = getControls().indexOf(currentControl);
+        return ContainerUtils.replace(this, currentControl, newControl,
+            controlIndex, getControlMap());
     }
 
     /**
