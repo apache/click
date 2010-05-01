@@ -181,11 +181,11 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public abstract class Field extends AbstractControl {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The Field disabled value. */
     protected boolean disabled;
@@ -240,7 +240,7 @@ public abstract class Field extends AbstractControl {
     /** The Field value. */
     protected String value;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct a new Field object.
@@ -268,7 +268,7 @@ public abstract class Field extends AbstractControl {
         setLabel(label);
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Set the parent of the Field.
@@ -280,6 +280,7 @@ public abstract class Field extends AbstractControl {
      * @throws IllegalArgumentException if the given parent instance is
      * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
      */
+    @Override
     public void setParent(Object parent) {
         if (parent == this) {
             throw new IllegalArgumentException("Cannot set parent to itself");
@@ -505,6 +506,7 @@ public abstract class Field extends AbstractControl {
      *
      * @return HTML element identifier attribute "id" value
      */
+    @Override
     public String getId() {
         if (hasAttributes() && getAttributes().containsKey("id")) {
             return getAttribute("id");
@@ -720,6 +722,7 @@ public abstract class Field extends AbstractControl {
      * @param listener the listener object with the named method to invoke
      * @param method the name of the method to invoke
      */
+    @Override
     public void setListener(Object listener, String method) {
         super.setListener(listener, method);
     }
@@ -1014,7 +1017,7 @@ public abstract class Field extends AbstractControl {
         setStyle("width", value);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * This method binds the submitted request value to the Field's value.
@@ -1027,16 +1030,6 @@ public abstract class Field extends AbstractControl {
      */
     public void bindRequestValue() {
         setValue(getRequestValue());
-    }
-
-    /**
-     * This method does nothing. Subclasses may override this method to perform
-     * additional initialization.
-     *
-     * @see org.apache.click.Control#onInit()
-     */
-    public void onInit() {
-        super.onInit();
     }
 
     /**
@@ -1065,6 +1058,7 @@ public abstract class Field extends AbstractControl {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
         if (isDisabled()) {
             Context context = getContext();
@@ -1101,7 +1095,7 @@ public abstract class Field extends AbstractControl {
     public void validate() {
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Return a normalized label for display in error messages.
@@ -1225,12 +1219,12 @@ public abstract class Field extends AbstractControl {
      * @return the field's value from the request
      */
     protected String getRequestValue() {
-        String value = getContext().getRequestParameter(getName());
-        if (value != null) {
+        String requestValue = getContext().getRequestParameter(getName());
+        if (requestValue != null) {
             if (isTrim()) {
-                return value.trim();
+                return requestValue.trim();
             } else {
-                return value;
+                return requestValue;
             }
         } else {
             return "";
