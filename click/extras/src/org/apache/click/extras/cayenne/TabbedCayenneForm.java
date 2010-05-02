@@ -27,7 +27,6 @@ import org.apache.click.Context;
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.element.CssImport;
-import org.apache.click.extras.control.TabbedForm;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
