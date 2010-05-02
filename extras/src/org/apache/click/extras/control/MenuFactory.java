@@ -162,17 +162,13 @@ public class MenuFactory implements Serializable {
 
     // Class Variables --------------------------------------------------------
 
-    /** The cached root Menu as defined in <tt>menu.xml</tt>. */
-    protected static Menu CACHED_ROOT_MENU;
-
     /** The default Menu XML attributes loaded into menu properties. */
-    protected static Set<String> DEFAULT_ATTRIBUTES;
+    protected final static Set<String> DEFAULT_ATTRIBUTES = new HashSet<String>();
 
     /** The menu cache. */
     protected static Map<String, Menu> menuCache;
 
     static {
-        DEFAULT_ATTRIBUTES = new HashSet<String>();
         DEFAULT_ATTRIBUTES.add("name");
         DEFAULT_ATTRIBUTES.add("label");
         DEFAULT_ATTRIBUTES.add("path");
@@ -491,7 +487,7 @@ public class MenuFactory implements Serializable {
 
         String webinfFileName = null;
         boolean absolute = fileName.startsWith("/");
-        if(!absolute) {
+        if (!absolute) {
             fileName = '/' + fileName;
             webinfFileName = "/WEB-INF" + fileName;
         }
