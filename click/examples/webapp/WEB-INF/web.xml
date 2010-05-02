@@ -144,11 +144,11 @@
 	<servlet>
 		<servlet-name>ClickServlet</servlet-name>
 		<servlet-class>org.apache.click.extras.spring.SpringClickServlet</servlet-class>
-		<load-on-startup>0</load-on-startup>
     <init-param>
        <param-name>inject-page-beans</param-name>
        <param-value>true</param-value>
     </init-param>
+    <load-on-startup>0</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
