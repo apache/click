@@ -361,7 +361,7 @@ public class CheckList extends Field {
      * @throws IllegalArgumentException if options is null, or the collection
      * contains an unsupported class
      */
-    public void addAll(Collection<? extends Object> options) {
+    public void addAll(Collection<?> options) {
         if (options == null) {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
