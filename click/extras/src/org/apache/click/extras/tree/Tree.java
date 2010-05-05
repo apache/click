@@ -40,6 +40,7 @@ import org.apache.click.control.AbstractControl;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Decorator;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.extras.control.SubmitLink;
 import org.apache.click.util.ClickUtils;
@@ -222,7 +223,7 @@ public class Tree extends AbstractControl {
     private boolean javascriptEnabled = false;
 
     /** List of subscribed listeners to tree events.*/
-    private List listeners = new ArrayList();
+    private List<TreeListener> listeners = new ArrayList<TreeListener>();
 
     /** Current javascript policy in effect. */
     private int javascriptPolicy = 0;
@@ -499,7 +500,7 @@ public class Tree extends AbstractControl {
      * @return the HTML HEAD elements for the control
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
 
         if (headElements == null) {
             headElements = super.getHeadElements();
@@ -774,11 +775,12 @@ public class Tree extends AbstractControl {
     /**
      * Returns all the nodes that were expanded.
      *
-     * @param includeInvisibleNodes indicator if only invisible nodes should be included.
-     * @return list of currently expanded nodes.
+     * @param includeInvisibleNodes indicator if only invisible nodes should be
+     * included
+     * @return list of currently expanded nodes
      */
-    public List getExpandedNodes(boolean includeInvisibleNodes) {
-        List currentlyExpanded = new ArrayList();
+    public List<TreeNode> getExpandedNodes(boolean includeInvisibleNodes) {
+        List<TreeNode> currentlyExpanded = new ArrayList<TreeNode>();
         for (Iterator it = iterator(); it.hasNext();) {
             TreeNode node = (TreeNode) it.next();
             if (node.isExpanded())  {
@@ -796,8 +798,8 @@ public class Tree extends AbstractControl {
      * @param includeInvisibleNodes indicates if invisible nodes should be included.
      * @return list of currently selected nodes.
      */
-    public List getSelectedNodes(boolean includeInvisibleNodes) {
-        List currentlySelected = new ArrayList();
+    public List<TreeNode> getSelectedNodes(boolean includeInvisibleNodes) {
+        List<TreeNode> currentlySelected = new ArrayList<TreeNode>();
         for (Iterator it = iterator(); it.hasNext();) {
             TreeNode node = (TreeNode) it.next();
             if (node.isSelected()) {
@@ -827,7 +829,7 @@ public class Tree extends AbstractControl {
      *
      * @return iterator over all elements in the tree
      */
-    public Iterator iterator() {
+    public Iterator<TreeNode> iterator() {
         return iterator(getRootNode());
     }
 
@@ -838,7 +840,7 @@ public class Tree extends AbstractControl {
      * @param node starting point of nodes to iterator over
      * @return iterator over all nodes starting form the specified node
      */
-    public Iterator iterator(TreeNode node) {
+    public Iterator<TreeNode> iterator(TreeNode node) {
         if (node == null) {
             node = getRootNode();
         }
@@ -1339,8 +1341,7 @@ public class Tree extends AbstractControl {
      * @param previousState contains the previous expanded state
      */
     protected void fireNodeExpanded(TreeNode node, boolean previousState) {
-        for (Iterator it = listeners.iterator(); it.hasNext();) {
-            TreeListener l = (TreeListener) it.next();
+        for (TreeListener l : listeners) {
             l.nodeExpanded(this, node, getContext(), previousState);
         }
     }
@@ -1353,8 +1354,7 @@ public class Tree extends AbstractControl {
      * @param previousState contains the previous expanded state
      */
     protected void fireNodeCollapsed(TreeNode node, boolean previousState) {
-        for (Iterator it = listeners.iterator(); it.hasNext();) {
-            TreeListener l = (TreeListener) it.next();
+        for (TreeListener l : listeners) {
             l.nodeCollapsed(this, node, getContext(), previousState);
         }
     }
@@ -1367,8 +1367,7 @@ public class Tree extends AbstractControl {
      * @param previousState contains the previous selected state
      */
     protected void fireNodeSelected(TreeNode node, boolean previousState) {
-        for (Iterator it = listeners.iterator(); it.hasNext();) {
-            TreeListener l = (TreeListener) it.next();
+        for (TreeListener l : listeners) {
             l.nodeSelected(this, node, getContext(), previousState);
         }
     }
@@ -1381,8 +1380,7 @@ public class Tree extends AbstractControl {
      * @param previousState contains the previous selected state
      */
     protected void fireNodeDeselected(TreeNode node, boolean previousState) {
-        for (Iterator it = listeners.iterator(); it.hasNext();) {
-            TreeListener l = (TreeListener) it.next();
+        for (TreeListener l : listeners) {
             l.nodeDeselected(this, node, getContext(), previousState);
         }
     }
@@ -1685,7 +1683,7 @@ public class Tree extends AbstractControl {
     static class BreadthTreeIterator implements Iterator {
 
         /**queue for storing node's. */
-        private List queue = new ArrayList();
+        private List<TreeNode> queue = new ArrayList();
 
         /** indicator to iterate collapsed node's. */
         private boolean iterateCollapsedNodes = true;
@@ -1733,10 +1731,10 @@ public class Tree extends AbstractControl {
          * @return the next node in the iteration.
          * @exception NoSuchElementException iteration has no more node.
          */
-        public Object next() {
+        public TreeNode next() {
             try {
                 //remove from the end of queue
-                TreeNode node = (TreeNode) queue.remove(queue.size() - 1);
+                TreeNode node = queue.remove(queue.size() - 1);
                 if (node.hasChildren()) {
                     if (iterateCollapsedNodes || node.isExpanded()) {
                         push(node.getChildren());
@@ -1763,9 +1761,9 @@ public class Tree extends AbstractControl {
          *
          * @param children list of node's to push on the beginning of the queue
          */
-        private void push(List children) {
-            for (Iterator it = children.iterator(); it.hasNext();) {
-                queue.add(0, it.next()); //add to the beginning of queue
+        private void push(List<TreeNode> children) {
+            for (TreeNode child : children) {
+                queue.add(0, child); //add to the beginning of queue
             }
         }
     }
