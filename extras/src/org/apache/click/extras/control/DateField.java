@@ -30,6 +30,7 @@ import java.util.Locale;
 import org.apache.click.Context;
 import org.apache.click.control.TextField;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.util.ClickUtils;
@@ -133,7 +134,7 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class DateField extends TextField {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
 
@@ -141,7 +142,7 @@ public class DateField extends TextField {
     static final String[] SUPPORTTED_LANGUAGES =
         {"da", "de", "fi", "fr", "ja", "nl", "pl", "pt", "ru"};
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The DateField's date value. */
     protected Date date;
@@ -180,7 +181,7 @@ public class DateField extends TextField {
     /** Indicates whether the help property should be rendered or not. */
     private boolean renderHelp = true;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct the Date Field with the given name.
@@ -308,7 +309,7 @@ public class DateField extends TextField {
         setFormatPattern(dateFormatPattern);
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Return the field Date value, or null if value was empty or a parsing
@@ -588,7 +589,7 @@ public class DateField extends TextField {
      * @return the HTML head import statements for the control
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         // CLK-309. Skip imports if dateField is disabled, readonly or calendar
         // should not be displayed.
         if (isReadonly() || isDisabled() || !isShowCalendar()) {
@@ -748,7 +749,7 @@ public class DateField extends TextField {
         return null;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Validate the DateField request submission.
@@ -829,7 +830,7 @@ public class DateField extends TextField {
         }
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Render the calendar button HTML representation to the buffer.
@@ -885,7 +886,7 @@ public class DateField extends TextField {
      *
      * @param headElements the list of head elements to include for this control
      */
-    protected void addCalendarOptions(List headElements) {
+    protected void addCalendarOptions(List<Element> headElements) {
         String fieldId = getId();
         String imgId = fieldId + "-button";
 

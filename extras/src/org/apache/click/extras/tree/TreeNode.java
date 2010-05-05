@@ -56,7 +56,7 @@ import java.util.Random;
  */
 public class TreeNode implements Serializable {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     /** default serial version id. */
     private static final long serialVersionUID = 1L;
@@ -65,7 +65,7 @@ public class TreeNode implements Serializable {
      * not explicitly provided. */
     private final static Random RANDOM = new Random();
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** Each node must have a unique id in the tree. If a node is not provided
      * an id, one is generated using the java.util.Random class.*/
@@ -91,12 +91,12 @@ public class TreeNode implements Serializable {
     private TreeNode parent;
 
     /** List containing this nodes children. */
-    private List children;
+    private List<TreeNode> children;
 
     /** A custom icon the Tree will render for this node. */
     private String icon;
 
-    // ---------------------------------------------------- Public Constructors
+    // Public Constructors ----------------------------------------------------
 
     /**
      * Creates a default node with no value or id.
@@ -161,7 +161,7 @@ public class TreeNode implements Serializable {
         parent.add(this);
     }
 
-    // --------------------------------------------- Public Getters and Setters
+    // Public Getters and Setters ---------------------------------------------
 
     /**
      * Returns this node's parent object or null if parent is not specified.
@@ -228,8 +228,8 @@ public class TreeNode implements Serializable {
         if (this.childrenSupported != childrenSupported) {
             this.childrenSupported = childrenSupported;
             if (!childrenSupported) {
-                for (int i = 0; i < getChildren().size(); i++) {
-                    remove((TreeNode) children.get(i));
+                for (TreeNode child : getChildren()) {
+                    remove(child);
                 }
             }
         }
@@ -258,7 +258,7 @@ public class TreeNode implements Serializable {
      *
      * @return the unmodifiable list of children.
      */
-    public List getChildren() {
+    public List<TreeNode> getChildren() {
         if (children == null) {
             return Collections.EMPTY_LIST;
         }
@@ -324,7 +324,7 @@ public class TreeNode implements Serializable {
         this.icon = icon;
     }
 
-    // -------------------------------------------------------- Public Behavior
+    // Public Behavior --------------------------------------------------------
 
     /**
      * Adds the specified node as a child of this node and sets the child's parent
@@ -381,7 +381,7 @@ public class TreeNode implements Serializable {
             throw new IllegalArgumentException("null child specified");
         }
         if (getMutableChildren() == null) {
-            children = new ArrayList();
+            children = new ArrayList<TreeNode>();
         }
         if (children.contains(child)) {
             return;
@@ -401,7 +401,7 @@ public class TreeNode implements Serializable {
             throw new IllegalArgumentException("null child specified");
         }
         if (getMutableChildren() == null) {
-            children = new ArrayList();
+            children = new ArrayList<TreeNode>();
         }
         getMutableChildren().remove(child);
         child.setParent(null);
@@ -528,6 +528,7 @@ public class TreeNode implements Serializable {
      *
      * @see Object#equals(Object)
      */
+    @Override
     public boolean equals(Object thatObject) {
         if (thatObject == this) {
             return true;
@@ -549,6 +550,7 @@ public class TreeNode implements Serializable {
      * @return a hash code value for this object.
      * @see Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return getId().hashCode();
     }
@@ -558,6 +560,7 @@ public class TreeNode implements Serializable {
      *
      * @return string representation of this node
      */
+    @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("TreeNode -> [");
@@ -570,7 +573,7 @@ public class TreeNode implements Serializable {
         return buffer.toString();
     }
 
-    // ----------------------------------------------- Package-private Behavior
+    // Package Private Methods ------------------------------------------------
 
     /**
      * Sets this node to the specified selected state.
@@ -590,14 +593,14 @@ public class TreeNode implements Serializable {
         this.expanded = expanded;
     }
 
-    // ------------------------------------------------------- Private Behavior
+    // Private Behavior -------------------------------------------------------
 
     /**
      * Returns the list of mutable children of this node.
      *
      * @return mutable children of this node
      */
-    private List getMutableChildren() {
+    private List<TreeNode> getMutableChildren() {
         return children;
     }
 
