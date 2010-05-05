@@ -1200,7 +1200,7 @@ public class Page implements Serializable {
      * @param location the path to redirect the request to
      * @param params the map of request parameter name and value pairs
      */
-    public void setRedirect(String location, Map<String, ? extends Object> params) {
+    public void setRedirect(String location, Map<String, ?> params) {
         Context context = getContext();
         if (StringUtils.isNotBlank(location)) {
             if (location.charAt(0) == '/') {
@@ -1271,7 +1271,7 @@ public class Page implements Serializable {
      * with a unique path
      */
     public void setRedirect(Class<? extends Page> pageClass,
-        Map<String, ? extends Object> params) {
+        Map<String, ?> params) {
 
         String target = getContext().getPagePath(pageClass);
 
