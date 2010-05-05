@@ -316,7 +316,7 @@ public class VelocityTemplateService implements TemplateService {
      * @throws IOException if an IO error occurs
      * @throws TemplateException if template error occurs
      */
-    public void renderTemplate(Page page, Map<String, ? extends Object> model, Writer writer)
+    public void renderTemplate(Page page, Map<String, ?> model, Writer writer)
         throws IOException, TemplateException {
 
         String templatePath = page.getTemplate();
@@ -340,7 +340,7 @@ public class VelocityTemplateService implements TemplateService {
      * @throws IOException if an IO error occurs
      * @throws TemplateException if an error occurs
      */
-    public void renderTemplate(String templatePath, Map<String, ? extends Object> model, Writer writer)
+    public void renderTemplate(String templatePath, Map<String, ?> model, Writer writer)
         throws IOException, TemplateException {
 
         internalRenderTemplate(templatePath, null, model, writer);
@@ -507,7 +507,7 @@ public class VelocityTemplateService implements TemplateService {
      */
     protected void internalRenderTemplate(String templatePath,
                                           Page page,
-                                          Map<String, ? extends Object> model,
+                                          Map<String, ?> model,
                                           Writer writer)
         throws IOException, TemplateException {
 

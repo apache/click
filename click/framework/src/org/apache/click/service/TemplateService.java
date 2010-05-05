@@ -75,7 +75,7 @@ public interface TemplateService {
      * @throws IOException if an IO error occurs
      * @throws TemplateException if template error occurs
      */
-    public void renderTemplate(Page page, Map<String, ? extends Object> model, Writer writer)
+    public void renderTemplate(Page page, Map<String, ?> model, Writer writer)
         throws IOException, TemplateException;
 
     /**
@@ -87,7 +87,7 @@ public interface TemplateService {
      * @throws IOException if an IO error occurs
      * @throws TemplateException if template error occurs
      */
-    public void renderTemplate(String templatePath, Map<String, ? extends Object> model, Writer writer)
+    public void renderTemplate(String templatePath, Map<String, ?> model, Writer writer)
         throws IOException, TemplateException;
 
 }
