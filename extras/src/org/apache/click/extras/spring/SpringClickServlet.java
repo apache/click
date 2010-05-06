@@ -343,7 +343,7 @@ public class SpringClickServlet extends ClickServlet {
 
     /**
      * The Servlet initialization parameter name for the path to the Spring XML
-     * appliation context definition file: &nbsp; <tt>"spring-path"</tt>.
+     * application context definition file: &nbsp; <tt>"spring-path"</tt>.
      */
     public static final String SPRING_PATH = "spring-path";
 

@@ -149,7 +149,7 @@ public class DoubleField extends NumberField {
 
     /**
      * Return the field Double value, or null if value was empty or a parsing
-     * error occured.
+     * error occurred.
      *
      * @return the field Double value
      */

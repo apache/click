@@ -488,7 +488,7 @@ public class DateField extends TextField {
 
     /**
      * Return the Timestamp value, or null if value was empty
-     * or a parsing error occured.
+     * or a parsing error occurred.
      *
      * @return the Timestamp value
      */
@@ -528,7 +528,7 @@ public class DateField extends TextField {
 
     /**
      * Return the field Date value, or null if value was empty or a parsing
-     * error occured.
+     * error occurred.
      *
      * @return the Date object representation of the Field value
      */

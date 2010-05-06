@@ -498,7 +498,7 @@ public class TabbedPanel extends Panel {
             if (tabIndex >= 0 && tabIndex < getPanels().size()) {
                 Panel targetPanel = (Panel) getPanels().get(tabIndex);
                 if (!targetPanel.isDisabled()) {
-                    // Deactive panels
+                    // Deactivate panels
                     for (Panel panel : getPanels()) {
                         panel.setActive(false);
                     }

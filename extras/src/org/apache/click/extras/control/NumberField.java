@@ -60,7 +60,7 @@ import org.apache.click.util.ClickUtils;
  * <p/>
  * When the Number is set through {@link #setNumber(Number)} the value of the field
  * is also set to the formatted number. The number returned from
- * {@link #getNumber()} is then the formatted number. It is not the orginal Number
+ * {@link #getNumber()} is then the formatted number. It is not the original Number
  * passed in. To circumvent formatting use setValue().
  *
  * <a name="resources"></a>
