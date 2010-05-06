@@ -82,7 +82,7 @@ public class JobAndSimpleTrigger {
         long count = trigger.getRepeatCount();
 
         if (count == -1) {
-            return "Continously";
+            return "Continuously";
 
         } else if (count == 0) {
             return "Run once";

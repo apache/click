@@ -243,11 +243,11 @@ public class CustomerService extends CayenneTemplate {
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> getInvestmentCatetories() {
+    public List<String> getInvestmentCategories() {
         List categories = new ArrayList();
 
         categories.add("Bonds");
-        categories.add("Commerical Property");
+        categories.add("Commercial Property");
         categories.add("Options");
         categories.add("Residential Property");
         categories.add("Stocks");

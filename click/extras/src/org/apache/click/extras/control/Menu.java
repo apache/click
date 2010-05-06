@@ -1235,7 +1235,7 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Render an html represenatation of the menu list (&lt;ul&gt;) structure.
+     * Render an html representation of the menu list (&lt;ul&gt;) structure.
      * <p/>
      * <b>Please note</b>: the method
      * {@link #canRender(org.apache.click.extras.control.Menu, int) canRender(menu)}
@@ -1423,7 +1423,7 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Render an HTML represenatation of the menu as a separator.
+     * Render an HTML representation of the menu as a separator.
      *
      * @param buffer the buffer to render to
      * @param menu the menu to render as a separator

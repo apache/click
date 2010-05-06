@@ -105,7 +105,7 @@ import org.apache.click.util.PropertyUtils;
  * this problem you can set a
  * {@link #setDataProvider(org.apache.click.dataprovider.DataProvider) dataProvider}
  * which allows the PickList to fetch data when needed. This is
- * particularly useful if retrieveing PickList data is expensive e.g. loading
+ * particularly useful if retrieving PickList data is expensive e.g. loading
  * from a database.
  * <p/>
  * Below is a simple example:
@@ -520,12 +520,12 @@ public class PickList extends Field {
 
                 // Create and populate the optionList from the Iterable data
                 if (iterableData instanceof Collection) {
-                    // Popuplate optionList from options
+                    // Populate optionList from options
                     addAll((Collection) iterableData);
 
                 } else {
                     if (iterableData != null) {
-                        // Popuplate optionList from options
+                        // Populate optionList from options
                         for (Object option : iterableData) {
                             add(option);
                         }
