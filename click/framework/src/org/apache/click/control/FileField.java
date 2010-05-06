@@ -170,7 +170,7 @@ public class FileField extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the FileFields's html tag: <tt>input</tt>.
+     * Return the FileField's html tag: <tt>input</tt>.
      *
      * @see AbstractControl#getTag()
      *

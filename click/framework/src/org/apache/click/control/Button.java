@@ -30,7 +30,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * </table>
  *
  * The Button control is used to render a JavaScript enabled button which can
- * perform client side logic. The Button control provides no servier side
+ * perform client side logic. The Button control provides no server side
  * processing. If server side processing is required use {@link Submit} instead.
  *
  * <h3>Button Example</h3>

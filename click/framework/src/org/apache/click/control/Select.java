@@ -841,12 +841,12 @@ public class Select extends Field {
 
                 // Create and populate the optionList from the Iterable data
                 if (iterableData instanceof Collection) {
-                    // Popuplate optionList from options
+                    // Populate optionList from options
                     addAll((Collection) iterableData);
 
                 } else {
                     if (iterableData != null) {
-                        // Popuplate optionList from options
+                        // Populate optionList from options
                         for (Object option : iterableData) {
                             add(option);
                         }

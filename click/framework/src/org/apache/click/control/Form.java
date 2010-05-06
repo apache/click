@@ -309,7 +309,7 @@ import org.apache.commons.lang.StringUtils;
  * Alternatively you can use the Form {@link #startTag()} and {@link #endTag()}
  * methods to render this information.
  * <p/>
- * An example of a manually layed out Login form is provided below:
+ * An example of a manually laid out Login form is provided below:
  *
  * <pre class="codeHtml">
  * <span class="blue">$form.startTag()</span>
@@ -401,7 +401,7 @@ import org.apache.commons.lang.StringUtils;
  *  &lt;tr&gt;
  *    &lt;td colspan="2"&gt;
  *    <span class="red">#foreach</span> (<span class="blue">$button</span> <span class="red">in </span><span class="blue">$form.buttonList</span>)
- *      <span class="blue">$button</span> &amp;nbsp;
+ *      <span class="blue">$button</span> &amp;&nbsp;
  *    <span class="red">#end</span>
  *    &lt;/td&gt;
  *  &lt;/tr&gt;

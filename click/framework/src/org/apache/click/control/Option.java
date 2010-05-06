@@ -42,7 +42,7 @@ import org.apache.click.util.HtmlStringBuffer;
  *
  *     <span class="kw">static</span> {
  *         OptionGroup property = <span class="kw">new</span> OptionGroup(<span class="st">"Property"</span>);
- *         property.add(<span class="kw">new</span> Option(<span class="st">"Commerical Property"</span>, <span class="st">"Commercial"</span>));
+ *         property.add(<span class="kw">new</span> Option(<span class="st">"Commercial Property"</span>, <span class="st">"Commercial"</span>));
  *         property.add(<span class="kw">new</span> Option(<span class="st">"Residential Property"</span>, <span class="st">"Residential"</span>));
  *         INVESTMENT_OPTIONS.add(property);
  *
@@ -66,7 +66,7 @@ import org.apache.click.util.HtmlStringBuffer;
  *     <span class="kw">private</span> Select investmentsSelect = <span class="kw">new</span> InvestmentsSelect(<span class="st">"investments"</span>);;
  *
  *     <span class="kw">public</span> InvestmentsPage() {
- *         investmentsSelect.setMutliple(<span class="kw">true</span>);
+ *         investmentsSelect.setMultiple(<span class="kw">true</span>);
  *         investmentsSelect(7);
  *         form.add(investmentsSelect);
  *
@@ -80,7 +80,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * <table class="htmlExample"><tr><td>
  * <table class='form'><tr>
  * <td align='left'><label >Investments</label></td>
- * <td align='left'><select name='investments' size='7' multiple><optgroup label='Property'><option value='Commerical Property'>Commercial</option><option value='Residential Property'>Residential</option></optgroup><optgroup label='Securities'><option value='Bonds'>Bonds</option><option selected value='Options'>Options</option><option value='Stocks'>Stocks</option></optgroup></select></td>
+ * <td align='left'><select name='investments' size='7' multiple><optgroup label='Property'><option value='Commercial Property'>Commercial</option><option value='Residential Property'>Residential</option></optgroup><optgroup label='Securities'><option value='Bonds'>Bonds</option><option selected value='Options'>Options</option><option value='Stocks'>Stocks</option></optgroup></select></td>
  * </tr>
  * <tr><td colspan='2'>&nbsp;</td></tr>
  * <tr align='left'><td colspan='2'>
@@ -139,7 +139,7 @@ public class Option implements Serializable {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the Options's html tag: <tt>option</tt>.
+     * Return the Option's html tag: <tt>option</tt>.
      *
      * @return the Option's html tag
      */

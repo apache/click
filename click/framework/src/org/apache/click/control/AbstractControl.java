@@ -74,7 +74,7 @@ import org.apache.click.util.MessagesMap;
  *
  *     public boolean onProcess() {
  *         // Bind the request parameter to the field value
- *         String requestValue = getContext().getRequestParamter(getName());
+ *         String requestValue = getContext().getRequestParameter(getName());
  *         setValue(requestValue);
  *
  *         // Invoke any listener of MyField
@@ -124,7 +124,7 @@ import org.apache.click.util.MessagesMap;
  * <li>{@link #getMessages()}</li>
  * </ul>
  *
- * The order in which localized messages resolve are descibed in the
+ * The order in which localized messages resolve are described in the
  * <a href="../../../../../user-guide/html/ch03s04.html#message-resolution">user guide</a>.
  */
 public abstract class AbstractControl implements Control {

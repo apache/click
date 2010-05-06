@@ -165,9 +165,9 @@ public class ErrorReport {
                     int lineStart = line.indexOf(":");
                     if (lineStart != -1) {
                         int lineEnd = line.indexOf(")");
-                        String linenumber = line.substring(lineStart + 1, lineEnd);
+                        String lineNumber = line.substring(lineStart + 1, lineEnd);
 
-                        this.lineNumber = Integer.parseInt(linenumber);
+                        this.lineNumber = Integer.parseInt(lineNumber);
 
                         String filename =
                             "/" + classname.replace('.', '/') + ".java";

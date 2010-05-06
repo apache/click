@@ -515,7 +515,7 @@ public class FieldSet extends Field implements Container {
     }
 
     /**
-     * Return the fieldsets's html tag: <tt>fieldset</tt>.
+     * Return the fieldset's html tag: <tt>fieldset</tt>.
      *
      * @see AbstractControl#getTag()
      *
