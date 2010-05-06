@@ -44,7 +44,7 @@ public abstract class AbstractLink extends AbstractControl {
 
     private static final long serialVersionUID = 1L;
 
-    // ----------------------------------------------------- Instance Variables
+    // Instance Variables -----------------------------------------------------
 
     /** The Field disabled value. */
     protected boolean disabled;
@@ -74,7 +74,7 @@ public abstract class AbstractLink extends AbstractControl {
     /** Flag to set if both icon and text are rendered, default value is false. */
     protected boolean renderLabelAndImage = false;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create an AbstractLink for the given name.
@@ -94,7 +94,7 @@ public abstract class AbstractLink extends AbstractControl {
     public AbstractLink() {
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
 
     /**
      * Return the link html tag: <tt>a</tt>.
@@ -103,6 +103,7 @@ public abstract class AbstractLink extends AbstractControl {
      *
      * @return this controls html tag
      */
+    @Override
     public String getTag() {
         return "a";
     }
@@ -179,6 +180,7 @@ public abstract class AbstractLink extends AbstractControl {
      *
      * @return HTML element identifier attribute "id" value
      */
+    @Override
     public String getId() {
         if (hasAttributes()) {
             return getAttribute("id");
@@ -491,7 +493,7 @@ public abstract class AbstractLink extends AbstractControl {
         this.renderLabelAndImage = renderLabelAndImage;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     /**
      * This method does nothing by default since AbstractLink does not bind to
@@ -515,6 +517,7 @@ public abstract class AbstractLink extends AbstractControl {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         if (isDisabled()) {
@@ -569,7 +572,7 @@ public abstract class AbstractLink extends AbstractControl {
         }
     }
 
-    // ------------------------------------------------------ Protected Methods
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Render the Image tag to the buffer.
