@@ -66,7 +66,7 @@ public class OptionGroup implements Serializable {
     // -------------------------------------------------- Public Attributes
 
    /**
-     * Return the OptionGroups's html tag: <tt>optgroup</tt>.
+     * Return the OptionGroup's html tag: <tt>optgroup</tt>.
      *
      * @return the OptionGroup's html tag
      */

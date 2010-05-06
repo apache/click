@@ -30,7 +30,7 @@ import org.apache.click.Page;
  * customized to your needs.
  * <p/>
  * Applications which require additional error handling logic must subclass
- * the ErrorPage. For example to rollback a Connection if an SQLException occured:
+ * the ErrorPage. For example to rollback a Connection if an SQLException occurred:
  *
  * <pre class="codeJava">
  * <span class="kw">package</span> com.mycorp.util;

@@ -1277,7 +1277,7 @@ public class Table extends AbstractControl {
      * could be much larger than the number of entries in the {@link #rowList},
      * indicating that some rows have not been loaded yet.
      * <p/>
-     * This property is automatically set by the table to the approriate value.
+     * This property is automatically set by the table to the appropriate value.
      *
      * @return the total possible number of rows of the table
      */
@@ -1861,7 +1861,7 @@ public class Table extends AbstractControl {
     /**
      * Render the table banner detailing number of rows and number displayed.
      * <p/>
-     * See the <tt>/click-controls.properies</tt> for the HTML templates:
+     * See the <tt>/click-controls.properties</tt> for the HTML templates:
      * <tt>table-page-banner</tt> and <tt>table-page-banner-nolinks</tt>
      *
      * @deprecated use {@link #renderPaginator(HtmlStringBuffer)} instead, this
@@ -1903,7 +1903,7 @@ public class Table extends AbstractControl {
     /**
      * Render the table paging action link controls.
      * <p/>
-     * See the <tt>/click-controls.properies</tt> for the HTML templates:
+     * See the <tt>/click-controls.properties</tt> for the HTML templates:
      * <tt>table-page-links</tt> and <tt>table-page-links-nobanner</tt>
      *
      * @deprecated use {@link #renderPaginator(HtmlStringBuffer)} instead, this
@@ -2020,7 +2020,7 @@ public class Table extends AbstractControl {
     /**
      * Return true if a dark table style is selected, false otherwise.
      *
-     * @return true if a dark table style is selectd, false otherwise
+     * @return true if a dark table style is selected, false otherwise
      */
     private boolean isDarkStyle() {
 

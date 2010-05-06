@@ -1267,7 +1267,7 @@ public class ClickServlet extends HttpServlet {
      *         Page page = (Page) applicationContext.getBean(beanName);
      *
      *     } <span class="kw">else</span> {
-     *         page = (Page) pageClass.newIntance();
+     *         page = (Page) pageClass.newInstance();
      *     }
      *
      *     <span class="kw">return</span> page;

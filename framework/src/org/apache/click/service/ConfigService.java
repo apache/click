@@ -52,7 +52,7 @@ import org.apache.click.util.Format;
  * in your <tt>web.xml</tt> file.
  * <p/>
  * Below is an example of a custom service class
- * <tt>com.mycorp.service.CustomConfigSerivce</tt>:
+ * <tt>com.mycorp.service.CustomConfigService</tt>:
  *
  * <pre class="prettyprint">
  * package com.mycorp.service;
@@ -140,7 +140,7 @@ public interface ConfigService {
 
     /**
      * Destroy the ConfigurationService. This method will also invoke the
-     * <tt>onDestory()</tt> methods on the <tt>FileUploadService</tt>,
+     * <tt>onDestroy()</tt> methods on the <tt>FileUploadService</tt>,
      * <tt>TemplateService</tt>, <tt>ResourceService</tt> and the
      * <tt>LogService</tt> in that order.
      */

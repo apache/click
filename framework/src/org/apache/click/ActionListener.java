@@ -27,7 +27,7 @@ import java.io.Serializable;
  * <p/>
  * The class that is interested in processing an action event
  * implements this interface, and the object created with that class is
- * registered with a control, using the controls's <tt>setActionListener</tt>
+ * registered with a control, using the control's <tt>setActionListener</tt>
  * method. When the action event occurs, that object's <tt>onAction</tt> method
  * is invoked.
  *

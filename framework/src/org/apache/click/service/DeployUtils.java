@@ -61,7 +61,7 @@ import org.apache.click.util.ClickUtils;
  *Collection&lt;ActionBean&gt; beans = resolver.getClasses();
  *</pre>
  *
- * This class was copied and adpated from the Stripes Framework -
+ * This class was copied and adapted from the Stripes Framework -
  * <a href="http://www.stripesframework.org">Stripes</a>.
  *
  * @author Tim Fennell

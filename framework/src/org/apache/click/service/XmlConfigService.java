@@ -1297,7 +1297,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 // Google App Engine (GAE) can indicate that resources are deployable
                 // when they are not, and will throw an error if restricted classes
                 // such as FileOutputStream are accessed. We will log a warning
-                // to indicate that resources coule not be deployed.
+                // to indicate that resources could not be deployed.
                 isResourcesDeployable = false;
             }
         }
