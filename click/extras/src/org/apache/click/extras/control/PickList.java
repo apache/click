@@ -459,7 +459,7 @@ public class PickList extends Field {
 
     /**
      * Set the PickList option list DataProvider. The dataProvider can return
-     * any mixture of Option/String/Number/Boolean values.
+     * any mixture of Option and OptionGroup values.
      * <p/>
      * Example usage:
      *
@@ -485,7 +485,7 @@ public class PickList extends Field {
         if (dataProvider != null) {
             if (optionList != null) {
                 ClickUtils.getLogService().warn("please note that setting a"
-                    + " dataProvider will nullify the optionList");
+                    + " dataProvider nullifies the optionList");
             }
             setOptionList(null);
         }
@@ -511,19 +511,19 @@ public class PickList extends Field {
     public List getOptionList() {
         if (optionList == null) {
 
-            optionList = new ArrayList();
-
             DataProvider dp = getDataProvider();
 
             if (dp != null) {
                 Iterable iterableData = dp.getData();
 
-                // Create and populate the optionList from the Iterable data
-                if (iterableData instanceof Collection) {
-                    // Populate optionList from options
-                    addAll((Collection) iterableData);
+                if (iterableData instanceof List) {
+                    // Set optionList to data
+                    setOptionList((List) iterableData);
 
                 } else {
+                    // Create and populate the optionList from the Iterable data
+                    optionList = new ArrayList();
+
                     if (iterableData != null) {
                         // Populate optionList from options
                         for (Object option : iterableData) {
@@ -531,6 +531,9 @@ public class PickList extends Field {
                         }
                     }
                 }
+            } else {
+                // Create empty list
+                optionList = new ArrayList();
             }
         }
         return optionList;

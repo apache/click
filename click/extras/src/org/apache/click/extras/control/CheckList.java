@@ -504,7 +504,7 @@ public class CheckList extends Field {
 
     /**
      * Set the CheckList option list DataProvider. The dataProvider can return
-     * any mixture of Option/String/Number/Boolean values.
+     * any mixture of Option and OptionGroup values.
      * <p/>
      * Example usage:
      *
@@ -529,7 +529,7 @@ public class CheckList extends Field {
         if (dataProvider != null) {
             if (optionList != null) {
                 ClickUtils.getLogService().warn("please note that setting a"
-                    + " dataProvider will nullify the optionList");
+                    + " dataProvider nullifies the optionList");
             }
             setOptionList(null);
         }
@@ -726,19 +726,19 @@ public class CheckList extends Field {
     public List getOptionList() {
         if (optionList == null) {
 
-            optionList = new ArrayList();
-
             DataProvider dp = getDataProvider();
 
             if (dp != null) {
                 Iterable iterableData = dp.getData();
 
-                // Create and populate the optionList from the Iterable data
-                if (iterableData instanceof Collection) {
-                    // Popuplate optionList from options
-                    addAll((Collection) iterableData);
+                if (iterableData instanceof List) {
+                    // Set optionList to data
+                    setOptionList((List) iterableData);
 
                 } else {
+                    // Create and populate the optionList from the Iterable data
+                    optionList = new ArrayList();
+
                     if (iterableData != null) {
                         // Popuplate optionList from options
                         for (Object option : iterableData) {
@@ -746,6 +746,9 @@ public class CheckList extends Field {
                         }
                     }
                 }
+            } else {
+                // Create empty list
+                optionList = new ArrayList();
             }
         }
         return optionList;

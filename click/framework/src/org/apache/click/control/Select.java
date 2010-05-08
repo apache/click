@@ -498,7 +498,7 @@ public class Select extends Field {
      * @throws IllegalArgumentException if options is null, or the collection
      *     contains an unsupported class
      */
-    public void addAll(Collection<? extends Object> options) {
+    public void addAll(Collection<?> options) {
         if (options == null) {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
@@ -651,7 +651,7 @@ public class Select extends Field {
 
     /**
      * Set the select option list DataProvider. The dataProvider can return any
-     * mixture of Option/OptionGroup/String/Number/Boolean values.
+     * mixture of Option and OptionGroup values.
      * <p/>
      * Example usage:
      *
@@ -678,7 +678,7 @@ public class Select extends Field {
         if (dataProvider != null) {
             if (optionList != null) {
                 ClickUtils.getLogService().warn("please note that setting a"
-                    + " dataProvider will nullify the optionList");
+                    + " dataProvider nullifies the optionList");
             }
             setOptionList(null);
         }
@@ -827,31 +827,41 @@ public class Select extends Field {
     public List getOptionList() {
         if (optionList == null) {
 
-            optionList = new ArrayList();
-
             Option defaultOption = getDefaultOption();
-            if (defaultOption != null) {
-                optionList.add(defaultOption);
-            }
 
             DataProvider dp = getDataProvider();
 
             if (dp != null) {
                 Iterable iterableData = dp.getData();
 
-                // Create and populate the optionList from the Iterable data
-                if (iterableData instanceof Collection) {
-                    // Populate optionList from options
-                    addAll((Collection) iterableData);
+                if (iterableData instanceof List) {
+                    // Set optionList to data
+                    List listData = (List) iterableData;
+                    if (defaultOption != null) {
+                        // Insert default option as first option
+                        listData.add(0, defaultOption);
+                    }
+                    setOptionList(listData);
 
                 } else {
+                    // Create and populate the optionList from the Iterable data
+                    optionList = new ArrayList();
+
                     if (iterableData != null) {
+
+                        if (defaultOption != null) {
+                            optionList.add(defaultOption);
+                        }
+
                         // Populate optionList from options
                         for (Object option : iterableData) {
                             add(option);
                         }
                     }
                 }
+            } else {
+                // Create empty list
+                optionList = new ArrayList();
             }
         }
         return optionList;
