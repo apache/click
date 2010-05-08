@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a select Option element: &nbsp; &lt;option&gt;&lt;/option&gt;.
@@ -116,23 +118,29 @@ public class Option implements Serializable {
     /**
      * Create an Option with the given value and display label.
      * <p/>
-     * <b>Note:</b> the specified value will be converted to a String.
+     * <b>Note:</b> the specified value and label will be converted to a String.
      *
      * @param value the Option value
      * @param label the Option display label
      */
-    public Option(Object value, String label) {
+    public Option(Object value, Object label) {
         this.value = value.toString();
-        this.label = label;
+        if (label == null) {
+            this.label = "";
+        } else {
+            this.label = label.toString();
+        }
     }
 
     /**
      * Create an Option with the given value. The value will also be used
      * for the display label.
+     * <p/>
+     * <b>Note:</b> the specified value will be converted to a String.
      *
      * @param value the Option value and display label
      */
-    public Option(String value) {
+    public Option(Object value) {
         this(value, value);
     }
 

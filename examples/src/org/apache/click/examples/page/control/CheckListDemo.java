@@ -39,13 +39,13 @@ public class CheckListDemo extends BorderPage{
     static {
         List<Option> list = new ArrayList<Option>();
         for (int i = 1; i <= 4; i++) {
-            list.add(new Option(Integer.toString(i),
+            list.add(new Option(i,
                      "Tutam gallia deviso est in partes " + i));
         }
         STANDARD_OPTIONS = Collections.unmodifiableList(list);
 
         for(int i = 1; i <= 6; i++) {
-            SORTABLE_OPTIONS.add(new Option(Integer.toString(i),
+            SORTABLE_OPTIONS.add(new Option(i,
                                  "Drag to sort me " + i));
         }
     }
