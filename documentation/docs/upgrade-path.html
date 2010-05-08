@@ -173,6 +173,22 @@ public class MyPage extends BorderPage {
         Please note, for backward compatibility the autobinding attribute still
         accepts the <tt>public</tt> value.
       </li>
+      <li class="change">
+        Added new method <a href="click-api/org/apache/click/control/Container.html#replace(org.apache.click.control Control, org.apache.click.control Control)">Container.replace</a>
+        for replacing an existing control with a new control. AbstractContainer
+        has an implementation of this method which should cater for most use cases.
+        <p/>
+        If however you have custom controls that override the
+        <a href="click-api/org/apache/click/control/Container.html#insert(org.apache.click.Control, int)">insert</a> or
+        <a href="click-api/org/apache/click/control/Container.html#add(org.apache.click.Control)">add</a>
+        methods, you need to ensure that
+        <a href="click-api/org/apache/click/control/Container.html#replace(org.apache.click.Control, org.apache.click.Control)">replace</a>
+        will function correctly for your control.
+        <p/>
+        For example, if a custom insert method adds the control to an
+        internal list the <tt>replace</tt> method must be overridden to replace
+        the control on that list as well.
+      </li>
     </ul>
   </dd>
 
