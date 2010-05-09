@@ -488,7 +488,7 @@ public class FieldSet extends Field implements Container {
      */
     public Control getControl(String controlName) {
         if (hasControls()) {
-            return (Control) getControlMap().get(controlName);
+            return getControlMap().get(controlName);
         }
         return null;
     }

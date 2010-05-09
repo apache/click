@@ -1341,7 +1341,7 @@ public class MockRequest implements HttpServletRequest {
                 for (Iterator iterator = uploadedFiles.keySet().iterator(); iterator.hasNext();) {
                     String fieldName = (String) iterator.next();
 
-                    UploadedFile uf = (UploadedFile) uploadedFiles.get(fieldName);
+                    UploadedFile uf = uploadedFiles.get(fieldName);
 
                     newAttachment(out);
                     out.write("; name=\"".getBytes());

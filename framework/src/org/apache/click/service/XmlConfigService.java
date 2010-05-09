@@ -347,7 +347,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     public Format createFormat() {
         try {
-            return (Format) formatClass.newInstance();
+            return formatClass.newInstance();
 
         } catch (Exception e) {
             throw new RuntimeException(e);

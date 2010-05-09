@@ -86,13 +86,13 @@ public class SearchForm extends BorderPage {
         else if (type.equals("name")) {
             List<Customer> list = customerService.getCustomersForName(value);
             if (!list.isEmpty()) {
-                customer = (Customer) list.get(0);
+                customer = list.get(0);
             }
         }
         else if (type.equals("age")) {
             List<Customer> list = customerService.getCustomersForAge(value);
             if (!list.isEmpty()) {
-                customer = (Customer) list.get(0);
+                customer = list.get(0);
             }
         }
 

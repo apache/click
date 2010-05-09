@@ -71,7 +71,7 @@ public class ContactDetailsPage extends BorderPage {
         fieldset.add(paymentGroup);
 
         // Retrieve the paymentGroup's ListItem, and set its CSS class to "radio"
-        ListItem item = (ListItem) fieldset.getHtmlList().getLast();
+        ListItem item = fieldset.getHtmlList().getLast();
         item.setAttribute("class", "radio");
 
         fieldset.add(new TextField("cardholderName"));
