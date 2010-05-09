@@ -154,6 +154,7 @@
    <path id="classpath.checkstyle"> 
       <pathelement location="framework/classes"/>
       <pathelement location="extras/classes"/> 
+      <pathelement location="mock/classes"/> 
    	  <fileset dir="lib">
          <include name="**/*.jar"/>
       </fileset>
@@ -472,6 +473,7 @@
       <checkstyle config="build/checkstyle-checks.xml">
          <fileset dir="framework/src/org/apache/click/" includes="**/*.java"/>
          <fileset dir="extras/src" includes="**/*.java"/>
+         <fileset dir="mock/src" includes="**/*.java"/>
       	<classpath refid="classpath.checkstyle"/>
       </checkstyle>
    </target>
