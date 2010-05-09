@@ -1556,7 +1556,7 @@ public class ClickUtils {
             }
 
         } catch (IOException e) {
-            String msg = "error occured getting resource " + descriptorFile + ", error " + e;
+            String msg = "error occurred getting resource " + descriptorFile + ", error " + e;
             logService.warn(msg);
         }
     }
