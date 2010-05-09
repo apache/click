@@ -484,12 +484,7 @@ class DeployUtils<T> {
             // Failure to read the stream means this is not a JAR
 
         } finally {
-            try {
-                if (is != null) {
-                    is.close();
-                }
-            } catch (Exception e) {
-            }
+            ClickUtils.close(is);
         }
 
         return false;
