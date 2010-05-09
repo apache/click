@@ -198,7 +198,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      */
     public Control getControl(String controlName) {
         if (hasControls()) {
-            return (Control) getControlMap().get(controlName);
+            return getControlMap().get(controlName);
         }
         return null;
     }

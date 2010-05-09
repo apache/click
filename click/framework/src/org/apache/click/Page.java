@@ -797,7 +797,7 @@ public class Page implements Serializable {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
-        return (String) getMessages().get(name);
+        return getMessages().get(name);
     }
 
     /**

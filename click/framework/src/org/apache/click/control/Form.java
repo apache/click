@@ -1931,7 +1931,7 @@ public class Form extends AbstractContainer {
         if (isFormSubmission()) {
 
             for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
+                Control control = getControls().get(i);
                 String controlName = control.getName();
                 if (controlName == null || !controlName.startsWith(Form.SUBMIT_CHECK)) {
 
@@ -2445,7 +2445,7 @@ public class Form extends AbstractContainer {
             if (!isHidden(control)) {
 
                 // Control width
-                Integer width = (Integer) fieldWidths.get(control.getName());
+                Integer width = fieldWidths.get(control.getName());
 
                 if (column == 1) {
                     buffer.append("<tr class=\"fields\">\n");
@@ -2796,7 +2796,7 @@ public class Form extends AbstractContainer {
         // Set field focus
         boolean errorFieldFound = false;
         for (int i = 0, size = formFields.size(); i < size; i++) {
-            Field field = (Field) formFields.get(i);
+            Field field = formFields.get(i);
 
             if (field.getError() != null
                 && !field.isHidden()
@@ -2814,7 +2814,7 @@ public class Form extends AbstractContainer {
 
         if (!errorFieldFound) {
             for (int i = 0, size = formFields.size(); i < size; i++) {
-                Field field = (Field) formFields.get(i);
+                Field field = formFields.get(i);
 
                 if (field.getFocus()
                     && !field.isHidden()

@@ -114,7 +114,7 @@ public class Button extends Field {
      */
     public String getOnClick() {
         if (attributes != null) {
-            return (String) attributes.get("onclick");
+            return attributes.get("onclick");
         } else {
             return null;
         }
