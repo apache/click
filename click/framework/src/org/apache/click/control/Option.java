@@ -22,8 +22,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a select Option element: &nbsp; &lt;option&gt;&lt;/option&gt;.
