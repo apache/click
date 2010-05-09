@@ -310,7 +310,7 @@ public class ActionButton extends Button {
      */
     public String getParameter(String name) {
         if (hasParameters()) {
-            return (String) getParameters().get(name);
+            return getParameters().get(name);
         } else {
             return null;
         }
@@ -368,7 +368,7 @@ public class ActionButton extends Button {
      */
     public String getValue() {
         if (hasParameters()) {
-            return (String) getParameters().get(VALUE);
+            return getParameters().get(VALUE);
         } else {
             return null;
         }

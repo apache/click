@@ -2219,7 +2219,7 @@ public class ClickUtils {
                     control = (Control) parent;
                     if (control != null) {
                         if (control.getMessages().containsKey(name)) {
-                            message = (String) control.getMessages().get(name);
+                            message = control.getMessages().get(name);
                         }
                     }
 
@@ -2231,7 +2231,7 @@ public class ClickUtils {
                 } else if (parent instanceof Page) {
                     Page page = (Page) parent;
                     if (page.getMessages().containsKey(name)) {
-                        message = (String) page.getMessages().get(name);
+                        message = page.getMessages().get(name);
                     }
                     return message;
 
@@ -2710,7 +2710,7 @@ public class ClickUtils {
      */
     private static void bind(Container container, Context context) {
         for (int i = 0; i < container.getControls().size(); i++) {
-            Control control = (Control) container.getControls().get(i);
+            Control control = container.getControls().get(i);
             if (control instanceof Container) {
                 // Include fields but skip fieldSets
                 if (control instanceof Field) {
@@ -2749,7 +2749,7 @@ public class ClickUtils {
     private static boolean bindAndValidate(Container container, Context context) {
         boolean valid = true;
         for (int i = 0; i < container.getControls().size(); i++) {
-            Control control = (Control) container.getControls().get(i);
+            Control control = container.getControls().get(i);
             if (control instanceof Container) {
 
                 // Include fields but skip fieldSets

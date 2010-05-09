@@ -842,7 +842,7 @@ public class FieldSet extends Field implements Container {
     public void onDestroy() {
         if (hasControls()) {
             for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
+                Control control = getControls().get(i);
                 try {
                     control.onDestroy();
                 } catch (Throwable t) {
@@ -860,7 +860,7 @@ public class FieldSet extends Field implements Container {
         super.onInit();
         if (hasControls()) {
             for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
+                Control control = getControls().get(i);
                 control.onInit();
             }
         }
@@ -873,7 +873,7 @@ public class FieldSet extends Field implements Container {
     public void onRender() {
         if (hasControls()) {
             for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
+                Control control = getControls().get(i);
                 control.onRender();
             }
         }

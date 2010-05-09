@@ -329,7 +329,7 @@ public class Column implements Serializable {
      * @return the Column HTML attribute
      */
     public String getAttribute(String name) {
-        return (String) getAttributes().get(name);
+        return getAttributes().get(name);
     }
 
     /**
@@ -449,7 +449,7 @@ public class Column implements Serializable {
      */
     public String getDataStyle(String name) {
         if (hasDataStyles()) {
-            return (String) getDataStyles().get(name);
+            return getDataStyles().get(name);
 
         } else {
             return null;
@@ -889,7 +889,7 @@ public class Column implements Serializable {
      */
     public String getHeaderStyle(String name) {
         if (hasHeaderStyles()) {
-            return (String) getHeaderStyles().get(name);
+            return getHeaderStyles().get(name);
 
         } else {
             return null;

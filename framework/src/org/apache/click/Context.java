@@ -824,7 +824,7 @@ public class Context {
      * @return stack data structure where Context's are stored
      */
     static ContextStack getContextStack() {
-        ContextStack contextStack = (ContextStack) THREAD_LOCAL_CONTEXT.get();
+        ContextStack contextStack = THREAD_LOCAL_CONTEXT.get();
 
         if (contextStack == null) {
             contextStack = new ContextStack(2);
@@ -938,7 +938,7 @@ public class Context {
                 throw new RuntimeException(msg);
             }
 
-            return (Context) get(length - 1);
+            return get(length - 1);
         }
     }
 

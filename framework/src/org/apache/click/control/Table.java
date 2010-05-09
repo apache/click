@@ -634,7 +634,7 @@ public class Table extends AbstractControl {
      * @param name the name of the column to remove from the table
      */
     public void removeColumn(String name) {
-        Column column = (Column) getColumns().get(name);
+        Column column = getColumns().get(name);
         removeColumn(column);
     }
 
@@ -685,7 +685,7 @@ public class Table extends AbstractControl {
      * @return the Column for the given name
      */
     public Column getColumn(String name) {
-        return (Column) columns.get(name);
+        return columns.get(name);
     }
 
     /**
@@ -1336,7 +1336,7 @@ public class Table extends AbstractControl {
         super.onInit();
         getControlLink().onInit();
         for (int i = 0, size = getControls().size(); i < size; i++) {
-            Control control = (Control) getControls().get(i);
+            Control control = getControls().get(i);
             control.onInit();
         }
     }
@@ -1350,7 +1350,7 @@ public class Table extends AbstractControl {
     public void onRender() {
         getControlLink().onRender();
         for (int i = 0, size = getControls().size(); i < size; i++) {
-            Control control = (Control) getControls().get(i);
+            Control control = getControls().get(i);
             control.onRender();
         }
     }
@@ -1394,7 +1394,7 @@ public class Table extends AbstractControl {
 
         boolean continueProcessing = true;
         for (int i = 0, size = getControls().size(); i < size; i++) {
-            Control control = (Control) getControls().get(i);
+            Control control = getControls().get(i);
             continueProcessing = control.onProcess();
             if (!continueProcessing) {
                 continueProcessing = false;
@@ -1418,7 +1418,7 @@ public class Table extends AbstractControl {
 
         getControlLink().onDestroy();
         for (int i = 0, size = getControls().size(); i < size; i++) {
-            Control control = (Control) getControls().get(i);
+            Control control = getControls().get(i);
             try {
                 control.onDestroy();
             } catch (Throwable t) {
@@ -2007,7 +2007,7 @@ public class Table extends AbstractControl {
     protected void sortRowList() {
         if (!isSorted() && StringUtils.isNotBlank(getSortedColumn())) {
 
-            Column column = (Column) getColumns().get(getSortedColumn());
+            Column column = getColumns().get(getSortedColumn());
 
             Collections.sort(getRowList(), column.getComparator());
 

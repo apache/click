@@ -239,7 +239,7 @@ public abstract class AbstractControl implements Control {
      */
      public String getAttribute(String name) {
         if (hasAttributes()) {
-            return (String) getAttributes().get(name);
+            return getAttributes().get(name);
         }
         return null;
     }
@@ -402,7 +402,7 @@ public abstract class AbstractControl implements Control {
         message = ClickUtils.getParentMessage(this, name);
 
         if (message == null && getMessages().containsKey(name)) {
-            message = (String) getMessages().get(name);
+            message = getMessages().get(name);
         }
 
         return message;

@@ -63,7 +63,7 @@ public class Element implements Serializable {
      */
      public String getAttribute(String name) {
         if (hasAttributes()) {
-            return (String) getAttributes().get(name);
+            return getAttributes().get(name);
         }
         return null;
     }

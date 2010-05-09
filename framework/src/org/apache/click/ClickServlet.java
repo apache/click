@@ -1282,7 +1282,7 @@ public class ClickServlet extends HttpServlet {
     protected Page newPageInstance(String path, Class<? extends Page> pageClass,
             HttpServletRequest request) throws Exception {
 
-        return (Page) pageClass.newInstance();
+        return pageClass.newInstance();
     }
 
     /**
@@ -1493,7 +1493,7 @@ public class ClickServlet extends HttpServlet {
                     converter = ClickUtils.classForName(classname);
                 }
 
-                typeConverter = (TypeConverter) converter.newInstance();
+                typeConverter = converter.newInstance();
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -1654,7 +1654,7 @@ public class ClickServlet extends HttpServlet {
             serviceClass = ClickUtils.classForName(classname);
         }
 
-        return (ConfigService) serviceClass.newInstance();
+        return serviceClass.newInstance();
     }
 
     /**
@@ -1753,7 +1753,7 @@ public class ClickServlet extends HttpServlet {
 
     List<PageInterceptor> getThreadLocalInterceptors() {
         List<PageInterceptor> listeners =
-            (List<PageInterceptor>) THREAD_LOCAL_INTERCEPTORS.get();
+                THREAD_LOCAL_INTERCEPTORS.get();
 
         if (listeners != null) {
             return listeners;

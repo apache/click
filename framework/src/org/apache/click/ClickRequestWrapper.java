@@ -85,7 +85,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
                 }
 
                 for (int i = 0; i < itemsList.size(); i++) {
-                    FileItem fileItem = (FileItem) itemsList.get(i);
+                    FileItem fileItem = itemsList.get(i);
 
                     String name = fileItem.getFieldName();
                     String value = null;
