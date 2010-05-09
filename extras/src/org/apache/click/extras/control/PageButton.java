@@ -18,6 +18,7 @@
  */
 package org.apache.click.extras.control;
 
+import org.apache.click.Page;
 import org.apache.click.control.PageLink;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -81,7 +82,7 @@ public class PageButton extends PageLink {
      * @param targetPage the target page class
      * @throws IllegalArgumentException if the name is null
      */
-    public PageButton(String name, Class targetPage) {
+    public PageButton(String name, Class<? extends Page> targetPage) {
         super(name, targetPage);
     }
 
@@ -93,7 +94,8 @@ public class PageButton extends PageLink {
      * @param targetPage the target page class
      * @throws IllegalArgumentException if the name is null
      */
-    public PageButton(String name, String label, Class targetPage) {
+    public PageButton(String name, String label,
+                      Class<? extends Page> targetPage) {
         super(name, label, targetPage);
     }
 
@@ -103,7 +105,7 @@ public class PageButton extends PageLink {
      * @param targetPage the target page class
      * @throws IllegalArgumentException if the name is null
      */
-    public PageButton(Class targetPage) {
+    public PageButton(Class<? extends Page> targetPage) {
         super(targetPage);
     }
 

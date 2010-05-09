@@ -56,7 +56,7 @@ public class PageSubmit extends Submit {
     private static final long serialVersionUID = 1L;
 
     /** The target page to redirect to. */
-    protected Class pageClass;
+    protected Class<? extends Page> pageClass;
 
     // ----------------------------------------------------------- Constructors
 
