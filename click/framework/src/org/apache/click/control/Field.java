@@ -834,7 +834,7 @@ public abstract class Field extends AbstractControl {
      * <tt>/click-control.properties</tt> file using the same key. If still
      * not found the title will be left as null and will not be rendered.
      * <p/>
-     * For examle given a <tt>CustomerPage</tt> with the properties file
+     * For example given a <tt>CustomerPage</tt> with the properties file
      * <tt>CustomerPage.properties</tt>:
      *
      * <pre class="codeConfig">
