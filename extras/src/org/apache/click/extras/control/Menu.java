@@ -1142,7 +1142,7 @@ public class Menu extends AbstractControl {
             root = (Menu) parentMenu;
             parentMenu = root.getParent();
         }
-        return (Menu) root;
+        return root;
     }
 
     /**

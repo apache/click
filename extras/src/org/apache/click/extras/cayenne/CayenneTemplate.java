@@ -146,7 +146,7 @@ public class CayenneTemplate {
     protected Connection getConnection() throws SQLException {
         DataDomain domain = Configuration.getSharedConfiguration().getDomain();
 
-        DataNode node = (DataNode) domain.getDataNodes().iterator().next();
+        DataNode node = domain.getDataNodes().iterator().next();
 
         return node.getDataSource().getConnection();
     }

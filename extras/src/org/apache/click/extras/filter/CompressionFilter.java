@@ -151,7 +151,7 @@ public class CompressionFilter implements Filter {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        final String path = ClickUtils.getResourcePath((HttpServletRequest) request);
+        final String path = ClickUtils.getResourcePath(request);
         supportCompression = useGzipCompression(request, response, path);
 
         if (!supportCompression) {
@@ -210,7 +210,7 @@ public class CompressionFilter implements Filter {
         }
 
         // Are we allowed to compress ?
-        String s = ((HttpServletRequest) request).getParameter("gzip");
+        String s = request.getParameter("gzip");
         if ("false".equals(s)) {
             return false;
         }

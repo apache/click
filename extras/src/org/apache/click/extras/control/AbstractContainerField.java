@@ -221,7 +221,7 @@ public abstract class AbstractContainerField extends Field implements Container 
      */
     public Control getControl(String controlName) {
         if (hasControls()) {
-            return (Control) getControlMap().get(controlName);
+            return getControlMap().get(controlName);
         }
         return null;
     }
@@ -314,7 +314,7 @@ public abstract class AbstractContainerField extends Field implements Container 
     public void onDestroy() {
         if (hasControls()) {
             for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
+                Control control = getControls().get(i);
                 try {
                     control.onDestroy();
                 } catch (Throwable t) {
@@ -332,7 +332,7 @@ public abstract class AbstractContainerField extends Field implements Container 
         super.onInit();
         if (hasControls()) {
             for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
+                Control control = getControls().get(i);
                 control.onInit();
             }
         }
@@ -345,7 +345,7 @@ public abstract class AbstractContainerField extends Field implements Container 
     public void onRender() {
         if (hasControls()) {
             for (int i = 0, size = getControls().size(); i < size; i++) {
-                Control control = (Control) getControls().get(i);
+                Control control = getControls().get(i);
                 control.onRender();
             }
         }
@@ -435,7 +435,7 @@ public abstract class AbstractContainerField extends Field implements Container 
     protected void renderChildren(HtmlStringBuffer buffer) {
         if (hasControls()) {
             for (int i = 0; i < getControls().size(); i++) {
-                Control control = (Control) getControls().get(i);
+                Control control = getControls().get(i);
 
                 int before = buffer.length();
                 control.render(buffer);

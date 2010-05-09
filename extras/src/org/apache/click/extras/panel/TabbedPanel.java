@@ -409,7 +409,7 @@ public class TabbedPanel extends Panel {
         initActivePanel();
 
         for (int i = 0, size = getControls().size(); i < size; i++) {
-            Control control = (Control) getControls().get(i);
+            Control control = getControls().get(i);
             if (control instanceof Panel) {
                 if (control == getActivePanel()) {
                     control.onInit();
@@ -434,7 +434,7 @@ public class TabbedPanel extends Panel {
         boolean continueProcessing = true;
 
         for (int i = 0, size = getControls().size(); i < size; i++) {
-            Control control = (Control) getControls().get(i);
+            Control control = getControls().get(i);
             if (control instanceof Panel) {
                 if (control == getActivePanel()) {
                     if (!control.onProcess()) {
@@ -463,7 +463,7 @@ public class TabbedPanel extends Panel {
     @Override
     public void onRender() {
         for (int i = 0, size = getControls().size(); i < size; i++) {
-            Control control = (Control) getControls().get(i);
+            Control control = getControls().get(i);
             if (control instanceof Panel) {
                 if (control == getActivePanel()) {
                     control.onRender();
@@ -496,7 +496,7 @@ public class TabbedPanel extends Panel {
         if (NumberUtils.isNumber(tabPanelIndex)) {
             int tabIndex = Integer.parseInt(tabPanelIndex);
             if (tabIndex >= 0 && tabIndex < getPanels().size()) {
-                Panel targetPanel = (Panel) getPanels().get(tabIndex);
+                Panel targetPanel = getPanels().get(tabIndex);
                 if (!targetPanel.isDisabled()) {
                     // Deactivate panels
                     for (Panel panel : getPanels()) {
@@ -515,7 +515,7 @@ public class TabbedPanel extends Panel {
 
                 // Check which panel user selected and set that Panel as active
                 for (int i = 0; i < getPanels().size(); i++) {
-                    Panel panel = (Panel) getPanels().get(i);
+                    Panel panel = getPanels().get(i);
 
                     // Deactivate panel
                     panel.setActive(false);
