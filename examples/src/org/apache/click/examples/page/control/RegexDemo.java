@@ -49,7 +49,7 @@ public class RegexDemo extends BorderPage {
         form.add(urlField);
 
         form.add(new Submit("submit", "  OK  "));
-        form.add(new PageSubmit("cancel", HomePage.class));;
+        form.add(new PageSubmit("cancel", HomePage.class));
     }
 
 }

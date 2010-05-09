@@ -377,10 +377,7 @@ public class ActionEventDispatcher {
          * @return true if the dispatcher has any Action Events registered
          */
         public boolean hasActionEvents() {
-            if (eventListenerList == null || eventListenerList.isEmpty()) {
-                return false;
-            }
-            return true;
+            return !(eventListenerList == null || eventListenerList.isEmpty());
         }
 
         /**

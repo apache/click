@@ -1328,12 +1328,7 @@ public class Page implements Serializable {
      * {@link #getPath()}
      */
     public String getTemplate() {
-        if (template == null) {
-            return getPath();
-
-        } else {
-            return template;
-        }
+        return template == null ? getPath() : template;
     }
 
     /**

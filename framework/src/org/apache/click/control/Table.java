@@ -757,7 +757,7 @@ public class Table extends AbstractControl {
      * @return true if the table has any controls defined
      */
     public boolean hasControls() {
-        return (controlList == null) ? false : !controlList.isEmpty();
+        return (controlList != null) && !controlList.isEmpty();
     }
 
     /**

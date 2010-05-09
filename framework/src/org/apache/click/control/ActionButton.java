@@ -353,11 +353,7 @@ public class ActionButton extends Button {
      * @return true if the ActionButton has parameters on false otherwise
      */
     public boolean hasParameters() {
-        if (parameters != null && !parameters.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return parameters != null && !parameters.isEmpty();
     }
 
     /**
