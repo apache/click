@@ -415,9 +415,9 @@ public class TextArea extends Field {
         args[3] = String.valueOf(getMaxLength());
         args[4] = getMessage("field-required-error", getErrorLabel());
         args[5] = getMessage("field-minlength-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMinLength())});
+                getErrorLabel(), String.valueOf(getMinLength()));
         args[6] = getMessage("field-maxlength-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMaxLength())});
+                getErrorLabel(), String.valueOf(getMaxLength()));
         return MessageFormat.format(VALIDATE_TEXTAREA_FUNCTION, args);
     }
 }
