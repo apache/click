@@ -145,7 +145,7 @@ public class CreditCardField extends TextField {
     public static final String DISCOVER = "DISCOVER";
 
     /** The statically initialized card type options list. */
-    protected static final List CARD_OPTIONS = new ArrayList();
+    protected static final List<Option> CARD_OPTIONS = new ArrayList<Option>();
 
     /** The card type Select name. */
     protected static final String SELECT_NAME = "cardType";
