@@ -844,7 +844,7 @@ public class ContainerUtils {
                 buffer.append("Attempt to construct instance of class '");
                 buffer.append(targetClass.getName()).append("' resulted in error: '");
                 buffer.append(targetClass.getName()).append("' does not seem");
-                buffer.append(" to have a default no argument constrcutor.");
+                buffer.append(" to have a default no argument constructor.");
                 buffer.append(" Please note another common problem is that the");
                 buffer.append(" class is either not public or not static.");
                 throw new RuntimeException(buffer.toString(), e);
