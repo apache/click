@@ -740,7 +740,7 @@ public class CheckList extends Field {
                     optionList = new ArrayList();
 
                     if (iterableData != null) {
-                        // Popuplate optionList from options
+                        // Populate optionList from options
                         for (Object option : iterableData) {
                             add(option);
                         }
