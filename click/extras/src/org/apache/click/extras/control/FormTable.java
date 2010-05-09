@@ -323,7 +323,7 @@ public class FormTable extends Table {
             int lastRow = getLastRow();
 
             for (int i = 0; i < getColumnList().size(); i++) {
-                Column column = (Column) getColumnList().get(i);
+                Column column = getColumnList().get(i);
                 if (column instanceof FieldColumn) {
                     Field field = ((FieldColumn) column).getField();
 

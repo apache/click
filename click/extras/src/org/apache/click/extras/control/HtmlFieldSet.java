@@ -214,7 +214,7 @@ public class HtmlFieldSet extends FieldSet {
     protected void renderChildren(HtmlStringBuffer buffer) {
         if (hasControls()) {
             for (int i = 0; i < getControls().size(); i++) {
-                Control control = (Control) getControls().get(i);
+                Control control = getControls().get(i);
 
                 int before = buffer.length();
                 control.render(buffer);

@@ -222,7 +222,7 @@ public class HtmlForm extends Form {
     protected void renderChildren(HtmlStringBuffer buffer) {
         if (hasControls()) {
             for (int i = 0; i < getControls().size(); i++) {
-                Control control = (Control) getControls().get(i);
+                Control control = getControls().get(i);
 
                 // Don't render hidden fields again.
                 if (control instanceof Field) {

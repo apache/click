@@ -252,7 +252,7 @@ public class SubmitLink extends ActionLink {
      */
     public String getOnClick() {
         if (attributes != null) {
-            return (String) attributes.get("onclick");
+            return attributes.get("onclick");
         } else {
             return null;
         }
