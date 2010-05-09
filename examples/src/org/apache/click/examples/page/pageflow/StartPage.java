@@ -79,7 +79,7 @@ public class StartPage extends BorderPage {
         customerSelect.setDataProvider(new DataProvider() {
 
             public List getData() {
-                List optionList = new ArrayList();
+                List<Option> optionList = new ArrayList<Option>();
                 List<Customer> customerList = customerService.getCustomers();
                 for (Customer customer : customerList) {
                     optionList.add(new Option(customer.getId(),
@@ -175,7 +175,7 @@ public class StartPage extends BorderPage {
             // Create a model to pass to the Page JavaScript template. The
             // template recognizes the following Velocity variables:
             // $context, $path, $selector and $target
-            Map model = ClickUtils.createTemplateModel(this, context);
+            Map<String, Object> model = ClickUtils.createTemplateModel(this, context);
 
             // Set path to the AjaxCustomer Page path
             model.put("path", context.getPagePath(AjaxCustomer.class));

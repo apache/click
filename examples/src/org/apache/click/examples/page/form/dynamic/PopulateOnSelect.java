@@ -140,7 +140,7 @@ public class PopulateOnSelect extends BorderPage {
         state.setDataProvider(new DataProvider() {
 
             public List getData() {
-                List optionList = new ArrayList();
+                List<Option> optionList = new ArrayList<Option>();
                 optionList.add(new Option(EASTERN_CAPE, "Eastern Cape"));
                 optionList.add(new Option(FREE_STATE, "Free State"));
                 optionList.add(new Option(GAUTENG_PROVINCE, "Gauteng Province"));
@@ -154,7 +154,7 @@ public class PopulateOnSelect extends BorderPage {
         city.setDataProvider(new DataProvider() {
 
             public List getData() {
-                List optionList = new ArrayList();
+                List<Option> optionList = new ArrayList<Option>();
 
                 if (EASTERN_CAPE.equals(stateCode)) {
                     optionList.add(new Option("Port Elizabeth"));
@@ -181,7 +181,7 @@ public class PopulateOnSelect extends BorderPage {
         suburb.setDataProvider(new DataProvider() {
 
             public List getData() {
-                List optionList = new ArrayList();
+                List<Option> optionList = new ArrayList<Option>();
 
                 if (cityCode.equals("Port Elizabeth")) {
                     optionList.add(new Option("Humewood"));

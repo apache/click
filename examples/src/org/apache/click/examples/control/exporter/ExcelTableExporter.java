@@ -58,7 +58,7 @@ public class ExcelTableExporter extends AbstractTableExporter {
 
     private Currency currency;
 
-    private Map<String, HSSFCellStyle> cellStyles = new HashMap();
+    private Map<String, HSSFCellStyle> cellStyles = new HashMap<String, HSSFCellStyle>();
 
     public ExcelTableExporter() {
     }
@@ -177,8 +177,7 @@ public class ExcelTableExporter extends AbstractTableExporter {
     }
 
     protected HSSFWorkbook createWorkbook() {
-        HSSFWorkbook wb = new HSSFWorkbook();
-        return wb;
+        return new HSSFWorkbook();
     }
 
     protected void createCellStyles(ExportTable table, HSSFSheet sheet,
