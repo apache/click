@@ -101,10 +101,10 @@ public class FieldSet extends Field implements Container {
     // Instance Variables -----------------------------------------------------
 
     /** The list of controls. */
-    protected List controls;
+    protected List<Control> controls;
 
     /** The map of controls keyed by field name. */
-    protected Map controlMap;
+    protected Map<String, Control> controlMap;
 
     /** The ordered list of fields, excluding buttons. */
     protected final List fieldList = new ArrayList();
@@ -475,7 +475,7 @@ public class FieldSet extends Field implements Container {
      */
     public List<Control> getControls() {
         if (controls == null) {
-            controls = new ArrayList();
+            controls = new ArrayList<Control>();
         }
         return controls;
     }
@@ -966,7 +966,7 @@ public class FieldSet extends Field implements Container {
      */
     protected Map<String, Control> getControlMap() {
         if (controlMap == null) {
-            controlMap = new HashMap();
+            controlMap = new HashMap<String, Control>();
         }
         return controlMap;
     }
