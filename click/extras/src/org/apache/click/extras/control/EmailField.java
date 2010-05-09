@@ -219,9 +219,9 @@ public class EmailField extends TextField {
         args[3] = String.valueOf(getMaxLength());
         args[4] = getMessage("field-required-error", getErrorLabel());
         args[5] = getMessage("field-minlength-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMinLength())});
+                getErrorLabel(), String.valueOf(getMinLength()));
         args[6] = getMessage("field-maxlength-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMaxLength())});
+                getErrorLabel(), String.valueOf(getMaxLength()));
         args[7] = getMessage("email-format-error", getErrorLabel());
 
         return MessageFormat.format(VALIDATE_EMAILFIELD_FUNCTION, args);

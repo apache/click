@@ -105,7 +105,7 @@ public class TableFooter extends BorderPage {
         }
 
         String format = "<b>Total Holdings</b>: &nbsp; ${0,number,#,##0.00}";
-        String totalDisplay = MessageFormat.format(format, new Object[] { new Double(total) });
+        String totalDisplay = MessageFormat.format(format, new Double(total));
 
         buffer.append("<tfoot><tr><td colspan='4' style='text-align:right'>");
         buffer.append(totalDisplay);
