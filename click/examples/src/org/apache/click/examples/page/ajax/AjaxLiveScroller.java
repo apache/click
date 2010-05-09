@@ -77,7 +77,7 @@ public class AjaxLiveScroller extends BorderPage {
 
             // Create a default model and add the pageSize variable to pass to
             // the JavaScript template: ajax-live-scroller.js
-            Map model = ClickUtils.createTemplateModel(this, getContext());
+            Map<String, Object> model = ClickUtils.createTemplateModel(this, getContext());
             model.put("pageSize", pageSize);
 
             // Note the actual JavaScript necessary to setup the dynamic scrolling

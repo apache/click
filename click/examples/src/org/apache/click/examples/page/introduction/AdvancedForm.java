@@ -90,8 +90,7 @@ public class AdvancedForm extends BorderPage {
         investmentSelect.setDataProvider(new DataProvider() {
 
             public List getData() {
-                List categories = customerService.getInvestmentCategories();
-                return categories;
+                return customerService.getInvestmentCategories();
             }
         });
     }

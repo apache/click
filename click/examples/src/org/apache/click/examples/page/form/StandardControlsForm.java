@@ -155,7 +155,7 @@ public class StandardControlsForm extends BorderPage {
     // Private Methods --------------------------------------------------------
 
     private List createOptionList(List<Customer> customers) {
-        List optionList = new ArrayList();
+        List<Option> optionList = new ArrayList<Option>();
         for (Customer customer : customers) {
             optionList.add(new Option(customer.getId(), customer.getName()));
         }
