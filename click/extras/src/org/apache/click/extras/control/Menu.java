@@ -761,11 +761,7 @@ public class Menu extends AbstractControl {
      * @return true if the menu has roles defined, false otherwise
      */
     public boolean hasRoles() {
-        if (roles != null) {
-            return !roles.isEmpty();
-        } else {
-            return false;
-        }
+        return roles != null && !roles.isEmpty();
     }
 
     /**

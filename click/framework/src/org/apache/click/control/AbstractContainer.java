@@ -219,7 +219,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      * @return true if the container has existing controls, false otherwise.
      */
     public boolean hasControls() {
-        return (controls == null) ? false : !controls.isEmpty();
+        return (controls != null) && !controls.isEmpty();
     }
 
     /**

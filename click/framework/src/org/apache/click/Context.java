@@ -286,12 +286,7 @@ public class Context {
      * @return true if the HTTP request method is "GET"
      */
     public boolean isGet() {
-        if (isPost) {
-            return false;
-
-        } else {
-            return getRequest().getMethod().equalsIgnoreCase("GET");
-        }
+        return !isPost && getRequest().getMethod().equalsIgnoreCase("GET");
     }
 
     /**

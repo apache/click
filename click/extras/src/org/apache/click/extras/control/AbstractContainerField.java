@@ -244,7 +244,7 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return true if the container has existing controls, false otherwise.
      */
     public boolean hasControls() {
-        return (controls == null) ? false : !controls.isEmpty();
+        return (controls != null) && !controls.isEmpty();
     }
 
     /**

@@ -395,11 +395,7 @@ public abstract class AbstractLink extends AbstractControl {
      * @return true if the AbstractLink has parameters, false otherwise
      */
     public boolean hasParameters() {
-        if (parameters != null && !parameters.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return parameters != null && !parameters.isEmpty();
     }
 
     /**

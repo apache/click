@@ -105,11 +105,7 @@ public class Element implements Serializable {
      * @return true if the Element has attributes on false otherwise
      */
     public boolean hasAttributes() {
-        if (attributes != null) {
-            return !attributes.isEmpty();
-        } else {
-            return false;
-        }
+        return attributes != null && !attributes.isEmpty();
     }
 
     /**

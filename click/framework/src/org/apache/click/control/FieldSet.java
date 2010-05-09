@@ -511,7 +511,7 @@ public class FieldSet extends Field implements Container {
      * @return true if the container has existing controls, false otherwise.
      */
     public boolean hasControls() {
-        return (controls == null) ? false : !controls.isEmpty();
+        return (controls != null) && !controls.isEmpty();
     }
 
     /**
@@ -992,7 +992,7 @@ public class FieldSet extends Field implements Container {
     }
 
     /**
-     * Render the fieldsets form fields to the string buffer. This method will
+     * Render the fieldset's form fields to the string buffer. This method will
      * apply the parent Forms properties to the layout and rendering of fields.
      *
      * @param buffer the StringBuffer to render to

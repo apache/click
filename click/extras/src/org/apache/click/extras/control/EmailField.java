@@ -282,7 +282,6 @@ public class EmailField extends TextField {
 
             if (!Character.isLetterOrDigit(value.charAt(length - 1))) {
                 setErrorMessage("email-format-error");
-                return;
             }
         }
     }

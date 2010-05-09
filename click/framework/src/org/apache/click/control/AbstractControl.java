@@ -301,11 +301,7 @@ public abstract class AbstractControl implements Control {
      * @return true if the control has attributes on false otherwise
      */
     public boolean hasAttributes() {
-        if (attributes != null) {
-            return !attributes.isEmpty();
-        } else {
-            return false;
-        }
+        return attributes != null && !attributes.isEmpty();
     }
 
     /**
@@ -709,7 +705,7 @@ public abstract class AbstractControl implements Control {
      * @param value the class attribute to add
      */
     public void addStyleClass(String value) {
-        //If vaule is null, exit early
+        //If value is null, exit early
         if (value == null) {
             return;
         }
