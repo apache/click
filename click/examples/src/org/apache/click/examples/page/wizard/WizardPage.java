@@ -49,7 +49,7 @@ public class WizardPage extends BorderPage {
         steps.add(new Step3("step", "Confirmation", "Step 3", this));
 
         // Set first step as current
-        setCurrentStep((Step) steps.get(0));
+        setCurrentStep(steps.get(0));
 
         // Initialize all the steps
         Iterator it = steps.iterator();
@@ -128,7 +128,7 @@ public class WizardPage extends BorderPage {
     public void previous() {
         int currentIndex = steps.indexOf(getCurrentStep());
         if (currentIndex > 0) {
-            setCurrentStep((Step) steps.get(currentIndex - 1));
+            setCurrentStep(steps.get(currentIndex - 1));
         }
     }
 
@@ -138,7 +138,7 @@ public class WizardPage extends BorderPage {
     public void next() {
         int currentIndex = steps.indexOf(getCurrentStep());
         if (currentIndex < steps.size() - 1) {
-            setCurrentStep((Step) steps.get(currentIndex + 1));
+            setCurrentStep(steps.get(currentIndex + 1));
         }
     }
 

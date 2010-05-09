@@ -181,7 +181,7 @@ public class ExcelExportPage extends BorderPage {
 
         List<Customer> customers = customerService.getCustomers();
         for (int i = 0; i < customers.size(); i++) {
-            Customer customer = (Customer) customers.get(i);
+            Customer customer = customers.get(i);
 
             row = worksheet.createRow(rowIndex++);
 

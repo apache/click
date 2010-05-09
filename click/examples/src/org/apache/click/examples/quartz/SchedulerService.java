@@ -301,7 +301,7 @@ public class SchedulerService {
 
                 SimpleTrigger trigger  = (SimpleTrigger) getScheduler().getTrigger(jobName, TRIGGER_GROUP_NAME);
 
-                list.add(new JobAndSimpleTrigger(jobDetail, (SimpleTrigger) trigger, getScheduler()));
+                list.add(new JobAndSimpleTrigger(jobDetail, trigger, getScheduler()));
             }
 
             return list;
@@ -328,7 +328,7 @@ public class SchedulerService {
                 SimpleTrigger trigger  = (SimpleTrigger)
                     getScheduler().getTrigger(jobName, TRIGGER_GROUP_NAME);
 
-                return new JobAndSimpleTrigger(jobDetail, (SimpleTrigger) trigger, getScheduler());
+                return new JobAndSimpleTrigger(jobDetail, trigger, getScheduler());
 
             } else {
                 return null;

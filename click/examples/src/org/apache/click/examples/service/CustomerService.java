@@ -175,7 +175,7 @@ public class CustomerService extends CayenneTemplate {
 
     public Customer findCustomerByID(Object value) {
         if (value != null && value.toString().length() > 0) {
-            return (Customer) getCustomerForID(value);
+            return getCustomerForID(value);
         } else {
             return null;
         }
