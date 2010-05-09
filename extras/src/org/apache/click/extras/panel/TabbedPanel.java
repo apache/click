@@ -341,8 +341,8 @@ public class TabbedPanel extends Panel {
      * non-null, then the listener will be called whenever a request to switch
      * tabs is placed by clicking the link associated with that tab.
      * <p/>
-     * The method signature of the listener is:<ul>
-     * <li>must hava a valid Java method name</li>
+     * The method signature of the listener:<ul>
+     * <li>must have a valid Java method name</li>
      * <li>takes no arguments</li>
      * <li>returns a boolean value</li>
      * </ul>
