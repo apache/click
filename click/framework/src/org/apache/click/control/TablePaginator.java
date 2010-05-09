@@ -54,7 +54,7 @@ public class TablePaginator implements Renderable {
     /**
      * Return the parent Table for this Paginator.
      *
-     * @return the paginators parent table
+     * @return the paginator's parent table
      */
     public Table getTable() {
         return table;
