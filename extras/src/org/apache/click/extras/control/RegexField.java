@@ -260,11 +260,11 @@ public class RegexField extends TextField {
         args[4] = escapeMessage(getPattern());
         args[5] = getMessage("field-required-error", getErrorLabel());
         args[6] = getMessage("field-minlength-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMinLength())});
+                getErrorLabel(), String.valueOf(getMinLength()));
         args[7] = getMessage("field-maxlength-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMaxLength())});
+                getErrorLabel(), String.valueOf(getMaxLength()));
         args[8] = escapeMessage(getMessage("field-pattern-error",
-                new Object[]{getErrorLabel(), getPattern()}));
+                getErrorLabel(), getPattern()));
         return MessageFormat.format(VALIDATE_REGEXFIELD_FUNCTION, args);
     }
 

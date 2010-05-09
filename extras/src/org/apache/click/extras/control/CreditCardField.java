@@ -400,9 +400,9 @@ public class CreditCardField extends TextField {
         args[4] = String.valueOf(getMaxLength());
         args[5] = getMessage("field-required-error", getErrorLabel());
         args[6] = getMessage("field-minlength-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMinLength())});
+                getErrorLabel(), String.valueOf(getMinLength()));
         args[7] = getMessage("field-maxlength-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMaxLength())});
+                getErrorLabel(), String.valueOf(getMaxLength()));
         args[8] = getMessage("creditcard-number-error", getErrorLabel());
 
         return MessageFormat.format(VALIDATE_CREDITCARD_FUNCTION, args);

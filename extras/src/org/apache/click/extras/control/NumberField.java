@@ -445,9 +445,9 @@ public class NumberField extends TextField {
         args[3] = String.valueOf(getMaxValue());
         args[4] = getMessage("field-required-error", getErrorLabel());
         args[5] = getMessage("number-minvalue-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMinValue())});
+                getErrorLabel(), String.valueOf(getMinValue()));
         args[6] = getMessage("number-maxvalue-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMaxValue())});
+                getErrorLabel(), String.valueOf(getMaxValue()));
 
         return MessageFormat.format(VALIDATE_NUMBER_FIELD_FUNCTION, args);
     }
