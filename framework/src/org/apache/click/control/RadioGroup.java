@@ -118,7 +118,7 @@ public class RadioGroup extends Field {
     // Instance Variables -----------------------------------------------------
 
     /** The list of Radio controls. */
-    protected List radioList;
+    protected List<Radio> radioList;
 
     /**
      * The layout is vertical flag (default false). If the layout is vertical
@@ -312,7 +312,7 @@ public class RadioGroup extends Field {
         String id = "";
 
         if (!getRadioList().isEmpty()) {
-            Radio radio = (Radio) getRadioList().get(0);
+            Radio radio = getRadioList().get(0);
             id = radio.getId();
         }
 
@@ -334,7 +334,7 @@ public class RadioGroup extends Field {
         super.setForm(form);
         if (hasRadios()) {
             for (int i = 0, size = getRadioList().size(); i < size; i++) {
-                Radio radio = (Radio) getRadioList().get(i);
+                Radio radio = getRadioList().get(i);
                 radio.setForm(getForm());
             }
         }
@@ -363,9 +363,9 @@ public class RadioGroup extends Field {
      *
      * @return the list of radio controls
      */
-    public List getRadioList() {
+    public List<Radio> getRadioList() {
         if (radioList == null) {
-            radioList = new ArrayList();
+            radioList = new ArrayList<Radio>();
         }
         return radioList;
     }
@@ -393,7 +393,7 @@ public class RadioGroup extends Field {
         args[3] = getMessage("select-error", getErrorLabel());
 
         if (!getRadioList().isEmpty()) {
-            Radio radio = (Radio) getRadioList().get(0);
+            Radio radio = getRadioList().get(0);
             args[4] = radio.getId();
         } else {
             args[4] = "";
@@ -411,7 +411,7 @@ public class RadioGroup extends Field {
     public void onInit() {
         super.onInit();
         for (int i = 0, size = getRadioList().size(); i < size; i++) {
-            Radio radio = (Radio) getRadioList().get(i);
+            Radio radio = getRadioList().get(i);
             radio.onInit();
         }
     }
@@ -443,7 +443,7 @@ public class RadioGroup extends Field {
 
         boolean continueProcessing = true;
         for (int i = 0, size = getRadioList().size(); i < size; i++) {
-            Radio radio = (Radio) getRadioList().get(i);
+            Radio radio = getRadioList().get(i);
             if (!radio.onProcess()) {
                 continueProcessing = false;
             }
@@ -464,7 +464,7 @@ public class RadioGroup extends Field {
     @Override
     public void onDestroy() {
         for (int i = 0, size = getRadioList().size(); i < size; i++) {
-            Radio radio = (Radio) getRadioList().get(i);
+            Radio radio = getRadioList().get(i);
             try {
                 radio.onDestroy();
             } catch (Throwable t) {
@@ -502,7 +502,7 @@ public class RadioGroup extends Field {
         final int size = getRadioList().size();
 
         for (int i = 0; i < size; i++) {
-            Radio radio = (Radio) getRadioList().get(i);
+            Radio radio = getRadioList().get(i);
 
             if (isReadonly() && !radio.isReadonly()) {
                 radio.setReadonly(true);
