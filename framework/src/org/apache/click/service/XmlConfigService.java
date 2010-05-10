@@ -1877,7 +1877,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
     static class PageElm {
 
-        final Map fields;
+        final Map<String, Field> fields;
 
         final Field[] fieldArray;
 
@@ -1929,7 +1929,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             fieldArray = XmlConfigService.getBindablePageFields(pageClass, autobinding);
 
-            fields = new HashMap();
+            fields = new HashMap<String, Field>();
             for (Field field : fieldArray) {
                 fields.put(field.getName(), field);
             }
@@ -1946,7 +1946,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             fieldArray = getBindablePageFields(pageClass, mode);
 
-            fields = new HashMap();
+            fields = new HashMap<String, Field>();
             for (Field field : fieldArray) {
                 fields.put(field.getName(), field);
             }
@@ -1985,8 +1985,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
     static class ExcludesElm {
 
-        final Set pathSet = new HashSet();
-        final Set fileSet = new HashSet();
+        final Set<String> pathSet = new HashSet<String>();
+        final Set<String> fileSet = new HashSet<String>();
 
         public ExcludesElm(Element element) throws ClassNotFoundException {
 
@@ -2026,8 +2026,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 return true;
             }
 
-            for (Iterator i = pathSet.iterator(); i.hasNext();) {
-                String path = i.next().toString();
+            for (String path : pathSet) {
                 if (resourcePath.startsWith(path)) {
                     return true;
                 }
