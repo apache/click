@@ -84,9 +84,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
                     request.setAttribute(FileUploadService.UPLOAD_EXCEPTION, fue);
                 }
 
-                for (int i = 0; i < itemsList.size(); i++) {
-                    FileItem fileItem = itemsList.get(i);
-
+                for (FileItem fileItem : itemsList) {
                     String name = fileItem.getFieldName();
                     String value = null;
 

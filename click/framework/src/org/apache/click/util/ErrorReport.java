@@ -488,8 +488,7 @@ public class ErrorReport {
         if (webInfDir.isDirectory() && webInfDir.canRead()) {
             File[] dirList = webInfDir.listFiles();
             if (dirList != null) {
-                for (int i = 0; i < dirList.length; i++) {
-                    File file = dirList[i];
+                for (File file : dirList) {
                     if (file.isDirectory() && file.canRead()) {
                         String sourcePath = file.toString() + filename;
                         sourceFile = new File(sourcePath);
@@ -670,8 +669,7 @@ public class ErrorReport {
     protected String getRenderJavaLine(String line) {
         line = ClickUtils.escapeHtml(line);
 
-        for (int i = 0; i < JAVA_KEYWORDS.length; i++) {
-            String keyword = JAVA_KEYWORDS[i];
+        for (String keyword : JAVA_KEYWORDS) {
             line = renderJavaKeywords(line, keyword);
         }
 

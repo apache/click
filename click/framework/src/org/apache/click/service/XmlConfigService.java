@@ -1930,8 +1930,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             fieldArray = XmlConfigService.getBindablePageFields(pageClass, autobinding);
 
             fields = new HashMap();
-            for (int i = 0; i < fieldArray.length; i++) {
-                Field field = fieldArray[i];
+            for (Field field : fieldArray) {
                 fields.put(field.getName(), field);
             }
         }
@@ -1948,8 +1947,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             fieldArray = getBindablePageFields(pageClass, mode);
 
             fields = new HashMap();
-            for (int i = 0; i < fieldArray.length; i++) {
-                Field field = fieldArray[i];
+            for (Field field : fieldArray) {
                 fields.put(field.getName(), field);
             }
         }

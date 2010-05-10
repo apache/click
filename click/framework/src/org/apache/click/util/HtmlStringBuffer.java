@@ -470,8 +470,8 @@ public class HtmlStringBuffer {
             return false;
         }
 
-        for (int i = 0; i < JS_ATTRIBUTES.length; i++) {
-            if (JS_ATTRIBUTES[i].equalsIgnoreCase(name)) {
+        for (String jsAttribute : JS_ATTRIBUTES) {
+            if (jsAttribute.equalsIgnoreCase(name)) {
                 return true;
             }
         }
@@ -508,7 +508,7 @@ public class HtmlStringBuffer {
      * <li>The <code>minimumCapacity</code> argument.
      * <li>Twice the old capacity, plus <code>2</code>.
      * </ul>
-     * If the <code>minimumCapacity</code> argument is nonpositive, this method
+     * If the <code>minimumCapacity</code> argument is non-positive, this method
      * takes no action and simply returns.
      *
      * @param minimumCapacity the minimum desired capacity
