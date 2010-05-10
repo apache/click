@@ -20,7 +20,6 @@ package org.apache.click.control;
 
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -272,9 +271,7 @@ public class ActionButton extends Button {
         }
 
         if (hasParameters()) {
-            Iterator<String> i = getParameters().keySet().iterator();
-            while (i.hasNext()) {
-                String name = i.next();
+            for (String name : getParameters().keySet()) {
                 if (!name.equals(ACTION_BUTTON) && !name.equals(VALUE)) {
                     Object paramValue = getParameters().get(name);
                     String encodedValue
