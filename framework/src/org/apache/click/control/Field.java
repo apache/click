@@ -1159,12 +1159,9 @@ public abstract class Field extends AbstractControl {
      * @param value the value to format in the message
      */
     protected void setErrorMessage(String key, Object value) {
-        Object[] args = new Object[] {
-            getErrorLabel(), value
-        };
-        String msg = getMessage(getName() + "." + key, args);
+        String msg = getMessage(getName() + "." + key, getErrorLabel(), value);
         if (msg == null) {
-            msg = getMessage(key, args);
+            msg = getMessage(key, getErrorLabel(), value);
         }
         setError(msg);
     }
@@ -1181,12 +1178,9 @@ public abstract class Field extends AbstractControl {
      * @param value the value to format in the message
      */
     protected void setErrorMessage(String key, int value) {
-        Object[] args = new Object[] {
-            getErrorLabel(), new Integer(value)
-        };
-        String msg = getMessage(getName() + "." + key, args);
+        String msg = getMessage(getName() + "." + key, getErrorLabel(), new Integer(value));
         if (msg == null) {
-            msg = getMessage(key, args);
+            msg = getMessage(key, getErrorLabel(), new Integer(value));
         }
         setError(msg);
     }
@@ -1203,12 +1197,9 @@ public abstract class Field extends AbstractControl {
      * @param value the value to format in the message
      */
     protected void setErrorMessage(String key, double value) {
-        Object[] args = new Object[] {
-            getErrorLabel(), new Double(value)
-        };
-        String msg = getMessage(getName() + "." + key, args);
+        String msg = getMessage(getName() + "." + key, getErrorLabel(), new Double(value));
         if (msg == null) {
-            msg = getMessage(key, args);
+            msg = getMessage(key, getErrorLabel(), new Double(value));
         }
         setError(msg);
     }
