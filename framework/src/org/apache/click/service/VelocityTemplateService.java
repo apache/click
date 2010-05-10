@@ -356,17 +356,17 @@ public class VelocityTemplateService implements TemplateService {
     protected Integer getInitLogLevel() {
 
         // Set Velocity log levels
-        Integer initLogLevel = new Integer(LogChute.ERROR_ID);
+        Integer initLogLevel = LogChute.ERROR_ID;
         String mode = configService.getApplicationMode();
 
         if (mode.equals(ConfigService.MODE_DEVELOPMENT)) {
-            initLogLevel = new Integer(LogChute.WARN_ID);
+            initLogLevel = LogChute.WARN_ID;
 
         } else if (mode.equals(ConfigService.MODE_DEBUG)) {
-            initLogLevel = new Integer(LogChute.WARN_ID);
+            initLogLevel = LogChute.WARN_ID;
 
         } else if (mode.equals(ConfigService.MODE_TRACE)) {
-            initLogLevel = new Integer(LogChute.INFO_ID);
+            initLogLevel = LogChute.INFO_ID;
         }
 
         return initLogLevel;
@@ -702,7 +702,7 @@ public class VelocityTemplateService implements TemplateService {
 
             Integer level = (Integer) rs.getApplicationAttribute(LOG_LEVEL);
             if (level instanceof Integer) {
-                logLevel = level.intValue();
+                logLevel = level;
 
             } else {
                 String msg = "Could not retrieve LOG_LEVEL from Runtime attributes";

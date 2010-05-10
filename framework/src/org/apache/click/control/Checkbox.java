@@ -166,7 +166,7 @@ public class Checkbox extends Field {
      * @param value the Field value
      */
     public void setValue(String value) {
-        checked = Boolean.valueOf(value).booleanValue();
+        checked = Boolean.valueOf(value);
      }
 
     /**
@@ -194,7 +194,7 @@ public class Checkbox extends Field {
      */
     public void setValueObject(Object object) {
         if (object != null && object instanceof Boolean) {
-            checked = ((Boolean) object).booleanValue();
+            checked = (Boolean) object;
         }
     }
 

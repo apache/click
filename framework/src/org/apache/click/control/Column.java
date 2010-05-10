@@ -1014,7 +1014,7 @@ public class Column implements Serializable {
             }
 
         } else {
-            return sortable.booleanValue();
+            return sortable;
         }
     }
 
@@ -1024,7 +1024,7 @@ public class Column implements Serializable {
      * @param value set the column render id attribute status
      */
     public void setRenderId(boolean value) {
-        renderId = Boolean.valueOf(value);
+        renderId = value;
     }
 
     /**
@@ -1043,7 +1043,7 @@ public class Column implements Serializable {
             }
 
         } else {
-            return renderId.booleanValue();
+            return renderId;
         }
     }
 
@@ -1053,7 +1053,7 @@ public class Column implements Serializable {
      * @param value the column sortable status
      */
     public void setSortable(boolean value) {
-        sortable = Boolean.valueOf(value);
+        sortable = value;
     }
 
     /**
