@@ -762,8 +762,8 @@ public class ContainerUtils {
 
         Method[] methods = object.getClass().getMethods();
 
-        for (int i = 0; i < methods.length; i++) {
-            String methodName = methods[i].getName();
+        for (Method method : methods) {
+            String methodName = method.getName();
 
             if (methodName.startsWith("get") && methodName.length() > 3) {
                 String propertyName =

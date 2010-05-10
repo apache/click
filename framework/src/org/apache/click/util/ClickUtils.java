@@ -1142,9 +1142,9 @@ public class ClickUtils {
         }
 
         //Otherwise, we have to do a linear scan for the cookie.
-        for (int i = 0; i < cookies.length; i++) {
-            if (cookies[i].getName().equals(name)) {
-                return cookies[i];
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(name)) {
+                return cookie;
             }
         }
 
@@ -2857,14 +2857,14 @@ public class ClickUtils {
 
             Method foundMethod = null;
             Method[] methods = object.getClass().getMethods();
-            for (int i = 0; i < methods.length; i++) {
-                String name = methods[i].getName();
+            for (Method method : methods) {
+                String name = method.getName();
                 if (name.equals(getterName)) {
-                    foundMethod = methods[i];
+                    foundMethod = method;
                     break;
 
                 } else if (name.equals(isGetterName)) {
-                    foundMethod = methods[i];
+                    foundMethod = method;
                     break;
                 }
             }
