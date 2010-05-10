@@ -1951,7 +1951,7 @@ public class ClickUtils {
             Object result = targetMethod.invoke(listener);
 
             if (result instanceof Boolean) {
-                return ((Boolean) result).booleanValue();
+                return (Boolean) result;
 
             } else {
                 String msg =

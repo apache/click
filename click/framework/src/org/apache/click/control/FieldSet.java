@@ -410,7 +410,7 @@ public class FieldSet extends Field implements Container {
         add(control);
 
         if (control.getName() != null) {
-            getFieldWidths().put(control.getName(), new Integer(width));
+            getFieldWidths().put(control.getName(), width);
         }
         return control;
     }
@@ -602,7 +602,7 @@ public class FieldSet extends Field implements Container {
      */
     public int getColumns() {
         if (columns != null) {
-            return columns.intValue();
+            return columns;
         } else {
             return getForm().getColumns();
         }
@@ -617,7 +617,7 @@ public class FieldSet extends Field implements Container {
      * @param columns the number of fieldset layout table columns
      */
     public void setColumns(int columns) {
-        this.columns = new Integer(columns);
+        this.columns = columns;
     }
 
     /**

@@ -909,7 +909,7 @@ public class Form extends AbstractContainer {
         add(control);
 
         if (control.getName() != null) {
-            getFieldWidths().put(control.getName(), new Integer(width));
+            getFieldWidths().put(control.getName(), width);
         }
         return control;
     }
@@ -1289,10 +1289,9 @@ public class Form extends AbstractContainer {
                 return false;
             }
 
-            formSubmission = Boolean.valueOf(
-                getName().equals(context.getRequestParameter(FORM_NAME)));
+            formSubmission = getName().equals(context.getRequestParameter(FORM_NAME));
         }
-        return formSubmission.booleanValue();
+        return formSubmission;
     }
 
     /**
@@ -1312,7 +1311,7 @@ public class Form extends AbstractContainer {
         if (bypassValidation == null) {
             bypassValidation = "true".equals(getContext().getRequestParameter(BYPASS_VALIDATION));
         }
-        return bypassValidation.booleanValue();
+        return bypassValidation;
     }
 
     /**
@@ -2320,7 +2319,7 @@ public class Form extends AbstractContainer {
         }
 
         // Save state info to form and session
-        final Long time = new Long(System.currentTimeMillis());
+        final Long time = System.currentTimeMillis();
         field.setValueObject(time);
 
         context.setSessionAttribute(submitTokenName, time);
@@ -2951,8 +2950,8 @@ public class Form extends AbstractContainer {
             key = "post-size-limit-exceeded-error";
 
             args = new Object[2];
-            args[0] = new Long(se.getPermittedSize());
-            args[1] = new Long(se.getActualSize());
+            args[0] = se.getPermittedSize();
+            args[1] = se.getActualSize();
             setError(getMessage(key, args));
 
         } else if (fue instanceof FileSizeLimitExceededException) {
@@ -2969,8 +2968,8 @@ public class Form extends AbstractContainer {
 
             args = new Object[3];
             args[0] = ClickUtils.toLabel(fieldName);
-            args[1] = new Long(fse.getPermittedSize());
-            args[2] = new Long(fse.getActualSize());
+            args[1] = fse.getPermittedSize();
+            args[2] = fse.getActualSize();
             setError(getMessage(key, args));
         }
     }

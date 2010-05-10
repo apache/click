@@ -907,7 +907,7 @@ public abstract class Field extends AbstractControl {
      */
     public boolean getValidate() {
         if (validate != null) {
-            return validate.booleanValue();
+            return validate;
 
         } else if (getForm() != null) {
             return getForm().getValidate();
@@ -923,7 +923,7 @@ public abstract class Field extends AbstractControl {
      * @param validate the field value when processed
      */
     public void setValidate(boolean validate) {
-        this.validate = Boolean.valueOf(validate);
+        this.validate = validate;
     }
 
     /**
@@ -1178,9 +1178,9 @@ public abstract class Field extends AbstractControl {
      * @param value the value to format in the message
      */
     protected void setErrorMessage(String key, int value) {
-        String msg = getMessage(getName() + "." + key, getErrorLabel(), new Integer(value));
+        String msg = getMessage(getName() + "." + key, getErrorLabel(), value);
         if (msg == null) {
-            msg = getMessage(key, getErrorLabel(), new Integer(value));
+            msg = getMessage(key, getErrorLabel(), value);
         }
         setError(msg);
     }
@@ -1197,9 +1197,9 @@ public abstract class Field extends AbstractControl {
      * @param value the value to format in the message
      */
     protected void setErrorMessage(String key, double value) {
-        String msg = getMessage(getName() + "." + key, getErrorLabel(), new Double(value));
+        String msg = getMessage(getName() + "." + key, getErrorLabel(), value);
         if (msg == null) {
-            msg = getMessage(key, getErrorLabel(), new Double(value));
+            msg = getMessage(key, getErrorLabel(), value);
         }
         setError(msg);
     }
