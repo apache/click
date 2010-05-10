@@ -502,7 +502,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @param path the page path
      * @return the page class for the given path or null if no class is found
      */
-    public Class getPageClass(String path) {
+    public Class<? extends Page> getPageClass(String path) {
 
         // If in production or profile mode.
         if (mode <= PROFILE) {
@@ -576,7 +576,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @throws IllegalArgumentException if the Page Class is not configured
      * with a unique path
      */
-    public String getPagePath(Class pageClass) {
+    public String getPagePath(Class<? extends Page> pageClass) {
         Object object = pageByClassMap.get(pageClass);
 
         if (object instanceof XmlConfigService.PageElm) {
@@ -626,7 +626,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @param path the path of the page
      * @return a Map of headers for the given page path
      */
-    public Map getPageHeaders(String path) {
+    public Map<String, Object> getPageHeaders(String path) {
         PageElm page = (PageElm) pageByPathMap.get(path);
         if (page == null) {
             String jspPath = StringUtils.replace(path, ".htm", ".jsp");
@@ -645,7 +645,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      *
      * @return the page not found <tt>Page</tt> <tt>Class</tt>
      */
-    public Class getNotFoundPageClass() {
+    public Class<? extends Page> getNotFoundPageClass() {
         PageElm page = (PageElm) pageByPathMap.get(NOT_FOUND_PATH);
 
         if (page != null) {
@@ -661,7 +661,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      *
      * @return the error handling page <tt>Page</tt> <tt>Class</tt>
      */
-    public Class getErrorPageClass() {
+    public Class<? extends Page> getErrorPageClass() {
         PageElm page = (PageElm) pageByPathMap.get(ERROR_PATH);
 
         if (page != null) {
@@ -679,7 +679,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @param fieldName the name of the field
      * @return the public field of the pageClass with the given name or null
      */
-    public Field getPageField(Class pageClass, String fieldName) {
+    public Field getPageField(Class<? extends Page> pageClass, String fieldName) {
         return (Field) getPageFields(pageClass).get(fieldName);
     }
 
@@ -689,7 +689,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @param pageClass the page class
      * @return an array public fields for the given page class
      */
-    public Field[] getPageFieldArray(Class pageClass) {
+    public Field[] getPageFieldArray(Class<? extends Page> pageClass) {
         Object object = pageByClassMap.get(pageClass);
 
         if (object instanceof XmlConfigService.PageElm) {
@@ -712,7 +712,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @param pageClass the page class
      * @return a Map of public fields for the given page class
      */
-    public Map getPageFields(Class pageClass) {
+    public Map<String, Field> getPageFields(Class<? extends Page> pageClass) {
         Object object = pageByClassMap.get(pageClass);
 
         if (object instanceof XmlConfigService.PageElm) {
@@ -802,7 +802,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @param pagesPackage the package of the page class
      * @return the page class for the specified pagePath and pagesPackage
      */
-    protected Class getPageClass(String pagePath, String pagesPackage) {
+    protected Class<? extends  Page> getPageClass(String pagePath, String pagesPackage) {
         // To understand this method lets walk through an example as the
         // code plays out. Imagine this method is called with the arguments:
         // pagePath='/pages/edit-customer.htm'
@@ -1741,7 +1741,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
     }
 
-    private Class getExcludesPageClass(String path) {
+    private Class<? extends Page> getExcludesPageClass(String path) {
         for (int i = 0; i < excludesList.size(); i++) {
             XmlConfigService.ExcludesElm override =
                 (XmlConfigService.ExcludesElm) excludesList.get(i);
@@ -1883,7 +1883,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
         final Map headers;
 
-        final Class pageClass;
+        final Class<? extends Page> pageClass;
 
         final String path;
 
@@ -1966,7 +1966,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             return fieldArray;
         }
 
-        public Map getFields() {
+        public Map<String, Field> getFields() {
             return fields;
         }
 
@@ -1974,7 +1974,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             return headers;
         }
 
-        public Class getPageClass() {
+        public Class<? extends Page> getPageClass() {
             return pageClass;
         }
 
@@ -2017,7 +2017,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
         }
 
-        public Class getPageClass() {
+        public Class<? extends Page> getPageClass() {
             return XmlConfigService.ExcludePage.class;
         }
 
