@@ -435,7 +435,7 @@ public class Page implements Serializable {
      * @return true if the page has any controls defined
      */
     public boolean hasControls() {
-        return (controls == null) ? false : !controls.isEmpty();
+        return (controls != null) && !controls.isEmpty();
     }
 
     /**
