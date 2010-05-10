@@ -117,7 +117,7 @@
 
     <suppress checks="MethodLength"
               files="Form.java"
-              lines="2425"/>
+              lines="2424"/>
 
     <suppress checks="MethodLength"
               files="FieldSet.java"

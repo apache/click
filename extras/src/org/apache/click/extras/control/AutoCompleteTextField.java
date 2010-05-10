@@ -257,8 +257,8 @@ public abstract class AutoCompleteTextField extends TextField {
      * @see org.apache.click.Control#getHeadElements()
      *
      * @return the list of HEAD elements to be included in the page
-     * @throws IllegalStateException if the field's name has not been set
-     * @throws IllegalStateException if the field is not attached to the Page
+     * @throws IllegalStateException if the field's name has not been set or
+     * if the field is not attached to the Page
      */
     @Override
     public List getHeadElements() {
