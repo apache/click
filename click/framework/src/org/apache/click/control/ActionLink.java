@@ -18,8 +18,6 @@
  */
 package org.apache.click.control;
 
-import java.util.Iterator;
-
 import org.apache.click.Context;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -307,9 +305,7 @@ public class ActionLink extends AbstractLink {
         }
 
         if (hasParameters()) {
-            Iterator<String> i = getParameters().keySet().iterator();
-            while (i.hasNext()) {
-                String paramName = i.next();
+            for (String paramName : getParameters().keySet()) {
                 if (!paramName.equals(ACTION_LINK) && !paramName.equals(VALUE)) {
                     Object paramValue = getParameters().get(paramName);
 

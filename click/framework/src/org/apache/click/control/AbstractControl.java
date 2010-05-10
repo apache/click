@@ -651,9 +651,7 @@ public abstract class AbstractControl implements Control {
         }
 
         //Iterate over the stylesMap appending each entry to buffer
-        Iterator it = stylesMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Entry entry = (Entry) it.next();
+        for (Entry<String, String> entry : stylesMap.entrySet()) {
             String styleName = String.valueOf(entry.getKey());
             String styleValue = String.valueOf(entry.getValue());
             buffer.append(styleName);
