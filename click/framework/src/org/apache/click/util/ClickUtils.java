@@ -1487,10 +1487,8 @@ public class ClickUtils {
             throw new IllegalArgumentException("Null resources parameter");
         }
 
-        for (int i = 0; i < resources.length; i++) {
-            ClickUtils.deployFile(servletContext,
-                                  resources[i],
-                                  targetDir);
+        for (String resource : resources) {
+            ClickUtils.deployFile(servletContext, resource, targetDir);
         }
     }
 

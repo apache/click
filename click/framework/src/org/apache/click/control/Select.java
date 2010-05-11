@@ -550,8 +550,7 @@ public class Select extends Field {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        for (int i = 0; i < options.length; i++) {
-            String option = options[i];
+        for (String option : options) {
             getOptionList().add(new Option(option, option));
         }
         setInitialValue();
@@ -604,9 +603,7 @@ public class Select extends Field {
 
         Map methodCache = new HashMap();
 
-        for (Iterator i = objects.iterator(); i.hasNext();) {
-            Object object = i.next();
-
+        for (Object object : objects) {
             try {
                 Object valueResult = PropertyUtils.getValue(object,
                     optionValueProperty, methodCache);

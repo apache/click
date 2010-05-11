@@ -278,9 +278,7 @@ public class RadioGroup extends Field {
 
         Map cache = new HashMap();
 
-        for (Iterator i = objects.iterator(); i.hasNext();) {
-            Object object = i.next();
-
+        for (Object object : objects) {
             try {
                 Object valueResult = PropertyUtils.getValue(object, value, cache);
                 Object labelResult = PropertyUtils.getValue(object, label, cache);
