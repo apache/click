@@ -545,8 +545,9 @@ public class Context {
      * @return a new Page object
      * @throws IllegalArgumentException if the Page is not found
      */
-    public Page createPage(String path) {
-        return clickServlet.createPage(path, request);
+    @SuppressWarnings("unchecked")
+    public <T extends Page> T createPage(String path) {
+        return (T) clickServlet.createPage(path, request);
     }
 
     /**
@@ -566,7 +567,7 @@ public class Context {
      * @throws IllegalArgumentException if the Page is not found, or is not
      * configured with a unique path
      */
-    public Page createPage(Class<? extends Page> pageClass) {
+    public <T extends Page> T createPage(Class<T> pageClass) {
         return clickServlet.createPage(pageClass, request);
     }
 

@@ -1579,7 +1579,8 @@ public class ClickServlet extends HttpServlet {
      * @return a new Page object
      * @throws IllegalArgumentException if the Page is not found
      */
-    protected Page createPage(String path, HttpServletRequest request) {
+    @SuppressWarnings("unchecked")
+    protected <T extends Page> T createPage(String path, HttpServletRequest request) {
         Class<? extends Page> pageClass = getConfigService().getPageClass(path);
 
         if (pageClass == null) {
@@ -1587,7 +1588,7 @@ public class ClickServlet extends HttpServlet {
             throw new IllegalArgumentException(msg);
         }
 
-        return initPage(path, pageClass, request);
+        return (T) initPage(path, pageClass, request);
     }
 
     /**
@@ -1599,7 +1600,8 @@ public class ClickServlet extends HttpServlet {
      * @throws IllegalArgumentException if the Page Class is not configured
      * with a unique path
      */
-    protected Page createPage(Class<? extends Page> pageClass, HttpServletRequest request) {
+    @SuppressWarnings("unchecked")
+    protected <T extends Page> T createPage(Class<T> pageClass, HttpServletRequest request) {
         String path = getConfigService().getPagePath(pageClass);
 
         if (path == null) {
@@ -1608,7 +1610,7 @@ public class ClickServlet extends HttpServlet {
             throw new IllegalArgumentException(msg);
         }
 
-        return initPage(path, pageClass, request);
+        return (T) initPage(path, pageClass, request);
     }
 
     /**
