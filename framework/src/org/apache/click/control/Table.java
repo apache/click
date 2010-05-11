@@ -645,8 +645,8 @@ public class Table extends AbstractControl {
      */
     public void removeColumns(List<String> columnNames) {
         if (columnNames != null) {
-            for (int i = 0; i < columnNames.size(); i++) {
-                removeColumn(columnNames.get(i).toString());
+            for (String columnName : columnNames) {
+                removeColumn(columnName);
             }
         }
     }
