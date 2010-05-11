@@ -1158,50 +1158,10 @@ public abstract class Field extends AbstractControl {
      * @param key the key of the localized message bundle string
      * @param value the value to format in the message
      */
-    protected void setErrorMessage(String key, Object value) {
+    protected <T> void setErrorMessage(String key, T value) {
         String msg = getMessage(getName() + "." + key, getErrorLabel(), value);
         if (msg == null) {
             msg = getMessage(key, getErrorLabel(), value);
-        }
-        setError(msg);
-    }
-
-    /**
-     * Set the error with the a label and value formatted message specified by
-     * the given message bundle key. The message will be formatted with the
-     * field label {0} using {@link #getErrorLabel()} and the given value {1}.
-     * <p/>
-     * <b>Also see</b> {@link #setErrorMessage(java.lang.String)} on how to
-     * specify error messages for specific Field instances.
-     *
-     * @param key the key of the localized message bundle string
-     * @param value the value to format in the message
-     */
-    protected void setErrorMessage(String key, int value) {
-        Integer valueInteger = value;
-        String msg = getMessage(getName() + "." + key, getErrorLabel(), valueInteger);
-        if (msg == null) {
-            msg = getMessage(key, getErrorLabel(), valueInteger);
-        }
-        setError(msg);
-    }
-
-    /**
-     * Set the error with the a label and value formatted message specified by
-     * the given message bundle key. The message will be formatted with the
-     * field label {0} using {@link #getErrorLabel()} and the given value {1}.
-     * <p/>
-     * <b>Also see</b> {@link #setErrorMessage(java.lang.String)} on how to
-     * specify error messages for specific Field instances.
-     *
-     * @param key the key of the localized message bundle string
-     * @param value the value to format in the message
-     */
-    protected void setErrorMessage(String key, double value) {
-        Double valueDouble = value;
-        String msg = getMessage(getName() + "." + key, getErrorLabel(), valueDouble);
-        if (msg == null) {
-            msg = getMessage(key, getErrorLabel(), valueDouble);
         }
         setError(msg);
     }
