@@ -151,7 +151,7 @@ public class LongField extends NumberField {
 
     /**
      * Return the field Long value, or null if value was empty or a parsing
-     * error occured.
+     * error occurred.
      *
      * @return the field Long value
      */
