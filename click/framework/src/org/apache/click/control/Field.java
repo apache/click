@@ -1178,9 +1178,10 @@ public abstract class Field extends AbstractControl {
      * @param value the value to format in the message
      */
     protected void setErrorMessage(String key, int value) {
-        String msg = getMessage(getName() + "." + key, getErrorLabel(), value);
+        Integer valueInteger = value;
+        String msg = getMessage(getName() + "." + key, getErrorLabel(), valueInteger);
         if (msg == null) {
-            msg = getMessage(key, getErrorLabel(), value);
+            msg = getMessage(key, getErrorLabel(), valueInteger);
         }
         setError(msg);
     }
@@ -1197,9 +1198,10 @@ public abstract class Field extends AbstractControl {
      * @param value the value to format in the message
      */
     protected void setErrorMessage(String key, double value) {
-        String msg = getMessage(getName() + "." + key, getErrorLabel(), value);
+        Double valueDouble = value;
+        String msg = getMessage(getName() + "." + key, getErrorLabel(), valueDouble);
         if (msg == null) {
-            msg = getMessage(key, getErrorLabel(), value);
+            msg = getMessage(key, getErrorLabel(), valueDouble);
         }
         setError(msg);
     }
