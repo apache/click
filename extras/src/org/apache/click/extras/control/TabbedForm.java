@@ -28,6 +28,7 @@ import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -256,7 +257,7 @@ public class TabbedForm extends Form {
      * @return the control list of HEAD elements to be included in the page
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

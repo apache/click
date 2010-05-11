@@ -26,6 +26,7 @@ import org.apache.click.control.Field;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.Table;
+import org.apache.click.element.Element;
 import org.apache.click.util.HtmlStringBuffer;
 
 import org.apache.click.control.ActionLink;
@@ -315,7 +316,7 @@ public class FormTable extends Table {
      * @return the list of HEAD elements
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

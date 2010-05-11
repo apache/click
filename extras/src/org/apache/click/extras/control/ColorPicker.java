@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import org.apache.click.Context;
 import org.apache.click.control.Field;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -204,7 +205,7 @@ public class ColorPicker extends Field {
      * @return the HTML HEAD elements for the control
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
@@ -298,7 +299,7 @@ public class ColorPicker extends Field {
     @Override
     public void render(HtmlStringBuffer buffer) {
         Context context = getContext();
-        Map values = new HashMap();
+        Map<String, Object> values = new HashMap<String, Object>();
 
         values.put("id", getId());
         values.put("field", this);
@@ -393,7 +394,7 @@ public class ColorPicker extends Field {
      * @param buffer the specified buffer to render the template output to
      * @param model the model data to merge with the template
      */
-    protected void renderTemplate(HtmlStringBuffer buffer, Map model) {
+    protected void renderTemplate(HtmlStringBuffer buffer, Map<String, ?> model) {
         buffer.append(getContext().renderTemplate(ColorPicker.class, model));
     }
 

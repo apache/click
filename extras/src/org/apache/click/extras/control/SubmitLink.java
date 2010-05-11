@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.click.Context;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Form;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ContainerUtils;
@@ -451,7 +452,7 @@ public class SubmitLink extends ActionLink {
      *
      * @return the list of HEAD elements to be included in the page
      */
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (getForm() == null) {
             return super.getHeadElements();
         }
