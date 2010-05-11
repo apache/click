@@ -22,6 +22,7 @@ import java.util.List;
 import org.apache.click.Context;
 import org.apache.click.control.TextField;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.util.ClickUtils;
@@ -127,7 +128,7 @@ public class VirtualKeyboard extends TextField {
      * @return the HTML HEAD elements for the control
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         Context context = getContext();
         String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
 

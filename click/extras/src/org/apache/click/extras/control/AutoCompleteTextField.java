@@ -28,6 +28,7 @@ import org.apache.click.Context;
 import org.apache.click.Page;
 import org.apache.click.control.TextField;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.util.ClickUtils;
@@ -261,7 +262,7 @@ public abstract class AutoCompleteTextField extends TextField {
      * if the field is not attached to the Page
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         // Check that the field name and parent Page has been set
         String fieldName = getName();
         if (fieldName == null) {
@@ -411,7 +412,7 @@ public abstract class AutoCompleteTextField extends TextField {
      *
      * @param autoCompleteList the suggested list of auto completion values
      */
-    protected void renderAutoCompleteList(List autoCompleteList) {
+    protected void renderAutoCompleteList(List<String> autoCompleteList) {
         HtmlStringBuffer buffer = new HtmlStringBuffer(10 + (autoCompleteList.size() * 20));
 
         buffer.append("<ul>");

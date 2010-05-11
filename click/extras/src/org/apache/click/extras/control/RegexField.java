@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import org.apache.click.Context;
 
 import org.apache.click.control.TextField;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 
@@ -229,7 +230,7 @@ public class RegexField extends TextField {
      * @return the HTML HEAD elements for the control
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.click.Context;
 
 import org.apache.click.control.TextField;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 
@@ -189,7 +190,7 @@ public class EmailField extends TextField {
      * @return the HTML head import statements for the control
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

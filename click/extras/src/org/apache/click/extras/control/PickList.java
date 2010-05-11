@@ -29,6 +29,7 @@ import org.apache.click.Context;
 
 import org.apache.click.control.Field;
 import org.apache.click.control.Option;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.dataprovider.DataProvider;
@@ -578,7 +579,7 @@ public class PickList extends Field {
      * @return the HTML HEAD elements for the control
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
