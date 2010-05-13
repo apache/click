@@ -126,7 +126,7 @@ public class TabbedCayenneForm extends CayenneForm {
         setButtonStyle("");
     }
 
-    // Properities ------------------------------------------------------------
+    // Properties ------------------------------------------------------------
 
     /**
      * Add the given FieldSet tab sheet to the form.
