@@ -53,7 +53,7 @@ public class PostCodeService extends CayenneTemplate {
             list.set(i, value);
         }
 
-        return list;
+        return (List<String>) list;
     }
 
     @SuppressWarnings("unchecked")
@@ -62,6 +62,6 @@ public class PostCodeService extends CayenneTemplate {
 
         query.setFetchLimit(10);
 
-        return performQuery(query);
+        return (List<PostCode>) performQuery(query);
     }
 }

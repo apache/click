@@ -30,6 +30,7 @@ import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.control.InvestmentSelect;
@@ -114,12 +115,12 @@ public class DisabledDemo extends BorderPage {
     }
 
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
             headElements.add(new JsImport("/assets/js/jquery-1.3.2.js"));
 
-            Map jsModel = new HashMap();
+            Map<String, Object> jsModel = new HashMap<String, Object>();
             headElements.add(new JsScript("/control/disabled-demo.js", jsModel));
         }
         return headElements;

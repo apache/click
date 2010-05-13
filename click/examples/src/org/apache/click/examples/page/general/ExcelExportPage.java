@@ -180,9 +180,7 @@ public class ExcelExportPage extends BorderPage {
         int rowIndex = 4;
 
         List<Customer> customers = customerService.getCustomers();
-        for (int i = 0; i < customers.size(); i++) {
-            Customer customer = customers.get(i);
-
+        for (Customer customer : customers) {
             row = worksheet.createRow(rowIndex++);
 
             row.createCell(0).setCellValue(new HSSFRichTextString(customer.getName()));

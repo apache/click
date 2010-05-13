@@ -40,6 +40,7 @@ public class ExampleJob implements Job {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ie) {
+                // ignore
             }
         }
 

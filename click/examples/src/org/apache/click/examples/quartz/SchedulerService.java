@@ -240,8 +240,8 @@ public class SchedulerService {
 
             String[] jobNames = getScheduler().getJobNames(GROUP_NAME);
 
-            for (int i = 0; i < jobNames.length; i++) {
-                list.add(getScheduler().getJobDetail(jobNames[i], GROUP_NAME));
+            for (String jobName : jobNames) {
+                list.add(getScheduler().getJobDetail(jobName, GROUP_NAME));
             }
 
             return list;

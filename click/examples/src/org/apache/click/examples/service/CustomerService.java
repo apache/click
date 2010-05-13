@@ -51,16 +51,14 @@ public class CustomerService extends CayenneTemplate {
     public List<Customer> getCustomers() {
         SelectQuery query = new SelectQuery(Customer.class);
         query.addOrdering(Customer.NAME_PROPERTY, true);
-        return performQuery(query);
+        return (List<Customer>) performQuery(query);
     }
 
-    @SuppressWarnings("unchecked")
     public int getNumberOfCustomers() {
         CountQuery query = new CountQuery(Customer.class);
         List result = performQuery(query);
         Map row = (Map) result.get(0);
-        Integer count = (Integer) row.get("C");
-        return count.intValue();
+        return (Integer) row.get("C");
     }
 
     @SuppressWarnings("unchecked")
@@ -77,10 +75,9 @@ public class CustomerService extends CayenneTemplate {
             query.setCacheStrategy(QueryCacheStrategy.SHARED_CACHE);
         }
 
-        return performQuery(query);
+        return (List<Customer>) performQuery(query);
     }
 
-    @SuppressWarnings("unchecked")
     public List<Customer> getCustomersSortedBy(String property, boolean ascending) {
         return getCustomersSortedBy(property, ascending, false);
     }
@@ -99,7 +96,7 @@ public class CustomerService extends CayenneTemplate {
         query.addOrdering(Customer.NAME_PROPERTY, true);
         query.addOrdering(Customer.DATE_JOINED_PROPERTY, true);
 
-        return performQuery(query);
+        return (List<Customer>) performQuery(query);
     }
 
     @SuppressWarnings("unchecked")
@@ -118,7 +115,7 @@ public class CustomerService extends CayenneTemplate {
             list.set(i, ((Customer)list.get(i)).getName());
         }
 
-        return list;
+        return (List<Customer>) list;
     }
 
     @SuppressWarnings("unchecked")
@@ -135,7 +132,7 @@ public class CustomerService extends CayenneTemplate {
         SelectQuery query = new SelectQuery(Customer.class, qual);
         query.addOrdering(Customer.DATE_JOINED_PROPERTY, true);
 
-        return performQuery(query);
+        return (List<Customer>) performQuery(query);
     }
 
     @SuppressWarnings("unchecked")
@@ -143,7 +140,7 @@ public class CustomerService extends CayenneTemplate {
         SelectQuery query = new SelectQuery(Customer.class);
         query.addOrdering(Customer.NAME_PROPERTY, true);
         query.setFetchLimit(rows);
-        return performQuery(query);
+        return (List<Customer>) performQuery(query);
     }
 
     @SuppressWarnings("unchecked")
@@ -151,7 +148,7 @@ public class CustomerService extends CayenneTemplate {
         SelectQuery query = new SelectQuery(Customer.class);
         query.addOrdering(Customer.DATE_JOINED_PROPERTY, true);
         query.setFetchLimit(rows);
-        return performQuery(query);
+        return (List<Customer>) performQuery(query);
     }
 
     public void saveCustomer(Customer customer) {
@@ -181,7 +178,6 @@ public class CustomerService extends CayenneTemplate {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public Customer findCustomerByName(String name) {
         SelectQuery query = new SelectQuery(Customer.class);
         query.andQualifier(ExpressionFactory.matchExp(Customer.NAME_PROPERTY,name));
@@ -199,13 +195,13 @@ public class CustomerService extends CayenneTemplate {
     public List<Customer> getCustomersForName(String value) {
         Expression template = Expression.fromString("name likeIgnoreCase $name");
         Expression e = template.expWithParameters(toMap(Customer.NAME_PROPERTY, "%" + value + "%"));
-        return  performQuery(new SelectQuery(Customer.class, e));
+        return (List<Customer>) performQuery(new SelectQuery(Customer.class, e));
     }
 
     @SuppressWarnings("unchecked")
     public List<Customer> getCustomersForAge(String value) {
         int age = NumberUtils.toInt(value);
-        return performQuery(Customer.class, Customer.AGE_PROPERTY, new Integer(age));
+        return (List<Customer>) performQuery(Customer.class, Customer.AGE_PROPERTY, age);
     }
 
     @SuppressWarnings("unchecked")
@@ -218,16 +214,14 @@ public class CustomerService extends CayenneTemplate {
         }
         query.setFetchOffset(offset);
         query.setFetchLimit(pageSize);
-        List list = performQuery(query);
 
-        return list;
+        return (List<Customer>) performQuery(query);
     }
 
-    @SuppressWarnings("unchecked")
     public List<Customer> getTopCustomersForPage(int offset, int pageSize) {
-        List list = getCustomersSortedBy(Customer.HOLDINGS_PROPERTY, false);
+        List<Customer> list = getCustomersSortedBy(Customer.HOLDINGS_PROPERTY, false);
 
-        List pageList = new ArrayList(pageSize);
+        List<Customer> pageList = new ArrayList<Customer>(pageSize);
         for (int i = 0; i < pageSize; i++) {
             // Increment row index with the offset
             int rowIndex = offset + i;
@@ -242,9 +236,8 @@ public class CustomerService extends CayenneTemplate {
         return pageList;
     }
 
-    @SuppressWarnings("unchecked")
     public List<String> getInvestmentCategories() {
-        List categories = new ArrayList();
+        List<String> categories = new ArrayList<String>();
 
         categories.add("Bonds");
         categories.add("Commercial Property");
@@ -258,7 +251,6 @@ public class CustomerService extends CayenneTemplate {
     /**
      * A custom Cayenne query which performs a count(*) query on the database.
      */
-    @SuppressWarnings("unchecked")
     class CountQuery extends IndirectQuery {
 
         private static final long serialVersionUID = 1L;

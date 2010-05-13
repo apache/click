@@ -49,9 +49,9 @@ public class ExportTable extends Table {
 
     protected int exportAttachment = EXPORTER_ATTACHED;
 
-    protected List excludedColumns;
+    protected List<String> excludedColumns;
 
-    protected List excludedExportColumns;
+    protected List<String> excludedExportColumns;
 
     protected TableExportContainer exportContainer;
 
@@ -133,7 +133,7 @@ public class ExportTable extends Table {
 
     public List<String> getExcludedColumns() {
         if (excludedColumns == null) {
-            excludedColumns = new ArrayList();
+            excludedColumns = new ArrayList<String>();
         }
         return excludedColumns;
     }
@@ -144,7 +144,7 @@ public class ExportTable extends Table {
 
     public List<String> getExcludedExportColumns() {
         if (excludedExportColumns == null) {
-            excludedExportColumns = new ArrayList();
+            excludedExportColumns = new ArrayList<String>();
         }
         return excludedExportColumns;
     }
@@ -153,9 +153,10 @@ public class ExportTable extends Table {
         this.excludedExportColumns = excludedExportColumns;
     }
 
-   public List getExportColumnList() {
+    @SuppressWarnings("unchecked")
+    public List getExportColumnList() {
         if (exportColumnList == null) {
-            exportColumnList = new ArrayList();
+            exportColumnList = new ArrayList<String>();
             List<Column> columns = getColumnList();
             List<String> excludes = getExcludedExportColumns();
 

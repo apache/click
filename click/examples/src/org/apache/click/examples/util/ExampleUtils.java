@@ -80,9 +80,9 @@ public class ExampleUtils {
         }
 
         Locale[] allLocales = Locale.getAvailableLocales();
-        for (int i = 0; i < allLocales.length; i++) {
-            symbol = currency.getSymbol(allLocales[i]);
-            if(!symbol.equals(currencyCode)) {
+        for (Locale allLocale : allLocales) {
+            symbol = currency.getSymbol(allLocale);
+            if (!symbol.equals(currencyCode)) {
                 CURRENCY_SYMBOLS.put(currency, symbol);
                 return symbol;
             }
