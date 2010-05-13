@@ -218,7 +218,7 @@ public class CheckList extends Field {
     protected String height;
 
     /** The Select Option list. */
-    protected List optionList;
+    protected List<Option> optionList;
 
     /** If sortable by drag and drop. */
     protected boolean sortable;
@@ -227,10 +227,10 @@ public class CheckList extends Field {
      * The key of the values in the order they are present (only set when
      * sortable).
      */
-    protected List sortorder;
+    protected List<String> sortorder;
 
     /** The selected values. */
-    protected List selectedValues;
+    protected List<String> selectedValues;
 
     // Constructors -----------------------------------------------------------
 
@@ -335,7 +335,7 @@ public class CheckList extends Field {
      */
     public void add(Object option) {
         if (option instanceof Option) {
-            getOptionList().add(option);
+            getOptionList().add((Option) option);
 
         } else if (option instanceof String) {
             getOptionList().add(new Option(option.toString()));
@@ -724,7 +724,7 @@ public class CheckList extends Field {
      *
      * @return the Option list
      */
-    public List getOptionList() {
+    public List<Option> getOptionList() {
         if (optionList == null) {
 
             DataProvider dp = getDataProvider();
@@ -738,7 +738,7 @@ public class CheckList extends Field {
 
                 } else {
                     // Create and populate the optionList from the Iterable data
-                    optionList = new ArrayList();
+                    optionList = new ArrayList<Option>();
 
                     if (iterableData != null) {
                         // Populate optionList from options
@@ -749,7 +749,7 @@ public class CheckList extends Field {
                 }
             } else {
                 // Create empty list
-                optionList = new ArrayList();
+                optionList = new ArrayList<Option>();
             }
         }
         return optionList;
@@ -763,7 +763,7 @@ public class CheckList extends Field {
      *
      * @param options a list of Option objects
      */
-    public void setOptionList(List options) {
+    public void setOptionList(List<Option> options) {
         optionList = options;
     }
     /**
@@ -792,7 +792,7 @@ public class CheckList extends Field {
      *
      * @return Returns list of strings of the option values.
      */
-    public List getSortorder() {
+    public List<String> getSortorder() {
         return sortorder;
     }
 
@@ -804,7 +804,7 @@ public class CheckList extends Field {
      *
      * @return a list of Strings
      */
-    public List getValues() {
+    public List<String> getValues() {
         return getSelectedValues();
     }
 
@@ -814,12 +814,12 @@ public class CheckList extends Field {
      *
      * @return the list of selected values
      */
-    public List getSelectedValues() {
+    public List<String> getSelectedValues() {
         if (selectedValues != null) {
             return selectedValues;
 
         } else {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
     }
 
@@ -831,7 +831,7 @@ public class CheckList extends Field {
      *
      * @param values a list of strings or null
      */
-    public void setValues(List values) {
+    public void setValues(List<String> values) {
         this.selectedValues = values;
     }
 
@@ -933,13 +933,13 @@ public class CheckList extends Field {
         }
 
         // Load the selected items.
-        this.selectedValues = new ArrayList();
+        this.selectedValues = new ArrayList<String>();
 
         String[] values = context.getRequestParameterValues(getName());
 
         if (values != null) {
-            for (int i = 0; i < values.length; i++) {
-                this.selectedValues.add(values[i]);
+            for (String value1 : values) {
+                this.selectedValues.add(value1);
             }
         }
 
@@ -947,9 +947,8 @@ public class CheckList extends Field {
             String[] order = context.getRequest().getParameterValues(
                     getName() + "_order");
             if (order != null) {
-                this.sortorder = new ArrayList(order.length);
-                for (int i = 0; i < order.length; i++) {
-                    String value = order[i];
+                this.sortorder = new ArrayList<String>(order.length);
+                for (String value : order) {
                     if (value != null) {
                         sortorder.add(value);
                     }

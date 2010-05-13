@@ -2109,14 +2109,14 @@ public class ClickUtils {
      * @param control the control to get the parent messages Map for
      * @return the top level parent's Map of localized messages
      */
-    public static Map getParentMessages(Control control) {
+    public static Map<String, String> getParentMessages(Control control) {
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
 
         Object parent = control.getParent();
         if (parent == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
 
         } else {
             while (parent != null) {
@@ -2134,12 +2134,12 @@ public class ClickUtils {
 
                 } else if (parent != null) {
                     // Unknown parent class
-                    return Collections.EMPTY_MAP;
+                    return Collections.emptyMap();
                 }
             }
         }
 
-        return Collections.EMPTY_MAP;
+        return Collections.emptyMap();
     }
 
     /**

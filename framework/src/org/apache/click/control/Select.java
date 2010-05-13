@@ -739,7 +739,7 @@ public class Select extends Field {
             return selectedValues;
 
         } else {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
     }
 

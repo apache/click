@@ -434,7 +434,7 @@ public class QuerySelect extends Select {
 
         DataContext dataContext = DataContext.getThreadDataContext();
 
-        List list = Collections.EMPTY_LIST;
+        List list = Collections.emptyList();
 
         if (getSelectQuery() != null) {
             list = dataContext.performQuery(getSelectQuery());
