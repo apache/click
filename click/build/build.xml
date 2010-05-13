@@ -638,7 +638,7 @@ Please ensure you have configured build.properties</echo>
 
       <javadocMacro src="framework/src"
                     destdir="documentation/docs/click-api"
-                    windowtitle="Click Framework API"
+                    windowtitle="Click Framework API - v${version}"
                     doctitle="Click API"
                     classpath="classpath.framework"
       	            overview="documentation/docs/core-overview.html"
@@ -651,7 +651,7 @@ Please ensure you have configured build.properties</echo>
 
       <javadocMacro src="extras/src"
                     destdir="documentation/docs/extras-api"
-                    windowtitle="Click Extras API"
+                    windowtitle="Click Extras API - v${version}"
                     doctitle="Click Extras API"
                     classpath="classpath.extras"
                     overview="documentation/docs/extras-overview.html"
@@ -664,7 +664,7 @@ Please ensure you have configured build.properties</echo>
 
       <javadocMacro src="mock/src"
                     destdir="documentation/docs/mock-api"
-                    windowtitle="Click Mock API"
+                    windowtitle="Click Mock API - v${version}"
                     doctitle="Click Mock API"
                     classpath="classpath.mock"
                     overview="documentation/docs/mock-overview.html"
