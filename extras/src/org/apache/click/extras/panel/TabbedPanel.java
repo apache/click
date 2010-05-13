@@ -25,6 +25,7 @@ import org.apache.click.Control;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Panel;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.util.ClickUtils;
 
 import org.apache.commons.lang.math.NumberUtils;
@@ -290,7 +291,7 @@ public class TabbedPanel extends Panel {
      * @return the HTML HEAD elements for the control
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
 
         if (headElements == null) {
             headElements = super.getHeadElements();

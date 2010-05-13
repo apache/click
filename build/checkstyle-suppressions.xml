@@ -53,7 +53,7 @@
     <!-- Method Length -->
     <suppress checks="MethodLength" files="ErrorReport.java"  lines="186"/>
     <suppress checks="MethodLength" files="ClickServlet.java" lines="476"/>
-    <suppress checks="MethodLength" files="Form.java"         lines="2424"/>
+    <suppress checks="MethodLength" files="Form.java"         lines="2425"/>
     <suppress checks="MethodLength" files="FieldSet.java"     lines="1000"/>
 
     <!-- Static Variable Name -->

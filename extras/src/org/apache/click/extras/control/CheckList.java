@@ -31,6 +31,7 @@ import org.apache.click.Context;
 import org.apache.click.control.Field;
 import org.apache.click.control.Option;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.util.ClickUtils;
@@ -651,7 +652,7 @@ public class CheckList extends Field {
      * @return the HTML head import statements for the control
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             Context context = getContext();
             String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
