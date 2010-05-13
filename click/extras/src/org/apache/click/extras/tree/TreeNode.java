@@ -260,7 +260,7 @@ public class TreeNode implements Serializable {
      */
     public List<TreeNode> getChildren() {
         if (children == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         return Collections.unmodifiableList(children);
     }

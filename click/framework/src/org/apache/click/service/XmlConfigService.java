@@ -725,7 +725,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             return page.getFields();
 
         } else {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
     }
 
@@ -1956,8 +1956,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             throws ClassNotFoundException {
 
             this.fieldArray = new Field[0];
-            this.fields = Collections.EMPTY_MAP;
-            this.headers = Collections.EMPTY_MAP;
+            this.fields = Collections.emptyMap();
+            this.headers = Collections.emptyMap();
             pageClass = ClickUtils.classForName(classname);
             this.path = path;
         }
