@@ -31,6 +31,7 @@ import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.service.FileUploadService;
 import org.apache.click.service.LogService;
@@ -1234,7 +1235,7 @@ public class Form extends AbstractContainer {
      * @return the form list of HEAD elements to be included in the page
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
