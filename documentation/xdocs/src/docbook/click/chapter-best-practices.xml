@@ -113,7 +113,7 @@
               applications where security is not important. This is the easiest
               authentication method, which simply displays a dialog box to users
               requiring them to authenticate before accessing secure resources.
-              The BASIC method is relatively unsecure as the username and password
+              The BASIC method is relatively insecure as the username and password
               are posted to the server as a Base64 encoded string.
           </para>
         </listitem>
@@ -777,7 +777,7 @@
 
 public class ErrorPage extends org.apache.click.util.ErrorPage {
 
-    public void onDestory() {
+    public void onDestroy() {
         Logger.getLogger(getClass()).error(getError());
     }
 }</programlisting>

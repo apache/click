@@ -750,7 +750,7 @@ public HelloWorld extends Page {
     public void onInit() {
         CustomerService customerService = getCustomerService();
         investmentSelect.add(Option.EMPTY_OPTION);
-        investmentSelect.addAll(customerService.getInvestmentCatetories());
+        investmentSelect.addAll(customerService.getInvestmentCategories());
     }
 
     /**
