@@ -72,16 +72,16 @@ public class ExampleUtils {
 
         String currencyCode = currency.getCurrencyCode();
 
-        Locale locale = Locale.getDefault();
-        symbol = currency.getSymbol(locale);
+        Locale defaultLocale = Locale.getDefault();
+        symbol = currency.getSymbol(defaultLocale);
         if(!symbol.equals(currencyCode)) {
             CURRENCY_SYMBOLS.put(currency, symbol);
             return symbol;
         }
 
-        Locale[] allLocales = Locale.getAvailableLocales();
-        for (Locale allLocale : allLocales) {
-            symbol = currency.getSymbol(allLocale);
+        Locale[] locales = Locale.getAvailableLocales();
+        for (Locale locale : locales) {
+            symbol = currency.getSymbol(locale);
             if (!symbol.equals(currencyCode)) {
                 CURRENCY_SYMBOLS.put(currency, symbol);
                 return symbol;
