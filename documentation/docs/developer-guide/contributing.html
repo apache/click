@@ -82,16 +82,16 @@
 
         <h3>Coding Style and Practices</h3>
 
-        Click follows the Sun conversions for Java code style. Other style convertions
+        Click follows the Sun conversions for Java code style. Other style conventions
         and practices include:
         <ul style="margin-top:0.75em;margin-bottom:0.75em;">
             <li>indents are 4 spaces wide and no tabs are used</li>
             <li>public and protected visibility members require Javadoc</li>
-            <li>private and package visiblity members do not require Javadoc</li>
+            <li>private and package visibility members do not require Javadoc</li>
             <li>favour the use of unchecked <tt>RuntimeException</tt> and avoid creating new Exception classes</li>
-            <li>check method parametes and throw <tt>IllegalArguementException</tt> if parameters are null or invalid</li>
+            <li>check method parameters and throw <tt>IllegalArgumentException</tt> if parameters are null or invalid</li>
             <li>avoid creating any more classes than you need to get the job done</li>
-            <li>localize control messages in the classe's <tt>properties</tt> files</li>
+            <li>localize control messages in the classes <tt>properties</tt> files</li>
             <li>use the <tt>Context.getLocale()</tt> method to obtain a users locale</li>
             <li>before checking in code run the Ant task: <tt>ant format-java</tt>
         </ul>
