@@ -47,7 +47,7 @@ import org.apache.commons.lang.StringUtils;
  * from <a href="http://c82.net/article.php?ID=25">Check it don't select it</a>
  * <p/>
  * A check list is a more user friendly substitution for
- * multiple-select-boxes. It is a scrollabe div which has many select-boxes.
+ * multiple-select-boxes. It is a scrollable div which has many select-boxes.
  *
  * <h3><a name="checklist-example"></a>CheckList Examples</h3>
  *
@@ -77,7 +77,7 @@ import org.apache.commons.lang.StringUtils;
  * this problem you can set a
  * {@link #setDataProvider(org.apache.click.dataprovider.DataProvider) dataProvider}
  * which allows the CheckList to fetch data when needed. This is
- * particularly useful if retrieveing CheckList data is expensive e.g. loading
+ * particularly useful if retrieving CheckList data is expensive e.g. loading
  * from a database.
  * <p/>
  * Below is a simple example:

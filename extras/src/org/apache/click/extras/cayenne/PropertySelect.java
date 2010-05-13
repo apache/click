@@ -101,7 +101,7 @@ import org.apache.commons.lang.StringUtils;
  * In this example no query is specified and the control will create a
  * simple {@link SelectQuery} based on the property class. However,
  * generally you should use a named query (configured in the Cayenne Modeler)
- * or an explicity set <tt>SelectQuery</tt>.
+ * or an explicitly set <tt>SelectQuery</tt>.
  * <p/>
  * Note when using a named query ensure that it will return DataObjects and not
  * DataRows.
