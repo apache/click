@@ -504,8 +504,8 @@ public class CheckList extends Field {
     }
 
     /**
-     * Set the CheckList option list DataProvider. The dataProvider can return
-     * any mixture of Option and OptionGroup values.
+     * Set the CheckList option list DataProvider. The dataProvider must return
+     * a list containing Option values.
      * <p/>
      * Example usage:
      *
