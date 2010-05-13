@@ -680,13 +680,13 @@ public MyPage extends Page {
      * or Excel document.
      */
     public InputStream getReport(String reportType) {
-        InputStream intputStream = null;
+        InputStream inputStream = null;
         if (PDF.equals(reportType)) {
             ...
         } else if (EXCEL.equals(reportType)) {
             ...
         }
-        return intputStream;
+        return inputStream;
     }
 
     /**
@@ -713,7 +713,7 @@ public MyPage extends Page {
   <p/>
   When the Click framework processes a request it creates a relatively small 
   number of objects. These include a Page, a Context, a Format and a number of
-  Contols which in turn contain some Lists, Maps and Strings.
+  Controls which in turn contain some Lists, Maps and Strings.
   <p/>
   The allocation of small/moderate numbers of short lived objects by 
   modern JVMs is very, very fast. Please see the IBM article 
