@@ -1050,14 +1050,14 @@ public class ClickUtils {
      * @param name the name of the child element
      * @return the list of XML child elements for the given name
      */
-    public static List getChildren(Element parent, String name) {
-        List list = new ArrayList();
+    public static List<Element> getChildren(Element parent, String name) {
+        List<Element> list = new ArrayList<Element>();
         NodeList nodeList = parent.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             if (node instanceof Element) {
                 if (node.getNodeName().equals(name)) {
-                    list.add(node);
+                    list.add((Element) node);
                 }
             }
         }
@@ -2534,7 +2534,7 @@ public class ClickUtils {
     /**
      * Return a field name string from the given field label.
      * <p/>
-     * A label of " OK do it!" is returned as "okDoIt". Any &amp;nbsp;
+     * A label of " OK do it!" is returned as "okDoIt". Any &amp; &nbsp;
      * characters will also be removed.
      * <p/>
      * A label of "customerSelect" is returned as "customerSelect".

@@ -38,7 +38,7 @@ public class ClientService extends CayenneTemplate {
     public List<Client> getClients() {
         SelectQuery query = new SelectQuery(Client.class);
         query.addOrdering("db:id", true);
-        return performQuery(query);
+        return (List<Client>) performQuery(query);
     }
 
     public Client getClient(Object id) {

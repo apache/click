@@ -33,6 +33,8 @@ public class BaseEntity extends CayenneDataObject {
     /**
      * Convenience method to get an id that may be used by the view. There is
      * no setter as id is managed by Cayenne.
+     *
+     * @return the primary key of this Entity.
      */
     public Integer getId() {
         return (Integer) DataObjectUtils.pkForObject(this);

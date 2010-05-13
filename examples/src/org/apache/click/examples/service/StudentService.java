@@ -103,7 +103,7 @@ public class StudentService extends CayenneTemplate {
     public List<Course> getCourses() {
         SelectQuery query = new SelectQuery(Course.class);
         query.addOrdering("db:id", true);
-        return performQuery(query);
+        return (List<Course>) performQuery(query);
     }
 
     public Course getCourse(Object id) {
@@ -135,7 +135,7 @@ public class StudentService extends CayenneTemplate {
     public List<StudentHouse> getStudentHouses() {
         SelectQuery query = new SelectQuery(StudentHouse.class);
         query.addOrdering(StudentHouse.NAME_PROPERTY, true);
-        return performQuery(query);
+        return (List<StudentHouse>) performQuery(query);
     }
 
     public StudentHouse getStudentHouse(Object id) {

@@ -33,11 +33,7 @@ public class UserService extends CayenneTemplate {
     public boolean isAuthenticatedUser(User user) {
         User user2 = getUser(user.getUsername());
 
-        if (user2 != null && user2.getPassword().equals(user.getPassword())) {
-            return true;
-        } else {
-            return false;
-        }
+        return user2 != null && user2.getPassword().equals(user.getPassword());
     }
 
     public User getUser(String username) {

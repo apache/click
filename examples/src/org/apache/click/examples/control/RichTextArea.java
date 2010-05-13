@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.click.control.TextArea;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.util.HtmlStringBuffer;
@@ -105,7 +106,7 @@ public class RichTextArea extends TextArea {
      * @see org.apache.click.control.Field#getHeadElements()
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
             headElements.add(new CssImport("/yui/fonts/fonts-min.css"));
