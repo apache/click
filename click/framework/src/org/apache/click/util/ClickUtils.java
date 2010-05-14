@@ -2534,10 +2534,10 @@ public class ClickUtils {
     /**
      * Return a field name string from the given field label.
      * <p/>
-     * A label of " OK do it!" is returned as "okDoIt". Any &amp; &nbsp;
+     * A label of <tt>" OK do it!"</tt> is returned as <tt>"okDoIt"</tt>. Any <tt>&amp;nbsp;</tt>
      * characters will also be removed.
      * <p/>
-     * A label of "customerSelect" is returned as "customerSelect".
+     * A label of <tt>"customerSelect"</tt> is returned as <tt>"customerSelect"</tt>.
      *
      * @param label the field label or caption
      * @return a field name string from the given field label
