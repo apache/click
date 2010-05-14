@@ -402,7 +402,7 @@ import org.apache.commons.lang.StringUtils;
  *  &lt;tr&gt;
  *    &lt;td colspan="2"&gt;
  *    <span class="red">#foreach</span> (<span class="blue">$button</span> <span class="red">in </span><span class="blue">$form.buttonList</span>)
- *      <span class="blue">$button</span> &amp;&nbsp;
+ *      <span class="blue">$button</span> &amp;nbsp;
  *    <span class="red">#end</span>
  *    &lt;/td&gt;
  *  &lt;/tr&gt;

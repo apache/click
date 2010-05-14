@@ -109,7 +109,7 @@ public class Format implements Serializable {
      * <p/>
      * Note the IE browser does not fully support CSS attribute: &nbsp;
      * <tt>table { empty-cells: show }</tt>. Also note returning
-     * <tt>&amp;&nbsp;</tt>
+     * <tt>&amp;nbsp;</tt>
      * value will prevent AJAX XML responses being rendered in browsers.
      *
      * @return the formatter methods empty string value
