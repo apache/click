@@ -83,7 +83,7 @@
     <dependency>
         <groupId>org.apache.cayenne</groupId>
         <artifactId>cayenne-nodeps</artifactId>
-        <version>3.0M6</version>
+        <version>3.0</version>
         <optional>true</optional>
     </dependency>
 
