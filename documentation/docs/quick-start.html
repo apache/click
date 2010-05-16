@@ -20,14 +20,18 @@
 -->
 <html>
 <head>
+ <!-- saved from url=(0014)about:internet -->
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
  <meta name="description" lang="en" content="Apache Click Java web application framework"/>
  <meta name="keywords" lang="en" content="Apache Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
  <title>Apache Click</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <link rel="stylesheet" type="text/css" href="../syntax-highlighter.css"/>
+ <script type="text/javascript" src="../syntax-highlighter.js"></script>
 </head>
-<body>
+<!--Activate syntax highlighting-->
+ <body onload="prettyPrint();">
   
 <h1>Quick Start Guide</h1>
 
@@ -317,12 +321,12 @@ automatically mapped by Click to our <tt>BorderPage</tt> class.
 Now we are going to modify our <tt>HomePage</tt> class to extend <tt>BorderPage</tt> 
 and define a <span class="blue">title</span> value.
 
-<pre class="codeJava">
-<span class="kw">package</span> com.quickstart.page;
+<pre class="prettyprint">
+package com.quickstart.page;
 
-<span class="kw">public class</span> HomePage <span class="kw">extends</span> BorderPage {
+public class HomePage extends BorderPage {
 
-    @Bindable <span class="kw">protected</span> String <span class="blue">title</span> = <span class="st">"Home"</span>;
+    public String title = "Home";
 
 } </pre>
 
