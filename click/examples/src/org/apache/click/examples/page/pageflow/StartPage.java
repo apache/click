@@ -145,7 +145,7 @@ public class StartPage extends BorderPage {
             courseBooking.setCourseType(courseSelect.getValue());
             courseBooking.setBookingNotes(notesField.getValue());
 
-            NextPage nextPage = (NextPage) getContext().createPage(NextPage.class);
+            NextPage nextPage = getContext().createPage(NextPage.class);
             nextPage.setCourseBooking(courseBooking);
 
             setForward(nextPage);

@@ -81,8 +81,7 @@ public class NextPage extends BorderPage {
     }
 
     public boolean onBackClick() {
-        StartPage startPage =
-            (StartPage) getContext().createPage(StartPage.class);
+        StartPage startPage = getContext().createPage(StartPage.class);
 
         courseBooking = (CourseBooking) courseField.getValueObject();
         startPage.setCourseBooking(courseBooking);
