@@ -38,14 +38,17 @@ public class LinkDemo extends BorderPage {
     @Bindable protected ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
     @Bindable protected ActionLink disabledActionLink = new ActionLink("DisabledActionLink", this, "onLinkClick");
     @Bindable protected ActionLink iconActionLink = new ActionLink("IconActionLink", this, "onLinkClick");
+    @Bindable protected ActionLink disabledIconActionLink = new ActionLink("DisabledIconActionLink", this, "onLinkClick");
 
     @Bindable protected PageLink pageLink = new PageLink("PageLink", HomePage.class);
     @Bindable protected PageLink disabledPageLink = new PageLink("DisabledPageLink", HomePage.class);
     @Bindable protected PageLink iconPageLink = new PageLink("IconPageLink",HomePage.class);
+    @Bindable protected PageLink disabledIconPageLink = new PageLink("DisabledIconPageLink",HomePage.class);
 
-    @Bindable protected ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
     @Bindable protected PageButton pageButton = new PageButton("PageButton", HomePage.class);
     @Bindable protected PageButton disabledPageButton = new PageButton("DisabledPageButton", HomePage.class);
+    @Bindable protected ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
+    @Bindable protected ExternalLink disabledExternalLink = new ExternalLink("DisabledExternalLink", "http://www.google.com/search");
 
     @Bindable protected String clicked;
 
@@ -55,16 +58,33 @@ public class LinkDemo extends BorderPage {
         iconActionLink.setRenderLabelAndImage(true);
         iconActionLink.addStyleClass("image-link");
         iconActionLink.setImageSrc("/assets/images/table-edit.png");
+
+        disabledIconActionLink.setRenderLabelAndImage(true);
+        disabledIconActionLink.addStyleClass("image-link");
+        disabledIconActionLink.setImageSrc("/assets/images/table-edit.png");
+        
         iconPageLink.setRenderLabelAndImage(true);
         iconPageLink.addStyleClass("image-link");
         iconPageLink.setImageSrc("/assets/images/home.png");
 
+        disabledIconPageLink.setRenderLabelAndImage(true);
+        disabledIconPageLink.addStyleClass("image-link");
+        disabledIconPageLink.setImageSrc("/assets/images/home.png");
+
         externalLink.setParameter("q", "Click Framework");
         externalLink.setAttribute("target", "_blank");
         externalLink.setAttribute("class", "external");
+
+        disabledExternalLink.setParameter("q", "Click Framework");
+        disabledExternalLink.setAttribute("target", "_blank");
+        disabledExternalLink.setAttribute("class", "external");
+
         disabledActionLink.setDisabled(true);
+        disabledIconActionLink.setDisabled(true);
+        disabledIconPageLink.setDisabled(true);
         disabledPageLink.setDisabled(true);
         disabledPageButton.setDisabled(true);
+        disabledExternalLink.setDisabled(true);
     }
 
     // Event Handlers ---------------------------------------------------------
