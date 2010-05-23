@@ -639,7 +639,7 @@ Please ensure you have configured build.properties</echo>
       <javadocMacro src="framework/src"
                     destdir="documentation/docs/click-api"
                     windowtitle="Click Framework API - v${version}"
-                    doctitle="Click API"
+                    doctitle="Click API - v${version}"
                     classpath="classpath.framework"
       	            overview="documentation/docs/core-overview.html"
                     excludes=""/>
@@ -652,7 +652,7 @@ Please ensure you have configured build.properties</echo>
       <javadocMacro src="extras/src"
                     destdir="documentation/docs/extras-api"
                     windowtitle="Click Extras API - v${version}"
-                    doctitle="Click Extras API"
+                    doctitle="Click Extras API - v${version}"
                     classpath="classpath.extras"
                     overview="documentation/docs/extras-overview.html"
                     excludes="${exclude-hibernate-package}"/>
@@ -665,7 +665,7 @@ Please ensure you have configured build.properties</echo>
       <javadocMacro src="mock/src"
                     destdir="documentation/docs/mock-api"
                     windowtitle="Click Mock API - v${version}"
-                    doctitle="Click Mock API"
+                    doctitle="Click Mock API - v${version}"
                     classpath="classpath.mock"
                     overview="documentation/docs/mock-overview.html"
                     excludes=""/>
