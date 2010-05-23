@@ -114,17 +114,17 @@
       </para>
 
     </sect2>
-    
+
     <sect2 id="type-converter-class" remap="h3">
       <title>Type Converter Class</title>
 
       <para>The ClickServlet uses the OGNL library for type coercion when binding
-      request parameters to bindable fields. The default type converter class 
+      request parameters to bindable variables. The default type converter class
       used is <ulink url="click-api/org/apache/click/util/RequestTypeConverter.html">RequestTypeConverter</ulink>.
       To specify your own type converter configure a <literal>type-converter-class</literal>
       init parameter with the ClickServlet. For example:
       </para>
-      
+
       <programlisting language="xml">
   &lt;servlet&gt;
     &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
@@ -136,17 +136,17 @@
     &lt;/init-param&gt;
   &lt;/servlet&gt;</programlisting>
 
-    </sect2>    
-    
+    </sect2>
+
     <sect2 id="config-service-class" remap="h3">
       <title>Config Service Class</title>
 
       <para>Click uses a single application configuration service which is
-      instantiated by the ClickServlet at startup. This service defines the 
+      instantiated by the ClickServlet at startup. This service defines the
       application configuration and is used by the ClickServlet to map requests
       to pages amongst other things.
       </para>
- 		
+
  	    <para>Once the ConfigService has been initialized it is stored in the
       ServletContext using the key  <ulink url="click-api/org/apache/click/service/ConfigService.html">ConfigService</ulink>
       The default ConfigService is <ulink url="click-api/org/apache/click/service/XmlConfigService.html">XmlConfigService</ulink>,
@@ -156,7 +156,7 @@
  	    <para>To use an alternative configuration service specify a
       <literal>config-service-class</literal> context parameter. For example:
  	    </para>
-      
+
       <programlisting language="xml">
 &lt;web-app xmlns="http://java.sun.com/xml/ns/j2ee"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -169,11 +169,11 @@
          &lt;param-name&gt;config-service-class&lt;/param-name&gt;
           &lt;param-value&gt;com.mycorp.service.CustomConfigSerivce&lt;/param-value&gt;
       &lt;/context-param&gt;
- 
+
   ...
- 
+
  &lt;/web-app&gt;</programlisting>
-      
+
     </sect2>
   </sect1>
 
@@ -482,21 +482,21 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
       <sect3 id="application-autobinding" remap="h4">
         <title>Page Autobinding</title>
 
-        <para>Autobinding is a feature that allows certain page fields to be
+        <para>Autobinding is a feature that allows certain page variables to be
         handled in a special way by the ClickServlet. The autobinding attribute
         can be configured with one of the following values:
         <itemizedlist>
           <listitem>
             <para> <varname>default</varname>: <literal>bindable</literal>
-            fields include both <varname>public</varname> page fields and fields
-            annotated with the
+            variables include both <varname>public</varname> page variables
+            and variables annotated with the
             <ulink url="../../click-api/org/apache/click/util/Bindable.html">@Bindable</ulink>
             annotation
             </para>
           </listitem>
           <listitem>
             <para> <varname>annotation</varname>: <literal>bindable</literal>
-            fields are fields annotated with the
+            variables are variables annotated with the
             <ulink url="../../click-api/org/apache/click/util/Bindable.html">@Bindable</ulink>
             annotation
             </para>
@@ -515,25 +515,26 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
 
         <itemizedlist>
           <listitem>
-            <para> add any <literal>bindable</literal> controls to the page,
+            <para> add all <literal>bindable</literal> controls to the page,
             after the page constructor has been invoked
             </para>
           </listitem>
           <listitem>
-            <para> if the <literal>bindable</literal> control name is not defined,
-            its name will be set to the value of its field name
+            <para> if a <literal>bindable</literal> control name is not defined,
+            the control name will be set to the value of its variable name (note,
+            if the control name is already defined its name will not be changed)
             </para>
           </listitem>
           <listitem>
-            <para> bind any request parameters to <literal>bindable</literal>
-            page fields, after page constructor has been invoked. See
+            <para> bind all request parameters to <literal>bindable</literal>
+            page variables, after the page constructor has been invoked. See
             <ulink url="../../click-api/org/apache/click/ClickServlet.html#processPageRequestParams(org.apache.click.Page)">ClickServlet.processPageRequestParams(Page)</ulink>
             for more details
             </para>
           </listitem>
           <listitem>
-            <para> add all <literal>bindable</literal> page fields to the page
-            model (this step occurs right before the page is rendered)</para>
+            <para> add all <literal>bindable</literal> page variables to the page
+            model (this step occurs just before the page is rendered)</para>
           </listitem>
         </itemizedlist>
 
@@ -542,51 +543,90 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
 
         <programlisting language="java">public class EmployeePage extends Page {
 
+    public String employeeDescription;
+
+    // Form does not have a name defined
     public Form employeeForm = new Form();
 
-    public Table myTable = new Table();
+    // Table defines its own name
+    public Table employeeTable = new Table("table");
 
 }</programlisting>
 
-        <para>Note in the above example that the <varname>employeeForm</varname>
-        and <varname>myTable</varname> controls were not added to the page. Also
-        note that Form and Table do not have their names defined.
+        <para>Note in the example above that the <varname>employeeDescription</varname>
+        variable and the <varname>employeeForm</varname> and <varname>employeeTable</varname>
+        controls are not added to the page. Also note that Form name is not
+        defined.
         </para>
 
         <para>When autobinding is enabled, ClickServlet will create a new Page
-        and add the public controls to the page. Following the example above the
-        <varname>employeeForm</varname> and <varname>myTable</varname> will be
-        added to the page, similar to calling
+        and add the bindable variables and controls to the page. Following the
+        example above the <varname>employeeDescription</varname>,
+        <varname>employeeForm</varname> and <varname>employeeTable</varname> will
+        be added to the page, which is equivalent to the following statements:
+        <methodname>addModel("employeeDescription", employeeDescription)</methodname>,
         <methodname>addControl(employeeForm)</methodname> and
-        <methodname>addControl(myTable)</methodname>.
+        <methodname>addControl(employeeTable)</methodname>.
         </para>
 
-        <para>Furthermore, the control names were not defined so ClickServlet
-        will set their names to the value of their field/variable name. In this
+        <para>Furthermore, controls that do not have a name defined will
+        have their name set to their instance variable name. In this
         case the Form name will be set to <varname>employeeForm</varname> while
-        the Table name will set to <varname>myTable</varname>.
+        the Table name won't be altered since it already has a name defined.
         </para>
 
-        <para>The above example is thus a shorthand way of writing the following:
+        <para>The above example is a shorthand way of writing the following:
         </para>
 
         <programlisting language="java">public class EmployeePage extends Page {
 
+    private String employeeDescription;
+
     private Form employeeForm = new Form();
 
-    private Table myTable = new Table();
+    private Table employeeTable = new Table("table");
 
     public void onInit() {
         employeeForm.setName("employeeForm");
         addControl(employeeForm);
 
-        myTable.setName("myTable");
         addControl(myTable);
     }
 }</programlisting>
 
-        <para>You can turn this behaviour off by setting the <symbol>autobinding</symbol>
-        attribute to <varname>none</varname> for example:
+        <para>Note that we did not show where employeeDescription is added
+        to the page model. The reason for that is because autobinding handles non
+        controls slightly differently. Non control variables are added to the
+        model just before the page response is written. This allows the value of
+        the variable to be set anywhere in the page. For example:
+        </para>
+
+<programlisting language="java">public class EmployeePage extends Page {
+
+    private String employeeDescription;
+
+    private Form employeeForm = new Form();
+
+    private Table employeeTable = new Table("table");
+
+    ...
+
+    public boolean onSaveClick {
+        if (employeeForm.isValid()) {
+            // employeeDescription is added to the page model just before the
+            // response is written
+            employeeDescription = employee.getDescription();
+        }
+    }
+} </programlisting>
+
+        <para><varname>employeeDescription</varname> will be added to the page
+        model and can be referenced in the page template as
+        <symbol>$employeeDescription</symbol>.
+        </para>
+
+        <para>Autobinding can be turned off by setting the <symbol>autobinding</symbol>
+        attribute to <varname>none</varname> as shown below:
         </para>
 
         <programlisting language="xml">&lt;click-app&gt;
@@ -599,15 +639,15 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
 
         <para>Click provides the
         <ulink url="../../click-api/org/apache/click/util/Bindable.html">Bindable</ulink>
-        annotation which enables autobinding of Page fields. The Bindable
+        annotation which enables autobinding of Page variables The Bindable
         annotation can bind <varname>private</varname>, <varname>protected</varname>
-        and <varname>public</varname> Page fields.
+        and <varname>public</varname> Page variables.
         </para>
 
         <para>By default, Click's autobinding feature operates on both
-        <symbol>public</symbol> and <symbol>@Bindable</symbol> fields.
+        <symbol>public</symbol> and <symbol>@Bindable</symbol> variables.
         To instruct Click to operate only on <symbol>@Bindable</symbol>
-        annotated fields, you can set the <symbol>autobinding</symbol>
+        annotated variables, you can set the <symbol>autobinding</symbol>
         attribute to <varname>annotation</varname>, for example:
         </para>
 
@@ -615,7 +655,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
   <pages package="com.mycorp.page" ]]><symbol>autobinding</symbol>="<varname>annotation</varname>"<![CDATA[/>
 </click-app>]]></programlisting>
 
-        <para>Click won't autobind <literal>public</literal> fields anymore.
+        <para>Click won't autobind <literal>public</literal> variables anymore.
         </para>
 
         <para>Below is an example using the <symbol>@Bindable</symbol>
