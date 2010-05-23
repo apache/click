@@ -158,7 +158,7 @@
     <para>Stepping through this GET request sequence, a new Page instance is
     created and the attributes for the Page are set (context, format, headers,
     path). Next, request parameter values are bound to any matching public
-    Page fields.
+    Page variables.
     </para>
 
     <para>Then the <methodname>onSecurityCheck()</methodname> handler is executed.
@@ -195,7 +195,7 @@
 
     <itemizedlist>
       <listitem>
-        <para>any public Page fields using the fields name</para>
+        <para>any public Page variable using the variable name</para>
       </listitem>
       <listitem>
         <para>context &nbsp;-&nbsp; the Servlet context path, e.g. /mycorp</para>
@@ -295,9 +295,9 @@
     <title>Request Parameter Auto Binding</title>
 
     <para>Click will automatically bind any request parameter values to public
-    Page fields with the same name. You can also use the
+    Page variable with the same name. You can also use the
     <ulink url="../../click-api/org/apache/click/util/Bindable.html">Bindable</ulink>
-    annotation to bind private and protected Page fields. When binding these
+    annotation to bind private and protected Page variables. When binding these
     values Click will also attempt to convert them to the correct type.
     </para>
 
@@ -320,14 +320,14 @@ public class CustomerDetails extends Page {
 
     <para>After the CustomerDetails page has been created the
     "<varname>customerId</varname>" request parameter value "<symbol>7023</symbol>"
-    will be converted into an Integer and assigned to the public page field
+    will be converted into an Integer and assigned to the public page variable
     <varname>customerId</varname>.
     </para>
 
-    <para>Another feature of Click is that any public Page fields are
+    <para>Another feature of Click is that any public Page variables are
     automatically added to the page's model before it is rendered. This will
     make these values available in the page template for display. In our example
-    the public <varname>customerId</varname> field will be added to the Page
+    the public <varname>customerId</varname> variable will be added to the Page
     model and will be available for rendering in the page template.
     </para>
 
@@ -395,7 +395,7 @@ public class CustomerDetails extends Page {
       <para>This request will load the <varname>customer</varname> object from
       the database using "<symbol>7203</symbol>" as the customer id value. The
       ClickServlet would then assign this <varname>customer</varname> object to
-      the matching page field:
+      the matching page variable:
       </para>
 
       <programlisting language="java">package com.mycorp.page;
