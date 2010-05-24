@@ -117,8 +117,8 @@ public class CommonsFileUploadService implements FileUploadService {
         if (logWarning) {
             logService.warn("The java.io.tmpdir directory, '" + tmpdir
                 + "', does not exist. This can cause file uploading to fail"
-                + " as uploaded files are saved to directory specified by the"
-                + " 'java.io.tmpdir' property.");
+                + " as uploaded files are saved to the directory specified by"
+                + " the 'java.io.tmpdir' property.");
         }
 
         if (restrictedEnvironment) {
