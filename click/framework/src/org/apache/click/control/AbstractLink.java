@@ -523,12 +523,11 @@ public abstract class AbstractLink extends AbstractControl {
 
             buffer.elementStart(getTag());
 
-            buffer.appendAttribute("href", getHref());
+            buffer.appendAttribute("href", "#");
             buffer.appendAttribute("id", getId());
             buffer.appendAttribute("title", "Disabled Link!");
             addStyleClass("controlDisabled");
 
-            buffer.appendAttribute("class", getAttribute("class"));
             if (hasAttribute("style")) {
                 buffer.appendAttribute("style", getAttribute("style"));
             }
