@@ -50,6 +50,9 @@
 
 <module name="Checker">
     
+    <property name="localeCountry" value="US"/>
+    <property name="localeLanguage" value="en"/>
+    
     <module name="SuppressionFilter">
        <property name="file" value="checkstyle-suppressions.xml"/>
     </module>
@@ -74,6 +77,13 @@
     <!-- See http://checkstyle.sf.net/config_misc.html#Translation -->
     <module name="Translation"/>
 
+    <!-- Checks if source file begin with the Apache.org header -->
+    <!-- http://checkstyle.sourceforge.net/config_header.html   -->
+    <module name="Header">
+        <property name="headerFile" value="header.txt"/>
+        <property name="fileExtensions" value="java"/>        
+    </module>
+    
     <module name="TreeWalker">
 
         <!-- Checks for Javadoc comments.                     -->
@@ -90,8 +100,13 @@
         <module name="JavadocVariable">
             <property name="scope" value="protected"/>
         </module>
-        <!-- module name="JavadocStyle"/ -->
-        
+<!--
+        <module name="JavadocStyle">
+            <property name="scope" value="protected"/>
+            <property name="checkHtml" value="false"/>  
+        </module>
+-->
+
         <!-- Checks for Naming Conventions.                  -->
         <!-- See http://checkstyle.sf.net/config_naming.html -->
         <module name="ConstantName"/>
@@ -132,15 +147,39 @@
 
         <module name="WhitespaceAfter"/>
         <module name="WhitespaceAround"/>
+
+        <module name="GenericWhitespace"/>        
         
         <!-- Checks for blocks. You know, those {}'s         -->
         <!-- See http://checkstyle.sf.net/config_blocks.html -->
         <module name="AvoidNestedBlocks"/>
         <!-- <module name="EmptyBlock"/> -->
-        <module name="LeftCurly"/>        
+        <module name="LeftCurly"/>
         <module name="NeedBraces"/>        
         <module name="RightCurly"/>
-        
+
+        <!-- Checks for misc                                        -->
+        <!-- see http://checkstyle.sourceforge.net/config_misc.html -->
+        <!-- <module name="Indentation"/> -->
+
+        <!-- Checks for annotations                                   -->
+        <!-- http://checkstyle.sourceforge.net/config_annotation.html -->
+        <module name="AnnotationUseStyle"/>
+        <!--<module name="MissingDeprecated"/>-->
+        <module name="MissingOverride"/>
+        <module name="SuppressWarnings"/>
+
+        <!-- Checks for correct class design                      -->
+        <!-- http://checkstyle.sourceforge.net/config_design.html -->
+        <!--<module name="VisibilityModifier"/>-->
+        <!--<module name="FinalClass"/>-->
+        <module name="InterfaceIsType"/>
+        <!--<module name="HideUtilityClassConstructor"/>        -->
+        <!--<module name="MutableException"/>-->
+        <module name="ThrowsCount">
+            <property name="max" value="2"/>
+        </module>
+
     </module>
 
 </module>
