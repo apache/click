@@ -18,6 +18,7 @@
  */
 package org.apache.click.examples.page.introduction;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 
@@ -90,7 +91,11 @@ public class AdvancedForm extends BorderPage {
         investmentSelect.setDataProvider(new DataProvider() {
 
             public List getData() {
-                return customerService.getInvestmentCategories();
+                List<Option> options = new ArrayList<Option>();
+                for (String category : customerService.getInvestmentCategories()) {
+                    options.add(new Option(category));
+                }
+                return options;
             }
         });
     }
