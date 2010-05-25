@@ -109,7 +109,7 @@ public class MockRequest implements HttpServletRequest {
      * Map of uploaded files, where the fieldname is the key and uploaded file
      * is the value.
      */
-    private Map <String, UploadedFile> uploadedFiles = new HashMap <String, UploadedFile>();
+    private Map<String, UploadedFile> uploadedFiles = new HashMap<String, UploadedFile>();
 
     /**
      * Indicates if this request is multipart (contains binary attachment) or
