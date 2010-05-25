@@ -90,7 +90,7 @@ public class AdvancedForm extends BorderPage {
         investmentSelect.setDefaultOption(Option.EMPTY_OPTION);
         investmentSelect.setDataProvider(new DataProvider() {
 
-            public List getData() {
+            public List<Option> getData() {
                 List<Option> options = new ArrayList<Option>();
                 for (String category : customerService.getInvestmentCategories()) {
                     options.add(new Option(category));
