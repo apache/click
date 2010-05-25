@@ -60,4 +60,6 @@
     <suppress checks="StaticVariableName" files="MenuFactory.java"  lines="118,121"/>
     <suppress checks="StaticVariableName" files="MockResponse.java" lines="56,59"/>
     <suppress checks="StaticVariableName" files="MockRequest.java"  lines="68"/>
+    
+    <suppress checks="Header" files="DeployUtils.java"/>
 </suppressions>
