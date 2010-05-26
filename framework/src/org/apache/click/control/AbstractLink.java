@@ -22,12 +22,9 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import org.apache.click.Context;
-import org.apache.click.element.CssImport;
-import org.apache.click.element.Element;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -521,18 +518,14 @@ public abstract class AbstractLink extends AbstractControl {
 
         if (isDisabled()) {
 
-            buffer.elementStart(getTag());
-
-            buffer.appendAttribute("href", "#");
+            buffer.elementStart("span");
             buffer.appendAttribute("id", getId());
-            buffer.appendAttribute("title", "Disabled Link!");
-            addStyleClass("controlDisabled");
+            addStyleClass("disabled");
+            buffer.appendAttribute("class", getAttribute("class"));
 
             if (hasAttribute("style")) {
                 buffer.appendAttribute("style", getAttribute("style"));
             }
-            buffer.appendAttribute("onClick", "return false;");
-            appendAttributes(buffer);
 
             buffer.closeTag();
 
@@ -548,7 +541,7 @@ public abstract class AbstractLink extends AbstractControl {
                 }
             }
 
-            buffer.elementEnd(getTag());
+            buffer.elementEnd("span");
                        
         } else {
             buffer.elementStart(getTag());
@@ -580,30 +573,6 @@ public abstract class AbstractLink extends AbstractControl {
         }
     }
 
-    /**
-     * Return the Form HTML HEAD elements for the following resources:
-     *
-     * <ul>
-     * <li><tt>click/control.css</tt></li>
-     * </ul>
-     *
-     * @see org.apache.click.Control#getHeadElements()
-     *
-     * @return the form list of HEAD elements to be included in the page
-     */
-    @Override
-    public List<Element> getHeadElements() {
-        if (headElements == null) {
-            headElements = super.getHeadElements();
-
-            Context context = getContext();
-            String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
-
-            headElements.add(new CssImport("/click/control.css", versionIndicator));
-        }
-        return headElements;
-    }
-    
     // Protected Methods ------------------------------------------------------
 
     /**

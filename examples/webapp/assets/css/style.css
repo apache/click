@@ -237,7 +237,7 @@ a.tb_label {
     margin-right: 2px;
 }
 
-.image-link {
+.image-link, .image-link.disabled {
     text-decoration: none;
 }
 
@@ -248,6 +248,19 @@ a.tb_label {
 .image-link img.link {
     vertical-align: top;
     padding-right: 2px;
+}
+
+span.disabled img {
+    filter: alpha( opacity = 50 );
+    -moz-opacity: 0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+}
+
+span.disabled {
+   cursor: pointer;
+   color: #6D6D6D;
+   text-decoration: underline;
 }
 
 /* Exporter */
