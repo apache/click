@@ -256,7 +256,7 @@
              destdir="extras/classes"
              debug="true"
              excludes="**/Test*, ${exclude-hibernate}"
-             encoding="ISO-8859-1"
+             encoding="UTF-8"
              source="${javac.source}">
          <classpath refid="classpath.extras"/>
       </javac>  
@@ -301,7 +301,7 @@
       <javac srcdir="${dir.source}"
              destdir="${dir.classes}"
              debug="true"
-             encoding="ISO-8859-1"
+             encoding="UTF-8"
              source="${javac.source}">
          <classpath refid="classpath.framework"/>
       </javac>  
@@ -388,7 +388,7 @@
              destdir="mock/classes"
              debug="true"
              excludes="**/Test*"
-             encoding="ISO-8859-1"
+             encoding="UTF-8"
              source="${javac.source}">
          <classpath refid="classpath.mock"/>
       </javac>
@@ -734,7 +734,7 @@ Please ensure you have configured build.properties</echo>
       <javac srcdir="framework/src;framework/test;mock/src" 
              destdir="framework/classes" 
              debug="true"
-             encoding="ISO-8859-1"
+             encoding="UTF-8"
              source="${javac.source}">
          <classpath refid="classpath.framework"/>
          <classpath refid="classpath.extras"/>
@@ -771,7 +771,7 @@ Please ensure you have configured build.properties</echo>
       <javac srcdir="extras/src;extras/test;mock/src;framework/test" 
              destdir="extras/classes" 
              debug="true"
-             encoding="ISO-8859-1"
+             encoding="UTF-8"
              source="${javac.source}">
          <classpath refid="classpath.framework"/>
          <classpath refid="classpath.extras"/>
@@ -808,7 +808,7 @@ Please ensure you have configured build.properties</echo>
       <javac srcdir="mock/src;mock/test"
              destdir="mock/classes"
              debug="true"
-             encoding="ISO-8859-1"
+             encoding="UTF-8"
              source="${javac.source}">
          <classpath refid="classpath.mock"/>
          <classpath refid="classpath.framework"/>
