@@ -29,7 +29,7 @@ public class PageAction extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    private PageLink link = new PageLink("link", PageAction.class);
+    private PageLink link = new PageLink("link", "Get Date", PageAction.class);
 
     public PageAction() {
         addControl(link);
@@ -42,6 +42,6 @@ public class PageAction extends BorderPage {
      * This method will be invoked when the link is clicked.
      */
     public Partial getDate() {
-        return new Partial(format.currentDate());
+        return new Partial(format.currentDate("MMM dd, yyyy HH:MM:ss"));
     }
 }
