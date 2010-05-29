@@ -928,26 +928,7 @@ public class ClickServlet extends HttpServlet {
 
         // Log request parameters
         if (logger.isTraceEnabled()) {
-            Map<String, Object> requestParams = new TreeMap<String, Object>();
-
-            Enumeration e = request.getParameterNames();
-            while (e.hasMoreElements()) {
-                String name = e.nextElement().toString();
-                String value = request.getParameter(name);
-                requestParams.put(name, value);
-            }
-
-            Iterator i = requestParams.entrySet().iterator();
-            while (i.hasNext()) {
-                Map.Entry entry = (Map.Entry) i.next();
-                String name = entry.getKey().toString();
-                String value = entry.getValue().toString();
-
-                String msg = "   request param: " + name + "="
-                    + ClickUtils.limitLength(value, 40);
-
-                logger.trace(msg);
-            }
+            logRequestParameters(request);
         }
 
         String path = Context.getThreadLocalContext().getResourcePath();
@@ -1804,4 +1785,53 @@ public class ClickServlet extends HttpServlet {
 
     }
 
+    // Private methods --------------------------------------------------------
+
+    /**
+     * Log the request parameter names and values.
+     *
+     * @param request the HTTP servlet request
+     */
+    private void logRequestParameters(HttpServletRequest request) {
+
+        Map<String, String[]> requestParams = new TreeMap<String, String[]>();
+
+        Enumeration e = request.getParameterNames();
+        while (e.hasMoreElements()) {
+            String name = e.nextElement().toString();
+            String[] values = request.getParameterValues(name);
+            requestParams.put(name, values);
+        }
+
+        Iterator it = requestParams.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, String[]> entry =
+                (Map.Entry<String, String[]>) it.next();
+            String name = entry.getKey();
+            String[] values = entry.getValue();
+
+            HtmlStringBuffer buffer = new HtmlStringBuffer(40);
+            buffer.append("   request param: " + name + "=");
+
+            if (values == null) {
+                // ignore
+            } else if (values.length == 1) {
+
+                buffer.append(ClickUtils.limitLength(values[0], 40));
+            } else {
+
+                for (int i = 0; i < values.length; i++) {
+                    if (i == 0) {
+                        buffer.append('[');
+                    } else {
+                        buffer.append(", ");
+                    }
+                    buffer.append(ClickUtils.limitLength(values[i], 40));
+                }
+                buffer.append("]");
+            }
+
+            logger.trace(buffer.toString());
+        }
+    }
 }
