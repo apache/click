@@ -46,13 +46,9 @@
     <menu label="Direct Page" path="general/direct-page.htm" target="_blank"/>
     <menu label="Exception Demo" path="general/exception.htm"/>
     <menu label="Flash Attribute" path="general/flash.htm"/>
+    <menu label="Page Action" path="general/page-action.htm"/>
     <menu label="Page Imports" path="general/page-imports-example.htm"/>
     <menu label="Page Security" path="security/secure.htm"/>
-    <menu separator="true"/>
-    <menu label="AJAX Accordion" path="ajax/ajax-accordion.htm"/>
-    <menu label="AJAX Auto Complete Field" path="ajax/auto-complete.htm"/>
-    <menu label="AJAX Live Scroller " path="ajax/ajax-live-scroller.htm"/>
-    <menu label="AJAX Select" path="ajax/ajax-select.htm"/>
     <menu separator="true"/>
     <menu label="JSP Hello World" path="jsp/hello-world.htm"/>
     <menu label="JSP Customer Table" path="jsp/customer-table.htm"/>
@@ -125,20 +121,25 @@
     <menu label="Large Dataset Demo" path="table/large-dataset-demo.htm"/>
   </menu>
 
-  <menu label=" Tree" path="#" imageSrc="/assets/images/tree.png">
-    <menu label="Tree" path="tree/tree-page.htm"/>
-    <menu label="Advanced Tree" path="tree/advanced-tree-page.htm"/>
-    <menu label="Checkbox Tree" path="tree/checkbox-tree-page.htm"/>
-    <menu label="Page Link Tree" path="tree/page-link-tree-page.htm"/>
-  </menu>
-
-  <menu label=" Panel" path="#" imageSrc="/assets/images/panel.png">
+  <menu label=" Panels &amp; Trees " path="#" imageSrc="/assets/images/tree.png">
     <menu label="Simple Panel" path="panel/simple-panel-demo.htm"/>
     <menu label="List Panel" path="panel/list-panel-demo.htm"/>
     <menu label="Tabbed Panel" path="panel/tabbed-panel-demo.htm"/>
     <menu label="Filter Panel" path="panel/filter-panel-demo.htm"/>
     <menu label="Column Panel" path="panel/panel-column-demo.htm"/>
     <menu label="Reusable Panel" path="panel/reusable-panel-demo.htm"/>
+    <menu separator="true"/>
+    <menu label="Tree" path="tree/tree-page.htm"/>
+    <menu label="Advanced Tree" path="tree/advanced-tree-page.htm"/>
+    <menu label="Checkbox Tree" path="tree/checkbox-tree-page.htm"/>
+    <menu label="Page Link Tree" path="tree/page-link-tree-page.htm"/>
+  </menu>
+
+  <menu label="Ajax" path="#" imageSrc="/assets/images/lightning.png">
+    <menu label="AJAX Accordion" path="ajax/ajax-accordion.htm"/>
+    <menu label="AJAX Auto Complete Field" path="ajax/auto-complete.htm"/>
+    <menu label="AJAX Live Scroller " path="ajax/ajax-live-scroller.htm"/>
+    <menu label="AJAX Select" path="ajax/ajax-select.htm"/>
   </menu>
 
   <menu label=" Integration" path="#" imageSrc="/assets/images/cayenne.png">
