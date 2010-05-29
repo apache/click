@@ -545,8 +545,9 @@ public class ClickServlet extends HttpServlet {
 
         ActionEventDispatcher eventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
 
+        boolean errorOccurred = page instanceof ErrorPage;
         // Support direct access of click-error.htm
-        if (page instanceof ErrorPage) {
+        if (errorOccurred) {
             ErrorPage errorPage = (ErrorPage) page;
             errorPage.setMode(configService.getApplicationMode());
 
@@ -555,6 +556,16 @@ public class ClickServlet extends HttpServlet {
         }
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
+
+        Partial partial = null;
+        if (continueProcessing && !errorOccurred) {
+            // Handle page method
+            String pageAction = context.getRequestParameter(Page.PAGE_ACTION);
+            if (pageAction != null) {
+                continueProcessing = false;
+                partial = ClickUtils.invokeAction(page, pageAction);
+            }
+        }
 
         if (continueProcessing) {
             performOnInit(page, context);
@@ -568,7 +579,7 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
-        performRender(page, context);
+        performRender(page, context, partial);
     }
 
     /**
@@ -742,7 +753,8 @@ public class ClickServlet extends HttpServlet {
      * @param context the request context
      * @throws java.lang.Exception if error occurs
      */
-    protected void performRender(Page page, Context context) throws Exception {
+    protected void performRender(Page page, Context context, Partial partial)
+        throws Exception {
 
         // Process page interceptors, and abort rendering if specified
         for (PageInterceptor interceptor : getThreadLocalInterceptors()) {
@@ -788,6 +800,9 @@ public class ClickServlet extends HttpServlet {
 
                 dispatcher.forward(request, response);
             }
+
+        } else if (partial != null) {
+            partial.render(context);
 
         } else if (page.getPath() != null) {
             String pagePath = page.getPath();
@@ -928,6 +943,7 @@ public class ClickServlet extends HttpServlet {
 
         // Log request parameters
         if (logger.isTraceEnabled()) {
+            logger.trace("   is Ajax request: " + context.isAjaxRequest());
             logRequestParameters(request);
         }
 

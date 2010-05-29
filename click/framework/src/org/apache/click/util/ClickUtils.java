@@ -61,6 +61,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
+import org.apache.click.Partial;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.Container;
 import org.apache.click.control.Field;
@@ -1908,90 +1909,61 @@ public class ClickUtils {
      *
      * @see org.apache.click.Control#setListener(Object, String)
      *
-     * @param listener
-     *            the object with the method to invoke
-     * @param method
-     *            the name of the method to invoke
+     * @param listener the object with the method to invoke
+     * @param method the name of the method to invoke
      * @return true if the listener method returned true
      */
     public static boolean invokeListener(Object listener, String method) {
-        if (listener == null) {
-            throw new IllegalArgumentException("Null listener parameter");
-        }
-        if (method == null) {
-            throw new IllegalArgumentException("Null method parameter");
-        }
 
-        Method targetMethod = null;
-        boolean isAccessible = true;
-        try {
-            Class listenerClass = listener.getClass();
-            targetMethod = listenerClass.getMethod(method);
+        Object result = invokeMethod(listener, method);
 
-            // Change accessible for anonymous inner classes public methods
-            // only. Conditional checks:
-            // #1 - Target method is not accessible
-            // #2 - Anonymous inner classes are not public
-            // #3 - Only modify public methods
-            // #4 - Anonymous inner classes have no declaring class
-            // #5 - Anonymous inner classes have $ in name
-            if (!targetMethod.isAccessible()
-                && !Modifier.isPublic(listenerClass.getModifiers())
-                && Modifier.isPublic(targetMethod.getModifiers())
-                && listenerClass.getDeclaringClass() == null
-                && listenerClass.getName().indexOf('$') != -1) {
+        if (result instanceof Boolean) {
+            return (Boolean) result;
 
-                isAccessible = false;
-                targetMethod.setAccessible(true);
-            }
+        } else {
 
+            Method targetMethod = null;
+            try {
+                targetMethod = listener.getClass().getMethod(method);
 
-            Object result = targetMethod.invoke(listener);
-
-            if (result instanceof Boolean) {
-                return (Boolean) result;
-
-            } else {
                 String msg =
                     "Invalid listener method, missing boolean return type: "
                     + targetMethod;
                 throw new RuntimeException(msg);
-            }
-
-        } catch (InvocationTargetException ite) {
-
-            Throwable e = ite.getTargetException();
-            if (e instanceof RuntimeException) {
-                throw (RuntimeException) e;
-
-            } else if (e instanceof Exception) {
-                String msg =
-                    "Exception occurred invoking public method: " + targetMethod;
-
-                throw new RuntimeException(msg, e);
-
-            } else if (e instanceof Error) {
-                String msg =
-                    "Error occurred invoking public method: " + targetMethod;
-
-                throw new RuntimeException(msg, e);
-
-            } else {
-                String msg =
-                    "Error occurred invoking public method: " + targetMethod;
-
+            } catch (Exception e) {
+                String msg = "Exception occurred invoking public method: " + targetMethod;
                 throw new RuntimeException(msg, e);
             }
+        }
+    }
 
-        } catch (Exception e) {
-            String msg =
-                "Exception occurred invoking public method: " + targetMethod;
+    /**
+     * Invoke the named method on the given target and return the Object result.
+     *
+     * @param target the target object with the method to invoke
+     * @param method the name of the method to invoke
+     * @return a Partial response
+     */
+    public static Partial invokeAction(Object target, String method) {
 
-            throw new RuntimeException(msg, e);
+        Object result = invokeMethod(target, method);
 
-        } finally {
-            if (targetMethod != null && !isAccessible) {
-                targetMethod.setAccessible(false);
+        if (result == null || result instanceof Partial) {
+            return (Partial) result;
+
+        } else {
+
+            Method targetMethod = null;
+            try {
+                targetMethod = target.getClass().getMethod(method);
+
+                String msg =
+                    "Invalid target method, missing Partial return type: "
+                    + targetMethod;
+                throw new RuntimeException(msg);
+            } catch (Exception e) {
+                String msg = "Exception occurred invoking public method: " + targetMethod;
+                throw new RuntimeException(msg, e);
             }
         }
     }
@@ -2919,4 +2891,81 @@ public class ClickUtils {
         return false;
     }
 
+    /**
+     * Invoke the named method on the given target object and return the result.
+     *
+     * @param target the target object with the method to invoke
+     * @param method the name of the method to invoke
+     * @return Object the target method result
+     */
+    private static Object invokeMethod(Object target, String method) {
+        if (target == null) {
+            throw new IllegalArgumentException("Null target parameter");
+        }
+        if (method == null) {
+            throw new IllegalArgumentException("Null method parameter");
+        }
+
+        Method targetMethod = null;
+        boolean isAccessible = true;
+        try {
+            Class targetClass = target.getClass();
+            targetMethod = targetClass.getMethod(method);
+
+            // Change accessible for anonymous inner classes public methods
+            // only. Conditional checks:
+            // #1 - Target method is not accessible
+            // #2 - Anonymous inner classes are not public
+            // #3 - Only modify public methods
+            // #4 - Anonymous inner classes have no declaring class
+            // #5 - Anonymous inner classes have $ in name
+            if (!targetMethod.isAccessible()
+                && !Modifier.isPublic(targetClass.getModifiers())
+                && Modifier.isPublic(targetMethod.getModifiers())
+                && targetClass.getDeclaringClass() == null
+                && targetClass.getName().indexOf('$') != -1) {
+
+                isAccessible = false;
+                targetMethod.setAccessible(true);
+            }
+
+            return targetMethod.invoke(target);
+
+        } catch (InvocationTargetException ite) {
+
+            Throwable e = ite.getTargetException();
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
+
+            } else if (e instanceof Exception) {
+                String msg =
+                    "Exception occurred invoking public method: " + targetMethod;
+
+                throw new RuntimeException(msg, e);
+
+            } else if (e instanceof Error) {
+                String msg =
+                    "Error occurred invoking public method: " + targetMethod;
+
+                throw new RuntimeException(msg, e);
+
+            } else {
+                String msg =
+                    "Error occurred invoking public method: " + targetMethod;
+
+                throw new RuntimeException(msg, e);
+            }
+
+        } catch (Exception e) {
+            String msg =
+                "Exception occurred invoking public method: " + targetMethod;
+
+            throw new RuntimeException(msg, e);
+
+        } finally {
+            if (targetMethod != null && !isAccessible) {
+                targetMethod.setAccessible(false);
+            }
+        }
+    }
 }
