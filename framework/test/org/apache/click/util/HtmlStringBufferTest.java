@@ -35,7 +35,7 @@ public class HtmlStringBufferTest extends TestCase {
         buffer.appendAttribute("type", "text");
         buffer.appendAttributeEscaped("value", "bl'ah\"s");
         buffer.elementEnd();
-        assertEquals("<input type=\"text\" value=\"bl'ah&quot;s\"/>", buffer.toString());
+        assertEquals("<input type=\"text\" value=\"bl&#039;ah&quot;s\"/>", buffer.toString());
         
         buffer = new HtmlStringBuffer();
         buffer.appendAttribute("onclick", "if (i < 3) alert('too small');");
@@ -49,7 +49,7 @@ public class HtmlStringBufferTest extends TestCase {
         
         buffer = new HtmlStringBuffer();
         buffer.appendAttributeEscaped("test", "if (i < 3) alert('too small');");
-        value = " test=\"if (i &lt; 3) alert('too small');\"";
+        value = " test=\"if (i &lt; 3) alert(&#039;too small&#039;);\"";
         assertEquals(value, buffer.toString());
         
         buffer = new HtmlStringBuffer();
@@ -62,7 +62,7 @@ public class HtmlStringBufferTest extends TestCase {
         buffer.closeTag();
         buffer.appendEscaped("This is the car's way home today");
         buffer.elementEnd("textarea");
-        value = "<textarea id=\"textarea-id\" rows=\"2\" cols=\"12\" class=\"field-input\">This is the car's way home today</textarea>";
+        value = "<textarea id=\"textarea-id\" rows=\"2\" cols=\"12\" class=\"field-input\">This is the car&#039;s way home today</textarea>";
         assertEquals(value, buffer.toString());
         
         buffer = new HtmlStringBuffer();
