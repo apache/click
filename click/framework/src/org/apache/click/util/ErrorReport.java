@@ -421,7 +421,7 @@ public class ErrorReport {
 
             parseMsg = ClickUtils.escapeHtml(parseMsg);
 
-            parseMsg = StringUtils.replace(parseMsg, "...", ", &nbsp;");
+            parseMsg = StringUtils.replace(parseMsg, "...", ", &#160;");
 
             return parseMsg;
 
@@ -655,7 +655,7 @@ public class ErrorReport {
             buffer.append("<br/>");
         }
         if (map.isEmpty()) {
-            buffer.append("&nbsp;");
+            buffer.append("&#160;");
         }
     }
 
