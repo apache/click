@@ -563,6 +563,7 @@ public class ClickServlet extends HttpServlet {
             String pageAction = context.getRequestParameter(Page.PAGE_ACTION);
             if (pageAction != null) {
                 continueProcessing = false;
+                // Returned partial could be null
                 partial = ClickUtils.invokeAction(page, pageAction);
             }
         }
@@ -751,6 +752,7 @@ public class ClickServlet extends HttpServlet {
      *
      * @param page page to render
      * @param context the request context
+     * @param partial the partial response object
      * @throws java.lang.Exception if error occurs
      */
     protected void performRender(Page page, Context context, Partial partial)
@@ -805,19 +807,24 @@ public class ClickServlet extends HttpServlet {
             partial.render(context);
 
         } else if (page.getPath() != null) {
-            String pagePath = page.getPath();
+            // Render template unless the request was a page action. This check
+            // guards against the scenario where the page action returns null
+            // instead of a partial instance
+            if (context.getRequestParameter(Page.PAGE_ACTION) == null) {
+                String pagePath = page.getPath();
 
-            // Check if request is a JSP page
-            if (pagePath.endsWith(".jsp") || configService.isJspPage(pagePath)) {
-                // CLK-141. Set pagePath as the forward value.
-                page.setForward(StringUtils.replace(pagePath, ".htm", ".jsp"));
+                // Check if request is a JSP page
+                if (pagePath.endsWith(".jsp") || configService.isJspPage(pagePath)) {
+                    // CLK-141. Set pagePath as the forward value.
+                    page.setForward(StringUtils.replace(pagePath, ".htm", ".jsp"));
 
-                // Indicates the request is forwarded
-                request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
-                renderJSP(page);
+                    // Indicates the request is forwarded
+                    request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
+                    renderJSP(page);
 
-            } else {
-                renderTemplate(page);
+                } else {
+                    renderTemplate(page);
+                }
             }
 
         } else {
