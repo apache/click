@@ -23,15 +23,18 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.click.util.ClickUtils;
 
 /**
+ * TODO rename partial as its used for both PageAction and Ajax?
+ *
  * Partial encapsulates a fragment of an HTTP response. A Partial can be used
  * to stream back a String or byte array to the browser.
  *
@@ -72,6 +75,9 @@ public class Partial {
 
     /** The Partial writer buffer size. */
     private static final int WRITER_BUFFER_SIZE = 256;
+
+    /** The Partial output buffer size. */
+    private static final int OUTPUT_BUFFER_SIZE = 4 * 1024;
 
     // -------------------------------------------------------- Variables
 
@@ -218,6 +224,18 @@ public class Partial {
     }
 
     /**
+     * Returns a boolean indicating whether the named response header has
+     * already been set.
+     *
+     * @param name the header name
+     * @return true if the named response header has already been set, false
+     * otherwise
+     */
+    public boolean containsHeader(String name) {
+        return getHeaders().containsKey(name);
+    }
+
+    /**
      * Return the map of response header values.
      *
      * @return the map of response header values
@@ -227,6 +245,41 @@ public class Partial {
             return new HashMap();
         }
         return headers;
+    }
+
+    /**
+     * Sets a response header with the given name and value. If the header had
+     * already been set, the new value overwrites the previous one.
+     *
+     * @param name the name of the header
+     * @param value the header value
+     */
+    public void setHeader(String name, String value) {
+        getHeaders().put(name, value);
+    }
+
+    /**
+     * Adds a response header with the given name and value. This method allows
+     * response headers to have multiple values.
+     *
+     * @param name the name of the header
+     * @param value the header value
+     */
+    public void addHeader(String name, String value) {
+        Map<String, Object> headersMap = getHeaders();
+        Object currValue = headersMap.get(name);
+        if (currValue == null) {
+            headersMap.put(name, value);
+
+        } else if (currValue instanceof List) {
+            ((List) currValue).add(value);
+
+        } else {
+            List list = new ArrayList();
+            list.add(currValue);
+            list.add(value);
+            headersMap.put(name, list);
+        }
     }
 
     /**
@@ -313,14 +366,18 @@ public class Partial {
                 while (-1 != (len = reader.read(buffer))) {
                     writer.write(buffer, 0, len);
                 }
+                writer.flush();
+                writer.close();
 
             } else if (inputStream != null) {
-                byte[] buffer = new byte[WRITER_BUFFER_SIZE];
+                byte[] buffer = new byte[OUTPUT_BUFFER_SIZE];
                 int len = 0;
                 OutputStream outputStream = response.getOutputStream();
                 while (-1 != (len = inputStream.read(buffer))) {
                     outputStream.write(buffer, 0, len);
                 }
+                outputStream.flush();
+                outputStream.close();
             }
 
         } catch (Exception e) {
@@ -347,27 +404,39 @@ public class Partial {
         }
     }
 
-    private void setResponseHeaders(HttpServletResponse response, Map headers) {
+    private void setResponseHeaders(HttpServletResponse response, Map<String, Object> headers) {
 
-        for (Iterator i = headers.entrySet().iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry) i.next();
-            String name = entry.getKey().toString();
+        for (Map.Entry<String, Object> entry : headers.entrySet()) {
+            String name = entry.getKey();
             Object value = entry.getValue();
 
-            if (value instanceof String) {
-                String strValue = (String) value;
-                if (!strValue.equalsIgnoreCase("Content-Encoding")) {
-                    response.setHeader(name, strValue);
+            if (value instanceof List) {
+                for (Object obj : (List) value) {
+                    setResponseHeader(response, name, obj);
                 }
 
-            } else if (value instanceof Date) {
-                long time = ((Date) value).getTime();
-                response.setDateHeader(name, time);
-
             } else {
-                int intValue = ((Integer) value).intValue();
-                response.setIntHeader(name, intValue);
+                setResponseHeader(response, name, value);
             }
+        }
+    }
+
+    private void setResponseHeader(HttpServletResponse response, String name,
+        Object value) {
+
+        if (value instanceof String) {
+            String strValue = (String) value;
+            if (!strValue.equalsIgnoreCase("Content-Encoding")) {
+                response.setHeader(name, strValue);
+            }
+
+        } else if (value instanceof Date) {
+            long time = ((Date) value).getTime();
+            response.setDateHeader(name, time);
+
+        } else {
+            int intValue = ((Integer) value).intValue();
+            response.setIntHeader(name, intValue);
         }
     }
 
