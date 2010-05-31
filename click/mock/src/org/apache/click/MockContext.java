@@ -297,8 +297,8 @@ public class MockContext extends Context {
     public boolean executeActionListeners() {
         ActionEventDispatcher controlRegistry = ActionEventDispatcher.getThreadLocalDispatcher();
 
-        // Fire POST_ON_PROCESS events
-        return controlRegistry.fireActionEvents(this, ActionEventDispatcher.POST_ON_PROCESS_EVENT);
+        // Fire action events
+        return controlRegistry.fireActionEvents(this);
     }
 
     /**
