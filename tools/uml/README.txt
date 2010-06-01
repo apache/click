@@ -1,8 +1,10 @@
 Apache Click UML Diagrams Project
 =================================
 
-This folder contains Apache Click UML diagrams which is drawn with
-BOUML (http://bouml.free.fr/).
+This folder contains Apache Click UML diagrams which are drawn with
+the help of BOUML (http://bouml.free.fr/).
+
+You can also see the exported diagrams in the Click Documentation.
 
 Usage
 =====
