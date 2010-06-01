@@ -405,11 +405,8 @@ public class NumberField extends TextField {
     }
 
     /**
-     * Return the NumberField HTML HEAD elements for the following resource:
-     * <p/>
-     * <ul>
-     * <li><tt>click/extras-control.js</tt></li>
-     * </ul>
+     * Returns the NumberField HTML HEAD elements for the
+     * <tt>click/extras-control.js</tt> resource.
      *
      * @see org.apache.click.Control#getHeadElements()
      *

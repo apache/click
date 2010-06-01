@@ -151,7 +151,7 @@ public class Page implements Serializable {
     public static final String PAGE_MESSAGES = "click-page";
 
     /**
-     * The Page action request parameter: &nbsp; "<tt>pageAction</tt>"
+     * The Page action request parameter: &nbsp; "<tt>pageAction</tt>".
      */
     public final static String PAGE_ACTION = "pageAction";
 
