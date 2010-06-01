@@ -220,10 +220,8 @@ public class RegexField extends TextField {
     }
 
     /**
-     * Return the RegexField HTML HEAD elements for the following resource:
-     * <ul>
-     * <li><tt>click/extras-control.js</tt></li>
-     * </ul>
+     * Returns the RegexField HTML HEAD elements for the
+     * <tt>click/extras-control.js</tt> resource.
      *
      * @see org.apache.click.Control#getHeadElements()
      *

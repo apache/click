@@ -568,11 +568,8 @@ public class PickList extends Field {
     }
 
     /**
-     * Return the PickList HTML HEAD elements for the following resource:
-     * <p/>
-     * <ul>
-     * <li><tt>click/extras-control.js</tt></li>
-     * </ul>
+     * Returns the PickList HTML HEAD elements for the
+     * <tt>click/extras-control.js</tt> resource.
      *
      * @see org.apache.click.Control#getHeadElements()
      *

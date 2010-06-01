@@ -178,12 +178,8 @@ public class EmailField extends TextField {
     // Public Attributes ------------------------------------------------------
 
     /**
-     * Return the EmailField HTML head imports statements for the following
-     * resource:
-     *
-     * <ul>
-     * <li><tt>click/extras-control.js</tt></li>
-     * </ul>
+     * Returns the EmailField HTML head imports statements for the
+     * <tt>click/extras-control.js</tt> resource.
      *
      * @see org.apache.click.Control#getHeadElements()
      *

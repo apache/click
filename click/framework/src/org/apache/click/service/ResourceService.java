@@ -62,7 +62,7 @@ public interface ResourceService {
     public void onDestroy();
 
     /**
-     * Return true if the request is for a static resource
+     * Return true if the request is for a static resource.
      *
      * @param request the servlet request
      * @return true if the request is for a static resource
@@ -70,7 +70,7 @@ public interface ResourceService {
     public boolean isResourceRequest(HttpServletRequest request);
 
     /**
-     * Render the resource request to the given servlet resource response
+     * Render the resource request to the given servlet resource response.
      *
      * @param request the servlet resource request
      * @param response the servlet response

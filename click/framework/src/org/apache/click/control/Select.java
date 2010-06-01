@@ -806,7 +806,7 @@ public class Select extends Field {
     }
 
     /**
-     * Return the Select default option or null if no default option is set
+     * Return the Select default option or null if no default option is set.
      *
      * @see #setDefaultOption(org.apache.click.control.Option)
      *
