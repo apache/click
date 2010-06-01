@@ -148,8 +148,8 @@ public class AttributeEditorUtils {
 		return combo;
 	}
 
-	
-	
+
+
 	/**
 	 * Creates the classname field editor.
 	 *
@@ -168,7 +168,7 @@ public class AttributeEditorUtils {
 
 		// packagename of page class
 		final String packageName = getPagePackageName(element, superClass);
-		
+
 		final Hyperlink link = toolkit.createHyperlink(parent, label, SWT.NULL);
 		link.addHyperlinkListener(new HyperlinkAdapter(){
 			public void linkActivated(HyperlinkEvent e){
@@ -209,7 +209,9 @@ public class AttributeEditorUtils {
 								NewClassWizard wizard = new NewClassWizard();
 								wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
 								if(superClass != null){
-									if(superClass == ClickPlugin.CLICK_CONTROL_IF || superClass.endsWith("Service")){
+									if(superClass == ClickPlugin.CLICK_CONTROL_IF
+											|| superClass == ClickPlugin.CLICK_PAGE_INTERCEPTOR_IF
+											|| superClass.endsWith("Service")){
 										wizard.addInterface(superClass);
 									} else {
 										wizard.setSuperClass(superClass);
@@ -231,7 +233,7 @@ public class AttributeEditorUtils {
 		Composite composite = toolkit.createComposite(parent);
 		composite.setLayout(FieldAssistUtils.createGridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		ContentAssistField field = new ContentAssistField(composite, SWT.BORDER,
 				new TextControlCreator(), new TextContentAdapter(),
 				new TypeNameContentProposalProvider(project, packageName),

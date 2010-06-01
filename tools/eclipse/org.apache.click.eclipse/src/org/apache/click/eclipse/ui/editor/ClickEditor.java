@@ -23,6 +23,7 @@ import org.apache.click.eclipse.ClickPlugin;
 import org.apache.click.eclipse.ui.editor.forms.ClickControlsEditor;
 import org.apache.click.eclipse.ui.editor.forms.ClickGeneralEditor;
 import org.apache.click.eclipse.ui.editor.forms.ClickHeadersEditor;
+import org.apache.click.eclipse.ui.editor.forms.ClickInterceptorEditor;
 import org.apache.click.eclipse.ui.editor.forms.ClickPagesEditor;
 import org.apache.click.eclipse.ui.editor.forms.ClickServiceEditor;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -61,6 +62,7 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 	private ClickPagesEditor pageEditor;
 	private ClickControlsEditor controlEditor;
 	private ClickServiceEditor serviceEditor;
+	private ClickInterceptorEditor interceptorEditor;
 
 //	private int generalEditorIndex;
 //	private int headerEditorIndex;
@@ -108,6 +110,15 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 
 		IStructuredModel model = (IStructuredModel)sourceEditor.getAdapter(IStructuredModel.class);
 
+		try {
+			interceptorEditor = new ClickInterceptorEditor();
+			addPage(0, interceptorEditor, getEditorInput());
+			interceptorEditor.initModel(model);
+			setPageText(0, ClickPlugin.getString("editor.clickXML.pageInterceptor"));
+			sourceEditorIndex++;
+		} catch(Exception ex){
+			removePage(0);
+		}
 		try {
 			serviceEditor = new ClickServiceEditor();
 			addPage(0, serviceEditor, getEditorInput());

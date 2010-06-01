@@ -54,11 +54,12 @@ public class ClickPlugin extends AbstractUIPlugin {
 	private ResourceBundle resource;
 	private ColorManager colorManager;
 
-	private List<IClickConfigurationProvider> 
+	private List<IClickConfigurationProvider>
 		configProviders = new ArrayList<IClickConfigurationProvider>();
 
 	public static final String CLICK_PAGE_CLASS = "org.apache.click.Page";
 	public static final String CLICK_CONTROL_IF = "org.apache.click.Control";
+	public static final String CLICK_PAGE_INTERCEPTOR_IF = "org.apache.click.PageInterceptor";
 
 	public static final String TAG_CLICK_APP = "click-app";
 	public static final String TAG_HEADERS = "headers";
@@ -76,6 +77,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String TAG_LOG_SERVICE = "log-service";
 	public static final String TAG_TEMPLATE_SERVICE = "template-service";
 	public static final String TAG_RESOURCE_SERVICE = "resource-service";
+	public static final String TAG_PAGE_INTERCEPTOR = "page-interceptor";
 	public static final String ATTR_CHARSET = "charset";
 	public static final String ATTR_LOCALE = "locale";
 	public static final String ATTR_CLASSNAME = "classname";
@@ -87,12 +89,14 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String ATTR_AUTO_BINDING = "autobinding";
 	public static final String ATTR_PACKAGE = "package";
 	public static final String ATTR_PATTERN = "pattern";
+	public static final String ATTR_SCOPE = "scope";
 
 	public static final String[] BOOLEAN_VALUES = {"true", "false"};
 	public static final String[] AUTO_BINDING_VALUES = {"annotation", "public", "none"};
 	public static final String[] LOGTO_VALUES = {"console", "servlet"};
 	public static final String[] MODE_VALUES = {"production", "profile", "development", "debug", "trace"};
 	public static final String[] HEADER_TYPE_VALUES = {"String", "Integer", "Date"};
+	public static final String[] SCOPE_VALUES = {"application", "request"};
 
 	public static final String PREF_TEMPLATES = "click.templates";
 	public static final String PREF_COLOR_VAR = "click.color.variable";

@@ -46,43 +46,45 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
  * This validator validates:
  * </p>
  * <ul>
- *   <li>charset of &lt;click-app&gt;.</li>
- *   <li>package of &lt;pages&gt;.</li>
- *   <li>automapping of &lt;pages&gt;.</li>
- *   <li>type of &lt;header&gt;.</li>
- *   <li>classname of &lt;page&gt;, &lt;control&gt; and &lt;format&gt;.</li>
- *   <li>value and logto of &lt;mode&gt;.</li>
+ *   <li>classname of many elements</li>
+ *   <li>charset of &lt;click-app&gt;</li>
+ *   <li>package of &lt;pages&gt;</li>
+ *   <li>automapping and autoBinding of &lt;pages&gt;</li>
+ *   <li>type of &lt;header&gt;</li>
+ *   <li>value and logto of &lt;mode&gt;</li>
+ *   <li>scope of &lt;page-interceptor&gt;</li>
  * </ul>
  * <p>
  * All detected errors are marked as WARNING.
  * </p>
- * 
+ * TODO We might have to remove attribute value validations from this validator because they are validated by DTD.
+ *
  * @author Naoki Takezoe
  */
 public class ClickXMLValidator {
-	
-	private static ResourceBundle resource 
+
+	private static ResourceBundle resource
 		= ResourceBundle.getBundle("org.apache.click.eclipse.core.validator.validation");
-	
+
 	private String packageName = null;
-	
+
 	/**
 	 * Validates click.xml.
-	 * 
+	 *
 	 * @param file the <code>IFile</code> of click.xml.
 	 */
 	public void validate(IFile file, IProgressMonitor monitor){
-		
+
 		packageName = null;
-		
+
 		try {
 			file.deleteMarkers(IMarker.PROBLEM, false, 0);
 		} catch(Exception ex){
 			ClickPlugin.log(ex);
 		}
-		
+
 		IStructuredModel model = null;
-		
+
 		try {
 			model = StructuredModelManager.getModelManager().getModelForRead(file);
 			IStructuredDocument doc = model.getStructuredDocument();
@@ -97,16 +99,16 @@ public class ClickXMLValidator {
 						ITextRegion region = list.get(j);
 						if(region.getType()==DOMRegionContext.XML_TAG_NAME){
 							tagName = text.substring(region.getStart(), region.getEnd()).trim();
-							
+
 						} else if(region.getType()==DOMRegionContext.XML_TAG_ATTRIBUTE_NAME){
 							attrName = text.substring(region.getStart(), region.getEnd()).trim();
-							
+
 						} else if(region.getType()==DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE){
 							String attrValue = text.substring(region.getStart(), region.getEnd()).trim();
 							int length = attrValue.length();
 							attrValue = attrValue.replaceAll("^\"|\"$","");
 							if(tagName!=null && attrName!=null){
-								validateAttributeValue(file, tagName, attrName, attrValue, 
+								validateAttributeValue(file, tagName, attrName, attrValue,
 										curNode.getStart() + region.getStart(), length);
 							}
 							attrName = null;
@@ -122,35 +124,45 @@ public class ClickXMLValidator {
 			}
 		}
 	}
-	
+
 	/**
 	 * Validates the attribute value.
 	 */
-	private void validateAttributeValue(IFile file, 
+	private void validateAttributeValue(IFile file,
 			String tagName, String attrName, String attrValue, int start, int length){
-		
+
 		// package of <pages>
 		if(tagName.equals(ClickPlugin.TAG_PAGES) && attrName.equals(ClickPlugin.ATTR_PACKAGE)){
 			packageName = attrValue;
 			return;
 		}
-		
+
 		// classname of <control>, <page>, <format> and <xxx-service>
 		if(tagName.equals(ClickPlugin.TAG_CONTROL) || tagName.equals(ClickPlugin.TAG_PAGE) || tagName.equals(ClickPlugin.TAG_FORMAT) ||
-				tagName.equals(ClickPlugin.TAG_LOG_SERVICE) || tagName.equals(ClickPlugin.TAG_TEMPLATE_SERVICE) || 
-				tagName.equals(ClickPlugin.TAG_FILE_UPLOAD_SERVICE) || tagName.equals(ClickPlugin.TAG_RESOURCE_SERVICE)){
-			
+				tagName.equals(ClickPlugin.TAG_LOG_SERVICE) || tagName.equals(ClickPlugin.TAG_TEMPLATE_SERVICE) ||
+				tagName.equals(ClickPlugin.TAG_FILE_UPLOAD_SERVICE) || tagName.equals(ClickPlugin.TAG_RESOURCE_SERVICE) ||
+				tagName.equals(ClickPlugin.TAG_PAGE_INTERCEPTOR)){
+
 			if(tagName.equals(ClickPlugin.TAG_PAGE) && packageName!=null && !packageName.equals("")){
 				attrValue = packageName + "." + attrValue;
 			}
-			
+
 			if(attrName.equals(ClickPlugin.ATTR_CLASSNAME)){
 				if(!existsJavaClass(file, attrValue)){
 					createWarningMarker(file, "notExist", new String[]{attrValue}, start, length);
 				}
 			}
 		}
-		
+
+		// scope of <page-interceptor>
+		if(tagName.equals(ClickPlugin.TAG_PAGE_INTERCEPTOR)){
+			if(attrName.equals(ClickPlugin.ATTR_SCOPE)){
+				if(!containsValue(ClickPlugin.SCOPE_VALUES, attrValue)){
+					createWarningMarker(file, "scope", new String[0], start, length);
+				}
+			}
+		}
+
 		// automapping and package of <pages>
 		if(tagName.equals(ClickPlugin.TAG_PAGES)){
 			if(attrName.equals(ClickPlugin.ATTR_AUTO_MAPPING)){
@@ -162,13 +174,13 @@ public class ClickXMLValidator {
 					createWarningMarker(file, "autoBinding", new String[0], start, length);
 				}
 			} else if(attrName.equals(ClickPlugin.ATTR_PACKAGE)){
-				
+
 			}
 		}
 		// path of <page>
 		if(tagName.equals(ClickPlugin.TAG_PAGE)){
 			if(attrName.equals(ClickPlugin.ATTR_PATH)){
-				
+
 			}
 		}
 		// type of <header>
@@ -196,7 +208,7 @@ public class ClickXMLValidator {
 			}
 		}
 	}
-	
+
 	private boolean existsJavaClass(IFile file, String typename){
 		IJavaProject project = JavaCore.create(file.getProject());
 		boolean exist = false;
@@ -208,7 +220,7 @@ public class ClickXMLValidator {
 		}
 		return exist;
 	}
-	
+
 	private boolean containsValue(String[] proposals, String value){
 		for(int i=0;i<proposals.length;i++){
 			if(proposals[i].equals(value)){
@@ -217,7 +229,7 @@ public class ClickXMLValidator {
 		}
 		return false;
 	}
-	
+
 	private boolean isSupportedEncoding(String encoding){
 		try {
 			new String(new byte[0], encoding);
@@ -226,16 +238,16 @@ public class ClickXMLValidator {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Create the warning marker.
 	 */
-	private void createWarningMarker(IFile file, String key, Object[] values, 
+	private void createWarningMarker(IFile file, String key, Object[] values,
 			int start, int length){
 		try {
 			String message = resource.getString(key);
 			message = MessageFormat.format(message, values);
-			
+
 			IMarker marker = file.createMarker(IMarker.PROBLEM);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(IMarker.SEVERITY, new Integer(IMarker.SEVERITY_WARNING));
@@ -244,10 +256,10 @@ public class ClickXMLValidator {
 			map.put(IMarker.CHAR_START,new Integer(start));
 			map.put(IMarker.CHAR_END,new Integer(start + length));
 			marker.setAttributes(map);
-			
+
 		} catch(Exception e){
 			ClickPlugin.log(e);
 		}
-	}	
-	
+	}
+
 }

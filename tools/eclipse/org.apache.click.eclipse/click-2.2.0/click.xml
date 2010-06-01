@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
    Licensed to the Apache Software Foundation (ASF) under one
    or more contributor license agreements.  See the NOTICE file
@@ -18,7 +18,7 @@
    under the License.
 -->
 <!DOCTYPE click-app PUBLIC
-  "-//Apache Software Foundation//DTD Click Configuration 2.1//EN"
+  "-//Apache Software Foundation//DTD Click Configuration 2.2//EN"
   "http://click.apache.org/dtds/click-2.2.dtd">
 
 <click-app charset="UTF-8">
@@ -26,7 +26,5 @@
   <pages package="${rootPackage}" autobinding="annotation"/>
 
   <mode value="profile"/>
-
-  <page-interceptor classname="org.apache.click.examples.interceptor.ProfilingInterceptor"/>
 
 </click-app>
