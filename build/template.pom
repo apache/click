@@ -21,7 +21,10 @@
 
   <inceptionYear>2003</inceptionYear>
   <url>http://click.apache.org/</url>
-  <description>Apache Click is a J2EE web application framework designed for commercial developers.</description>
+  <description>Apache Click is a modern JEE web application framework, providing a natural
+  rich client style programming model. Apache Click is designed to be very easy to learn and use,
+  with developers getting up and running within a day.
+  </description>
 
   <issueManagement>
     <system>jira</system>
