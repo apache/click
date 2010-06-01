@@ -34,6 +34,14 @@
     <suppress checks="JavadocMethod" files="PaginatingList.java"/>
     <suppress checks="JavadocMethod" files="SessionMap.java"/>
 
+    <!-- Javadoc Style -->
+    <suppress checks="JavadocStyle" files="Form.java"            lines="1225"/>
+    <suppress checks="JavadocStyle" files="Menu.java"            lines="1025"/>
+    <suppress checks="JavadocStyle" files="CheckList.java"       lines="635"/>
+    <suppress checks="JavadocStyle" files="Tree.java"            lines="489"/>
+    <suppress checks="JavadocStyle" files="ColorPicker.java"     lines="193"/>
+    <suppress checks="JavadocStyle" files="VirtualKeyboard.java" lines="116"/>
+
     <!-- Line Length -->
     <suppress checks="LineLength" files="DateField.java"       lines="96,97,98"/>
     <suppress checks="LineLength" files="CreditCardField.java" lines="164,176"/>
