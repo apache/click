@@ -305,7 +305,6 @@ public class Context {
      * By specifying "<tt>X-Requested-With</tt>" as a request parameter the IFrame
      * request will be handled like a normal Ajax request.
      *
-     * @param request the servlet request
      * @return true if this is an Ajax request, false otherwise
      */
     public boolean isAjaxRequest() {
