@@ -23,7 +23,7 @@ Docmentation
 
 Comprehensive HTML documentation is available online at:
 
-    http://incubator.apache.org/click/docs/click-ide.html
+    http://click.apache.org/docs/click-ide.html
 
 
 Release Notes
@@ -31,7 +31,7 @@ Release Notes
 
 Detailed release notes are available here:
 
-    http://incubator.apache.org/click/docs/click-ide-roadmap-changes.html
+    http://click.apache.org/docs/click-ide-roadmap-changes.html
 
 
 Build Information

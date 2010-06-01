@@ -25,10 +25,10 @@
     <topic label="Best Practices" href="documentation/user-guide/ch05.html"/>
   </topic>
   <topic label="Javadoc" href="documentation/javadoc.html">
-    <topic label="Click API" href="http://incubator.apache.org/click/docs/click-api/overview-summary.html"/>
-    <topic label="Control API" href="http://incubator.apache.org/click/docs/click-api/org/apache/click/control/package-summary.html"/>
-    <topic label="Extras API" href="http://incubator.apache.org/click/docs/extras-api/overview-summary.html"/>
-    <topic label="Mock API" href="http://incubator.apache.org/click/docs/mock-api/overview-summary.html"/>
+    <topic label="Click API" href="http://click.apache.org/docs/click-api/overview-summary.html"/>
+    <topic label="Control API" href="http://click.apache.org/docs/click-api/org/apache/click/control/package-summary.html"/>
+    <topic label="Extras API" href="http://click.apache.org/docs/extras-api/overview-summary.html"/>
+    <topic label="Mock API" href="http://click.apache.org/docs/mock-api/overview-summary.html"/>
   </topic>
   <topic label="Velocity" href="documentation/velocity/velocity.html">
     <topic label="Users Guide PDF" href="documentation/velocity/VelocityUsersGuide.pdf"/>
