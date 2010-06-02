@@ -1062,9 +1062,8 @@ public class Menu extends AbstractControl {
 
         // Note, the addLoadEvent script is recreated and checked if it
         // is contained in the headElement.
-        String menuId = getId();
         JsScript script = new JsScript();
-        script.setId(menuId + "_js_setup");
+        script.setId(id + "_js_setup");
         if (!headElements.contains(script)) {
             // Script must be executed as soon as browser dom is ready
             script.setExecuteOnDomReady(true);
