@@ -423,7 +423,7 @@ public class Partial {
     }
 
     /**
-     * Process the partial with the given context.
+     * Render the partial response to the client.
      *
      * @param context the request context
      */
