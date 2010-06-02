@@ -92,7 +92,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String ATTR_SCOPE = "scope";
 
 	public static final String[] BOOLEAN_VALUES = {"true", "false"};
-	public static final String[] AUTO_BINDING_VALUES = {"annotation", "public", "none"};
+	public static final String[] AUTO_BINDING_VALUES = {"default", "annotation", "none"};
 	public static final String[] LOGTO_VALUES = {"console", "servlet"};
 	public static final String[] MODE_VALUES = {"production", "profile", "development", "debug", "trace"};
 	public static final String[] HEADER_TYPE_VALUES = {"String", "Integer", "Date"};
