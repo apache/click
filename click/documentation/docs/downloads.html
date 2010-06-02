@@ -101,10 +101,11 @@
                 </tr>
             </tbody>
         </table>
-
         <p/>
-        <a class="external" target="_blank" href="http://hudson.zones.apache.org/hudson/view/Click/job/Click/">Nightly builds</a>
-        are available from our continuous integration server.
+        We strongly encourage our users to <a href="#verify">verify the integrity and authenticity</a> of each downloaded release.
+        <p/>
+        <b><a class="external" target="_blank" href="http://hudson.zones.apache.org/hudson/view/Click/job/Click/">Nightly builds</a></b>
+        are also available from our continuous integration server.
 
         <h2 class="heading">Pre Apache Releases</h2>
         Please select a release from the table below. All releases are platform independent.
@@ -215,5 +216,63 @@
                 click-nodeps
             </li>
         </ul>
+
+    <h2 class="heading">ANT</h2>
+        Click JARs can also be downloaded automatically into your project using ANT. The following ANT macro can be
+        included in your <tt>build.xml</tt> file:
+<pre style="border: 1px solid #888888; padding: 1em; overflow: auto">
+<span class="tag">&lt;macrodef</span> name=<span class="red">"downloadMacro"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;attribute</span> name=<span class="red">"name"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;attribute</span> name=<span class="red">"path"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;sequential&gt;</span>
+        <span class="tag">&lt;get</span> src=<span class="red">"${repository}/maven2/@{path}/@{name}"</span>
+             dest=<span class="red">"lib/@{name}"</span>
+             verbose=<span class="red">"true"</span>
+             usetimestamp=<span class="red">"true"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/sequential&gt;</span>
+<span class="tag">&lt;/macrodef&gt;</span>    
+</pre>
+and than, using the following properties and task to get the JARs on demand:
+<pre style="border: 1px solid #888888; padding: 1em; overflow: auto">
+<span class="tag">&lt;property</span> name=<span class="red">"jar.click"</span>        value=<span class="red">"click-${click.version}.jar"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;property</span> name=<span class="red">"jar.click-extras"</span> value=<span class="red">"click-extras-${click.version}.jar"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;property</span> name=<span class="red">"jar.click-mock"</span>   value=<span class="red">"click-mock-${click.version}.jar"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;property</span> name=<span class="red">"repository"</span>       value=<span class="red">"http://repo1.maven.org"</span><span class="tag">/&gt;</span>
+
+<span class="tag">&lt;target</span> name=<span class="red">"get-deps"</span> description=<span class="red">"download JAR dependencies"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;downloadMacro</span> name=<span class="red">"${jar.click}"</span>        path=<span class="red">"org/apache/click/click/${click.version}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;downloadMacro</span> name=<span class="red">"${jar.click-extras}"</span> path=<span class="red">"org/apache/click/click-extras/${click.version}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;downloadMacro</span> name=<span class="red">"${jar.click-mock}"</span>   path=<span class="red">"org/apache/click/click-mock/${click.version}"</span><span class="tag">/&gt;</span>
+    &lt;!-- Include here other required dependencies too. --&gt;
+<span class="tag">&lt;/target&gt;</span>
+</pre>
+        <p/>
+    <a name="verify-download"> </a>    
+    <h2 class="heading">Verifying the Downloads</h2>
+    All Click releases are digitally signed: in order to ensure their integrity and authenticity. Details about the signing
+    process employed at Apache.org can be found <a href="http://www.apache.org/dev/release-signing.html">here</a>.
+    <p/>
+    <b>MD5</b> can be used to verify the integrity of a downloaded Click release, by:
+        <ol>
+            <li>regenerating the checksum with: <pre style="border: 1px solid #888888; padding: 1em; overflow: auto">md5sum click-2.2.0.zip</pre></li>
+            <li>and comparing this result with to the downloaded checksum, e.g. by using:
+                <ul>
+                    <li><a class="external" target="_blank" href="http://technet.microsoft.com/en-us/library/bb490883.aspx"><tt>COMP</tt></a> on Windows.</li>
+                    <li><a class="external" target="_blank" href="http://en.wikipedia.org/wiki/Diff#Usage"><tt>diff</tt></a> on Linux and UNIX.</li>
+                </ul>
+            </li>
+        </ol>
+    <p/>
+    <b>PGP</b> signatures can be verified by using <a class="external" target="_blank" href="http://www.gnupg.org/">GnuPG</a>
+    <i>(there is also a <a class="external" target="_blank" href="http://www.gpg4win.org/">Windows</a> port available)</i>.
+    In order to verify the PGP signature of a Click release, the following steps might help:
+        <ol>
+            <li>download the <a class="external" target="_blank" href="http://svn.apache.org/repos/asf/click/trunk/click/KEYS">KEYS</a> file</li>
+            <li>import the KEYS into GnuPG: <pre style="border: 1px solid #888888; padding: 1em; overflow: auto">gpg --import KEYS</pre></li>
+            <li>download the ASC files from the <b><a target="_blank" href="http://www.apache.org/dist/click/click/">main distribution site</a></b> only!</li>
+            <li>run the verification process:<pre  style="border: 1px solid #888888; padding: 1em; overflow: auto">gpg --verify click-2.2.0.zip.asc</pre></li>
+        </ol>
+        
+    <p/>
     </body>
 </html>
