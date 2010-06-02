@@ -20,20 +20,21 @@ package org.apache.click;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.click.util.ClickUtils;
 
 /**
  * TODO rename partial as its used for both PageAction and Ajax?
+ *
+ * TODO add support for rendering a given template
  *
  * Partial encapsulates a fragment of an HTTP response. A Partial can be used
  * to stream back a String or byte array to the browser.
@@ -102,7 +103,50 @@ public class Partial {
     /** Indicates whether the Partial should be cached by browser. */
     private boolean cachePartial = false;
 
+    /** The path of the partial template to render. */
+    private String template;
+
+    /** The model for the Partial {@link #template}. */
+    private Map<String, Object> model;
+
     // ----------------------------------------------------------- Constructors
+
+    /**
+     * Construct the Partial for the given template and model.
+     * <p/>
+     * When the Partial is rendered the template and model will be merged and
+     * the result will be streamed back to the client.
+     * <p/>
+     * For example:
+     * <pre class="prettyprint">
+     * public class MyPage extends Page {
+     *     public void onInit() {
+     *
+     *         Behavior behavior = new DefaultAjaxBehavior() {
+     *
+     *             public Partial onAction() {
+     *
+     *                 Map model = new HashMap();
+     *                 model.put("id", "link");
+     *
+     *                 // Note: we set XML as the content type
+     *                 Partial partial = new Partial("/js/partial.xml", model, Partial.XML);
+     *
+     *                 return partial;
+     *             }
+     *         }
+     *     }
+     * } </pre>
+     *
+     * @param template the template to render and stream back to the client
+     * @param model the template data model
+     * @param contentType the response content type
+     */
+    public Partial(String template, Map<String, Object> model, String contentType) {
+        this.template = template;
+        this.model = model;
+        this.contentType = contentType;
+    }
 
     /**
      * Construct the Partial for the given reader and content type.
@@ -337,30 +381,82 @@ public class Partial {
     }
 
     /**
-     * Process the partial with the given context.
+     * Return the data model for the Partial {@link #template}.
      *
-     * @param context the request context to use
+     * @return the data model for the Partial template
      */
-    public final void render(Context context) {
-        prepare(context);
-        render(context.getRequest(), context.getResponse());
+    public Map getModel() {
+        if (model == null) {
+            model = new HashMap();
+        }
+        return model;
     }
 
     /**
-     * Render the partial to the specified response.
+     * Set the model of the Partial template to render.
+     * <p/>
+     * If the {@link #template} property is set, the template and {@link #model}
+     * will be merged and the result will be streamed back to the client.
      *
-     * @param request the page servlet request
-     * @param response the page servlet response
+     * @param model the model of the template to render
      */
-    protected void render(HttpServletRequest request, HttpServletResponse response) {
+    public void setModel(Map<String, Object> model) {
+        this.model = model;
+    }
+
+    /**
+     * Return the template to render for this partial.
+     *
+     * @return the template to render for this partial
+     */
+    public String getTemplate() {
+        return template;
+    }
+
+    /**
+     * Set the template to render for this partial.
+     *
+     * @param template the template to render for this partial
+     */
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
+    /**
+     * Process the partial with the given context.
+     *
+     * @param context the request context
+     */
+    public final void render(Context context) {
+        prepare(context);
+        renderPartial(context);
+    }
+
+    /**
+     * Render the partial response to the client.
+     *
+     * @param context the request context
+     */
+    protected void renderPartial(Context context) {
+
+        HttpServletResponse response = context.getResponse();
 
         try {
-            if (content != null) {
+            String template = getTemplate();
+            if (template != null) {
+                Map<String, Object> templateModel = getModel();
+                if (templateModel == null) {
+                    templateModel = new HashMap<String, Object>();
+                }
+                String result = context.renderTemplate(template, templateModel);
+                this.reader = new StringReader(result);
+
+            } else if (content != null) {
                 this.reader = new StringReader(content.toString());
             }
 
             if (reader != null) {
-                PrintWriter writer = response.getWriter();
+                Writer writer = response.getWriter();
                 char[] buffer = new char[WRITER_BUFFER_SIZE];
                 int len = 0;
                 while (-1 != (len = reader.read(buffer))) {
