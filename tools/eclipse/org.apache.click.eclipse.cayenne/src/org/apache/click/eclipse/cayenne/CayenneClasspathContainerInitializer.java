@@ -45,7 +45,7 @@ public class CayenneClasspathContainerInitializer extends ClasspathContainerInit
 	public void initialize(final IPath containerPath, IJavaProject project) throws CoreException {
 
 		final IClasspathEntry[] entries = new IClasspathEntry[]{
-				getLibraryEntry("cayenne/cayenne-server-3.0M6.jar"),
+				getLibraryEntry("cayenne/cayenne-server-3.0.jar"),
 				getLibraryEntry("cayenne/ashwood-2.0.jar"),
 				getLibraryEntry("cayenne/commons-collections-3.1.jar"),
 				getLibraryEntry("cayenne/commons-logging-1.1.jar"),
