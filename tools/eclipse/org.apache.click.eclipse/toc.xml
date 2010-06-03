@@ -31,7 +31,7 @@
     <topic label="Mock API" href="http://click.apache.org/docs/mock-api/overview-summary.html"/>
   </topic>
   <topic label="Velocity" href="documentation/velocity/velocity.html">
-    <topic label="Users Guide PDF" href="documentation/velocity/VelocityUsersGuide.pdf"/>
+    <topic label="Users Guide" href="documentation/velocity/user-guide.html"/>
     <topic label="Developers Guide" href="documentation/velocity/developer-guide.html"/>
     <topic label="VTL Reference" href="documentation/velocity/vtl-reference-guide.html"/>
   </topic>
