@@ -19,9 +19,9 @@
 package org.apache.click.extras.control;
 
 import java.util.Date;
-
-import org.apache.click.MockContext;
+import java.util.Locale;
 import junit.framework.TestCase;
+import org.apache.click.MockContext;
 import org.apache.click.servlet.MockRequest;
 import org.apache.commons.lang.StringUtils;
 
@@ -66,6 +66,7 @@ public class DateFieldTest extends TestCase {
     public void testIntegerCacheValue() {
         MockContext mockContext = MockContext.initContext();
         MockRequest request = mockContext.getMockRequest();
+        mockContext.setLocale(Locale.US);
         
         DateField dateField = new DateField("dateField");
         dateField.setFormatPattern("dd MMM yyyy H m s S");
