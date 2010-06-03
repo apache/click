@@ -822,6 +822,7 @@ Please ensure you have configured build.properties</echo>
          <batchtest fork="yes" todir="mock/test">
             <fileset dir="mock/test">
                <include name="**/*Test.java"/>
+               <include name="**/*Tests.java"/>
             </fileset>
          </batchtest>
       </junit>
