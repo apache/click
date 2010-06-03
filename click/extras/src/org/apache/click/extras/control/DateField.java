@@ -140,7 +140,7 @@ public class DateField extends TextField {
 
     /** Supported locales. */
     static final String[] SUPPORTTED_LANGUAGES =
-        {"da", "de", "fi", "fr", "ja", "nl", "pl", "pt", "ru"};
+        {"da", "de", "en", "fi", "fr", "ja", "nl", "pl", "pt", "ru"};
 
     // Instance Variables -----------------------------------------------------
 
