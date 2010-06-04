@@ -139,7 +139,7 @@ public class DateField extends TextField {
     private static final long serialVersionUID = 1L;
 
     /** Supported locales. */
-    static final String[] SUPPORTTED_LANGUAGES =
+    static final String[] SUPPORTED_LANGUAGES =
         {"da", "de", "en", "fi", "fr", "ja", "nl", "pl", "pt", "ru"};
 
     // Instance Variables -----------------------------------------------------
@@ -951,13 +951,13 @@ public class DateField extends TextField {
 
         locale = getContext().getLocale();
         String lang = locale.getLanguage();
-        if (Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0) {
+        if (Arrays.binarySearch(SUPPORTED_LANGUAGES, lang) >= 0) {
             return locale;
         }
 
         locale = Locale.getDefault();
         lang = locale.getLanguage();
-        if (Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0) {
+        if (Arrays.binarySearch(SUPPORTED_LANGUAGES, lang) >= 0) {
             return locale;
         }
 
