@@ -1259,8 +1259,8 @@ public class Menu extends AbstractControl {
                 renderMenuListItemAttributes(buffer, child, depth);
                 buffer.closeTag();
 
-                if (menu.isSeparator()) {
-                    renderSeparator(buffer, menu);
+                if (child.isSeparator()) {
+                    renderSeparator(buffer, child);
                 } else {
                     renderMenuLink(buffer, child);
                 }
