@@ -28,6 +28,8 @@ import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.click.control.Container;
 import org.apache.click.control.Panel;
+import org.apache.click.control.Radio;
+import org.apache.click.control.RadioGroup;
 import org.apache.click.control.Table;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.CssStyle;
@@ -381,6 +383,14 @@ public class PageImports {
             if (table.hasControls()) {
                 for (Control childControl : table.getControls()) {
                     processControl(childControl);
+                }
+            }
+
+        } else if (control instanceof RadioGroup) {
+            RadioGroup radioGroup = (RadioGroup) control;
+            if (radioGroup.hasRadios()) {
+                for (Radio radio : radioGroup.getRadioList()) {
+                    processControl(radio);
                 }
             }
         }
