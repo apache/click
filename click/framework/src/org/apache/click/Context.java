@@ -308,8 +308,7 @@ public class Context {
      * @return true if this is an Ajax request, false otherwise
      */
     public boolean isAjaxRequest() {
-        return getRequest().getHeader(X_REQUESTED_WITH) != null
-            || getRequest().getParameter(X_REQUESTED_WITH) != null;
+        return ClickUtils.isAjaxRequest(getRequest());
     }
 
     /**
