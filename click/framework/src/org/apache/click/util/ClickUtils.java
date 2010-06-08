@@ -62,7 +62,9 @@ import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.click.Partial;
+import org.apache.click.control.AbstractControl;
 import org.apache.click.control.AbstractLink;
+import org.apache.click.control.ActionLink;
 import org.apache.click.control.Container;
 import org.apache.click.control.Field;
 import org.apache.click.control.Form;
@@ -143,6 +145,9 @@ public class ClickUtils {
     /** Hexadecimal characters for MD5 encoding. */
     private static final char[] HEXADECIMAL = { '0', '1', '2', '3', '4', '5',
         '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
+    /** Ajax request header or parameter: "<tt>X-Requested-With</tt>". */
+    private static final String X_REQUESTED_WITH = "X-Requested-With";
 
     /**
      * The array of escaped HTML character values, indexed on char value.
@@ -693,6 +698,30 @@ public class ClickUtils {
     }
 
     /**
+     * Return true is this is an Ajax request, false otherwise.
+     * <p/>
+     * An Ajax request is identified by the presence of the request <tt>header</tt>
+     * or request <tt>parameter</tt>: "<tt>X-Requested-With</tt>".
+     * "<tt>X-Requested-With</tt>" is the de-facto standard identifier used by
+     * Ajax libraries.
+     * <p/>
+     * <b>Note:</b> incoming requests that contains a request <tt>parameter</tt>
+     * "<tt>X-Requested-With</tt>" will result in this method returning true, even
+     * though the request itself was not initiated through a <tt>XmlHttpRequest</tt>
+     * object. This allows one to programmatically enable Ajax requests. A common
+     * use case for this feature is when uploading files through an IFrame element.
+     * By specifying "<tt>X-Requested-With</tt>" as a request parameter the IFrame
+     * request will be handled like a normal Ajax request.
+     *
+     * @param request the servlet request
+     * @return true if this is an Ajax request, false otherwise
+     */
+    public static boolean isAjaxRequest(HttpServletRequest request) {
+        return request.getHeader(X_REQUESTED_WITH) != null
+            || request.getParameter(X_REQUESTED_WITH) != null;
+    }
+
+    /**
      * Return true if the request is a multi-part content type POST request.
      *
      * @param request the page servlet request
@@ -1048,6 +1077,83 @@ public class ClickUtils {
             }
         }
         return "";
+    }
+
+    /**
+     * Return the given control CSS selector or null if no selector can be found.
+     * <p/>
+     * <b>Please note:</b> it is highly recommended to set a control's ID
+     * attribute when dealing with Ajax requests.
+     * <p/>
+     * The algorith returns the selector in the following order:
+     * <ol>
+     *   <li>if control.getId() is set, prepend it with a '#' char
+     *   and return the value. An example selector will be: <tt>#field-id</tt></li>
+     *   <li>if control.getName() is not null the following checks are made:
+     *     <ol>
+     *       <li>if the control is of type {@link org.apache.click.control.ActionLink},
+     *       its "<tt>class</tt>" attribute selector will be returned. For example:
+     *       <tt>input[class=red]</tt>.
+     *       <b>Please note:</b> if no class attribute is set, this method will
+     *       automatically set link's "class" attribute to its name value and
+     *       prefix the name with an underscore '_'. For example:
+     *       <tt>input[class=_my-link]</tt>.
+     *       </li>
+     *       <li>if the control is not an ActionLink, it is assumed the control
+     *       will render its "<tt>name</tt>" attribute and the name attribute
+     *       selector will be returned. For example: <tt>input[name=my-button]</tt>.
+     *       </li>
+     *     </ol>
+     *   </li>
+     *   <li>otherwise this method returns null.
+     *   </li>
+     * </ol>
+     *
+     * @param control the control which CSS selector to return
+     * @return the control CSS selector or null if no selector can be found
+     * @throws IllegalArgumentException if control is null
+     */
+    public static String getCssSelector(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("Control cannot be null");
+        }
+
+        String id = control.getId();
+        String name = control.getName();
+        String cssSelector = null;
+
+        if (StringUtils.isNotBlank(id)) {
+            cssSelector = '#' + id;
+        } else if (StringUtils.isNotBlank(name)) {
+            String tag = null;
+
+            // Try and create a more specific selector by retrieving the
+            // control's tag
+            if (control instanceof AbstractControl) {
+                tag = StringUtils.defaultString(((AbstractControl) control).getTag());
+            }
+
+            HtmlStringBuffer buffer = new HtmlStringBuffer(20);
+
+            // Handle ActionLink (perhaps other link controls too?) differently
+            // as it doesn't render the "name" attribute. The "name" attribute
+            // is used by links for bookmarking purposes. Instead set the class
+            // attribute to the link's name and use that as the selector.
+            if (control instanceof ActionLink) {
+                ActionLink link = (ActionLink) control;
+                if (!link.hasAttribute("class")) {
+                    link.setAttribute("class", '_' + name);
+                }
+                buffer.append(tag).append("[class*=");
+                buffer.append(link.getAttribute("class")).append("]");
+
+            } else {
+                buffer.append(tag).append("[name=");
+                buffer.append(name).append("]");
+            }
+            cssSelector = buffer.toString();
+        }
+        return cssSelector;
     }
 
     /**
