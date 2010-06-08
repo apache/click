@@ -18,9 +18,9 @@
  */
 package org.apache.click.control;
 
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -77,9 +77,16 @@ public class ActionButton extends Button {
     /** The button is clicked. */
     protected boolean clicked;
 
+    /** The button parameters map. */
+    protected Map<String, Object> parameters;
 
-    /** The link parameters map. */
-    protected Map<String, String> parameters;
+    /**
+     * Flag indicating whether incoming request parameters are only bound to the
+     * buttons {@link #parameters} if they have been defined before the
+     * {@link #onProcess()} event. Strict parameter binding will be applied for
+     * ajax requests, while non-strict binding is used for non-ajax requests.
+     */
+    protected Boolean strictParameterBinding = null;
 
     // ----------------------------------------------------------- Constructors
 
@@ -212,6 +219,7 @@ public class ActionButton extends Button {
      * @param name of the control
      * @throws IllegalArgumentException if the name is null
      */
+    @Override
     public void setName(String name) {
         if (ACTION_BUTTON.equals(name)) {
             String msg = "Invalid name '" + ACTION_BUTTON + "'. This name is "
@@ -231,6 +239,7 @@ public class ActionButton extends Button {
      * @throws IllegalArgumentException if the given parent instance is
      * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
      */
+    @Override
     public void setParent(Object parent) {
         if (parent == this) {
             throw new IllegalArgumentException("Cannot set parent to itself");
@@ -294,8 +303,80 @@ public class ActionButton extends Button {
      *
      * @return the ActionButton anchor &lt;a&gt; tag HTML href attribute value
      */
+    @Override
     public String getOnClick() {
         return getOnClick(getValueObject());
+    }
+
+    /**
+     * Return true if strict parameter binding is used, false otherwise.
+     *
+     * @see {@link #setStrictParameterBinding(boolean)} for more information
+     *
+     * @return true if strict parameter binding is used, false otherwise
+     */
+    public boolean isStrictParameterBinding() {
+        if (strictParameterBinding == null) {
+            return Boolean.FALSE;
+        }
+        return strictParameterBinding;
+    }
+
+    /**
+     * Set whether strict parameter binding should be used. By default strict
+     * parameter binding is used for ajax requests, while non-strict binding is
+     * used for non-ajax requests.
+     * <p/>
+     * Strict parameter binding means that incoming request parameters are only
+     * added to the button {@link #parameters parameter map} if these parameters
+     * have been defined <i>before</i> the {@link #onProcess()} event.
+     * <p/>
+     * A button parameter is automatically defined when
+     * {@link #setParameter(java.lang.String, java.lang.String) setting a parameter}.
+     * Alternatively a parameter can be explicitly defined via
+     * {@link #defineParameter(java.lang.String)}.
+     * <p/>
+     * For example:
+     * <pre class="prettyprint">
+     * private ActionButton button = new ActionButton("button");
+     *
+     * public void onInit() {
+     *     button.defineParameter("id"); // Explicitly defined parameter
+     *     button.setParameter("customerName", "John"); // Implicitly defined parameter
+     * } </pre>
+     *
+     * @param value true if strict parameter binding should be used, false
+     * otherwise
+     */
+    public void setStrictParameterBinding(boolean value) {
+        this.strictParameterBinding = value;
+    }
+
+    /**
+     * Defines a button parameter that will be bound to its matching request
+     * parameter.
+     * <p/>
+     * <b>Please note:</b> by default parameters only need to be defined for
+     * ajax requests. For non-ajax requests, <i>all</i> incoming request parameters
+     * are bound. This behavior can be controlled through the
+     * {@link #setStrictParameterBinding(boolean) strictParameterBinding}
+     * property.
+     * <p/>
+     * <b>Also note:</b> parameters must be defined <i>before</i> the
+     * {@link #onProcess()} event, otherwise they will not be bound to
+     * incoming request parameters.
+     *
+     * @param name the name of the parameter to define
+     */
+    public void defineParameter(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        Map<String, Object> parameters = getParameters();
+        if (!parameters.containsKey(name)) {
+            parameters.put(name, null);
+        }
     }
 
     /**
@@ -307,7 +388,8 @@ public class ActionButton extends Button {
      */
     public String getParameter(String name) {
         if (hasParameters()) {
-            return getParameters().get(name);
+            Object value = getParameters().get(name);
+            return (value == null ? null : value.toString());
         } else {
             return null;
         }
@@ -337,9 +419,9 @@ public class ActionButton extends Button {
      *
      * @return the ActionButton parameters Map
      */
-    public Map<String, String> getParameters() {
+    public Map<String, Object> getParameters() {
         if (parameters == null) {
-            parameters = new HashMap<String, String>(4);
+            parameters = new HashMap<String, Object>(4);
         }
         return parameters;
     }
@@ -359,9 +441,10 @@ public class ActionButton extends Button {
      *
      * @return the ActionButton value if the ActionButton was processed
      */
+    @Override
     public String getValue() {
         if (hasParameters()) {
-            return getParameters().get(VALUE);
+            return getParameter(VALUE);
         } else {
             return null;
         }
@@ -420,6 +503,7 @@ public class ActionButton extends Button {
      *
      * @param value the ActionButton value
      */
+    @Override
     public void setValue(String value) {
         getParameters().put(VALUE, value);
     }
@@ -429,6 +513,7 @@ public class ActionButton extends Button {
      *
      * @return the value of the ActionButton
      */
+    @Override
     public Object getValueObject() {
         return getParameters().get(VALUE);
     }
@@ -438,6 +523,7 @@ public class ActionButton extends Button {
      *
      * @param object the object value to set
      */
+    @Override
     public void setValueObject(Object object) {
         if (object != null) {
             setValue(object.toString());
@@ -447,9 +533,10 @@ public class ActionButton extends Button {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * This method binds the submitted request value to the ActionLink's
+     * This method binds the submitted request value to the ActionButton's
      * value.
      */
+    @Override
     @SuppressWarnings("unchecked")
     public void bindRequestValue() {
         Context context = getContext();
@@ -460,15 +547,7 @@ public class ActionButton extends Button {
         clicked = getName().equals(context.getRequestParameter(ACTION_BUTTON));
 
         if (clicked) {
-            HttpServletRequest request = context.getRequest();
-
-            Enumeration paramNames = request.getParameterNames();
-
-            while (paramNames.hasMoreElements()) {
-                String name = paramNames.nextElement().toString();
-                String value = request.getParameter(name);
-                getParameters().put(name, value);
-            }
+            bindRequestParameters(context);
         }
     }
 
@@ -481,6 +560,7 @@ public class ActionButton extends Button {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
         if (isDisabled()) {
             Context context = getContext();
@@ -511,6 +591,7 @@ public class ActionButton extends Button {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 
@@ -533,5 +614,48 @@ public class ActionButton extends Button {
         }
 
         buffer.elementEnd();
+    }
+
+    // Protected Methods ------------------------------------------------------
+
+    /**
+     * This method binds the submitted request parameters to the buttons's
+     * parameters.
+     *
+     * @param context the request context
+     */
+    @SuppressWarnings("unchecked")
+    protected void bindRequestParameters(Context context) {
+        defineParameter(VALUE);
+
+        HttpServletRequest request = context.getRequest();
+
+        Set<String> parameterNames = null;
+
+        Map parameters = getParameters();
+
+        if (strictParameterBinding == null) {
+            if (getContext().isAjaxRequest()) {
+                parameterNames = parameters.keySet();
+            } else {
+                parameterNames = request.getParameterMap().keySet();
+            }
+        } else {
+            if (isStrictParameterBinding()) {
+                parameterNames = parameters.keySet();
+            } else {
+                parameterNames = request.getParameterMap().keySet();
+            }
+        }
+
+        for (String param : parameterNames) {
+            String[] values = request.getParameterValues(param);
+
+            if (values != null && values.length == 1) {
+                parameters.put(param, values[0]);
+            } else {
+                parameters.put(param, values);
+            }
+        }
     }
 }
