@@ -929,6 +929,17 @@ public class Select extends Field {
     }
 
     /**
+     * This method invokes {@link #getOptionList()} to ensure exceptions thrown
+     * while retrieving options will be handled by the error page.
+     *
+     * @see org.apache.click.Control#onRender()
+     */
+    @Override
+    public void onRender() {
+        getOptionList();
+    }
+
+    /**
      * @see AbstractControl#getControlSizeEst()
      *
      * @return the estimated rendered control size in characters
