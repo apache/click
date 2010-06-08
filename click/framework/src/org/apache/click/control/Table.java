@@ -1342,7 +1342,8 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Perform any pre rendering logic.
+     * This method invokes {@link #getRowList()} to ensure exceptions thrown
+     * while retrieving table rows will be handled by the error page.
      *
      * @see org.apache.click.Control#onRender()
      */
@@ -1353,6 +1354,7 @@ public class Table extends AbstractControl {
             Control control = getControls().get(i);
             control.onRender();
         }
+        getRowList();
     }
 
     /**
