@@ -171,6 +171,7 @@ public class CheckboxTree extends Tree {
      */
     @Override
     public void onInit() {
+        super.onInit();
         setDecorator(createDecorator());
     }
 
