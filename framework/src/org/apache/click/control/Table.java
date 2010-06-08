@@ -1368,6 +1368,11 @@ public class Table extends AbstractControl {
     @Override
     public boolean onProcess() {
         ActionLink controlLink = getControlLink();
+        controlLink.defineParameter(PAGE);
+        controlLink.defineParameter(COLUMN);
+        controlLink.defineParameter(ASCENDING);
+        controlLink.defineParameter(SORT);
+
         controlLink.onProcess();
 
         if (controlLink.isClicked()) {
