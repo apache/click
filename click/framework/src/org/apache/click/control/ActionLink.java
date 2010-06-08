@@ -510,4 +510,17 @@ public class ActionLink extends AbstractLink {
         return true;
     }
 
+    // Protected Methods ------------------------------------------------------
+
+    /**
+     * This method binds the submitted request parameters to the link's
+     * parameters.
+     *
+     * @param context the request context
+     */
+    @Override
+    protected void bindRequestParameters(Context context) {
+        defineParameter(VALUE);
+        super.bindRequestParameters(context);
+    }
 }
