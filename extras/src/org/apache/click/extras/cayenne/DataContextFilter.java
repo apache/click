@@ -310,6 +310,7 @@ public class DataContextFilter implements Filter {
      * Destroy the DataContextFilter.
      */
     public void destroy() {
+        Configuration.getSharedConfiguration().shutdown();
         this.filterConfig = null;
     }
 
