@@ -295,7 +295,7 @@ public interface ConfigService {
      *
      * @return the list of configured page classes
      */
-    public List<? extends Page> getPageClassList();
+    public List<Class<? extends Page>> getPageClassList();
 
     /**
      * Return Map of bindable fields for the given page class.
