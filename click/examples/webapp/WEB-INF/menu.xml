@@ -40,6 +40,8 @@
     <menu separator="true"/>
     <menu label="Simple Form" path="introduction/simple-form.htm"/>
     <menu label="Advanced Form" path="introduction/advanced-form.htm"/>
+    <menu separator="true"/>
+    <menu label="Link List" path="introduction/link-list.htm"/>
   </menu>
 
   <menu label="General" path="#" imageSrc="/assets/images/general.png">
