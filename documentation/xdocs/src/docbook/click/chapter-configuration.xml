@@ -278,7 +278,7 @@
       character set to UTF-8 and the default Locale as German (de):
       </para>
 
-      <programlisting language="xml">&lt;click-app charset=" UTF-8" locale="de"&gt;
+      <programlisting language="xml">&lt;click-app charset="UTF-8" locale="de"&gt;
   ..
 &lt;/click-app&gt;</programlisting>
     </sect2>
