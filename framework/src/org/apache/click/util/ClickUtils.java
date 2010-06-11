@@ -2046,7 +2046,7 @@ public class ClickUtils {
 
     /**
      * Get the parent page of the given control or null if the control has no
-     * parent set. This method will walk up the control's parent hierarchy to
+     * parent. This method will walk up the control's parent hierarchy to
      * find its parent page.
      *
      * @param control the control to get the parent page from
