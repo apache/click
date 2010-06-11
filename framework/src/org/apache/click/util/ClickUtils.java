@@ -2045,11 +2045,13 @@ public class ClickUtils {
     }
 
     /**
-     * Get the parent page of the given control. This method will walk up
-     * the control's parent hierarchy to find its parent page.
+     * Get the parent page of the given control or null if the control has no
+     * parent set. This method will walk up the control's parent hierarchy to
+     * find its parent page.
      *
      * @param control the control to get the parent page from
-     * @return the parent page of the control
+     * @return the parent page of the control or null if the control has no
+     * parent
      */
     public static Page getParentPage(Control control) {
         Object parent = control.getParent();
