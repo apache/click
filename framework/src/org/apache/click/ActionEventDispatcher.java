@@ -19,36 +19,28 @@
 package org.apache.click;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 import java.util.List;
+import java.util.Set;
+import org.apache.click.service.ConfigService;
+import org.apache.click.service.LogService;
+import org.apache.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.Validate;
 
 /**
- * Provides a control ActionListener event dispatcher.
- * <p/>
- * <b>Please note:</b> this class is meant for component development and can be
- * ignored otherwise.
- * <p/>
- * When registering an ActionListener you can specify the callback to occur for
- * a specific event. For example ActionListeners can be registered to fire
- * <tt>after</tt> the <tt>onProcess</tt> event. This event can be specified
- * through the constant {@link #POST_ON_PROCESS_EVENT}.
- * <p/>
- * The ClickServlet will notify the ActionEventDispatcher which ActionListeners
- * to fire. For example, after the <tt>onProcess</tt> event, the ClickServlet
- * will notify the dispatcher to fire ActionListeners registered for the
- * {@link #POST_ON_PROCESS_EVENT} (this is the default event when listeners are
- * fired).
- * <p/>
- * Out of the box ActionEventDispatcher only supports the event
- * {@link #POST_ON_PROCESS_EVENT} (the default).
+ * Provides a control ActionListener and Behavior dispatcher. The
+ * ClickServlet will dispatch registered ActionListeners and Behaviors after
+ * page controls have been processed.
  *
  * <h4>Example Usage</h4>
  * The following example shows how to register an ActionListener with a custom
  * Control:
  *
  * <pre class="prettyprint">
- * public class MyLink extends AbstractControl {
+ * public class MyControl extends AbstractControl {
  *     ...
  *
  *     public boolean onProcess() {
@@ -64,10 +56,10 @@ import org.apache.commons.lang.Validate;
  *     }
  * } </pre>
  *
- * In this example if the link is clicked, it then calls
+ * When the link is clicked it invokes the method
  * {@link org.apache.click.control.AbstractControl#dispatchActionEvent()}.
- * This method registers the Control's action listener with ActionEventDispatcher.
- * The ClickServlet will subsequently invoke the registered
+ * This method registers the Control's action listener with the
+ * ActionEventDispatcher. The ClickServlet will subsequently invoke the registered
  * {@link ActionListener#onAction(Control)} method after all the Page controls
  * <tt>onProcess()</tt> method have been invoked.
  */
@@ -75,57 +67,102 @@ public class ActionEventDispatcher {
 
     // Constants --------------------------------------------------------------
 
-    /**
-     * Indicates the listener should fire <tt>AFTER</tt> the onProcess event.
-     * The <tt>POST_ON_PROCESS_EVENT</tt> is the event during which control
-     * listeners will fire.
-     */
-    public static final int POST_ON_PROCESS_EVENT = 300;
-
-    // Variables --------------------------------------------------------------
-
-    /** The thread local dispatcher holder. */
+     /** The thread local dispatcher holder. */
     private static final ThreadLocal<DispatcherStack> THREAD_LOCAL_DISPATCHER
         = new ThreadLocal<DispatcherStack>();
 
-    /** The POST_PROCESS events holder. */
-    private EventHolder postProcessEventHolder;
+    // Variables --------------------------------------------------------------
 
-    //  Public Methods ---------------------------------------------------------
+    /** The list of registered event sources. */
+    List<Control> eventSourceList;
+
+    /** The list of registered event listeners. */
+    List<ActionListener> eventListenerList;
+
+    /** The set of Controls with attached Behaviors. */
+    Set<Control> behaviorSourceSet;
+
+    /**
+     * The {@link org.apache.click.Partial} response to render. This partial is
+     * set from the target Behavior.
+     */
+    Partial partial;
+
+    /** The application log service. */
+    LogService logger;
+
+    // Constructors -----------------------------------------------------------
+
+    public ActionEventDispatcher(ConfigService configService) {
+        this.logger = configService.getLogService();
+    }
+
+    // Public Methods ---------------------------------------------------------
 
     /**
      * Register the event source and event ActionListener to be fired by the
      * ClickServlet once all the controls have been processed.
-     * <p/>
-     * Listeners registered by this method will be fired in the
-     * {@link #POST_ON_PROCESS_EVENT}.
-     *
-     * @see #dispatchActionEvent(org.apache.click.Control, org.apache.click.ActionListener, int)
      *
      * @param source the action event source
      * @param listener the event action listener
      */
     public static void dispatchActionEvent(Control source, ActionListener listener) {
-        dispatchActionEvent(source, listener, POST_ON_PROCESS_EVENT);
-    }
-
-    /**
-     * Register the event source and event ActionListener to be fired by the
-     * ClickServlet in the specified event.
-     *
-     * @param source the action event source
-     * @param listener the event action listener
-     * @param event the specific event to trigger the action event
-     */
-    public static void dispatchActionEvent(Control source,
-        ActionListener listener, int event) {
-
         Validate.notNull(source, "Null source parameter");
         Validate.notNull(listener, "Null listener parameter");
 
         ActionEventDispatcher instance = getThreadLocalDispatcher();
-        EventHolder eventHolder = instance.getEventHolder(event);
-        eventHolder.registerActionEvent(source, listener);
+        instance.registerActionEvent(source, listener);
+    }
+
+    /**
+     * Register the source control which behaviors should be fired by the
+     * ClickServlet.
+     *
+     * @param source the source control which behaviors should be fired
+     */
+    public static void dispatchBehavior(Control source) {
+        Validate.notNull(source, "Null source parameter");
+
+        ActionEventDispatcher instance = getThreadLocalDispatcher();
+        instance.registerBehaviorSource(source);
+    }
+
+    /**
+     * Fire all the registered action events after the Page Controls have been
+     * processed and return true if the page should continue processing.
+     *
+     * @see #fireActionEvents(org.apache.click.Context, int)
+     *
+     * @param context the request context
+     *
+     * @return true if the page should continue processing, false otherwise
+     */
+    public boolean fireActionEvents(Context context) {
+
+        if (!hasActionEvents()) {
+            return true;
+        }
+
+        return fireActionEvents(context, getEventSourceList(), getEventListenerList());
+    }
+
+    /**
+     * Fire all the registered behaviors after the Page Controls have been
+     * processed and return true if the page should continue processing.
+     *
+     * @see #fireBehaviors(org.apache.click.Context, java.util.Set)
+     *
+     * @param context the request context
+     *
+     * @return true if the page should continue processing, false otherwise
+     */
+    public boolean fireBehaviors(Context context) {
+
+        if (!hasBehaviorSourceSet()) {
+            return true;
+        }
+
+        return fireBehaviors(context, getBehaviorSourceSet());
     }
 
     // Protected Methods ------------------------------------------------------
@@ -136,16 +173,8 @@ public class ActionEventDispatcher {
      * @param throwable the error which occurred during processing
      */
     protected void errorOccurred(Throwable throwable) {
-        // Clear the POST_ON_PROCESS_EVENT control listeners from the dispatcher
-        // Registered listeners from other phases must still be invoked
-        getEventHolder(ActionEventDispatcher.POST_ON_PROCESS_EVENT).clear();
-    }
-
-    /**
-     * Clear the event list.
-     */
-    protected void clearEvents() {
-        getPostProcessEventHolder().clear();
+        // Clear the control listeners and behaviors from the dispatcher
+        clear();
     }
 
     /**
@@ -153,7 +182,7 @@ public class ActionEventDispatcher {
      *
      * @return the thread local dispatcher instance.
      * @throws RuntimeException if a ActionEventDispatcher is not available on the
-     * thread.
+     * thread
      */
     protected static ActionEventDispatcher getThreadLocalDispatcher() {
         return getDispatcherStack().peek();
@@ -162,10 +191,6 @@ public class ActionEventDispatcher {
     /**
      * Fire the actions for the given listener list and event source list which
      * return true if the page should continue processing.
-     * <p/>
-     * This method will be passed the listener list and event source list
-     * of a specific event e.g. {@link #POST_ON_PROCESS_EVENT}.
-     * event.
      * <p/>
      * This method can be overridden if you need to customize the way events
      * are fired.
@@ -177,20 +202,20 @@ public class ActionEventDispatcher {
      *
      * @return true if the page should continue processing or false otherwise
      */
-    protected boolean fireActionEvents(Context context, List<Control> eventSourceList,
-        List<ActionListener> eventListenerList, int event) {
+    protected boolean fireActionEvents(Context context, List eventSourceList,
+        List eventListenerList) {
 
         boolean continueProcessing = true;
 
         for (int i = 0, size = eventSourceList.size(); i < size; i++) {
-            Control source = eventSourceList.get(0);
-            ActionListener listener = eventListenerList.get(0);
+            Control source = (Control) eventSourceList.get(0);
+            ActionListener listener = (ActionListener) eventListenerList.get(0);
 
             // Pop the first entry in the list
             eventSourceList.remove(0);
             eventListenerList.remove(0);
 
-            if (!fireActionEvent(context, source, listener, event)) {
+            if (!fireActionEvent(context, source, listener)) {
                 continueProcessing = false;
             }
         }
@@ -199,39 +224,8 @@ public class ActionEventDispatcher {
     }
 
     /**
-     * Fire all the registered action events after the Page Controls have been
-     * processed and return true if the page should continue processing.
-     * <p/>
-     * @see #fireActionEvents(org.apache.click.Context, int)
-     *
-     * @param context the request context
-     *
-     * @return true if the page should continue processing or false otherwise
-     */
-    protected boolean fireActionEvents(Context context) {
-        return fireActionEvents(context, ActionEventDispatcher.POST_ON_PROCESS_EVENT);
-    }
-
-    /**
-     * Fire all the registered action events for the specified event and return
-     * true if the page should continue processing.
-     *
-     * @param context the request context
-     * @param event the event which listeners to fire
-     *
-     * @return true if the page should continue processing or false otherwise
-     */
-    protected boolean fireActionEvents(Context context, int event) {
-        EventHolder eventHolder = getEventHolder(event);
-        return eventHolder.fireActionEvents(context);
-    }
-
-    /**
      * Fire the action for the given listener and event source which
      * return true if the page should continue processing.
-     * <p/>
-     * This method will be passed a listener and source of a specific event
-     * e.g. {@link #POST_ON_PROCESS_EVENT}.
      * <p/>
      * This method can be overridden if you need to customize the way events
      * are fired.
@@ -239,52 +233,216 @@ public class ActionEventDispatcher {
      * @param context the request context
      * @param source the source control
      * @param listener the listener to fire
-     * @param event the specific event which events to fire
      *
-     * @return true if the page should continue processing or false otherwise
+     * @return true if the page should continue processing, false otherwise
      */
     protected boolean fireActionEvent(Context context, Control source,
-        ActionListener listener, int event) {
+        ActionListener listener) {
         return listener.onAction(source);
     }
 
     /**
-     * Return the EventHolder for the specified event.
+     * Fire the behaviors for the given control set and return true if the page
+     * should continue processing, false otherwise.
+     * <p/>
+     * This method can be overridden if you need to customize the way behaviors
+     * are fired.
      *
-     * @param event the event which EventHolder to retrieve
+     * @see #fireBehavior(org.apache.click.Context, org.apache.click.Control)
      *
-     * @return the EventHolder for the specified event
+     * @param context the request context
+     * @param behaviorSourceSet the set of controls with attached behaviors
+     *
+     * @return true if the page should continue processing, false otherwise
      */
-    protected EventHolder getEventHolder(int event) {
-        if (event == POST_ON_PROCESS_EVENT) {
-            return getPostProcessEventHolder();
-        } else {
-            return null;
+    protected boolean fireBehaviors(Context context, Set<Control> behaviorSourceSet) {
+
+        boolean continueProcessing = true;
+
+        for (Iterator<Control> it = behaviorSourceSet.iterator(); it.hasNext(); ) {
+            Control source = it.next();
+
+            // Pop the first entry in the set
+            it.remove();
+
+            if (!fireBehavior(context, source)) {
+                continueProcessing = false;
+            }
         }
+
+        return continueProcessing;
     }
 
     /**
-     * Create a new EventHolder instance.
+     * Fire the behavior for the given control and return true if the page
+     * should continue processing, false otherwise.
+     * <p/>
+     * This method can be overridden if you need to customize the way behaviors
+     * are fired.
      *
-     * @param event the EventHolder's event
-     * @return new EventHolder instance
+     * @param context the request context
+     * @param source the control which attached behaviors should be fired
+     *
+     * @return true if the page should continue processing, false otherwise
      */
-    protected EventHolder createEventHolder(int event) {
-        return new EventHolder(event);
+    protected boolean fireBehavior(Context context, Control source) {
+
+        boolean continueProcessing = true;
+
+        for (Behavior behavior : source.getBehaviors()) {
+
+            if (behavior.isRequestTarget(context)) {
+
+                partial = behavior.onAction(source);
+
+                if (logger.isTraceEnabled()) {
+                    String behaviorClassName = ClassUtils.getShortClassName(behavior.getClass());
+                    HtmlStringBuffer buffer = new HtmlStringBuffer();
+                    buffer.append("   invoked: ");
+                    buffer.append(behaviorClassName);
+                    buffer.append(".isRequestTarget() : true");
+                    buffer.append(" (Ajax Behavior found)");
+
+                    logger.trace(buffer.toString());
+
+                    if (partial == null) {
+                        buffer = new HtmlStringBuffer();
+                        buffer.append("   invoked: ");
+                        buffer.append(behaviorClassName);
+                        buffer.append(".onAction() : null");
+                        buffer.append(" (*no* Partial was returned by Behavior)");
+                        logger.trace(buffer.toString());
+                    }
+                }
+
+                continueProcessing = false;
+                break;
+            }
+        }
+
+        if (logger.isTraceEnabled()) {
+
+            // Provide trace if no target behavior was found
+            if (continueProcessing) {
+                HtmlStringBuffer buffer = new HtmlStringBuffer();
+                String sourceClassName = ClassUtils.getShortClassName(source.getClass());
+                buffer.append("   *no* target behavior found for '");
+                buffer.append(source.getName()).append("' ");
+                buffer.append(sourceClassName);
+                buffer.append(" - invoking Behavior.isRequestTarget() returned false for all behaviors");
+                logger.trace(buffer.toString());
+            }
+        }
+
+        // Ajax requests stops further processing
+        return continueProcessing;
     }
 
     // Package Private Methods ------------------------------------------------
 
     /**
-     * Return the {@link #POST_ON_PROCESS_EVENT} {@link EventHolder}.
+     * Register the event source and event ActionListener.
      *
-     * @return the {@link #POST_ON_PROCESS_EVENT} {@link EventHolder}
+     * @param source the action event source
+     * @param listener the event action listener
      */
-    EventHolder getPostProcessEventHolder() {
-        if (postProcessEventHolder == null) {
-            postProcessEventHolder = createEventHolder(POST_ON_PROCESS_EVENT);
+    void registerActionEvent(Control source, ActionListener listener) {
+        Validate.notNull(source, "Null source parameter");
+        Validate.notNull(listener, "Null listener parameter");
+
+        getEventSourceList().add(source);
+        getEventListenerList().add(listener);
+    }
+
+    /**
+     * Register the behavior source control.
+     *
+     * @param source the behavior source control
+     */
+    void registerBehaviorSource(Control source) {
+        Validate.notNull(source, "Null source parameter");
+
+        getBehaviorSourceSet().add(source);
+    }
+
+    /**
+     * Checks if any Action Events have been registered.
+     *
+     * @return true if the dispatcher has any Action Events registered
+     */
+    boolean hasActionEvents() {
+        if (eventListenerList == null || eventListenerList.isEmpty()) {
+            return false;
         }
-        return postProcessEventHolder;
+        return true;
+    }
+
+    /**
+     * Return the list of event listeners.
+     *
+     * @return list of event listeners
+     */
+    List<ActionListener> getEventListenerList() {
+        if (eventListenerList == null) {
+            eventListenerList = new ArrayList<ActionListener>();
+        }
+        return eventListenerList;
+    }
+
+    /**
+     * Return the list of event sources.
+     *
+     * @return list of event sources
+     */
+    List<Control> getEventSourceList() {
+        if (eventSourceList == null) {
+            eventSourceList = new ArrayList<Control>();
+        }
+        return eventSourceList;
+    }
+
+    /**
+     * Clear the events and behaviors.
+     */
+    void clear() {
+        if (hasActionEvents()) {
+            getEventSourceList().clear();
+            getEventListenerList().clear();
+            getBehaviorSourceSet().clear();
+        }
+    }
+
+    /**
+     * Return the Partial Ajax response or null if no behavior was dispatched.
+     *
+     * @return the Partial Ajax response or null if no behavior was dispatched
+     */
+    Partial getPartial() {
+        return partial;
+    }
+
+    /**
+     * Return true if a control with behaviors was registered, false otherwise.
+     *
+     * @return true if a control with behaviors was registered, false otherwise.
+     */
+    boolean hasBehaviorSourceSet() {
+        if (behaviorSourceSet == null || behaviorSourceSet.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Return the set of controls with attached behaviors.
+     *
+     * @return set of control with attached behaviors
+     */
+    Set<Control> getBehaviorSourceSet() {
+        if (behaviorSourceSet == null) {
+            behaviorSourceSet = new LinkedHashSet<Control>();
+        }
+        return behaviorSourceSet;
     }
 
     /**
@@ -330,107 +488,6 @@ public class ActionEventDispatcher {
     }
 
     // Inner Classes ----------------------------------------------------------
-
-    /**
-     * Holds the list of listeners and event sources.
-     */
-    public class EventHolder {
-
-        /** The EventHolder's event. */
-        protected int event;
-
-        /** The list of registered event sources. */
-        private List<Control> eventSourceList;
-
-        /** The list of registered event listeners. */
-        private List<ActionListener> eventListenerList;
-
-        // ------------------------------------------------------- Constructors
-
-        /**
-         * Create a new EventHolder for the given event.
-         *
-         * @param event the EventHolder's event
-         */
-        public EventHolder(int event) {
-            this.event = event;
-        }
-
-        /**
-         * Register the event source and event ActionListener to be fired in the
-         * specified event.
-         *
-         * @param source the action event source
-         * @param listener the event action listener
-         */
-        public void registerActionEvent(Control source, ActionListener listener) {
-            Validate.notNull(source, "Null source parameter");
-            Validate.notNull(listener, "Null listener parameter");
-
-            getEventSourceList().add(source);
-            getEventListenerList().add(listener);
-        }
-
-        /**
-         * Checks if any Action Events have been registered.
-         *
-         * @return true if the dispatcher has any Action Events registered
-         */
-        public boolean hasActionEvents() {
-            return !(eventListenerList == null || eventListenerList.isEmpty());
-        }
-
-        /**
-         * Return the list of event listeners.
-         *
-         * @return list of event listeners
-         */
-        public List<ActionListener> getEventListenerList() {
-            if (eventListenerList == null) {
-                eventListenerList = new ArrayList<ActionListener>();
-            }
-            return eventListenerList;
-        }
-
-        /**
-         * Return the list of event sources.
-         *
-         * @return list of event sources
-         */
-        public List<Control> getEventSourceList() {
-            if (eventSourceList == null) {
-                eventSourceList = new ArrayList<Control>();
-            }
-            return eventSourceList;
-        }
-
-        /**
-         * Clear the events.
-         */
-        public void clear() {
-            if (hasActionEvents()) {
-                getEventSourceList().clear();
-                getEventListenerList().clear();
-            }
-        }
-
-        /**
-         * Fire all the registered action events and return true if the page should
-         * continue processing.
-         *
-         * @param context the page request context
-         * @return true if the page should continue processing or false otherwise
-         */
-        public boolean fireActionEvents(Context context) {
-
-            if (!hasActionEvents()) {
-                return true;
-            }
-
-            return ActionEventDispatcher.this.fireActionEvents(context,
-                getEventSourceList(), getEventListenerList(), event);
-        }
-    }
 
     /**
      * Provides an unsynchronized Stack.
