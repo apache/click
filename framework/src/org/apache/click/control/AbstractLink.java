@@ -568,6 +568,20 @@ public abstract class AbstractLink extends AbstractControl {
         this.renderLabelAndImage = renderLabelAndImage;
     }
 
+    @Override
+    public boolean isAjaxTarget(Context context) {
+        String id = getId();
+        if (id != null) {
+            return context.getRequestParameter(id) != null;
+        } else {
+            String name = getName();
+            if (name != null) {
+                return name.equals(context.getRequestParameter(ActionLink.ACTION_LINK));
+            }
+        }
+        return false;
+    }
+
     // Public Methods ---------------------------------------------------------
 
     /**

@@ -435,6 +435,20 @@ public class ActionButton extends Button {
         return parameters != null && !parameters.isEmpty();
     }
 
+    @Override
+    public boolean isAjaxTarget(Context context) {
+        String id = getId();
+        if (id != null) {
+            return context.getRequestParameter(id) != null;
+        } else {
+            String name = getName();
+            if (name != null) {
+                return name.equals(context.getRequestParameter(ActionButton.ACTION_BUTTON));
+            }
+        }
+        return false;
+    }
+
     /**
      * Returns the ActionButton value if the action link was processed and has
      * a value, or null otherwise.

@@ -34,6 +34,8 @@ import javax.servlet.ServletContext;
 
 import org.apache.click.ActionEventDispatcher;
 import org.apache.click.ActionListener;
+import org.apache.click.Behavior;
+import org.apache.click.CallbackDispatcher;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
@@ -138,6 +140,9 @@ public abstract class AbstractControl implements Control {
     /** The control's action listener. */
     protected ActionListener actionListener;
 
+    /** The control's list of {@link org.apache.click.Behavior behaviors}. */
+    protected List<Behavior> behaviors;
+
     /**
      * The list of page HTML HEAD elements including: Javascript imports,
      * Css imports, inline Javascript and inline Css.
@@ -228,6 +233,54 @@ public abstract class AbstractControl implements Control {
      */
     public void setActionListener(ActionListener listener) {
         this.actionListener = listener;
+    }
+
+    public boolean hasBehaviors() {
+        return (behaviors != null && behaviors.size() > 0);
+    }
+
+    public void addBehavior(Behavior behavior) {
+        if (getBehaviors().contains(behavior)) {
+            return;
+        }
+
+        getBehaviors().add(behavior);
+
+        // Register control here in case behavior was added *after* the onInit event.
+        // This can occur if the behavior is added in a listener event or during
+        // onRender.
+        CallbackDispatcher.registerBehavior(this);
+    }
+
+    public void removeBehavior(Behavior behavior) {
+        getBehaviors().remove(behavior);
+    }
+
+    public List<Behavior> getBehaviors() {
+        if (behaviors == null) {
+            behaviors = new ArrayList();
+        }
+        return behaviors;
+    }
+
+    public String getCssSelector() {
+        // TODO each control could have an optimized version of cssSelector
+        // targeting specifically that control. For now we just use a generic
+        // utility impl
+        return ClickUtils.getCssSelector(this);
+    }
+
+    public boolean isAjaxTarget(Context context) {
+        // TODO each control could have an optimized version of isAjaxTarget
+        // targeting specifically that control. For now we just check that the
+        // control id is present. Not all controls can use an ID for example:
+        // ActionLink
+        String id = getId();
+        if (id != null) {
+            return context.getRequestParameter(id) != null;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -498,12 +551,26 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * This method does nothing. Subclasses may override this method to perform
-     * initialization.
+     * If a behavior has been attached to this control, it will be registered
+     * with the {@link org.apache.click.CallbackDispatcher}.
+     * <p/>
+     * <b>Please note:</b> a common problem when overriding onInit in
+     * subclasses is forgetting to call <em>super.onInit()</em>. Consider
+     * carefully whether you should call <em>super.onInit()</em> or not.
      *
      * @see org.apache.click.Control#onInit()
      */
     public void onInit() {
+        // Q: Why does onInit need to register callback instead of addBehavior?
+        // A: Because on stateful pages addBehavior might only be called once
+        //    when the control was created so we ensure the behavior is registered
+        //    before onProcess
+        //    TODO might want to extract the code below into ClickServlet itself
+        //    to ensure this code is called *before* onProcess. Leaving the code
+        //    here opens problems if subclass does not call super.onInit
+        if (hasBehaviors()) {
+           CallbackDispatcher.registerBehavior(this);
+        }
     }
 
     /**
@@ -833,6 +900,10 @@ public abstract class AbstractControl implements Control {
     protected void dispatchActionEvent() {
         if (getActionListener() != null) {
             ActionEventDispatcher.dispatchActionEvent(this, getActionListener());
+        }
+
+        if (hasBehaviors()) {
+            ActionEventDispatcher.dispatchBehavior(this);
         }
     }
 
