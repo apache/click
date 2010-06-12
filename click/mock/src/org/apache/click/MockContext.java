@@ -26,6 +26,7 @@ import javax.servlet.ServletConfig;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.click.service.ConfigService;
 import org.apache.click.service.ConsoleLogService;
 import org.apache.click.servlet.MockServletContext;
 import org.apache.click.servlet.MockSession;
@@ -220,11 +221,10 @@ public class MockContext extends Context {
      */
     public static MockContext initContext(MockServletConfig servletConfig,
         MockRequest request, MockResponse response, ClickServlet clickServlet) {
-        ActionEventDispatcher controlRegistry = new ActionEventDispatcher();
-        return initContext(servletConfig, request, response, clickServlet,
-            controlRegistry);
-    }
 
+        return initContext(servletConfig, request, response, clickServlet,
+            null, null);
+    }
 
     /**
      * Creates and returns a new Context instance for the specified mock
@@ -239,7 +239,7 @@ public class MockContext extends Context {
      */
     public static MockContext initContext(MockServletConfig servletConfig,
         MockRequest request, MockResponse response, ClickServlet clickServlet,
-        ActionEventDispatcher controlRegistry) {
+        ActionEventDispatcher actionEventDispatcher, CallbackDispatcher callbackDispatcher) {
 
         try {
             //Sanity checks
@@ -259,24 +259,34 @@ public class MockContext extends Context {
                 throw new IllegalArgumentException("ClickServlet cannot be null");
             }
 
-            boolean isPost = true;
-            if (request != null) {
-                isPost = request.getMethod().equalsIgnoreCase("POST");
-            }
+            boolean isPost = request.getMethod().equalsIgnoreCase("POST");
 
             MockServletContext servletContext =
                 (MockServletContext) servletConfig.getServletContext();
 
-            servletContext.setAttribute(ClickServlet.MOCK_MODE_ENABLED,
-                Boolean.TRUE);
+            servletContext.setAttribute(ClickServlet.MOCK_MODE_ENABLED, Boolean.TRUE);
             request.setAttribute(ClickServlet.MOCK_MODE_ENABLED, Boolean.TRUE);
 
             clickServlet.init(servletConfig);
 
+            ConfigService configService = clickServlet.getConfigService();
+            if (configService == null) {
+                throw new IllegalArgumentException("ClickServlet.getConfigService() cannot return null");
+            }
+
             MockContext mockContext = new MockContext(servletConfig, request,
                 response, isPost, clickServlet);
 
-            ActionEventDispatcher.pushThreadLocalDispatcher(controlRegistry);
+            if (actionEventDispatcher == null) {
+                actionEventDispatcher = new ActionEventDispatcher(configService);
+            }
+
+            if (actionEventDispatcher == null) {
+                callbackDispatcher = new CallbackDispatcher(configService);
+            }
+
+            ActionEventDispatcher.pushThreadLocalDispatcher(actionEventDispatcher);
+            CallbackDispatcher.pushThreadLocalDispatcher(callbackDispatcher);
             Context.pushThreadLocalContext(mockContext);
 
             if (ClickUtils.getLogService() instanceof ConsoleLogService) {
