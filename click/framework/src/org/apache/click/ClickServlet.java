@@ -20,6 +20,7 @@ package org.apache.click;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -339,6 +340,10 @@ public class ClickServlet extends HttpServlet {
             // Bind ActionEventDispatcher to current thread
             ActionEventDispatcher.pushThreadLocalDispatcher(eventDispatcher);
 
+            CallbackDispatcher callbackDispatcher = createCallbackDispatcher();
+            // Bind CallbackDispatcher to current thread
+            CallbackDispatcher.pushThreadLocalDispatcher(callbackDispatcher);
+
             Context context = createContext(request, response, isPost);
             // Bind context to current thread
             Context.pushThreadLocalContext(context);
@@ -419,6 +424,7 @@ public class ClickServlet extends HttpServlet {
                 if (request.getAttribute(MOCK_MODE_ENABLED) == null) {
                     Context.popThreadLocalContext();
                 }
+                CallbackDispatcher.popThreadLocalDispatcher();
                 ActionEventDispatcher.popThreadLocalDispatcher();
             }
         }
@@ -448,6 +454,12 @@ public class ClickServlet extends HttpServlet {
     protected void handleException(HttpServletRequest request,
         HttpServletResponse response, boolean isPost, Throwable exception,
         Class<? extends Page> pageClass) {
+
+        if (isAjaxRequest(request)) {
+            handleAjaxException(request, response, isPost, exception, pageClass);
+            // Exit after handling ajax exception
+            return;
+        }
 
         if (exception instanceof TemplateException) {
             TemplateException te = (TemplateException) exception;
@@ -531,6 +543,8 @@ public class ClickServlet extends HttpServlet {
      * <p/>
      * This method does not invoke the "onDestroy()" callback method.
      *
+     * @see #processPageEvents(org.apache.click.Page, org.apache.click.Context)
+     *
      * @param page the Page to process
      * @throws Exception if an error occurs
      */
@@ -538,12 +552,31 @@ public class ClickServlet extends HttpServlet {
     protected void processPage(Page page) throws Exception {
 
         final Context context = page.getContext();
-        final boolean isPost = context.isPost();
 
         PageImports pageImports = createPageImports(page);
         page.setPageImports(pageImports);
 
+        if (context.isAjaxRequest()) {
+            processAjaxPageEvents(page, context);
+        } else {
+            processPageEvents(page, context);
+        }
+    }
+
+    /**
+     * Process the given page events, invoking the "on" event callback methods
+     * and directing the response.
+     * <p/>
+     * This method does not invoke the "onDestroy()" callback method.
+     *
+     * @param page the Page which events to process
+     * @param context the request context
+     * @throws Exception if an error occurs
+     */
+    protected void processPageEvents(Page page, Context context) throws Exception {
+
         ActionEventDispatcher eventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
+        CallbackDispatcher callbackDispatcher = CallbackDispatcher.getThreadLocalDispatcher();
 
         boolean errorOccurred = page instanceof ErrorPage;
         // Support direct access of click-error.htm
@@ -551,8 +584,9 @@ public class ClickServlet extends HttpServlet {
             ErrorPage errorPage = (ErrorPage) page;
             errorPage.setMode(configService.getApplicationMode());
 
-            // Notify the dispatcher of the error
+            // Notify the dispatcher and callbackRegistry of the error
             eventDispatcher.errorOccurred(errorPage.getError());
+            callbackDispatcher.errorOccurred(errorPage.getError());
         }
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
@@ -574,12 +608,14 @@ public class ClickServlet extends HttpServlet {
             continueProcessing = performOnProcess(page, context, eventDispatcher);
 
             if (continueProcessing) {
-                performOnPostOrGet(page, context, isPost);
+                performOnPostOrGet(page, context, context.isPost());
 
                 performOnRender(page, context);
             }
         }
 
+        callbackDispatcher.processBeforeResponse(context);
+        callbackDispatcher.processBeforeGetHeadElements(context);
         performRender(page, context, partial);
     }
 
@@ -656,25 +692,31 @@ public class ClickServlet extends HttpServlet {
             for (int i = 0, size = controls.size(); i < size; i++) {
                 Control control = controls.get(i);
 
+                int initialListenerCount = 0;
+                if (logger.isTraceEnabled()) {
+                    initialListenerCount = eventDispatcher.getEventSourceList().size();
+                }
+
                 boolean onProcessResult = control.onProcess();
                 if (!onProcessResult) {
                     continueProcessing = false;
                 }
 
                 if (logger.isTraceEnabled()) {
-                    String controlClassName = control.getClass().getName();
-                    controlClassName = controlClassName.substring(
-                        controlClassName.lastIndexOf('.') + 1);
+                    String controlClassName = ClassUtils.getShortClassName(control.getClass());
 
                     String msg = "   invoked: '" + control.getName() + "' "
                         + controlClassName + ".onProcess() : " + onProcessResult;
                     logger.trace(msg);
+
+                    if (initialListenerCount != eventDispatcher.getEventSourceList().size()) {
+                        logger.trace("    listener was registered while processing control");
+                    }
                 }
             }
 
             if (continueProcessing) {
-                // Fire registered action events for the POST_ON_PROCESS event,
-                // which is also the default event
+                // Fire registered action events
                 continueProcessing = eventDispatcher.fireActionEvents(context);
 
                 if (logger.isTraceEnabled()) {
@@ -752,6 +794,17 @@ public class ClickServlet extends HttpServlet {
      *
      * @param page page to render
      * @param context the request context
+     * @throws java.lang.Exception if error occurs
+     */
+    protected void performRender(Page page, Context context) throws Exception {
+        performRender(page, context, null);
+    }
+
+    /**
+     * Performs rendering of the specified page.
+     *
+     * @param page page to render
+     * @param context the request context
      * @param partial the partial response object
      * @throws java.lang.Exception if error occurs
      */
@@ -804,7 +857,7 @@ public class ClickServlet extends HttpServlet {
             }
 
         } else if (partial != null) {
-            partial.render(context);
+            renderPartial(partial, context);
 
         } else if (page.getPath() != null) {
             // Render template unless the request was a page action. This check
@@ -860,7 +913,7 @@ public class ClickServlet extends HttpServlet {
 
         response.setContentType(page.getContentType());
 
-        Writer writer = getWriter(context);
+        Writer writer = getWriter(response);
 
         if (page.getHeaders() != null) {
             setPageResponseHeaders(response, page.getHeaders());
@@ -927,6 +980,43 @@ public class ClickServlet extends HttpServlet {
                 buffer.append(",");
             }
             buffer.append(page.getForward());
+            buffer.append(" - ");
+            buffer.append(System.currentTimeMillis() - startTime);
+            buffer.append(" ms");
+            logger.info(buffer);
+        }
+    }
+
+    /**
+     * Render the given Partial response. If the partial is null, nothing is
+     * rendered.
+     *
+     * @param partial the partial resopnse to render
+     * @param context the request context
+     */
+    protected void renderPartial(Partial partial, Context context) {
+        if (partial == null) {
+            return;
+        }
+
+        long startTime = System.currentTimeMillis();
+
+        partial.render(context);
+
+        if (!configService.isProductionMode()) {
+            HtmlStringBuffer buffer = new HtmlStringBuffer(50);
+            if (logger.isTraceEnabled()) {
+                buffer.append("   ");
+            }
+
+            buffer.append("renderPartial (");
+            buffer.append(partial.getContentType());
+            buffer.append(")");
+            String template = partial.getTemplate();
+            if (template != null) {
+                buffer.append(": ");
+                buffer.append(template);
+            }
             buffer.append(" - ");
             buffer.append(System.currentTimeMillis() - startTime);
             buffer.append(" ms");
@@ -1010,6 +1100,11 @@ public class ClickServlet extends HttpServlet {
     @SuppressWarnings("deprecation")
     protected void processPageOnDestroy(Page page, long startTime) {
         if (page.hasControls()) {
+
+            // notify callbacks of destroy event
+            // TODO check that exceptions don't unnecessarily trigger preDestroy
+            CallbackDispatcher.getThreadLocalDispatcher().processPreDestroy(page.getContext());
+
             List<Control> controls = page.getControls();
 
             for (int i = 0, size = controls.size(); i < size; i++) {
@@ -1539,7 +1634,16 @@ public class ClickServlet extends HttpServlet {
      * @return the new ActionEventDispatcher instance
      */
     protected ActionEventDispatcher createActionEventDispatcher() {
-        return new ActionEventDispatcher();
+        return new ActionEventDispatcher(configService);
+    }
+
+    /**
+     * Creates and returns a new CallbackDispatcher instance.
+     *
+     * @return the new CallbackDispatcher instance
+     */
+    protected CallbackDispatcher createCallbackDispatcher() {
+        return new CallbackDispatcher(configService);
     }
 
     /**
@@ -1625,6 +1729,195 @@ public class ClickServlet extends HttpServlet {
     */
     protected PageImports createPageImports(Page page) {
         return new PageImports(page);
+    }
+
+    // TODO refactor Page events into its a separate Livecycle class. This will
+    // take some of the responsibility off ClickServlet and remove code duplication
+
+    /**
+     * Process the given page events, invoking the "on" event callback methods
+     * and directing the response.
+     *
+     * @param page the page which events to process
+     * @param context the request context
+     * @throws Exception if an error occurs
+     */
+    protected void processAjaxPageEvents(Page page, Context context) throws Exception {
+
+        ActionEventDispatcher eventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
+
+        CallbackDispatcher callbackDispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+
+        // TODO Ajax requests shouldn't reach this code path
+        // Support direct access of click-error.htm
+        if (page instanceof ErrorPage) {
+            ErrorPage errorPage = (ErrorPage) page;
+            errorPage.setMode(configService.getApplicationMode());
+
+            // Notify the dispatcher and registry of the error
+            eventDispatcher.errorOccurred(errorPage.getError());
+            callbackDispatcher.errorOccurred(errorPage.getError());
+        }
+
+        boolean continueProcessing = performOnSecurityCheck(page, context);
+
+        Partial partial = null;
+        if (continueProcessing) {
+
+            // Handle page method
+            String pageAction = context.getRequestParameter(Page.PAGE_ACTION);
+            if (pageAction != null) {
+                continueProcessing = false;
+                partial = ClickUtils.invokeAction(page, pageAction);
+                callbackDispatcher.processBeforeResponse(context);
+                callbackDispatcher.processBeforeGetHeadElements(context);
+
+                renderPartial(partial, context);
+            }
+        }
+
+        if (continueProcessing) {
+            performOnInit(page, context);
+
+            // TODO: Ajax doesn't support forward. Is it still necessary to
+            // check isForward?
+            if (callbackDispatcher.hasBehaviorEnabledControls() && !context.isForward()) {
+
+                // Perform onProcess for regsitered Ajax controls
+                processAjaxControls(context, eventDispatcher, callbackDispatcher);
+
+                // Fire behaviors registered during the onProcess event
+                // The target behavior will set the eventDispatcher partial instance
+                // to render
+                eventDispatcher.fireBehaviors(context);
+
+                // Ensure we execute the beforeResponse and beforeGetHeadElements
+                // for Ajax requests
+                callbackDispatcher.processBeforeResponse(context);
+                callbackDispatcher.processBeforeGetHeadElements(context);
+
+                partial = eventDispatcher.getPartial();
+
+                // Render the partial
+                renderPartial(partial, context);
+
+            } else {
+
+                continueProcessing = performOnProcess(page, context, eventDispatcher);
+
+                if (continueProcessing) {
+                    performOnPostOrGet(page, context, context.isPost());
+
+                    performOnRender(page, context);
+                }
+
+                callbackDispatcher.processBeforeResponse(context);
+                callbackDispatcher.processBeforeGetHeadElements(context);
+                performRender(page, context);
+            }
+        } else {
+            // If security check fails for an Ajax request, Click returns without
+            // any rendering. It is up to the user to render a Partial response
+            // in the onSecurityCheck event
+            // Note: this code path is also followed if a pageAction is invoked
+        }
+    }
+
+    /**
+     * Process all ajax controls and return true if the page should continue
+     * processing, false otherwise.
+     *
+     * @param context the request context
+     * @param callbackDispatcher the callback dispatcher
+     * @return true if the page should continue processing, false otherwise
+     */
+    protected boolean processAjaxControls(Context context,
+        ActionEventDispatcher eventDispatcher, CallbackDispatcher callbackDispatcher) {
+
+        boolean continueProcessing = true;
+
+        Control ajaxTarget = null;
+
+        for (Control control : callbackDispatcher.getBehaviorEnabledControls()) {
+
+            if (control.isAjaxTarget(context)) {
+                ajaxTarget = control;
+                // The first matching control will be processed. Multiple matching
+                // controls are not supported
+                break;
+            }
+        }
+
+        if (ajaxTarget != null) {
+            if (logger.isTraceEnabled()) {
+                HtmlStringBuffer buffer = new HtmlStringBuffer();
+                buffer.append("   invoked: '");
+                buffer.append(ajaxTarget.getName()).append("' ");
+                String className = ClassUtils.getShortClassName(ajaxTarget.getClass());
+                buffer.append(className);
+                buffer.append(".isAjaxTarget() : true (Ajax Control found)");
+                logger.trace(buffer.toString());
+            }
+
+            // Process the control
+            if (!ajaxTarget.onProcess()) {
+                continueProcessing = false;
+            }
+
+            // Log a trace if no behavior was registered after processing the control
+            if (logger.isTraceEnabled()) {
+
+                HtmlStringBuffer buffer = new HtmlStringBuffer();
+                String controlClassName = ClassUtils.getShortClassName(ajaxTarget.getClass());
+                buffer.append("   invoked: '");
+                buffer.append(ajaxTarget.getName());
+                buffer.append("' ").append(controlClassName);
+                buffer.append(".onProcess() : ").append(continueProcessing);
+                logger.trace(buffer.toString());
+
+                if (!eventDispatcher.hasBehaviorSourceSet()) {
+                    logger.trace("   *no* behavior was registered while processing control");
+                }
+            }
+        } else {
+
+            if (logger.isTraceEnabled()) {
+                String msg = "   *no* target control was found for Ajax request";
+                logger.trace(msg);
+            }
+        }
+
+        return continueProcessing;
+    }
+
+    protected void handleAjaxException(HttpServletRequest request,
+        HttpServletResponse response, boolean isPost, Throwable exception,
+        Class<? extends Page> pageClass) {
+
+        // If an exception occurs during an Ajax request, stream
+        // the exception instead of creating an ErrorPage
+        try {
+
+            PrintWriter writer = null;
+
+            try {
+                writer = getPrintWriter(response);
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+                // TODO: use return an ErrorReport instance instead?
+                writer.write("<div>\n");
+                exception.printStackTrace(writer);
+                writer.write("\n</div>");
+            } finally {
+                if (writer != null) {
+                    writer.flush();
+                }
+            }
+        } catch (Throwable error) {
+            logger.error(error.getMessage(), error);
+            throw new RuntimeException(error);
+        }
+        logger.error("handleException: ", exception);
     }
 
     // ------------------------------------------------ Package Private Methods
@@ -1773,22 +2066,56 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
+     * TODO turn into utility method?
      * Retrieve a writer instance for the given context.
      *
-     * @param context the request context
+     * @param response the servlet response
      * @return a writer instance
      * @throws IOException if an input or output exception occurred
      */
-    Writer getWriter(Context context) throws IOException {
+    Writer getWriter(HttpServletResponse response) throws IOException {
         try {
 
-            return context.getResponse().getWriter();
+            return response.getWriter();
 
         } catch (IllegalStateException ignore) {
             // If writer cannot be retrieved fallback to OutputStream. CLK-644
-            return new OutputStreamWriter(context.getResponse().getOutputStream(),
-                 context.getResponse().getCharacterEncoding());
+            return new OutputStreamWriter(response.getOutputStream(),
+                 response.getCharacterEncoding());
         }
+    }
+
+    /**
+     * Return a PrintWriter instance for the given response.
+     *
+     * @param response the servlet response
+     * @return a PrintWriter instance
+     */
+    PrintWriter getPrintWriter(HttpServletResponse response) throws IOException {
+        Writer writer = getWriter(response);
+        if (writer instanceof PrintWriter) {
+            return (PrintWriter) writer;
+        }
+        return new PrintWriter(writer);
+    }
+
+    /**
+     * Return true if this is an ajax request, false otherwise.
+     *
+     * @param request the servlet request
+     * @return true if this is an ajax request, false otherwise
+     */
+    boolean isAjaxRequest(HttpServletRequest request) {
+        boolean isAjaxRequest = false;
+        if (Context.hasThreadLocalContext()) {
+            Context context = Context.getThreadLocalContext();
+            if (context.isAjaxRequest()) {
+                isAjaxRequest = true;
+            }
+        } else {
+            isAjaxRequest = ClickUtils.isAjaxRequest(request);
+        }
+        return isAjaxRequest;
     }
 
     // ---------------------------------------------------------- Inner Classes
