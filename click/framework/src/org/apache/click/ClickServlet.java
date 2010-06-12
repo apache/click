@@ -710,7 +710,7 @@ public class ClickServlet extends HttpServlet {
                     logger.trace(msg);
 
                     if (initialListenerCount != eventDispatcher.getEventSourceList().size()) {
-                        logger.trace("    listener was registered while processing control");
+                        logger.trace("   listener was registered while processing control");
                     }
                 }
             }
