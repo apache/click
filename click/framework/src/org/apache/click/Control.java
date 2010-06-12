@@ -463,4 +463,15 @@ public interface Control extends Serializable {
      * @param buffer the specified buffer to render the control's output to
      */
     public void render(HtmlStringBuffer buffer);
+
+    public boolean hasBehaviors();
+
+    public List<Behavior> getBehaviors();
+
+    // What about setCssSelector?
+    public String getCssSelector();
+
+    // TODO this method could be changed to both check and return the target
+    // behavior
+    public boolean isAjaxTarget(Context context);
 }
