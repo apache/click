@@ -138,6 +138,7 @@
   </menu>
 
   <menu label="Ajax" path="#" imageSrc="/assets/images/lightning.png">
+    <menu label="Basic AJAX Demo" path="ajax/basic-ajax-demo.htm"/>
     <menu label="AJAX Accordion" path="ajax/ajax-accordion.htm"/>
     <menu label="AJAX Auto Complete Field" path="ajax/auto-complete.htm"/>
     <menu label="AJAX Live Scroller " path="ajax/ajax-live-scroller.htm"/>
