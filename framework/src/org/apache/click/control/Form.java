@@ -1636,6 +1636,17 @@ public class Form extends AbstractContainer {
      *
      * @return true if JavaScript client side form validation is enabled
      */
+    public boolean isJavaScriptValidation() {
+        return javaScriptValidation;
+    }
+
+    /**
+     * Return true if JavaScript client side form validation is enabled.
+     *
+     * @deprecated use {@link #isJavaScriptValidation()} instead
+     *
+     * @return true if JavaScript client side form validation is enabled
+     */
     public boolean getJavaScriptValidation() {
         return javaScriptValidation;
     }
@@ -2362,7 +2373,7 @@ public class Form extends AbstractContainer {
 
         appendAttributes(buffer);
 
-        if (getJavaScriptValidation()) {
+        if (isJavaScriptValidation()) {
             String javaScript = "return on_" + getId() + "_submit();";
             buffer.appendAttribute("onsubmit", javaScript);
         }
@@ -2718,7 +2729,7 @@ public class Form extends AbstractContainer {
 
         // Reset bypass flag to ensure it does not influence the validate flag
         bypassValidation = Boolean.FALSE;
-        if (getValidate() && getJavaScriptValidation()) {
+        if (getValidate() && isJavaScriptValidation()) {
             buffer.append("<tr style=\"display:none\" id=\"");
             buffer.append(getId());
             buffer.append("-errorsTr\"><td width='100%' align=\"");
@@ -2843,7 +2854,7 @@ public class Form extends AbstractContainer {
         bypassValidation = Boolean.FALSE;
 
         // Render JavaScript form validation code
-        if (getValidate() && getJavaScriptValidation()) {
+        if (getValidate() && isJavaScriptValidation()) {
             List<String> functionNames = new ArrayList<String>();
 
             buffer.append("<script type=\"text/javascript\"><!--\n");
