@@ -326,7 +326,7 @@ public class SubmitLink extends ActionLink {
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(60);
         buffer.append("return");
-        if (getForm().getValidate() && getForm().getJavaScriptValidation()) {
+        if (getForm().getValidate() && getForm().isJavaScriptValidation()) {
             buffer.append(" on_");
             buffer.append(getForm().getId());
             buffer.append("_submit() &&");
