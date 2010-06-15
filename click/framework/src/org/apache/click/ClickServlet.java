@@ -1905,7 +1905,7 @@ public class ClickServlet extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
                 // TODO: use return an ErrorReport instance instead?
-                writer.write("<div>\n");
+                writer.write("<div id='errorReport' class='errorReport'>\n");
                 exception.printStackTrace(writer);
                 writer.write("\n</div>");
             } finally {
