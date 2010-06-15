@@ -50,7 +50,8 @@ public class ExtrasClickUtilsTest extends TestCase {
         Calendar calendar = new GregorianCalendar(2000, 01, 02);
         DATE_OF_BIRTH = calendar.getTime();
     }
-    
+
+    @Override
     protected void setUp() {
     	MockContext.initContext(Locale.ENGLISH);
     }
