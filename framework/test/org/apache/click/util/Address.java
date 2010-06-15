@@ -18,8 +18,6 @@
  */
 package org.apache.click.util;
 
-import org.apache.click.util.State;
-
 public class Address {
     private Integer id;
     private String lineOne;
