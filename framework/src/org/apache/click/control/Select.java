@@ -478,9 +478,9 @@ public class Select extends Field {
             optionList.add(new Option(option.toString()));
 
         } else {
-            String message = "Unsupported options class "
-                + option.getClass().getName() + ". Please use method "
-                + "Select.addAll(Collection, String, String) instead.";
+            String message = "Unsupported Option class "
+                + option.getClass().getName() + ". Must be one of "
+                + "Option, OptionGroup, String, Number or Boolean";
             throw new IllegalArgumentException(message);
         }
 
