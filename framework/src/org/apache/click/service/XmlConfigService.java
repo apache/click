@@ -680,7 +680,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @return the public field of the pageClass with the given name or null
      */
     public Field getPageField(Class<? extends Page> pageClass, String fieldName) {
-        return (Field) getPageFields(pageClass).get(fieldName);
+        return getPageFields(pageClass).get(fieldName);
     }
 
     /**
@@ -1555,7 +1555,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     private void loadPageInterceptors(Element rootElm) throws Exception {
-        List<Element> interceptorList = (List<Element>)
+        List<Element> interceptorList =
             ClickUtils.getChildren(rootElm, "page-interceptor");
 
         for (Element interceptorElm : interceptorList) {
@@ -1870,6 +1870,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
          *
          * @return the map of HTTP header to be set in the HttpServletResponse
          */
+        @Override
         public Map getHeaders() {
             return HEADERS;
         }
@@ -2035,6 +2036,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             return false;
         }
 
+        @Override
         public String toString() {
             return getClass().getName()
                 + "[fileSet=" + fileSet + ",pathSet=" + pathSet + "]";
@@ -2064,7 +2066,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             // or is scope request then create a new interceptor
             if (pageInterceptor == null || !applicationScope) {
                 try {
-                    listener = (PageInterceptor) interceptorClass.newInstance();
+                    listener = interceptorClass.newInstance();
 
                     Map ognlContext = new HashMap();
 
