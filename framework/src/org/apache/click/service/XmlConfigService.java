@@ -977,6 +977,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 } else if ("public".equalsIgnoreCase(autobindingStr)) {
                     autobinding = AutoBinding.DEFAULT;
 
+                } else if ("default".equalsIgnoreCase(autobindingStr)) {
+                    autobinding = AutoBinding.DEFAULT;
+
                 } else if ("none".equalsIgnoreCase(autobindingStr)) {
                     autobinding = AutoBinding.NONE;
 
