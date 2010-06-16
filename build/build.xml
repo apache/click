@@ -768,7 +768,7 @@ Please ensure you have configured build.properties</echo>
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
-      <javac srcdir="extras/src;extras/test;mock/src;framework/test" 
+      <javac srcdir="extras/src;extras/test;mock/src" 
              destdir="extras/classes" 
              debug="true"
              encoding="UTF-8"
