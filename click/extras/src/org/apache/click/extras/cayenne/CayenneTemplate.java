@@ -68,8 +68,8 @@ public class CayenneTemplate {
      * @param dataObjectClass the data object class to create and register
      * @return the new registered data object
      */
-    protected DataObject newObject(Class dataObjectClass) {
-        return (DataObject) getDataContext().newObject(dataObjectClass);
+    protected DataObject newObject(Class<DataObject> dataObjectClass) {
+        return getDataContext().newObject(dataObjectClass);
     }
 
     /**
@@ -79,8 +79,8 @@ public class CayenneTemplate {
      * @param dataObjectClass the data object class to create and register
      * @return the new registered data object
      */
-    protected DataObject createAndRegisterNewObject(Class dataObjectClass) {
-        return (DataObject) getDataContext().newObject(dataObjectClass);
+    protected DataObject createAndRegisterNewObject(Class<DataObject> dataObjectClass) {
+        return getDataContext().newObject(dataObjectClass);
     }
 
     /**
@@ -355,7 +355,7 @@ public class CayenneTemplate {
      * @param parameters the Map of query parameter names and values
      * @return the array of update counts
      */
-    protected int[] performNonSelectingQuery(String queryName, Map parameters) {
+    protected int[] performNonSelectingQuery(String queryName, Map<String, ?> parameters) {
         return getDataContext().performNonSelectingQuery(queryName, parameters);
     }
 
