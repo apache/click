@@ -48,7 +48,7 @@ import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.log.LogChute;
 import org.apache.velocity.runtime.parser.TemplateParseException;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
-import org.apache.velocity.tools.view.servlet.WebappLoader;
+import org.apache.velocity.tools.view.WebappResourceLoader;
 import org.apache.velocity.util.SimplePool;
 
 /**
@@ -83,7 +83,7 @@ import org.apache.velocity.util.SimplePool;
  * <pre class="codeConfig">
  * resource.loader=<span class="blue">webapp</span>, <span class="red">class</span>
  *
- * <span class="blue">webapp</span>.resource.loader.class=org.apache.velocity.tools.view.servlet.WebappLoader
+ * <span class="blue">webapp</span>.resource.loader.class=org.apache.velocity.tools.view.WebappResourceLoader
  * <span class="blue">webapp</span>.resource.loader.cache=[true|false] &nbsp; <span class="green">#depending on application mode</span>
  * <span class="blue">webapp</span>.resource.loader.modificationCheckInterval=0 <span class="green">#depending on application mode</span>
  *
@@ -95,7 +95,7 @@ import org.apache.velocity.util.SimplePool;
  * velocimacro.library=click/VM_global_library.vm
  * </pre>
  *
- * This service uses the Velocity Tools WebappLoader for loading templates.
+ * This service uses the Velocity Tools WebappResourceLoader for loading templates.
  * This avoids issues associate with using the Velocity FileResourceLoader on JEE
  * application servers.
  * <p/>
@@ -263,7 +263,7 @@ public class VelocityTemplateService implements TemplateService {
         velocityEngine.setApplicationAttribute(ConfigService.class.getName(),
                                                configService);
 
-        // Set ServletContext instance for WebappLoader
+        // Set ServletContext instance for WebappResourceLoader
         velocityEngine.setApplicationAttribute(ServletContext.class.getName(),
                                                configService.getServletContext());
 
@@ -387,7 +387,7 @@ public class VelocityTemplateService implements TemplateService {
 
         velProps.setProperty(RuntimeConstants.RESOURCE_LOADER, "webapp, class");
         velProps.setProperty("webapp.resource.loader.class",
-                             WebappLoader.class.getName());
+                             WebappResourceLoader.class.getName());
         velProps.setProperty("class.resource.loader.class",
                              ClasspathResourceLoader.class.getName());
 
