@@ -208,7 +208,9 @@ public class JsImport extends ResourceElement {
 
         buffer.elementStart(getTag());
 
-        buffer.appendAttribute("id", getId());
+        if (isRenderId()) {
+            buffer.appendAttribute("id", getId());
+        }
 
         String src = getSrc();
         renderResourcePath(buffer, "src", src);

@@ -381,7 +381,10 @@ public class JsScript extends ResourceElement {
 
         buffer.elementStart(getTag());
 
-        buffer.appendAttribute("id", getId());
+        if (isRenderId()) {
+            buffer.appendAttribute("id", getId());
+        }
+
         appendAttributes(buffer);
 
         buffer.closeTag();
