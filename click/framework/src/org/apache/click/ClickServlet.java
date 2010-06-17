@@ -26,7 +26,6 @@ import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -1033,7 +1032,6 @@ public class ClickServlet extends HttpServlet {
      * @return a new Page instance for the given request, or null if an
      * PageInterceptor has aborted page creation
      */
-    @SuppressWarnings("unchecked")
     protected Page createPage(Context context) {
 
         HttpServletRequest request = context.getRequest();
@@ -2146,17 +2144,14 @@ public class ClickServlet extends HttpServlet {
 
         Map<String, String[]> requestParams = new TreeMap<String, String[]>();
 
-        Enumeration e = request.getParameterNames();
+        Enumeration<?> e = request.getParameterNames();
         while (e.hasMoreElements()) {
             String name = e.nextElement().toString();
             String[] values = request.getParameterValues(name);
             requestParams.put(name, values);
         }
 
-        Iterator it = requestParams.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, String[]> entry =
-                (Map.Entry<String, String[]>) it.next();
+        for (Map.Entry<String, String[]> entry : requestParams.entrySet()) {
             String name = entry.getKey();
             String[] values = entry.getValue();
 

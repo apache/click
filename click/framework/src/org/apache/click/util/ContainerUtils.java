@@ -120,7 +120,7 @@ public class ContainerUtils {
 
         // If the given object is a map, its key/value pair is populated from
         // the fields name/value pair.
-        if (object instanceof Map) {
+        if (object instanceof Map<?, ?>) {
             copyFieldsToMap(fieldList, (Map) object);
             // Exit after populating the map.
             return;
@@ -129,7 +129,7 @@ public class ContainerUtils {
         LogService logService = ClickUtils.getLogService();
 
         Set<String> properties = getObjectPropertyNames(object);
-        Map ognlContext = new HashMap();
+        Map<?, ?> ognlContext = new HashMap<Object, Object>();
 
         for (Field field : fieldList) {
 
@@ -240,7 +240,7 @@ public class ContainerUtils {
 
         //If the given object is a map, populate the fields name/value from
         //the maps key/value pair.
-        if (object instanceof Map) {
+        if (object instanceof Map<?, ?>) {
 
             copyMapToFields((Map) object, fieldList);
             //Exit after populating the fields.
@@ -830,9 +830,9 @@ public class ContainerUtils {
 
         if (result == null) {
             // Find the target class of the object in the path to create
-            Class targetClass = getterMethod.getReturnType();
+            Class<?> targetClass = getterMethod.getReturnType();
 
-            Constructor constructor = null;
+            Constructor<?> constructor = null;
             try {
                 // Lookup default no-arg constructor
                 constructor = targetClass.getConstructor((Class[]) null);
@@ -891,7 +891,7 @@ public class ContainerUtils {
         String getterName = ClickUtils.toGetterName(property);
 
         Method method = null;
-        Class sourceClass = object.getClass();
+        Class<?> sourceClass = object.getClass();
 
         try {
             method = sourceClass.getMethod(getterName, (Class[]) null);
@@ -955,14 +955,14 @@ public class ContainerUtils {
      * @return the setter method
      */
     private final static Method findSetter(Object source,
-        String property, Class targetClass, String path) {
+        String property, Class<?> targetClass, String path) {
         Method method = null;
 
         // Find the setter for property
         String setterName = ClickUtils.toSetterName(property);
 
-        Class sourceClass = source.getClass();
-        Class[] classArgs = { targetClass };
+        Class<?> sourceClass = source.getClass();
+        Class<?>[] classArgs = { targetClass };
         try {
             method = sourceClass.getMethod(setterName, classArgs);
         } catch (Exception e) {

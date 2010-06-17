@@ -1534,8 +1534,9 @@ public class Table extends AbstractControl {
      *
      * @return a new table row list
      */
-    protected List createRowList() {
-        DataProvider dp = getDataProvider();
+    @SuppressWarnings("unchecked")
+    protected List<Object> createRowList() {
+        DataProvider<?> dp = getDataProvider();
 
         List<Object> rowList = null;
 
@@ -1543,7 +1544,7 @@ public class Table extends AbstractControl {
 
             boolean isPaginating = false;
 
-            if (dp instanceof PagingDataProvider) {
+            if (dp instanceof PagingDataProvider<?>) {
                 isPaginating = true;
             }
 
@@ -1553,7 +1554,7 @@ public class Table extends AbstractControl {
                 // since the getData implementation could have a dependency
                 // on the methods getFirstRow, getLastRow etc all of which
                 // depends on the rowCount value
-                this.rowCount = ((PagingDataProvider) dp).size();
+                this.rowCount = ((PagingDataProvider<?>) dp).size();
 
                 // paginated datasets cannot be sorted by the table since it
                 // has access to only a limited number of rows. The dataset has
@@ -1563,11 +1564,11 @@ public class Table extends AbstractControl {
                 setSorted(true);
             }
 
-            Iterable iterableData = dp.getData();
+            Iterable<?> iterableData = dp.getData();
 
             // If dataProvider returns a list, use that as the rowList
-            if (iterableData instanceof List) {
-                rowList = (List) iterableData;
+            if (iterableData instanceof List<?>) {
+                rowList = (List<Object>) iterableData;
 
             } else {
 

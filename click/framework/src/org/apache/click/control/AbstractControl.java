@@ -258,7 +258,7 @@ public abstract class AbstractControl implements Control {
 
     public List<Behavior> getBehaviors() {
         if (behaviors == null) {
-            behaviors = new ArrayList();
+            behaviors = new ArrayList<Behavior>();
         }
         return behaviors;
     }
@@ -670,7 +670,6 @@ public abstract class AbstractControl implements Control {
      * @param name the CSS style name
      * @param value the CSS style value
      */
-    @SuppressWarnings("unchecked")
     public void setStyle(String name, String value) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");

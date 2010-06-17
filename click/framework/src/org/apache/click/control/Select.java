@@ -319,7 +319,7 @@ public class Select extends Field {
      * The multiple selected values. This list will only be populated if
      * {@link #multiple} is true.
      */
-    protected List selectedValues;
+    protected List<String> selectedValues;
 
     /** The select data provider. */
     @SuppressWarnings("unchecked")
@@ -751,7 +751,7 @@ public class Select extends Field {
      *
      * @param multipleValues the list of selected values
      */
-    public void setMultipleValues(List multipleValues) {
+    public void setMultipleValues(List<String> multipleValues) {
         this.selectedValues = multipleValues;
     }
 
@@ -760,7 +760,7 @@ public class Select extends Field {
      *
      * @param multipleValues the list of selected values
      */
-    public void setSelectedValues(List multipleValues) {
+    public void setSelectedValues(List<String> multipleValues) {
         this.selectedValues = multipleValues;
     }
 
@@ -905,7 +905,7 @@ public class Select extends Field {
     @Override
     public void bindRequestValue() {
 
-        selectedValues = new ArrayList(5);
+        selectedValues = new ArrayList<String>(5);
 
         // Process single item select case.
         if (!isMultiple()) {
