@@ -573,22 +573,18 @@ public class ConfigServiceTest extends TestCase {
     static public class MyPageInterceptor implements PageInterceptor {
         public String type;
 
-        @Override
         public boolean postCreate(Page page) {
             return false;
         }
 
-        @Override
         public void postDestroy(Page page) {
         }
 
-        @Override
         public boolean preCreate(Class<? extends Page> pageClass,
                 Context context) {
             return false;
         }
 
-        @Override
         public boolean preResponse(Page page) {
             return false;
         }
