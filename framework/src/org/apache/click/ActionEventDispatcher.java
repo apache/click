@@ -293,7 +293,10 @@ public class ActionEventDispatcher {
 
             if (behavior.isRequestTarget(context)) {
 
-                partial = behavior.onAction(source);
+                Partial behaviorPartial = behavior.onAction(source);
+                if (partial == null && behaviorPartial != null) {
+                    partial = behaviorPartial;
+                }
 
                 if (logger.isTraceEnabled()) {
                     String behaviorClassName = ClassUtils.getShortClassName(behavior.getClass());
@@ -301,7 +304,16 @@ public class ActionEventDispatcher {
                     buffer.append("   invoked: ");
                     buffer.append(behaviorClassName);
                     buffer.append(".isRequestTarget() : true");
-                    buffer.append(" (Ajax Behavior found)");
+
+                    if (partial == behaviorPartial && behaviorPartial != null) {
+                        buffer.append(" (Partial content will be rendered)");
+                    } else {
+                        if (behaviorPartial == null) {
+                            buffer.append(" (Partial is null and will be ignored)");
+                        } else {
+                            buffer.append(" (Partial will be ignored since another Behavior already retuned a non-null Partial)");
+                        }
+                    }
 
                     logger.trace(buffer.toString());
 
