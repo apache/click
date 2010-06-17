@@ -77,8 +77,6 @@ public class ConfigServiceTest extends TestCase {
         assertEquals(Collections.EMPTY_LIST, config.getPageClassList());
         // Check deployed resource
         assertTrue(new File(tmpdir, "click/control.css").exists());
-        // Check deployed extras resource
-        assertTrue(new File(tmpdir, "click/calendar/calendar_date_select.js").exists());
 
         container.stop();
 
