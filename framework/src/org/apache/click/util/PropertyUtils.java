@@ -20,8 +20,7 @@ package org.apache.click.util;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-
-import EDU.oswego.cs.dl.util.concurrent.ConcurrentReaderHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import ognl.Ognl;
 import ognl.OgnlException;
@@ -33,10 +32,10 @@ import ognl.OgnlException;
 public class PropertyUtils {
 
     /** Provides a synchronized cache of OGNL expressions. */
-    private static final Map OGNL_EXPRESSION_CACHE = new ConcurrentReaderHashMap();
+    private static final Map<String, Object> OGNL_EXPRESSION_CACHE = new ConcurrentHashMap<String, Object>();
 
     /** Provides a synchronized cache of get value reflection methods. */
-    private static final Map GET_METHOD_CACHE = new ConcurrentReaderHashMap();
+    private static final Map<String, Object> GET_METHOD_CACHE = new ConcurrentHashMap<String, Object>();
 
     // -------------------------------------------------------- Public Methods
 
@@ -276,6 +275,7 @@ public class PropertyUtils {
          * @param o the object with which to compare this instance with
          * @return true if the specified object is the same as this object
          */
+        @Override
         public final boolean equals(Object o) {
             if (this == o) {
                 return true;
@@ -299,6 +299,7 @@ public class PropertyUtils {
          *
          * @return a hash code value for this object.
          */
+        @Override
         public final int hashCode() {
             return sourceClass.hashCode() * 31 + property.hashCode();
         }
