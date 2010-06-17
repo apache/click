@@ -234,7 +234,8 @@ public class MockContext extends Context {
      * @param request the mock request
      * @param response the mock response
      * @param clickServlet the mock clickServlet
-     * @param controlRegistry the controlRegistry instance
+     * @param actionEventDispatcher action and behavior dispatcher 
+     * @param callbackDispatcher the control callback dispatcher 
      * @return new Context instance
      */
     public static MockContext initContext(MockServletConfig servletConfig,
