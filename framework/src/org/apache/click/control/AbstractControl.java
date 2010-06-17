@@ -235,10 +235,22 @@ public abstract class AbstractControl implements Control {
         this.actionListener = listener;
     }
 
+    /**
+     * Returns <tt>true</tt> if this control has any
+     * <tt>Behavior</tt>s registered.
+     *
+     * @return <tt>true</tt> if this control has any
+     * <tt>Behavior</tt>s registered, <tt>false</tt> otherwise.
+     */
     public boolean hasBehaviors() {
         return (behaviors != null && behaviors.size() > 0);
     }
 
+    /**
+     * Adds an AJAX Behavior.
+     *  
+     * @param behavior the AJAX behavior
+     */
     public void addBehavior(Behavior behavior) {
         if (getBehaviors().contains(behavior)) {
             return;
@@ -252,10 +264,20 @@ public abstract class AbstractControl implements Control {
         CallbackDispatcher.registerBehavior(this);
     }
 
+    /**
+     * Removes form this Control a <tt>behavior</tt>.
+     *  
+     * @param behavior the <tt>behavior</tt> to remove.
+     */
     public void removeBehavior(Behavior behavior) {
         getBehaviors().remove(behavior);
     }
 
+    /**
+     * Returns the list with all available behaviors for this control.
+     *
+     * @return the list with this control's behaviors.
+     */
     public List<Behavior> getBehaviors() {
         if (behaviors == null) {
             behaviors = new ArrayList<Behavior>();
@@ -263,6 +285,13 @@ public abstract class AbstractControl implements Control {
         return behaviors;
     }
 
+    /**
+     * Returns this Control's CSS selector or <tt>null</tt>null if no selector
+     * can be found.
+     * 
+     * @return this Control's CSS selector or <tt>null</tt> if no selector
+     * can be found.
+     */
     public String getCssSelector() {
         // TODO each control could have an optimized version of cssSelector
         // targeting specifically that control. For now we just use a generic
@@ -270,6 +299,15 @@ public abstract class AbstractControl implements Control {
         return ClickUtils.getCssSelector(this);
     }
 
+
+    /**
+     * Returns <tt>true</tt> if this is an AJAX control,
+     * <tt>false</tt> otherwise.
+     *
+     * @param context the Click context.      
+     * @return <tt>true</tt> if this is an AJAX control,
+     * <tt>false</tt> otherwise.  
+     */
     public boolean isAjaxTarget(Context context) {
         // TODO each control could have an optimized version of isAjaxTarget
         // targeting specifically that control. For now we just check that the

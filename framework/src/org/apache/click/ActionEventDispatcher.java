@@ -198,7 +198,6 @@ public class ActionEventDispatcher {
      * @param context the request context
      * @param eventSourceList the list of source controls
      * @param eventListenerList the list of listeners to fire
-     * @param event the specific event which events to fire
      *
      * @return true if the page should continue processing or false otherwise
      */
@@ -259,7 +258,7 @@ public class ActionEventDispatcher {
 
         boolean continueProcessing = true;
 
-        for (Iterator<Control> it = behaviorSourceSet.iterator(); it.hasNext(); ) {
+        for (Iterator<Control> it = behaviorSourceSet.iterator(); it.hasNext();) {
             Control source = it.next();
 
             // Pop the first entry in the set

@@ -24,6 +24,7 @@
 <suppressions>
     <!-- File Length -->
     <suppress checks="FileLength" files="ClickUtils.java"/>
+    <suppress checks="FileLength" files="ClickServlet.java"/>
     <suppress checks="FileLength" files="Form.java"/>
     <suppress checks="FileLength" files="Tree.java"/>
     <suppress checks="FileLength" files="Table.java"/>
