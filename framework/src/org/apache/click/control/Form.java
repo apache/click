@@ -1410,7 +1410,7 @@ public class Form extends AbstractContainer {
      * @return the Map of form fields (including buttons), keyed
      * on field name
      */
-    public Map getFields() {
+    public Map<String, Control> getFields() {
         return getControlMap();
     }
 
@@ -2407,7 +2407,7 @@ public class Form extends AbstractContainer {
                 return;
 
             } else {
-                Map fieldMap = ContainerUtils.getFieldMap(this);
+                Map<String, Field> fieldMap = ContainerUtils.getFieldMap(this);
                 if (fieldMap.containsKey(FORM_NAME)
                     && fieldMap.containsKey(BYPASS_VALIDATION)) {
                     return;
@@ -3018,7 +3018,7 @@ public class Form extends AbstractContainer {
          * @param name the field name
          * @param valueClass the Class of the value Object
          */
-        public NonbindableHiddenField(String name, Class valueClass) {
+        public NonbindableHiddenField(String name, Class<?> valueClass) {
             super(name, valueClass);
         }
 

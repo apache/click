@@ -20,7 +20,6 @@ package org.apache.click.control;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.click.Control;
@@ -107,16 +106,16 @@ public class FieldSet extends Field implements Container {
     protected Map<String, Control> controlMap;
 
     /** The ordered list of fields, excluding buttons. */
-    protected final List fieldList = new ArrayList();
+    protected final List<Field> fieldList = new ArrayList<Field>();
 
     /** The map of field width values. */
-    protected Map fieldWidths;
+    protected Map<String, Integer> fieldWidths;
 
     /** The FieldSet legend. */
     protected String legend;
 
     /** The FieldSet legend attributes map. */
-    protected Map legendAttributes;
+    protected Map<String, String> legendAttributes;
 
     /** The render fieldset border flag, default value is true. */
     protected boolean showBorder = true;
@@ -661,7 +660,7 @@ public class FieldSet extends Field implements Container {
      *
      * @return the ordered List of fieldset fields
      */
-    public List getFieldList() {
+    public List<Field> getFieldList() {
         return fieldList;
     }
 
@@ -670,7 +669,7 @@ public class FieldSet extends Field implements Container {
      *
      * @return the Map of fieldset fields, keyed on field name
      */
-    public Map getFields() {
+    public Map<String, Control> getFields() {
         return getControlMap();
     }
 
@@ -679,9 +678,9 @@ public class FieldSet extends Field implements Container {
      *
      * @return the map of field width values, keyed on field name
      */
-    public Map getFieldWidths() {
+    public Map<String, Integer> getFieldWidths() {
         if (fieldWidths == null) {
-            fieldWidths = new HashMap();
+            fieldWidths = new HashMap<String, Integer>();
         }
         return fieldWidths;
     }
@@ -697,8 +696,7 @@ public class FieldSet extends Field implements Container {
 
         // Set the specified form on the fieldsSets children. This call is not
         // recursive to children's children
-        for (Iterator it = getControls().iterator(); it.hasNext();) {
-            Control control = (Control) it.next();
+        for (Control control : getControls()) {
             if (control instanceof Field) {
                 ((Field) control).setForm(form);
             }
@@ -755,7 +753,7 @@ public class FieldSet extends Field implements Container {
      */
     public String getLegendAttribute(String name) {
         if (legendAttributes != null) {
-            return (String) legendAttributes.get(name);
+            return legendAttributes.get(name);
         } else {
             return null;
         }
@@ -774,7 +772,7 @@ public class FieldSet extends Field implements Container {
         }
 
         if (legendAttributes == null) {
-            legendAttributes = new HashMap(5);
+            legendAttributes = new HashMap<String, String>(5);
         }
 
         if (value != null) {
@@ -789,9 +787,9 @@ public class FieldSet extends Field implements Container {
      *
      * @return the fieldset attributes Map
      */
-    public Map getLegendAttributes() {
+    public Map<String, String> getLegendAttributes() {
         if (legendAttributes == null) {
-            legendAttributes = new HashMap(5);
+            legendAttributes = new HashMap<String, String>(5);
         }
         return legendAttributes;
     }
@@ -819,8 +817,7 @@ public class FieldSet extends Field implements Container {
     @Override
     public boolean onProcess() {
         if (hasControls()) {
-            for (Iterator it = getControls().iterator(); it.hasNext();) {
-                Control control = (Control) it.next();
+            for (Control control : getControls()) {
                 String controlName = control.getName();
                 if (controlName == null || !controlName.startsWith(
                     Form.SUBMIT_CHECK)) {
@@ -1015,10 +1012,7 @@ public class FieldSet extends Field implements Container {
             return;
         }
 
-        List controls = getControls();
-
-        for (int i = 0; i < controls.size(); i++) {
-            Control control = (Control) controls.get(i);
+        for (Control control : getControls()) {
 
             // Buttons are rendered separately
             if (control instanceof Button) {
@@ -1028,7 +1022,7 @@ public class FieldSet extends Field implements Container {
             if (!isHidden(control)) {
 
                 // Field width
-                Integer width = (Integer) getFieldWidths().get(control.getName());
+                Integer width = getFieldWidths().get(control.getName());
 
                 if (column == 1) {
                     buffer.append("<tr class=\"fields\">\n");
@@ -1222,7 +1216,7 @@ public class FieldSet extends Field implements Container {
      * @param buffer the StringBuffer to render to
      */
     protected void renderButtons(HtmlStringBuffer buffer) {
-        List buttons = ContainerUtils.getButtons(this);
+        List<Button> buttons = ContainerUtils.getButtons(this);
 
         if (!buttons.isEmpty()) {
             buffer.append("<table class=\"buttons\" id=\"");
@@ -1231,12 +1225,11 @@ public class FieldSet extends Field implements Container {
             buffer.append("<tr class=\"buttons\">");
 
             Form form = getForm();
-            for (int i = 0, size = buttons.size(); i < size; i++) {
+            for (Button button : buttons) {
                 buffer.append("<td class=\"buttons\"");
                 buffer.appendAttribute("style", form.getButtonStyle());
                 buffer.closeTag();
 
-                Button button = (Button) buttons.get(i);
                 button.render(buffer);
 
                 buffer.append("</td>");

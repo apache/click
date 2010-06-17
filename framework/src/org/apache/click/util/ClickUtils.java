@@ -41,7 +41,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -185,7 +184,7 @@ public class ClickUtils {
      *         of the response content
      */
     public static void autoPostRedirect(HttpServletRequest request,
-            HttpServletResponse response, String target, Map params,
+            HttpServletResponse response, String target, Map<String, String> params,
             boolean compress) {
 
         Validate.notNull(request, "Null response parameter");
@@ -197,8 +196,7 @@ public class ClickUtils {
         buffer.append("<form name=\"form\" method=\"post\" style=\"{display:none;}\" action=\"");
         buffer.append(target);
         buffer.append("\">");
-        for (Iterator i = params.keySet().iterator(); i.hasNext();) {
-            String name = i.next().toString();
+        for (String name : params.keySet()) {
             String value = params.get(name).toString();
             buffer.elementStart("textarea");
             buffer.appendAttribute("name", name);
@@ -211,7 +209,7 @@ public class ClickUtils {
         // Determine whether browser will accept gzip compression
         if (compress) {
             compress = false;
-            Enumeration e = request.getHeaders("Accept-Encoding");
+            Enumeration<?> e = request.getHeaders("Accept-Encoding");
 
             while (e.hasMoreElements()) {
                 String name = (String) e.nextElement();
@@ -1344,7 +1342,8 @@ public class ClickUtils {
      * @param targetDir target directory where to deploy the files to. In most cases this
      * is only the reserved directory <code>click</code>
      */
-    public static void deployFileList(ServletContext servletContext, Class controlClass, String targetDir) {
+    public static void deployFileList(ServletContext servletContext, 
+            Class<? extends Control> controlClass, String targetDir) {
 
         String packageName = ClassUtils.getPackageName(controlClass);
         packageName = StringUtils.replaceChars(packageName, '.', '/');
@@ -1366,7 +1365,7 @@ public class ClickUtils {
 
             // a target dir list is required cause the ClickUtils.deployFile() is too inflexible to autodetect
             // required subdirectories.
-            List targetDirList = new ArrayList(fileList.size());
+            List<String> targetDirList = new ArrayList<String>(fileList.size());
             for (int i = 0; i < fileList.size(); i++) {
                 String filePath = (String) fileList.get(i);
                 String destination = "";
@@ -1380,7 +1379,7 @@ public class ClickUtils {
 
             for (int i = 0; i < fileList.size(); i++) {
                 String source = (String) fileList.get(i);
-                String targetDirName = (String) targetDirList.get(i);
+                String targetDirName = targetDirList.get(i);
                 ClickUtils.deployFile(servletContext, source, targetDirName);
             }
 
@@ -1863,7 +1862,7 @@ public class ClickUtils {
      * @param form the form to obtain the fields from
      * @return the list of contained form fields
      */
-    public static List getFormFields(Form form) {
+    public static List<Field> getFormFields(Form form) {
         if (form == null) {
             throw new IllegalArgumentException("Null form parameter");
         }
@@ -2078,11 +2077,11 @@ public class ClickUtils {
      * @param request the servlet request to obtain request parameters from
      * @return the ordered map of request parameters
      */
-    public static Map getRequestParameterMap(HttpServletRequest request) {
+    public static Map<String, Object> getRequestParameterMap(HttpServletRequest request) {
 
-        TreeMap requestParams = new TreeMap();
+        TreeMap<String, Object> requestParams = new TreeMap<String, Object>();
 
-        Enumeration paramNames = request.getParameterNames();
+        Enumeration<?> paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
             String name = paramNames.nextElement().toString();
 
@@ -2177,7 +2176,7 @@ public class ClickUtils {
      *     not found using the current <tt>Thread</tt> context <tt>ClassLoader</tt>.
      * @return the input stream of the resource if found or null otherwise
      */
-    public static InputStream getResourceAsStream(String name, Class aClass) {
+    public static InputStream getResourceAsStream(String name, Class<?> aClass) {
         Validate.notNull(name, "Parameter name is null");
         Validate.notNull(aClass, "Parameter aClass is null");
 
@@ -2204,7 +2203,7 @@ public class ClickUtils {
      *     not found using the current <tt>Thread</tt> context <tt>ClassLoader</tt>.
      * @return the URL of the resource if found or null otherwise
      */
-    public static URL getResource(String name, Class aClass) {
+    public static URL getResource(String name, Class<?> aClass) {
         Validate.notNull(name, "Parameter name is null");
         Validate.notNull(aClass, "Parameter aClass is null");
 
@@ -2322,8 +2321,8 @@ public class ClickUtils {
             char[] buffer = new char[32];
 
             for (int i = 0; i < 16; i++) {
-                int low = (int) (binaryData[i] & 0x0f);
-                int high = (int) ((binaryData[i] & 0xf0) >> 4);
+                int low = (binaryData[i] & 0x0f);
+                int high = ((binaryData[i] & 0xf0) >> 4);
                 buffer[i * 2] = HEXADECIMAL[high];
                 buffer[i * 2 + 1] = HEXADECIMAL[low];
             }
@@ -2683,7 +2682,7 @@ public class ClickUtils {
                 result = foundMethod.getReturnType().newInstance();
 
                 String setterName = toSetterName(value);
-                Class[] classArgs = { foundMethod.getReturnType() };
+                Class<?>[] classArgs = { foundMethod.getReturnType() };
 
                 Method setterMethod =
                     object.getClass().getMethod(setterName, classArgs);
@@ -2741,7 +2740,7 @@ public class ClickUtils {
         Method targetMethod = null;
         boolean isAccessible = true;
         try {
-            Class targetClass = target.getClass();
+            Class<?> targetClass = target.getClass();
             targetMethod = targetClass.getMethod(method);
 
             // Change accessible for anonymous inner classes public methods

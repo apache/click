@@ -551,7 +551,6 @@ public class ActionButton extends Button {
      * value.
      */
     @Override
-    @SuppressWarnings("unchecked")
     public void bindRequestValue() {
         Context context = getContext();
         if (context.isMultipartRequest()) {

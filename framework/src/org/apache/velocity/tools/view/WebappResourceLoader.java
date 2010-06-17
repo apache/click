@@ -55,7 +55,7 @@ public class WebappResourceLoader extends ResourceLoader
 {
     /** The root paths for templates (relative to webapp's root). */
     protected String[] paths = null;
-    protected HashMap templatePaths = null;
+    protected HashMap<String, String> templatePaths = null;
     protected ServletContext servletContext = null;
 
 
@@ -69,6 +69,7 @@ public class WebappResourceLoader extends ResourceLoader
      * @param configuration the {@link ExtendedProperties} associated with
      *        this resource loader.
      */
+    @Override
     public void init(ExtendedProperties configuration)
     {
         log.trace("WebappResourceLoader: initialization starting.");
@@ -105,7 +106,7 @@ public class WebappResourceLoader extends ResourceLoader
         }
 
         /* init the template paths map */
-        templatePaths = new HashMap();
+        templatePaths = new HashMap<String, String>();
 
         log.trace("WebappResourceLoader: initialization complete.");
     }
@@ -119,6 +120,7 @@ public class WebappResourceLoader extends ResourceLoader
      * @throws ResourceNotFoundException if template not found
      *         in  classpath.
      */
+    @Override
     public synchronized InputStream getResourceStream(String name)
         throws ResourceNotFoundException
     {
@@ -198,7 +200,7 @@ public class WebappResourceLoader extends ResourceLoader
             fileName = fileName.substring(1);
         }
 
-        String savedPath = (String)templatePaths.get(fileName);
+        String savedPath = templatePaths.get(fileName);
         return new File(rootPath + savedPath, fileName);
     }
 
@@ -209,6 +211,7 @@ public class WebappResourceLoader extends ResourceLoader
      * @param resource Resource  The resource to check for modification
      * @return boolean  True if the resource has been modified
      */
+    @Override
     public boolean isSourceModified(Resource resource)
     {
         String rootPath = servletContext.getRealPath("/");
@@ -262,6 +265,7 @@ public class WebappResourceLoader extends ResourceLoader
      * @param resource Resource the resource to check
      * @return long The time when the resource was last modified or 0 if the file can't be read
      */
+    @Override
     public long getLastModified(Resource resource)
     {
         String rootPath = servletContext.getRealPath("/");

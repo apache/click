@@ -717,7 +717,7 @@ public class Format implements Serializable {
      * @param arguments list of message arguments
      * @return the formatted string
      */
-    public String message(String pattern, List arguments) {
+    public String message(String pattern, List<?> arguments) {
         return message(pattern, arguments.toArray());
     }
 

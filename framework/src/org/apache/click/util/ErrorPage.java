@@ -79,6 +79,7 @@ import org.apache.click.Page;
  * </ul>
  */
 public class ErrorPage extends Page {
+    private static final long serialVersionUID = 1L;
 
     /** The number of lines to display. */
     protected static final int NUMB_LINES = 8;
@@ -93,7 +94,7 @@ public class ErrorPage extends Page {
     protected String mode;
 
     /** The page class in error. */
-    protected Class pageClass;
+    protected Class<? extends Page> pageClass;
 
     // --------------------------------------------------------- Event Handlers
 
@@ -112,6 +113,7 @@ public class ErrorPage extends Page {
      *
      * @see Page#onInit()
      */
+    @Override
     public void onInit() {
         addModel("mode", getMode());
         Context context = getContext();
@@ -178,7 +180,7 @@ public class ErrorPage extends Page {
      *
      * @return the page class in error
      */
-    public Class getPageClass() {
+    public Class<? extends Page> getPageClass() {
         return pageClass;
     }
 
@@ -187,7 +189,7 @@ public class ErrorPage extends Page {
      *
      * @param pageClass the page class in error
      */
-    public void setPageClass(Class pageClass) {
+    public void setPageClass(Class<? extends Page> pageClass) {
         this.pageClass = pageClass;
     }
 }

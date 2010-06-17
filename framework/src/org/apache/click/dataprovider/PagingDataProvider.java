@@ -89,7 +89,7 @@ package org.apache.click.dataprovider;
  *     }
  * } </pre>
  */
-public interface PagingDataProvider<T> extends DataProvider {
+public interface PagingDataProvider<T> extends DataProvider<T> {
 
     /**
      * Return the total number of results represented by this DataProvider.

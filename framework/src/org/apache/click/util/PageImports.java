@@ -339,7 +339,6 @@ public class PageImports {
      *
      * @param controls the list of Controls which HEAD elements to process
      */
-    @SuppressWarnings("deprecation")
     public void processControls(List<Control> controls) {
         for (Control control : controls) {
 
@@ -497,7 +496,6 @@ public class PageImports {
     /**
      * Process the Page's set of control HEAD elements.
      */
-    @SuppressWarnings("deprecation")
     protected void processPageControls() {
         if (isInitialized()) {
             return;

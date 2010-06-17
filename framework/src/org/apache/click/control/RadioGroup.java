@@ -22,7 +22,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.click.Context;
@@ -208,13 +207,12 @@ public class RadioGroup extends Field {
      * @param options the collection of Radio items to add
      * @throws IllegalArgumentException if options is null
      */
-    public void addAll(Collection options) {
+    public void addAll(Collection<Radio> options) {
         if (options == null) {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        for (Iterator i = options.iterator(); i.hasNext();) {
-            Radio radio = (Radio) i.next();
+        for (Radio radio : options) {
             add(radio);
         }
     }
@@ -230,15 +228,13 @@ public class RadioGroup extends Field {
      * @param options the Map of radio option values and labels to add
      * @throws IllegalArgumentException if options is null
      */
-    public void addAll(Map options) {
+    public void addAll(Map<String, String> options) {
         if (options == null) {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        for (Iterator i = options.entrySet().iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry) i.next();
-            Radio radio = new Radio(entry.getKey().toString(),
-                                    entry.getValue().toString());
+        for (Map.Entry<String, String> entry : options.entrySet()) {
+            Radio radio = new Radio(entry.getKey(), entry.getValue());
             add(radio);
         }
     }
@@ -258,7 +254,7 @@ public class RadioGroup extends Field {
      * @param label the name of the object property to render as the Radio label
      * @throws IllegalArgumentException if options, value or label parameter is null
      */
-    public void addAll(Collection objects, String value, String label) {
+    public void addAll(Collection<?> objects, String value, String label) {
         if (objects == null) {
             String msg = "objects parameter cannot be null";
             throw new IllegalArgumentException(msg);
@@ -276,7 +272,7 @@ public class RadioGroup extends Field {
             return;
         }
 
-        Map cache = new HashMap();
+        Map<?, ?> cache = new HashMap<Object, Object>();
 
         for (Object object : objects) {
             try {

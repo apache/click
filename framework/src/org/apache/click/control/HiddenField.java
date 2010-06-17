@@ -94,7 +94,7 @@ public class HiddenField extends Field {
     protected Object valueObject;
 
     /** The field value Class. */
-    protected Class valueClass;
+    protected Class<?> valueClass;
 
     // ----------------------------------------------------------- Constructors
 
@@ -104,7 +104,7 @@ public class HiddenField extends Field {
      * @param name the name of the hidden field
      * @param valueClass the Class of the value Object
      */
-    public HiddenField(String name, Class valueClass) {
+    public HiddenField(String name, Class<?> valueClass) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
@@ -151,6 +151,7 @@ public class HiddenField extends Field {
      *
      * @return this controls html tag
      */
+    @Override
     public String getTag() {
         return "input";
     }
@@ -162,6 +163,7 @@ public class HiddenField extends Field {
      *
      * @return true
      */
+    @Override
     public boolean isHidden() {
         return true;
     }
@@ -180,6 +182,7 @@ public class HiddenField extends Field {
      *
      * @return the Field value
      */
+    @Override
     public String getValue() {
         return (getValueObject() != null) ? getValueObject().toString() : "";
     }
@@ -189,6 +192,7 @@ public class HiddenField extends Field {
      *
      * @param value the Field value
      */
+    @Override
     public void setValue(String value) {
         setValueObject(value);
     }
@@ -198,7 +202,7 @@ public class HiddenField extends Field {
      *
      * @return the registered Class for the Hidden Field value Object
      */
-    public Class getValueClass() {
+    public Class<?> getValueClass() {
         return valueClass;
     }
 
@@ -207,7 +211,7 @@ public class HiddenField extends Field {
      *
      * @param valueClass the registered Class for the Hidden Field value Object
      */
-    public void setValueClass(Class valueClass) {
+    public void setValueClass(Class<?> valueClass) {
         this.valueClass = valueClass;
     }
 
@@ -218,6 +222,7 @@ public class HiddenField extends Field {
      *
      * @return the object representation of the Field value
      */
+    @Override
     public Object getValueObject() {
         return valueObject;
     }
@@ -227,6 +232,7 @@ public class HiddenField extends Field {
      *
      * @param value the object value to set
      */
+    @Override
     public void setValueObject(Object value) {
         if ((value != null) && (value.getClass() != valueClass)) {
             String msg =
@@ -245,6 +251,7 @@ public class HiddenField extends Field {
      *
      * @return null to ensure no client side JavaScript validation is performed
      */
+    @Override
     public String getValidationJavaScript() {
         return null;
     }
@@ -254,10 +261,11 @@ public class HiddenField extends Field {
     /**
      * This method binds the submitted request value to the Field's value.
      */
+    @Override
     public void bindRequestValue() {
 
         String aValue = getRequestValue();
-        Class valueClass = getValueClass();
+        Class<?> valueClass = getValueClass();
 
         if (valueClass == null) {
             throw new IllegalStateException("The value class is not defined."
@@ -331,6 +339,7 @@ public class HiddenField extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         buffer.elementStart(getTag());
@@ -338,7 +347,7 @@ public class HiddenField extends Field {
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("id", getId());
 
-        Class valueCls = getValueClass();
+        Class<?> valueCls = getValueClass();
 
         if (valueCls == String.class
             || valueCls == Integer.class
