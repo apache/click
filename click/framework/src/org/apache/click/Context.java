@@ -38,7 +38,6 @@ import org.apache.click.service.LogService;
 import org.apache.click.service.TemplateService;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.FlashAttribute;
-
 import org.apache.commons.fileupload.FileItem;
 
 /**
@@ -62,9 +61,6 @@ public class Context {
 
     /** The thread local context. */
     private static final ThreadLocal<ContextStack> THREAD_LOCAL_CONTEXT = new ThreadLocal<ContextStack>();
-
-    /** Ajax request header or parameter: "<tt>X-Requested-With</tt>". */
-    private static final String X_REQUESTED_WITH = "X-Requested-With";
 
     // ----------------------------------------------------- Instance Variables
 
