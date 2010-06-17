@@ -384,10 +384,9 @@ public class CayenneForm extends Form {
             // Clear any form data
             oidField.setValueObject(null);
 
-            List fields = ContainerUtils.getInputFields(this);
-            for (int i = 0; i < fields.size(); i++) {
-                Field field = (Field) fields.get(i);
-                if (field instanceof HiddenField == false) {
+            List<Field> fields = ContainerUtils.getInputFields(this);
+            for (Field field : fields) {
+                if (!(field instanceof HiddenField)) {
                     field.setValue("");
                 }
             }
@@ -595,14 +594,10 @@ public class CayenneForm extends Form {
 
             setObjEntityFieldConstrains(null, objEntity);
 
-            Iterator relationships = objEntity.getRelationships().iterator();
-            while (relationships.hasNext()) {
-                ObjRelationship objRelationship =
-                    (ObjRelationship) relationships.next();
-
+            for (ObjRelationship objRelationship : objEntity.getRelationships()) {
                 String relName = objRelationship.getName();
                 ObjEntity relObjEntity =
-                    (ObjEntity) objRelationship.getTargetEntity();
+                        (ObjEntity) objRelationship.getTargetEntity();
 
                 setObjEntityFieldConstrains(relName, relObjEntity);
             }
@@ -635,9 +630,7 @@ public class CayenneForm extends Form {
     protected void setObjEntityFieldConstrains(String relationshipName,
             ObjEntity objEntity) {
 
-        Iterator attributes = objEntity.getAttributes().iterator();
-        while (attributes.hasNext()) {
-            ObjAttribute objAttribute = (ObjAttribute) attributes.next();
+        for (ObjAttribute objAttribute : objEntity.getAttributes()) {
             DbAttribute dbAttribute = objAttribute.getDbAttribute();
 
             String fieldName = objAttribute.getName();
