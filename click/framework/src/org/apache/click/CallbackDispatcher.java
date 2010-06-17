@@ -106,7 +106,7 @@ public class CallbackDispatcher {
 
     void processBeforeResponse(Context context) {
         if (hasBehaviorEnabledControls()) {
-            for(Control control : getBehaviorEnabledControls()) {
+            for (Control control : getBehaviorEnabledControls()) {
                 List<Behavior> behaviors = control.getBehaviors();
                 for (Behavior behavior : behaviors) {
                     behavior.preResponse(control);
@@ -125,7 +125,7 @@ public class CallbackDispatcher {
 
     void processBeforeGetHeadElements(Context context) {
         if (hasBehaviorEnabledControls()) {
-            for(Control control : getBehaviorEnabledControls()) {
+            for (Control control : getBehaviorEnabledControls()) {
                 List<Behavior> behaviors = control.getBehaviors();
                 for (Behavior behavior : behaviors) {
                     behavior.preGetHeadElements(control);
@@ -144,7 +144,7 @@ public class CallbackDispatcher {
 
     void processPreDestroy(Context context) {
         if (hasBehaviorEnabledControls()) {
-            for(Control control : getBehaviorEnabledControls()) {
+            for (Control control : getBehaviorEnabledControls()) {
                 List<Behavior> behaviors = control.getBehaviors();
                 for (Behavior behavior : behaviors) {
                     behavior.preDestroy(control);
