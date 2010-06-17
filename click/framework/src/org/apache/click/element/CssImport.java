@@ -209,7 +209,9 @@ public class CssImport extends ResourceElement {
 
         buffer.elementStart(getTag());
 
-        buffer.appendAttribute("id", getId());
+        if (isRenderId()) {
+            buffer.appendAttribute("id", getId());
+        }
 
         String href = getHref();
         renderResourcePath(buffer, "href", href);

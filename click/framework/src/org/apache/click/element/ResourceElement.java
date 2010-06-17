@@ -205,10 +205,10 @@ public class ResourceElement extends Element {
     private String conditionalComment;
 
     /**
-     * Indicates if Click should ensure the import is unique, default value is
-     * <tt>false</tt>.
+     * Indicates whether the {@link #getId() ID} attribute should be rendered
+     * or not, default value is <tt>true</tt>.
      */
-    private boolean unique = false;
+    private boolean renderId = true;
 
     /**
      * The <tt>version indicator</tt> to append to the Resource element.
@@ -239,8 +239,8 @@ public class ResourceElement extends Element {
     }
 
     /**
-     * Return true if the Resource should be unique, false otherwise. The default
-     * value is <tt>true</tt> if the {@link #getId() ID} attribute is defined,
+     * Returns whether or not the Resource unique. This method returns
+     * <tt>true</tt> if the {@link #getId() ID} attribute is defined,
      * false otherwise.
      *
      * @return true if the Resource should be unique, false otherwise.
@@ -253,7 +253,31 @@ public class ResourceElement extends Element {
         if (StringUtils.isNotBlank(id)) {
             return true;
         }
-        return unique;
+        return false;
+    }
+
+    /**
+     * Returns the element render {@link #getId() ID} attribute status, default
+     * value is true.
+     *
+     * @see {@link #setRenderId(boolean)}
+     *
+     * @return the element render id attribute status, default value is true
+     */
+    public boolean isRenderId() {
+        return renderId;
+    }
+
+    /**
+     * Set the element render {@link #getId() ID} attribute status.
+     * <p/>
+     * If renderId is false the element {@link #getId() ID} attribute will not
+     * be rendered.
+     *
+     * @param renderId set the element render id attribute status
+     */
+    public void setRenderId(boolean renderId) {
+        this.renderId = renderId;
     }
 
     /**
