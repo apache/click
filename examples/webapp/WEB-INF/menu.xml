@@ -74,6 +74,7 @@
     <menu label="Action Controls" path="control/action-demo.htm"/>
     <menu label="CheckList" path="control/check-list-demo.htm"/>
     <menu label="FieldSet" path="control/field-set-demo.htm"/>
+    <menu label="FieldSeparator" path="control/field-separator-demo.htm"/>
     <menu label="FileField" path="control/file-upload.htm"/>
     <menu label="ImageSubmit" path="control/image-demo.htm"/>
     <menu label="Link Controls" path="control/link-demo.htm"/>
