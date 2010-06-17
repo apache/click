@@ -67,7 +67,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * <a name="on-deploy"></a>
  * <h4>Deploying Resources</h4>
  *
- * The Click framework uses the Velocity Tools <tt>WebappLoader</tt> for loading templates.
+ * The Click framework uses the Velocity Tools <tt>WebappResourceLoader</tt> for loading templates.
  * This avoids issues associate with using the Velocity <tt>ClasspathResourceLoader</tt> and
  * <tt>FileResourceLoader</tt> on J2EE application servers.
  * To make preconfigured resources (templates, JavaScript, stylesheets, etc.)
