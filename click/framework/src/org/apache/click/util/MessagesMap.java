@@ -69,11 +69,12 @@ import org.apache.click.service.ConfigService;
 public class MessagesMap implements Map<String, String> {
 
     /** Cache of resource bundle and locales which were not found. */
-    protected static final Set NOT_FOUND_CACHE =
-        Collections.synchronizedSet(new HashSet());
+    protected static final Set<String> NOT_FOUND_CACHE =
+        Collections.synchronizedSet(new HashSet<String>());
 
     /** Cache of messages keyed by bundleName + Locale name. */
-    protected static final Map MESSAGES_CACHE = new HashMap();
+    protected static final Map<CacheKey, Map<String, String>> MESSAGES_CACHE = 
+        new HashMap<CacheKey, Map<String, String>>();
 
     /** The cache key set load lock. */
     protected static final Object CACHE_LOAD_LOCK = new Object();
@@ -81,13 +82,13 @@ public class MessagesMap implements Map<String, String> {
     // ----------------------------------------------------- Instance Variables
 
     /** The base class. */
-    protected final Class baseClass;
+    protected final Class<?> baseClass;
 
     /** The class global resource bundle base name. */
     protected final String globalBaseName;
 
     /** The map of localized messages. */
-    protected Map messages;
+    protected Map<String, String> messages;
 
     /** The resource bundle locale. */
     protected final Locale locale;
@@ -105,7 +106,7 @@ public class MessagesMap implements Map<String, String> {
      * @param baseClass the target class
      * @param globalResource the global resource bundle name
      */
-    public MessagesMap(Class baseClass, String globalResource) {
+    public MessagesMap(Class<?> baseClass, String globalResource) {
         Validate.notNull(baseClass, "Null object parameter");
 
         this.baseClass = baseClass;
@@ -163,7 +164,7 @@ public class MessagesMap implements Map<String, String> {
         String value = null;
         if (key != null) {
             ensureInitialized();
-            value = (String) messages.get(key);
+            value = messages.get(key);
         }
 
         if (value == null) {
@@ -204,7 +205,7 @@ public class MessagesMap implements Map<String, String> {
      *
      * @see java.util.Map#putAll(Map)
      */
-    public void putAll(Map map) {
+    public void putAll(Map<? extends String, ? extends String> map) {
         throw new UnsupportedOperationException();
     }
 
@@ -221,7 +222,7 @@ public class MessagesMap implements Map<String, String> {
     /**
      * @see java.util.Map#keySet()
      */
-    public Set keySet() {
+    public Set<String> keySet() {
         ensureInitialized();
         return messages.keySet();
     }
@@ -229,7 +230,7 @@ public class MessagesMap implements Map<String, String> {
     /**
      * @see java.util.Map#values()
      */
-    public Collection values() {
+    public Collection<String> values() {
         ensureInitialized();
         return messages.values();
     }
@@ -237,7 +238,7 @@ public class MessagesMap implements Map<String, String> {
     /**
      * @see java.util.Map#entrySet()
      */
-    public Set entrySet() {
+    public Set<Map.Entry<String, String>> entrySet() {
         ensureInitialized();
         return messages.entrySet();
     }
@@ -245,6 +246,7 @@ public class MessagesMap implements Map<String, String> {
     /**
      * @see #toString()
      */
+    @Override
     public String toString() {
         ensureInitialized();
         return messages.toString();
@@ -258,22 +260,22 @@ public class MessagesMap implements Map<String, String> {
             CacheKey resourceKey = new CacheKey(globalBaseName,
                 baseClass.getName(), locale.toString());
 
-            messages = (Map) MESSAGES_CACHE.get(resourceKey);
+            messages = MESSAGES_CACHE.get(resourceKey);
 
             if (messages != null) {
                 return;
             }
 
-            messages = new HashMap();
+            messages = new HashMap<String, String>();
 
             synchronized (CACHE_LOAD_LOCK) {
 
                 loadResourceValuesIntoMap(globalBaseName, messages);
 
-                List classnameList = new ArrayList();
+                List<String> classnameList = new ArrayList<String>();
 
                 // Build class list
-                Class aClass = baseClass;
+                Class<?> aClass = baseClass;
                 while (!aClass.getName().equals("java.lang.Object")) {
                     classnameList.add(aClass.getName());
                     aClass = aClass.getSuperclass();
@@ -282,7 +284,7 @@ public class MessagesMap implements Map<String, String> {
                 // Load messages from parent to child order, so that child
                 // class messages override parent messages.
                 for (int i = classnameList.size() - 1; i >= 0; i--) {
-                    String className = (String) classnameList.get(i);
+                    String className = classnameList.get(i);
                     loadResourceValuesIntoMap(className, messages);
                 }
 
@@ -297,7 +299,7 @@ public class MessagesMap implements Map<String, String> {
         }
     }
 
-    private void loadResourceValuesIntoMap(String resourceName, Map map) {
+    private void loadResourceValuesIntoMap(String resourceName, Map<String, String> map) {
         if (resourceName == null) {
             return;
         }
@@ -308,9 +310,9 @@ public class MessagesMap implements Map<String, String> {
             try {
                 ResourceBundle resources = ClickUtils.getBundle(resourceName, locale);
 
-                Enumeration e = resources.getKeys();
+                Enumeration<String> e = resources.getKeys();
                 while (e.hasMoreElements()) {
-                    String name = e.nextElement().toString();
+                    String name = e.nextElement();
                     String value = resources.getString(name);
                     map.put(name, value);
                 }
