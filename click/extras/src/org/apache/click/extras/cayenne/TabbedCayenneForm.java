@@ -135,7 +135,7 @@ public class TabbedCayenneForm extends CayenneForm {
      */
     public void addTabSheet(FieldSet tabSheet) {
         if (tabSheet == null) {
-            throw new IllegalArgumentException("Null tabSeet parameter");
+            throw new IllegalArgumentException("Null tabSheet parameter");
         }
         tabSheet.setShowBorder(false);
         getTabSheets().add(tabSheet);
