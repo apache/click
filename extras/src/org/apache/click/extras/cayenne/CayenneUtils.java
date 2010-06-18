@@ -18,6 +18,7 @@
  */
 package org.apache.click.extras.cayenne;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.click.util.ClickUtils;
@@ -72,14 +73,14 @@ public final class CayenneUtils {
             throw new RuntimeException(msg);
         }
 
-        List pkAttributes = dbEntity.getPrimaryKey();
+        Collection<DbAttribute> pkAttributes = dbEntity.getPrimaryKeys();
         if (pkAttributes.size() != 1) {
             String msg = "PK contains " + pkAttributes.size()
                 + " columns, expected 1.";
             throw new RuntimeException(msg);
         }
 
-        DbAttribute attr = (DbAttribute) pkAttributes.get(0);
+        DbAttribute attr = pkAttributes.iterator().next();
 
         return new ObjectId(entity.getName(), attr.getName(), pk);
     }
@@ -144,14 +145,14 @@ public final class CayenneUtils {
                     + objEntity.getName());
         }
 
-        List pkAttributes = dbEntity.getPrimaryKey();
+        Collection<DbAttribute> pkAttributes = dbEntity.getPrimaryKeys();
         if (pkAttributes.size() != 1) {
             throw new CayenneRuntimeException("PK contains "
                     + pkAttributes.size()
                     + " columns, expected 1.");
         }
 
-        DbAttribute attr = (DbAttribute) pkAttributes.get(0);
+        DbAttribute attr = pkAttributes.iterator().next();
 
         String className = TypesMapping.getJavaBySqlType(attr.getType());
 
@@ -190,14 +191,14 @@ public final class CayenneUtils {
                     + objEntity.getName());
         }
 
-        List pkAttributes = dbEntity.getPrimaryKey();
+        Collection<DbAttribute> pkAttributes = dbEntity.getPrimaryKeys();
         if (pkAttributes.size() != 1) {
             throw new CayenneRuntimeException("PK contains "
                     + pkAttributes.size()
                     + " columns, expected 1.");
         }
 
-        DbAttribute attr = (DbAttribute) pkAttributes.get(0);
+        DbAttribute attr = pkAttributes.iterator().next();
 
         return attr.getName();
     }
