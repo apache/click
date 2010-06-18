@@ -184,7 +184,7 @@ public class ClickUtils {
      *         of the response content
      */
     public static void autoPostRedirect(HttpServletRequest request,
-            HttpServletResponse response, String target, Map<String, String> params,
+            HttpServletResponse response, String target, Map<?, ?> params,
             boolean compress) {
 
         Validate.notNull(request, "Null response parameter");
@@ -196,7 +196,7 @@ public class ClickUtils {
         buffer.append("<form name=\"form\" method=\"post\" style=\"{display:none;}\" action=\"");
         buffer.append(target);
         buffer.append("\">");
-        for (String name : params.keySet()) {
+        for (Object name : params.keySet()) {
             String value = params.get(name).toString();
             buffer.elementStart("textarea");
             buffer.appendAttribute("name", name);

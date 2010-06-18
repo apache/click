@@ -228,13 +228,14 @@ public class RadioGroup extends Field {
      * @param options the Map of radio option values and labels to add
      * @throws IllegalArgumentException if options is null
      */
-    public void addAll(Map<String, String> options) {
+    public void addAll(Map<?, ?> options) {
         if (options == null) {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        for (Map.Entry<String, String> entry : options.entrySet()) {
-            Radio radio = new Radio(entry.getKey(), entry.getValue());
+        for (Map.Entry<?, ?> entry : options.entrySet()) {
+            Radio radio = new Radio(entry.getKey().toString(), 
+                                    entry.getValue().toString());
             add(radio);
         }
     }
