@@ -19,9 +19,9 @@
 package org.apache.click.extras.cayenne;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
 import java.util.List;
 
+import org.apache.cayenne.BaseContext;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Field;
 import org.apache.click.control.Form;
@@ -276,7 +276,7 @@ public class CayenneForm extends Form {
      * @return the thread local <tt>DataContext</tt>
      */
     public DataContext getDataContext() {
-        return DataContext.getThreadDataContext();
+        return (DataContext) BaseContext.getThreadObjectContext();
     }
 
     /**
@@ -303,22 +303,22 @@ public class CayenneForm extends Form {
 
         if (StringUtils.isNotBlank(classField.getValue())) {
             try {
-                Class dataClass = getDataObjectClass();
+                Class<? extends DataObject> dataClass = getDataObjectClass();
 
                 String id = oidField.getValue();
                 if (StringUtils.isNotBlank(id)) {
 
-                    dataObject = (DataObject)
+                    dataObject = 
                         CayenneUtils.getObjectForPK(getDataContext(),
                                                     dataClass,
                                                     id);
 
                 } else {
                     if (copyTo) {
-                        dataObject = getDataContext().createAndRegisterNewObject(dataClass);
+                        dataObject = getDataContext().newObject(dataClass);
 
                     } else {
-                        dataObject = (DataObject) dataClass.newInstance();
+                        dataObject = dataClass.newInstance();
                     }
                 }
 
@@ -398,7 +398,7 @@ public class CayenneForm extends Form {
      *
      * @return the Class of the form <tt>DataObject</tt>.
      */
-    public Class getDataObjectClass() {
+    public Class<? extends DataObject> getDataObjectClass() {
         String className = null;
         if (classField.getValueObject() != null) {
             className = classField.getValue();
