@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,7 +48,7 @@ import javax.servlet.http.HttpSession;
  * The SessionMap supports {@link FlashAttribute} which when accessed via
  * {@link #get(Object)} are removed from the session.
  */
-public class SessionMap implements Map {
+public class SessionMap implements Map<String, Object> {
 
     /** The internal session attribute. */
     protected HttpSession session;
@@ -69,7 +68,7 @@ public class SessionMap implements Map {
     public int size() {
         if (session != null) {
             int size = 0;
-            Enumeration enumeration = session.getAttributeNames();
+            Enumeration<?> enumeration = session.getAttributeNames();
             while (enumeration.hasMoreElements()) {
                 enumeration.nextElement();
                 size++;
@@ -134,7 +133,7 @@ public class SessionMap implements Map {
     /**
      * @see java.util.Map#put(Object, Object)
      */
-    public Object put(Object key, Object value) {
+    public Object put(String key, Object value) {
         if (session != null && key != null) {
             Object out = session.getAttribute(key.toString());
 
@@ -165,11 +164,10 @@ public class SessionMap implements Map {
     /**
      * @see java.util.Map#putAll(Map)
      */
-    public void putAll(Map map) {
+    public void putAll(Map<? extends String, ?> map) {
         if (session != null && map != null) {
-            for (Iterator i = map.entrySet().iterator(); i.hasNext();) {
-                Map.Entry entry = (Map.Entry) i.next();
-                String key = entry.getKey().toString();
+            for (Map.Entry<? extends String, ? extends Object> entry : map.entrySet()) {
+                String key = entry.getKey();
                 Object value = entry.getValue();
                 session.setAttribute(key, value);
             }
@@ -181,7 +179,7 @@ public class SessionMap implements Map {
      */
     public void clear() {
         if (session != null) {
-            Enumeration enumeration = session.getAttributeNames();
+            Enumeration<?> enumeration = session.getAttributeNames();
             while (enumeration.hasMoreElements()) {
                 String name = enumeration.nextElement().toString();
                 session.removeAttribute(name);
@@ -192,19 +190,19 @@ public class SessionMap implements Map {
     /**
      * @see java.util.Map#keySet()
      */
-    public Set keySet() {
+    public Set<String> keySet() {
         if (session != null) {
-            Set keySet = new HashSet();
+            Set<String> keySet = new HashSet<String>();
 
-            Enumeration enumeration = session.getAttributeNames();
+            Enumeration<?> enumeration = session.getAttributeNames();
             while (enumeration.hasMoreElements()) {
-                keySet.add(enumeration.nextElement());
+                keySet.add(enumeration.nextElement().toString());
             }
 
             return keySet;
 
         } else {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
     }
 
@@ -214,29 +212,71 @@ public class SessionMap implements Map {
      *
      * @see java.util.Map#values()
      */
-    public Collection values() {
+    public Collection<Object> values() {
         throw new UnsupportedOperationException();
     }
 
     /**
      * @see java.util.Map#entrySet()
      */
-    public Set entrySet() {
+    public Set<Map.Entry<String, Object>> entrySet() {
         if (session != null) {
-            Set entrySet = new HashSet();
+            Set<Map.Entry<String, Object>> entrySet = new HashSet<Map.Entry<String, Object>>();
 
-            Enumeration enumeration = session.getAttributeNames();
+            Enumeration<?> enumeration = session.getAttributeNames();
             while (enumeration.hasMoreElements()) {
                 String name = enumeration.nextElement().toString();
                 Object value = session.getAttribute(name);
-                entrySet.add(value);
+                entrySet.add(new Entry(name, value));
             }
 
             return entrySet;
 
         } else {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
     }
+    
+    static class Entry implements Map.Entry<String, Object> {
+        final String key;
+        Object value;
 
+        /**
+         * Creates new entry.
+         */
+        Entry(String k, Object v) {
+            value = v;
+            key = k;
+        }
+
+        public final String getKey() {
+            return key;
+        }
+
+        public final Object getValue() {
+            return value;
+        }
+
+        public final Object setValue(Object newValue) {
+            Object oldValue = value;
+            value = newValue;
+            return oldValue;
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (!(o instanceof Entry))
+                return false;
+            Entry e = (Entry)o;
+            Object k1 = getKey();
+            Object k2 = e.getKey();
+            if (k1 == k2 || (k1 != null && k1.equals(k2))) {
+                Object v1 = getValue();
+                Object v2 = e.getValue();
+                if (v1 == v2 || (v1 != null && v1.equals(v2)))
+                    return true;
+            }
+            return false;
+        }
+    }
 }
