@@ -1042,7 +1042,7 @@ public class ClickServlet extends HttpServlet {
             logRequestParameters(request);
         }
 
-        String path = Context.getThreadLocalContext().getResourcePath();
+        String path = context.getResourcePath();
 
         if (request.getAttribute(FORWARD_PAGE) != null) {
             Page forwardPage = (Page) request.getAttribute(FORWARD_PAGE);
