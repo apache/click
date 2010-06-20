@@ -1060,8 +1060,6 @@ public class Menu extends AbstractControl {
             headElements.add(jsImport);
         }
 
-        // Note, the addLoadEvent script is recreated and checked if it
-        // is contained in the headElement.
         JsScript script = new JsScript();
         script.setId(id + "_js_setup");
         if (!headElements.contains(script)) {

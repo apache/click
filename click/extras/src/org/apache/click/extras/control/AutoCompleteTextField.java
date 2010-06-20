@@ -298,8 +298,6 @@ public abstract class AutoCompleteTextField extends TextField {
                 versionIndicator));
         }
 
-        // Note the addLoadEvent script is recreated and checked if it
-        // is contained in the headElement.
         String fieldId = getId();
         JsScript script = new JsScript();
         script.setId(fieldId + "_autocomplete");

@@ -293,7 +293,7 @@ public class JsScript extends ResourceElement {
      * DOM is ready.
      * <p/>
      * If this flag is true, the JsScript content will be registered with
-     * the "<tt>addLoadEvent</tt>" function from the JavaScript file
+     * the "<tt>Click.addLoadEvent</tt>" function from the JavaScript file
      * "<tt>/click/control.js</tt>".
      * <p/>
      * <b>Please note:</b> when setting this flag to true, the JavaScript
@@ -302,7 +302,7 @@ public class JsScript extends ResourceElement {
      * <p/>
      * <b>Also note:</b> for {@link org.apache.click.Context#isAjaxRequest() Ajax}
      * requests the JsScript content won't be registered with the
-     * "<tt>addLoadEvent</tt>" function because Ajax requests does not trigger
+     * "<tt>Click.addLoadEvent</tt>" function because Ajax requests does not trigger
      * the browser's DOM loaded event. Instead the JsScript content will be
      * evaluated immediately by the browser.
      *
@@ -493,23 +493,23 @@ public class JsScript extends ResourceElement {
     }
 
     /**
-     * Render the "<tt>addLoadEvent</tt>" function prefix to ensure the script
+     * Render the "<tt>Click.addLoadEvent</tt>" function prefix to ensure the script
      * is executed as soon as the browser DOM is available. The prefix is
-     * "<tt>addLoadEvent(function(){</tt>".
+     * "<tt>Click.addLoadEvent(function(){</tt>".
      *
      * @see #renderDomReadySuffix(org.apache.click.util.HtmlStringBuffer)
      *
-     * @param buffer buffer to append the addLoadEvent function to
+     * @param buffer the buffer to append the Click.addLoadEvent function to
      */
     protected void renderDomReadyPrefix(HtmlStringBuffer buffer) {
-        // Wrap content in addLoadEvent function
+        // Wrap content in Click.addLoadEvent function
         if (isExecuteOnDomReady()) {
-            buffer.append("addLoadEvent(function(){\n");
+            buffer.append("Click.addLoadEvent(function(){\n");
         }
     }
 
     /**
-     * Render the "<tt>addLoadEvent</tt>" function suffix. The suffix is
+     * Render the "<tt>Click.addLoadEvent</tt>" function suffix. The suffix is
      * "<tt>});</tt>".
      *
      * @see #renderDomReadyPrefix(org.apache.click.util.HtmlStringBuffer)
@@ -517,7 +517,7 @@ public class JsScript extends ResourceElement {
      * @param buffer buffer to append the conditional comment prefix
      */
     protected void renderDomReadySuffix(HtmlStringBuffer buffer) {
-        // Close addLoadEvent function
+        // Close Click.addLoadEvent function
         if (isExecuteOnDomReady()) {
             buffer.append("});");
         }

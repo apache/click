@@ -680,8 +680,6 @@ public class CheckList extends Field {
             }
         }
 
-        // Note, the addLoadEvent script is recreated and checked if it
-        // is contained in the headElement.
         String checkListId = getId();
         JsScript script = new JsScript();
         script.setId(checkListId + "_js_setup");

@@ -102,7 +102,7 @@ Click.domready = {
  *    });
  *
  */
-addLoadEvent = function(func) {
+Click.addLoadEvent = function(func) {
     // If dom is ready, fire event and return
     if (Click.domready.ready) {
         return func();
