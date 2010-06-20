@@ -33,15 +33,17 @@ import org.apache.click.util.HtmlStringBuffer;
 /**
  * Provides an abstract convenience class that implements Container and extend Field.
  * <p/>
- * If you need to bind a request parameter to this field's value, please see
- * {@link #bindRequestValue()}.
+ * This control is only rarely used or necessary. The primary use case is for
+ * creating custom Containers that will be treated as {@link org.apache.click.control.Field}
+ * instances by the {@link org.apache.click.control.Form}.
  * <p/>
- * Here is an example of a Border Control that can wrap a Button and render
- * a <tt>div</tt> border around it.
+ * Here is an example of a FieldBorder which wraps Fields in a
+ * <tt>&lt;div&gt;</tt> element. The FieldBorder container can be passed to the
+ * Form and will be treated as a normal Field.
  *
  * <pre class="prettyprint">
- * public class ButtonBorder extends AbstractContainerField {
- *     public ButtonBorder(String name) {
+ * public class FieldBorder extends AbstractContainerField {
+ *     public FieldBorder(String name) {
  *         super(name);
  *     }
  *
@@ -49,10 +51,13 @@ import org.apache.click.util.HtmlStringBuffer;
  *         return "div";
  *     }
  *
- *     public Control add(Button button) {
- *         return getContainer().add(button);
+ *     public Control add(Field field) {
+ *         return getContainer().add(field);
  *     }
  * } </pre>
+ *
+ * If you need to bind a request parameter to this field value, please see
+ * {@link #bindRequestValue()}.
  */
 public abstract class AbstractContainerField extends Field implements Container {
 
