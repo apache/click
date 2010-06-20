@@ -83,8 +83,8 @@ import org.apache.commons.lang.StringUtils;
  *         SubmitLink link = new SubmitLink("link", "Delete");
  *         form.add(link);
  *
- *         // Get the submit script for the given form name
- *         String submitScript = submitLink.getSubmitScript(form.getName());
+ *         // Get the submit script for the given form id
+ *         String submitScript = submitLink.getSubmitScript(form.getId());
  *
  *         // Add a confirmation popup message
  *         scriptLink.setOnClick("var confirm = window.confirm('Are you sure?'); if (confirm) "
@@ -302,26 +302,26 @@ public class SubmitLink extends ActionLink {
     }
 
     /**
-     * Return the JavaScript that submits the Form with the given formName.
+     * Return the JavaScript that submits the Form with the given formId.
      * <p/>
      * The script returned by this method is:
      *
      * <pre class="prettyprint">
-     * "return Click.submitLinkAction(this, 'formName');" </pre>
+     * "return Click.submitLinkAction(this, 'formId');" </pre>
      *
      * The <tt>Click.submitLinkAction</tt> function takes as parameters a reference
-     * to the SubmitLink and the name of the Form to submit. (The
+     * to the SubmitLink and the id of the Form to submit. (The
      * Click.submitLinkAction is defined in <tt>/click/extras-control.js</tt>)
      *
-     * @param formName the name of the Form to submit
+     * @param formId the id of the Form to submit
      *
-     * @return the JavaScript that submits the Form with the given formName
+     * @return the JavaScript that submits the Form with the given formId
      *
-     * @throws IllegalStateException if the form name is null
+     * @throws IllegalStateException if the form id is null
      */
-    public String getSubmitScript(String formName) {
-        if (formName == null) {
-            throw new IllegalStateException("formName cannot be null.");
+    public String getSubmitScript(String formId) {
+        if (formId == null) {
+            throw new IllegalStateException("formId cannot be null.");
         }
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(60);
@@ -332,7 +332,7 @@ public class SubmitLink extends ActionLink {
             buffer.append("_submit() &&");
         }
         buffer.append(" Click.submitLinkAction(this, '");
-        buffer.append(formName);
+        buffer.append(formId);
         buffer.append("');");
         return buffer.toString();
     }
@@ -347,6 +347,7 @@ public class SubmitLink extends ActionLink {
      * @param value the SubmitLink value parameter
      * @return the SubmitLink HTML href attribute
      */
+    @Override
     public String getHref(Object value) {
         Context context = getContext();
         String uri = ClickUtils.getRequestURI(context.getRequest());
@@ -400,6 +401,7 @@ public class SubmitLink extends ActionLink {
      * This method binds the submitted request value to the SubmitLink's
      * value.
      */
+    @Override
     public void bindRequestValue() {
         Context context = getContext();
 
@@ -452,6 +454,7 @@ public class SubmitLink extends ActionLink {
      *
      * @return the list of HEAD elements to be included in the page
      */
+    @Override
     public List<Element> getHeadElements() {
         if (getForm() == null) {
             return super.getHeadElements();
@@ -474,13 +477,14 @@ public class SubmitLink extends ActionLink {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         // Check that the link is attached to a Form and the onClick attribute
         // has not been set
         Form form = getForm();
         if (form != null && getOnClick() == null) {
-            setOnClick(getSubmitScript(form.getName()));
+            setOnClick(getSubmitScript(form.getId()));
         }
 
         super.render(buffer);
