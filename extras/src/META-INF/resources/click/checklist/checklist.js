@@ -15,10 +15,10 @@
  * See  Nicolaus Rougeux 'Check it, don't select it':
  * http://c82.net/article.php?ID=25
  */
-function initChecklist(checklistid) {
+function initChecklist(checkListId) {
 	if (document.all && document.getElementById) {
 		// Get all unordered lists
-		var theList = document.getElementById(checklistid);
+		var theList = document.getElementById(checkListId);
 		if(theList != null) {
 			var labels = theList.getElementsByTagName("label");
 			
@@ -32,13 +32,17 @@ function initChecklist(checklistid) {
 	}
 }
 
-function validateCheckList(pathName, required, msgs){
+function validateCheckList(checkListName, formId, required, msgs){
 	if(required){
-		for (i = 0; i < pathName.length; i++) {
-			if (pathName[i].checked) {
-				return null;
-			}
-		}
-		return msgs[0];
+    var form = document.getElementById(formId);
+    if(form){
+      var path=form[checkListName];
+		  for (i = 0; i < path.length; i++) {
+			  if (path[i].checked) {
+				  return null;
+			  }
+		  }
+		  return msgs[0];
+    }
 	}
 }
