@@ -99,10 +99,11 @@ public class RadioGroup extends Field {
      * The field validation JavaScript function template.
      * The function template arguments are: <ul>
      * <li>0 - is the field id</li>
-     * <li>1 - is the full path name to the radio button</li>
-     * <li>2 - is the Field required status</li>
-     * <li>3 - is the localized error message</li>
-     * <li>4 - is the first radio id to select</li>
+     * <li>1 - is the name of the radio button</li>
+     * <li>2 - is the id of the form</li>
+     * <li>3 - is the Field required status</li>
+     * <li>4 - is the localized error message</li>
+     * <li>5 - is the first radio id to select</li>
      * </ul>
      */
     protected final static String VALIDATE_RADIOGROUP_FUNCTION =
