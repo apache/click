@@ -366,24 +366,28 @@ function validateForm(msgs, id, align, style) {
  * Usage: <input onclick="Click.submit(form, false)">
  */
 Click.submit=function(form, validate) {
-    if (typeof form == "undefined") {
-        alert('Error: form is undefined. Usage: Click.submit(form, false)');
+    if (typeof form == 'undefined') {
+        alert('Error: form is undefined. Usage: Click.submit(formName)');
         return false;
     }
 
     // Validate is true by default
-    validate = (typeof validate == "undefined") ? true : validate;
+    validate = (typeof validate == 'undefined') ? true : validate;
 
     if (form) {
-        if(document.getElementsByName('submit').length != 0) {
-            alert('Error: In order to submit the Form through JavaScript, buttons and fields must not be named "submit". Please rename the button/field called "submit".');
-            return false;
+        var formElements = form.elements;
+        for (var i=0; i < formElements.length; i++) {
+            var el = formElements[i];
+    		    if(el.name=='submit'){
+               alert('Error: In order to submit the Form through JavaScript, buttons and fields must not be named "submit". Please rename the button/field called "submit".');
+               return false;
+           }
         }
         if (!validate) {
             // Bypass JS validation
             var input = document.getElementById(form.id + '_bypass_validation');
             if (input) {
-                input.value="true";
+                input.value='true';
             }
         }
         form.submit();
