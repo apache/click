@@ -65,12 +65,12 @@ public class TableStyles extends BorderPage {
         form.setLabelAlign(Form.ALIGN_LEFT);
 
         styleSelect.addAll(Table.CLASS_STYLES);
-        styleSelect.setAttribute("onchange", "this.form.submit();");
+        styleSelect.setAttribute("onchange", "form.submit();");
         form.add(styleSelect);
 
         form.add(new Label("&nbsp; &nbsp;"));
 
-        hoverCheckbox.setAttribute("onchange", "this.form.submit();");
+        hoverCheckbox.setAttribute("onclick", "form.submit();");
         form.add(hoverCheckbox);
 
         // Setup customers table
