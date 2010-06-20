@@ -409,6 +409,32 @@ public abstract class AbstractContainerField extends Field implements Container 
     // Protected Methods ------------------------------------------------------
 
     /**
+     * Render the Container tag and common attributes including {@link #getId() id},
+     * <tt>class</tt> and <tt>style</tt>. The {@link #getName() name} attribute
+     * is <em>not</em> rendered by this container.
+     *
+     * @see org.apache.click.control.AbstractControl#renderTagBegin(java.lang.String, org.apache.click.util.HtmlStringBuffer)
+     *
+     * @param tagName the name of the tag to render
+     * @param buffer the buffer to append the output to
+     */
+    @Override
+    protected void renderTagBegin(String tagName, HtmlStringBuffer buffer) {
+        if (tagName == null) {
+            throw new IllegalStateException("Tag cannot be null");
+        }
+
+        buffer.elementStart(tagName);
+
+        String id = getId();
+        if (id != null) {
+            buffer.appendAttribute("id", id);
+        }
+
+        appendAttributes(buffer);
+    }
+
+    /**
      * @see org.apache.click.control.AbstractControl#renderTagEnd(java.lang.String, org.apache.click.util.HtmlStringBuffer)
      *
      * @param tagName the name of the tag to close

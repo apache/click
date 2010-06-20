@@ -1183,4 +1183,34 @@ public abstract class Field extends AbstractControl {
             return "";
         }
     }
+
+    /**
+     * Render the Field tag and common attributes including {@link #getName() name},
+     * {@link #getId() id}, <tt>class</tt> and <tt>style</tt>.
+     *
+     * @see org.apache.click.control.AbstractControl#renderTagBegin(java.lang.String, org.apache.click.util.HtmlStringBuffer)
+     *
+     * @param tagName the name of the tag to render
+     * @param buffer the buffer to append the output to
+     */
+    @Override
+    protected void renderTagBegin(String tagName, HtmlStringBuffer buffer) {
+        if (tagName == null) {
+            throw new IllegalStateException("Tag cannot be null");
+        }
+
+        buffer.elementStart(tagName);
+
+        String controlName = getName();
+        if (controlName != null) {
+            buffer.appendAttribute("name", controlName);
+        }
+
+        String id = getId();
+        if (id != null) {
+            buffer.appendAttribute("id", id);
+        }
+
+        appendAttributes(buffer);
+    }
 }
