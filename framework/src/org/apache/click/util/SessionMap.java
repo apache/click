@@ -18,10 +18,12 @@
  */
 package org.apache.click.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -213,7 +215,21 @@ public class SessionMap implements Map<String, Object> {
      * @see java.util.Map#values()
      */
     public Collection<Object> values() {
-        throw new UnsupportedOperationException();
+        if (session != null) {
+            List<Object> values = new ArrayList<Object>();
+
+            Enumeration<?> enumeration = session.getAttributeNames();
+            while (enumeration.hasMoreElements()) {
+                String name = enumeration.nextElement().toString();
+                Object value = session.getAttribute(name);
+                values.add(value);
+            }
+
+            return values;
+
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     /**
@@ -265,18 +281,21 @@ public class SessionMap implements Map<String, Object> {
 
         @Override
         public final boolean equals(Object o) {
-            if (!(o instanceof Entry))
+            if (!(o instanceof Entry)) {
                 return false;
-            Entry e = (Entry)o;
+            }
+            Entry e = (Entry) o;
             Object k1 = getKey();
             Object k2 = e.getKey();
             if (k1 == k2 || (k1 != null && k1.equals(k2))) {
                 Object v1 = getValue();
                 Object v2 = e.getValue();
-                if (v1 == v2 || (v1 != null && v1.equals(v2)))
+                if (v1 == v2 || (v1 != null && v1.equals(v2))) {
                     return true;
+                }
             }
             return false;
         }
     }
 }
+
