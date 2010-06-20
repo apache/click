@@ -97,7 +97,7 @@ public class ExtraControlsForm extends BorderPage {
         form.add(new VirtualKeyboard("keyboardField"));
         form.add(new CountrySelect("countrySelect"));
 
-        form.add(new Submit("submit"));
+        form.add(new Submit("save"));
         form.add(new PageSubmit("cancel", HomePage.class));
 
         // Settings Form
