@@ -1067,6 +1067,7 @@ public class Menu extends AbstractControl {
         if (!headElements.contains(script)) {
             // Script must be executed as soon as browser dom is ready
             script.setExecuteOnDomReady(true);
+            script.setConditionalComment(JsImport.IF_LESS_THAN_IE7);
 
             HtmlStringBuffer buffer = new HtmlStringBuffer();
             buffer.append(" if(typeof Click != 'undefined' && typeof Click.menu != 'undefined') {\n");
