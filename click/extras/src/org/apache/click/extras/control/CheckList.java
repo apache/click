@@ -192,15 +192,15 @@ public class CheckList extends Field {
      * The field validation JavaScript function template.
      * The function template arguments are: <ul>
      * <li>0 - is the field id</li>
-     * <li>1 - is the full path name to the checkbox</li>
-     * <li>2 - is the Field required status</li>
-     * <li>3 - is the localized error message for required validation</li>
+     * <li>1 - is the name of the checkbox</li>
+     * <li>2 - is the id of the form</li>
+     * <li>3 - is the Field required status</li>
+     * <li>4 - is the localized error message for required validation</li>
      * </ul>
      */
     protected final static String VALIDATE_CHECKLIST_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   var msg = validateCheckList(\n"
-        + "         {1} ,{2}, [''{3}'']);\n"
+        + "   var msg = validateCheckList(''{1}'', ''{2}'', {3}, [''{4}'']);\n"
         + "   if (msg) '{'\n"
         + "      return msg + ''|{0}'';\n"
         + "   '}' else '{'\n"
@@ -904,11 +904,12 @@ public class CheckList extends Field {
      */
     @Override
     public String getValidationJavaScript() {
-        Object[] args = new Object[4];
+        Object[] args = new Object[5];
         args[0] = getId();
-        args[1] = "document." + getForm().getName() + "." + getName();
-        args[2] = String.valueOf(isRequired());
-        args[3] = getMessage("field-required-error", getErrorLabel());
+        args[1] = getName();
+        args[2] = getForm().getId();
+        args[3] = String.valueOf(isRequired());
+        args[4] = getMessage("field-required-error", getErrorLabel());
 
         return MessageFormat.format(VALIDATE_CHECKLIST_FUNCTION, args);
     }
