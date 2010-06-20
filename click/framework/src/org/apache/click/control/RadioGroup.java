@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.click.Context;
+import org.apache.click.util.ClickUtils;
 
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PropertyUtils;
@@ -106,9 +107,9 @@ public class RadioGroup extends Field {
      */
     protected final static String VALIDATE_RADIOGROUP_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   var msg = validateRadioGroup({1}, {2}, [''{3}'']);\n"
+        + "   var msg = validateRadioGroup(''{1}'', ''{2}'', {3}, [''{4}'']);\n"
         + "   if (msg) '{'\n"
-        + "      return msg + ''|{4}'';\n"
+        + "      return msg + ''|{5}'';\n"
         + "   '}' else '{'\n"
         + "      return null;\n"
         + "   '}'\n"
@@ -381,17 +382,18 @@ public class RadioGroup extends Field {
      */
     @Override
     public String getValidationJavaScript() {
-        Object[] args = new Object[5];
+        Object[] args = new Object[6];
         args[0] = getId();
-        args[1] = "document." + getForm().getName() + "." + getName();
-        args[2] = String.valueOf(isRequired());
-        args[3] = getMessage("select-error", getErrorLabel());
+        args[1] = getName();
+        args[2] = getForm().getId();
+        args[3] = String.valueOf(isRequired());
+        args[4] = getMessage("select-error", getErrorLabel());
 
         if (!getRadioList().isEmpty()) {
             Radio radio = getRadioList().get(0);
-            args[4] = radio.getId();
+            args[5] = radio.getId();
         } else {
-            args[4] = "";
+            args[5] = "";
         }
 
         return MessageFormat.format(VALIDATE_RADIOGROUP_FUNCTION, args);
@@ -463,7 +465,7 @@ public class RadioGroup extends Field {
             try {
                 radio.onDestroy();
             } catch (Throwable t) {
-                t.printStackTrace();
+                ClickUtils.getLogService().error("onDestroy error", t);
             }
         }
     }

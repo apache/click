@@ -283,15 +283,18 @@ function validateSelect(id, defaultValue, required, msgs) {
     }
 }
 
-function validateRadioGroup(pathName, required, msgs) {
+function validateRadioGroup(radioName, formId, required, msgs) {
     if(required){
-        //var value = pathName.value;
-        for (i = 0; i < pathName.length; i++) {
-            if (pathName[i].checked) {
-                return null;
+        var form = document.getElementById(formId);
+        if(form){
+            var path=form[radioName];
+            for (i = 0; i < path.length; i++){
+                if (path[i].checked){
+                    return null;
+                }
             }
+            return msgs[0];
         }
-        return msgs[0];
     }
 }
 
