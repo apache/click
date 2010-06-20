@@ -223,8 +223,8 @@ public class FormProperties extends BorderPage {
         // Setup showBorders checkbox Javascript using a JsScript HEAD element
 
         // First create a JsScript instance for the JavaScript template
-        // '/form-head.htm'
-        JsScript jsScript = new JsScript("/form-head.htm", new HashMap());
+        // '/form-head.js'
+        JsScript jsScript = new JsScript("/form-head.js", new HashMap());
 
         // Then add a JsScript element to the Page HEAD elements
         getHeadElements().add(jsScript);
