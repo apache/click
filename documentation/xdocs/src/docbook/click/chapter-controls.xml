@@ -790,7 +790,7 @@ public EmployeePage extends Page {
         form.add(new DoubleField("salary"));
 
         // Add a submit button to form
-        form.add(new Submit("submit", "Add Employee"));
+        form.add(new Submit("add", "Add Employee"));
 
         // Add form the page
         addControl(form);
@@ -984,7 +984,7 @@ public class EmployeePage extends Page {
         addTextField("salary", "Salary:", list);
 
         // Add a submit button to form
-        form.add(new Submit("submit", "Add Employee"));
+        form.add(new Submit("add", "Add Employee"));
 
         // Add the form to the page
         addControl(form);
@@ -1046,7 +1046,7 @@ public class EmployeePage extends Page {
             &lt;input type="text" name="salary" id="form_salary" value="" size="20"/&gt;
         &lt;/li&gt;
     &lt;/ol&gt;
-    &lt;input type="submit" name="submit" id="form_submit" value="Add Employee"/&gt;
+    &lt;input type="submit" name="add" id="form_add" value="Add Employee"/&gt;
 &lt;/form&gt;</programlisting>
 
       <para>Again using a CSS stylesheet, the markup above can be styled and

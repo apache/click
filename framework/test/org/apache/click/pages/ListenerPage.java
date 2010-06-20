@@ -40,10 +40,11 @@ public class ListenerPage extends Page {
     /**
      * Initialize page.
      */
+    @Override
     public void onInit() {
 
         // Create and add submit button *before* adding the textField
-        Submit submit = new Submit("submit");
+        Submit submit = new Submit("save");
         form.add(submit);
 
         // Add listener on submit button

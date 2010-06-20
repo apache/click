@@ -38,12 +38,13 @@ public class ClientPanel extends Panel {
         super(name);
     }
 
+    @Override
     public void onInit() {
         form.add(new TextField("name")).setRequired(true);
         form.add(new DateField("dateJoined"));
         form.add(new DoubleField("holdings"));
 
-        form.add(new Submit("submit", this, "onSubmit"));
+        form.add(new Submit("save", this, "onSave"));
         form.add(new Submit("cancel", this, "onCancel"));
 
         add(form);
@@ -54,7 +55,7 @@ public class ClientPanel extends Panel {
         super.onInit();
     }
 
-    public boolean onSubmit() {
+    public boolean onSave() {
         if (form.isValid()) {
             // In real app one would store client in database
             addModel("msg", "Successfully created new Client: '"

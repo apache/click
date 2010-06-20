@@ -108,7 +108,7 @@ public class StandardControlsForm extends BorderPage {
         imageSubmit.setTitle("ImageSubmit");
         form.add(imageSubmit);
         form.add(new Reset("reset"));
-        form.add(new Submit("submit"));
+        form.add(new Submit("save"));
 
         // Settings Form
         fieldSet = new FieldSet("options", "Form Options");

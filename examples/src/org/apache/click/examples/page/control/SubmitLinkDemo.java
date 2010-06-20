@@ -61,7 +61,7 @@ public class SubmitLinkDemo extends BorderPage {
 
     public void demo1() {
         // Create a submit link.
-        final SubmitLink submitLink = new SubmitLink("submit");
+        final SubmitLink submitLink = new SubmitLink("save");
 
         Form form = new Form("demo1");
         addControl(form);
