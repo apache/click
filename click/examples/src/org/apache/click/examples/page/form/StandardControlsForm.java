@@ -112,9 +112,9 @@ public class StandardControlsForm extends BorderPage {
 
         // Settings Form
         fieldSet = new FieldSet("options", "Form Options");
-        allFieldsRequired.setAttribute("onchange", "optionsForm.submit();");
+        allFieldsRequired.setAttribute("onclick", "form.submit();");
         fieldSet.add(allFieldsRequired);
-        jsValidate.setAttribute("onchange", "optionsForm.submit();");
+        jsValidate.setAttribute("onclick", "form.submit();");
         fieldSet.add(jsValidate);
         optionsForm.add(fieldSet);
         optionsForm.setListener(this, "onOptionsSubmit");

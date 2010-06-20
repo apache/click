@@ -31,7 +31,7 @@ import org.apache.click.extras.control.DoubleField;
 import org.apache.click.util.ClickUtils;
 
 /**
- * Demonstrates dynamic Form behaviour using a Select control.
+ * Demonstrates dynamic Form behavior using a Select control.
  */
 public class DynamicSelect extends BorderPage {
 
@@ -69,9 +69,9 @@ public class DynamicSelect extends BorderPage {
         form.add(select);
 
         // The Click script, '/click/control.js', provides the JavaScript
-        // function Click.submit(formName, validate). To bypass validation
+        // function Click.submit(form, validate). To bypass validation
         // specify 'false' as the second argument.
-        select.setAttribute("onchange", "Click.submit(dynamicForm, false)");
+        select.setAttribute("onchange", "Click.submit(form, false)");
 
         form.add(submit);
 
