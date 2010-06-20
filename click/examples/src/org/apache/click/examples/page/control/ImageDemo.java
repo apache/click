@@ -53,7 +53,7 @@ public class ImageDemo extends BorderPage {
         // Colors Form
         form.add(new Label("label", "<b>Color Chooser</b>"));
 
-        colorSubmit = new ImageSubmit("submit", "/assets/images/colors.gif");
+        colorSubmit = new ImageSubmit("save", "/assets/images/colors.gif");
         colorSubmit.setListener(this, "onColorClick");
         form.add(colorSubmit);
     }

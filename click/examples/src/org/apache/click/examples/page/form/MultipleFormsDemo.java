@@ -72,11 +72,11 @@ public class MultipleFormsDemo extends BorderPage {
 
         // construct form1
         form1.add(new TextField("name"));
-        form1.add(new Submit("submit", this, "onForm1Submit"));
+        form1.add(new Submit("save", this, "onForm1Submit"));
 
         // construct form2
         form2.add(new TextField("name"));
-        form2.add(new Submit("submit", this, "onForm2Submit"));
+        form2.add(new Submit("save", this, "onForm2Submit"));
 
         // add form1 and form2 to the page controls.
         addControl(form1);
