@@ -2737,7 +2737,7 @@ public class Form extends AbstractContainer {
             buffer.append("\">\n");
             buffer.append("<div class=\"errors\" id=\"");
             buffer.append(getId());
-            buffer.append("-errorsDiv\"/>\n");
+            buffer.append("-errorsDiv\"></div>\n");
             buffer.append("</td></tr>\n");
         }
     }
