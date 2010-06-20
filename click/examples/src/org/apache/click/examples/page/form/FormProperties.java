@@ -143,77 +143,77 @@ public class FormProperties extends BorderPage {
         buttonAlignSelect = new Select("buttonAlign");
         buttonAlignSelect.addAll(new String[] { "left", "center", "right" });
         buttonAlignSelect.setTitle("Buttons horizontal alignment");
-        buttonAlignSelect.setAttribute("onchange", "optionsForm.submit();");
+        buttonAlignSelect.setAttribute("onchange", "form.submit();");
         fieldSet.add(buttonAlignSelect);
 
         columnsSelect = new Select("columns");
         columnsSelect.addAll(new String[] { "1", "2", "3", "4" });
         columnsSelect.setTitle("Number of Form table columns");
-        columnsSelect.setAttribute("onchange", "optionsForm.submit();");
+        columnsSelect.setAttribute("onchange", "form.submit();");
         fieldSet.add(columnsSelect);
 
         buttonStyle = new TextField("buttonStyle");
         buttonStyle.setTitle("Button td style attribute");
-        buttonStyle.setAttribute("onchange", "optionsForm.submit();");
+        buttonStyle.setAttribute("onchange", "form.submit();");
         fieldSet.add(buttonStyle);
 
         errorsAlignSelect = new Select("errorsAlign");
         errorsAlignSelect.addAll(new String[] { "left", "center", "right" });
         errorsAlignSelect.setTitle("Errors block horizontal alignment");
-        errorsAlignSelect.setAttribute("onchange", "optionsForm.submit();");
+        errorsAlignSelect.setAttribute("onchange", "form.submit();");
         fieldSet.add(errorsAlignSelect);
 
         errorsPositionSelect = new Select("errorsPosition");
         errorsPositionSelect.addAll(new String[] { "top", "middle", "bottom" });
         errorsPositionSelect.setTitle("Form errors position");
-        errorsPositionSelect.setAttribute("onchange", "optionsForm.submit();");
+        errorsPositionSelect.setAttribute("onchange", "form.submit();");
         fieldSet.add(errorsPositionSelect);
 
         errorsStyle = new TextField("errorsStyle");
         errorsStyle.setTitle("Errors td style attribute");
-        errorsStyle.setAttribute("onchange", "optionsForm.submit();");
+        errorsStyle.setAttribute("onchange", "form.submit();");
         fieldSet.add(errorsStyle);
 
         labelAlignSelect = new Select("labelAlign");
         labelAlignSelect.addAll(new String[] { "left", "center", "right" });
         labelAlignSelect.setTitle("Field label alignment");
-        labelAlignSelect.setAttribute("onchange", "optionsForm.submit();");
+        labelAlignSelect.setAttribute("onchange", "form.submit();");
         fieldSet.add(labelAlignSelect);
 
         labelsPositionSelect = new Select("labelsPosition");
         labelsPositionSelect.addAll(new String[] {"left", "top"});
         labelsPositionSelect.setTitle("Form labels position");
-        labelsPositionSelect.setAttribute("onchange", "optionsForm.submit();");
+        labelsPositionSelect.setAttribute("onchange", "form.submit();");
         fieldSet.add(labelsPositionSelect);
 
         labelStyle = new TextField("labelStyle");
         labelStyle.setTitle("Label td style attribute");
-        labelStyle.setAttribute("onchange", "optionsForm.submit();");
+        labelStyle.setAttribute("onchange", "form.submit();");
         fieldSet.add(labelStyle);
 
         disabledCheckbox = new Checkbox("disabled");
-        disabledCheckbox.setAttribute("onclick", "optionsForm.submit();");
+        disabledCheckbox.setAttribute("onclick", "form.submit();");
         fieldSet.add(disabledCheckbox);
 
         readonlyCheckbox = new Checkbox("readonly");
-        readonlyCheckbox.setAttribute("onclick", "optionsForm.submit();");
+        readonlyCheckbox.setAttribute("onclick", "form.submit();");
         fieldSet.add(readonlyCheckbox);
 
         fieldStyle = new TextField("fieldStyle");
         fieldStyle.setTitle("Field td style attribute");
-        fieldStyle.setAttribute("onchange", "optionsForm.submit();");
+        fieldStyle.setAttribute("onchange", "form.submit();");
         fieldSet.add(fieldStyle);
 
         validateCheckbox = new Checkbox("validate");
-        validateCheckbox.setAttribute("onclick", "optionsForm.submit();");
+        validateCheckbox.setAttribute("onclick", "form.submit();");
         fieldSet.add(validateCheckbox);
 
         javaScriptValidateCheckbox = new Checkbox("javaScriptValidate", "JavaScript Validate");
-        javaScriptValidateCheckbox.setAttribute("onclick", "optionsForm.submit();");
+        javaScriptValidateCheckbox.setAttribute("onclick", "form.submit();");
         fieldSet.add(javaScriptValidateCheckbox);
 
         showBordersCheckbox = new Checkbox("showBorders");
-        showBordersCheckbox.setAttribute("onclick", "optionsForm.submit();");
+        showBordersCheckbox.setAttribute("onclick", "form.submit();");
         fieldSet.add(showBordersCheckbox);
 
         optionsForm.add(new Submit("restoreDefaults", this, "onRestoreDefaults"));
