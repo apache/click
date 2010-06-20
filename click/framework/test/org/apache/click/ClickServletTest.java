@@ -39,7 +39,7 @@ public class ClickServletTest extends TestCase {
         MockContainer container = new MockContainer("web");
         container.start();
         container.setParameter(Form.FORM_NAME, "form"); // Simulate form submitted
-        container.setParameter("submit", "submit"); // Simulate Submit button clicked
+        container.setParameter("save", "save"); // Simulate Submit button clicked
         container.setParameter("field", "one"); // Simulate TextField value set
 
         ListenerPage page = (ListenerPage) container.testPage(ListenerPage.class);

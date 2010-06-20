@@ -44,7 +44,7 @@ public class ControlHeadDemo extends BorderPage {
         StarRating rating = new StarRating("rating", 5, 2);
         form.add(rating);
 
-        form.add(new Submit("submit"));
+        form.add(new Submit("save"));
 
         addControl(form);
     }

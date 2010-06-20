@@ -71,7 +71,7 @@ import org.apache.commons.lang.ArrayUtils;
  *         Tree tree = createTree();
  *         form.add(tree);
  *
- *         submit = new Submit("submit", this, "onSubmitClick");
+ *         submit = new Submit("save", this, "onSubmitClick");
  *         cancel = new Submit("cancel", this, "onCancelClick");
  *
  *         form.add(submit);
@@ -254,7 +254,7 @@ public class CheckboxTree extends Tree {
      *     }
      *     Form form = createForm();
      *     form.add(tree);
-     *     Submit submit = new Submit("submit");
+     *     Submit submit = new Submit("save");
      *     form.add(submit);
      *     submit.setActionListener(new ActionListener() {
      *         public boolean onAction(Control source) {
