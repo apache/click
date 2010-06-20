@@ -956,22 +956,28 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Render the tag and common attributes.
+     * Render the tag and common attributes including {@link #getId() id},
+     * <tt>class</tt> and <tt>style</tt>. The {@link #getName() name} attribute
+     * is <em>not</em> rendered by this control. It is up to subclasses
+     * whether to render the name attribute or not. Generally only
+     * {@link org.apache.click.control.Field} controls render the name attribute.
      * <p/>
      * <b>Please note:</b> the tag will not be closed by this method. This
      * enables callers of this method to append extra attributes as needed.
      * <p/>
-     * For example the result of calling:
+     * For example the following example:
+     *
      * <pre class="prettyprint">
      * Field field = new TextField("mytext");
      * HtmlStringBuffer buffer = new HtmlStringBuffer();
-     * field.renderTagBegin("div", buffer);
-     * </pre>
-     * will be:
+     * field.renderTagBegin("input", buffer); </pre>
+     *
+     * will render:
+     *
      * <pre class="prettyprint">
-     * &lt;div name="mytext" id="mytext"
-     * </pre>
-     * <b>Note</b> that the tag is not closed, so subclasses can easily add more
+     * &lt;input name="mytext" id="mytext" </pre>
+     *
+     * <b>Note</b> that the tag is not closed, so subclasses can render extra
      * attributes.
      *
      * @param tagName the name of the tag to render
@@ -985,10 +991,6 @@ public abstract class AbstractControl implements Control {
 
         buffer.elementStart(tagName);
 
-        String controlName = getName();
-        if (controlName != null) {
-            buffer.appendAttribute("name", controlName);
-        }
         String id = getId();
         if (id != null) {
             buffer.appendAttribute("id", id);
