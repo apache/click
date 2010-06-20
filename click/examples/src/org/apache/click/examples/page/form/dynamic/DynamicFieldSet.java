@@ -65,9 +65,9 @@ public class DynamicFieldSet extends BorderPage {
         customerFS.add(addressChk);
 
         // The Click script, '/click/control.js', provides the JavaScript
-        // function Click.submit(formName, validate). To bypass validation
+        // function Click.submit(form, validate). To bypass validation
         // specify 'false' as the second argument.
-        addressChk.setAttribute("onclick", "Click.submit(dynamicForm, false)");
+        addressChk.setAttribute("onclick", "Click.submit(form, false)");
 
         form.add(submit);
 

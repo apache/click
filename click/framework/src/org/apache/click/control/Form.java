@@ -486,15 +486,15 @@ import org.apache.commons.lang.StringUtils;
  * Form also provides a JavaScript function (part of the <tt>"/click/control.js"</tt>
  * resource) that will submit the Form and optionally bypasses validation. The
  * JavaScript function is:
- * <tt>"Click.submit(formName, validate)"</tt> and can be used as follows:
+ * <tt>"Click.submit(form, validate)"</tt> and can be used as follows:
  * <pre class="prettyprint">
  * Form form = new Form("myform");
  *
  * // The second argument to Click.submit is "false", meaning validation is bypassed
- * checkbox.setAttribute("onclick", "Click.submit(myform, false)");
+ * checkbox.setAttribute("onclick", "Click.submit(form, false)");
  *
  * // For a Select field use the "onchange" JavaScript event instead
- * select.setAttribute("onchange", "Click.submit(myform, false)"); </pre>
+ * select.setAttribute("onchange", "Click.submit(form, false)"); </pre>
  *
  * <p>&nbsp;<p/>
  * See also the W3C HTML reference:
