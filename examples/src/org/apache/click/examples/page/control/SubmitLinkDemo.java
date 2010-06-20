@@ -151,7 +151,7 @@ public class SubmitLinkDemo extends BorderPage {
 
         // Set custom JavaScript for the onclick event. The confirmSubmit function
         // is defined in the page template -> submit-link-demo.htm
-        String clickEvent = "return confirmSubmit(this, '" + form.getName() + "', 'Are you sure?');";
+        String clickEvent = "return confirmSubmit(this, '" + form.getId() + "', 'Are you sure?');";
         confirmationLink.setOnClick(clickEvent);
 
         // The Parametrized SubmitLink action listener
