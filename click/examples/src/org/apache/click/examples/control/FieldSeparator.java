@@ -9,24 +9,49 @@ import org.apache.click.util.ClickUtils;
 import java.util.List;
 
 /**
- * FieldSeparator is a component derived from a FieldSet that acts as a visual separator
- * having a label/legend too. This component is practical in forms where a FieldSet would
- * not align correctly the fields due to variable label width between the groups.<p/>
- *
- * @see FieldSeparatorDemo
- *
+ * <tt>FieldSeparator</tt> is a component derived from a <tt>FieldSet</tt> that acts as a visual separator that
+ * can have a "legend" too. <p/> 
+ * This component is practical in forms where such a visual representation is required, or
+ * where a <tt>FieldSet</tt> would not auto-align correctly all the fields (despite tweaking the CSS), e.g. due
+ * to variable label widths between the groups, common in:
+ * <ul>
+ *   <li>i18n forms - where tweaking the width for one language, would break the width for another</li>
+ *   <li>dynamic forms - where there's no a priori knowledge about the label</li>
+ * </ul>
+ * or simply where the user doesn't want to manually handle this alignment problem, but let Click do
+ * the job.
  */
 public class FieldSeparator extends FieldSet {
+    
+    // Constructors -----------------------------------------------------------
+
+    /**
+     * Create a FieldSeparator with the given name. <p/>
+     * The legend for this separator will be be inferred from the name.
+     *  
+     * @param name the field separator name element value
+     */
     public FieldSeparator(String name) {
         super(name);
         addStyleClass("fieldSeparator");        
     }
 
+    /**
+     * Create a FieldSeparator with the given name and legend.
+     *
+     * @param name the field separator name
+     * @param legend the field separator legend element value
+     */    
     public FieldSeparator(String name, String legend) {
         super(name, legend);
         addStyleClass("fieldSeparator");
     }
 
+    /**
+     * Create a FieldSeparator with no name defined.
+     * <p/>
+     * <b>Please note</b> the control's name must be defined before it is valid.
+     */    
     public FieldSeparator() {
         super();
         addStyleClass("fieldSeparator");
