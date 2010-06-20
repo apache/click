@@ -53,9 +53,9 @@ public class DynamicForm extends BorderPage {
         form.add(checkbox);
 
         // The Click script, '/click/control.js', provides the JavaScript
-        // function Click.submit(formName, validate). To bypass validation
+        // function Click.submit(form, validate). To bypass validation
         // specify 'false' as the second argument.
-        checkbox.setAttribute("onclick", "Click.submit(dynamicForm, false)");
+        checkbox.setAttribute("onclick", "Click.submit(form, false)");
 
         form.add(submit);
 
