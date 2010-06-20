@@ -1429,7 +1429,7 @@ public class Table extends AbstractControl {
             try {
                 control.onDestroy();
             } catch (Throwable t) {
-                t.printStackTrace();
+                ClickUtils.getLogService().error("onDestroy error", t);
             }
         }
         if (getNullifyRowListOnDestroy()) {
