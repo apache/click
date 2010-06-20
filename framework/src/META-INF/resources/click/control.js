@@ -96,27 +96,29 @@ if ( typeof Click.domready == 'undefined' ) {
 })();
 
 /**
- * Usage: Call addLoadEvent passing in a function to invoke when the DOM is
+ * Usage: Call Click.addLoadEvent passing in a function to invoke when the DOM is
  * ready:
  *
  *    Example 1:
  *    function something() {
  *       // do something
  *    }
- *    addLoadEvent(something);
+ *    Click.addLoadEvent(something);
  *
  *    Example 2:
- *    addLoadEvent(function() {
+ *    Click.addLoadEvent(function() {
  *        // do something
  *    });
  */
-addLoadEvent = function(func) {
+Click.addLoadEvent = function(func) {
     // If dom is ready, fire event and return
     if (Click.domready.ready) {
         return func();
     }
     Click.domready.events.push(func);
 };
+
+addLoadEvent=Click.addLoadEvent;
 
 function doubleFilter(event) {
     var keyCode;
@@ -358,11 +360,12 @@ function validateForm(msgs, id, align, style) {
 /**
  * Submit the form and optionally validate the fields.
  *
- * Usage: <input onclick="Click.submit(formName, false)">
+ * Usage: <input onclick="Click.submit(form, false)">
  */
 Click.submit=function(form, validate) {
     if (typeof form == "undefined") {
-        alert('Error: form is undefined. Usage: Click.submit(formName)');
+        alert('Error: form is undefined. Usage: Click.submit(form, false)');
+        return false;
     }
 
     // Validate is true by default

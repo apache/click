@@ -868,7 +868,7 @@ public class DateField extends TextField {
      * The default option script will render as (depending on the values):
      *
      * <pre class="prettyprint">
-     * addLoadEvent(function() {
+     * Click.addLoadEvent(function() {
      *   Event.observe('my-calendar-button', 'click', function(){
      *     Date.first_day_of_week=0;
      *     calendar = new CalendarDateSelect($('my-calendar'), {
