@@ -50,7 +50,7 @@ function validateCreditCardField(id, typeId, required, minLength, maxLength, msg
 			
 			var length = value.length;
 			if(length < 13){
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[3];
 			}
 			
@@ -75,13 +75,13 @@ function validateCreditCardField(id, typeId, required, minLength, maxLength, msg
 			}
 			
 			if (!isValid) {
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[3];
 			}
 		}
 		
 		// no error
-		setFieldValidColor(field);
+		Click.setFieldValidClass(field);
 		return null;
 	}
 }
@@ -99,22 +99,22 @@ function validateEmailField (id, required, minLength, maxLength, msgs){
 			var index = value.indexOf("@");
 			
 			if (index < 1 || index == length - 1) {
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[3];
 			}
 	
 			if (!isLetterOrDigit(value.charAt(0))) {
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[3];
 			}
 	
 			if (!isLetterOrDigit(value.charAt(length - 1))) {
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[3];
 			}
 		}
 	}
-	setFieldValidColor(field);
+	Click.setFieldValidClass(field);
 	return null;
 }
 
@@ -124,20 +124,20 @@ function validateNumberField(id, required, minValue, maxValue, msgs){
 		var value = field.value;
 		if (value.length == 0) {
 			if(required){
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[0];
 			}
 		} else {
 			if (value > maxValue){
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[2];
 			} else if (value < minValue){
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[1];
 			}
 		}
 		
-		setFieldValidColor(field);
+		Click.setFieldValidClass(field);
 		return null;
 		
 	} else {
@@ -150,12 +150,12 @@ function validatePickList(id, required, msgs){
 	if(field){
 		if (field.options.length == 0) {
 			if(required){
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[0];
 			}
 		}
 		
-		setFieldValidColor(field);
+		Click.setFieldValidClass(field);
 		return null;
 		
 	} else {
@@ -170,10 +170,10 @@ function validateRegexField(id, required, minLength, maxLength, regex, msgs){
 	} else {
 		var field = document.getElementById(id);
 		if (field.value.length == 0 || field.value.match(new RegExp(regex))) {
-			setFieldValidColor(field);
+			Click.setFieldValidClass(field);
 			return null;
 		} else {
-			setFieldErrorColor(field);
+			Click.setFieldErrorClass(field);
 			return msgs[3];
 		}
 	}
@@ -259,12 +259,12 @@ function pickListMoveItem(from, to, values, hidden, isSelected){
  *
  * @return false to prevent the link default action
  */
-Click.submitLinkAction = function(link, formName) {
+Click.submitLinkAction = function(link, formId) {
   var params=Click.getUrlParams(link.href);
   if (params == null) {
       return false;
   }
-  var form = document.getElementById(formName);
+  var form = document.getElementById(formId);
   if(form == null) {
       return false;
   }

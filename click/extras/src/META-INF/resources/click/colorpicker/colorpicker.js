@@ -54,15 +54,15 @@ function validateColorPicker(id, required, msgs){
         var value = field.value;
         if(value.length == 0){
             if(required){
-                setFieldErrorColor(field);
+                Click.setFieldErrorClass(field);
                 return msgs[0];
             }
         } else if(!field.value.match(new RegExp("^#[a-fA-F0-9]{3}([a-fA-F0-9]{3})?$"))){
-            setFieldErrorColor(field);
+            Click.setFieldErrorClass(field);
             return msgs[1];
         }
 
-        setFieldValidColor(field);
+        Click.setFieldValidClass(field);
         return null;
 
     } else {
