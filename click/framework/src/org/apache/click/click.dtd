@@ -31,7 +31,7 @@
 -->
 
 <!-- The Click Application (click.xml) Document Type Definition. -->
-<!ELEMENT click-app (pages*, headers?, format?, mode?, controls?, file-upload-service?, log-service?, template-service?, messages-map-service?, page-interceptor*)>
+<!ELEMENT click-app (pages*, headers?, format?, mode?, controls?, file-upload-service?, log-service?, messages-map-service?, resource-service?, template-service?, page-interceptor*)>
   <!ATTLIST click-app charset CDATA #IMPLIED>
   <!ATTLIST click-app locale CDATA #IMPLIED>
 
@@ -92,13 +92,17 @@
   <!ELEMENT log-service (property*)>
    <!ATTLIST log-service classname CDATA #FIXED "org.apache.click.service.ConsoleLogService">
 
-  <!-- Template Service class. -->
-  <!ELEMENT template-service (property*)>
-   <!ATTLIST template-service classname CDATA #FIXED "org.apache.click.service.VelocityTemplateService">
-
   <!-- Messages Map Service class. -->
   <!ELEMENT messages-map-service (property*)>
    <!ATTLIST messages-map-service classname CDATA #FIXED "org.apache.click.service.DefaultMessagesMapService">
+
+  <!-- Resource Service class. -->
+  <!ELEMENT resource-service (property*)>
+   <!ATTLIST resource-service classname CDATA #FIXED "org.apache.click.service.ClickResourceService">
+
+  <!-- Template Service class. -->
+  <!ELEMENT template-service (property*)>
+   <!ATTLIST template-service classname CDATA #FIXED "org.apache.click.service.VelocityTemplateService">
 
   <!-- Application page interceptors. -->
   <!ELEMENT page-interceptor (property*)>

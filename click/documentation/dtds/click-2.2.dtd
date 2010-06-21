@@ -31,7 +31,7 @@
 -->
 
 <!-- The Click Application (click.xml) Document Type Definition. -->
-<!ELEMENT click-app (pages*, headers?, format?, mode?, controls?, file-upload-service?, log-service?, template-service?, page-interceptor*)>
+<!ELEMENT click-app (pages*, headers?, format?, mode?, controls?, file-upload-service?, log-service?, resource-service?, template-service?, page-interceptor*)>
   <!ATTLIST click-app charset CDATA #IMPLIED>
   <!ATTLIST click-app locale CDATA #IMPLIED>
 
@@ -91,6 +91,10 @@
   <!-- Log Service. -->
   <!ELEMENT log-service (property*)>
    <!ATTLIST log-service classname CDATA #FIXED "org.apache.click.service.ConsoleLogService">
+
+  <!-- Resource Service class. -->
+  <!ELEMENT resource-service (property*)>
+   <!ATTLIST resource-service classname CDATA #FIXED "org.apache.click.service.ClickResourceService">
 
   <!-- Template Service class. -->
   <!ELEMENT template-service (property*)>
