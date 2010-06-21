@@ -48,7 +48,7 @@ Click application XML descriptor Documentation Type Definition (DTD) :
 
 &lt;!-- The Click Application (click.xml) Document Type Definition. --&gt;
 &lt;!ELEMENT <span class="red">click-app</span> (<span class="blue">pages</span>*, <span class="blue">headers</span>?, <span class="blue">format</span>?, <span class="blue">mode</span>?, <span class="blue">controls</span>?, 
-                     <span class="blue">file-upload-service</span>?, <span class="blue">log-service</span>?, <span class="blue">template-service</span>?, <span class="blue">page-interceptor</span>*)&gt;
+                     <span class="blue">file-upload-service</span>?, <span class="blue">log-service</span>?, <span class="blue">template-service</span>?, <span class="blue">messages-map-service</span>?, <span class="blue">page-interceptor</span>*)&gt;
   &lt;!ATTLIST <span class="red">click-app</span> <span class="blue">charset</span> CDATA #IMPLIED&gt;
   &lt;!ATTLIST <span class="red">click-app</span> <span class="blue">locale</span> CDATA #IMPLIED&gt;
 
@@ -112,6 +112,10 @@ Click application XML descriptor Documentation Type Definition (DTD) :
   &lt;!-- Template Service. --&gt;
   &lt;!ELEMENT <span class="red">template-service</span> (property*)&gt;
     &lt;!ATTLIST <span class="red">template-service</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">org.apache.click.service.VelocityTemplateService</span>"&gt;
+
+  &lt;!-- Messages Map Service. --&gt;
+  &lt;!ELEMENT <span class="red">messages-map-service</span> (property*)&gt;
+    &lt;!ATTLIST <span class="red">messages-map-service</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">org.apache.click.service.DefaultMessagesMapService</span>"&gt;
 
   &lt;!-- Application page interceptors. --&gt;
   &lt;!ELEMENT page-interceptor (property*)&gt;
