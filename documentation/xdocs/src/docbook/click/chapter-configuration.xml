@@ -248,7 +248,7 @@
       </para>
 
       <literallayout>&lt;!ELEMENT <symbol>click-app</symbol> (pages*, headers?, format?, mode?, controls?,
-                         file-upload-service?, log-service?, template-service?, resource-service?, messages-map-service?)&gt;
+                         file-upload-service?, log-service?, messages-map-service?, resource-service?, template-service?, page-interceptor*)&gt;
   &lt;!ATTLIST click-app <varname>charset</varname> CDATA #IMPLIED&gt;
   &lt;!ATTLIST click-app <varname>locale</varname> CDATA #IMPLIED&gt;</literallayout>
 
