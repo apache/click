@@ -1576,6 +1576,39 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         getLogService().info(msg);
     }
 
+    private void loadMessagesMapService(Element rootElm) throws Exception {
+        Element messagesMapServiceElm = ClickUtils.getChild(rootElm, "messages-map-service");
+
+        if (messagesMapServiceElm != null) {
+            Class messagesMapServiceClass = DefaultMessagesMapService.class;
+
+            String classname = messagesMapServiceElm.getAttribute("classname");
+
+            if (StringUtils.isNotBlank(classname)) {
+                messagesMapServiceClass = ClickUtils.classForName(classname);
+            }
+
+            messagesMapService = (MessagesMapService) messagesMapServiceClass.newInstance();
+
+            Map propertyMap = loadPropertyMap(messagesMapServiceElm);
+
+            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
+                String name = i.next().toString();
+                String value = propertyMap.get(name).toString();
+
+                Ognl.setValue(name, messagesMapService, value);
+            }
+        }
+
+        if (getLogService().isDebugEnabled()) {
+            String msg = "initializing MessagesMapService: "
+                + messagesMapService.getClass().getName();
+            getLogService().debug(msg);
+        }
+
+        messagesMapService.onInit(servletContext);
+    }
+
     private void loadPageInterceptors(Element rootElm) throws Exception {
         List<Element> interceptorList =
             ClickUtils.getChildren(rootElm, "page-interceptor");
@@ -1678,39 +1711,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         templateService.onInit(servletContext);
     }
 
-    private void loadMessagesMapService(Element rootElm) throws Exception {
-        Element messagesMapServiceElm = ClickUtils.getChild(rootElm, "messages-map-service");
-
-        if (messagesMapServiceElm != null) {
-            Class messagesMapServiceClass = DefaultMessagesMapService.class;
-
-            String classname = messagesMapServiceElm.getAttribute("classname");
-
-            if (StringUtils.isNotBlank(classname)) {
-                messagesMapServiceClass = ClickUtils.classForName(classname);
-            }
-
-            messagesMapService = (MessagesMapService) messagesMapServiceClass.newInstance();
-
-            Map propertyMap = loadPropertyMap(messagesMapServiceElm);
-
-            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
-                String name = i.next().toString();
-                String value = propertyMap.get(name).toString();
-
-                Ognl.setValue(name, messagesMapService, value);
-            }
-        }
-
-        if (getLogService().isDebugEnabled()) {
-            String msg = "initializing MessagesMapService: "
-                + messagesMapService.getClass().getName();
-            getLogService().debug(msg);
-        }
-
-        messagesMapService.onInit(servletContext);
-    }
-    
     private static Map loadPropertyMap(Element parentElm) {
         Map propertyMap = new HashMap();
 
