@@ -1,3 +1,8 @@
+/*! Copyright (c) 2010 Brandon Aaron (http://brandonaaron.net)
+* Licensed under the MIT License (LICENSE.txt).
+*
+* Version 2.1.3-pre
+*/
 // Ensure Click namespace exists
 if ( typeof Click == 'undefined' )
     Click = {};
@@ -15,18 +20,16 @@ Click.menu.fixHiddenMenu = function(menuId){
     	return;
     }
 
-    s ={
+    var s = {
         top : 'auto',
         left : 'auto',
         width : 'auto',
         height : 'auto',
         opacity : true,
-        src : "javascript:'<html></html>'"
-    }, s || {};
+        src : 'javascript:false;'
+    };
 
-    var prop = function(n){
-        return n&&n.constructor==Number?n+'px':n;
-    }
+    var prop = function(n){return n&&n.constructor==Number?n+'px':n;}
 
     var html = '<iframe class="bgiframe"frameborder="0"tabindex="-1"src="'+s.src+'"'+
         'style="display:block;position:absolute;z-index:-1;'+
