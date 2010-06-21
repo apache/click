@@ -1561,7 +1561,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
                 Ognl.setValue(name, logService, value);
             }
-
         }
 
         logService.onInit(getServletContext());
@@ -1972,7 +1971,25 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 throw new RuntimeException(msg);
             }
 
-            pageClass = ClickUtils.classForName(value);
+            try {
+
+                pageClass = ClickUtils.classForName(value);
+
+            } catch (ClassNotFoundException cnfe) {
+
+                // If a pagesPackage was delcared provide a descriptive error message
+                if (StringUtils.isNotBlank(pagesPackage)) {
+                    String msg = "No class was found for the Page classname: '"
+                        + value + "'. Please note that Click automatically adds"
+                        + " the given package '" + pagesPackage + "' to page"
+                        + " classnames. If you need to specify an absolute"
+                        + " classname declare a <pages>...</pages> element"
+                        + " without a package attribute.";
+                    throw new RuntimeException(msg, cnfe);
+                } else {
+                    throw cnfe;
+                }
+            }
 
             if (!Page.class.isAssignableFrom(pageClass)) {
                 String msg = "Page class " + value
