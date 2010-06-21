@@ -93,6 +93,21 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
       </div>
       <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
           <li class="change">
+            Fixed the JavaScript function <tt>Click.submit(form, validate)</tt> which incorrectly
+            stated that the first argument is the form name. The first argument
+            is in fact the form instance.
+            <p/>
+            For example:
+            <pre class="prettyprint">
+Select.setAttribute("onchange", "Click.submit(form, false)");
+</pre>
+          </li>
+          <li class="change">
+              Changed AbstractControl not to render the <tt>name</tt>
+              attribute since it is only used for Field controls
+              [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-699">CLK-699</a>].
+          </li>
+          <li class="change">
               Improved Table and Select to retrieve data from their DataProviders
               during the onRender event. This change allows exceptions thrown
               by DataProviders to be handled by the ErrorPage
@@ -116,6 +131,10 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
           <li class="change">
               Fixed SubmitLink to use Form id instead of Form name
               [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-701">CLK-701</a>].
+          </li>
+          <li class="change">
+              Fixed Form validation to add and remove an <tt>error</tt> class
+              [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-700">CLK-700</a>].
           </li>
           <li class="change">
               Update to the latest version for some of the JARs dependencies: log4j-1.2.16, freemarker-2.3.16,
@@ -211,7 +230,7 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
       <li class="change">
         Added improved dynamic Form support. Forms can now optionally bypass
         validation for JavaScript based submissions using the new JavaScript
-        function <tt>"Click.submit(formName, validate)"</tt>
+        function <tt>"Click.submit(form, validate)"</tt>
         [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-638">CLK-638</a>].
       </li>
       <li class="change">
