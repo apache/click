@@ -36,7 +36,8 @@ public class CallbackDispatcher {
     // -------------------------------------------------------------- Constants
 
     /** The thread local dispatcher holder. */
-    private static final ThreadLocal THREAD_LOCAL_DISPATCHER = new ThreadLocal();
+    private static final ThreadLocal<DispatcherStack> THREAD_LOCAL_DISPATCHER = 
+                    new ThreadLocal<DispatcherStack>();
 
     // -------------------------------------------------------------- Variables
 
@@ -236,7 +237,7 @@ public class CallbackDispatcher {
     }
 
     static DispatcherStack getDispatcherStack() {
-        DispatcherStack dispatcherStack = (DispatcherStack) THREAD_LOCAL_DISPATCHER.get();
+        DispatcherStack dispatcherStack = THREAD_LOCAL_DISPATCHER.get();
 
         if (dispatcherStack == null) {
             dispatcherStack = new DispatcherStack(2);
@@ -249,7 +250,7 @@ public class CallbackDispatcher {
     /**
      * Provides an unsynchronized Stack.
      */
-    static class DispatcherStack extends ArrayList {
+    static class DispatcherStack extends ArrayList<CallbackDispatcher> {
 
         /** Serialization version indicator. */
         private static final long serialVersionUID = 1L;
@@ -302,7 +303,7 @@ public class CallbackDispatcher {
                 throw new RuntimeException(msg);
             }
 
-            return (CallbackDispatcher) get(length - 1);
+            return get(length - 1);
         }
     }
 

@@ -201,18 +201,14 @@ public class ActionEventDispatcher {
      *
      * @return true if the page should continue processing or false otherwise
      */
-    protected boolean fireActionEvents(Context context, List eventSourceList,
-        List eventListenerList) {
+    protected boolean fireActionEvents(Context context, 
+        List<Control> eventSourceList, List<ActionListener> eventListenerList) {
 
         boolean continueProcessing = true;
 
         for (int i = 0, size = eventSourceList.size(); i < size; i++) {
-            Control source = (Control) eventSourceList.get(0);
-            ActionListener listener = (ActionListener) eventListenerList.get(0);
-
-            // Pop the first entry in the list
-            eventSourceList.remove(0);
-            eventListenerList.remove(0);
+            Control source = eventSourceList.remove(0);
+            ActionListener listener = eventListenerList.remove(0);
 
             if (!fireActionEvent(context, source, listener)) {
                 continueProcessing = false;

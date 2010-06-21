@@ -58,6 +58,7 @@ public class RequestTypeConverter implements TypeConverter {
      * @return Converted value of type toType or TypeConverter.NoConversionPossible
      *  to indicate that the conversion was not possible.
      */
+    @SuppressWarnings("unchecked")
     public Object convertValue(Map context, Object target, Member member,
             String propertyName, Object value, Class toType) {
 
@@ -73,14 +74,14 @@ public class RequestTypeConverter implements TypeConverter {
      * @param toType the target class type to convert the value to
      * @return a converted value into the specified type
      */
-    protected Object convertValue(Object value, Class toType) {
+    protected Object convertValue(Object value, Class<?> toType) {
         Object result = null;
 
         if (value != null) {
 
             // If array -> array then convert components of array individually
             if (value.getClass().isArray() && toType.isArray()) {
-                Class componentType = toType.getComponentType();
+                Class<?> componentType = toType.getComponentType();
 
                 result =
                     Array.newInstance(componentType, Array.getLength(value));
