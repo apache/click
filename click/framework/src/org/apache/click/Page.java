@@ -179,7 +179,7 @@ public class Page implements Serializable {
     protected boolean headersEdited;
 
     /** The map of localized page resource messages. **/
-    protected transient MessagesMap messages;
+    protected transient Map<String, String> messages;
 
     /**
      * The page model. For Velocity templates the model is used to populate the
@@ -836,7 +836,7 @@ public class Page implements Serializable {
     public Map<String, String> getMessages() {
         if (messages == null) {
             if (getContext() != null) {
-                messages = new MessagesMap(getClass(), PAGE_MESSAGES);
+                messages = getContext().createMessagesMap(getClass(), PAGE_MESSAGES);
 
             } else {
                 String msg = "Context not set cannot initialize messages";

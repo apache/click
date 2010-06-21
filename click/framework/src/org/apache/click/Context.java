@@ -35,6 +35,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.click.service.FileUploadService;
 import org.apache.click.service.LogService;
+import org.apache.click.service.MessagesMapService;
 import org.apache.click.service.TemplateService;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.FlashAttribute;
@@ -622,6 +623,21 @@ public class Context {
             charset = "ISO-8859-1";
         }
         return charset;
+    }
+
+    /**
+     * Return a new messages map for the given baseClass (a page or control)
+     * and the given global resource bundle name. 
+     *
+     * @param baseClass the target class
+     * @param globalResource the global resource bundle name     
+     * @return a new messages map with the messages for the target.
+     */
+    public Map<String, String> createMessagesMap(Class<?> baseClass, String globalResource) {
+        MessagesMapService messagesMapService = 
+            clickServlet.getConfigService().getMessagesMapService();
+        
+        return messagesMapService.createMessagesMap(baseClass, globalResource);
     }
 
     /**

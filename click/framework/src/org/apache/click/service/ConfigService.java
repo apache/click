@@ -176,6 +176,13 @@ public interface ConfigService {
     public TemplateService getTemplateService();
 
     /**
+     * Return the application messages map service.
+     *
+     * @return the application messages Map service
+     */
+    public MessagesMapService getMessagesMapService();
+
+    /**
      * Return the Click application mode value: &nbsp;
      * <tt>["production", "profile", "development", "debug", "trace"]</tt>.
      *

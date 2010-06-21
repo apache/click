@@ -41,10 +41,13 @@ import org.apache.click.service.ClickResourceService;
 import org.apache.click.service.CommonsFileUploadService;
 import org.apache.click.service.ConfigService;
 import org.apache.click.service.ConsoleLogService;
+import org.apache.click.service.DefaultMessagesMapService;
+import org.apache.click.service.MessagesMapService;
 import org.apache.click.service.VelocityTemplateService;
 import org.apache.click.service.ConfigService.AutoBinding;
 import org.apache.click.util.ErrorPage;
 import org.apache.click.util.Format;
+import org.apache.click.util.MessagesMap;
 
 /**
  * Tests for the XmlConfigService class.
@@ -506,6 +509,42 @@ public class ConfigServiceTest extends TestCase {
         deleteDir(tmpdir);
     }
 
+    public void testMessagesMapService() throws Exception {
+        File tmpdir = makeTmpDir();
+
+        PrintStream pstr = makeXmlStream(tmpdir, "WEB-INF/click.xml");
+        pstr.println("<click-app>");
+        pstr.println(" <pages/>");
+        pstr.println(" <messages-map-service classname='org.apache.click.ConfigServiceTest$MyMessagesMapService'/>");
+        pstr.println("</click-app>");
+        pstr.close();
+
+        MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
+        container.start();
+
+        ConfigService config = container.getClickServlet().getConfigService();
+
+        assertTrue(config.getMessagesMapService() instanceof MyMessagesMapService);
+
+        container.stop();
+        deleteDir(tmpdir);
+    }
+    
+    static public class MyMessagesMapService implements MessagesMapService {
+
+        public void onInit(ServletContext servletContext) throws Exception {
+        }
+
+        public void onDestroy() {
+        }
+        
+        public Map<String, String> createMessagesMap(Class<?> baseClass,
+                String globalResource) {
+            return new MessagesMap(baseClass, globalResource);
+        }
+    }
+    
+    
     public void testControls() throws Exception {
         File tmpdir = makeTmpDir();
 

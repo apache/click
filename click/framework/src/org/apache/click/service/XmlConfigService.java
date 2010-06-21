@@ -197,6 +197,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /** The application TemplateService. */
     private TemplateService templateService;
 
+    /** The application TemplateService. */
+    private MessagesMapService messagesMapService;
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -213,6 +216,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
         // Set default logService early to log errors when services fail.
         logService = new ConsoleLogService();
+        messagesMapService = new DefaultMessagesMapService();
 
         InputStream inputStream = ClickUtils.getClickConfig(servletContext);
 
@@ -257,6 +261,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             // Load the Resource service
             loadResourceService(rootElm);
 
+            // Load the Messages Map service
+            loadMessagesMapService(rootElm);
+
             // Load the PageInterceptors
             loadPageInterceptors(rootElm);
 
@@ -277,6 +284,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
         if (getResourceService() != null) {
             getResourceService().onDestroy();
+        }
+        if (getMessagesMapService() != null) {
+            getMessagesMapService().onDestroy();
         }
         if (getLogService() != null) {
             getLogService().onDestroy();
@@ -340,6 +350,15 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         return templateService;
     }
 
+    /**
+     * @see ConfigService#getMessagesMapService()
+     *
+     * @return the messages map service
+     */
+    public MessagesMapService getMessagesMapService() {
+        return messagesMapService;
+    }
+    
     /**
      * @see ConfigService#createFormat()
      *
@@ -1659,6 +1678,39 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         templateService.onInit(servletContext);
     }
 
+    private void loadMessagesMapService(Element rootElm) throws Exception {
+        Element messagesMapServiceElm = ClickUtils.getChild(rootElm, "messages-map-service");
+
+        if (messagesMapServiceElm != null) {
+            Class messagesMapServiceClass = DefaultMessagesMapService.class;
+
+            String classname = messagesMapServiceElm.getAttribute("classname");
+
+            if (StringUtils.isNotBlank(classname)) {
+                messagesMapServiceClass = ClickUtils.classForName(classname);
+            }
+
+            messagesMapService = (MessagesMapService) messagesMapServiceClass.newInstance();
+
+            Map propertyMap = loadPropertyMap(messagesMapServiceElm);
+
+            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
+                String name = i.next().toString();
+                String value = propertyMap.get(name).toString();
+
+                Ognl.setValue(name, messagesMapService, value);
+            }
+        }
+
+        if (getLogService().isDebugEnabled()) {
+            String msg = "initializing MessagesMapService: "
+                + messagesMapService.getClass().getName();
+            getLogService().debug(msg);
+        }
+
+        messagesMapService.onInit(servletContext);
+    }
+    
     private static Map loadPropertyMap(Element parentElm) {
         Map propertyMap = new HashMap();
 
