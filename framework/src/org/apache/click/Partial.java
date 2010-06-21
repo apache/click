@@ -321,9 +321,9 @@ public class Partial {
      *
      * @return the data model for the Partial template
      */
-    public Map getModel() {
+    public Map<String, Object> getModel() {
         if (model == null) {
-            model = new HashMap();
+            model = new HashMap<String, Object>();
         }
         return model;
     }
