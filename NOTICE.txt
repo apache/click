@@ -69,3 +69,7 @@ http://www.famfamfam.com/lab/icons
 This product includes the class org.apache.click.service.DeployUtils.java
 from the Stripes Framework, released under the Apache 2.0 license.
 http://stripesframework.org
+
+This product includes the JQuery bgiframe plugin, developed by
+Brandon Aaron, distributed under the terms of the MIT license.
+http://brandonaaron.net/code/bgiframe/docs/
