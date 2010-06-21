@@ -22,14 +22,20 @@ if ( typeof Click == 'undefined' )
 /**
  * DomReady state variables.
  */
-Click.domready = {
-    events: [],
-    ready: false,
-    run : function() {
-        Click.domready.ready=true;
-        var e;
-        while(e = Click.domready.events.shift()) {
-            e();
+if ( typeof Click.domready == 'undefined' ) {
+    Click.domready = {
+        events: [],
+        ready: false,
+        run : function() {
+            if ( !document.body ) {
+              // If body is null run this function after timeout
+              return setTimeout(arguments.callee, 13);
+            }
+            Click.domready.ready=true;
+            var e;
+            while(e = Click.domready.events.shift()) {
+                e();
+            }
         }
     }
 };
@@ -39,68 +45,70 @@ Click.domready = {
  * Matthias Miller, John Resig and Jesse Skinner.
  *
  * http://dean.edwards.name/weblog/2006/06/again/
- * http://www.vivabit.com/bollocks/2006/06/21/a-dom-ready-extension-for-prototype
- * http://simon.incutio.com/archive/2004/05/26/addLoadEvent
+ * http://simonwillison.net/2004/May/26/addLoadEvent/
  * http://javascript.nwbox.com/IEContentLoaded/
- * http://www.thefutureoftheweb.com/blog/adddomloadevent
+ * http://www.thefutureoftheweb.com/blog/adddomloadevent/
+ * http://www.subprint.com/blog/demystifying-the-dom-ready-event-method/
  */
 (function() {
-    /* Handle IE (32/64 bit) */
-    /*@cc_on
-			@if (@_win32 || @_win64)
-      // Guard against iframe
-      if (window == top) {
-	  		var d = window.document;
-  	    (function () {
-  		    try {
-  			    d.documentElement.doScroll('left');
-  		    } catch (e) {
-  			    setTimeout(arguments.callee, 50);
-  			    return;
+    // Handle DOMContentLoaded compliant browsers.
+    if (document.addEventListener) {
+      document.addEventListener("DOMContentLoaded", function() {
+        document.removeEventListener("DOMContentLoaded", arguments.callee, false);
+        Click.domready.run();
+      }, false);
+
+      // A fallback to window.onload, that will always work
+			window.addEventListener( "load",  Click.domready.run, false );
+
+    // If IE event model is used
+    } else if ( document.attachEvent ) {
+      // ensure firing before onload, maybe late but safe also for iframes
+      document.attachEvent("onreadystatechange", function() {
+        if (document.readyState === "complete") {
+          document.detachEvent("onreadystatechange", arguments.callee);
+          Click.domready.run();
+        }
+      });
+
+			// A fallback to window.onload, that will always work
+			window.attachEvent( "onload", Click.domready.run );
+
+      // If IE and not a frame continually check to see if the document is ready
+			var toplevel = false;
+      try {
+				toplevel = window.frameElement == null;
+			} catch(e) {}
+
+			if ( document.documentElement.doScroll && toplevel) {
+	      (function () {
+    	    try {
+    			  document.documentElement.doScroll('left');
+    		  } catch (e) {
+     			  setTimeout(arguments.callee, 1);
+    			  return;
  		      }
 		      // Dom is ready, run events
 		      Click.domready.run();
 	      })();
       }
-			@end
-		@*/
-
-    // Handle DOMContentLoaded compliant browsers.
-    if(document.addEventListener) {
-        document.addEventListener("DOMContentLoaded", Click.domready.run, false);
-
-    // Handle old KHTML/WebKit
-    } else if(/KHTML|WebKit/i.test(navigator.userAgent)) {
-        if(/loaded|complete/.test(document.readyState)) {
-            Click.domready.run();
-        } else {
-            setTimeout(arguments.callee, 0);
-        }
     }
-
-    // Fallback to window.onload
-    var prevOnload = window.onload;
-    window.onload = function() {
-        Click.domready.run();
-        if (typeof prevOnload === 'function') prevOnload();
-    };
 })();
 
 /**
- * Usage: Call addLoadEvent passing in a function to invoke when the DOM is
+ * Usage: Call Click.addLoadEvent passing in a function to invoke when the DOM is
  * ready:
  *
  *    Example 1:
  *    function something() {
  *       // do something
  *    }
- *    addLoadEvent(something);
+ *    Click.addLoadEvent(something);
  *
  *    Example 2:
- *    addLoadEvent(function() {
+ *    Click.addLoadEvent(function() {
  *        // do something
  *    });
- *
  */
 Click.addLoadEvent = function(func) {
     // If dom is ready, fire event and return
@@ -110,75 +118,77 @@ Click.addLoadEvent = function(func) {
     Click.domready.events.push(func);
 };
 
+addLoadEvent=Click.addLoadEvent;
+
 function doubleFilter(event) {
     var keyCode;
     if (document.all) {
-        keyCode = event.keyCode; 
+        keyCode = event.keyCode;
     } else if (document.getElementById) {
-        keyCode = event.which;   
+        keyCode = event.which;
     } else if (document.layers) {
-        keyCode = event.which;   
+        keyCode = event.which;
     }
-  
+
     if (keyCode >= 33 && keyCode <= 43) {
         return false;
-        
+
     } else if (keyCode == 47) {
         return false;
-        
+
     } else if (keyCode >= 58 && keyCode <= 126) {
         return false;
-        
-    } else {  
-        return true;     
+
+    } else {
+        return true;
     }
 }
 
 function integerFilter(event) {
     var keyCode;
     if (document.all) {
-        keyCode = event.keyCode; 
+        keyCode = event.keyCode;
     } else if (document.getElementById) {
-        keyCode = event.which;   
+        keyCode = event.which;
     } else if (document.layers) {
-        keyCode = event.which;   
+        keyCode = event.which;
     }
-    
+
     if (keyCode >= 33 && keyCode <= 44) {
         return false;
-        
+
     } else if (keyCode >= 46 && keyCode <= 47) {
         return false;
-        
+
     } else if (keyCode >= 58 && keyCode <= 126) {
         return false;
-        
-    } else {  
-        return true;     
+
+    } else {
+        return true;
     }
 }
 
 function noLetterFilter(event) {
     var keyCode;
     if (document.all) {
-        keyCode = event.keyCode; 
+        keyCode = event.keyCode;
     } else if (document.getElementById) {
-        keyCode = event.which;   
+        keyCode = event.which;
     } else if (document.layers) {
-        keyCode = event.which;   
-    } 
+        keyCode = event.which;
+    }
 
     if (keyCode >= 33 && keyCode <= 39) {
         return false;
-        
+
     } else if (keyCode == 47) {
         return false;
-        
+
     } else if (keyCode >= 58 && keyCode <= 126) {
         return false;
-        
-    } else {  
-        return true;     
+
+    } else {
+        return true;
     }
 }
 
@@ -192,23 +202,49 @@ function setFocus(id) {
     }
 }
 
-function trim(str) {  
-    while (str.charAt(0) == (" ")) {  
+function trim(str) {
+    while (str.charAt(0) == (" ")) {
         str = str.substring(1);
       }
-      while (str.charAt(str.length - 1) == " ") {  
+      while (str.charAt(str.length - 1) == " ") {
           str = str.substring(0,str.length-1);
       }
       return str;
 }
 
-
-function setFieldValidColor(field) {
-    field.style.background = 'white';
+Click.hasClass=function(element,cls){
+    var className=element.className;
+    if(className) {
+        return new RegExp('\\b'+cls+'\\b').test(className);
+    }
+    return false;
 }
 
-function setFieldErrorColor(field) {
-    field.style.background = '#FFFF80';
+Click.addClass=function(element,cls){
+    if(!Click.hasClass(element,cls)) {
+        element.className += element.className ? ' ' + cls : cls;
+    }
+}
+
+Click.removeClass=function(element,cls){
+    var className=element.className;
+    if(!className) return;
+
+    if(className.indexOf(' ')<0) {
+        element.className='';
+        return;
+    }
+
+    var rep = new RegExp('(^|\\s)' + cls + '(?:\\s|$)');
+    element.className = className.replace(rep, '$1');
+}
+
+Click.setFieldValidClass=function(field) {
+    Click.removeClass(field,'error');
+}
+
+Click.setFieldErrorClass=function(field) {
+    Click.addClass(field,'error');
 }
 
 function validateTextField(id, required, minLength, maxLength, msgs) {
@@ -217,23 +253,23 @@ function validateTextField(id, required, minLength, maxLength, msgs) {
         var value = trim(field.value);
         if (required) {
             if (value.length == 0) {
-                setFieldErrorColor(field);
+                Click.setFieldErrorClass(field);
                 return msgs[0];
             }
         }
         if (required && minLength > 0) {
             if (value.length < minLength) {
-                setFieldErrorColor(field);
+                Click.setFieldErrorClass(field);
                 return msgs[1];
             }
         }
         if (maxLength > 0) {
             if (value.length > maxLength) {
-                setFieldErrorColor(field);
+                Click.setFieldErrorClass(field);
                 return msgs[2];
             }
         }
-        setFieldValidColor(field);
+        Click.setFieldValidClass(field);
         return null;
     } else {
         return 'Field ' + id + ' not found.';
@@ -261,10 +297,10 @@ function validateSelect(id, defaultValue, required, msgs) {
         if (required) {
             var value = field.value;
             if (value != defaultValue) {
-                setFieldValidColor(field);
+                Click.setFieldValidClass(field);
                 return null;
             } else {
-                setFieldErrorColor(field);
+                Click.setFieldErrorClass(field);
                 return msgs[0];
             }
         }
@@ -273,25 +309,28 @@ function validateSelect(id, defaultValue, required, msgs) {
     }
 }
 
-function validateRadioGroup(pathName, required, msgs) {
+function validateRadioGroup(radioName, formId, required, msgs) {
     if(required){
-        //var value = pathName.value;
-        for (i = 0; i < pathName.length; i++) {
-            if (pathName[i].checked) {
-                return null;
+        var form = document.getElementById(formId);
+        if(form){
+            var path=form[radioName];
+            for (i = 0; i < path.length; i++){
+                if (path[i].checked){
+                    return null;
+                }
             }
+            return msgs[0];
         }
-        return msgs[0];
     }
 }
- 
+
 function validateFileField(id, required, msgs) {
     var field = document.getElementById(id);
     if (field) {
         var value = trim(field.value);
         if (required) {
             if (value.length == 0) {
-                setFieldErrorColor(field);
+                Click.setFieldErrorClass(field);
                 return msgs[0];
             }
         }
@@ -303,18 +342,18 @@ function validateFileField(id, required, msgs) {
 function validateForm(msgs, id, align, style) {
     var errorsHtml = '';
     var focusFieldId = null;
-    
+
     for (i = 0; i < msgs.length; i++) {
         var value = msgs[i];
         if (value != null) {
             var index = value.lastIndexOf('|');
             var fieldMsg = value.substring(0, index);
             var fieldId = value.substring(index + 1);
-            
+
             if (focusFieldId == null) {
                 focusFieldId = fieldId;
             }
-            
+
             errorsHtml += '<tr class="errors"><td class="errors" align="';
             errorsHtml += align;
 			if (style != null) {
@@ -323,48 +362,78 @@ function validateForm(msgs, id, align, style) {
             }
             errorsHtml += '">';
             errorsHtml += '<a class="error" href="javascript:setFocus(\'';
-            errorsHtml += fieldId; 
+            errorsHtml += fieldId;
             errorsHtml += '\');">';
             errorsHtml += fieldMsg;
             errorsHtml += '</a>';
             errorsHtml += '</td></tr>';
         }
     }
-    
+
     if (errorsHtml.length > 0) {
-        errorsHtml = '<table class="errors">' + errorsHtml + '</table>';        
+        errorsHtml = '<table class="errors">' + errorsHtml + '</table>';
         //alert(errorsHtml);
-        
+
         document.getElementById(id + '-errorsDiv').innerHTML = errorsHtml;
         document.getElementById(id + '-errorsTr').style.display = 'inline';
-        
+
         setFocus(focusFieldId);
-        
+
         return false;
-        
-    } else {        
+
+    } else {
         return true;
     }
 }
 
-/*
- * This file is dependend upon /click/control.js functions.
+/**
+ * Submit the form and optionally validate the fields.
+ *
+ * Usage: <input onclick="Click.submit(form, false)">
  */
- 
+Click.submit=function(form, validate) {
+    if (typeof form == 'undefined') {
+        alert('Error: form is undefined. Usage: Click.submit(formName)');
+        return false;
+    }
+
+    // Validate is true by default
+    validate = (typeof validate == 'undefined') ? true : validate;
+
+    if (form) {
+        var formElements = form.elements;
+        for (var i=0; i < formElements.length; i++) {
+            var el = formElements[i];
+    		    if(el.name=='submit'){
+               alert('Error: In order to submit the Form through JavaScript, buttons and fields must not be named "submit". Please rename the button/field called "submit".');
+               return false;
+           }
+        }
+        if (!validate) {
+            // Bypass JS validation
+            var input = document.getElementById(form.id + '_bypass_validation');
+            if (input) {
+                input.value='true';
+            }
+        }
+        form.submit();
+    }
+}
+
 /* Validate Functions */
 
 function validateCreditCardField(id, typeId, required, minLength, maxLength, msgs){
-	
+
 	var msg = validateTextField(id, required, minLength, maxLength, msgs);
-	
+
 	if(msg){
 		return msg;
-		
+
 	} else {
 		var field = document.getElementById(id);
 		var value = field.value;
 		var type  = document.getElementById(typeId).value;
-		
+
 		if(value.length > 0){
 			// strip
 			var buffer = '';
@@ -375,17 +444,17 @@ function validateCreditCardField(id, typeId, required, minLength, maxLength, msg
 				}
 			}
 			value = buffer;
-			
+
 			var length = value.length;
 			if(length < 13){
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[3];
 			}
-			
+
 			var firstdig  = value.charAt(0);
 			var seconddig = value.charAt(1);
 			var isValid = false;
-			
+
 			if(type=='VISA'){
 				isValid = ((length == 16) || (length == 13)) && (firstdig == '4');
 			}
@@ -401,15 +470,15 @@ function validateCreditCardField(id, typeId, required, minLength, maxLength, msg
 			if(type=='DISCOVER'){
 				isValid = (length == 16) && value.startsWith("6011");
 			}
-			
+
 			if (!isValid) {
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[3];
 			}
 		}
-		
+
 		// no error
-		setFieldValidColor(field);
+		Click.setFieldValidClass(field);
 		return null;
 	}
 }
@@ -422,27 +491,27 @@ function validateEmailField (id, required, minLength, maxLength, msgs){
 		var field  = document.getElementById(id);
 		var value  = field.value;
 		var length = value.length;
-		
+
 		if(length > 0){
 			var index = value.indexOf("@");
-			
+
 			if (index < 1 || index == length - 1) {
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[3];
 			}
-	
+
 			if (!isLetterOrDigit(value.charAt(0))) {
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[3];
 			}
-	
+
 			if (!isLetterOrDigit(value.charAt(length - 1))) {
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[3];
 			}
 		}
 	}
-	setFieldValidColor(field);
+	Click.setFieldValidClass(field);
 	return null;
 }
 
@@ -452,22 +521,22 @@ function validateNumberField(id, required, minValue, maxValue, msgs){
 		var value = field.value;
 		if (value.length == 0) {
 			if(required){
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[0];
 			}
 		} else {
 			if (value > maxValue){
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[2];
 			} else if (value < minValue){
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[1];
 			}
 		}
-		
-		setFieldValidColor(field);
+
+		Click.setFieldValidClass(field);
 		return null;
-		
+
 	} else {
 		return 'Field ' + id + ' not found.';
 	}
@@ -478,14 +547,14 @@ function validatePickList(id, required, msgs){
 	if(field){
 		if (field.options.length == 0) {
 			if(required){
-				setFieldErrorColor(field);
+				Click.setFieldErrorClass(field);
 				return msgs[0];
 			}
 		}
-		
-		setFieldValidColor(field);
+
+		Click.setFieldValidClass(field);
 		return null;
-		
+
 	} else {
 		return 'Field ' + id + ' not found.';
 	}
@@ -497,11 +566,11 @@ function validateRegexField(id, required, minLength, maxLength, regex, msgs){
 		return msg;
 	} else {
 		var field = document.getElementById(id);
-		if (field.value.match(new RegExp(regex))) {
-			setFieldValidColor(field);
+		if (field.value.length == 0 || field.value.match(new RegExp(regex))) {
+			Click.setFieldValidClass(field);
 			return null;
 		} else {
-			setFieldErrorColor(field);
+			Click.setFieldErrorClass(field);
 			return msgs[3];
 		}
 	}
@@ -580,3 +649,127 @@ function pickListMoveItem(from, to, values, hidden, isSelected){
 		}
 	}
 }
+
+/**
+ * Define the SubmitLink action. This function creates hidden fields for
+ * each SubmitLink parameter and submits the form.
+ *
+ * @return false to prevent the link default action
+ */
+Click.submitLinkAction = function(link, formId) {
+  var params=Click.getUrlParams(link.href);
+  if (params == null) {
+      return false;
+  }
+  var form = document.getElementById(formId);
+  if(form == null) {
+      return false;
+  }
+  for(var i=0; i<params.length; i++){
+    var param=params[i];
+    var input = document.createElement("input");
+    input.setAttribute("type", "hidden");
+    input.setAttribute("name", param.name);
+    input.setAttribute("value", param.value);
+    form.appendChild(input);
+  }
+  form.submit();
+  return false;
+}
+
+/**
+ * Return the url parameters as an array of key/value pairs or null
+ * if no parameters can be extracted.
+ */
+Click.getUrlParams = function(url) {
+  if (url == null || url == '' || url == 'undefined') {
+    return null;
+  }
+  url = unescape(url);
+  var start = url.indexOf('?')
+  if (start == -1) {
+    return null;
+  }
+  url=url.substring(start + 1);
+  var pairs=url.split("&");
+  var params = new Array();
+  for (var i=0;i<pairs.length;i++) {
+    var param = new Object();
+    var pos = pairs[i].indexOf('=');
+    if (pos >= 0) {
+      param.name = pairs[i].substring(0,pos);
+      param.value = pairs[i].substring(pos+1);
+      params.push(param);
+    }
+  }
+  return params;
+};
+
+if ( typeof Click.menu == 'undefined' )
+    Click.menu = {};
+
+// Code adapted from jquery.bgiframe. Add an IFrame to the menu ensuring Select
+// elements does not burn through when menu is open
+Click.menu.fixHiddenMenu = function(menuId){
+    var menu = document.getElementById(menuId);
+
+    // If menu is not available, exit early
+    if(menu==null){
+    	return;
+    }
+
+    var s = {
+        top : 'auto',
+        left : 'auto',
+        width : 'auto',
+        height : 'auto',
+        opacity : true,
+        src : 'javascript:false;'
+    };
+
+    var prop = function(n){return n&&n.constructor==Number?n+'px':n;}
+
+    var html = '<iframe class="bgiframe"frameborder="0"tabindex="-1"src="'+s.src+'"'+
+        'style="display:block;position:absolute;z-index:-1;'+
+        (s.opacity !== false?'filter:Alpha(Opacity=\'0\');':'')+
+        'top:'+(s.top=='auto'?'expression(((parseInt(this.parentNode.currentStyle.borderTopWidth)||0)*-1)+\'px\')':prop(s.top))+';'+
+        'left:'+(s.left=='auto'?'expression(((parseInt(this.parentNode.currentStyle.borderLeftWidth)||0)*-1)+\'px\')':prop(s.left))+';'+
+        'width:'+(s.width=='auto'?'expression(this.parentNode.offsetWidth+\'px\')':prop(s.width))+';'+
+        'height:'+(s.height=='auto'?'expression(this.parentNode.offsetHeight+\'px\')':prop(s.height))+';'+
+        '"/>';
+
+    var uls = document.getElementById(menuId).getElementsByTagName('ul');
+    for(var i = 0; i < uls.length; i++) {
+        var ul = uls[i];
+        var el = document.createElement(html);
+        ul.insertBefore(el);
+    }
+}
+
+// Add 'over' class when hovering over menu items
+Click.menu.fixHover = function(menuId) {
+    var elements = document.getElementById(menuId);
+    if (elements != null) {
+        var list = elements.getElementsByTagName("LI");
+        if (list != null) {
+            //enable hover for the list
+            for (var i=0; i<list.length; i++) {
+                list[i].onmouseover=function() {
+                    this.className+=" over";
+                }
+                list[i].onmouseout=function() {
+                    this.className=this.className.replace(new RegExp(" over\\b"), "");
+                }
+            }
+        }
+    }
+}
+
+Click.addLoadEvent(function(){
+ if(typeof Click != 'undefined' && typeof Click.menu != 'undefined') {
+   if(typeof Click.menu.fixHiddenMenu != 'undefined') {
+     Click.menu.fixHiddenMenu("rootMenu");
+     Click.menu.fixHover("rootMenu");
+   }
+ }
+});
