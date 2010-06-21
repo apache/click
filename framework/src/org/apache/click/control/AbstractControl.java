@@ -525,7 +525,7 @@ public abstract class AbstractControl implements Control {
      */
     public Map<String, String> getMessages() {
         if (messages == null) {
-            messages = new MessagesMap(getClass(), CONTROL_MESSAGES);
+            messages = getContext().createMessagesMap(getClass(), CONTROL_MESSAGES);
         }
         return messages;
     }
