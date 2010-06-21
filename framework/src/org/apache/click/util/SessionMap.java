@@ -209,9 +209,6 @@ public class SessionMap implements Map<String, Object> {
     }
 
     /**
-     * This method is not supported and will throw
-     * <tt>UnsupportedOperationException</tt> if invoked.
-     *
      * @see java.util.Map#values()
      */
     public Collection<Object> values() {
@@ -252,9 +249,11 @@ public class SessionMap implements Map<String, Object> {
             return Collections.emptySet();
         }
     }
-    
+
     static class Entry implements Map.Entry<String, Object> {
+
         final String key;
+
         Object value;
 
         /**
@@ -279,6 +278,9 @@ public class SessionMap implements Map<String, Object> {
             return oldValue;
         }
 
+        /**
+         * @see java.lang.Object#equals(java.lang.Object)
+         */
         @Override
         public final boolean equals(Object o) {
             if (!(o instanceof Entry)) {
@@ -296,6 +298,20 @@ public class SessionMap implements Map<String, Object> {
             }
             return false;
         }
+
+        /**
+         * @see java.lang.Object#hashCode()
+         */
+        @Override
+        public int hashCode() {
+            String k = getKey();
+            Object v = getValue();
+
+            int hash = 17;
+            hash = hash * 37 + (k == null ? 0 : k.hashCode());
+            hash = hash * 37 + (v == null ? 0 : v.hashCode());
+
+            return hash;
+        }
     }
 }
-
