@@ -80,6 +80,9 @@ Provides an example of all <a href="click-dtd.html">DTD</a> ELEMENTS and ATTRIBU
   &lt;!-- Set Click internal Logger to Log4J instead of the default ConsoleLogService --&gt;
   &lt;log-service classname="org.apache.click.extras.service.Log4JLogService"/&gt;
 
+  &lt;!-- Set a custom messages map service --&gt;
+  &lt;messages-map-service classname="com.mycorp.services.CustomMessagesMapService"/&gt;
+
   &lt;!-- Set the template engine to use Freemarker instead of Velocity --&gt;
   &lt;template-service classname="org.apache.click.extras.service.FreemarkerTemplateService"/&gt;
 
@@ -96,7 +99,7 @@ Provides an example of all <a href="click-dtd.html">DTD</a> ELEMENTS and ATTRIBU
       a custom org.apache.click.service.FileUploadService implementation.
   --&gt;
   &lt;!--
-  &lt;file-upload-service classname="com.mycorp.util.CustomFileUploadService"&gt;
+  &lt;file-upload-service classname="com.mycorp.service.CustomFileUploadService"&gt;
       &lt;property name="sizeMax" value="10485760"/&gt;
       &lt;property name="fileSizeMax" value="2097152"/&gt;
   &lt;/file-upload-service&gt;
