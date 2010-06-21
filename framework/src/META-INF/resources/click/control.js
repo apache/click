@@ -212,13 +212,39 @@ function trim(str) {
       return str;
 }
 
-
-function setFieldValidColor(field) {
-    field.style.background = 'white';
+Click.hasClass=function(element,cls){
+    var className=element.className;
+    if(className) {
+        return new RegExp('\\b'+cls+'\\b').test(className);
+    }
+    return false;
 }
 
-function setFieldErrorColor(field) {
-    field.style.background = '#FFFF80';
+Click.addClass=function(element,cls){
+    if(!Click.hasClass(element,cls)) {
+        element.className += element.className ? ' ' + cls : cls;
+    }
+}
+
+Click.removeClass=function(element,cls){
+    var className=element.className;
+    if(!className) return;
+
+    if(className.indexOf(' ')<0) {
+        element.className='';
+        return;
+    }
+
+    var rep = new RegExp('(^|\\s)' + cls + '(?:\\s|$)');
+    element.className = className.replace(rep, '$1');
+}
+
+Click.setFieldValidClass=function(field) {
+    Click.removeClass(field,'error');
+}
+
+Click.setFieldErrorClass=function(field) {
+    Click.addClass(field,'error');
 }
 
 function validateTextField(id, required, minLength, maxLength, msgs) {
@@ -227,23 +253,23 @@ function validateTextField(id, required, minLength, maxLength, msgs) {
         var value = trim(field.value);
         if (required) {
             if (value.length == 0) {
-                setFieldErrorColor(field);
+                Click.setFieldErrorClass(field);
                 return msgs[0];
             }
         }
         if (required && minLength > 0) {
             if (value.length < minLength) {
-                setFieldErrorColor(field);
+                Click.setFieldErrorClass(field);
                 return msgs[1];
             }
         }
         if (maxLength > 0) {
             if (value.length > maxLength) {
-                setFieldErrorColor(field);
+                Click.setFieldErrorClass(field);
                 return msgs[2];
             }
         }
-        setFieldValidColor(field);
+        Click.setFieldValidClass(field);
         return null;
     } else {
         return 'Field ' + id + ' not found.';
@@ -271,10 +297,10 @@ function validateSelect(id, defaultValue, required, msgs) {
         if (required) {
             var value = field.value;
             if (value != defaultValue) {
-                setFieldValidColor(field);
+                Click.setFieldValidClass(field);
                 return null;
             } else {
-                setFieldErrorColor(field);
+                Click.setFieldErrorClass(field);
                 return msgs[0];
             }
         }
@@ -304,7 +330,7 @@ function validateFileField(id, required, msgs) {
         var value = trim(field.value);
         if (required) {
             if (value.length == 0) {
-                setFieldErrorColor(field);
+                Click.setFieldErrorClass(field);
                 return msgs[0];
             }
         }
