@@ -1562,8 +1562,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 Ognl.setValue(name, logService, value);
             }
 
-        } else {
-            logService = new ConsoleLogService();
         }
 
         logService.onInit(getServletContext());
