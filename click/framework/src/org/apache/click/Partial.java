@@ -75,10 +75,10 @@ public class Partial {
     public static final String XML = "text/xml";
 
     /** The Partial writer buffer size. */
-    private static final int WRITER_BUFFER_SIZE = 256;
+    private static final int WRITER_BUFFER_SIZE = 256; // For text assume a small response
 
     /** The Partial output buffer size. */
-    private static final int OUTPUT_BUFFER_SIZE = 4 * 1024;
+    private static final int OUTPUT_BUFFER_SIZE = 4 * 1024; // For binary assume a large response
 
     // -------------------------------------------------------- Variables
 
@@ -96,9 +96,6 @@ public class Partial {
 
     /** The resposne character encoding. */
     private String characterEncoding;
-
-    /** The response headers. */
-    private Map headers;
 
     /** Indicates whether the Partial should be cached by browser. */
     private boolean cachePartial = false;
@@ -268,65 +265,6 @@ public class Partial {
     }
 
     /**
-     * Returns a boolean indicating whether the named response header has
-     * already been set.
-     *
-     * @param name the header name
-     * @return true if the named response header has already been set, false
-     * otherwise
-     */
-    public boolean containsHeader(String name) {
-        return getHeaders().containsKey(name);
-    }
-
-    /**
-     * Return the map of response header values.
-     *
-     * @return the map of response header values
-     */
-    public Map getHeaders() {
-        if (headers == null) {
-            return new HashMap();
-        }
-        return headers;
-    }
-
-    /**
-     * Sets a response header with the given name and value. If the header had
-     * already been set, the new value overwrites the previous one.
-     *
-     * @param name the name of the header
-     * @param value the header value
-     */
-    public void setHeader(String name, String value) {
-        getHeaders().put(name, value);
-    }
-
-    /**
-     * Adds a response header with the given name and value. This method allows
-     * response headers to have multiple values.
-     *
-     * @param name the name of the header
-     * @param value the header value
-     */
-    public void addHeader(String name, String value) {
-        Map<String, Object> headersMap = getHeaders();
-        Object currValue = headersMap.get(name);
-        if (currValue == null) {
-            headersMap.put(name, value);
-
-        } else if (currValue instanceof List) {
-            ((List) currValue).add(value);
-
-        } else {
-            List list = new ArrayList();
-            list.add(currValue);
-            list.add(value);
-            headersMap.put(name, list);
-        }
-    }
-
-    /**
      * Set the content to stream back to the client.
      *
      * @param content the content to stream back to the client
@@ -487,58 +425,15 @@ public class Partial {
 
     // -------------------------------------------------------- Private Methods
 
-    private void applyHeaders(HttpServletResponse response) {
+    private void prepare(Context context) {
+        HttpServletResponse response = context.getResponse();
 
         if (!cachePartial) {
+            // Set headers to disable cache
             response.setHeader("Pragma", "no-cache");
             response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
             response.setDateHeader("Expires", new Date(1L).getTime());
         }
-
-        if (headers != null) {
-            setResponseHeaders(response, getHeaders());
-        }
-    }
-
-    private void setResponseHeaders(HttpServletResponse response, Map<String, Object> headers) {
-
-        for (Map.Entry<String, Object> entry : headers.entrySet()) {
-            String name = entry.getKey();
-            Object value = entry.getValue();
-
-            if (value instanceof List) {
-                for (Object obj : (List) value) {
-                    setResponseHeader(response, name, obj);
-                }
-
-            } else {
-                setResponseHeader(response, name, value);
-            }
-        }
-    }
-
-    private void setResponseHeader(HttpServletResponse response, String name,
-        Object value) {
-
-        if (value instanceof String) {
-            String strValue = (String) value;
-            if (!strValue.equalsIgnoreCase("Content-Encoding")) {
-                response.setHeader(name, strValue);
-            }
-
-        } else if (value instanceof Date) {
-            long time = ((Date) value).getTime();
-            response.setDateHeader(name, time);
-
-        } else {
-            int intValue = ((Integer) value).intValue();
-            response.setIntHeader(name, intValue);
-        }
-    }
-
-    private void prepare(Context context) {
-        HttpServletResponse response = context.getResponse();
-        applyHeaders(response);
 
         if (getCharacterEncoding() == null) {
 
