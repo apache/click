@@ -282,7 +282,7 @@ public class MockContext extends Context {
                 actionEventDispatcher = new ActionEventDispatcher(configService);
             }
 
-            if (actionEventDispatcher == null) {
+            if (callbackDispatcher == null) {
                 callbackDispatcher = new CallbackDispatcher(configService);
             }
 
