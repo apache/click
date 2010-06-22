@@ -56,7 +56,6 @@ public class PageImportsExample extends BorderPage {
 
             headElements.add(new CssImport("/assets/css/imports.css"));
             headElements.add(new JsImport("/assets/js/imports.js"));
-            headElements.add(new JsScript("addLoadEvent(function() { initMenu(); });"));
         }
         return headElements;
     }
