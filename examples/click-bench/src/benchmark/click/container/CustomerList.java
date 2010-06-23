@@ -28,14 +28,17 @@ import benchmark.dao.Customer;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import net.sf.clickclick.control.html.table.Cell;
-import net.sf.clickclick.control.html.table.HeaderCell;
+import net.sf.clickclick.control.html.table.HeaderRow;
 import net.sf.clickclick.control.html.table.HtmlTable;
 import net.sf.clickclick.control.html.table.Row;
+import net.sf.clickclick.control.html.table.TableBody;
+import net.sf.clickclick.control.html.table.TableHeader;
 import org.apache.click.ActionListener;
 import org.apache.click.control.AbstractContainer;
 import org.apache.click.control.Container;
 import org.apache.click.util.HtmlStringBuffer;
 
+// 470
 public class CustomerList extends Page {
 
     private HtmlTable table;
@@ -44,8 +47,7 @@ public class CustomerList extends Page {
 
     private ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
-    private final SimpleDateFormat FORMAT = new SimpleDateFormat(
-        "MMMM d, yyyy");
+    private final SimpleDateFormat FORMAT = new SimpleDateFormat("MMMM d, yyyy");
 
     public CustomerList() {
         table = new HtmlTable("table");
@@ -60,8 +62,7 @@ public class CustomerList extends Page {
             public boolean onAction(Control source) {
                 Integer id = editLink.getValueInteger();
                 Customer customer = CustomerDao.getInstance().findById(id);
-                EditCustomer editPage = (EditCustomer) getContext().createPage(
-                    EditCustomer.class);
+                EditCustomer editPage = getContext().createPage(EditCustomer.class);
                 editPage.setCustomer(customer);
                 setForward(editPage);
                 return true;
@@ -79,78 +80,51 @@ public class CustomerList extends Page {
         });
     }
 
+    @Override
     public void onRender() {
-        Container thead = new AbstractContainer() {
-            public String getTag() {
-                return "thead";
-            }
-        };
+        TableHeader thead = new TableHeader();
         thead.add(createHeaderRow());
         table.add(thead);
-        
+
+        TableBody body = new TableBody();
+        table.add(body);
+
         List<Customer> customers = CustomerDao.getInstance().findAll();
         for (Customer customer : customers) {
             Row row = createRow(customer);
-            table.add(row);
+            body.add(row);
         }
     }
 
     private Row createHeaderRow() {
-        Row row = new Row();
-        Cell cell = new HeaderCell();
-        cell.setText("First Name");
-        row.add(cell);
-
-        cell = new HeaderCell();
-        cell.setText("Last Name");
-        row.add(cell);
-
-        cell = new HeaderCell();
-        cell.setText("State");
-        row.add(cell);
-
-        cell = new HeaderCell();
-        cell.setText("Birth Date");
-        row.add(cell);
-
-        cell = new HeaderCell();
-        cell.setText("Options");
-        row.add(cell);
+        HeaderRow row = new HeaderRow();
+        row.add("First Name", "Last Name", "State", "Birth Date", "Options");
         return row;
     }
 
     private Row createRow(final Customer customer) {
         Row row = new Row();
+        row.add(customer.getFirstName(),
+            customer.getLastName(),
+            customer.getState(),
+            FORMAT.format(customer.getBirthDate()));
+
         Cell cell = new Cell();
-        row.add(cell);
-        cell.setText(customer.getFirstName());
 
-        cell = new Cell();
-        row.add(cell);
-        cell.setText(customer.getLastName());
-
-        cell = new Cell();
-        row.add(cell);
-        cell.setText(customer.getState());
-
-        cell = new Cell();
-        row.add(cell);
-        cell.setText(FORMAT.format(customer.getBirthDate()));
-
-
-        cell = new Cell();
-        
         final AbstractContainer editLinkWrapper = new AbstractContainer("Edit") {
+
+            @Override
             public void render(HtmlStringBuffer buffer) {
-                editLink.setValue(customer.getId().toString());
+                editLink.setValueObject(customer.getId());
                 editLink.render(buffer);
             }
         };
 
-        
         final Container deleteLinkWrapper = new AbstractContainer("Delete") {
+
+            @Override
             public void render(HtmlStringBuffer buffer) {
-                deleteLink.setValue(customer.getId().toString());
+                deleteLink.setValueObject(customer.getId());
                 deleteLink.render(buffer);
             }
         };
