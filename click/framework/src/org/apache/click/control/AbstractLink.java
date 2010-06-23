@@ -399,7 +399,7 @@ public abstract class AbstractLink extends AbstractControl {
      * @param value the attribute value
      * @throws IllegalArgumentException if name parameter is null
      */
-    public void setParameter(String name, String value) {
+    public void setParameter(String name, Object value) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
@@ -438,13 +438,13 @@ public abstract class AbstractLink extends AbstractControl {
      * Set the link parameter with the given parameter name and values. If the
      * values are null, the parameter will be removed from the {@link #parameters}.
      *
-     * @see #setParameter(java.lang.String, java.lang.String)
+     * @see #setParameter(java.lang.String, java.lang.Object)
      *
      * @param name the attribute name
      * @param values the attribute values
      * @throws IllegalArgumentException if name parameter is null
      */
-    public void setParameterValues(String name, String[] values) {
+    public void setParameterValues(String name, Object[] values) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
