@@ -231,6 +231,14 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             // Load the application mode and set the logger levels
             loadMode(rootElm);
 
+            if (logService.isInfoEnabled()) {
+                logService.info("***  Initializing Click " + ClickUtils.getClickVersion()
+                    + " in " + getApplicationMode() + " mode  ***");
+
+                String msg = "initialized LogService: " + logService.getClass().getName();
+                getLogService().info(msg);
+            }
+
             // Deploy click resources
             deployFiles(rootElm);
 
@@ -1561,16 +1569,11 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
                 Ognl.setValue(name, logService, value);
             }
+        } else {
+            logService = new ConsoleLogService();
         }
 
         logService.onInit(getServletContext());
-
-        logService.info("***  Initializing Click " + ClickUtils.getClickVersion()
-            + "  ***");
-
-        String msg = "initialized LogService: "
-            + logService.getClass().getName();
-        getLogService().info(msg);
     }
 
     private void loadMessagesMapService(Element rootElm) throws Exception {
