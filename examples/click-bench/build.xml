@@ -21,7 +21,7 @@
 <project name="click-bench" default="compile" basedir=".">
     <description>Builds, tests, and runs the project click-bench.</description>
 
-    <property name="click.version" value="2.0.1-RC1-incubator"/>
+    <property name="click.version" value="2.3.0-M1"/>
     <property name="name" value="click-bench"/>
     <property name="build.dir" value="build"/>
     <property name="build.web.dir" value="${build.dir}/web"/>
