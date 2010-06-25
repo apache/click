@@ -19,9 +19,9 @@
 package org.apache.click.extras.control;
 
 import java.sql.Timestamp;
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +35,7 @@ import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a Date Field control:   &lt;input type='text'&gt;&lt;img&gt;.
@@ -137,10 +138,6 @@ public class DateField extends TextField {
     // Constants --------------------------------------------------------------
 
     private static final long serialVersionUID = 1L;
-
-    /** Supported locales. */
-    static final String[] SUPPORTED_LANGUAGES =
-        {"da", "de", "en", "fi", "fr", "ja", "nl", "pl", "pt", "ru"};
 
     // Instance Variables -----------------------------------------------------
 
@@ -623,10 +620,7 @@ public class DateField extends TextField {
             // English is default language, only include language pack if other
             // than English
             if (!"en".equals(language)) {
-                JsImport jsImport = new JsImport("/click/calendar/"
-                    + language + ".js", versionIndicator);
-                jsImport.setAttribute("charset", "UTF-8");
-                headElements.add(jsImport);
+                addCalenderTranslations(headElements);
             }
         }
 
@@ -870,7 +864,6 @@ public class DateField extends TextField {
      * <pre class="prettyprint">
      * Click.addLoadEvent(function() {
      *   Event.observe('my-calendar-button', 'click', function(){
-     *     Date.first_day_of_week=0;
      *     calendar = new CalendarDateSelect($('my-calendar'), {
      *       minute_interval: 1,
      *       popup_by: 'my-calendar-button',
@@ -904,7 +897,6 @@ public class DateField extends TextField {
             HtmlStringBuffer buffer = new HtmlStringBuffer(150);
 
             buffer.append("Event.observe('").append(imgId).append("', 'click', function(){");
-            buffer.append(" Date.first_day_of_week=").append(getFirstDayOfWeek() - 1).append(";");
             buffer.append(" calendar = new CalendarDateSelect($('").append(fieldId).append("'), {");
             buffer.append("  minute_interval: 1, popup_by: '").append(imgId).append("',");
             buffer.append("  embedded: false,");
@@ -922,6 +914,98 @@ public class DateField extends TextField {
     }
 
     /**
+     * Return the names of months and weekdays as a script.
+     */
+    protected void addCalenderTranslations(List<Element> headElements) {
+        JsScript script = new JsScript();
+        script.setId("$datefield_js_setup_global");
+        script.setRenderId(false);
+        if (!headElements.contains(script)) {
+            DateFormatSymbols dfs = new DateFormatSymbols(getLocale());
+
+            HtmlStringBuffer buffer = new HtmlStringBuffer(150);
+            buffer.append("Date.months=new Array(");
+            generateJavaScriptArray(buffer, dfs.getMonths(), 0, 12);
+            buffer.append(");\n");
+
+            buffer.append("Date.monthAbbreviations=new Array(");
+            generateJavaScriptArray(buffer, dfs.getShortMonths(), 0, 12);
+            buffer.append(");\n");
+
+            buffer.append("Date.dayNames=new Array(");
+            generateJavaScriptArray(buffer, dfs.getWeekdays(),
+                    Calendar.SUNDAY, Calendar.SATURDAY+1);
+            buffer.append(");\n");
+
+            buffer.append("Date.dayAbbreviations=new Array(");
+            generateJavaScriptArray(buffer, dfs.getShortWeekdays(),
+                    Calendar.SUNDAY, Calendar.SATURDAY+1);
+            buffer.append(");\n");
+
+            String[] weekdays = null;
+            if (getMessages().containsKey("calendar-weekdays-heading")) {
+                String headings = getMessage("calendar-weekdays-heading");
+                weekdays = StringUtils.splitPreserveAllTokens("," + headings, ',');
+            } else {
+                weekdays = dfs.getShortWeekdays();
+            }
+            String[] days = new String[7];
+            for (int i = 0; i < 7; i++) {
+                days[i] = weekdays[(i + getFirstDayOfWeek()-1) % 7 + 1];   
+            }
+            buffer.append("Date.weekdays=new Array(");
+            generateJavaScriptArray(buffer, days, 0, 7);
+            buffer.append(");\n");
+
+            buffer.append("Date.first_day_of_week=").append(getFirstDayOfWeek() - 1).append(";\n");
+            if (getMessages().containsKey("calendar-ok")) {
+                buffer.append("_translations[\"OK\"] = \"");
+                buffer.append(getMessage("calendar-ok"));
+                buffer.append("\";\n");
+            }
+            if (getMessages().containsKey("calendar-now")) {
+                buffer.append("_translations[\"Now\"] = \"");
+                buffer.append(getMessage("calendar-now"));
+                buffer.append("\";\n");
+            }
+            if (getMessages().containsKey("calendar-today")) {
+                buffer.append("_translations[\"Today\"] = \"");
+                buffer.append(getMessage("calendar-today"));
+                buffer.append("\";\n");
+            }
+            if (getMessages().containsKey("calendar-clear")) {
+                buffer.append("_translations[\"Clear\"] = \"");
+                buffer.append(getMessage("calendar-clear"));
+                buffer.append("\";\n");
+            }
+
+            script.setContent(buffer.toString());
+            headElements.add(script);
+        }
+    }
+
+    /**
+     * Append a list of quoted names delimited by commas.
+     * @param buffer the buffer to append to.
+     * @param names the list of names.
+     * @param start start index in the list.
+     * @param end end index in the list.
+     */
+    private void generateJavaScriptArray(HtmlStringBuffer buffer, 
+           String[] names, int start, int end) {
+        for (int i = start; i < end; i++) {
+            buffer.append('"');
+            buffer.append(names[i]);
+            buffer.append('"');
+            if (i < end - 1) {
+                buffer.append(',');
+            }
+        }
+    }
+       
+
+
+    /**
      * Return the first day of the week. For example e.g., Sunday in US,
      * Monday in France and Australia.
      *
@@ -930,15 +1014,12 @@ public class DateField extends TextField {
     protected int getFirstDayOfWeek() {
         Locale locale = getLocale();
 
-        Calendar calendar = Calendar.getInstance(getLocale());
-
-        int dayOfWeek = calendar.getFirstDayOfWeek();
-
         if ("AU".equals(locale.getCountry())) {
-            dayOfWeek += 1;
+            return Calendar.MONDAY;
         }
+        Calendar calendar = Calendar.getInstance(locale);
 
-        return dayOfWeek;
+        return calendar.getFirstDayOfWeek();
     }
 
     /**
@@ -947,21 +1028,7 @@ public class DateField extends TextField {
      * @return the locale that should be used in this control
      */
     protected Locale getLocale() {
-        Locale locale = null;
-
-        locale = getContext().getLocale();
-        String lang = locale.getLanguage();
-        if (Arrays.binarySearch(SUPPORTED_LANGUAGES, lang) >= 0) {
-            return locale;
-        }
-
-        locale = Locale.getDefault();
-        lang = locale.getLanguage();
-        if (Arrays.binarySearch(SUPPORTED_LANGUAGES, lang) >= 0) {
-            return locale;
-        }
-
-        return Locale.ENGLISH;
+        return getContext().getLocale();
     }
 
     /**
