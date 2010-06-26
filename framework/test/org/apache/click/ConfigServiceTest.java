@@ -41,7 +41,6 @@ import org.apache.click.service.ClickResourceService;
 import org.apache.click.service.CommonsFileUploadService;
 import org.apache.click.service.ConfigService;
 import org.apache.click.service.ConsoleLogService;
-import org.apache.click.service.DefaultMessagesMapService;
 import org.apache.click.service.MessagesMapService;
 import org.apache.click.service.VelocityTemplateService;
 import org.apache.click.service.ConfigService.AutoBinding;
@@ -529,7 +528,7 @@ public class ConfigServiceTest extends TestCase {
         container.stop();
         deleteDir(tmpdir);
     }
-    
+
     static public class MyMessagesMapService implements MessagesMapService {
 
         public void onInit(ServletContext servletContext) throws Exception {
@@ -537,13 +536,12 @@ public class ConfigServiceTest extends TestCase {
 
         public void onDestroy() {
         }
-        
+
         public Map<String, String> createMessagesMap(Class<?> baseClass,
-                String globalResource) {
-            return new MessagesMap(baseClass, globalResource);
+                String globalResource, Locale locale) {
+            return new MessagesMap(baseClass, globalResource, locale);
         }
     }
-    
     
     public void testControls() throws Exception {
         File tmpdir = makeTmpDir();
@@ -667,4 +665,3 @@ public class ConfigServiceTest extends TestCase {
         tmpdir.delete();
     }
 }
-
