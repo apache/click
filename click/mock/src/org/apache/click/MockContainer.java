@@ -470,7 +470,7 @@ public class MockContainer {
             // Cleanup any Context instances still referenced on stack.
             clearContextStack();
             getResponse().reset();
-            String servletPath = clickServlet.getConfigService().getPagePath(pageClass);
+            String servletPath = getClickServlet().getConfigService().getPagePath(pageClass);
             if (servletPath == null) {
                 throw new IllegalArgumentException("The class " + pageClass.getName()
                     + " was not mapped by Click and does not have a"
