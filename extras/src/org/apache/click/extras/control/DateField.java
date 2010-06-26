@@ -601,8 +601,6 @@ public class DateField extends TextField {
                 + " getHeadElements().");
         }
 
-        String language = getLocale().getLanguage();
-
         if (headElements == null) {
             headElements = super.getHeadElements();
 
@@ -617,8 +615,9 @@ public class DateField extends TextField {
             headElements.add(new JsImport("/click/calendar/calendar_date_select.js",
                 versionIndicator));
 
-            // English is default language, only include language pack if other
-            // than English
+            String language = getLocale().getLanguage();
+            // English is default language; only include translations for other
+            // languages
             if (!"en".equals(language)) {
                 addCalenderTranslations(headElements);
             }
@@ -881,7 +880,6 @@ public class DateField extends TextField {
      */
     protected void addCalendarOptions(List<Element> headElements) {
         String fieldId = getId();
-        String imgId = fieldId + "-button";
 
         JsScript script = new JsScript();
         script.setId(fieldId + "_js_setup");
@@ -896,9 +894,9 @@ public class DateField extends TextField {
 
             HtmlStringBuffer buffer = new HtmlStringBuffer(150);
 
-            buffer.append("Event.observe('").append(imgId).append("', 'click', function(){");
+            buffer.append("Event.observe('").append(fieldId).append("-button").append("', 'click', function(){");
             buffer.append(" calendar = new CalendarDateSelect($('").append(fieldId).append("'), {");
-            buffer.append("  minute_interval: 1, popup_by: '").append(imgId).append("',");
+            buffer.append("  minute_interval: 1, popup_by: '").append(fieldId).append("-button").append("',");
             buffer.append("  embedded: false,");
             buffer.append("  footer: false,");
             buffer.append("  buttons: ").append(isShowTime()).append(",");
@@ -918,7 +916,7 @@ public class DateField extends TextField {
      */
     protected void addCalenderTranslations(List<Element> headElements) {
         JsScript script = new JsScript();
-        script.setId("$datefield_js_setup_global");
+        script.setId("datefield_js_setup_global");
         script.setRenderId(false);
         if (!headElements.contains(script)) {
             DateFormatSymbols dfs = new DateFormatSymbols(getLocale());
@@ -950,14 +948,15 @@ public class DateField extends TextField {
                 weekdays = dfs.getShortWeekdays();
             }
             String[] days = new String[7];
+            int firstDayOfWeek = getFirstDayOfWeek() - 1;
             for (int i = 0; i < 7; i++) {
-                days[i] = weekdays[(i + getFirstDayOfWeek()-1) % 7 + 1];   
+                days[i] = weekdays[(i + firstDayOfWeek) % 7 + 1];
             }
             buffer.append("Date.weekdays=new Array(");
             generateJavaScriptArray(buffer, days, 0, 7);
             buffer.append(");\n");
 
-            buffer.append("Date.first_day_of_week=").append(getFirstDayOfWeek() - 1).append(";\n");
+            buffer.append("Date.first_day_of_week=").append(firstDayOfWeek).append(";\n");
             if (getMessages().containsKey("calendar-ok")) {
                 buffer.append("_translations[\"OK\"] = \"");
                 buffer.append(getMessage("calendar-ok"));
@@ -1002,8 +1001,6 @@ public class DateField extends TextField {
             }
         }
     }
-       
-
 
     /**
      * Return the first day of the week. For example e.g., Sunday in US,
