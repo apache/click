@@ -415,6 +415,9 @@ public class ActionEventDispatcher {
         if (hasActionEvents()) {
             getEventSourceList().clear();
             getEventListenerList().clear();
+        }
+
+        if (hasBehaviorSourceSet()) {
             getBehaviorSourceSet().clear();
         }
     }
