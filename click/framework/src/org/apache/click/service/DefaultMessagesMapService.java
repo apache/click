@@ -18,6 +18,7 @@
  */
 package org.apache.click.service;
 
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -46,19 +47,20 @@ public class DefaultMessagesMapService implements MessagesMapService {
     }
 
     /**
-     * Return a MessagesMap instance for the target baseClass and global 
-     * resource name.
-     * 
+     * Return a MessagesMap instance for the target baseClass, global resource
+     * name and locale.
+     *
      * @param baseClass the target class
      * @param globalResource the global resource bundle name
-     * 
+     * @param the users Locale
+     *
      * @return a MessagesMap instance.
-     * 
-     * @see MessagesMapService#createMessagesMap(Class, String)
+     *
+     * @see MessagesMapService#createMessagesMap(java.lang.Class, java.lang.String, java.util.Locale)
      * @see MessagesMap#MessagesMap(Class, String)
      */
     public Map<String, String> createMessagesMap(Class<?> baseClass,
-            String globalResource) {
-        return new MessagesMap(baseClass, globalResource);
+        String globalResource, Locale locale) {
+        return new MessagesMap(baseClass, globalResource, locale);
     }
 }

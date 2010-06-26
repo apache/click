@@ -634,10 +634,10 @@ public class Context {
      * @return a new messages map with the messages for the target.
      */
     public Map<String, String> createMessagesMap(Class<?> baseClass, String globalResource) {
-        MessagesMapService messagesMapService = 
+        MessagesMapService messagesMapService =
             clickServlet.getConfigService().getMessagesMapService();
-        
-        return messagesMapService.createMessagesMap(baseClass, globalResource);
+
+        return messagesMapService.createMessagesMap(baseClass, globalResource, getLocale());
     }
 
     /**

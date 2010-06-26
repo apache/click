@@ -18,6 +18,7 @@
  */
 package org.apache.click.service;
 
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -48,13 +49,13 @@ import javax.servlet.ServletContext;
  *
  * public class CustomMessagesMapService implements MessagesMapService {
  *
- *     public Map<String, String> createMessagesMap(Class&lt;?&gt; baseClass, String globalResource) {
- *         return new MessagesMap(baseClass, globalResource); 
+ *     public Map<String, String> createMessagesMap(Class&lt;?&gt; baseClass, String globalResource, Locale locale) {
+ *         return new MyMessagesMap(baseClass, globalResource, locale);
  *     }
  * } </pre>
  */
 public interface MessagesMapService {
-    
+
     /**
      * Initialize the MessagesMapService with the given application servlet context.
      * <p/>
@@ -69,14 +70,16 @@ public interface MessagesMapService {
      * Destroy the MessagesMapService.
      */
     public void onDestroy();
-    
+
     /**
      * Return a new messages map for the given baseClass (a page or control)
-     * and the given global resource bundle name. 
-
+     * and the given global resource bundle name.
+     *
      * @param baseClass the target class
-     * @param globalResource the global resource bundle name     
+     * @param globalResource the global resource bundle name
+     * @param the users Locale
      * @return a new messages map with the messages for the target.
      */
-    public Map<String, String> createMessagesMap(Class<?> baseClass, String globalResource);
+    public Map<String, String> createMessagesMap(Class<?> baseClass,
+        String globalResource, Locale locale);
 }
