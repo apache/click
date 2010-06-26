@@ -107,12 +107,27 @@ public class MessagesMap implements Map<String, String> {
      * @param globalResource the global resource bundle name
      */
     public MessagesMap(Class<?> baseClass, String globalResource) {
+        this(baseClass, globalResource, Context.getThreadLocalContext().getLocale());
+    }
+
+    /**
+     * Create a resource bundle messages <tt>Map</tt> adaptor for the given
+     * object's class resource bundle, the global resource bundle and
+     * <tt>Context</tt>.
+     * <p/>
+     * Messages located in the object's resource bundle will override any
+     * messages defined in the global resource bundle.
+     *
+     * @param baseClass the target class
+     * @param globalResource the global resource bundle name
+     * @param the resource bundle locale.
+     */
+    public MessagesMap(Class<?> baseClass, String globalResource, Locale locale) {
         Validate.notNull(baseClass, "Null object parameter");
 
         this.baseClass = baseClass;
-        this.locale = Context.getThreadLocalContext().getLocale();
-
         this.globalBaseName = globalResource;
+        this.locale = locale;
     }
 
     // --------------------------------------------------------- Public Methods
