@@ -613,8 +613,8 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
-        callbackDispatcher.processBeforeResponse(context);
-        callbackDispatcher.processBeforeGetHeadElements(context);
+        callbackDispatcher.processPreResponse(context);
+        callbackDispatcher.processPreGetHeadElements(context);
         performRender(page, context, partial);
     }
 
@@ -1767,8 +1767,8 @@ public class ClickServlet extends HttpServlet {
             if (pageAction != null) {
                 continueProcessing = false;
                 partial = ClickUtils.invokeAction(page, pageAction);
-                callbackDispatcher.processBeforeResponse(context);
-                callbackDispatcher.processBeforeGetHeadElements(context);
+                callbackDispatcher.processPreResponse(context);
+                callbackDispatcher.processPreGetHeadElements(context);
 
                 renderPartial(partial, context);
             }
@@ -1791,8 +1791,8 @@ public class ClickServlet extends HttpServlet {
 
                 // Ensure we execute the beforeResponse and beforeGetHeadElements
                 // for Ajax requests
-                callbackDispatcher.processBeforeResponse(context);
-                callbackDispatcher.processBeforeGetHeadElements(context);
+                callbackDispatcher.processPreResponse(context);
+                callbackDispatcher.processPreGetHeadElements(context);
 
                 partial = eventDispatcher.getPartial();
 
@@ -1809,8 +1809,8 @@ public class ClickServlet extends HttpServlet {
                     performOnRender(page, context);
                 }
 
-                callbackDispatcher.processBeforeResponse(context);
-                callbackDispatcher.processBeforeGetHeadElements(context);
+                callbackDispatcher.processPreResponse(context);
+                callbackDispatcher.processPreGetHeadElements(context);
                 performRender(page, context);
             }
         } else {

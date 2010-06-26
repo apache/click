@@ -33,13 +33,13 @@ import org.apache.commons.lang.Validate;
  */
 public class CallbackDispatcher {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
     /** The thread local dispatcher holder. */
-    private static final ThreadLocal<DispatcherStack> THREAD_LOCAL_DISPATCHER = 
+    private static final ThreadLocal<DispatcherStack> THREAD_LOCAL_DISPATCHER =
                     new ThreadLocal<DispatcherStack>();
 
-    // -------------------------------------------------------------- Variables
+    // Variables --------------------------------------------------------------
 
     /** The set of registered behavior enabled controls. */
     Set<Control> behaviorEnabledControls;
@@ -56,7 +56,7 @@ public class CallbackDispatcher {
         this.logger = configService.getLogService();
     }
 
-    // --------------------------------------------------------- Public Methods
+    // Public Methods ---------------------------------------------------------
 
     public static void registerBehavior(Control control) {
         CallbackDispatcher instance = getThreadLocalDispatcher();
@@ -68,7 +68,7 @@ public class CallbackDispatcher {
         instance.internalRegisterCallback(control, callback);
     }
 
-    // protected methods ------------------------------------------------------
+    // Protected Methods ------------------------------------------------------
 
     /**
      * Allow the dispatcher to handle the error that occurred.
@@ -76,11 +76,23 @@ public class CallbackDispatcher {
      * @param throwable the error which occurred during processing
      */
     protected void errorOccurred(Throwable throwable) {
-        getBehaviorEnabledControls().clear();
-        getCallbacks().clear();
+        clear();
     }
 
-    // ------------------------------------------------ package private methods
+    // Package Private Methods ------------------------------------------------
+
+    /**
+     * Remove all callbacks and controls from this dispatcher.
+     */
+    void clear() {
+        if (hasCallbacks()) {
+            getCallbacks().clear();
+        }
+
+        if (hasBehaviorEnabledControls()) {
+            getBehaviorEnabledControls().clear();
+        }
+    }
 
     /**
      * Register the behavior source control.
@@ -105,7 +117,7 @@ public class CallbackDispatcher {
         getCallbacks().add(callbackHolder);
     }
 
-    void processBeforeResponse(Context context) {
+    void processPreResponse(Context context) {
         if (hasBehaviorEnabledControls()) {
             for (Control control : getBehaviorEnabledControls()) {
                 List<Behavior> behaviors = control.getBehaviors();
@@ -124,7 +136,7 @@ public class CallbackDispatcher {
         }
     }
 
-    void processBeforeGetHeadElements(Context context) {
+    void processPreGetHeadElements(Context context) {
         if (hasBehaviorEnabledControls()) {
             for (Control control : getBehaviorEnabledControls()) {
                 List<Behavior> behaviors = control.getBehaviors();
