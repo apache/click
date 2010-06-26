@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.click;
+package org.apache.click.service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,18 +32,17 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import junit.framework.TestCase;
+import org.apache.click.Context;
+import org.apache.click.MockContainer;
+import org.apache.click.Page;
+import org.apache.click.PageInterceptor;
 
 import org.apache.click.control.AbstractControl;
 import org.apache.click.pages.BinaryPage;
 import org.apache.click.pages.JspPage;
 import org.apache.click.pages.ListenerPage;
-import org.apache.click.service.ClickResourceService;
-import org.apache.click.service.CommonsFileUploadService;
-import org.apache.click.service.ConfigService;
-import org.apache.click.service.ConsoleLogService;
-import org.apache.click.service.MessagesMapService;
-import org.apache.click.service.VelocityTemplateService;
 import org.apache.click.service.ConfigService.AutoBinding;
+import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ErrorPage;
 import org.apache.click.util.Format;
 import org.apache.click.util.MessagesMap;
@@ -51,7 +50,7 @@ import org.apache.click.util.MessagesMap;
 /**
  * Tests for the XmlConfigService class.
  */
-public class ConfigServiceTest extends TestCase {
+public class XmlConfigServiceTest extends TestCase {
 
     public void testDefaults() throws Exception {
         File tmpdir = makeTmpDir();
@@ -59,13 +58,12 @@ public class ConfigServiceTest extends TestCase {
         PrintStream pstr = makeXmlStream(tmpdir, "WEB-INF/click.xml");
         pstr.println("<click-app charset='UTF-8'>");
         pstr.println(" <pages package='org.apache.click.pages'/>");
-        //pstr.println(" <mode value='trace'/>");
         pstr.println("</click-app>");
         pstr.close();
 
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertEquals(ErrorPage.class, config.getErrorPageClass());
         assertEquals(Page.class, config.getNotFoundPageClass());
@@ -97,7 +95,7 @@ public class ConfigServiceTest extends TestCase {
 
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertEquals(Locale.UK, config.getLocale());
         assertEquals("iso8859-1", config.getCharset());
@@ -124,7 +122,7 @@ public class ConfigServiceTest extends TestCase {
 
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         Class<? extends Page> pageClass = config.getPageClass("/BinaryPage.htm");
         assertFalse(BinaryPage.class.isAssignableFrom(pageClass));
@@ -149,7 +147,7 @@ public class ConfigServiceTest extends TestCase {
 
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertEquals(true, config.isProductionMode());
         assertEquals(false, config.isProfileMode());
@@ -171,7 +169,7 @@ public class ConfigServiceTest extends TestCase {
 
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertEquals(false, config.isProductionMode());
         assertEquals(true, config.isProfileMode());
@@ -193,7 +191,7 @@ public class ConfigServiceTest extends TestCase {
 
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertEquals(false, config.isProductionMode());
         assertEquals(false, config.isProfileMode());
@@ -218,7 +216,7 @@ public class ConfigServiceTest extends TestCase {
 
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertSame(BinaryPage.class, config.getPageClass("/BinaryPage.htm"));
         assertEquals(3, config.getPageHeaders("/BinaryPage.htm").size());
@@ -259,7 +257,7 @@ public class ConfigServiceTest extends TestCase {
 
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertEquals("/BinaryPage.htm", config.getPagePath(BinaryPage.class));
         assertEquals(2, config.getPageFieldArray(BinaryPage.class).length);
@@ -298,7 +296,7 @@ public class ConfigServiceTest extends TestCase {
 
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertTrue(config.isJspPage("/BinaryPage.htm"));
         assertTrue(config.isJspPage("/BinaryPage"));
@@ -388,7 +386,7 @@ public class ConfigServiceTest extends TestCase {
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
 
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         Map<String, Object> headers = config.getPageHeaders("/BinaryPage.htm");
         assertEquals(4, headers.size());
@@ -416,7 +414,7 @@ public class ConfigServiceTest extends TestCase {
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
 
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertTrue(config.createFormat() instanceof Format);
 
@@ -437,7 +435,7 @@ public class ConfigServiceTest extends TestCase {
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
 
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertTrue(config.getLogService() instanceof ConsoleLogService);
 
@@ -458,7 +456,7 @@ public class ConfigServiceTest extends TestCase {
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
 
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertTrue(config.getResourceService() instanceof ClickResourceService);
 
@@ -479,7 +477,7 @@ public class ConfigServiceTest extends TestCase {
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
 
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertTrue(config.getTemplateService() instanceof VelocityTemplateService);
 
@@ -500,7 +498,7 @@ public class ConfigServiceTest extends TestCase {
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
 
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertTrue(config.getFileUploadService() instanceof CommonsFileUploadService);
 
@@ -514,14 +512,14 @@ public class ConfigServiceTest extends TestCase {
         PrintStream pstr = makeXmlStream(tmpdir, "WEB-INF/click.xml");
         pstr.println("<click-app>");
         pstr.println(" <pages/>");
-        pstr.println(" <messages-map-service classname='org.apache.click.ConfigServiceTest$MyMessagesMapService'/>");
+        pstr.println(" <messages-map-service classname='org.apache.click.service.ConfigServiceTest$MyMessagesMapService'/>");
         pstr.println("</click-app>");
         pstr.close();
 
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
 
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         assertTrue(config.getMessagesMapService() instanceof MyMessagesMapService);
 
@@ -593,7 +591,7 @@ public class ConfigServiceTest extends TestCase {
         MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
         container.start();
 
-        ConfigService config = container.getClickServlet().getConfigService();
+        ConfigService config = ClickUtils.getConfigService(container.getServletContext());
 
         List<PageInterceptor> list = config.getPageInterceptors();
         assertEquals(2, list.size());
