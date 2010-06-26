@@ -73,8 +73,8 @@ public class MessagesMap implements Map<String, String> {
         Collections.synchronizedSet(new HashSet<String>());
 
     /** Cache of messages keyed by bundleName + Locale name. */
-    protected static final Map<CacheKey, Map<String, String>> MESSAGES_CACHE = 
-        new HashMap<CacheKey, Map<String, String>>();
+    protected static final Map<Object, Map<String, String>> MESSAGES_CACHE =
+        new HashMap<Object, Map<String, String>>();
 
     /** The cache key set load lock. */
     protected static final Object CACHE_LOAD_LOCK = new Object();
@@ -139,7 +139,7 @@ public class MessagesMap implements Map<String, String> {
     public boolean containsKey(Object key) {
         if (key != null) {
             ensureInitialized();
-            return messages.containsKey(key);
+            return messages.containsKey(key.toString());
         }
         return false;
     }
@@ -150,7 +150,6 @@ public class MessagesMap implements Map<String, String> {
     public boolean containsValue(Object value) {
         ensureInitialized();
         return messages.containsValue(value);
-
     }
 
     /**
@@ -164,13 +163,11 @@ public class MessagesMap implements Map<String, String> {
         String value = null;
         if (key != null) {
             ensureInitialized();
-            value = messages.get(key);
+            value = messages.get(key.toString());
         }
 
         if (value == null) {
-            String msg =
-                "Message \"{0}\" not found in bundle \"{1}\" "
-                + "for locale \"{2}\"";
+            String msg = "Message \"{0}\" not found in bundle \"{1}\" for locale \"{2}\"";
             String keyStr = (key != null) ? key.toString() : null;
             Object[] args = { keyStr, baseClass.getName(), locale };
             msg = MessageFormat.format(msg, args);
