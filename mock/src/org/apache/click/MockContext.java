@@ -75,8 +75,13 @@ import org.apache.click.util.ClickUtils;
  *
  *     // Check that nameField value is now bound to request value
  *     Assert.assertEquals(requestValue, nameField.getValueObject());
- * }
- * </pre>
+ * } </pre>
+ *
+ * <b>Please note:</b> using MockContext to run performance tests over a large
+ * number of Controls could lead to <tt>out of memory</tt> errors. If you run
+ * into memory issues, you can either re-recreate a MockContext or invoke
+ * {@link #reset()}, which removes all references to Controls,
+ * ActionListeners and Behaviors.
  */
 public class MockContext extends Context {
 
@@ -301,20 +306,58 @@ public class MockContext extends Context {
     }
 
     /**
-     * Execute all listeners that was registered by the processed Controls.
+     * Execute all listeners that was registered by processed Controls.
      *
      * @return true if all listeners returned true, false otherwise
      */
     public boolean executeActionListeners() {
-        ActionEventDispatcher controlRegistry = ActionEventDispatcher.getThreadLocalDispatcher();
+        ActionEventDispatcher dispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
 
         // Fire action events
-        return controlRegistry.fireActionEvents(this);
+        return dispatcher.fireActionEvents(this);
     }
 
     /**
-     * Fire all action events that was registered by the processed Controls, and
-     * clears all registered listeners from the ControlRegistry.
+     * Execute all behaviors that was registered by processed Controls.
+     *
+     * @return true if all behaviors returned true, false otherwise
+     */
+    public boolean executeBehaviors() {
+        ActionEventDispatcher dispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
+
+        // Fire behaviors
+        return dispatcher.fireBehaviors(this);
+    }
+
+    /**
+     * Execute the preResponse callback event for all registered callbacks.
+     */
+    public void executePreResponseCallbackEvent() {
+        CallbackDispatcher dispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+
+        dispatcher.processPreResponse(this);
+    }
+
+    /**
+     * Execute the preGetHeadElements callback event for all registered callbacks.
+     */
+    public void executePreGetHeadElementsCallbackEvent() {
+        CallbackDispatcher dispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+
+        dispatcher.processPreGetHeadElements(this);
+    }
+
+    /**
+     * Execute the preDestroy callback event for all registered callbacks.
+     */
+    public void executePreDestroyCallbackEvent() {
+        CallbackDispatcher dispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+
+        dispatcher.processPreDestroy(this);
+    }
+
+    /**
+     * Fire all action events that was registered by the processed Controls.
      *
      * @deprecated use {@link #executeActionListeners()} instead
      *
@@ -322,5 +365,18 @@ public class MockContext extends Context {
      */
     public boolean fireActionEventsAndClearRegistry() {
         return executeActionListeners();
+    }
+
+    /**
+     * Reset mock internal state. Running a large number of tests using the same
+     * MockContext could lead to <tt>out of memory</tt> errors. Calling this
+     * method will remove any references to objects, thus freeing up memory.
+     */
+    public void reset() {
+        CallbackDispatcher callbackDispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+        callbackDispatcher.clear();
+
+        ActionEventDispatcher actionEventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
+        actionEventDispatcher.clear();
     }
 }
