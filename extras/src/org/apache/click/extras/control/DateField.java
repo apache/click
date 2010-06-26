@@ -88,7 +88,7 @@ import org.apache.commons.lang.StringUtils;
  * {@link #setShowCalendar(boolean)} to false. No JavaScript and CSS will be
  * included when this option is false.
  * <p/>
- * The DateFielld control makes use of the following resources
+ * The DateField control makes use of the following resources
  * (which Click automatically deploys to the application directories,
  * <tt>/click/calendar</tt> and <tt>/click/prototype</tt>):
  *
@@ -128,6 +128,18 @@ import org.apache.commons.lang.StringUtils;
  * <li>red</li>
  * <li>silver</li>
  * </ul>
+ *
+ * <h3>Default date format pattern</h3>
+ * The default date format pattern is set to the message <tt>"date-format-pattern"</tt>
+ * defined in the resource bundle <tt>/org/apache/click/extras/control/DateField.properties</tt>.
+ * <p/>
+ * You can easily customize the default date format pattern by overriding the
+ * <tt>"date-format-pattern"</tt> in your <tt>click-page<lang>.properties</tt>
+ * files.
+ * <p/>
+ * An example src/click-page.properties file is shown below:
+ * <pre class="prettyprint">
+ * date-format-pattern=dd-MM-yyyy </pre>
  *
  * See also W3C HTML reference
  * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
@@ -182,47 +194,25 @@ public class DateField extends TextField {
 
     /**
      * Construct the Date Field with the given name.
-     * <p/>
-     * The date format pattern will be set to the message
-     * <tt>"date-format-pattern"</tt> defined in the resource bundle
-     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
-     * <p/>
-     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
      *
      * @param name the name of the field
      */
     public DateField(String name) {
         super(name);
-        String dateFormatPattern = getMessage("date-format-pattern");
-        setFormatPattern(dateFormatPattern);
     }
 
     /**
      * Construct the Date Field with the given name and label.
-     * <p/>
-     * The date format pattern will be set to the message
-     * <tt>"date-format-pattern"</tt> defined in the resource bundle
-     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
-     * <p/>
-     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
      *
      * @param name the name of the field
      * @param label the label of the field
      */
     public DateField(String name, String label) {
         super(name, label);
-        String dateFormatPattern = getMessage("date-format-pattern");
-        setFormatPattern(dateFormatPattern);
     }
 
     /**
      * Construct the Date Field with the given name and required status.
-     * <p/>
-     * The date format pattern will be set to the message
-     * <tt>"date-format-pattern"</tt> defined in the resource bundle
-     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
-     * <p/>
-     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
      *
      * @param name the name of the field
      * @param required the field required status
@@ -234,12 +224,6 @@ public class DateField extends TextField {
 
     /**
      * Construct the Date Field with the given name, label and required status.
-     * <p/>
-     * The date format pattern will be set to the message
-     * <tt>"date-format-pattern"</tt> defined in the resource bundle
-     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
-     * <p/>
-     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
      *
      * @param name the name of the field
      * @param label the label of the field
@@ -247,18 +231,10 @@ public class DateField extends TextField {
      */
     public DateField(String name, String label, boolean required) {
         super(name, label, required);
-        String dateFormatPattern = getMessage("date-format-pattern");
-        setFormatPattern(dateFormatPattern);
     }
 
     /**
      * Construct the Date Field with the given name, label and size.
-     * <p/>
-     * The date format pattern will be set to the message
-     * <tt>"date-format-pattern"</tt> defined in the resource bundle
-     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
-     * <p/>
-     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
      *
      * @param name the name of the field
      * @param label the label of the field
@@ -272,12 +248,6 @@ public class DateField extends TextField {
     /**
      * Construct the Date Field with the given name, label, size and
      * required status.
-     * <p/>
-     * The date format pattern will be set to the message
-     * <tt>"date-format-pattern"</tt> defined in the resource bundle
-     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
-     * <p/>
-     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
      *
      * @param name the name of the field
      * @param label the label of the field
@@ -292,18 +262,10 @@ public class DateField extends TextField {
     /**
      * Create a Date Field with no name defined.
      * <p/>
-     * The date format pattern will be set to the message
-     * <tt>"date-format-pattern"</tt> defined in the resource bundle
-     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
-     * <p/>
-     * The default date format pattern for English is <tt>"dd MMM yyyy"</tt>.
-     * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public DateField() {
         super();
-        String dateFormatPattern = getMessage("date-format-pattern");
-        setFormatPattern(dateFormatPattern);
     }
 
     // Public Attributes ------------------------------------------------------
@@ -333,24 +295,28 @@ public class DateField extends TextField {
     }
 
     /**
-     * Return the SimpleDateFormat for the {@link #formatPattern}
-     * property.
+     * Return the SimpleDateFormat for the {@link #formatPattern} property.
      *
      * @return the SimpleDateFormat for the formatPattern
      */
     public SimpleDateFormat getDateFormat() {
         if (dateFormat == null) {
+            String formatPattern = getFormatPattern();
             dateFormat = new SimpleDateFormat(formatPattern, getLocale());
         }
         return dateFormat;
     }
 
     /**
-     * Return the SimpleDateFormat pattern.
+     * Return the date format pattern. If the date format pattern is not defined
+     * it will be loaded through the method, {@link #loadFormatPattern()}.
      *
-     * @return the SimpleDateFormat pattern
+     * @return the date format pattern
      */
     public String getFormatPattern() {
+        if (formatPattern == null) {
+            loadFormatPattern();
+        }
         return formatPattern;
     }
 
@@ -554,12 +520,18 @@ public class DateField extends TextField {
     }
 
     /**
-     * Return the JavaScript Calendar pattern. The Calendar pattern
-     * is defined when you set the format pattern.
+     * Return the JavaScript Calendar pattern. The Calendar pattern is defined
+     * when you set the {@link #getFormatPattern() format pattern}.
+     * <p/>
+     * If the date format pattern is not defined it will be loaded through the
+     * method {@link #loadFormatPattern()}.
      *
      * @return the JavaScript Calendar pattern
      */
     public String getCalendarPattern() {
+        if (calendarPattern == null) {
+            loadFormatPattern();
+        }
         return calendarPattern;
     }
 
@@ -1026,6 +998,18 @@ public class DateField extends TextField {
      */
     protected Locale getLocale() {
         return getContext().getLocale();
+    }
+
+    /**
+     * Load the default date format pattern. The format pattern is set to the
+     * message <tt>"date-format-pattern"</tt> defined in the resource bundle
+     * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
+     * <p/>
+     * The default date format pattern for English is: <tt>"dd MMM yyyy"</tt>.
+     */
+    protected void loadFormatPattern() {
+        String dateFormatPattern = getMessage("date-format-pattern");
+        setFormatPattern(dateFormatPattern);
     }
 
     /**
