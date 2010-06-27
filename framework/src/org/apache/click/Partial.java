@@ -18,6 +18,7 @@
  */
 package org.apache.click;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -31,8 +32,6 @@ import org.apache.click.util.ClickUtils;
 
 /**
  * TODO rename partial as its used for both PageAction and Ajax?
- *
- * TODO add support for rendering a given template
  *
  * Partial encapsulates a fragment of an HTTP response. A Partial can be used
  * to stream back a String or byte array to the browser.
@@ -81,7 +80,10 @@ public class Partial {
     // -------------------------------------------------------- Variables
 
     /** The content to render. */
-    private Object content;
+    private String content;
+
+    /** The content as a byte array. */
+    private byte[] bytes;
 
     /** The servlet response reader. */
     private Reader reader;
@@ -168,15 +170,23 @@ public class Partial {
 
     /**
      * Construct the Partial for the given content and content type.
-     * <p/>
-     * At rendering time the partial invokes the Object's <tt>toString()</tt>
-     * method and streams the resulting <tt>String</tt> back to the client.
      *
      * @param content the content to stream back to the client
      * @param contentType the response content type
      */
-    public Partial(Object content, String contentType) {
+    public Partial(String content, String contentType) {
         this.content = content;
+        this.contentType = contentType;
+    }
+
+    /**
+     * Construct the Partial for the given byte array and content type.
+     *
+     * @param bytes the byte array to stream back to the client
+     * @param contentType the response content type
+     */
+    public Partial(byte[] bytes, String contentType) {
+        this.bytes = bytes;
         this.contentType = contentType;
     }
 
@@ -184,13 +194,10 @@ public class Partial {
      * Construct the Partial for the given content. The
      * <tt>{@link javax.servlet.http.HttpServletResponse#setContentType(java.lang.String) response content type}</tt>
      * will default to {@link #TEXT}.
-     * <p/>
-     * At rendering time the partial invokes the Object's <tt>toString()</tt>
-     * method and streams the resulting <tt>String</tt> back to the client.
      *
      * @param content the content to stream back to the client
      */
-    public Partial(Object content) {
+    public Partial(String content) {
         this.content = content;
         this.contentType = TEXT;
     }
@@ -199,7 +206,6 @@ public class Partial {
      * Construct a new empty Partial. The
      * <tt>{@link javax.servlet.http.HttpServletResponse#setContentType(java.lang.String) response content type}</tt>
      * will default to {@link #TEXT}.
-     *
      */
     public Partial() {
         this.contentType = TEXT;
@@ -267,7 +273,7 @@ public class Partial {
      *
      * @param content the content to stream back to the client
      */
-    public void setContent(Object content) {
+    public void setContent(String content) {
         this.content = content;
     }
 
@@ -276,8 +282,27 @@ public class Partial {
      *
      * @return the content to stream back to the client
      */
-    public Object getContent() {
+    public String getContent() {
         return content;
+    }
+
+    /**
+     * Set the byte array to stream back to the client.
+     *
+     * @param bytes the byte array to stream back to the client
+     */
+    public void setBytes(byte[] bytes, String contentType) {
+        this.bytes = bytes;
+        this.contentType = contentType;
+    }
+
+    /**
+     * Return the byte array to stream back to the client.
+     *
+     * @return the byte array to stream back to the client
+     */
+    public byte[] getBytes() {
+        return bytes;
     }
 
     /**
@@ -377,7 +402,13 @@ public class Partial {
 
         HttpServletResponse response = context.getResponse();
 
+        Reader reader = getReader();
+        InputStream inputStream = getInputStream();
+
         try {
+            String content = getContent();
+            byte[] bytes = getBytes();
+
             String template = getTemplate();
             if (template != null) {
                 Map<String, Object> templateModel = getModel();
@@ -385,10 +416,12 @@ public class Partial {
                     templateModel = new HashMap<String, Object>();
                 }
                 String result = context.renderTemplate(template, templateModel);
-                this.reader = new StringReader(result);
+                reader = new StringReader(result);
 
             } else if (content != null) {
-                this.reader = new StringReader(content.toString());
+                reader = new StringReader(content);
+            } else if (bytes != null) {
+                inputStream = new ByteArrayInputStream(bytes);
             }
 
             if (reader != null) {
