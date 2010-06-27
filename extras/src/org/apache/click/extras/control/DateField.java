@@ -738,6 +738,8 @@ public class DateField extends TextField {
      */
     @Override
     public void validate() {
+        String formatPattern = getFormatPattern();
+
         if (formatPattern == null) {
             String msg = "dateFormat attribute is null for field: " + getName();
             throw new IllegalStateException(msg);
@@ -774,7 +776,7 @@ public class DateField extends TextField {
 
         // Set default title
         if (getTitle() == null) {
-            setTitle(getMessage("date-title", formatPattern));
+            setTitle(getMessage("date-title", getFormatPattern()));
         }
 
         // Ensure help is not rendered by super implementation
