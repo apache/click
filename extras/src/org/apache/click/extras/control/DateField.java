@@ -890,8 +890,7 @@ public class DateField extends TextField {
      */
     protected void addCalenderTranslations(List<Element> headElements) {
         JsScript script = new JsScript();
-        script.setId("datefield_js_setup_global");
-        script.setRenderId(false);
+        script.setId("c_datefield_js_setup_global");
         if (!headElements.contains(script)) {
             DateFormatSymbols dfs = new DateFormatSymbols(getLocale());
 
