@@ -595,9 +595,9 @@ public class ClickServlet extends HttpServlet {
             // Handle page method
             String pageAction = context.getRequestParameter(Page.PAGE_ACTION);
             if (pageAction != null) {
-                continueProcessing = false;
                 // Returned partial could be null
-                partial = ClickUtils.invokeAction(page, pageAction);
+                partial = performPageAction(page, pageAction, context);
+                continueProcessing = false;
             }
         }
 
@@ -635,6 +635,33 @@ public class ClickServlet extends HttpServlet {
                 + ".onSecurityCheck() : " + continueProcessing);
         }
         return continueProcessing;
+    }
+
+    /**
+     * Perform the page action for the given page and return the Partial response.
+     *
+     * @param page the page which action to perform
+     * @param pageAction the name of the page action
+     * @param context the request context
+     * @return the page action Partial response
+     */
+    protected Partial performPageAction(Page page, String pageAction, Context context) {
+        Partial partial = ClickUtils.invokeAction(page, pageAction);
+
+        if (logger.isTraceEnabled()) {
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            String pageClassName = ClassUtils.getShortClassName(page.getClass());
+            buffer.append("   invoked: ");
+            buffer.append(pageClassName);
+            buffer.append(".").append(pageAction).append("() : ");
+            if (partial == null) {
+                buffer.append("null (*no* Partial was returned by PageAction)");
+            } else {
+                buffer.append(ClassUtils.getShortClassName(partial.getClass()));
+            }
+            logger.trace(buffer.toString());
+        }
+        return partial;
     }
 
     /**
@@ -1766,7 +1793,10 @@ public class ClickServlet extends HttpServlet {
             String pageAction = context.getRequestParameter(Page.PAGE_ACTION);
             if (pageAction != null) {
                 continueProcessing = false;
-                partial = ClickUtils.invokeAction(page, pageAction);
+
+                // Returned partial could be null
+                partial = performPageAction(page, pageAction, context);
+
                 callbackDispatcher.processPreResponse(context);
                 callbackDispatcher.processPreGetHeadElements(context);
 
