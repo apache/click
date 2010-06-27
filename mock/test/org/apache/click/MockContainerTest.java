@@ -45,45 +45,60 @@ public class MockContainerTest extends TestCase {
             container.start();
 
             // Set a parameter
-            container.setParameter("myparam", "Some parameter");
+            String expectedValue = "Some parameter";
+            container.setParameter("myparam", expectedValue);
 
-            // Upload a file
+            // Prepare a file for upload
             URL resource = container.getClass().getResource("/web/test.htm");
             URI uri = new URI(resource.toString());
             container.setParameter("myfile", new File(uri), "text/html");
 
-            // First run
+            // Test 1 ---------------------------------------------------------
+
+            // First test exectes the test against the TestPage class
             Page testPage = container.testPage(TestPage.class);
 
-            System.out.println("\nFirst run finished");
-            System.out.println(
-                "======================== HTML Document ========================\n"
-                + container.getHtml() 
-                + "\n===============================================================\n");
+            // Check that the expected value was rendered by the Page template
+            assertTrue(container.getHtml().indexOf(expectedValue) > 0);
 
-            Assert.assertEquals("200", testPage.getContext().getRequestAttribute("id"));
+            // Check that the page set a ID value as a request attribute
+            assertEquals(TestPage.ID_VALUE, testPage.getContext().getRequestAttribute("id"));
 
-            // Second run
+            // Remove request attribute
+            testPage.getContext().setRequestAttribute("id", null);
+            assertEquals(null, testPage.getContext().getRequestAttribute("id"));
+
+            // Test 2 ---------------------------------------------------------
+
+            // Note: the test continues without restart the container
+
+            // Second test executes the test against the test.htm template
             testPage = container.testPage("test.htm");
-            Assert.assertEquals("200", testPage.getContext().getRequestAttribute("id"));
 
-            System.out.println("\nSecond run finished");
-            System.out.println(
-                "======================== HTML Document ========================\n"
-                + container.getHtml()
-                + "\n===============================================================\n");
+            // Check that the page set a ID value as a request attribute
+            Assert.assertEquals(TestPage.ID_VALUE, testPage.getContext().getRequestAttribute("id"));
 
-            container.stop();//TODO remove need for stop???
+            // Check that the expected value was rendered by the Page template
+            assertTrue(container.getHtml().indexOf(expectedValue) > 0);
 
+            // Remove request attribute
+            testPage.getContext().setRequestAttribute("id", null);
+            assertEquals(null, testPage.getContext().getRequestAttribute("id"));
+
+            // Test 3 ---------------------------------------------------------
+
+            // Note: container is restarted for this test
+            container.stop();
             container.start();
 
-            // Third run
+            // Third test exectes the test against the test.htm template
             testPage = container.testPage("/test.htm");
-            System.out.println("\nThird run finished");
-            System.out.println(
-                "======================== HTML Document ========================\n"
-                + container.getHtml()
-                + "\n===============================================================\n");
+
+            // Check that the page set a ID value as a request attribute
+            Assert.assertEquals(TestPage.ID_VALUE, testPage.getContext().getRequestAttribute("id"));
+
+            // Check that the expected value was rendered by the Page template
+            assertTrue(container.getHtml().indexOf(expectedValue) > 0);
 
             container.stop();
 
@@ -103,9 +118,12 @@ public class MockContainerTest extends TestCase {
             container.start();
 
             // Set a parameter
-            container.setParameter("myparam", "Some parameter");
+            String expectedValue = "Some parameter";
 
-            // Upload a file
+            // Set a parameter
+            container.setParameter("myparam", expectedValue);
+
+            // Prepare a file for upload
             URL resource = container.getClass().getResource("/web/test.htm");
             URI uri = new URI(resource.toString());
             container.setParameter("myfile", new File(uri), "text/html");
@@ -113,13 +131,19 @@ public class MockContainerTest extends TestCase {
             // Process page
             Page testPage = container.testPage(BorderTestPage.class);
 
-            System.out.println(
-                "\n======================== HTML Document ========================\n"
-                + container.getHtml()
-                + "\n===============================================================\n");
+            // Check that the page set a ID value as a request attribute
+            assertEquals(BorderTestPage.ID_VALUE, testPage.getContext().getRequestAttribute("id"));
 
-            // Check that border page markup is available
-            Assert.assertTrue(container.getHtml().indexOf("<h1>Header</h1>") >= 0);
+            // Check that border page token was rendered
+            int borderTokenIndex = container.getHtml().indexOf("<h1>Header</h1>");
+            assertTrue(borderTokenIndex >= 0);
+
+            // Check that the expected value was rendered by the Page template
+            int pageTokenIndex = container.getHtml().indexOf(expectedValue);
+            assertTrue(pageTokenIndex > 0);
+
+            // Check that the border token was rendered *before* the page template value
+            assertTrue(borderTokenIndex < pageTokenIndex);
 
         } catch (Exception exception) {
             exception.printStackTrace(System.err);
@@ -137,7 +161,10 @@ public class MockContainerTest extends TestCase {
             container.start();
 
             // Set a parameter
-            container.setParameter("myparam", "Some parameter");
+            String expectedValue = "Some parameter";
+
+            // Set a parameter
+            container.setParameter("myparam", expectedValue);
 
             // Upload a file
             URL resource = container.getClass().getResource("/web/test.htm");
@@ -147,11 +174,15 @@ public class MockContainerTest extends TestCase {
             // Process page
             Page testPage = container.testPage(TestPage.class);
 
-            System.out.println("\nFirst run finished");
-            System.out.println(
-                "======================== HTML Document ========================\n"
-                + container.getHtml()
-                + "\n===============================================================\n");
+            // Check that the expected value was rendered by the Page template
+            assertTrue(container.getHtml().indexOf(expectedValue) > 0);
+
+            // Check that the page set a ID value as a request attribute
+            assertEquals(ForwardPage.ID_VALUE, testPage.getContext().getRequestAttribute("id"));
+
+            // Remove request attribute
+            testPage.getContext().setRequestAttribute("id", null);
+            assertEquals(null, testPage.getContext().getRequestAttribute("id"));
 
             // ForwardPage forwards to TestPage.class
             testPage = container.testPage(ForwardPage.class);
@@ -160,9 +191,9 @@ public class MockContainerTest extends TestCase {
             Assert.assertEquals("/test.htm", container.getForward());
             Assert.assertEquals(TestPage.class, container.getForwardPageClass());
 
-            // ForwardPage result will be empty because the template is NOT
-            // rendered when forwarding a request.
-            System.out.println("Forward result: " + container.getHtml());
+            // MockContainer does not process forwarded requests. getHtml should be empty
+            assertEquals("", container.getHtml());
+
         } catch (Exception exception) {
             exception.printStackTrace(System.err);
             Assert.fail();
@@ -179,7 +210,10 @@ public class MockContainerTest extends TestCase {
             container.start();
 
             // Set a parameter
-            container.setParameter("myparam", "Some parameter");
+            String expectedValue = "Some parameter";
+
+            // Set a parameter
+            container.setParameter("myparam", expectedValue);
 
             // Upload a file
             URL resource = container.getClass().getResource("/web/test.htm");
@@ -189,31 +223,31 @@ public class MockContainerTest extends TestCase {
             // Process page
             Page testPage = container.testPage(TestPage.class);
 
-            System.out.println("\nFirst run finished");
-            System.out.println(
-                "======================== HTML Document ========================\n"
-                + container.getHtml()
-                + "\n===============================================================\n");
+            // Remove request attribute
+            testPage.getContext().setRequestAttribute("id", null);
+            assertEquals(null, testPage.getContext().getRequestAttribute("id"));
 
             // RedirectPage redirects to TestPage.class
             testPage = container.testPage(RedirectPage.class);
 
+            // Check that the page set a ID value as a request attribute
+            assertEquals(ForwardPage.ID_VALUE, testPage.getContext().getRequestAttribute("id"));
+
             // Assert that redirectUrl was set
-            System.out.println("Redirect " + container.getRedirect());
-            Assert.assertEquals("/mock/test.htm", container.getRedirect());
-            Assert.assertEquals(TestPage.class, container.getRedirectPageClass());
+            assertEquals("/mock/test.htm", container.getRedirect());
+            assertEquals(TestPage.class, container.getRedirectPageClass());
 
             // Alternatively use the container.getDestination() call which returns
-            // either the forward or redirect value. For redirect values the 
+            // either the forward or redirect value. For redirect values the
             // context is removed making for easier testing.
-            Assert.assertEquals("/test.htm", container.getForwardOrRedirectUrl());
+            assertEquals("/test.htm", container.getForwardOrRedirectUrl());
 
-            // RedirectPage result will be empty because the template is NOT
-            // rendered when redirecting a request.
-            System.out.println("Redirect result: " + container.getHtml());
+            // MockContainer does not process forwarded requests. getHtml should be empty
+            assertEquals("", container.getHtml());
+
         } catch (Exception exception) {
             exception.printStackTrace(System.err);
-            Assert.fail();
+            fail();
         }
     }
 
@@ -226,26 +260,24 @@ public class MockContainerTest extends TestCase {
 
             container.start();
 
+            // Set a parameter
+            String fieldValue = "one";
+            String fieldName = "myfield";
+
             // Set the form name to ensure a Form submission occurs
             container.setParameter(Form.FORM_NAME, "form");
 
             // Set the field parameter
-            container.setParameter("myfield", "one");
+            container.setParameter(fieldName, fieldValue);
 
             // Process page
             FormPage formPage = (FormPage) container.testPage(FormPage.class);
 
-            System.out.println("\nFirst run finished");
-            System.out.println(
-                "======================== HTML Document ========================\n"
-                + container.getHtml()
-                + "\n===============================================================\n");
-
             // Assert that form with id="form" was rendered
-            Assert.assertTrue(container.getHtml().indexOf("id=\"form\"") > 0);
+            assertTrue(container.getHtml().indexOf("id=\"form\"") > 0);
 
             // Assert that form field "myfield" was bound to request parameter "myfield"
-            Assert.assertEquals("one", formPage.getForm().getFieldValue("myfield"));
+            Assert.assertEquals(fieldValue, formPage.getForm().getFieldValue(fieldName));
 
         } catch (Exception exception) {
             exception.printStackTrace(System.err);
