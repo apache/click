@@ -512,7 +512,7 @@ public class XmlConfigServiceTest extends TestCase {
         PrintStream pstr = makeXmlStream(tmpdir, "WEB-INF/click.xml");
         pstr.println("<click-app>");
         pstr.println(" <pages/>");
-        pstr.println(" <messages-map-service classname='org.apache.click.service.ConfigServiceTest$MyMessagesMapService'/>");
+        pstr.println(" <messages-map-service classname='org.apache.click.service.XmlConfigServiceTest$MyMessagesMapService'/>");
         pstr.println("</click-app>");
         pstr.close();
 
@@ -548,7 +548,7 @@ public class XmlConfigServiceTest extends TestCase {
         pstr.println("<click-app>");
         pstr.println("<pages package='org.apache.click.pages'/>");
         pstr.println("<controls>");
-        pstr.println(" <control classname='org.apache.click.ConfigServiceTest$MyControl'/>");
+        pstr.println(" <control classname='org.apache.click.service.XmlConfigServiceTest$MyControl'/>");
         pstr.println(" <control-set name='MyControlSet.xml'/>");
         pstr.println("</controls>");
         pstr.println("</click-app>");
@@ -579,10 +579,10 @@ public class XmlConfigServiceTest extends TestCase {
         PrintStream pstr = makeXmlStream(tmpdir, "WEB-INF/click.xml");
         pstr.println("<click-app>");
         pstr.println(" <pages/>");
-        pstr.println(" <page-interceptor classname='org.apache.click.ConfigServiceTest$MyPageInterceptor'>");
+        pstr.println(" <page-interceptor classname='org.apache.click.service.XmlConfigServiceTest$MyPageInterceptor'>");
         pstr.println("  <property name='type' value='std'/>");
         pstr.println(" </page-interceptor>");
-        pstr.println(" <page-interceptor classname='org.apache.click.ConfigServiceTest$MyPageInterceptor' scope='application'>");
+        pstr.println(" <page-interceptor classname='org.apache.click.service.XmlConfigServiceTest$MyPageInterceptor' scope='application'>");
         pstr.println("  <property name='type' value='app'/>");
         pstr.println(" </page-interceptor>");
         pstr.println("</click-app>");
