@@ -562,7 +562,6 @@ public class XmlConfigServiceTest extends TestCase {
         deleteDir(tmpdir);
     }
 
-
     static public class MyControl extends AbstractControl {
         private static final long serialVersionUID = 1L;
 
@@ -571,7 +570,6 @@ public class XmlConfigServiceTest extends TestCase {
             System.out.println("onDeploy");
         }
     }
-
 
     public void testPageInterceptors() throws Exception {
         File tmpdir = makeTmpDir();
