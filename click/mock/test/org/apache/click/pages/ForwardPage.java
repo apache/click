@@ -25,17 +25,21 @@ import org.apache.click.*;
  */
 public class ForwardPage extends Page {
 
+    public static final String ID_VALUE = "200";
+
     /**
      * Initialize page.
      */
+    @Override
     public void onInit() {
-        getContext().setRequestAttribute("id", "200");
+        getContext().setRequestAttribute("id", ID_VALUE);
         addModel("myparam", getContext().getRequestParameter("myparam"));
     }
 
     /**
      * onPost event handler.
      */
+    @Override
     public void onPost() {
         setForward(TestPage.class);
     }

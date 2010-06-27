@@ -24,12 +24,13 @@ import org.apache.click.Page;
  * A border page for mock testing.
  */
 public class BorderPage extends Page {
-    
+
     /**
      * Return border template path.
      *
      * @return border template path
      */
+    @Override
     public String getTemplate() {
         return "border-template.htm";
     }
