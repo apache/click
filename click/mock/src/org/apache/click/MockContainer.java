@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.click.servlet.MockSession;
 import org.apache.commons.lang.StringUtils;
 
@@ -466,19 +467,22 @@ public class MockContainer {
         if (pageClass == null) {
             throw new IllegalArgumentException("pageClass cannot be null");
         }
+
         try {
-            // Cleanup any Context instances still referenced on stack.
-            clearContextStack();
-            getResponse().reset();
+            // Reset internal state before test
+            reset();
+
             String servletPath = getClickServlet().getConfigService().getPagePath(pageClass);
             if (servletPath == null) {
                 throw new IllegalArgumentException("The class " + pageClass.getName()
                     + " was not mapped by Click and does not have a"
                     + " corresponding template file.");
             }
+
             getRequest().setServletPath(servletPath);
             getClickServlet().service(request, getResponse());
             return getPage();
+
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -649,16 +653,21 @@ public class MockContainer {
         }
     }
 
-    // -------------------------------------------------------- Package private methods
+    // Package private methods ------------------------------------------------
 
     /**
-     * Removes any {@link org.apache.click.Context} instances from the ThradLocal
-     * ContextStack.
+     * Reset container internal state.
      *
      * @see #start()
      */
-    void clearContextStack() {
+    void reset() {
         Context.getContextStack().clear();
+        HttpServletResponse response = getResponse();
+        if (response != null) {
+            response.reset();
+        }
+        ActionEventDispatcher.getDispatcherStack().clear();
+        CallbackDispatcher.getDispatcherStack().clear();
     }
 
     /**
