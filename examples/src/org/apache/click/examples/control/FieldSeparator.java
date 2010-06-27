@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * <tt>FieldSeparator</tt> is a component derived from a <tt>FieldSet</tt> that acts as a visual separator that
- * can have a "legend" too. <p/> 
+ * can have a "legend" too. <p/>
  * This component is practical in forms where such a visual representation is required, or
  * where a <tt>FieldSet</tt> would not auto-align correctly all the fields (despite tweaking the CSS), e.g. due
  * to variable label widths between the groups, common in:
@@ -22,18 +22,18 @@ import java.util.List;
  * the job.
  */
 public class FieldSeparator extends FieldSet {
-    
+
     // Constructors -----------------------------------------------------------
 
     /**
      * Create a FieldSeparator with the given name. <p/>
      * The legend for this separator will be be inferred from the name.
-     *  
+     *
      * @param name the field separator name element value
      */
     public FieldSeparator(String name) {
         super(name);
-        addStyleClass("fieldSeparator");        
+        addStyleClass("fieldSeparator");
     }
 
     /**
@@ -41,7 +41,7 @@ public class FieldSeparator extends FieldSet {
      *
      * @param name the field separator name
      * @param legend the field separator legend element value
-     */    
+     */
     public FieldSeparator(String name, String legend) {
         super(name, legend);
         addStyleClass("fieldSeparator");
@@ -51,12 +51,12 @@ public class FieldSeparator extends FieldSet {
      * Create a FieldSeparator with no name defined.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
-     */    
+     */
     public FieldSeparator() {
         super();
         addStyleClass("fieldSeparator");
     }
-    
+
     /**
      * Returns the FieldSeparator HTML HEAD elements for the
      * <tt>click/control.css</tt> resource.

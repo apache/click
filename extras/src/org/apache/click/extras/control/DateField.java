@@ -962,7 +962,7 @@ public class DateField extends TextField {
      * @param start start index in the list.
      * @param end end index in the list.
      */
-    private void generateJavaScriptArray(HtmlStringBuffer buffer, 
+    private void generateJavaScriptArray(HtmlStringBuffer buffer,
            String[] names, int start, int end) {
         for (int i = start; i < end; i++) {
             buffer.append('"');

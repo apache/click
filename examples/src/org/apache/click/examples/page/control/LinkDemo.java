@@ -62,7 +62,7 @@ public class LinkDemo extends BorderPage {
         disabledIconActionLink.setRenderLabelAndImage(true);
         disabledIconActionLink.addStyleClass("image-link");
         disabledIconActionLink.setImageSrc("/assets/images/table-edit.png");
-        
+
         iconPageLink.setRenderLabelAndImage(true);
         iconPageLink.addStyleClass("image-link");
         iconPageLink.setImageSrc("/assets/images/home.png");
