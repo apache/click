@@ -24,7 +24,7 @@ public class FieldSeparatorDemo extends BorderPage {
     public FieldSeparatorDemo() {
         // a separator based form
         makeSeparatorForm();
-        
+
         // a field set based form
         makeFieldSetForm();
     }
