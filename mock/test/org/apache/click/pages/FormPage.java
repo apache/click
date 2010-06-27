@@ -33,11 +33,12 @@ public class FormPage extends Page {
     /**
      * Initialize page.
      */
+    @Override
     public void onInit() {
         form.add(new TextField("myfield"));
         addControl(form);
     }
-    
+
     /**
      * Return form instance.
      *
