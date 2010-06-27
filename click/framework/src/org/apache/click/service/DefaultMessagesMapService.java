@@ -27,7 +27,7 @@ import org.apache.click.util.MessagesMap;
 
 /**
  * Provides a default MessagesMapService which returns MessagesMap implementations
- * of the messages map. 
+ * of the messages map.
  */
 public class DefaultMessagesMapService implements MessagesMapService {
 

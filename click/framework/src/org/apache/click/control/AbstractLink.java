@@ -635,7 +635,7 @@ public abstract class AbstractLink extends AbstractControl {
             }
 
             buffer.elementEnd("span");
-                       
+
         } else {
             buffer.elementStart(getTag());
 

@@ -236,7 +236,7 @@ public class RadioGroup extends Field {
             throw new IllegalArgumentException(msg);
         }
         for (Map.Entry<?, ?> entry : options.entrySet()) {
-            Radio radio = new Radio(entry.getKey().toString(), 
+            Radio radio = new Radio(entry.getKey().toString(),
                                     entry.getValue().toString());
             add(radio);
         }

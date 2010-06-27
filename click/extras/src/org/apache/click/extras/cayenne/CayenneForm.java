@@ -308,7 +308,7 @@ public class CayenneForm extends Form {
                 String id = oidField.getValue();
                 if (StringUtils.isNotBlank(id)) {
 
-                    dataObject = 
+                    dataObject =
                         CayenneUtils.getObjectForPK(getDataContext(),
                                                     dataClass,
                                                     id);

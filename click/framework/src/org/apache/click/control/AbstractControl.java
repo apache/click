@@ -248,7 +248,7 @@ public abstract class AbstractControl implements Control {
 
     /**
      * Adds an AJAX Behavior.
-     *  
+     *
      * @param behavior the AJAX behavior
      */
     public void addBehavior(Behavior behavior) {
@@ -266,7 +266,7 @@ public abstract class AbstractControl implements Control {
 
     /**
      * Removes form this Control a <tt>behavior</tt>.
-     *  
+     *
      * @param behavior the <tt>behavior</tt> to remove.
      */
     public void removeBehavior(Behavior behavior) {
@@ -288,7 +288,7 @@ public abstract class AbstractControl implements Control {
     /**
      * Returns this Control's CSS selector or <tt>null</tt>null if no selector
      * can be found.
-     * 
+     *
      * @return this Control's CSS selector or <tt>null</tt> if no selector
      * can be found.
      */
@@ -299,14 +299,12 @@ public abstract class AbstractControl implements Control {
         return ClickUtils.getCssSelector(this);
     }
 
-
     /**
      * Returns <tt>true</tt> if this is an AJAX control,
      * <tt>false</tt> otherwise.
      *
-     * @param context the Click context.      
-     * @return <tt>true</tt> if this is an AJAX control,
-     * <tt>false</tt> otherwise.  
+     * @param context the Click context.
+     * @return <tt>true</tt> if this is an AJAX control, <tt>false</tt> otherwise.
      */
     public boolean isAjaxTarget(Context context) {
         // TODO each control could have an optimized version of isAjaxTarget

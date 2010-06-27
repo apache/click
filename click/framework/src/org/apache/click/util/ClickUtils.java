@@ -1342,7 +1342,7 @@ public class ClickUtils {
      * @param targetDir target directory where to deploy the files to. In most cases this
      * is only the reserved directory <code>click</code>
      */
-    public static void deployFileList(ServletContext servletContext, 
+    public static void deployFileList(ServletContext servletContext,
             Class<? extends Control> controlClass, String targetDir) {
 
         String packageName = ClassUtils.getPackageName(controlClass);
