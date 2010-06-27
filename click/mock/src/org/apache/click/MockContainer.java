@@ -564,8 +564,8 @@ public class MockContainer {
      * Return the forward or redirect url as set by the Page.
      * <p/>
      * <b>Note:</b> redirect url's inside this application will have their
-     * context path removed. This ensures that a forward or redirect to the
-     * same url will have the same value.
+     * context path removed. This ensures that a forward or redirect will have
+     * the same value for the same url.
      *
      * @return either forward or redirect value.
      */
