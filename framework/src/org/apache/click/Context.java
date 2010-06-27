@@ -627,10 +627,10 @@ public class Context {
 
     /**
      * Return a new messages map for the given baseClass (a page or control)
-     * and the given global resource bundle name. 
+     * and the given global resource bundle name.
      *
      * @param baseClass the target class
-     * @param globalResource the global resource bundle name     
+     * @param globalResource the global resource bundle name
      * @return a new messages map with the messages for the target.
      */
     public Map<String, String> createMessagesMap(Class<?> baseClass, String globalResource) {

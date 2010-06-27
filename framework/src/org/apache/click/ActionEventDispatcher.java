@@ -201,7 +201,7 @@ public class ActionEventDispatcher {
      *
      * @return true if the page should continue processing or false otherwise
      */
-    protected boolean fireActionEvents(Context context, 
+    protected boolean fireActionEvents(Context context,
         List<Control> eventSourceList, List<ActionListener> eventListenerList) {
 
         boolean continueProcessing = true;
