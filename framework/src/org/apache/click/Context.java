@@ -539,12 +539,21 @@ public class Context {
      *
      * setForward(userEdit); </pre>
      *
+     * The given page path must start with a <tt>'/'</tt>.
+     *
      * @param path the Page path as configured in the click.xml file
      * @return a new Page object
      * @throws IllegalArgumentException if the Page is not found
      */
     @SuppressWarnings("unchecked")
     public <T extends Page> T createPage(String path) {
+        if (path == null || path.length() == 0) {
+            throw new IllegalArgumentException("page path cannot be null or empty");
+        }
+
+        if (path.charAt(0) != '/') {
+            throw new IllegalArgumentException("page path must start with a '/'");
+        }
         return (T) clickServlet.createPage(path, request);
     }
 
