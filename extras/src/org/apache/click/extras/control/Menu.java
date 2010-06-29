@@ -1061,7 +1061,7 @@ public class Menu extends AbstractControl {
         }
 
         JsScript script = new JsScript();
-        script.setId(id + "_js_setup");
+        script.setId(id + "-js-setup");
         if (!headElements.contains(script)) {
             // Script must be executed as soon as browser dom is ready
             script.setExecuteOnDomReady(true);
