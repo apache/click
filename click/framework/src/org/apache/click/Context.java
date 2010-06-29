@@ -199,7 +199,11 @@ public class Context {
      * false otherwise
      */
     public static boolean hasThreadLocalContext() {
-        return !getContextStack().isEmpty();
+        ContextStack contextStack = THREAD_LOCAL_CONTEXT.get();
+        if (contextStack == null) {
+            return false;
+        }
+        return !contextStack.isEmpty();
     }
 
     /**
@@ -871,7 +875,7 @@ public class Context {
         Context context = contextStack.pop();
 
         if (contextStack.isEmpty()) {
-            THREAD_LOCAL_CONTEXT.set(null);
+            THREAD_LOCAL_CONTEXT.remove();
         }
 
         return context;
