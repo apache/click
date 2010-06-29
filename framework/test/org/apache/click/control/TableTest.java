@@ -64,9 +64,9 @@ public class TableTest extends TestCase {
         column.setSortable(false);
         table.addColumn(column);
 
-        String header = "<thead>\n<tr>\n<th>Name</th></tr></thead>\n";
-        String row1 = "<tr class=\"odd\">\n<td id=\"Foos-Name_0\">foo1</td></tr>\n";
-        String row2 = "<tr class=\"even\">\n<td id=\"Foos-Name_1\">foo2</td></tr>";
+        String header = "<thead>\n<tr>\n<th id=\"Foos-Name\">Name</th></tr></thead>\n";
+        String row1 = "<tr class=\"odd\">\n<td id=\"Foos-Name_0\" headers=\"Foos-Name\">foo1</td></tr>\n";
+        String row2 = "<tr class=\"even\">\n<td id=\"Foos-Name_1\" headers=\"Foos-Name\">foo2</td></tr>";
         String body = "<tbody>\n" + row1 + row2 + "</tbody>";
         assertEquals("<table id=\"Foos\">\n" + header + body + "</table>\n", table.toString());
     }
@@ -112,6 +112,7 @@ public class TableTest extends TestCase {
         }
 
         Table table = new Table("table") {
+            @Override
             protected void addRowAttributes(Map attributes, Object row, int rowIndex) {
                 Foo foo = (Foo) row;
                 attributes.put("id", foo.getName());
@@ -143,5 +144,45 @@ public class TableTest extends TestCase {
             return name;
         }
     }
+    
+    /**
+     * Test CLK-673 headers attribute
+     */
+    public void testHeaders() {
+        MockContext.initContext();
 
+        List<Foo> foos = new ArrayList<Foo>();
+        foos.add(new Foo("foo1"));
+        foos.add(new Foo("foo2"));
+
+        Table table = new Table("table");
+        table.setRenderId(true);
+        table.setRowList(foos);
+        Column column = new Column("name");
+        table.addColumn(column);
+
+        System.out.println(table.toString());
+        assertTrue(table.toString().contains("<th id=\"table-name\">"));
+        assertTrue(table.toString().contains("<td id=\"table-name_1\" headers=\"table-name\">"));
+    }
+    
+    
+    /**
+     * Test CLK-673 caption
+     */
+    public void testCaption() {
+        MockContext.initContext();
+
+        List<Foo> foos = new ArrayList<Foo>();
+        foos.add(new Foo("foo1"));
+        foos.add(new Foo("foo2"));
+
+        Table table = new Table("table");
+        table.setCaption("caption<tt>tt</tt>");
+        table.setRowList(foos);
+        Column column = new Column("name");
+        table.addColumn(column);
+
+        assertTrue(table.toString().contains("<caption>caption<tt>tt</tt></caption>"));
+    }
 }

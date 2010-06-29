@@ -1171,6 +1171,7 @@ public class Column implements Serializable {
         buffer.elementStart("td");
         if (getRenderId()) {
             buffer.appendAttribute("id", getId() + "_" + rowIndex);
+            buffer.appendAttribute("headers", getId());
         }
         buffer.appendAttribute("class", getDataClass());
 
@@ -1226,6 +1227,9 @@ public class Column implements Serializable {
 
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
+        }
+        if (getRenderId()) {
+            buffer.appendAttribute("id", getId());
         }
 
         buffer.closeTag();
