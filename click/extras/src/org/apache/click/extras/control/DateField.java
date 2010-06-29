@@ -141,21 +141,21 @@ import org.apache.commons.lang.StringUtils;
  * date-format-pattern=dd-MM-yyyy </pre>
  *
  * <h3>Localization</h3>
- * The following localization messages are available in in the resource bundle 
+ * The following localization messages are available in the resource bundle:
  * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
  * <ul>
- *   <li><tt>date-title</tt>. The <tt>title</tt> attribute of the input field.</li>
- *   <li><tt>calendar-image-title</tt>. The <tt>title</tt> attribute of the
+ *   <li><tt>date-title</tt> - the <tt>title</tt> attribute of the input field.</li>
+ *   <li><tt>calendar-image-title</tt> - the <tt>title</tt> attribute of the
  *       calendar image icon</tt></li>
- *   <li><tt>calendar-weekdays-heading</tt>. A comma separated list of
+ *   <li><tt>calendar-weekdays-heading</tt> - a comma separated list of
  *       abbreviated week day names starting with Sunday. The default value is
  *       <tt>"S,M,T,W,T,F,S"</tt>. If not defined for a locale, the abbreviated
- *       week day names from the JDK is used. The names are used as column
+ *       week day names from the JDK is used. The names are used as the column
  *       heading in the popup.</li>
- *   <li><tt>calendar-ok</tt>. The label on the "OK" button.</li>
- *   <li><tt>calendar-now</tt>. The label on the "Now" button.</li>
- *   <li><tt>calendar-today</tt>. The label on the "Today" button.</li>
- *   <li><tt>calendar-clear</tt>. The label on the "Clear" button.</li>
+ *   <li><tt>calendar-ok</tt> - the label on the "OK" button.</li>
+ *   <li><tt>calendar-now</tt> - the label on the "Now" button.</li>
+ *   <li><tt>calendar-today</tt> - the label on the "Today" button.</li>
+ *   <li><tt>calendar-clear</tt> - the label on the "Clear" button.</li>
  * </ul>
  * The buttons are only shown when DateField popup also contains time: 
  * <tt>field.setShowTime(true);</tt> 
