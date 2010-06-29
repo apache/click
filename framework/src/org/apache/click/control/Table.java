@@ -567,21 +567,25 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Return the content of the HTML table's <tt>&lt;caption&gt;</tt> elements.
-     * @return the tables caption or <tt>null</tt> if not defined.
+     * Return the content of the table <tt>&lt;caption&gt;</tt> element, or null
+     * if not defined.
+     *
+     * @return the content of the table caption element, or <tt>null</tt> if not
+     * defined.
      */
     public String getCaption() {
         return caption;
     }
-    
+
     /**
-     * Set the HTML table's <tt>&lt;caption&gt;</tt> element. 
+     * Set the content of the table <tt>&lt;caption&gt;</tt> element.
+     *
      * @param caption the content of the caption element.
      */
     public void setCaption(String caption) {
         this.caption = caption;
     }
-    
+
     /**
      * Set the HTML class attribute.
      * <p/>
