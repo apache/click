@@ -96,7 +96,6 @@ import org.apache.commons.lang.StringUtils;
  * <li><tt>click/calendar/{style}.css</tt> - where {style} is a specific Calendar style e.g. <tt>default</tt>, <tt>red</tt>, <tt>blue</tt> etc.</li>
  * <li><tt>click/prototype/prototype.js</tt></li>
  * <li><tt>click/calendar/calendar_date_select.js</tt></li>
- * <li><tt>click/calendar/{lang}.js</tt> - where {lang} is the language specified by the browser e.g. <tt>fr</tt> (French), <tt>de</tt> (German) etc.</li>
  * </ul>
  *
  * The Calendar popup is created as a &lt;div&gt; element using JavaScript.
@@ -141,6 +140,26 @@ import org.apache.commons.lang.StringUtils;
  * <pre class="prettyprint">
  * date-format-pattern=dd-MM-yyyy </pre>
  *
+ * <h3>Localization</h3>
+ * The following localization messages are available in in the resource bundle 
+ * <tt>/org/apache/click/extras/control/DateField.properties</tt>.
+ * <ul>
+ *   <li><tt>date-title</tt>. The <tt>title</tt> attribute of the input field.</li>
+ *   <li><tt>calendar-image-title</tt>. The <tt>title</tt> attribute of the
+ *       calendar image icon</tt></li>
+ *   <li><tt>calendar-weekdays-heading</tt>. A comma separated list of
+ *       abbreviated week day names starting with Sunday. The default value is
+ *       <tt>"S,M,T,W,T,F,S"</tt>. If not defined for a locale, the abbreviated
+ *       week day names from the JDK is used. The names are used as column
+ *       heading in the popup.</li>
+ *   <li><tt>calendar-ok</tt>. The label on the "OK" button.</li>
+ *   <li><tt>calendar-now</tt>. The label on the "Now" button.</li>
+ *   <li><tt>calendar-today</tt>. The label on the "Today" button.</li>
+ *   <li><tt>calendar-clear</tt>. The label on the "Clear" button.</li>
+ * </ul>
+ * The buttons are only shown when DateField popup also contains time: 
+ * <tt>field.setShowTime(true);</tt> 
+ * <p/>
  * See also W3C HTML reference
  * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
  *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.4">INPUT</a>
