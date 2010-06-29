@@ -856,7 +856,7 @@ public class DateField extends TextField {
         String fieldId = getId();
 
         JsScript script = new JsScript();
-        script.setId(fieldId + "_js_setup");
+        script.setId(fieldId + "-js-setup");
 
         // Note the Calendar options script is recreated and checked if it
         // is contained in the headElement. This caters for when the field is
@@ -890,7 +890,7 @@ public class DateField extends TextField {
      */
     protected void addCalenderTranslations(List<Element> headElements) {
         JsScript script = new JsScript();
-        script.setId("c_datefield_js_setup_global");
+        script.setId("datefield-js-setup-global");
         if (!headElements.contains(script)) {
             DateFormatSymbols dfs = new DateFormatSymbols(getLocale());
 

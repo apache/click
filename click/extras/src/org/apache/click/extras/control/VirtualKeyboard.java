@@ -143,7 +143,7 @@ public class VirtualKeyboard extends TextField {
 
         String fieldId = getId();
         JsScript script = new JsScript();
-        script.setId(fieldId + "_js_setup");
+        script.setId(fieldId + "-js-setup");
 
         if (!headElements.contains(script)) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(150);

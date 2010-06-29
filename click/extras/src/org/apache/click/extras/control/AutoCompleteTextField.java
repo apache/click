@@ -300,7 +300,7 @@ public abstract class AutoCompleteTextField extends TextField {
 
         String fieldId = getId();
         JsScript script = new JsScript();
-        script.setId(fieldId + "_autocomplete");
+        script.setId(fieldId + "-autocomplete");
         if (!headElements.contains(script)) {
             // Script must be executed as soon as browser dom is ready
             script.setExecuteOnDomReady(true);
@@ -309,7 +309,7 @@ public abstract class AutoCompleteTextField extends TextField {
             HtmlStringBuffer buffer = new HtmlStringBuffer(150);
             buffer.append("new Ajax.Autocompleter(");
             buffer.append("'").append(fieldId).append("'");
-            buffer.append(",'").append(fieldId).append("_auto_complete_div'");
+            buffer.append(",'").append(fieldId).append("-auto-complete-div'");
             buffer.append(",'").append(contextPath).append(page.getPath()).append(
                 "'");
             buffer.append(",").append(getAutoCompleteOptions()).append(");");
@@ -332,7 +332,7 @@ public abstract class AutoCompleteTextField extends TextField {
 
         buffer.elementStart("div");
         buffer.appendAttribute("class", "auto_complete");
-        buffer.appendAttribute("id", getId() + "_auto_complete_div");
+        buffer.appendAttribute("id", getId() + "-auto-complete-div");
         buffer.closeTag();
         buffer.elementEnd("div");
     }

@@ -682,7 +682,7 @@ public class CheckList extends Field {
 
         String checkListId = getId();
         JsScript script = new JsScript();
-        script.setId(checkListId + "_js_setup");
+        script.setId(checkListId + "-js-setup");
 
         if (!headElements.contains(script)) {
             script.setExecuteOnDomReady(true);
@@ -696,7 +696,7 @@ public class CheckList extends Field {
                 // Script to execute
                 buffer.append("Sortable.create('");
                 buffer.append(StringEscapeUtils.escapeJavaScript(checkListId));
-                buffer.append("_ul'");
+                buffer.append("-ul'");
 
                 if (getHeight() != null) {
                     buffer.append(", { scroll : '");
@@ -708,7 +708,7 @@ public class CheckList extends Field {
             } else {
                 buffer.append("initChecklist('");
                 buffer.append(StringEscapeUtils.escapeJavaScript(checkListId));
-                buffer.append("_ul');\n");
+                buffer.append("-ul');\n");
             }
             script.setContent(buffer.toString());
             headElements.add(script);
@@ -1040,7 +1040,7 @@ public class CheckList extends Field {
 
         // the ul tag
         buffer.elementStart("ul");
-        buffer.appendAttribute("id", getId() + "_ul");
+        buffer.append(" id=\"").append(getId()).append("-ul\"");
         buffer.closeTag();
 
         // the options
@@ -1050,7 +1050,6 @@ public class CheckList extends Field {
             for (Iterator it = optionsList.iterator(); it.hasNext();) {
                 Option option = (Option) it.next();
                 i++;
-                final String liId = getName() + "_" + i;
 
                 buffer.append("<li>");
                 if (sortable) {
@@ -1058,14 +1057,14 @@ public class CheckList extends Field {
                     buffer.appendAttribute("style", "cursor:move;");
                 } else {
                     buffer.elementStart("label");
-                    buffer.appendAttribute("for", liId);
+                    buffer.append(" for=\"").append(getName()).append('_').append(i).append("\"");
                 }
                 buffer.appendAttribute("class", "checkListLabel");
                 buffer.closeTag();
 
                 buffer.append("<input type=\"checkbox\" ");
                 buffer.appendAttributeEscaped("value", option.getValue());
-                buffer.appendAttribute("id", liId);
+                buffer.append(" id=\"").append(getName()).append('_').append(i).append("\"");
                 buffer.appendAttribute("name", getName());
 
                 if (sortable) {
