@@ -386,6 +386,9 @@ public class Table extends AbstractControl {
      */
     protected int bannerPosition = POSITION_BOTTOM;
 
+    /** The table HTML &lt;caption&gt; element */
+    protected String caption;
+    
     /** The map of table columns keyed by column name. */
     protected Map<String, Column> columns = new HashMap<String, Column>();
 
@@ -563,6 +566,22 @@ public class Table extends AbstractControl {
         bannerPosition = value;
     }
 
+    /**
+     * Return the content of the HTML table's <tt>&lt;caption&gt;</tt> elements.
+     * @return the tables caption or <tt>null</tt> if not defined.
+     */
+    public String getCaption() {
+        return caption;
+    }
+    
+    /**
+     * Set the HTML table's <tt>&lt;caption&gt;</tt> element. 
+     * @param caption the content of the caption element.
+     */
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+    
     /**
      * Set the HTML class attribute.
      * <p/>
@@ -1502,7 +1521,15 @@ public class Table extends AbstractControl {
 
         buffer.closeTag();
         buffer.append("\n");
-
+        
+        String caption = getCaption(); 
+        if (caption != null) {
+            buffer.elementStart("caption");
+            buffer.closeTag();
+            buffer.append(caption);
+            buffer.elementEnd("caption");
+            buffer.append("\n");
+        }
         // Render table header
         renderHeaderRow(buffer);
 
