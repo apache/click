@@ -74,14 +74,6 @@ public abstract class AbstractLink extends AbstractControl {
     /** Flag to set if both icon and text are rendered, default value is false. */
     protected boolean renderLabelAndImage = false;
 
-    /**
-     * Flag indicating whether incoming request parameters are only bound to the
-     * link {@link #parameters} if they have been defined before the
-     * {@link #onProcess()} event. Strict parameter binding will be applied for
-     * ajax requests, while non-strict binding is used for non-ajax requests.
-     */
-    protected Boolean strictParameterBinding = null;
-
     // Constructors -----------------------------------------------------------
 
     /**
@@ -275,79 +267,11 @@ public abstract class AbstractLink extends AbstractControl {
     }
 
     /**
-     * Return true if strict parameter binding is used, false otherwise.
-     *
-     * @see {@link #setStrictParameterBinding(boolean)} for more information
-     *
-     * @return true if strict parameter binding is used, false otherwise
-     */
-    public boolean isStrictParameterBinding() {
-        if (strictParameterBinding == null) {
-            return Boolean.FALSE;
-        }
-        return strictParameterBinding;
-    }
-
-    /**
-     * Set whether strict parameter binding should be used. By default strict
-     * parameter binding is used for ajax requests, while non-strict binding is
-     * used for non-ajax requests.
-     * <p/>
-     * Strict parameter binding means that incoming request parameters are only
-     * added to the link {@link #parameters parameter map} if these parameters
-     * have been defined <i>before</i> the {@link #onProcess()} event.
-     * <p/>
-     * A link parameter is automatically defined when
-     * {@link #setParameter(java.lang.String, java.lang.String) setting a parameter}.
-     * Alternatively a parameter can be explicitly defined via
-     * {@link #defineParameter(java.lang.String)}.
-     * <p/>
-     * For example:
-     * <pre class="prettyprint">
-     * private ActionLink link = new ActionLink("link");
-     *
-     * public void onInit() {
-     *     link.defineParameter("id"); // Explicitly defined parameter
-     *     link.setParameter("customerName", "John"); // Implicitly defined parameter
-     * } </pre>
-     *
-     * @param value true if strict parameter binding should be used, false
-     * otherwise
-     */
-    public void setStrictParameterBinding(boolean value) {
-        this.strictParameterBinding = value;
-    }
-
-    /**
-     * Defines a link parameter that will be bound to its matching request
-     * parameter.
-     * <p/>
-     * <b>Please note:</b> by default parameters only need to be defined for
-     * ajax requests. For non-ajax requests, <i>all</i> incoming request parameters
-     * are bound. This behavior can be controlled through the
-     * {@link #setStrictParameterBinding(boolean) strictParameterBinding}
-     * property.
-     * <p/>
-     * <b>Also note:</b> parameters must be defined <i>before</i> the
-     * {@link #onProcess()} event, otherwise they will not be bound to
-     * incoming request parameters.
-     *
-     * @param name the name of the parameter to define
-     */
-    public void defineParameter(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        Map<String, Object> parameters = getParameters();
-        if (!parameters.containsKey(name)) {
-            parameters.put(name, null);
-        }
-    }
-
-    /**
      * Return the link request parameter value for the given name, or null if
      * the parameter value does not exist.
+     *
+     * @deprecated use {@link org.apache.click.Context#getRequestParameter(java.lang.String)}
+     * instead
      *
      * @param name the name of request parameter
      * @return the link request parameter value
@@ -415,6 +339,9 @@ public abstract class AbstractLink extends AbstractControl {
      * Return the link request parameter values for the given name, or null if
      * the parameter values does not exist.
      *
+     * @deprecated use {@link org.apache.click.Context#getRequestParameterValues(java.lang.String)}
+     * instead
+     *
      * @param name the name of request parameter
      * @return the link request parameter values
      */
@@ -458,6 +385,9 @@ public abstract class AbstractLink extends AbstractControl {
 
     /**
      * Return the AbstractLink parameters Map.
+     *
+     * @deprecated use {@link org.apache.click.Context#getRequestParameter(java.lang.String)}
+     * instead
      *
      * @return the AbstractLink parameters Map
      */
@@ -745,35 +675,40 @@ public abstract class AbstractLink extends AbstractControl {
     }
 
     /**
-     * This method binds the submitted request parameters to the link's
+     * This method binds the submitted request parameters to the link
      * parameters.
+     *
+     * @deprecated binding link parameters can cause memory leaks, use
+     * {@link org.apache.click.Context#getRequestParameter(java.lang.String)}
+     * instead
      *
      * @param context the request context
      */
     @SuppressWarnings("unchecked")
     protected void bindRequestParameters(Context context) {
+        // TODO: remove this method in a future release since it can lead to
+        // memory leaks
         HttpServletRequest request = context.getRequest();
 
         Set<String> parameterNames = null;
 
-        if (strictParameterBinding == null) {
-            if (getContext().isAjaxRequest()) {
-                parameterNames = getParameters().keySet();
-            } else {
-                parameterNames = request.getParameterMap().keySet();
-            }
+        if (context.isAjaxRequest()) {
+            parameterNames = getParameters().keySet();
         } else {
-            if (isStrictParameterBinding()) {
-                parameterNames = getParameters().keySet();
-            } else {
-                parameterNames = request.getParameterMap().keySet();
-            }
+            parameterNames = request.getParameterMap().keySet();
         }
 
         for (String param : parameterNames) {
             String[] values = request.getParameterValues(param);
+            // Do not process parameters that are not defined as it would nullify
+            // parameters that was explicitly set during Page.onInit. This only
+            // occurs for Ajax requests which processes all parameters defined
+            // on the link
+            if (values == null) {
+                continue;
+            }
 
-            if (values != null && values.length == 1) {
+            if (values.length == 1) {
                 getParameters().put(param, values[0]);
             } else {
                 getParameters().put(param, values);

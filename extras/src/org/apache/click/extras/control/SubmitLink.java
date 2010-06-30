@@ -18,9 +18,9 @@
  */
 package org.apache.click.extras.control;
 
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.click.Context;
 import org.apache.click.control.ActionLink;
@@ -271,6 +271,9 @@ public class SubmitLink extends ActionLink {
     /**
      * Set the parameter prefix that is applied to the SubmitLink parameters.
      *
+     * @deprecated the link request parameter binding will be removed in a future
+     * release, thus removing the need for parameter prefixing
+     *
      * @param prefix the parameter prefix
      */
     public void setParameterPrefix(String prefix) {
@@ -279,6 +282,9 @@ public class SubmitLink extends ActionLink {
 
     /**
      * Return the parameter prefix that is applied to the SubmitLink parameters.
+     *
+     * @deprecated the link request parameter binding will be removed in a future
+     * release, thus removing the need for parameter prefixing
      *
      * @return the parameter prefix that is applied to the SubmitLink parameters.
      */
@@ -411,14 +417,26 @@ public class SubmitLink extends ActionLink {
             // SubmitLink parameters are prefixed when included inside a Form
             String prefix = getParameterPrefix();
 
+            // TODO: create a VALUE for SubmitLink with a static prefix in order
+            // to obscure the parameter from Form fields
+            /*
+            String value = context.getRequestParameter(prefix + VALUE);
+            if (value != null) {
+                setValue(value);
+            }*/
+
+            // TODO refactor link not to bind parameters since it can lead to
+            // memory leaks, especially when using Ajax. Remove the code below
             HttpServletRequest request = context.getRequest();
-            Enumeration paramNames = request.getParameterNames();
+            Set<String> parameterNames = request.getParameterMap().keySet();
 
             boolean hasParentForm = hasParentForm();
 
-            while (paramNames.hasMoreElements()) {
-                String param = paramNames.nextElement().toString();
+            for (String param : parameterNames) {
                 String[] values = request.getParameterValues(param);
+                if (values == null) {
+                    continue;
+                }
 
                 if (hasParentForm) {
                     // Only bind parameters that start with the prefix
@@ -426,7 +444,7 @@ public class SubmitLink extends ActionLink {
 
                         // Remove prefix from parameters
                         String key = param.substring(prefix.length());
-                        if (values != null && values.length == 1) {
+                        if (values.length == 1) {
                             getParameters().put(key, values[0]);
                         } else {
                             getParameters().put(key, values);
@@ -434,7 +452,7 @@ public class SubmitLink extends ActionLink {
                     }
 
                 } else {
-                    if (values != null && values.length == 1) {
+                    if (values.length == 1) {
                         getParameters().put(param, values[0]);
                     } else {
                         getParameters().put(param, values);
