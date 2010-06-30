@@ -69,14 +69,16 @@ public class SelectPostCode extends BorderPage {
              * Override default implementation to send parameters
              * address.postCode and address.state to the WizardPage.
              */
+            @Override
             protected void renderActionLink(HtmlStringBuffer buffer,
                 AbstractLink link, Context context, Object row, Object value) {
                 // Remove the default parameter name set for the value
-                String idPropertyValue = (String) link.getParameters().remove(idProperty);
+                link.setParameter(idProperty, null);
 
+                PostCode postCode = (PostCode) row;
                 // Add extra parameters for each row to the rendered action link
-                link.setParameter("address.postCode", idPropertyValue);
-                link.setParameter("address.state", ((PostCode) row).getState());
+                link.setParameter("address.postCode", postCode.getPostCode());
+                link.setParameter("address.state", postCode.getState());
                 super.renderActionLink(buffer, link, context, row, value);
             }
         };
