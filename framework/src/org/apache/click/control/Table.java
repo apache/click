@@ -388,7 +388,7 @@ public class Table extends AbstractControl {
 
     /** The table HTML &lt;caption&gt; element */
     protected String caption;
-    
+
     /** The map of table columns keyed by column name. */
     protected Map<String, Column> columns = new HashMap<String, Column>();
 
@@ -1391,33 +1391,30 @@ public class Table extends AbstractControl {
     @Override
     public boolean onProcess() {
         ActionLink controlLink = getControlLink();
-        controlLink.defineParameter(PAGE);
-        controlLink.defineParameter(COLUMN);
-        controlLink.defineParameter(ASCENDING);
-        controlLink.defineParameter(SORT);
 
         controlLink.onProcess();
 
         if (controlLink.isClicked()) {
-            String page = controlLink.getParameter(PAGE);
+            Context context = getContext();
+            String page = context.getRequestParameter(PAGE);
             if (NumberUtils.isNumber(page)) {
                 setPageNumber(Integer.parseInt(page));
             } else {
                 setPageNumber(0);
             }
 
-            String column = controlLink.getParameter(COLUMN);
+            String column = context.getRequestParameter(COLUMN);
             if (column != null) {
                 setSortedColumn(column);
             }
 
-            String ascending =  controlLink.getParameter(ASCENDING);
+            String ascending = context.getRequestParameter(ASCENDING);
             if (ascending != null) {
                 setSortedAscending("true".equals(ascending));
             }
 
             // Flip sorting order
-            if ("true".equals(controlLink.getParameter(SORT))) {
+            if ("true".equals(context.getRequestParameter(SORT))) {
                 setSortedAscending(!isSortedAscending());
             }
         }
@@ -1525,8 +1522,8 @@ public class Table extends AbstractControl {
 
         buffer.closeTag();
         buffer.append("\n");
-        
-        String caption = getCaption(); 
+
+        String caption = getCaption();
         if (caption != null) {
             buffer.elementStart("caption");
             buffer.closeTag();
