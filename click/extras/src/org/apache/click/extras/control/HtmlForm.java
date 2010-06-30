@@ -98,51 +98,6 @@ public class HtmlForm extends Form {
     }
 
     /**
-     * @see org.apache.click.Control#onProcess().
-     *
-     * @return true to continue Page event processing or false otherwise
-     */
-    @Override
-    public boolean onProcess() {
-
-        if (getValidate()) {
-            validate();
-
-            // If a POST error occurred exit early.
-            if (hasPostError()) {
-                // Remove exception to ensure other forms on Page do not
-                // validate twice for same error.
-                getContext().getRequest().removeAttribute(
-                    FileUploadService.UPLOAD_EXCEPTION);
-
-                return true;
-            }
-        }
-
-        boolean continueProcessing = true;
-
-        if (isFormSubmission()) {
-
-            if (hasControls()) {
-                for (Iterator it = getControls().iterator(); it.hasNext();) {
-                    Control control = (Control) it.next();
-                    String controlName = control.getName();
-                    if (controlName == null || !controlName.startsWith(SUBMIT_CHECK)) {
-
-                        if (!control.onProcess()) {
-                            continueProcessing = false;
-                        }
-                    }
-                }
-            }
-
-            dispatchActionEvent();
-        }
-
-        return continueProcessing;
-    }
-
-    /**
      * Render the HTML representation of the form and all its child
      * controls to the specified buffer.
      *
