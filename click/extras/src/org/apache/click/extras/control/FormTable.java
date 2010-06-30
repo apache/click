@@ -19,6 +19,7 @@
 package org.apache.click.extras.control;
 
 import java.util.List;
+import org.apache.click.Context;
 
 import org.apache.click.control.Button;
 import org.apache.click.control.Column;
@@ -476,89 +477,96 @@ public class FormTable extends Table {
 
         boolean continueProcessing = super.onProcess();
 
-        if (!controlLink.isClicked() && getForm().isFormSubmission()) {
-            Field pageField = getForm().getField(PAGE);
-            pageField.onProcess();
-            if (StringUtils.isNotBlank(pageField.getValue())) {
-                setPageNumber(Integer.parseInt(pageField.getValue()));
-            }
+        if (controlLink.isClicked()) {
+            Context context = getContext();
+            getForm().getField(PAGE).setValue(context.getRequestParameter(PAGE));
 
-            Field columnField = getForm().getField(COLUMN);
-            columnField.onProcess();
-            setSortedColumn(columnField.getValue());
+            getForm().getField(COLUMN).setValue(context.getRequestParameter(COLUMN));
 
-            Field ascendingField = getForm().getField(ASCENDING);
-            ascendingField.onProcess();
-            setSortedAscending("true".equals(ascendingField.getValue()));
-
-            // Ensure data is retrieved before getRowCount can be called
-            getRowList();
-
-            // Range sanity check
-            int pageNumber = Math.min(getPageNumber(), getRowCount() - 1);
-            pageNumber = Math.max(pageNumber, 0);
-            setPageNumber(pageNumber);
-
-            //Have to sort list here before we process each field. Otherwise if
-            //sortRowList() is only called in Table.toString(), the fields values set here
-            //will not correspond to their rows in the rowList.
-            sortRowList();
-
-            int firstRow = 0;
-            int lastRow = 0;
-
-            if (getDataProvider() instanceof PagingDataProvider) {
-                lastRow = getRowList().size();
-            } else {
-                firstRow = getFirstRow();
-                lastRow = getLastRow();
-            }
-
-            List rowList = getRowList();
-            List columnList = getColumnList();
-
-            for (int i = firstRow; i < lastRow; i++) {
-                Object row = rowList.get(i);
-
-                for (int j = 0; j < columnList.size(); j++) {
-
-                    Column column = (Column) columnList.get(j);
-
-                    if (column instanceof FieldColumn) {
-                        FieldColumn fieldColumn = (FieldColumn) column;
-                        Field field = fieldColumn.getField();
-
-                        if (field != null) {
-                            field.setName(column.getName() + "_" + i);
-
-                            field.onProcess();
-
-                            if (field.isValid()) {
-                                fieldColumn.setProperty(row, column.getName(),
-                                    field.getValueObject());
-                            } else {
-                                getForm().setError(getMessage("formtable-error"));
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            String page = controlLink.getParameter(PAGE);
-            getForm().getField(PAGE).setValue(page);
-
-            String column = controlLink.getParameter(COLUMN);
-            getForm().getField(COLUMN).setValue(column);
-
-            String ascending =  controlLink.getParameter(ASCENDING);
+            String ascending = context.getRequestParameter(ASCENDING);
             getForm().getField(ASCENDING).setValue(ascending);
 
             // Table.onProcess() flips the sort order, so to ensure the ASCENDING
             // Field value is in sync with the Table, we flip the field value as
             // well.
-            String sort = controlLink.getParameter(SORT);
+            String sort = context.getRequestParameter(SORT);
             if ("true".equals(sort) || ascending == null) {
                 getForm().getField(ASCENDING).setValue("true".equals(ascending) ? "false" : "true");
+            }
+
+        } else {
+
+            if (getForm().isFormSubmission()) {
+                Field pageField = getForm().getField(PAGE);
+                pageField.onProcess();
+                if (StringUtils.isNotBlank(pageField.getValue())) {
+                    setPageNumber(Integer.parseInt(pageField.getValue()));
+                }
+
+                Field columnField = getForm().getField(COLUMN);
+                columnField.onProcess();
+                setSortedColumn(columnField.getValue());
+
+                Field ascendingField = getForm().getField(ASCENDING);
+                ascendingField.onProcess();
+                setSortedAscending("true".equals(ascendingField.getValue()));
+
+                // Ensure data is retrieved before getRowCount can be called
+                getRowList();
+
+                // Range sanity check
+                int pageNumber = Math.min(getPageNumber(), getRowCount() - 1);
+                pageNumber = Math.max(pageNumber, 0);
+                setPageNumber(pageNumber);
+
+                //Have to sort list here before we process each field. Otherwise if
+                //sortRowList() is only called in Table.toString(), the fields values set here
+                //will not correspond to their rows in the rowList.
+                sortRowList();
+
+                int firstRow = 0;
+                int lastRow = 0;
+
+                if (getDataProvider() instanceof PagingDataProvider) {
+                    lastRow = getRowList().size();
+                } else {
+                    firstRow = getFirstRow();
+                    lastRow = getLastRow();
+                }
+
+                List rowList = getRowList();
+                List columnList = getColumnList();
+
+                for (int i = firstRow; i < lastRow; i++) {
+                    Object row = rowList.get(i);
+
+                    for (int j = 0; j < columnList.size(); j++) {
+
+                        Column column = (Column) columnList.get(j);
+
+                        if (column instanceof FieldColumn) {
+                            FieldColumn fieldColumn = (FieldColumn) column;
+                            Field field = fieldColumn.getField();
+
+                            if (field != null) {
+                                HtmlStringBuffer buffer = new HtmlStringBuffer();
+                                buffer.append(column.getName());
+                                buffer.append("_");
+                                buffer.append(i);
+                                field.setName(buffer.toString());
+
+                                field.onProcess();
+
+                                if (field.isValid()) {
+                                    fieldColumn.setProperty(row, column.getName(),
+                                        field.getValueObject());
+                                } else {
+                                    getForm().setError(getMessage("formtable-error"));
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
