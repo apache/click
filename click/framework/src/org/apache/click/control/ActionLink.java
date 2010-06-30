@@ -18,6 +18,8 @@
  */
 package org.apache.click.control;
 
+import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.click.Context;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -485,6 +487,12 @@ public class ActionLink extends AbstractLink {
         clicked = getName().equals(context.getRequestParameter(ACTION_LINK));
 
         if (clicked) {
+            String value = context.getRequestParameter(VALUE);
+            if (value != null) {
+                setValue(value);
+            }
+            // TODO refactor link not to bind parameters since it can lead to
+            // memory leaks, especially when using Ajax. Remove the line below
             bindRequestParameters(context);
         }
     }
@@ -508,19 +516,5 @@ public class ActionLink extends AbstractLink {
             dispatchActionEvent();
         }
         return true;
-    }
-
-    // Protected Methods ------------------------------------------------------
-
-    /**
-     * This method binds the submitted request parameters to the link's
-     * parameters.
-     *
-     * @param context the request context
-     */
-    @Override
-    protected void bindRequestParameters(Context context) {
-        defineParameter(VALUE);
-        super.bindRequestParameters(context);
     }
 }
