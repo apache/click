@@ -79,6 +79,10 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
       <div class="release-header">Latest Release - Version 2.3.0 Milestone 1 - ?? July 2010</div>
   </dt>
   <dd>
+      <div style="margin-left:-2em;margin-bottom:1em;">
+      <b>IMPORTANT:</b> be sure to read the <a href="upgrade-path.html#2.3.0">upgrade path</a>
+      when upgrading from previous releases.
+      </div>
       <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
       <b>New examples:</b>
       </div>
@@ -88,6 +92,44 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-544">CLK-544</a>].
         </li>
       </ul>
+
+    <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+      <b>Deprecated:</b>
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change">
+          Deprecated the AbstractLink <tt>parameter</tt> getter methods. You should
+          still set parameters on links, however binding link parameters to incoming
+          request parameters will be removed in a future release. The main issues
+          with binding link parameters is that all incoming request parameters
+          are bound which can lead to undesirable link parameters (especially
+          problematic for Ajax requests) and possibly memory leaks.
+          <p/>
+          Deprecated methods are:
+          <ul>
+              <li>
+                  <a href="click-api/org/apache/click/control/AbstractLink.html#getParameter(java.lang.String)">AbstractLink.getParameter(String)</a>
+                  - use <a href="click-api/org/apache/click/Context.html#getRequestParameter(java.lang.String)">Context.getRequestParameter(String)</a>
+                  instead
+              </li>
+              <li>
+                  <a href="click-api/org/apache/click/control/AbstractLink.html#getParameters()">AbstractLink.getParameters()</a>
+                  - use <a href="click-api/org/apache/click/Context.html#getRequest()">HttpServletRequest.getParameterMap()</a>
+                  instead
+              </li>
+              <li>
+                  <a href="click-api/org/apache/click/control/AbstractLink.html#getParameterValues(java.lang.String)">AbstractLink.getParameterValues(String)</a>
+                  - use <a href="click-api/org/apache/click/Context.html#getRequestParameterValues(java.lang.String)">Context.getRequestParameterValues(String)</a>
+                  instead
+              </li>
+              <li>
+                  <a href="extras-api/org/apache/click/extras/control/SubmitLink.html#setParameterPrefix(java.lang.String)">SubmitLink.setParameterPrefix(String)</a>
+                  - parameter prefixing was only necessary for binding incoming
+                  request parameters
+              </li>
+           </ul>
+      </li>
+    </ul>
       <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
         <b>New features and issues resolved:</b>
       </div>
@@ -134,8 +176,7 @@ Select.setAttribute("onchange", "Click.submit(form, false)");
               [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-705">CLK-705</a>].
           </li>
           <li class="change">
-              Added a strict parameter binding strategy for AbstractLink and
-              ActionButton. This option restricts incoming parameters to be
+              Deprecated
               added only to explicitly defined parameters. By default this option
               will be true for ajax requests, false for non-ajax requests
               [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-685">CLK-685</a>].
@@ -181,7 +222,7 @@ Select.setAttribute("onchange", "Click.submit(form, false)");
   </dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
-        <b>IMPORTANT:</b> be sure to read the <a href="upgrade-path.html#2.2.0">upgrade path</a>
+      <b>IMPORTANT:</b> be sure to read the <a href="upgrade-path.html#2.2.0">upgrade path</a>
       when upgrading from previous releases.
       <p/>
       Its worth highlighting that in this release we have removed the deprecated methods
