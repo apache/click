@@ -197,10 +197,14 @@ Select.setAttribute("onchange", "Click.submit(form, false)");
               Fixed Form validation to add and remove an <tt>error</tt> class
               [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-700">CLK-700</a>].
           </li>
-           <li class="change">
+          <li class="change">
               Fixed issue where Context.createPage could lead to duplicate page-to-class
               mappings. This issue was raised by Andrey Rybin and fixed by Md. Jahid Shohel
               [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-625">CLK-625</a>].
+          </li>
+          <li class="change">
+              Fixed AutoCompleteTextField not to be added to parent Page
+              [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-707">CLK-707</a>].
           </li>
           <li class="change">
               Update to the latest version for some of the JARs dependencies: log4j-1.2.16, freemarker-2.3.16,
