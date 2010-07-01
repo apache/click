@@ -18,14 +18,17 @@
  */
 package org.apache.click.extras.control;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import javax.servlet.http.HttpServletResponse;
-
+import org.apache.click.Behavior;
 import org.apache.click.Context;
+import org.apache.click.Control;
 import org.apache.click.Page;
+import org.apache.click.Partial;
+import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.TextField;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.Element;
@@ -33,6 +36,7 @@ import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides an Auto Complete Text Field control: &nbsp; &lt;input type='text'&gt;.
@@ -50,10 +54,10 @@ import org.apache.click.util.HtmlStringBuffer;
  * the abstract method <tt>getAutoCompleteList()</tt> is implemented to provide
  * the list of suggested values.
  *
- * <pre class="codeJava">
- * AutoCompleteTextField nameField = <span class="kw">new</span> AutoCompleteTextField(<span class="st">"name"</span>) {
+ * <pre class="prettyprint">
+ * AutoCompleteTextField nameField = new AutoCompleteTextField("name") {
  *     public List getAutoCompleteList(String criteria) {
- *         <span class="kw">return</span> getCustomerService().getCustomerNamesLike(criteria);
+ *         return getCustomerService().getCustomerNamesLike(criteria);
  *     }
  * };
  * form.add(nameField); </pre>
@@ -92,9 +96,19 @@ public abstract class AutoCompleteTextField extends TextField {
 
     /**
      * The JavaScript 'script.aculo.us' Autocompleter initialization options,
-     * default value is: <tt>{minChars:1}</tt>.
+     * default value is: <tt>minChars:1</tt>.
      */
-    protected String autoCompleteOptions = "{minChars:1}";
+    protected String autoCompleteOptions = "minChars:1";
+
+    /**
+     * Additional parameters to send to server. Note the AutoCompleteTextField
+     * {@link #getId() id} is always sent as a parameter to the server in order
+     * for Click to identify the field.
+     */
+    protected Map<String, Object> parameters;
+
+    /** The Field Ajax Behavior provides autocomplete support. */
+    protected Behavior behavior;
 
     // Constructors -----------------------------------------------------------
 
@@ -178,7 +192,7 @@ public abstract class AutoCompleteTextField extends TextField {
 
     /**
      * Return the JavaScript 'script.aculo.us' Autocompleter initialization
-     * options, default value is: <tt>{}</tt>.
+     * options, default value is <tt>"minChars:1"</tt>.
      *
      * @return the JavaScript Autocompleter initialization options
      */
@@ -188,32 +202,20 @@ public abstract class AutoCompleteTextField extends TextField {
 
     /**
      * Set the JavaScript 'script.aculo.us' Autocompleter initialization
-     * options, default value is: <tt>{minChars:1}</tt>.
+     * options, default value is: <tt>minChars:1</tt>.
      * <p/>
-     * Scriptaculous AutoCompleter supports sending arbitrary request parameters
-     * as part of its options. See the Ajax-AutoCompleter
-     * <a href="http://github.com/madrobby/scriptaculous/wikis/ajax-autocompleter" target="_blank">documentation</a>
-     * for some examples.
+     * For the full list of available options, see the Ajax-AutoCompleter
+     * <a href="http://github.com/madrobby/scriptaculous/wikis/ajax-autocompleter" target="_blank">documentation</a>.
      * <p/>
-     * Below is an example of how to send extra request parameters:
+     * Below is an example of how to set some of these options:
      * <pre class="prettyprint">
      * public void onInit() {
      *     AutoCompleteTextField cityField = new AutoCompleteTextField("cityField");
-     *     HtmlStringBuffer buffer = new HtmlStringBuffer();
-     *     buffer.append("{"); // Options opens with squiggly bracket
-     *     buffer.append(stateField.getName());
-     *     buffer.append("=");
-     *     buffer.append(stateField.getValue());
-     *     buffer.append("&amp;");
-     *     buffer.append(idField.getName());
-     *     buffer.append("=");
-     *     buffer.append(idField.getValue());
-     *     buffer.append("}"); // Options closes with squiggly bracket
-     *     field.setAutoCompleteOptions(options.toString());
+     *     field.setAutoCompleteOptions("minChars:1, frequency: 0.6");
      * } </pre>
      *
-     * Note that you can add any of the options specified on the
-     * Ajax-AutoCompleter wiki.
+     * <b>Please note:</b> to send additional request parameters use
+     * {@link #setParameter(java.lang.String, java.lang.Object)} instead
      *
      * @param options the JavaScript Autocompleter initialization options
      */
@@ -222,25 +224,51 @@ public abstract class AutoCompleteTextField extends TextField {
     }
 
     /**
-     * @see org.apache.click.control.Field#setParent(Object)
+     * Return true if this field has additional parameters, false otherwise.
      *
-     * @param parent the parent of the Control
-     * @throws IllegalStateException if {@link #name} is not defined
-     * @throws IllegalArgumentException if the given parent instance is
-     * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
+     * @return true if this field has additional parameters, false otherwise
      */
-    @Override
-    public void setParent(Object parent) {
-        if (parent == null) {
-            // If the field parent control is set to null (indicating the field
-            // is being removed), also remove the field from its parent page
-            Page page = getPage();
-            if (page != null) {
-                page.getControls().remove(this);
-                page.getModel().remove(getName());
-            }
+    public boolean hasParameters() {
+        return parameters != null && !parameters.isEmpty();
+    }
+
+    /**
+     * Return this field map of additional parameters.
+     *
+     * @return this field map of additional parameters
+     */
+    public Map<String, Object> getParameters() {
+        if (parameters == null) {
+             parameters = new HashMap<String, Object>();
         }
-        super.setParent(parent);
+        return parameters;
+    }
+
+    /**
+     * Set the field parameter with the given parameter name and value. If the
+     * value is null the parameter will be removed.
+     * <p/>
+     * Scriptaculous AutoCompleter supports sending arbitrary request parameters
+     * as part of its options. See the Ajax-AutoCompleter
+     * <a href="http://github.com/madrobby/scriptaculous/wikis/ajax-autocompleter" target="_blank">documentation</a>
+     * for some examples.
+     * <p/>
+     * Below is an example of how to send additional request parameters:
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *     AutoCompleteTextField cityField = new AutoCompleteTextField("cityField");
+     *     cityField.setParameter(stateField.getName(), stateField.getValue());
+     * } </pre>
+     *
+     * @param name the attribute name
+     * @param value the attribute value
+     */
+    public void setParameter(String name, Object value) {
+        if (value != null) {
+            getParameters().put(name, value);
+        } else {
+            getParameters().remove(name);
+        }
     }
 
     /**
@@ -310,9 +338,30 @@ public abstract class AutoCompleteTextField extends TextField {
             buffer.append("new Ajax.Autocompleter(");
             buffer.append("'").append(fieldId).append("'");
             buffer.append(",'").append(fieldId).append("-auto-complete-div'");
-            buffer.append(",'").append(contextPath).append(page.getPath()).append(
-                "'");
-            buffer.append(",").append(getAutoCompleteOptions()).append(");");
+            buffer.append(",'").append(contextPath).append(page.getPath()).append("'");
+
+            String id  = getId();
+
+            // Include the field id as a parameter
+            buffer.append(",{parameters: '").append(id).append("=1'");
+
+            if (hasParameters()) {
+
+                for (Entry<String, Object> entry : getParameters().entrySet()) {
+                    // Add additional parameters
+                    buffer.append("&amp;");
+                    buffer.append(entry.getKey());
+                    buffer.append("=");
+                    buffer.append(entry.getValue());
+                }
+            }
+
+            if (StringUtils.isNotEmpty(getAutoCompleteOptions())) {
+                buffer.append(",").append(getAutoCompleteOptions());
+            }
+
+            buffer.append("});");
+
             script.setContent(buffer.toString());
             headElements.add(script);
         }
@@ -332,7 +381,7 @@ public abstract class AutoCompleteTextField extends TextField {
 
         buffer.elementStart("div");
         buffer.appendAttribute("class", "auto_complete");
-        buffer.appendAttribute("id", getId() + "-auto-complete-div");
+        buffer.append(" id=\"").append(getId()).append("-auto-complete-div\"");
         buffer.closeTag();
         buffer.elementEnd("div");
     }
@@ -348,70 +397,84 @@ public abstract class AutoCompleteTextField extends TextField {
     @Override
     public void onInit() {
         super.onInit();
-
-        Page page = getPage();
-        if (page == null) {
-            // If parent page is not reachable, exit early
-            return;
-        }
-
-        // See whether control has been registered at Page level.
-        Object control = page.getModel().get(getName());
-
-        // If not registered, then register control
-        if (control == null) {
-            // Ensure current parent control does not change
-            Object parent = getParent();
-            page.addControl(this);
-            setParent(parent);
-
-        } else if (!(control instanceof AutoCompleteTextField)) {
-            String message =
-                "Non AutoCompleteTextField object '"
-                + control.getClass().toString()
-                + "' already registered in Page as: "
-                + getName();
-            throw new IllegalStateException(message);
-        }
+        super.addBehavior(getBehavior());
     }
 
     /**
-     * Process the page request and if an auto completion POST request then
-     * render an list of suggested values.
+     * This method is not supported and throws an UnsupportedOperationException
+     * if invoked.
      *
-     * @see org.apache.click.Control#onProcess()
-     *
-     * @return false if an auto complete request, otherwise returns true
+     * @param behavior the behavior to add
+     * @throws UnsupportedOperationException this field uses an internal behavior
+     * instead
      */
     @Override
-    public boolean onProcess() {
-        Context context = getContext();
-        if (context.isPost()) {
-            // If an auto complete POST request then render suggested list,
-            // otherwise continue as normal
-            if (getForm().isFormSubmission()) {
-                return super.onProcess();
-            } else if (context.isAjaxRequest()) {
-                String criteria = context.getRequestParameter(getName());
-                if (criteria != null) {
-                    List autoCompleteList = getAutoCompleteList(criteria);
-                    renderAutoCompleteList(autoCompleteList);
-                    return false;
-                }
-            }
-        }
-        return true;
+    public void addBehavior(Behavior behavior) {
+        throw new UnsupportedOperationException("AutoCompleteTextField uses"
+            + " an internal behavior, extra behaviors are not supported");
+    }
+
+    /**
+     * This method is not supported and throws an UnsupportedOperationException
+     * if invoked.
+     *
+     * @param behavior the behavior to add
+     * @throws UnsupportedOperationException if invoked
+     */
+    @Override
+    public void removeBehavior(Behavior behavior) {
+        throw new UnsupportedOperationException("AutoCompleteTextField uses"
+            + " an internal behavior, extra behaviors are not supported");
     }
 
     // Protected Methods ------------------------------------------------------
+
+    /**
+     * Return the field internal Ajax behavior instance.
+     *
+     * @return the field internal Ajax behavior instance
+     */
+    protected Behavior getBehavior() {
+        if(behavior == null) {
+            behavior = createBehavior();
+        }
+        return behavior;
+    }
+
+    /**
+     * Create the field Ajax behavior instance.
+     *
+     * @return the field Ajax behavior instance
+     */
+    protected Behavior createBehavior() {
+        AjaxBehavior behavior = new AjaxBehavior() {
+
+            @Override
+            public Partial onAction(Control source) {
+                Partial partial = new Partial();
+
+                String contentType = getPage().getContentType();
+                partial.setContentType(contentType);
+
+                List autocompleteList = getAutoCompleteList(getValue());
+                if (autocompleteList != null) {
+                    HtmlStringBuffer buffer = new HtmlStringBuffer(10 + (autocompleteList.size() * 20));
+                    renderAutoCompleteList(buffer, autocompleteList);
+                    partial.setContent(buffer.toString());
+                }
+                return partial;
+            }
+        };
+
+        return behavior;
+    }
 
     /**
      * Render the suggested auto completion list to the servlet response.
      *
      * @param autoCompleteList the suggested list of auto completion values
      */
-    protected void renderAutoCompleteList(List<String> autoCompleteList) {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(10 + (autoCompleteList.size() * 20));
+    protected void renderAutoCompleteList(HtmlStringBuffer buffer, List<String> autoCompleteList) {
 
         buffer.append("<ul>");
 
@@ -423,23 +486,5 @@ public abstract class AutoCompleteTextField extends TextField {
         }
 
         buffer.append("</ul>");
-
-        HttpServletResponse response = getContext().getResponse();
-
-        response.setContentType(getPage().getContentType());
-
-        try {
-            PrintWriter writer = response.getWriter();
-            writer.print(buffer.toString());
-            writer.flush();
-            writer.close();
-
-            getPage().setPath(null);
-
-        } catch (IOException ioe) {
-            throw new RuntimeException(ioe);
-        }
     }
-
-
 }
