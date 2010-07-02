@@ -20,14 +20,12 @@ package org.apache.click.examples.page.general;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.click.ActionListener;
-import org.apache.click.Control;
+import org.apache.click.Partial;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
@@ -61,57 +59,40 @@ public class ExcelExportPage extends BorderPage {
         super.onInit();
 
         ActionLink link = new ActionLink("export");
-        link.setActionListener(new ActionListener() {
-            private static final long serialVersionUID = 1L;
 
-            public boolean onAction(Control source) {
-                export();
-                return false;
-            }
-        });
+        // A "pageAction" is set as a parameter on the link. The "pageAction"
+        // value is set to the Page method: "renderSpreadsheet"
+        link.setParameter(PAGE_ACTION, "renderSpreadsheet");
 
         addControl(link);
     }
 
     /**
-     * Export the spreadsheet.
+     * This is a "pageAction" method and will render the Excel spreadsheet.
+     *
+     * Note the signature of the pageAction: a public, no-argument method
+     * returning a Partial instance.
      */
-    public void export() {
-
+    public Partial renderSpreadsheet() {
         HttpServletResponse response = getContext().getResponse();
 
         HSSFWorkbook wb = createWorkbook();
 
         // Set response headers
-        String mimeType = ClickUtils.getMimeType(".xls");
         response.setHeader("Content-Disposition", "attachment; filename=\"report.xls\"");
-        response.setContentType(mimeType);
         response.setHeader("Pragma", "no-cache");
 
-
-        OutputStream outputStream = null;
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             wb.write(baos);
 
-            byte[] bytes = baos.toByteArray();
+            String contentTyype = ClickUtils.getMimeType(".xls");
+            Partial partial = new Partial(baos.toByteArray(), contentTyype);
 
-            response.setContentLength(bytes.length);
-
-            outputStream = response.getOutputStream();
-
-            // Write out Excel Workbook to response stream
-            outputStream.write(bytes);
-            outputStream.flush();
-
-            // Specify no further rendering required
-            setPath(null);
+            return partial;
 
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);
-
-        } finally {
-            ClickUtils.close(outputStream);
         }
     }
 
