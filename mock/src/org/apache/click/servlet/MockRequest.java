@@ -497,6 +497,7 @@ public class MockRequest implements HttpServletRequest {
 
             return new ServletInputStream() {
 
+                @Override
                 public int read() {
                     return bais.read();
                 }
@@ -504,6 +505,7 @@ public class MockRequest implements HttpServletRequest {
         } else {
             return new ServletInputStream() {
 
+                @Override
                 public int read() {
                     return -1;
                 }
@@ -587,7 +589,12 @@ public class MockRequest implements HttpServletRequest {
      * @return The parameter value, or null
      */
     public String getParameter(final String name) {
-        return (String) parameters.get(name);
+        Object value = parameters.get(name);
+        if (value instanceof String[]) {
+            return ((String[])value)[0];
+        } else {
+            return (String) parameters.get(name);
+        }
     }
 
     /**
@@ -669,10 +676,22 @@ public class MockRequest implements HttpServletRequest {
             try {
                 for (Iterator iterator = parameters.keySet().iterator(); iterator.hasNext();) {
                     final String name = (String) iterator.next();
-                    final String value = (String) parameters.get(name);
-                    buf.append(URLEncoder.encode(name, "UTF-8"));
-                    buf.append('=');
-                    buf.append(URLEncoder.encode(value, "UTF-8"));
+                    final Object value = parameters.get(name);
+                    if (value instanceof String[]) {
+                        String[] aValue = (String[]) value; 
+                        for (int i = 0; i < aValue.length; i++) {
+                            buf.append(URLEncoder.encode(name, "UTF-8"));
+                            buf.append('=');
+                            buf.append(URLEncoder.encode(aValue[i], "UTF-8"));
+                            if (i < aValue.length) {
+                                buf.append("&amp;");
+                            }
+                        }
+                    } else {
+                        buf.append(URLEncoder.encode(name, "UTF-8"));
+                        buf.append('=');
+                        buf.append(URLEncoder.encode((String) value, "UTF-8"));
+                    }
                     if (iterator.hasNext()) {
                         buf.append("&amp;");
                     }
@@ -1262,6 +1281,7 @@ public class MockRequest implements HttpServletRequest {
      *
      * @return string representation of the mock request
      */
+    @Override
     public String toString() {
         return getRequestURL().toString();
     }
