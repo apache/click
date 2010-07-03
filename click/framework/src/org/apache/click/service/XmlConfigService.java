@@ -622,7 +622,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                     buffer.append(", ");
                 }
             }
-            buffer.append("]");
+            buffer.append("]\nUse Context.createPage(String), or Context.getPageClass(String) instead.");
             throw new IllegalArgumentException(buffer.toString());
 
         } else {
