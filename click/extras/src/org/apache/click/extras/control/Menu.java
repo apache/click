@@ -1088,10 +1088,12 @@ public class Menu extends AbstractControl {
      * of the submenu.
      *
      * @param menu the submenu to add
+     * @return the menu that was added
      */
-    public void add(Menu menu) {
+    public Menu add(Menu menu) {
         getChildren().add(menu);
         menu.setParent(this);
+        return menu;
     }
 
     /**
