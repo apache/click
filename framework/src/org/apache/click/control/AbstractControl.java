@@ -43,7 +43,6 @@ import org.apache.click.element.Element;
 import org.apache.click.util.ActionListenerAdaptor;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.MessagesMap;
 
 /**
  * Provides a default implementation of the {@link Control} interface
@@ -286,11 +285,11 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Returns this Control's CSS selector or <tt>null</tt>null if no selector
-     * can be found.
+     * Returns this Control CSS selector or <tt>null</tt>null if no CSS selector
+     * has been defined.
      *
-     * @return this Control's CSS selector or <tt>null</tt> if no selector
-     * can be found.
+     * @return this Control CSS selector or <tt>null</tt> if no CSS selector has
+     * been defined
      */
     public String getCssSelector() {
         // TODO each control could have an optimized version of cssSelector
@@ -300,11 +299,15 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Returns <tt>true</tt> if this is an AJAX control,
-     * <tt>false</tt> otherwise.
+     * Returns <tt>true</tt> if this control is an AJAX target, <tt>false</tt>
+     * otherwise.
+     * <p/>
+     * The control is defined as an Ajax target if the control {@link #getId() ID}
+     * is send as a request parameter.
      *
-     * @param context the Click context.
-     * @return <tt>true</tt> if this is an AJAX control, <tt>false</tt> otherwise.
+     * @param context the request context
+     * @return <tt>true</tt> if this control is an AJAX target, <tt>false</tt>
+     * otherwise
      */
     public boolean isAjaxTarget(Context context) {
         // TODO each control could have an optimized version of isAjaxTarget
@@ -313,7 +316,7 @@ public abstract class AbstractControl implements Control {
         // ActionLink
         String id = getId();
         if (id != null) {
-            return context.getRequestParameter(id) != null;
+            return context.hasRequestParameter(id);
         } else {
             return false;
         }

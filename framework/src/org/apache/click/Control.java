@@ -468,10 +468,7 @@ public interface Control extends Serializable {
 
     public List<Behavior> getBehaviors();
 
-    // What about setCssSelector?
     public String getCssSelector();
 
-    // TODO this method could be changed to both check and return the target
-    // behavior
     public boolean isAjaxTarget(Context context);
 }
