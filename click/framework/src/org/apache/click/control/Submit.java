@@ -180,13 +180,14 @@ public class Submit extends Button {
      */
     @Override
     public void bindRequestValue() {
-        this.value = getContext().getRequestParameter(getName());
+        String requestValue = getContext().getRequestParameter(getName());
 
-        if (value != null) {
+        if (requestValue != null) {
             this.clicked = true;
         } else {
             this.clicked = false;
         }
+        setValue(requestValue);
     }
 
     /**
