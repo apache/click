@@ -194,8 +194,7 @@ public class Submit extends Button {
      * Process the submit event and return true to continue event processing.
      * <p/>
      * If the submit button is clicked and a Control listener is defined, the
-     * listener method will be invoked and its boolean return value will be
-     * returned by this method.
+     * listener method will be invoked.
      * <p/>
      * Submit buttons will be processed after all the non Button Form Controls
      * have been processed. Submit buttons will be processed in the order

@@ -18,6 +18,7 @@
  */
 package org.apache.click.control;
 
+import org.apache.click.Context;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
@@ -141,14 +142,37 @@ public class Button extends Field {
     // Public Methods --------------------------------------------------------
 
     /**
-     * Returns true, as buttons perform no server side logic.
+     * For non Ajax requests this method returns true, as buttons by default
+     * perform no server side logic. If the button is an Ajax target and a
+     * behavior is defined, the behavior action will be invoked.
      *
      * @see org.apache.click.control.Field#onProcess()
      *
-     * @return true
+     * @return true to continue Page event processing or false otherwise
      */
     @Override
     public boolean onProcess() {
+        Context context = getContext();
+
+        if (!context.isAjaxRequest()) {
+            return true;
+        }
+
+        if (isDisabled()) {
+            // Switch off disabled property if control has incoming request
+            // parameter. Normally this means the field was enabled via JS
+            if (context.hasRequestParameter(getName())) {
+                setDisabled(false);
+            } else {
+                // If field is disabled skip process event
+                return true;
+            }
+        }
+
+        if (context.hasRequestParameter(getName())) {
+            dispatchActionEvent();
+        }
+
         return true;
     }
 
