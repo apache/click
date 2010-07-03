@@ -1705,9 +1705,10 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Return a new Page instance for the given path.
+     * Return a new Page instance for the given path. The path must start with
+     * a <tt>"/"</tt>.
      *
-     * @param path the Page path configured in the click.xml file
+     * @param path the path which maps to a Page class
      * @param request the Page request
      * @return a new Page object
      * @throws IllegalArgumentException if the Page is not found

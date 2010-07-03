@@ -288,7 +288,8 @@ public interface ConfigService {
     public String getPagePath(Class<? extends Page> pageClass);
 
     /**
-     * Return the page <tt>Class</tt> for the given path.
+     * Return the page <tt>Class</tt> for the given path. The path must start
+     * with a <tt>"/"</tt>.
      *
      * @param path the page path
      * @return the page class for the given path
