@@ -18,9 +18,9 @@
  under the License.
 -->
 <project default="feature_export" name="build">
-	
+
 	<property name="dest.dir" value="dest" />
-	<property name="version" value="2.1.0.0" />
+	<property name="version" value="2.2.0.0" />
 	<property name="click.plugin" value="../org.apache.click.eclipse" />
 	<property name="cayenne.plugin" value="../org.apache.click.eclipse.cayenne" />
 
@@ -35,7 +35,7 @@
 
 	<target name="feature_export">
 		<mkdir dir="${dest.dir}"/>
-		
+
 		<!-- Copy LICENSE and NOTICE to each plugin META-INF folder -->
 		<copy file="LICENSE.txt" todir="${click.plugin}/META-INF" />
 		<copy file="NOTICE.txt" todir="${click.plugin}/META-INF" />
@@ -60,13 +60,13 @@
 			exportType="directory" features="org.apache.click.eclipse.feature" useJARFormat="false"/>
 
 	</target>
-	
+
 	<target name="append_files">
 		<copy file="LICENSE.txt" todir="${dest.dir}/clickide-${version}" />
 		<copy file="NOTICE.txt" todir="${dest.dir}/clickide-${version}" />
 		<copy file="README.txt" todir="${dest.dir}/clickide-${version}" />
 	</target>
-	
+
 	<target name="create_zip">
 		<zip basedir="${dest.dir}/clickide-${version}" destfile="${dest.dir}/clickide-${version}.zip" />
 		<digestMacro file="${dest.dir}/clickide-${version}.zip"/>
