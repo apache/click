@@ -1870,31 +1870,39 @@ public class ClickUtils {
     }
 
     /**
-     * Return the mime-type or content-type for the given filename.
+     * Return the mime-type or content-type for the given filename/extension.
+     * <p/>
+     * Example:
+     * <pre class="prettyprint">
+     * // Lookup mimetype for file
+     * String mimeType = ClickUtils.getMimeType("hello-world.pdf");
      *
-     * @param filename the filename to obtain the mime-type for
-     * @return the mime-type for the given filename, or null if not found
+     * // Lookup mimetype for extension
+     * mimeType = ClickUtils.getMimeType("pdf");
+     * </pre>
+     *
+     * @param value the filename or extension to obtain the mime-type for
+     * @return the mime-type for the given filename/extension, or null if not
+     * found
      */
-    public static String getMimeType(String filename) {
-        if (filename == null) {
-            throw new IllegalArgumentException("null filename parameter");
+    public static String getMimeType(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException("null filename/extension parameter");
         }
 
-        int index = filename.lastIndexOf(".");
+        String ext = value;
 
+        int index = value.lastIndexOf(".");
         if (index != -1) {
-            String ext = filename.substring(index + 1);
+            ext = value.substring(index + 1);
+        }
 
-            try {
-                ResourceBundle bundle = getBundle("org/apache/click/util/mime-type");
+        try {
+            ResourceBundle bundle = getBundle("org/apache/click/util/mime-type");
 
-                return bundle.getString(ext.toLowerCase());
+            return bundle.getString(ext.toLowerCase());
 
-            } catch (MissingResourceException mre) {
-                return null;
-            }
-
-        } else {
+        } catch (MissingResourceException mre) {
             return null;
         }
     }

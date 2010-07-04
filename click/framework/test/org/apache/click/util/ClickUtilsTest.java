@@ -449,10 +449,16 @@ public class ClickUtilsTest extends TestCase {
      * Sanity checks for ClickUtils.getMimeType.
      */
     public void testGetMimeType() {
+        // Test mime type based on filename
         assertEquals("application/vnd.ms-excel", ClickUtils.getMimeType("worksheet.xls"));
 
         assertEquals("application/vnd.ms-excel", ClickUtils.getMimeType("WORKSHEET.XLS"));
-        
+
+        // Test mime type based on extension
+        assertEquals("application/json", ClickUtils.getMimeType("json"));
+
+        assertEquals("application/json", ClickUtils.getMimeType(".JSON"));
+
         try {
         	assertNull(ClickUtils.getMimeType("broken.xxx"));
         } catch (Exception e) {
