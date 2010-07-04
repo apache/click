@@ -41,9 +41,9 @@ public class CayennePlugin extends AbstractUIPlugin {
 
 	// The shared instance
 	private static CayennePlugin plugin;
-	
+
 	private ResourceBundle resource;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -77,18 +77,18 @@ public class CayennePlugin extends AbstractUIPlugin {
 	public static CayennePlugin getDefault() {
 		return plugin;
 	}
-	
+
 	public static String getString(String key){
 		return getDefault().resource.getString(key);
 	}
-	
+
 	/**
 	 * JAR files for Cayenne Modeler.
 	 */
 	private static File[] files;
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public static File[] getCayenneModelerClassPaths(){
@@ -106,13 +106,13 @@ public class CayennePlugin extends AbstractUIPlugin {
 //				new File(dir, "looks-1.3.1.jar"),
 //				new File(dir, "ognl-2.6.7.jar"),
 //				new File(dir, "scope-bin-1.0.1.jar"),
-				new File(dir, "CayenneModeler.jar"),
+				new File(dir, "cayenne-modeler-3.0.jar"),
 		};
 		return files;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public static String[] getCayenneModelerClassPathAsStringArray(){
@@ -123,9 +123,9 @@ public class CayennePlugin extends AbstractUIPlugin {
 		}
 		return paths;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @throws CoreException
 	 */
 	public static void copyCayenneModelerLibraries() throws CoreException {
@@ -137,9 +137,9 @@ public class CayennePlugin extends AbstractUIPlugin {
 			}
 		}
 	}
-	
+
 //	/**
-//	 * 
+//	 *
 //	 * @throws CoreException
 //	 */
 //	public static void removeCayenneModelerLibraries() throws CoreException {
@@ -150,7 +150,7 @@ public class CayennePlugin extends AbstractUIPlugin {
 //			}
 //		}
 //	}
-	
+
 	private static void copyFile(URL url, File file) throws CoreException {
 		try {
 			InputStream in = url.openStream();
@@ -170,6 +170,6 @@ public class CayennePlugin extends AbstractUIPlugin {
 					IStatus.ERROR, CayennePlugin.PLUGIN_ID, 0, ex.toString(), ex);
 			throw new CoreException(status);
 		}
-	}	
+	}
 
 }
