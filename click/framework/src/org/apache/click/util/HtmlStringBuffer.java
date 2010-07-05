@@ -185,7 +185,8 @@ public class HtmlStringBuffer {
     }
 
     /**
-     * Append the given value to the buffer and escape its HTML value.
+     * Append the given value to the buffer and escape its value. The following
+     * characters are escaped: &lt;, &gt;, &quot;, &#039;, &amp;.
      *
      * @param value the object value to append
      * @return a reference to this <tt>HtmlStringBuffer</tt> object
@@ -253,8 +254,11 @@ public class HtmlStringBuffer {
      * <pre class="javaCode">
      *    appendAttribute(<span class="st">"class"</span>, <span class="st">"required"</span>)  <span class="green">-></span>  <span class="st">class="required"</span> </pre>
      *
-     * The attribute value will be HTML escaped. If the attribute name is a
-     * JavaScript event handler the value will not be escaped.
+     * The attribute value will be escaped. The following characters are escaped:
+     * &lt;, &gt;, &quot;, &#039;, &amp;.
+     * <p/>
+     * If the attribute name is a JavaScript event handler the value will
+     * not be escaped.
      *
      * @param name the HTML attribute name
      * @param value the object value to append
@@ -493,6 +497,7 @@ public class HtmlStringBuffer {
      *
      * @return a string representation of the string buffer
      */
+    @Override
     public String toString() {
         return new String(characters, 0, count);
     }
@@ -527,4 +532,37 @@ public class HtmlStringBuffer {
         characters = newValue;
     }
 
+    // Private Package Methods ------------------------------------------------
+
+    /**
+     * Append the given value to the buffer and HTML escape its value.
+     *
+     * @param value the object value to append
+     * @return a reference to this <tt>HtmlStringBuffer</tt> object
+     * @throws IllegalArgumentException if the value is null
+     */
+    HtmlStringBuffer appendHtmlEscaped(Object value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Null value parameter");
+        }
+
+        String string = value.toString();
+
+        boolean requiresEscape = false;
+        for (int i = 0, size = string.length(); i < size; i++) {
+            if (ClickUtils.requiresHtmlEscape(string.charAt(i))) {
+                requiresEscape = true;
+                break;
+            }
+        }
+
+        if (requiresEscape) {
+            ClickUtils.appendHtmlEscapeString(string, this);
+
+        } else {
+            append(value);
+        }
+
+        return this;
+    }
 }

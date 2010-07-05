@@ -534,6 +534,24 @@ public class Format implements Serializable {
     }
 
     /**
+     * Escape the given object value as a string. The following
+     * characters are escaped: &lt;, &gt;, &quot;, &#039;, &amp;.
+     * <p/>
+     * If the value is null this method will return the
+     * {@link #getEmptyString()} value.
+     *
+     * @param value unescaped value
+     * @return the escaped string
+     */
+    public String escape(Object value) {
+        if (value != null) {
+            return ClickUtils.escape(value.toString());
+        } else {
+            return getEmptyString();
+        }
+    }
+
+    /**
      * Escape the given object value as a HTML string.
      * <p/>
      * If the value is null this method will return the
