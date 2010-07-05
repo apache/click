@@ -80,14 +80,6 @@ public class ActionButton extends Button {
     /** The button parameters map. */
     protected Map<String, Object> parameters;
 
-    /**
-     * Flag indicating whether incoming request parameters are only bound to the
-     * buttons {@link #parameters} if they have been defined before the
-     * {@link #onProcess()} event. Strict parameter binding will be applied for
-     * ajax requests, while non-strict binding is used for non-ajax requests.
-     */
-    protected Boolean strictParameterBinding = null;
-
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -309,79 +301,11 @@ public class ActionButton extends Button {
     }
 
     /**
-     * Return true if strict parameter binding is used, false otherwise.
-     *
-     * @see {@link #setStrictParameterBinding(boolean)} for more information
-     *
-     * @return true if strict parameter binding is used, false otherwise
-     */
-    public boolean isStrictParameterBinding() {
-        if (strictParameterBinding == null) {
-            return Boolean.FALSE;
-        }
-        return strictParameterBinding;
-    }
-
-    /**
-     * Set whether strict parameter binding should be used. By default strict
-     * parameter binding is used for ajax requests, while non-strict binding is
-     * used for non-ajax requests.
-     * <p/>
-     * Strict parameter binding means that incoming request parameters are only
-     * added to the button {@link #parameters parameter map} if these parameters
-     * have been defined <i>before</i> the {@link #onProcess()} event.
-     * <p/>
-     * A button parameter is automatically defined when
-     * {@link #setParameter(java.lang.String, java.lang.String) setting a parameter}.
-     * Alternatively a parameter can be explicitly defined via
-     * {@link #defineParameter(java.lang.String)}.
-     * <p/>
-     * For example:
-     * <pre class="prettyprint">
-     * private ActionButton button = new ActionButton("button");
-     *
-     * public void onInit() {
-     *     button.defineParameter("id"); // Explicitly defined parameter
-     *     button.setParameter("customerName", "John"); // Implicitly defined parameter
-     * } </pre>
-     *
-     * @param value true if strict parameter binding should be used, false
-     * otherwise
-     */
-    public void setStrictParameterBinding(boolean value) {
-        this.strictParameterBinding = value;
-    }
-
-    /**
-     * Defines a button parameter that will be bound to its matching request
-     * parameter.
-     * <p/>
-     * <b>Please note:</b> by default parameters only need to be defined for
-     * ajax requests. For non-ajax requests, <i>all</i> incoming request parameters
-     * are bound. This behavior can be controlled through the
-     * {@link #setStrictParameterBinding(boolean) strictParameterBinding}
-     * property.
-     * <p/>
-     * <b>Also note:</b> parameters must be defined <i>before</i> the
-     * {@link #onProcess()} event, otherwise they will not be bound to
-     * incoming request parameters.
-     *
-     * @param name the name of the parameter to define
-     */
-    public void defineParameter(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        Map<String, Object> parameters = getParameters();
-        if (!parameters.containsKey(name)) {
-            parameters.put(name, null);
-        }
-    }
-
-    /**
      * Return the button request parameter value for the given name, or null if
      * the parameter value does not exist.
+     *
+     * @deprecated use {@link org.apache.click.Context#getRequestParameter(java.lang.String)}
+     * instead
      *
      * @param name the name of request parameter
      * @return the button request parameter value
@@ -416,6 +340,9 @@ public class ActionButton extends Button {
 
     /**
      * Return the ActionButton parameters Map.
+     *
+     * @deprecated use {@link org.apache.click.Context#getRequestParameter(java.lang.String)}
+     * instead
      *
      * @return the ActionButton parameters Map
      */
@@ -560,6 +487,12 @@ public class ActionButton extends Button {
         clicked = getName().equals(context.getRequestParameter(ACTION_BUTTON));
 
         if (clicked) {
+            String value = context.getRequestParameter(VALUE);
+            if (value != null) {
+                setValue(value);
+            }
+            // TODO refactor link not to bind parameters since it can lead to
+            // memory leaks, especially when using Ajax. Remove the line below
             bindRequestParameters(context);
         }
     }
@@ -632,42 +565,43 @@ public class ActionButton extends Button {
     // Protected Methods ------------------------------------------------------
 
     /**
-     * This method binds the submitted request parameters to the buttons's
+     * This method binds the submitted request parameters to the buttons
      * parameters.
+     *
+     * @deprecated binding button parameters can cause memory leaks, use
+     * {@link org.apache.click.Context#getRequestParameter(java.lang.String)}
+     * instead
      *
      * @param context the request context
      */
     @SuppressWarnings("unchecked")
     protected void bindRequestParameters(Context context) {
-        defineParameter(VALUE);
-
+        // TODO: remove this method in a future release since it can lead to
+        // memory leaks
         HttpServletRequest request = context.getRequest();
 
         Set<String> parameterNames = null;
 
-        Map parameters = getParameters();
-
-        if (strictParameterBinding == null) {
-            if (getContext().isAjaxRequest()) {
-                parameterNames = parameters.keySet();
-            } else {
-                parameterNames = request.getParameterMap().keySet();
-            }
+        if (context.isAjaxRequest()) {
+            parameterNames = getParameters().keySet();
         } else {
-            if (isStrictParameterBinding()) {
-                parameterNames = parameters.keySet();
-            } else {
-                parameterNames = request.getParameterMap().keySet();
-            }
+            parameterNames = request.getParameterMap().keySet();
         }
 
         for (String param : parameterNames) {
             String[] values = request.getParameterValues(param);
+            // Do not process parameters that are not defined as it would nullify
+            // parameters that was explicitly set during Page.onInit. This only
+            // occurs for Ajax requests which processes all parameters defined
+            // on the link
+            if (values == null) {
+                continue;
+            }
 
-            if (values != null && values.length == 1) {
-                parameters.put(param, values[0]);
+            if (values.length == 1) {
+                getParameters().put(param, values[0]);
             } else {
-                parameters.put(param, values);
+                getParameters().put(param, values);
             }
         }
     }
