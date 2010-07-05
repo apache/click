@@ -480,7 +480,8 @@ public class Partial {
 
     /**
      * Render the partial response to the client. This method can be overridden
-     * by subclasses if custom rendering is required.
+     * by subclasses if custom rendering or direct access to the
+     * HttpServletResponse is required.
      *
      * @param context the request context
      */
