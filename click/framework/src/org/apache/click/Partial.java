@@ -31,53 +31,123 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.click.util.ClickUtils;
 
 /**
- * TODO rename partial as its used for both PageAction and Ajax?
+ * Partial encapsulates a fragment of an HTTP response and is used to stream
+ * back a response to the browser. So instead of returning the entire Page to
+ * the browser, only a portion of the Page is returned by the Partial.
+ * <p/>
+ * A Partial response can be a String (HTML, JSON, XML, plain text) or a byte
+ * array (jpg, gif, png, pdf or excel documents). The Partial {@link #contentType}
+ * must be set appropriately in order for the browser to recognize the response.
+ * <p/>
+ * Partials are used by {@link org.apache.click.ajax.AjaxBehavior Ajax Behaviors}
+ * and <tt>pageAction</tt> methods.
  *
- * Partial encapsulates a fragment of an HTTP response. A Partial can be used
- * to stream back a String or byte array to the browser.
+ * <h3>Ajax Behavior</h3>
  *
- * <h3>Usage</h3>
- * A Partial is often used to stream back html, json, xml, plain text and
- * byte array e.g. jpg, gif, png, pdf and excel documents.
+ * Ajax requests are handled by adding an {@link org.apache.click.ajax.AjaxBehavior Ajax Behavior}
+ * to a control. The AjaxBehavior {@link org.apache.click.Behavior#onAction(org.apache.click.Control) onAction}
+ * method will handle the request and return a Partial instance that contains
+ * the response, thus bypassing the rendering of the Page template. For example:
  *
- * <h3>Ajax</h3>
- * TODO
+ * <pre class="prettyprint">
+ * private ActionLink link = new ActionLink("link");
+ *
+ * public void onInit() {
+ *     addControl(link);
+ *
+ *     link.addBehavior(new AjaxBehavior() {
+ *
+ *         // The onAction method must return a Partial
+ *         public Partial onAction(Control source) {
+ *             // Create a new partial containing an HTML snippet and the content type of HTML
+ *             Partial partial = new Partial("&lt;span&gt;Hello World&lt;/span&gt;", Partial.HTML);
+ *             return partial;
+ *         }
+ *     });
+ * } </pre>
  *
  * <h3>Page Action</h3>
- * TODO
  *
- * <h3>Example</h3>
- * TODO
+ * A <tt>Page Action</tt> is a method on a Page that can be invoked directly
+ * from the browser. The Page Action method returns a Partial instance that
+ * contains the response, thus bypassing the rendering of the Page template.
+ *
+ * <pre class="prettyprint">
+ * private ActionLink link = new ActionLink("link");
+ *
+ * public void onInit() {
+ *     link.addControl(link);
+ *
+ *     // A "pageAction" is set as a parameter on the link. The "pageAction"
+ *     // value is set to the Page method: "renderHelloWorld"
+ *     link.setParameter(PAGE_ACTION, "renderHelloWorld");
+ * }
+ *
+ * &#47;**
+ *  * This is a "pageAction" method that will render an HTML response.
+ *  *
+ *  * Note the signature of the pageAction: a public, no-argument method
+ *  * returning a Partial instance.
+ *  *&#47;
+ * public Partial renderHelloWorld() {
+ *     Partial partial = new Partial("&lt;span&gt;Hello World&lt;/span&gt;", Partial.HTML);
+ *     return partial;
+ * } </pre>
+ *
+ * <h3>Content Type</h3>
+ *
+ * The {@link #contentType} of the Partial must be set to the appropriate type
+ * in order for the client to recognize the response. Partial provides constants
+ * for some of the more common <tt>content types</tt>, including: {@value XML},
+ * {@value HTML}, {@value JSON}, {@value TEXT}.
+ * <p/>
+ * For example:
+ * <pre class="prettyprint">
+ * Partial partial = new Partial("alert('hello world');", Partial.JAVASCRIPT);
+ *
+ * ...
+ *
+ * // content type can also be set through the setContentType method
+ * partial.setContentType(Partial.JAVASCRIPT);
+ *
+ * ...
+ * </pre>
+ *
+ * More content types can be retrieved through {@link org.apache.click.util.ClickUtils#getMimeType(java.lang.String)}:
+ * <pre class="prettyprint">
+ * // lookup content type for PNG
+ * String contentType = ClickUtils.getMimeType("png");
+ * partial.setContentType(contentType); </pre>
  */
 public class Partial {
 
-    // -------------------------------------------------------------- Constants
+    // Constants --------------------------------------------------------------
 
-    /** The plain text content type constant <tt>text/plain</tt>. */
+    /** The plain text content type constant: <tt>text/plain</tt>. */
     public static final String TEXT = "text/plain";
 
-    /** The html content type constant <tt>text/html</tt>. */
+    /** The html content type constant: <tt>text/html</tt>. */
     public static final String HTML = "text/html";
 
-    /** The The xhtml content type constant <tt>application/xhtml+xml</tt>. */
+    /** The The xhtml content type constant: <tt>application/xhtml+xml</tt>. */
     public static final String XHTML = "application/xhtml+xml";
 
-    /** The json content type constant <tt>text/json</tt>. */
-    public static final String JSON = "text/json";
+    /** The json content type constant: <tt>text/json</tt>. */
+    public static final String JSON = "application/json";
 
-    /** The javascript content type constant <tt>text/javascript</tt>. */
+    /** The javascript content type constant: <tt>text/javascript</tt>. */
     public static final String JAVASCRIPT = "text/javascript";
 
-    /** The xml content type constant <tt>text/xml</tt>. */
+    /** The xml content type constant: <tt>text/xml</tt>. */
     public static final String XML = "text/xml";
 
     /** The Partial writer buffer size. */
-    private static final int WRITER_BUFFER_SIZE = 256; // For text assume a small response
+    private static final int WRITER_BUFFER_SIZE = 256; // For text, set a small response size
 
     /** The Partial output buffer size. */
-    private static final int OUTPUT_BUFFER_SIZE = 4 * 1024; // For binary assume a large response
+    private static final int OUTPUT_BUFFER_SIZE = 4 * 1024; // For binary, set a a large response size
 
-    // -------------------------------------------------------- Variables
+    // Variables --------------------------------------------------------------
 
     /** The content to render. */
     private String content;
@@ -94,7 +164,7 @@ public class Partial {
     /** The response content type. */
     private String contentType;
 
-    /** The resposne character encoding. */
+    /** The response character encoding. */
     private String characterEncoding;
 
     /** Indicates whether the Partial should be cached by browser. */
@@ -106,7 +176,7 @@ public class Partial {
     /** The model for the Partial {@link #template}. */
     private Map<String, Object> model;
 
-    // ----------------------------------------------------------- Constructors
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct the Partial for the given template and model.
@@ -169,9 +239,9 @@ public class Partial {
     }
 
     /**
-     * Construct the Partial for the given content and content type.
+     * Construct the Partial for the given String content and content type.
      *
-     * @param content the content to stream back to the client
+     * @param content the String content to stream back to the client
      * @param contentType the response content type
      */
     public Partial(String content, String contentType) {
@@ -193,56 +263,67 @@ public class Partial {
     /**
      * Construct the Partial for the given content. The
      * <tt>{@link javax.servlet.http.HttpServletResponse#setContentType(java.lang.String) response content type}</tt>
-     * will default to {@link #TEXT}.
+     * will default to {@link #TEXT}, unless overridden.
      *
      * @param content the content to stream back to the client
      */
     public Partial(String content) {
         this.content = content;
-        this.contentType = TEXT;
     }
 
     /**
      * Construct a new empty Partial. The
      * <tt>{@link javax.servlet.http.HttpServletResponse#setContentType(java.lang.String) response content type}</tt>
-     * will default to {@link #TEXT}.
+     * will default to {@link #TEXT}, unless overridden.
      */
     public Partial() {
-        this.contentType = TEXT;
     }
 
-    // ---------------------------------------------------------- Public Methds
+    // Public Methods ---------------------------------------------------------
 
     /**
-     * Indicates whether the partial should be cached by the clients browser
-     * or not, defaults to false.
+     * Set whether the partial content should be cached by the client browser or
+     * not.
      * <p/>
      * If false, Click will set the following headers to prevent browsers
      * from caching the result:
      * <pre class="prettyprint">
      * response.setHeader("Pragma", "no-cache");
      * response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
-     * response.setDateHeader("Expires", new Date(1L).getTime());
-     * </pre>
+     * response.setDateHeader("Expires", new Date(1L).getTime()); </pre>
      *
-     * @param cachePartial indicates whether the partial should be cached
-     * by clients browser or not
+     * @param cachePartial indicates whether the partial content should be cached
+     * by the client browser or not
      */
     public void setCachePartial(boolean cachePartial) {
         this.cachePartial = cachePartial;
     }
 
     /**
-     * Return the partial character encoding.
+     * Return true if the partial content should be cached by the client browser,
+     * defaults to false. It is highly unlikely that you would turn partial caching
+     * on.
      *
-     * @return the partial character encoding.
+     * @return true if the partial content should be cached by the client browser,
+     * false otherwise
+     */
+    public boolean isCachePartial() {
+        return cachePartial;
+    }
+
+    /**
+     * Return the partial character encoding. If no character encoding is specified
+     * the request character encoding will be used.
+     *
+     * @return the partial character encoding
      */
     public String getCharacterEncoding() {
         return characterEncoding;
     }
 
     /**
-     * Set the partial character encoding.
+     * Set the partial character encoding. If no character encoding is set the
+     * request character encoding will be used.
      *
      * @param characterEncoding the partial character encoding
      */
@@ -251,7 +332,8 @@ public class Partial {
     }
 
     /**
-     * Set the partial response content type.
+     * Set the partial response content type. If no content type is set it will
+     * default to {@value #TEXT}.
      *
      * @param contentType the partial response content type
      */
@@ -260,7 +342,8 @@ public class Partial {
     }
 
     /**
-     * Return the partial content type.
+     * Return the partial content type. If no content type is specified it will
+     * default to {@value #TEXT}.
      *
      * @return the response content type
      */
@@ -269,18 +352,18 @@ public class Partial {
     }
 
     /**
-     * Set the content to stream back to the client.
+     * Set the content String to stream back to the client.
      *
-     * @param content the content to stream back to the client
+     * @param content the content String to stream back to the client
      */
     public void setContent(String content) {
         this.content = content;
     }
 
     /**
-     * Return the content to stream back to the client.
+     * Return the content String to stream back to the client.
      *
-     * @return the content to stream back to the client
+     * @return the content String to stream back to the client
      */
     public String getContent() {
         return content;
@@ -393,8 +476,11 @@ public class Partial {
         renderPartial(context);
     }
 
+    // Protected Methods ------------------------------------------------------
+
     /**
-     * Render the partial response to the client.
+     * Render the partial response to the client. This method can be overridden
+     * by subclasses if custom rendering is required.
      *
      * @param context the request context
      */
@@ -454,8 +540,13 @@ public class Partial {
         }
     }
 
-    // -------------------------------------------------------- Private Methods
+    // Private Methods --------------------------------------------------------
 
+    /**
+     * Prepare the partial for rendering.
+     *
+     * @param context the request context
+     */
     private void prepare(Context context) {
         HttpServletResponse response = context.getResponse();
 
@@ -466,18 +557,23 @@ public class Partial {
             response.setDateHeader("Expires", new Date(1L).getTime());
         }
 
+        String contentType = getContentType();
+        if (contentType == null) {
+            contentType = TEXT;
+        }
+
         if (getCharacterEncoding() == null) {
 
             // Fallback to request character encoding
             if (context.getRequest().getCharacterEncoding() != null) {
-                response.setContentType(getContentType() + "; charset="
+                response.setContentType(contentType + "; charset="
                     + context.getRequest().getCharacterEncoding());
             } else {
-                response.setContentType(getContentType());
+                response.setContentType(contentType);
             }
 
         } else {
-            response.setContentType(getContentType() + "; charset=" + getCharacterEncoding());
+            response.setContentType(contentType + "; charset=" + getCharacterEncoding());
         }
     }
 }
