@@ -27,7 +27,7 @@
   </para>
 
   <para>This chapter covers Control in detail including the Control life cycle,
-  Control event callbacks and localization.
+  Control listeners and localization.
 
   </para>
 
@@ -135,11 +135,11 @@
 
   </sect1>
 
-  <sect1 id="control-callback" remap="h2">
-    <title>Control Callback</title>
+  <sect1 id="control-listener" remap="h2">
+    <title>Control Listener</title>
 
-    <para>Click Controls provide an event callback mechanism similar to a
-    <classname>java.awt.ActionListener</classname> callback.
+    <para>Click Controls provide an action listener mechanism similar to a
+    <classname>java.awt.ActionListener</classname>.
     </para>
 
     <para>Click supports two styles of action listeners. The first is using the
@@ -241,7 +241,7 @@
       <listitem>
         <para>
           <ulink url="../../click-api/org/apache/click/control/ActionLink.html">ActionLink</ulink>
-          - provides an anchor link which can invoke callback listeners.
+          - provides an anchor link that can invoke action listeners.
         </para>
       </listitem>
       <listitem>
@@ -259,13 +259,13 @@
       <listitem>
         <para>
           <ulink url="../../click-api/org/apache/click/control/Submit.html">Submit</ulink>
-          - provides an input type submit control which can invoke callback listeners.
+          - provides an input type submit control that can invoke action listeners.
         </para>
       </listitem>
       <listitem>
         <para>
           <ulink url="../../click-api/org/apache/click/control/TextField.html">TextField</ulink>
-          - provides an input type text control which can invoke callback listeners.
+          - provides an input type text control that can invoke action listeners.
         </para>
       </listitem>
     </itemizedlist>
