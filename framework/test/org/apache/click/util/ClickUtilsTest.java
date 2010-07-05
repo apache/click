@@ -415,6 +415,39 @@ public class ClickUtilsTest extends TestCase {
     /**
      * Sanity checks for ClickUtils.escapeHtml.
      */
+    public void testEscape() {
+        String value1 = "";
+        String value2 = ClickUtils.escape(value1);
+        assertEquals(value1, value2);
+        assertTrue(value1 == value2);
+
+        String value3 = "1234567890abcdefghijklmnopqrstuvwzyz";
+        String value4 = ClickUtils.escape(value3);
+        assertEquals(value3, value4);
+        assertTrue(value3 == value4);
+
+        assertEquals("&quot;", ClickUtils.escape("\""));
+        assertEquals("&amp;", ClickUtils.escape("&"));
+        assertEquals("&lt;", ClickUtils.escape("<"));
+        assertEquals("&gt;", ClickUtils.escape(">"));
+        assertEquals(" ", ClickUtils.escape(" "));
+
+        assertEquals("\u00e0", ClickUtils.escape("à"));
+        assertEquals("à", ClickUtils.escape("à"));
+        assertEquals("\u00e0", ClickUtils.escape("\u00e0"));
+
+        assertFalse(ClickUtils.requiresEscape((char) 0));
+        assertTrue(ClickUtils.requiresEscape((char) 34));
+        assertTrue(ClickUtils.requiresEscape((char) 38));
+        assertTrue(ClickUtils.requiresEscape((char) 39));
+        assertTrue(ClickUtils.requiresEscape((char) 60));
+        assertTrue(ClickUtils.requiresEscape((char) 62));
+        assertFalse(ClickUtils.requiresEscape((char) 63));
+    }
+
+    /**
+     * Sanity checks for ClickUtils.escapeHtml.
+     */
     public void testEscapeHtml() {
         String value1 = "";
         String value2 = ClickUtils.escapeHtml(value1);
@@ -431,18 +464,12 @@ public class ClickUtilsTest extends TestCase {
         assertEquals("&lt;", ClickUtils.escapeHtml("<"));
         assertEquals("&gt;", ClickUtils.escapeHtml(">"));
         assertEquals(" ", ClickUtils.escapeHtml(" "));
+        assertEquals("&agrave;", ClickUtils.escapeHtml("\u00e0"));
 
-        assertEquals("\u00e0", ClickUtils.escapeHtml("à"));
-        assertEquals("à", ClickUtils.escapeHtml("à"));
-        assertEquals("\u00e0", ClickUtils.escapeHtml("\u00e0"));
-
-        assertFalse(ClickUtils.requiresEscape((char) 0));
-        assertTrue(ClickUtils.requiresEscape((char) 34));
-        assertTrue(ClickUtils.requiresEscape((char) 38));
-        assertTrue(ClickUtils.requiresEscape((char) 39));
-        assertTrue(ClickUtils.requiresEscape((char) 60));
-        assertTrue(ClickUtils.requiresEscape((char) 62));
-        assertFalse(ClickUtils.requiresEscape((char) 63));
+        assertFalse(ClickUtils.requiresHtmlEscape((char) 0));
+        assertTrue(ClickUtils.requiresHtmlEscape((char) 34));
+        assertTrue(ClickUtils.requiresHtmlEscape((char) 184));
+        assertFalse(ClickUtils.requiresHtmlEscape((char) 999999));
     }
 
     /**
