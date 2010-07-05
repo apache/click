@@ -18,8 +18,6 @@
  */
 package org.apache.click.control;
 
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.click.Context;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
