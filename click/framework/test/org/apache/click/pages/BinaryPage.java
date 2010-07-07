@@ -26,6 +26,7 @@ import org.apache.click.Page;
  * Page that renders binary content.
  */
 public class BinaryPage extends Page {
+    private static final long serialVersionUID = 1L;
 
     @Override
     public void onInit() {

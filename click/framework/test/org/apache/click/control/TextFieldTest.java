@@ -37,14 +37,14 @@ public class TextFieldTest extends TestCase {
         TextField textField = new TextField("text");
         assertEquals("text", textField.getName());
         
-        request.getParameterMap().put("text", "textvalue");
+        request.setParameter("text", "textvalue");
         
         assertTrue(textField.onProcess());
         assertTrue(textField.isValid());
         assertEquals("textvalue", textField.getValue());
         assertEquals("textvalue", textField.getValueObject());
         
-        request.getParameterMap().put("text", "");
+        request.setParameter("text", "");
         
         assertTrue(textField.onProcess());
         assertTrue(textField.isValid());
@@ -58,7 +58,7 @@ public class TextFieldTest extends TestCase {
         assertEquals("", textField.getValue());
         assertEquals(null, textField.getValueObject());
         
-        request.getParameterMap().put("text", "ratherlongtextvalue");
+        request.setParameter("text", "ratherlongtextvalue");
         
         textField.setMinLength(10);
         assertTrue(textField.onProcess());

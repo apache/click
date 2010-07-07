@@ -24,5 +24,6 @@ import org.apache.click.Page;
  * Page with a JSP template.
  */
 public class JspPage extends Page {
+    private static final long serialVersionUID = 1L;
 
 }

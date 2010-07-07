@@ -30,6 +30,7 @@ import org.apache.click.control.TextField;
  * Page which tests action listener functionality.
  */
 public class ListenerPage extends Page {
+    private static final long serialVersionUID = 1L;
 
     /** Form holder. */
     public Form form = new Form("form");
@@ -49,6 +50,8 @@ public class ListenerPage extends Page {
 
         // Add listener on submit button
         submit.setActionListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 // Assert that this listener can access the textfield value
                 Assert.assertEquals("one", form.getFieldValue("field"));

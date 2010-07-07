@@ -37,14 +37,14 @@ public class TextAreaTest extends TestCase {
         TextArea textArea = new TextArea("text");
         assertEquals("text", textArea.getName());
         
-        request.getParameterMap().put("text", "textvalue");
+        request.setParameter("text", "textvalue");
         
         assertTrue(textArea.onProcess());
         assertTrue(textArea.isValid());
         assertEquals("textvalue", textArea.getValue());
         assertEquals("textvalue", textArea.getValueObject());
         
-        request.getParameterMap().put("text", "");
+        request.setParameter("text", "");
         
         assertTrue(textArea.onProcess());
         assertTrue(textArea.isValid());
@@ -58,7 +58,7 @@ public class TextAreaTest extends TestCase {
         assertEquals("", textArea.getValue());
         assertEquals(null, textArea.getValueObject());
         
-        request.getParameterMap().put("text", "ratherlongtextvalue");
+        request.setParameter("text", "ratherlongtextvalue");
         
         textArea.setMinLength(10);
         assertTrue(textArea.onProcess());

@@ -32,7 +32,9 @@ public class AbstractContainerTest extends TestCase {
      */
     public void testInsertPreCondistion() {
         MockContext.initContext();
-        AbstractContainer container = new AbstractContainer("form") {};
+        AbstractContainer container = new AbstractContainer("form") {
+            private static final long serialVersionUID = 1L;
+        };
 
         // Check that adding null control fails
         try {
@@ -64,7 +66,9 @@ public class AbstractContainerTest extends TestCase {
         }
 
         // Create new container for testing
-        container = new AbstractContainer("form") {};
+        container = new AbstractContainer("form") {
+            private static final long serialVersionUID = 1L;
+        };
 
         // Check that adding TextField with name succeeds
         try {
@@ -94,7 +98,9 @@ public class AbstractContainerTest extends TestCase {
 
         // Check that adding Container without name succeeds
         try {
-            container.add(new AbstractContainer() {});
+            container.add(new AbstractContainer() {
+                private static final long serialVersionUID = 1L;
+            });
         } catch (Exception e) {
             e.printStackTrace();
             fail("Container does not need to define name");
@@ -156,6 +162,7 @@ public class AbstractContainerTest extends TestCase {
      */
     public void testReplace() {
         AbstractContainer container = new AbstractContainer("container") {
+            private static final long serialVersionUID = 1L;
         };
 
         // Add two fields named child1 and child2

@@ -22,6 +22,7 @@ package org.apache.click.pages;
  * Page which redirects to JspPage by specifying the JSP path.
  */
 public class JspRedirectPage extends RedirectToJsp {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Initialize page.

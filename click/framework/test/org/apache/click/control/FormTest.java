@@ -58,7 +58,7 @@ public class FormTest extends TestCase {
         Assert.assertNotNull(submitCheckField);
 
         // Add submitCheckField as a request parameter
-        request.getParameterMap().put(Form.SUBMIT_CHECK + form.getName() + "_" + context.getResourcePath(), submitCheckField.getValue());
+        request.setParameter(Form.SUBMIT_CHECK + form.getName() + "_" + context.getResourcePath(), submitCheckField.getValue());
         
         // Simulate a second submit check.
         valid = form.onSubmitCheck(page, "/invalid-submit.html");
@@ -76,7 +76,7 @@ public class FormTest extends TestCase {
     public void testOnSubmitCheckMissingParam() {
         MockContext context = MockContext.initContext("test-form.htm");
         MockRequest request = context.getMockRequest();
-        request.getParameterMap().put("form_name", "form");
+        request.setParameter("form_name", "form");
         Page page = new Page();
         Form form = new Form("form");
 
@@ -840,6 +840,7 @@ public class FormTest extends TestCase {
      * Div container used for testing.
      */
     static class Div extends AbstractContainer {
+        private static final long serialVersionUID = 1L;
 
         /**
          * Constructor.

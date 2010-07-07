@@ -24,6 +24,7 @@ import org.apache.click.Page;
  * Page which redirects to another Page through its class.
  */
 public class RedirectToJsp extends Page {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Redirect to JspPage.

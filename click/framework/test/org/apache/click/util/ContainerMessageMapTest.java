@@ -58,6 +58,7 @@ public class ContainerMessageMapTest extends TestCase {
      * Custom Form class.
      */
     public class MyForm extends Form {
+        private static final long serialVersionUID = 1L;
 
         /**
          * Construct a MyForm instance for the given name.
