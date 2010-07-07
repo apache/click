@@ -79,7 +79,7 @@ public class MockRequest implements HttpServletRequest {
     private Locale locale = Locale.getDefault();
 
     /** The request attributes map. */
-    private final Map attributes = new HashMap();
+    private final Map<String, Object> attributes = new HashMap<String, Object>();
 
     /** The request authentication type (BASIC, FORM, DIGEST, CLIENT_CERT). */
     private String authType;
@@ -91,16 +91,16 @@ public class MockRequest implements HttpServletRequest {
     private ServletContext servletContext;
 
     /** The request list of cookies. */
-    private final List cookies = new ArrayList();
+    private final List<Cookie> cookies = new ArrayList<Cookie>();
 
     /** The request headers map. */
-    private final Map headers = new HashMap();
+    private final Map<String, List<String>> headers = new HashMap<String, List<String>>();
 
     /** The name of the HTTP method with which this request was made. */
     private String method = "POST";
 
     /** The request parameter map. */
-    private final Map parameters = new HashMap();
+    private final Map<String, Object> parameters = new HashMap<String, Object>();
 
     /** The request HTTP session. */
     private HttpSession session;
@@ -121,7 +121,7 @@ public class MockRequest implements HttpServletRequest {
     private String forward;
 
     /** The list of server side included url's. */
-    private List includes = new ArrayList();
+    private List<String> includes = new ArrayList<String>();
 
     /** The scheme used to make this request, defaults to "http". */
     private String scheme = "http";
@@ -271,7 +271,7 @@ public class MockRequest implements HttpServletRequest {
         }
 
         if (uploadedFiles == null) {
-            uploadedFiles = new HashMap/* <String, UploadedFile> */();
+            uploadedFiles = new HashMap<String, UploadedFile>();
         }
 
         UploadedFile uf = new UploadedFile(fieldName, file, contentType);
@@ -287,9 +287,9 @@ public class MockRequest implements HttpServletRequest {
      * @param value the value
      */
     public void addHeader(String name, String value) {
-        List list = (List) headers.get(name);
+        List<String> list = headers.get(name);
         if (list == null) {
-            list = new ArrayList(1);
+            list = new ArrayList<String>(1);
             headers.put(name, list);
         }
         list.add(value);
@@ -312,7 +312,7 @@ public class MockRequest implements HttpServletRequest {
      * @param values the header values
      */
     public void setHeader(String name, String... values) {
-        List list = new ArrayList(values.length);
+        List<String> list = new ArrayList<String>(values.length);
         headers.put(name, list);
         for (String value : values) {
             list.add(value);
@@ -334,7 +334,7 @@ public class MockRequest implements HttpServletRequest {
      *
      * @return The names
      */
-    public Enumeration getAttributeNames() {
+    public Enumeration<String> getAttributeNames() {
         return Collections.enumeration(attributes.keySet());
     }
 
@@ -409,7 +409,7 @@ public class MockRequest implements HttpServletRequest {
             return null;
         }
         Cookie[] result = new Cookie[cookies.size()];
-        return (Cookie[]) cookies.toArray(result);
+        return cookies.toArray(result);
     }
 
     /**
@@ -441,11 +441,11 @@ public class MockRequest implements HttpServletRequest {
      * @return The header value or null
      */
     public String getHeader(final String name) {
-        final List l = (List) headers.get(name);
+        final List<String> l = headers.get(name);
         if (l == null || l.size() < 1) {
             return null;
         } else {
-            return (String) l.get(0);
+            return l.get(0);
         }
     }
 
@@ -454,7 +454,7 @@ public class MockRequest implements HttpServletRequest {
      *
      * @return The header names
      */
-    public Enumeration getHeaderNames() {
+    public Enumeration<String> getHeaderNames() {
         return Collections.enumeration(headers.keySet());
     }
 
@@ -464,10 +464,10 @@ public class MockRequest implements HttpServletRequest {
      * @param name The name
      * @return The header values
      */
-    public Enumeration getHeaders(final String name) {
-        List list = (List) headers.get(name);
+    public Enumeration<String> getHeaders(final String name) {
+        List<String> list = headers.get(name);
         if (list == null) {
-            list = new ArrayList();
+            list = new ArrayList<String>();
         }
         return Collections.enumeration(list);
     }
@@ -477,7 +477,7 @@ public class MockRequest implements HttpServletRequest {
      *
      * @return the map of headers for this request
      */
-    public Map getHeaders() {
+    public Map<String, List<String>> getHeaders() {
         return headers;
     }
 
@@ -565,8 +565,8 @@ public class MockRequest implements HttpServletRequest {
      *
      * @return The locales
      */
-    public Enumeration getLocales() {
-        List list = new ArrayList(1);
+    public Enumeration<Locale> getLocales() {
+        List<Locale> list = new ArrayList<Locale>(1);
         list.add(getLocale());
         return Collections.enumeration(list);
     }
@@ -593,7 +593,7 @@ public class MockRequest implements HttpServletRequest {
         if (value instanceof String[]) {
             return ((String[])value)[0];
         } else {
-            return (String) parameters.get(name);
+            return (String) value;
         }
     }
 
@@ -602,7 +602,7 @@ public class MockRequest implements HttpServletRequest {
      *
      * @return The parameters
      */
-    public Map getParameterMap() {
+    public Map<String, Object> getParameterMap() {
         return parameters;
     }
 
@@ -611,7 +611,7 @@ public class MockRequest implements HttpServletRequest {
      *
      * @return The parameter names
      */
-    public Enumeration getParameterNames() {
+    public Enumeration<String> getParameterNames() {
         return Collections.enumeration(parameters.keySet());
     }
 
@@ -674,8 +674,8 @@ public class MockRequest implements HttpServletRequest {
         } else {
             final StringBuffer buf = new StringBuffer();
             try {
-                for (Iterator iterator = parameters.keySet().iterator(); iterator.hasNext();) {
-                    final String name = (String) iterator.next();
+                for (Iterator<String> iterator = parameters.keySet().iterator(); iterator.hasNext();) {
+                    final String name = iterator.next();
                     final Object value = parameters.get(name);
                     if (value instanceof String[]) {
                         String[] aValue = (String[]) value; 
@@ -1238,7 +1238,7 @@ public class MockRequest implements HttpServletRequest {
      *
      * @param parameters the parameters to set
      */
-    public void setParameters(final Map parameters) {
+    public void setParameters(final Map<String, Object> parameters) {
         this.parameters.putAll(parameters);
     }
 
@@ -1272,7 +1272,7 @@ public class MockRequest implements HttpServletRequest {
      *
      * @return list of urls that were included
      */
-    public List getIncludes() {
+    public List<String> getIncludes() {
         return this.includes;
     }
 
@@ -1344,8 +1344,7 @@ public class MockRequest implements HttpServletRequest {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
 
             // Add parameters
-            for (Iterator iterator = parameters.keySet().iterator(); iterator.hasNext();) {
-                final String name = (String) iterator.next();
+            for (String name : parameters.keySet()) {
                 newAttachment(out);
                 out.write("; name=\"".getBytes());
                 out.write(name.getBytes());
@@ -1358,9 +1357,7 @@ public class MockRequest implements HttpServletRequest {
 
             // Add files
             if (uploadedFiles != null) {
-                for (Iterator iterator = uploadedFiles.keySet().iterator(); iterator.hasNext();) {
-                    String fieldName = (String) iterator.next();
-
+                for (String fieldName : uploadedFiles.keySet()) {
                     UploadedFile uf = uploadedFiles.get(fieldName);
 
                     newAttachment(out);
@@ -1453,6 +1450,7 @@ public class MockRequest implements HttpServletRequest {
          *
          * @param contentType The content type.
          */
+        @SuppressWarnings("unused")
         public void setContentType(String contentType) {
             this.contentType = contentType;
         }
@@ -1462,6 +1460,7 @@ public class MockRequest implements HttpServletRequest {
          *
          * @return The field name.
          */
+        @SuppressWarnings("unused")
         public String getFieldName() {
             return fieldName;
         }
@@ -1471,6 +1470,7 @@ public class MockRequest implements HttpServletRequest {
          *
          * @param fieldName the name of the file field
          */
+        @SuppressWarnings("unused")
         public void setFieldName(String fieldName) {
             this.fieldName = fieldName;
         }
@@ -1489,6 +1489,7 @@ public class MockRequest implements HttpServletRequest {
          *
          * @param file the uploaded file
          */
+        @SuppressWarnings("unused")
         public void setFile(File file) {
             this.file = file;
         }

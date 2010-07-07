@@ -42,7 +42,7 @@ public class MockServletConfig implements ServletConfig {
     private String servletName = "mock click servlet";
 
     /** The servlet initialization parameters. */
-    private final Map initParameters = new HashMap();
+    private final Map<String, String> initParameters = new HashMap<String, String>();
 
     // -------------------------------------------------------- Constructors
 
@@ -90,7 +90,7 @@ public class MockServletConfig implements ServletConfig {
      * @param servletContext the servlet context
      * @param initParameters the initialization parameters
      */
-    public MockServletConfig(String servletName, ServletContext servletContext, Map initParameters) {
+    public MockServletConfig(String servletName, ServletContext servletContext, Map<String, String> initParameters) {
         this.servletContext = servletContext;
         this.servletName = servletName;
         addInitParameters(initParameters);
@@ -113,7 +113,7 @@ public class MockServletConfig implements ServletConfig {
      *
      * @param initParameters A map of init parameters
      */
-    public void addInitParameters(final Map initParameters) {
+    public void addInitParameters(final Map<String, String> initParameters) {
         if (initParameters == null) {
             return;
         }
@@ -165,7 +165,7 @@ public class MockServletConfig implements ServletConfig {
      *
      * @return enumeration of initialization parameters
      */
-    public Enumeration getInitParameterNames() {
+    public Enumeration<String> getInitParameterNames() {
         return Collections.enumeration(initParameters.keySet());
     }
 
@@ -177,6 +177,6 @@ public class MockServletConfig implements ServletConfig {
      * @return a String containing the value of the initialization parameter
      */
     public String getInitParameter(String name) {
-        return (String) initParameters.get(name);
+        return initParameters.get(name);
     }
 }
