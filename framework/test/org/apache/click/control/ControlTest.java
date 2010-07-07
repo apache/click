@@ -99,7 +99,7 @@ public class ControlTest extends TestCase {
      * CLK-414.
      */
     public void testAddContainerToItself() {
-        MockContext context = MockContext.initContext();
+        MockContext.initContext();
         try {
             Form form = new Form("form");
             form.add(form);

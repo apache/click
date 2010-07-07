@@ -24,7 +24,8 @@ import org.apache.click.Page;
  * Page which redirects to another Page through its path.
  */
 public class RedirectToHtm extends Page {
- 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Redirect to test.htm path.
      */

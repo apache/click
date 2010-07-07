@@ -112,6 +112,8 @@ public class TableTest extends TestCase {
         }
 
         Table table = new Table("table") {
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected void addRowAttributes(Map attributes, Object row, int rowIndex) {
                 Foo foo = (Foo) row;

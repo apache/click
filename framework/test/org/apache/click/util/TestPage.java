@@ -24,5 +24,6 @@ import org.apache.click.Page;
  * A test page.
  */
 public class TestPage extends Page {
+    private static final long serialVersionUID = 1L;
 
 }

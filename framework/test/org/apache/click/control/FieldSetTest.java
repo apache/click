@@ -216,7 +216,7 @@ public class FieldSetTest extends TestCase {
         // Check that fieldWidth has entry for field
         assertTrue(testFieldSet.getFieldWidths().size() == 1);
         
-        Integer width = (Integer) testFieldSet.getFieldWidths().get(field.getName());
+        Integer width = testFieldSet.getFieldWidths().get(field.getName());
         assertEquals(4, width.intValue());
 
         testFieldSet.remove(field);
@@ -241,7 +241,7 @@ public class FieldSetTest extends TestCase {
         // Check that fieldWidth has entry for table
         assertTrue(testFieldSet.getFieldWidths().size() == 1);
         
-        Integer width = (Integer) testFieldSet.getFieldWidths().get(table.getName());
+        Integer width = testFieldSet.getFieldWidths().get(table.getName());
         assertEquals(4, width.intValue());
 
         testFieldSet.remove(table);
@@ -478,6 +478,7 @@ public class FieldSetTest extends TestCase {
      * A custom Div container.
      */
     static class Div extends AbstractContainer {
+        private static final long serialVersionUID = 1L;
 
         /**
          * Construct a new Div with the given name.

@@ -24,6 +24,7 @@ import org.apache.click.Page;
  * This page sets its path to a JSP.
  */
 public class SetPathToJspPage extends Page {
+    private static final long serialVersionUID = 1L;
 
     public static final String PATH = "dummy.jsp";
 

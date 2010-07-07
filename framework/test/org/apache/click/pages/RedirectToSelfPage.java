@@ -24,6 +24,7 @@ import org.apache.click.Page;
  * This page redirects to itself.
  */
 public class RedirectToSelfPage extends Page {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Redirect to self.

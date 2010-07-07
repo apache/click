@@ -70,15 +70,19 @@ public class ClickUtilsInvokeListenerTest extends TestCase {
         
         //the anonymous inner class
         Object anon = new Object() {
+            @SuppressWarnings("unused")
             public boolean onClick(){
                 return true;
             }
+            @SuppressWarnings("unused")
             private boolean privateMethod(){
                 return true;
             }
+            @SuppressWarnings("unused")
             protected boolean protectedMethod() {
                 return true;
             }
+            @SuppressWarnings("unused")
             boolean packagePrivateMethod(){
                 return false;
             }
@@ -146,6 +150,7 @@ public class ClickUtilsInvokeListenerTest extends TestCase {
          *
          * @return true if processing should continue
          */
+        @SuppressWarnings("unused")
         private boolean privateMethod(){
             return true;
         }
@@ -179,6 +184,7 @@ public class ClickUtilsInvokeListenerTest extends TestCase {
          *
          * @return true if processing should continue
          */
+        @SuppressWarnings("unused")
         public boolean onClick(){
             return true;
         }
