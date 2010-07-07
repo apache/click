@@ -697,7 +697,7 @@ public class FormTest extends TestCase {
         int textFieldCount = 15;
         
         // Number of times to populate a form with fields
-        int loops = 100000;
+        int loops = Integer.getInteger("click.perf.loops", 100000);
         
         long time = 0;
         for (int i = 0; i < loops; i++) {

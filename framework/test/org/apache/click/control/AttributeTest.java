@@ -137,9 +137,11 @@ public class AttributeTest extends TestCase {
         long start = System.currentTimeMillis();
         TextField nameField = null;
         
+        int loops = Integer.getInteger("click.perf.loops", 100000);
+        
         //100000 iterations ran in
         //    1890ms for setStyle
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < loops; i++) {
             nameField = new TextField("nameFld");
             nameField.setStyle("size", "3em");//add size
             nameField.setStyle("color", "red");//add color
@@ -153,7 +155,7 @@ public class AttributeTest extends TestCase {
         //100000 iterations ran in
         //  906ms for setAttribute
         start = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < loops; i++) {
             nameField = new TextField("nameFld");
             nameField.setAttribute("style", "size:3em");//add size
             nameField.setAttribute("style", "size:3em;color:red;");//add color
@@ -168,7 +170,7 @@ public class AttributeTest extends TestCase {
         //100000 iterations ran in
         //  1704ms for setStyle and getStyle
         start = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < loops; i++) {
             nameField = new TextField("nameFld");
             nameField.setStyle("size", "3em");//add size
             nameField.setStyle("color", "red");//add color
@@ -183,7 +185,7 @@ public class AttributeTest extends TestCase {
         //100000 iterations ran in
         //  828ms for setAttribute and getAttribute
         start = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < loops; i++) {
             nameField = new TextField("nameFld");
             nameField.setAttribute("style", "size:3em");//add size
             nameField.getAttribute("style");//get style
@@ -300,9 +302,11 @@ public class AttributeTest extends TestCase {
         long start = System.currentTimeMillis();
         TextField nameField = null;
 
+        int loops = Integer.getInteger("click.perf.loops", 100000);
+        
         //100000 iterations ran in
         //  1953ms for addStyleClass and removeStyleClass
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < loops; i++) {
             nameField = new TextField("nameFld");
             nameField.addStyleClass("hidden");
             nameField.addStyleClass("display-all");
@@ -316,7 +320,7 @@ public class AttributeTest extends TestCase {
         //100000 iterations ran in
         //  1203ms for setAttribute and getAttribute
         start = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < loops; i++) {
             nameField = new TextField("nameFld");
             nameField.setAttribute("class", "hidden");
             nameField.setAttribute("class", "hidden display-all");
