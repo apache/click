@@ -26,6 +26,7 @@ import org.apache.click.control.TextField;
  * Form test page.
  */
 public class FormPage extends Page {
+    private static final long serialVersionUID = 1L;
 
     /** Form instance. */
     private Form form = new Form("form");

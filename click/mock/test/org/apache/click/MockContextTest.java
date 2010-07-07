@@ -57,13 +57,15 @@ public class MockContextTest extends TestCase {
      */
     public void testFireActionListeners() {
         MockContext context = MockContext.initContext();
-        MockRequest request = (MockRequest) context.getMockRequest();
+        MockRequest request = context.getMockRequest();
         request.setParameter("save", "save");
 
         submitCalled = false;
         Submit submit = new Submit("save");
         // Registry a listener which must be invoked
         submit.setActionListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 // When action is invoked, set flag to true
                 return submitCalled = true;
@@ -94,12 +96,14 @@ public class MockContextTest extends TestCase {
      */
     public void testResetActionListeners() {
         MockContext context = MockContext.initContext();
-        MockRequest request = (MockRequest) context.getMockRequest();
+        MockRequest request = context.getMockRequest();
         request.setParameter("save", "save");
 
         Submit submit = new Submit("save");
         // Registry a listener which must be invoked
         submit.setActionListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 // When action is invoked, set flag to true
                 return true;
@@ -128,7 +132,7 @@ public class MockContextTest extends TestCase {
      */
     public void testFireBehaviors() {
         MockContext context = MockContext.initContext();
-        MockRequest request = (MockRequest) context.getMockRequest();
+        MockRequest request = context.getMockRequest();
         request.setParameter("save", "save");
 
         submitCalled = false;
@@ -136,6 +140,9 @@ public class MockContextTest extends TestCase {
         Submit submit = new Submit("save");
         // Register an ajax behavior
         submit.addBehavior(new AjaxBehavior() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
             public Partial onAction(Control source) {
                 // When action is invoked, set flag to true
                 submitCalled = true;
@@ -164,12 +171,15 @@ public class MockContextTest extends TestCase {
      */
     public void testResetBehaviors() {
         MockContext context = MockContext.initContext();
-        MockRequest request = (MockRequest) context.getMockRequest();
+        MockRequest request = context.getMockRequest();
         request.setParameter("save", "save");
 
         Submit submit = new Submit("save");
         // Register an ajax behavior
         submit.addBehavior(new AjaxBehavior() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
             public Partial onAction(Control source) {
                 // When action is invoked, set flag to true
                 return new Partial();
@@ -291,7 +301,7 @@ public class MockContextTest extends TestCase {
      */
     public void testProcessBehaviorAndCallbacks() {
         MockContext context = MockContext.initContext();
-        MockRequest request = (MockRequest) context.getMockRequest();
+        MockRequest request = context.getMockRequest();
         request.setParameter("save", "save");
 
         Submit submit = new Submit("save");
@@ -302,6 +312,7 @@ public class MockContextTest extends TestCase {
         preDestroyCalled = false;
 
         submit.addBehavior(new AjaxBehavior() {
+            private static final long serialVersionUID = 1L;
 
             @Override
             public Partial onAction(Control source) {

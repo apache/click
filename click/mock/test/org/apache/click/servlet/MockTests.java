@@ -154,7 +154,6 @@ public class MockTests extends TestCase {
             //a mock directory is added to avoid file locking issues when
             //deleting the entire operating system temp dir.
             String tempPath3 = System.getProperty("java.io.tmpdir");
-            File tempDir3 = new File(tempPath3);
             servletContext.setTempPath(tempPath3);
             File convertedTemp = new File(servletContext.getTempPath());
             Assert.assertTrue(convertedTemp.exists());

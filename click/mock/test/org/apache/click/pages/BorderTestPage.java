@@ -22,6 +22,7 @@ package org.apache.click.pages;
  * Basic test page.
  */
 public class BorderTestPage extends BorderPage {
+    private static final long serialVersionUID = 1L;
 
     public static final String ID_VALUE = "200";
 
