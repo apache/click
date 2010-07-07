@@ -28,6 +28,7 @@ public class RedirectToSelfPage extends Page {
     /**
      * Redirect to self.
      */
+    @Override
     public void onInit() {
         // Redirect to self
         setRedirect(RedirectToSelfPage.class);

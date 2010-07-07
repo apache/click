@@ -27,6 +27,7 @@ import org.apache.click.Page;
  */
 public class BinaryPage extends Page {
 
+    @Override
     public void onInit() {
         try {
             Context context = getContext();

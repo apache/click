@@ -40,7 +40,7 @@ public class ColumnCompareTest extends TestCase {
         table.addColumn(column);
 
         Column.ColumnComparator comparator = new Column.ColumnComparator(column);
-        List rowList = createRowList1();
+        List<Map<String, Object>> rowList = createRowList1();
         
         assertTrue(indexOf("-234", rowList) == 11);
         assertTrue(indexOf(Boolean.TRUE, rowList) == 3);
@@ -80,7 +80,7 @@ public class ColumnCompareTest extends TestCase {
         table.addColumn(column);
 
         Column.ColumnComparator comparator = new Column.ColumnComparator(column);
-        List rowList = createRowList2();
+        List<Map<String, Object>> rowList = createRowList2();
         Collections.sort(rowList, comparator);
 
         // Check sort order for ascending
@@ -113,7 +113,7 @@ public class ColumnCompareTest extends TestCase {
         table.addColumn(column);
 
         Column.ColumnComparator comparator = new Column.ColumnComparator(column);
-        List rowList = createRowList3();
+        List<Map<String, Object>> rowList = createRowList3();
         Collections.sort(rowList, comparator);
     }
 
@@ -122,8 +122,8 @@ public class ColumnCompareTest extends TestCase {
      *
      * @return a test Table row list
      */
-    private List createRowList1() {
-        List rowList = new ArrayList();
+    private List<Map<String, Object>> createRowList1() {
+        List<Map<String, Object>> rowList = new ArrayList<Map<String, Object>>();
 
         rowList.add(createRow("Dht"));
         rowList.add(createRow("DHT"));
@@ -153,8 +153,8 @@ public class ColumnCompareTest extends TestCase {
      *
      * @return a test Table row list
      */
-    private List createRowList2() {
-        List rowList = new ArrayList();
+    private List<Map<String, Object>> createRowList2() {
+        List<Map<String, Object>> rowList = new ArrayList<Map<String, Object>>();
 
         rowList.add(createRow(null));
         rowList.add(createRow(Boolean.TRUE));
@@ -168,8 +168,8 @@ public class ColumnCompareTest extends TestCase {
      *
      * @return a test Table row list
      */
-    private List createRowList3() {
-        List rowList = new ArrayList();
+    private List<Map<String, Object>> createRowList3() {
+        List<Map<String, Object>> rowList = new ArrayList<Map<String, Object>>();
 
         rowList.add(createRow("113L - 7 - 107"));
         rowList.add(createRow("113D - 7 - 107"));
@@ -187,7 +187,7 @@ public class ColumnCompareTest extends TestCase {
      * @param value the of the row
      * @return a map representing a Table row
      */
-    private Map createRow(Object value) {
+    private Map<String, Object> createRow(Object value) {
         return Collections.singletonMap("name", value);
     }
 
@@ -198,9 +198,9 @@ public class ColumnCompareTest extends TestCase {
      * @param rowList the rowList to find the object in
      * @return the index of the object in the rowList
      */
-    private int indexOf(Object value, List rowList) {
+    private int indexOf(Object value, List<Map<String, Object>> rowList) {
         for (int i = 0; i < rowList.size(); i++) {
-            Map row = (Map) rowList.get(i);
+            Map<String, Object> row = rowList.get(i);
             // Check for null value
             if (value == null) {
                 if (row.get("name") == null) {

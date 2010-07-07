@@ -33,7 +33,7 @@ public class ContextAccessTest extends TestCase {
 	private Object object;
 	
   /** ThreadLocal holder of Object to lookup. */
-	private static ThreadLocal threadLocal = new ThreadLocal();
+	private static ThreadLocal<Object> threadLocal = new ThreadLocal<Object>();
 	
   /**
    * Test performance of looking up an Object directly.

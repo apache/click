@@ -37,7 +37,7 @@ public class FormTest extends TestCase {
      */
     public void testDuplicateOnSubmitCheck() {
         MockContext context = MockContext.initContext("test-form.htm");
-        MockRequest request = (MockRequest) context.getMockRequest();
+        MockRequest request = context.getMockRequest();
         request.setParameter("form_name", "form");
 
         Page page = new Page();
@@ -74,8 +74,8 @@ public class FormTest extends TestCase {
      * CLK-289.
      */
     public void testOnSubmitCheckMissingParam() {
-        MockContext context = (MockContext) MockContext.initContext("test-form.htm");
-        MockRequest request = (MockRequest) context.getMockRequest();
+        MockContext context = MockContext.initContext("test-form.htm");
+        MockRequest request = context.getMockRequest();
         request.getParameterMap().put("form_name", "form");
         Page page = new Page();
         Form form = new Form("form");
@@ -112,8 +112,8 @@ public class FormTest extends TestCase {
      */
     public void testFormOnProcessRequestBinding() {
         // Create a mock context
-        MockContext context = (MockContext) MockContext.initContext("test-form.htm");
-        MockRequest request = (MockRequest) context.getMockRequest();
+        MockContext context = MockContext.initContext("test-form.htm");
+        MockRequest request = context.getMockRequest();
 
         // The request value that should be set as the textField value
         String requestValue = "one";
@@ -358,7 +358,7 @@ public class FormTest extends TestCase {
         // Check that fieldWidth has entry for field
         assertTrue(testForm.getFieldWidths().size() == 1);
         
-        Integer width = (Integer) testForm.getFieldWidths().get(field.getName());
+        Integer width = testForm.getFieldWidths().get(field.getName());
         assertEquals(4, width.intValue());
 
         testForm.remove(field);
@@ -383,7 +383,7 @@ public class FormTest extends TestCase {
         // Check that fieldWidth has entry for table
         assertTrue(testForm.getFieldWidths().size() == 1);
         
-        Integer width = (Integer) testForm.getFieldWidths().get(table.getName());
+        Integer width = testForm.getFieldWidths().get(table.getName());
         assertEquals(4, width.intValue());
 
         testForm.remove(table);

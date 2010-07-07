@@ -52,7 +52,7 @@ public class TableTest extends TestCase {
     public void testTdId() {
         MockContext.initContext();
         
-        List foos = new ArrayList();
+        List<Foo> foos = new ArrayList<Foo>();
         foos.add(new Foo("foo1"));
         foos.add(new Foo("foo2"));
 
@@ -77,7 +77,7 @@ public class TableTest extends TestCase {
     public void testPagingCurrentPage() {
         MockContext.initContext();
 
-        List foos = new ArrayList();
+        List<Foo> foos = new ArrayList<Foo>();
         for (int i = 0; i < 1000; i++) {
             foos.add(new Foo("foo" + i));
         }
@@ -106,7 +106,7 @@ public class TableTest extends TestCase {
     public void testSetRowAttributes() {
         MockContext.initContext();
 
-        List foos = new ArrayList();
+        List<Foo> foos = new ArrayList<Foo>();
         for (int i = 0; i < 3; i++) {
             foos.add(new Foo("foo" + i));
         }

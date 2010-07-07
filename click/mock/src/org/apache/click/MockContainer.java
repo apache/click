@@ -25,7 +25,6 @@ import org.apache.click.servlet.MockRequest;
 import java.io.File;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -434,16 +433,14 @@ public class MockContainer {
      * @param parameters the request parameters
      * @return the Page instance for the specified pageClass
      */
-    public Page testPage(Class pageClass, Map parameters) {
+    public <T extends Page> Page testPage(Class<T> pageClass, Map<?, ?> parameters) {
         if (pageClass == null) {
             throw new IllegalArgumentException("pageClass cannot be null");
         }
         if (parameters == null) {
             throw new IllegalArgumentException("Parameters cannot be null");
         }
-        Iterator it = parameters.entrySet().iterator();
-        while (it.hasNext()) {
-            Entry entry = (Entry) it.next();
+        for (Entry<?, ?> entry : parameters.entrySet()) {
             setParameter(String.valueOf(entry.getKey()),
                 String.valueOf(entry.getValue()));
         }
@@ -460,7 +457,8 @@ public class MockContainer {
      * @param pageClass specifies the class of the Page to test
      * @return the Page instance for the specified pageClass
      */
-    public Page testPage(Class pageClass) {
+    @SuppressWarnings("unchecked")
+    public <T extends Page> T testPage(Class<T> pageClass) {
         if (!started) {
             throw new IllegalStateException("Container has not been started yet. Call start() first.");
         }
@@ -481,7 +479,7 @@ public class MockContainer {
 
             getRequest().setServletPath(servletPath);
             getClickServlet().service(request, getResponse());
-            return getPage();
+            return (T) getPage();
 
         } catch (RuntimeException ex) {
             throw ex;
@@ -508,7 +506,7 @@ public class MockContainer {
             throw new IllegalArgumentException("path cannot be null");
         }
         path = appendLeadingSlash(path);
-        Class pageClass = getClickServlet().getConfigService().getPageClass(path);
+        Class<? extends Page> pageClass = getClickServlet().getConfigService().getPageClass(path);
         return testPage(pageClass);
     }
 
@@ -527,12 +525,12 @@ public class MockContainer {
      *
      * @return a new Page instance for the specified path
      */
-    public Page testPage(String path, Map parameters) {
+    public Page testPage(String path, Map<?, ?> parameters) {
         if (path == null) {
             throw new IllegalArgumentException("path cannot be null");
         }
         path = appendLeadingSlash(path);
-        Class pageClass = getClickServlet().getConfigService().getPageClass(path);
+        Class<? extends Page> pageClass = getClickServlet().getConfigService().getPageClass(path);
         return testPage(pageClass, parameters);
     }
 
@@ -595,7 +593,7 @@ public class MockContainer {
      *
      * @return the class that Page forwarded to
      */
-    public Class getForwardPageClass() {
+    public Class<? extends Page> getForwardPageClass() {
         if (Context.getContextStack().isEmpty()) {
             return null;
         }
@@ -620,7 +618,7 @@ public class MockContainer {
      *
      * @return the Class that Page redirected to
      */
-    public Class getRedirectPageClass() {
+    public Class<? extends Page> getRedirectPageClass() {
         if (Context.getContextStack().isEmpty()) {
             return null;
         }
@@ -780,6 +778,7 @@ public class MockContainer {
          *
          * @return localized description of this exception
          */
+        @Override
         public String getLocalizedMessage() {
             if (getCause() == null) {
                 return super.getLocalizedMessage();
@@ -795,6 +794,7 @@ public class MockContainer {
          *
          * @return the exception error message
          */
+        @Override
         public String getMessage() {
             if (getCause() == null) {
                 return super.getMessage();
@@ -810,6 +810,7 @@ public class MockContainer {
          *
          * @param printStream the PrintStream to print to
          */
+        @Override
         public void printStackTrace(PrintStream printStream) {
             synchronized (printStream) {
                 if (getCause() == null) {
@@ -825,6 +826,7 @@ public class MockContainer {
          *
          * @param printWriter the PrintWriter to print to
          */
+        @Override
         public void printStackTrace(PrintWriter printWriter) {
             synchronized (printWriter) {
                 if (getCause() == null) {
@@ -841,6 +843,7 @@ public class MockContainer {
          * @return a reference to either the underlying cause (if its defined)
          * or this Throwable instance.
          */
+        @Override
         public synchronized Throwable fillInStackTrace() {
             if (getCause() == null) {
                 return this;

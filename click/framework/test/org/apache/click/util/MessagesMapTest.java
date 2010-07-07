@@ -246,7 +246,7 @@ public class MessagesMapTest extends TestCase {
      */
     private class ReloadableMessagesMap extends MessagesMap {
 
-        public ReloadableMessagesMap(Class baseClass, String globalResource) {
+        public ReloadableMessagesMap(Class<?> baseClass, String globalResource) {
             super(baseClass, globalResource);
             clearCache();
         }
@@ -258,10 +258,10 @@ public class MessagesMapTest extends TestCase {
 
         private void clearResourceBundleCache() {
             try {
-                Class type = ResourceBundle.class;
+                Class<?> type = ResourceBundle.class;
                 Field cacheList = type.getDeclaredField("cacheList");
                 cacheList.setAccessible(true);
-                ((Map) cacheList.get(ResourceBundle.class)).clear();
+                ((Map<?, ?>) cacheList.get(ResourceBundle.class)).clear();
                 cacheList.setAccessible(false);
             } catch (Exception jvmNotSupported) {
                 System.out.println("WARNING: Could not clear the MessagesMap " +

@@ -26,6 +26,7 @@ public class JspRedirectPage extends RedirectToJsp {
     /**
      * Initialize page.
      */
+    @Override
     public void onInit() {
         setRedirect("/test.jsp");
     }
