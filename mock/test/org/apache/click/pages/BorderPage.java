@@ -24,6 +24,7 @@ import org.apache.click.Page;
  * A border page for mock testing.
  */
 public class BorderPage extends Page {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Return border template path.

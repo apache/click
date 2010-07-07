@@ -24,6 +24,7 @@ import org.apache.click.*;
  * Redirect test page.
  */
 public class RedirectPage extends Page {
+    private static final long serialVersionUID = 1L;
 
     public static final String ID_VALUE = "200";
 

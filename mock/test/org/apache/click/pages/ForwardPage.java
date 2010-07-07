@@ -24,6 +24,7 @@ import org.apache.click.*;
  * Forward test page.
  */
 public class ForwardPage extends Page {
+    private static final long serialVersionUID = 1L;
 
     public static final String ID_VALUE = "200";
 

@@ -34,9 +34,10 @@ public class MockRequestTest extends TestCase {
      * Check that MockRequest can dynamically add parameters and trigger
      * a Controls action listener.
      */
+    @SuppressWarnings("unchecked")
     public void testDynamicRequest() {
         MockContext context = MockContext.initContext();
-        MockRequest request = (MockRequest) context.getMockRequest();
+        MockRequest request = context.getMockRequest();
 
         TextArea textArea = new TextArea("text");
         assertEquals("text", textArea.getName());
@@ -46,6 +47,8 @@ public class MockRequestTest extends TestCase {
 
         // Registry a listener which must be invoked
         textArea.setActionListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 // When action is invoked, set flag to true
                 return actionCalled = true;
