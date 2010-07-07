@@ -72,13 +72,13 @@ public class MockServletContext implements ServletContext {
     // -------------------------------------------------------- Private variables
 
     /** Map of attributes. */
-    private final Map attributes = new HashMap();
+    private final Map<String, Object> attributes = new HashMap<String, Object>();
 
     /** Map of initialization parameters. */
-    private final Map initParameters = new HashMap();
+    private final Map<String, String> initParameters = new HashMap<String, String>();
 
     /** Map of mime types. */
-    private final Map mimeTypes = new HashMap();
+    private final Map<String, String> mimeTypes = new HashMap<String, String>();
 
     /** The context temporary path. */
     private String tempPath;
@@ -365,7 +365,7 @@ public class MockServletContext implements ServletContext {
      *
      * @param initParameters A map of init parameters
      */
-    public void addInitParameters(final Map initParameters) {
+    public void addInitParameters(final Map<String, String> initParameters) {
         if (initParameters == null) {
             return;
         }
@@ -398,7 +398,7 @@ public class MockServletContext implements ServletContext {
      *
      * @return The attribute names
      */
-    public Enumeration getAttributeNames() {
+    public Enumeration<String> getAttributeNames() {
         return Collections.enumeration(attributes.keySet());
     }
 
@@ -439,7 +439,7 @@ public class MockServletContext implements ServletContext {
      * @return The parameter, or null if no such parameter
      */
     public String getInitParameter(final String name) {
-        return (String) initParameters.get(name);
+        return initParameters.get(name);
     }
 
     /**
@@ -447,7 +447,7 @@ public class MockServletContext implements ServletContext {
      *
      * @return The init parameter names
      */
-    public Enumeration getInitParameterNames() {
+    public Enumeration<String> getInitParameterNames() {
         return Collections.enumeration(initParameters.keySet());
     }
 
@@ -479,7 +479,7 @@ public class MockServletContext implements ServletContext {
         }
         String type = name.substring(index + 1);
         if (mimeTypes.containsKey(type)) {
-            return (String) mimeTypes.get(type);
+            return mimeTypes.get(type);
         } else {
             return ClickUtils.getMimeType(type);
         }
@@ -604,13 +604,13 @@ public class MockServletContext implements ServletContext {
      * @throws IllegalArgumentException if the specified name does not start
      * with a "/" character
      */
-    public Set getResourcePaths(String name) {
+    public Set<String> getResourcePaths(String name) {
         if (!name.startsWith("/")) {
             throw new IllegalArgumentException("Path " + name
                 + " does not start with a \"/\" character");
         }
         if (webappRoot == null) {
-            return new HashSet();
+            return new HashSet<String>();
         }
 
         name = name.substring(1);
@@ -644,7 +644,7 @@ public class MockServletContext implements ServletContext {
 
         //List of resources in the matching path
         File[] files = current.listFiles();
-        Set result = new HashSet();
+        Set<String> result = new HashSet<String>();
         int stripLength = webappRoot.getPath().length();
         for (int f = 0; f < files.length; f++) {
             String s = files[f].getPath().substring(stripLength).replace('\\', '/');
@@ -692,7 +692,7 @@ public class MockServletContext implements ServletContext {
      *
      * @return null
      */
-    public Enumeration getServletNames() {
+    public Enumeration<String> getServletNames() {
         return null;
     }
 
@@ -701,7 +701,7 @@ public class MockServletContext implements ServletContext {
      *
      * @return null
      */
-    public Enumeration getServlets() {
+    public Enumeration<?> getServlets() {
         return null;
     }
 
@@ -810,6 +810,7 @@ public class MockServletContext implements ServletContext {
         }
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
+            @Override
             public void run() {
                 //delete the temporary directory and all subdirectories
                 deleteDirectory(directory);

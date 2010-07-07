@@ -87,13 +87,13 @@ public class MockResponse implements HttpServletResponse {
     private int code = HttpServletResponse.SC_OK;
 
     /** The response list of cookies. */
-    private final List cookies = new ArrayList();
+    private final List<Cookie> cookies = new ArrayList<Cookie>();
 
     /** The response error message. */
     private String errorMessage = null;
 
     /** The response headers map. */
-    private final Map headers = new HashMap();
+    private final Map<String, List<String>> headers = new HashMap<String, List<String>>();
 
     /** The response locale. */
     private Locale locale = null;
@@ -154,9 +154,9 @@ public class MockResponse implements HttpServletResponse {
      * @param value The value for the header
      */
     public void addHeader(final String name, final String value) {
-        List list = (List) headers.get(name);
+        List<String> list = headers.get(name);
         if (list == null) {
-            list = new ArrayList(1);
+            list = new ArrayList<String>(1);
             headers.put(name, list);
         }
         list.add(value);
@@ -281,7 +281,7 @@ public class MockResponse implements HttpServletResponse {
      *
      * @return The collection of cookies
      */
-    public Collection getCookies() {
+    public Collection<Cookie> getCookies() {
         return cookies;
     }
 
@@ -314,11 +314,11 @@ public class MockResponse implements HttpServletResponse {
      * @return The value, or null
      */
     public String getHeader(final String name) {
-        List l = (List) headers.get(name);
+        List<String> l = headers.get(name);
         if (l == null || l.size() < 1) {
             return null;
         } else {
-            return (String) l.get(0);
+            return l.get(0);
         }
     }
 
@@ -327,7 +327,7 @@ public class MockResponse implements HttpServletResponse {
      *
      * @return The header names
      */
-    public Set getHeaderNames() {
+    public Set<String> getHeaderNames() {
         return headers.keySet();
     }
 
@@ -405,6 +405,7 @@ public class MockResponse implements HttpServletResponse {
         byteStream = new ByteArrayOutputStream();
         servletStream = new ServletOutputStream() {
 
+            @Override
             public void write(int b) {
                 byteStream.write(b);
             }
@@ -412,10 +413,12 @@ public class MockResponse implements HttpServletResponse {
         stringWriter = new StringWriter();
         printWriter = new PrintWriter(stringWriter) {
 
+            @Override
             public void close() {
             // Do nothing
             }
 
+            @Override
             public void flush() {
             // Do nothing
             }
@@ -648,7 +651,7 @@ public class MockResponse implements HttpServletResponse {
      * @param value The value for the header
      */
     public void setHeader(final String name, final String value) {
-        List l = new ArrayList(1);
+        List<String> l = new ArrayList<String>(1);
         l.add(value);
         headers.put(name, l);
     }

@@ -57,7 +57,7 @@ public class MockTests extends TestCase {
         final String value = "initValue";
         ServletContext servletContext = new MockServletContext();
         MockServletConfig servletConfig = new MockServletConfig(servletName,
-          servletContext, new HashMap());
+          servletContext, new HashMap<String, String>());
 
         //test that the method is null safe
         servletConfig.addInitParameters(null);

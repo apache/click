@@ -23,9 +23,10 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionContext;
+
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
 
@@ -43,7 +44,7 @@ public class MockSession implements HttpSession {
     private ServletContext servletContext = null;
 
     /** The session attributes. */
-    private Map attributes = new HashMap();
+    private Map<String, Object> attributes = new HashMap<String, Object>();
 
     /** The session unique id. */
     private String id = Long.toString(new Random().nextLong());
@@ -124,7 +125,7 @@ public class MockSession implements HttpSession {
      * @return an Enumeration of String objects specifying the names of all the
      * objects bound to this session
      */
-    public Enumeration getAttributeNames() {
+    public Enumeration<String> getAttributeNames() {
         return Collections.enumeration(attributes.keySet());
     }
 
@@ -184,7 +185,8 @@ public class MockSession implements HttpSession {
      *
      * @return the session sessionContext
      */
-    public HttpSessionContext getSessionContext() {
+    @SuppressWarnings("deprecation")
+    public javax.servlet.http.HttpSessionContext getSessionContext() {
         return null;
     }
 
@@ -195,7 +197,7 @@ public class MockSession implements HttpSession {
      * objects bound to this session
      */
     public String[] getValueNames() {
-        return (String[]) attributes.keySet().toArray(new String[attributes.size()]);
+        return attributes.keySet().toArray(new String[attributes.size()]);
     }
 
     /**
@@ -289,11 +291,12 @@ public class MockSession implements HttpSession {
      *
      * @return string representation of the session
      */
+    @Override
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
         buffer.append("Session attributes {");
-        for (Enumeration en = getAttributeNames(); en.hasMoreElements();) {
-            String name = (String) en.nextElement();
+        for (Enumeration<String> en = getAttributeNames(); en.hasMoreElements();) {
+            String name = en.nextElement();
             Object value = getAttribute(name);
             buffer.append(name);
             buffer.append("=");
