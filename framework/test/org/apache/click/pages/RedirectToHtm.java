@@ -28,6 +28,7 @@ public class RedirectToHtm extends Page {
     /**
      * Redirect to test.htm path.
      */
+    @Override
     public void onInit() {
         setRedirect("/test.htm");
     }

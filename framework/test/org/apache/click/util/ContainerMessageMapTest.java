@@ -45,7 +45,7 @@ public class ContainerMessageMapTest extends TestCase {
         MyForm form = new MyForm("myform");
         page.addControl(form);
         Field customField = form.getField("customField");
-        Map map = form.getMessages();
+        Map<String, String> map = form.getMessages();
         assertFalse(map.isEmpty());
         assertTrue(map.size() >= 2);
         assertEquals("Custom Name", customField.getLabel());

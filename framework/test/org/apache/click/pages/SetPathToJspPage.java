@@ -30,6 +30,7 @@ public class SetPathToJspPage extends Page {
     /**
      * Set path to non-existent dummy.jsp
      */
+    @Override
     public void onInit() {
         setPath(PATH);
     }

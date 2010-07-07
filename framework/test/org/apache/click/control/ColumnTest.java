@@ -140,6 +140,7 @@ public class ColumnTest extends TestCase {
             this.child = child;
         }
 
+        @Override
         public String toString() {
             return "TextObject [ " + getName() + ", " + getValue() + "]";
         }
@@ -164,6 +165,7 @@ public class ColumnTest extends TestCase {
             this.name = name;
         }
         
+        @Override
         public String toString() {
             return "Child [ " + getName() + "]";
         }

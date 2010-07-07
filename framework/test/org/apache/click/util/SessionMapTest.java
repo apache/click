@@ -144,7 +144,7 @@ public class SessionMapTest extends TestCase  {
         
         container.getRequest().setMethod("GET");
 
-        SessionMapPage page = (SessionMapPage) container.testPage(SessionMapPage.class);
+        container.testPage(SessionMapPage.class);
         Assert.assertTrue(container.getHtml().contains("attrib1=value1"));
         
         container.stop();

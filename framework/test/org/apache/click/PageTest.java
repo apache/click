@@ -40,7 +40,7 @@ public class PageTest extends TestCase {
         String contextPath = container.getRequest().getContextPath();
         container.getRequest().setMethod("GET");
 
-        RedirectToHtm page = (RedirectToHtm) container.testPage(RedirectToHtm.class);
+        RedirectToHtm page = container.testPage(RedirectToHtm.class);
 
         // assert that the Page successfully redirected to test.htm
         String expected = contextPath + "/test.htm";
@@ -58,7 +58,7 @@ public class PageTest extends TestCase {
         String contextPath = container.getRequest().getContextPath();
         container.getRequest().setMethod("GET");
 
-        RedirectToJsp page = (RedirectToJsp) container.testPage(RedirectToJsp.class);
+        RedirectToJsp page = container.testPage(RedirectToJsp.class);
 
         // assert that the Page successfully redirected to jsp-page.htm, meaning
         // Click converted the Page JSP template from jsp-page.jsp to jsp-page.htm
@@ -77,7 +77,7 @@ public class PageTest extends TestCase {
         String contextPath = container.getRequest().getContextPath();
         container.getRequest().setMethod("GET");
 
-        JspRedirectPage page = (JspRedirectPage) container.testPage(JspRedirectPage.class);
+        JspRedirectPage page = container.testPage(JspRedirectPage.class);
 
         // assert that the Page successfully redirected to test.jsp, meaning
         // Click DID NOT convert the location from test.jsp to test.htm
@@ -118,7 +118,7 @@ public class PageTest extends TestCase {
         container.start();
         container.getRequest().setMethod("GET");
 
-        RedirectToSelfPage page = (RedirectToSelfPage) container.testPage(RedirectToSelfPage.class);
+        RedirectToSelfPage page = container.testPage(RedirectToSelfPage.class);
 
         assertEquals(RedirectToSelfPage.class.getName(), container.getRedirectPageClass().getName());
 
@@ -135,7 +135,7 @@ public class PageTest extends TestCase {
         container.start();
         container.getRequest().setMethod("GET");
 
-        SetPathToJspPage page = (SetPathToJspPage) container.testPage(SetPathToJspPage.class);
+        SetPathToJspPage page = container.testPage(SetPathToJspPage.class);
         assertEquals(SetPathToJspPage.PATH, container.getForward());
 
         container.stop();

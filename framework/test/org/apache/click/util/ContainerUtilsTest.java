@@ -22,6 +22,7 @@ import java.util.List;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
 import org.apache.click.control.Button;
+import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
@@ -61,7 +62,7 @@ public class ContainerUtilsTest extends TestCase {
         Button button = new Button("button");
         form.add(button);
         
-        List fields = ContainerUtils.getInputFields(form);
+        List<Field> fields = ContainerUtils.getInputFields(form);
         
         // Total should be 4 consisting of the fields "hidden", "id" and the
         // Forms internal HiddenFields "form_name" and "bypass_validation".

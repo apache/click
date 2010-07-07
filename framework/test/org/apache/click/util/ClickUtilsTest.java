@@ -59,6 +59,7 @@ public class ClickUtilsTest extends TestCase {
     /**
      * Setup a MockContext for each test.
      */
+    @Override
     protected void setUp() {
     	MockContext.initContext(Locale.ENGLISH);
     }
@@ -202,7 +203,7 @@ public class ClickUtilsTest extends TestCase {
         form.copyFrom(user, true);
         assertEquals("NSW", codeField.getValueObject());
         
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("name", "malcolm");
         form = new Form();
         TextField nameField2 = new TextField("name");
@@ -225,7 +226,7 @@ public class ClickUtilsTest extends TestCase {
         String street = "12 Short street";
         
         // Setup the map
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", id);
         map.put("name", name);
         map.put("age", age);
@@ -275,7 +276,7 @@ public class ClickUtilsTest extends TestCase {
         String street = "12 Short street";
 
         // Setup the map with no values
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", null);
         map.put("name", null);
         map.put("age", null);
@@ -377,7 +378,7 @@ public class ClickUtilsTest extends TestCase {
     public void testGetParentMessages() {
         TextField textField = new TextField("test");
         
-        Map map = ClickUtils.getParentMessages(textField);
+        Map<String, String> map = ClickUtils.getParentMessages(textField);
         assertNotNull(map);
         assertTrue(map.isEmpty());
         assertTrue(map == Collections.EMPTY_MAP);
@@ -385,7 +386,7 @@ public class ClickUtilsTest extends TestCase {
         Page page = new Page();
         page.addControl(textField);
         
-        Map map2 = ClickUtils.getParentMessages(textField);
+        Map<String, String> map2 = ClickUtils.getParentMessages(textField);
         assertNotNull(map2);
         assertEquals(1, map2.size());
         assertFalse(map2 == Collections.EMPTY_MAP);
@@ -398,7 +399,7 @@ public class ClickUtilsTest extends TestCase {
         TextField textField2 = new TextField("test");
         form.add(textField2);
 
-        Map map3 = ClickUtils.getParentMessages(textField2);
+        Map<String, String> map3 = ClickUtils.getParentMessages(textField2);
         assertNotNull(map3);
         assertEquals(1, map3.size());
         assertFalse(map3 == Collections.EMPTY_MAP);        

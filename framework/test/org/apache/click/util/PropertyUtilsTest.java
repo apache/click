@@ -34,21 +34,21 @@ public class PropertyUtilsTest extends TestCase {
      */
     public void testGetProperty() {
         try {
-            PropertyUtils.getValue(new Object(), "username", new HashMap());
+            PropertyUtils.getValue(new Object(), "username", new HashMap<Object, Object>());
             assertTrue(false);
         } catch (Exception e) {
             assertTrue(true);
         }
 
         try {
-            PropertyUtils.getValue(new Object(), "class", new HashMap());
+            PropertyUtils.getValue(new Object(), "class", new HashMap<Object, Object>());
             assertTrue(true);
         } catch (Exception e) {
             assertTrue(false);
         }
 
         ParentObject testObject = new ParentObject();
-        Map cache = new HashMap();
+        Map<?, ?> cache = new HashMap<Object, Object>();
 
         assertNull(PropertyUtils.getValue(testObject, "name", cache));
         assertNull(PropertyUtils.getValue(testObject, "value", cache));
@@ -88,7 +88,7 @@ public class PropertyUtilsTest extends TestCase {
      * Test that PropertyUtils can extract value from Map.
      */
     public void testMap() {
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("name", "malcolm");
 
         assertEquals("malcolm", PropertyUtils.getValue(map, "name"));
