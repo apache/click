@@ -117,6 +117,7 @@ public class MockTests extends TestCase {
             resourceStream.read(resultData);
             boolean sameBytes = Arrays.equals(resultData, origData.getBytes());
             Assert.assertTrue(sameBytes);
+            resourceStream.close();
 
         } catch (Exception ex) {
             ex.printStackTrace();
