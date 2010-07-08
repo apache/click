@@ -144,6 +144,8 @@ public class DateFieldTest extends TestCase {
     }
 
     public class MyDateField extends DateField {
+        private static final long serialVersionUID = 1L;
+
         public MyDateField(String name) {
             super(name);
         }

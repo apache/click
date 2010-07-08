@@ -27,9 +27,11 @@ import org.apache.click.control.TextField;
  * A Google App Engine (GAE) file upload test page.
  */
 public class MemoryFileItemUploadPage extends Page {
+    private static final long serialVersionUID = 1L;
 
     private Form form = new Form("form");
 
+    @Override
     public void onInit() {
         addControl(form);
         form.add(new TextField("firstname"));

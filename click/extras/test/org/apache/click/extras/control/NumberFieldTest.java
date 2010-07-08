@@ -43,8 +43,7 @@ public class NumberFieldTest extends TestCase{
     }
 
     public void testFormat() {
-        MockContext mockContext = MockContext.initContext(Locale.US);
-        MockRequest req = mockContext.getMockRequest();
+        MockContext.initContext(Locale.US);
         
         Number decNum = new Float(2.56f);
         
@@ -96,8 +95,7 @@ public class NumberFieldTest extends TestCase{
         engF.setValue("3456,134");
         assertEquals(3456.134f, engF.getNumber().floatValue(),0);
         
-        mockContext = MockContext.initContext(Locale.GERMANY);
-        req = mockContext.getMockRequest();
+        MockContext.initContext(Locale.GERMANY);
         
         NumberField germanF = new NumberField("de");
         
