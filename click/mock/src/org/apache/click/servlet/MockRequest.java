@@ -591,7 +591,7 @@ public class MockRequest implements HttpServletRequest {
     public String getParameter(final String name) {
         Object value = parameters.get(name);
         if (value instanceof String[]) {
-            return ((String[])value)[0];
+            return ((String[]) value)[0];
         } else {
             return (String) value;
         }

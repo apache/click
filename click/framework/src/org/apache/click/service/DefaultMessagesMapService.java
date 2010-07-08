@@ -52,7 +52,7 @@ public class DefaultMessagesMapService implements MessagesMapService {
      *
      * @param baseClass the target class
      * @param globalResource the global resource bundle name
-     * @param the users Locale
+     * @param locale the users Locale
      *
      * @return a MessagesMap instance.
      *

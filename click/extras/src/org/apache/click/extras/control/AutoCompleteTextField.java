@@ -435,7 +435,7 @@ public abstract class AutoCompleteTextField extends TextField {
      * @return the field internal Ajax behavior instance
      */
     protected Behavior getBehavior() {
-        if(behavior == null) {
+        if (behavior == null) {
             behavior = createBehavior();
         }
         return behavior;
