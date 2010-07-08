@@ -39,14 +39,14 @@ public class CountryFieldTest extends TestCase {
      * CLK-458
      */
     public void testDuplicateCountries() {
-        MockContext mockContext = MockContext.initContext();
+        MockContext.initContext();
 
         CountrySelect countrySelect = new CountrySelect("select");
         countrySelect.bindRequestValue();
-        List countries = countrySelect.getOptionList();
-        Iterator it = countries.iterator();
+        List<?> countries = countrySelect.getOptionList();
+        Iterator<?> it = countries.iterator();
         
-        Set uniqueChecker = new HashSet();
+        Set<String> uniqueChecker = new HashSet<String>();
         while(it.hasNext()) {
             Option option = (Option) it.next();
             

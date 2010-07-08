@@ -19,10 +19,13 @@
 package org.apache.click.extras.control;
 
 import java.util.List;
+
 import junit.framework.TestCase;
+
 import org.apache.click.MockContext;
 import org.apache.click.Page;
 import org.apache.click.control.Form;
+import org.apache.click.element.Element;
 import org.apache.click.util.PageImports;
 
 public class FormTableTest extends TestCase {
@@ -41,8 +44,8 @@ public class FormTableTest extends TestCase {
         FormTable table = new FormTable("table");
 
         pageImports.processControl(table);
-        List headElements = pageImports.getHeadElements();
-        List jsElements = pageImports.getJsElements();
+        List<Element> headElements = pageImports.getHeadElements();
+        List<Element> jsElements = pageImports.getJsElements();
 
         assertTrue(headElements.get(0).toString().contains("/table.css"));
         assertTrue(headElements.get(1).toString().contains("/control.css"));

@@ -35,12 +35,14 @@ public class TreeTest extends TestCase {
     private String[] testIds;
     private MockContext mockContext;
 
+    @Override
     public void setUp() throws Exception {
         mockContext = MockContext.initContext();
         buildTree();
         buildTestIds();
     }
     
+    @Override
     public void tearDown() throws Exception {
         tree = null;
     }
@@ -82,7 +84,7 @@ public class TreeTest extends TestCase {
         //nodeId '3.1' should be invisible because its parent 'three' is not expanded,
         //thus only node 'one' and 'three' should be returned.
         boolean includeInvisibleNodes = false;
-        List result = tree.getSelectedNodes(includeInvisibleNodes);
+        List<TreeNode> result = tree.getSelectedNodes(includeInvisibleNodes);
         assertEquals(2, result.size());
         
         //now check if all values are selected
@@ -105,7 +107,7 @@ public class TreeTest extends TestCase {
         //nodeId '3.1' should be invisible because its parent 'three' is not expanded,
         //thus only node 'one' and 'three' should be returned.
         boolean includeInvisibleNodes = false;
-        List result = tree.getExpandedNodes(includeInvisibleNodes);
+        List<TreeNode> result = tree.getExpandedNodes(includeInvisibleNodes);
         
         //rootnode is expanded by default.
         //Result below should be 2 because 3.1 is collapsed hiding 3.1.1 which is expanded

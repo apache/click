@@ -19,7 +19,6 @@
 package org.apache.click.extras.control;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.click.control.Option;
@@ -37,7 +36,7 @@ public class CheckListTest extends TestCase {
     public void testSortOptions() {
         CheckList cL = new CheckList();
         int[] in = {1,2,3,4,5,6};
-        List oL = createOptionsList(in);
+        List<Option> oL = createOptionsList(in);
 
         cL.setOptionList(oL);
         int[] sort = {6,4,2,1,3,5};
@@ -68,8 +67,8 @@ public class CheckListTest extends TestCase {
         return ret;
     }
     
-    private List createOptionsList(int[] values) {
-        List ret = new ArrayList();
+    private List<Option> createOptionsList(int[] values) {
+        List<Option> ret = new ArrayList<Option>();
         for(int i=0; i<values.length; i++) {
             String value = Integer.toString(values[i]);
             String label = "Label: "+i;
@@ -78,15 +77,14 @@ public class CheckListTest extends TestCase {
         return ret;
     }
     
-    private void compareOptions(int[] values,List options) {
+    private void compareOptions(int[] values, List<Option> options) {
         assertNotNull(options);
         String demanded ="";
         String given = "";
         for(int i=0;i<values.length;i++) {
             demanded += values[i]+",";
         }
-        for (Iterator it = options.iterator(); it.hasNext(); ) {
-            Option opt = (Option) it.next();
+        for (Option opt : options) {
             assertNotNull(opt);
             given += opt.getValue()+",";
         }
