@@ -230,11 +230,11 @@ public class TextFieldTest extends TestCase {
      * CLK-627
      */
     public void testTrim() {
-         String trimmedValue = "value";
-         String value = " " + trimmedValue + " ";
+        String trimmedValue = "value";
+        String value = " " + trimmedValue + " ";
 
-         MockContext context = MockContext.initContext();
-         context.getMockRequest().setParameter("field", value);
+        MockContext context = MockContext.initContext();
+        context.getMockRequest().setParameter("field", value);
 
         Field field = new TextField("field");
         field.onProcess();
