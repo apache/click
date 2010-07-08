@@ -58,6 +58,8 @@ public class MenuTest extends TestCase {
     }
 
     public class MyMenu extends Menu {
+        private static final long serialVersionUID = 1L;
+
         public MyMenu(String name) {
             super(name);
         }

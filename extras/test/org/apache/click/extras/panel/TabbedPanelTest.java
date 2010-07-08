@@ -99,6 +99,8 @@ public class TabbedPanelTest extends TestCase {
         tabbedPanel.add(new Panel("panel2"));
 
         tabbedPanel.setTabListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 return false;
             }
@@ -107,7 +109,7 @@ public class TabbedPanelTest extends TestCase {
         tabbedPanel.onInit();
         tabbedPanel.onProcess();
         // Simulate ClickServlet triggering all action events
-        boolean actionResult = context.fireActionEventsAndClearRegistry();
+        boolean actionResult = context.executeActionListeners();
 
         // If tab listener was triggered the actionResult should be false
         assertFalse(actionResult);

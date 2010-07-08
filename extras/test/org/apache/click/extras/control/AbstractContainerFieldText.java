@@ -27,7 +27,6 @@ import org.apache.click.servlet.MockRequest;
 import org.apache.click.servlet.MockResponse;
 import org.apache.click.servlet.MockServletConfig;
 import org.apache.click.servlet.MockServletContext;
-import org.apache.click.servlet.MockSession;
 
 public class AbstractContainerFieldText extends TestCase {
 
@@ -39,6 +38,9 @@ public class AbstractContainerFieldText extends TestCase {
         initMockContext();
 
         AbstractContainerField field = new AbstractContainerField() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
             public String getTag() {
                 return "div";
             }
@@ -68,15 +70,14 @@ public class AbstractContainerFieldText extends TestCase {
     private void initMockContext() {
         MockServletContext servletContext = new MockServletContext();
         String servletName = "click-servlet";
-        String servletPath = "test";
         MockServletConfig servletConfig = new MockServletConfig(servletName,
             servletContext);
         ClickServlet servlet = new ClickServlet();
         MockResponse response = new MockResponse();
-        MockSession session = new MockSession(servletContext);
         MockRequest request = new MockRequest() {
 
             // Override getParameter to throw exception if argument is null
+            @Override
             public String getParameter(String name) {
                 if (name == null) {
                     throw new IllegalArgumentException("Null parameter");
@@ -88,7 +89,9 @@ public class AbstractContainerFieldText extends TestCase {
     }
     
     class FeedbackBorder extends AbstractContainerField {
+        private static final long serialVersionUID = 1L;
 
+        @Override
         public Control insert(Control control, int index) {
 
             // Enforce rule that only 1 control can be added
