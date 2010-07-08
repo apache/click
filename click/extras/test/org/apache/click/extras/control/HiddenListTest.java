@@ -54,7 +54,7 @@ public class HiddenListTest extends TestCase {
         hiddenList.addValue("B");
         hiddenList.addValue("C");
         
-        List valueObject = (List) hiddenList.getValueObject();
+        List<?> valueObject = (List<?>) hiddenList.getValueObject();
         assertEquals(3, valueObject.size());
         assertEquals("A", valueObject.get(0));
         assertEquals("B", valueObject.get(1));
@@ -64,14 +64,14 @@ public class HiddenListTest extends TestCase {
     public void testSetValueObject() {
         HiddenList hiddenList = new HiddenList("hiddenList");
         
-        List valueObject = new ArrayList();
+        List<String> valueObject = new ArrayList<String>();
         valueObject.add("A");
         valueObject.add("B");
         valueObject.add("C");
         
         hiddenList.setValueObject(valueObject);
         
-        List values = hiddenList.getValues();
+        List<String> values = hiddenList.getValues();
         assertEquals(3, values.size());
         assertEquals("A", values.get(0));
         assertEquals("B", values.get(1));

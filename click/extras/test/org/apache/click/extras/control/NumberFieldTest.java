@@ -31,11 +31,13 @@ public class NumberFieldTest extends TestCase{
 
     Locale defaultLocale;
 
+    @Override
     protected void setUp() throws Exception {
         defaultLocale = Locale.getDefault();
         Locale.setDefault(Locale.US);
     }
 
+    @Override
     protected void tearDown() throws Exception {
         Locale.setDefault(defaultLocale);
     }
@@ -108,7 +110,7 @@ public class NumberFieldTest extends TestCase{
     public void testOnProcess() {
         MockContext mockContext = MockContext.initContext(Locale.US);
         MockRequest req = mockContext.getMockRequest();
-        Map params = req.getParameterMap();
+        Map<String, Object> params = req.getParameterMap();
         
         NumberField engF = new NumberField("en");
         engF.setPattern("#,##0.00");
@@ -151,7 +153,7 @@ public class NumberFieldTest extends TestCase{
     public void testValidate() {
         MockContext mockContext = MockContext.initContext(Locale.US);
         MockRequest req = mockContext.getMockRequest();
-        Map params = req.getParameterMap();
+        Map<String, Object> params = req.getParameterMap();
         
         NumberField engF = new NumberField("en");
         engF.setPattern("0");

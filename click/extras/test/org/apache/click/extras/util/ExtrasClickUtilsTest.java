@@ -186,7 +186,7 @@ public class ExtrasClickUtilsTest extends TestCase {
         form.copyFrom(user, true);
         assertEquals("NSW", codeField.getValueObject());
         
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("name", "malcolm");
         form = new Form();
         TextField nameField2 = new TextField("name");
