@@ -1375,27 +1375,29 @@ public class ClickUtils {
      * <b>Please note:</b> it is highly recommended to set a control's ID
      * attribute when dealing with Ajax requests.
      * <p/>
-     * The algorith returns the selector in the following order:
+     * The CSS selector is calculated as follows:
      * <ol>
      *   <li>if control.getId() is set, prepend it with a '#' char
-     *   and return the value. An example selector will be: <tt>#field-id</tt></li>
-     *   <li>if control.getName() is not null the following checks are made:
+     *       and return the value. An example selector will be: <tt>#field-id</tt>
+     *   </li>
+     *
+     *   <li>if control.getName() is set do the following:
      *     <ol>
      *       <li>if the control is of type {@link org.apache.click.control.ActionLink},
-     *       its "<tt>class</tt>" attribute selector will be returned. For example:
-     *       <tt>input[class=red]</tt>.
-     *       <b>Please note:</b> if no class attribute is set, this method will
-     *       automatically set link's "class" attribute to its name value and
-     *       prefix the name with an underscore '_'. For example:
-     *       <tt>input[class=_my-link]</tt>.
+     *       it's "<tt>class</tt>" attribute selector will be returned. For example:
+     *       <tt>a[class=red]</tt>. <b>Please note:</b> if the link class attribute is
+     *       not set, the class attribute will be set to its name, prefixed with
+     *       a dash, '-'. For example: <tt>a[class=-my-link]</tt>.
      *       </li>
+     *
      *       <li>if the control is not an ActionLink, it is assumed the control
      *       will render its "<tt>name</tt>" attribute and the name attribute
      *       selector will be returned. For example: <tt>input[name=my-button]</tt>.
      *       </li>
      *     </ol>
      *   </li>
-     *   <li>otherwise this method returns null.
+     *
+     *   <li>otherwise return null.
      *   </li>
      * </ol>
      *
@@ -1432,7 +1434,7 @@ public class ClickUtils {
             if (control instanceof ActionLink) {
                 ActionLink link = (ActionLink) control;
                 if (!link.hasAttribute("class")) {
-                    link.setAttribute("class", '_' + name);
+                    link.setAttribute("class", '-' + name);
                 }
                 buffer.append(tag).append("[class*=");
                 buffer.append(link.getAttribute("class")).append("]");
