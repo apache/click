@@ -924,12 +924,12 @@ public class DateField extends TextField {
 
             buffer.append("Date.dayNames=new Array(");
             generateJavaScriptArray(buffer, dfs.getWeekdays(),
-                    Calendar.SUNDAY, Calendar.SATURDAY+1);
+                    Calendar.SUNDAY, Calendar.SATURDAY + 1);
             buffer.append(");\n");
 
             buffer.append("Date.dayAbbreviations=new Array(");
             generateJavaScriptArray(buffer, dfs.getShortWeekdays(),
-                    Calendar.SUNDAY, Calendar.SATURDAY+1);
+                    Calendar.SUNDAY, Calendar.SATURDAY + 1);
             buffer.append(");\n");
 
             String[] weekdays = null;

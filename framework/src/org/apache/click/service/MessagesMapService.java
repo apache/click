@@ -77,7 +77,7 @@ public interface MessagesMapService {
      *
      * @param baseClass the target class
      * @param globalResource the global resource bundle name
-     * @param the users Locale
+     * @param locale the users Locale
      * @return a new messages map with the messages for the target.
      */
     public Map<String, String> createMessagesMap(Class<?> baseClass,

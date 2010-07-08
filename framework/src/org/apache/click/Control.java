@@ -464,9 +464,30 @@ public interface Control extends Serializable {
      */
     public void render(HtmlStringBuffer buffer);
 
+    /**
+     * Returns <tt>true</tt> if this control has any
+     * <tt>Behavior</tt>s registered.
+     *
+     * @return <tt>true</tt> if this control has any
+     * <tt>Behavior</tt>s registered, <tt>false</tt> otherwise.
+     */
     public boolean hasBehaviors();
 
+    /**
+     * Returns the list with all available behaviors for this control.
+     *
+     * @return the list with this control's behaviors.
+     */
     public List<Behavior> getBehaviors();
 
+    /**
+     * Returns <tt>true</tt> if this control is an AJAX target, <tt>false</tt>
+     * otherwise.
+     * <p/>
+     *
+     * @param context the request context
+     * @return <tt>true</tt> if this control is an AJAX target, <tt>false</tt>
+     * otherwise
+     */
     public boolean isAjaxTarget(Context context);
 }

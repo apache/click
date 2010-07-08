@@ -30,7 +30,6 @@ import org.apache.click.element.Element;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.MessagesMap;
 import org.apache.click.util.PageImports;
 import org.apache.commons.lang.StringUtils;
 
