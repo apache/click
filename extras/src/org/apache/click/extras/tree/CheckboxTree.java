@@ -714,6 +714,7 @@ public class CheckboxTree extends Tree {
      * This class implements a session based javascript handler.
      */
     protected class CheckboxSessionHandler extends SessionHandler {
+        private static final long serialVersionUID = 1L;
 
         /**
          * Creates and initializes a new CheckboxSessionHandler.
@@ -745,6 +746,7 @@ public class CheckboxTree extends Tree {
      * This class implements a session based javascript handler.
      */
     protected class CheckboxCookieHandler extends CookieHandler {
+        private static final long serialVersionUID = 1L;
 
         /**
          * Creates and initializes a new CookieHandler.
