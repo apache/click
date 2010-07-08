@@ -282,7 +282,7 @@ public class CheckboxTree extends Tree {
 
         // find currently selected nodes
         boolean includeInvisibleNodes = isSelectChildNodes();
-        Collection currentlySelected = getSelectedNodes(includeInvisibleNodes);
+        Collection<TreeNode> currentlySelected = getSelectedNodes(includeInvisibleNodes);
 
         // is there any new selected node's
         if (nodeIds == null || nodeIds.length == 0) {
@@ -291,16 +291,16 @@ public class CheckboxTree extends Tree {
             return;
         }
         // build hashes of id's for fast lookup
-        Set hashes = new HashSet();
-        List newSelectedNodes = new ArrayList();
+        Set<String> hashes = new HashSet<String>();
+        List<TreeNode> newSelectedNodes = new ArrayList<TreeNode>();
         for (int i = 0; i < nodeIds.length; i++) {
             hashes.add(nodeIds[i]);
         }
         nodeIds = null;
 
         // build list of newSelectedNodes
-        for (Iterator it = iterator(getRootNode()); it.hasNext();) {
-            TreeNode result = (TreeNode) it.next();
+        for (Iterator<TreeNode> it = iterator(getRootNode()); it.hasNext();) {
+            TreeNode result = it.next();
             if (hashes.contains(result.getId())) {
                 newSelectedNodes.add(result);
             }
@@ -386,7 +386,7 @@ public class CheckboxTree extends Tree {
                 if (isJavascriptEnabled()) {
                     //create a href to interact with the checkbox on browser
                     buffer.elementStart("a");
-                    Map hrefParameters =
+                    Map<String, String> hrefParameters =
                         Collections.singletonMap(SELECT_TREE_NODE_PARAM,
                                                  treeNode.getId());
                     buffer.appendAttribute("href", getHref(hrefParameters));

@@ -565,7 +565,7 @@ public class Tree extends AbstractControl {
      * the tree's nodes.
      */
     public void bindExpandOrCollapseValues() {
-        expandOrCollapseNodeIds = getExpandLink().getParameterValues(EXPAND_TREE_NODE_PARAM);
+        expandOrCollapseNodeIds = getExpandLink().getParameterValues(EXPAND_TREE_NODE_PARAM); 
     }
 
     /**
@@ -658,8 +658,8 @@ public class Tree extends AbstractControl {
      * notify listeners of any change.
      */
     public void expandAll() {
-        for (Iterator it = iterator(); it.hasNext();) {
-            TreeNode node = (TreeNode) it.next();
+        for (Iterator<TreeNode> it = iterator(); it.hasNext();) {
+            TreeNode node = it.next();
             boolean oldValue = node.isExpanded();
             node.setExpanded(true);
             if (isNotifyListeners()) {
@@ -674,8 +674,8 @@ public class Tree extends AbstractControl {
      * notify listeners of any change.
      */
     public void collapseAll() {
-        for (Iterator it = iterator(); it.hasNext();) {
-            TreeNode node = (TreeNode) it.next();
+        for (Iterator<TreeNode> it = iterator(); it.hasNext();) {
+            TreeNode node = it.next();
             boolean oldValue = node.isExpanded();
             node.setExpanded(false);
             if (isNotifyListeners()) {
@@ -746,8 +746,8 @@ public class Tree extends AbstractControl {
      * notify listeners of any change.
      */
     public void selectAll() {
-        for (Iterator it = iterator(); it.hasNext();) {
-            TreeNode node = (TreeNode) it.next();
+        for (Iterator<TreeNode> it = iterator(); it.hasNext();) {
+            TreeNode node = it.next();
             boolean oldValue = node.isSelected();
             node.setSelected(true);
             if (isNotifyListeners()) {
@@ -762,8 +762,8 @@ public class Tree extends AbstractControl {
      * notify listeners of any change.
      */
     public void deselectAll() {
-        for (Iterator it = iterator(); it.hasNext();) {
-            TreeNode node = (TreeNode) it.next();
+        for (Iterator<TreeNode> it = iterator(); it.hasNext();) {
+            TreeNode node = it.next();
             boolean oldValue = node.isSelected();
             node.setSelected(false);
             if (isNotifyListeners()) {
@@ -781,8 +781,8 @@ public class Tree extends AbstractControl {
      */
     public List<TreeNode> getExpandedNodes(boolean includeInvisibleNodes) {
         List<TreeNode> currentlyExpanded = new ArrayList<TreeNode>();
-        for (Iterator it = iterator(); it.hasNext();) {
-            TreeNode node = (TreeNode) it.next();
+        for (Iterator<TreeNode> it = iterator(); it.hasNext();) {
+            TreeNode node = it.next();
             if (node.isExpanded())  {
                 if (includeInvisibleNodes || isVisible(node)) {
                     currentlyExpanded.add(node);
@@ -800,8 +800,8 @@ public class Tree extends AbstractControl {
      */
     public List<TreeNode> getSelectedNodes(boolean includeInvisibleNodes) {
         List<TreeNode> currentlySelected = new ArrayList<TreeNode>();
-        for (Iterator it = iterator(); it.hasNext();) {
-            TreeNode node = (TreeNode) it.next();
+        for (Iterator<TreeNode> it = iterator(); it.hasNext();) {
+            TreeNode node = it.next();
             if (node.isSelected()) {
                 if (includeInvisibleNodes || isVisible(node)) {
                     currentlySelected.add(node);
@@ -1078,10 +1078,7 @@ public class Tree extends AbstractControl {
         }
         buffer.append("\">\n");
 
-        Iterator it = treeNode.getChildren().iterator();
-        while (it.hasNext()) {
-            TreeNode child = (TreeNode) it.next();
-
+        for (TreeNode child : treeNode.getChildren()) {
             if (isJavascriptEnabled()) {
                 javascriptHandler.getJavascriptRenderer().init(child);
             }
@@ -1441,7 +1438,7 @@ public class Tree extends AbstractControl {
      * @param nodes specifies the collection of a TreeNodes which expand states will be set
      * @param newValue specifies the new expand state
      */
-    protected void setExpandState(final Collection nodes, final boolean newValue) {
+    protected void setExpandState(final Collection<TreeNode> nodes, final boolean newValue) {
         processNodes(nodes, new Callback() {
             public void callback(TreeNode node) {
                 setExpandState(node, newValue);
@@ -1503,7 +1500,7 @@ public class Tree extends AbstractControl {
      * @param nodes specifies the collection of a TreeNodes which select states will be set
      * @param newValue specifies the new select state
      */
-    protected void setSelectState(final Collection nodes, final boolean newValue) {
+    protected void setSelectState(final Collection<TreeNode> nodes, final boolean newValue) {
         processNodes(nodes, new Callback() {
             public void callback(TreeNode node) {
                 setSelectState(node, newValue);
@@ -1540,12 +1537,11 @@ public class Tree extends AbstractControl {
      * @param nodes the collection of nodes to process
      * @param callback object on which callbacks are made
      */
-    protected void processNodes(Collection nodes, Callback callback) {
+    protected void processNodes(Collection<TreeNode> nodes, Callback callback) {
         if (nodes == null) {
             return;
         }
-        for (Iterator it = nodes.iterator(); it.hasNext();) {
-            TreeNode node = (TreeNode) it.next();
+        for (TreeNode node : nodes) {
             callback.callback(node);
         }
     }
@@ -1559,8 +1555,8 @@ public class Tree extends AbstractControl {
      * @return TreeNode the first node matching the id or null if no match was found.
      */
     protected TreeNode find(TreeNode node, String id) {
-        for (Iterator it = iterator(node); it.hasNext();) {
-            TreeNode result = (TreeNode) it.next();
+        for (Iterator<TreeNode> it = iterator(node); it.hasNext();) {
+            TreeNode result = it.next();
             if (result.getId().equals(id)) {
                 return result;
             }
@@ -1605,7 +1601,7 @@ public class Tree extends AbstractControl {
      * @param parameters the href parameters
      * @return the HTML href attribute
      */
-    protected String getHref(Map parameters) {
+    protected String getHref(Map<String, ? extends Object> parameters) {
         Context context = getContext();
         String uri = ClickUtils.getRequestURI(context.getRequest());
 
@@ -1615,11 +1611,10 @@ public class Tree extends AbstractControl {
         buffer.append(uri);
         if (parameters != null && !parameters.isEmpty()) {
             buffer.append("?");
-            Iterator i = parameters.entrySet().iterator();
+            Iterator<String> i = parameters.keySet().iterator();
             while (i.hasNext()) {
-                Map.Entry entry = (Map.Entry) i.next();
-                String name = entry.getKey().toString();
-                String value = entry.getValue().toString();
+                String name = i.next();
+                String value = parameters.get(name).toString();
 
                 buffer.append(name);
                 buffer.append("=");
@@ -1680,10 +1675,10 @@ public class Tree extends AbstractControl {
      *      node2.2
      * </pre>
      */
-    static class BreadthTreeIterator implements Iterator {
+    static class BreadthTreeIterator implements Iterator<TreeNode> {
 
         /**queue for storing node's. */
-        private List<TreeNode> queue = new ArrayList();
+        private List<TreeNode> queue = new ArrayList<TreeNode>();
 
         /** indicator to iterate collapsed node's. */
         private boolean iterateCollapsedNodes = true;
@@ -2131,10 +2126,10 @@ public class Tree extends AbstractControl {
         protected JavascriptRenderer javascriptRenderer;
 
         /** Tracker for the expanded node id's. */
-        private Set expandTracker;
+        private Set<String> expandTracker;
 
         /** Tracker for the collapsed node id's. */
-        private Set collapsedTracker;
+        private Set<String> collapsedTracker;
 
         /** Value of the cookie responsible for tracking the expanded node id's. */
         private String expandedNodeCookieValue = null;
@@ -2164,8 +2159,8 @@ public class Tree extends AbstractControl {
             if (expandTracker != null || collapsedTracker != null) {
                 return;
             }
-            expandTracker = new HashSet();
-            collapsedTracker = new HashSet();
+            expandTracker = new HashSet<String>();
+            collapsedTracker = new HashSet<String>();
 
             if (context == null) {
                 throw new IllegalArgumentException("context cannot be null");
@@ -2178,11 +2173,11 @@ public class Tree extends AbstractControl {
             }
 
             //build hashes of id's for fast lookup
-            Set expandHash = asSet(expandedNodeCookieValue, DELIM);
-            Set collapsedHash = asSet(collapsedNodeCookieValue, DELIM);
+            Set<String> expandHash = asSet(expandedNodeCookieValue, DELIM);
+            Set<String> collapsedHash = asSet(collapsedNodeCookieValue, DELIM);
 
-            for (Iterator it = iterator(getRootNode()); it.hasNext();) {
-                TreeNode currentNode = (TreeNode) it.next();
+            for (Iterator<TreeNode> it = iterator(getRootNode()); it.hasNext();) {
+                TreeNode currentNode = it.next();
 
                 //If currentNode was expanded by user in browser
                 if (expandHash.contains(currentNode.getId())) {
@@ -2350,8 +2345,8 @@ public class Tree extends AbstractControl {
          * @param delim delimiter used to tokenize the value
          * @return set of tokens
          */
-        protected Set asSet(String value, String delim) {
-            Set set = new HashSet();
+        protected Set<String> asSet(String value, String delim) {
+            Set<String> set = new HashSet<String>();
             if (value  == null) {
                 return set;
             }
@@ -2484,7 +2479,7 @@ public class Tree extends AbstractControl {
          * have been added to the map. This helps keep track of the number of
          * parallel paths.
          */
-        private Map selectTracker = null;
+        private Map<String, Entry> selectTracker = null;
 
         /**
          * This class is dependant on {@link org.apache.click.Context}, so this
@@ -2506,6 +2501,7 @@ public class Tree extends AbstractControl {
          *
          * @param context provides access to the http request, and session
          */
+        @SuppressWarnings("unchecked")
         public void init(Context context) {
             //If already initialized
             if (selectTracker != null) {
@@ -2517,9 +2513,9 @@ public class Tree extends AbstractControl {
             StringBuffer buffer = new StringBuffer(JS_HANDLER_SESSION_KEY).
                     append(getName());
             String key = buffer.toString();
-            selectTracker = (Map) context.getSessionAttribute(key);
+            selectTracker = (Map<String, Entry>) context.getSessionAttribute(key);
             if (selectTracker == null) {
-                selectTracker = new HashMap();
+                selectTracker = new HashMap<String, Entry>();
                 context.setSessionAttribute(key, selectTracker);
             }
         }
@@ -2535,7 +2531,7 @@ public class Tree extends AbstractControl {
          * @see #renderAsExpanded(TreeNode)
          */
         public boolean renderAsExpanded(TreeNode treeNode) {
-            Entry entry = (Entry) selectTracker.get(treeNode.getId());
+            Entry entry = selectTracker.get(treeNode.getId());
             if (entry == null || entry.lastNodeInPath) {
                 return false;
             }
@@ -2602,7 +2598,7 @@ public class Tree extends AbstractControl {
                     }
                 }
                 String id = currentNode.getId();
-                Entry entry = (Entry) selectTracker.get(id);
+                Entry entry = selectTracker.get(id);
 
                 //If node is not yet tracked, add it to the selected path tracker,
                 //otherwise increment the overlaid path count
@@ -2640,7 +2636,7 @@ public class Tree extends AbstractControl {
             for (int i = 0; i < nodes.length; i++) {
                 TreeNode currentNode = nodes[i];
                 String id = currentNode.getId();
-                Entry entry = (Entry) selectTracker.get(id);
+                Entry entry = selectTracker.get(id);
 
                 //This node is not tracked, so we continue looping.
                 if (entry == null) {

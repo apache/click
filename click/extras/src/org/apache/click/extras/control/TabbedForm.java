@@ -155,7 +155,7 @@ public class TabbedForm extends Form {
     protected String tabHeight = "";
 
     /** The list of FieldSet tab sheets. */
-    protected List tabSheets = new ArrayList();
+    protected List<FieldSet> tabSheets = new ArrayList<FieldSet>();
 
     /** The tab sheet width HTML attribute value. */
     protected String tabWidth = "";
@@ -292,7 +292,7 @@ public class TabbedForm extends Form {
      *
      * @return list FieldSet tab sheets
      */
-    public List getTabSheets() {
+    public List<FieldSet> getTabSheets() {
         return tabSheets;
     }
 
@@ -305,7 +305,7 @@ public class TabbedForm extends Form {
      */
     public int getTabSheetNumber(String fieldName) {
         for (int i = 0; i < getTabSheets().size(); i++) {
-            FieldSet fieldSet = (FieldSet) getTabSheets().get(i);
+            FieldSet fieldSet = getTabSheets().get(i);
             if (fieldSet.getFields().containsKey(fieldName)) {
                 return i + 1;
             }
@@ -363,9 +363,9 @@ public class TabbedForm extends Form {
         boolean result = super.onProcess();
 
         if (!isValid()) {
-            List errorFields = getErrorFields();
+            List<Field> errorFields = getErrorFields();
             if (!errorFields.isEmpty()) {
-                Field field = (Field) errorFields.get(0);
+                Field field = errorFields.get(0);
                 int sheetNumber = getTabSheetNumber(field.getName());
                 setDisplayTab(sheetNumber);
             }
@@ -383,7 +383,7 @@ public class TabbedForm extends Form {
      */
     @Override
     public void render(HtmlStringBuffer buffer) {
-        Map model = new HashMap();
+        Map<String, Object> model = new HashMap<String, Object>();
         model.put("form", this);
 
         buffer.append(getContext().renderTemplate(getTemplate(), model));

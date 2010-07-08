@@ -18,12 +18,10 @@
  */
 package org.apache.click.extras.control;
 
-import java.util.Iterator;
 import java.util.List;
 import org.apache.click.Control;
 import org.apache.click.control.Field;
 import org.apache.click.control.Form;
-import org.apache.click.service.FileUploadService;
 import org.apache.click.util.ContainerUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -157,9 +155,8 @@ public class HtmlForm extends Form {
     @Override
     protected void renderContent(HtmlStringBuffer buffer) {
         // Render hidden fields
-        List fields = ContainerUtils.getInputFields(this);
-        for (Iterator it = fields.iterator(); it.hasNext();) {
-            Field field = (Field) it.next();
+        List<Field> fields = ContainerUtils.getInputFields(this);
+        for (Field field : fields) {
             if (field.isHidden()) {
                 field.render(buffer);
                 buffer.append("\n");
@@ -203,7 +200,7 @@ public class HtmlForm extends Form {
      * @return the estimated rendered control size in characters
      */
     @Override
-    protected int getFormSizeEst(List formFields) {
+    protected int getFormSizeEst(List<Field> formFields) {
         return 400 + (getControls().size() * 350);
     }
 }

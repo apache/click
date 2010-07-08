@@ -294,16 +294,16 @@ public class PerformanceFilter implements Filter {
     protected FilterConfig filterConfig = null;
 
     /** The cacheable-path include directories. */
-    protected List includeDirs = new ArrayList();
+    protected List<String> includeDirs = new ArrayList<String>();
 
     /** The cacheable-path include files. */
-    protected List includeFiles = new ArrayList();
+    protected List<String> includeFiles = new ArrayList<String>();
 
     /** The cacheable-path exclude directories. */
-    protected List excludeDirs = new ArrayList();
+    protected List<String> excludeDirs = new ArrayList<String>();
 
     /** The cacheable-path exclude files. */
-    protected List excludeFiles = new ArrayList();
+    protected List<String> excludeFiles = new ArrayList<String>();
 
     /** The application resource version indicator. */
     protected String applicationVersionIndicator = "";
@@ -751,7 +751,7 @@ public class PerformanceFilter implements Filter {
                 return false;
             }
 
-            Enumeration e = request.getHeaders("Accept-Encoding");
+            Enumeration<?> e = request.getHeaders("Accept-Encoding");
 
             while (e.hasMoreElements()) {
                 String name = (String) e.nextElement();

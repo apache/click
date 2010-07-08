@@ -58,7 +58,7 @@ public class HiddenList extends Field {
     // Instance Variables -----------------------------------------------------
 
     /** The hidden values. */
-    protected List valueObject;
+    protected List<String> valueObject;
 
     // Constructors -----------------------------------------------------------
 
@@ -86,13 +86,14 @@ public class HiddenList extends Field {
      *
      * @param valueObject a list of Strings
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void setValueObject(Object valueObject) {
-        if (!(valueObject instanceof List)) {
+        if (!(valueObject instanceof List<?>)) {
             throw new IllegalArgumentException("the valueObject must be a"
                 + " List.");
         }
-        this.valueObject = (List) valueObject;
+        this.valueObject = (List<String>) valueObject;
     }
 
     /**
@@ -103,7 +104,7 @@ public class HiddenList extends Field {
     @Override
     public Object getValueObject() {
         if (this.valueObject == null) {
-            this.valueObject = new ArrayList();
+            this.valueObject = new ArrayList<String>();
         }
         return this.valueObject;
     }
@@ -114,8 +115,9 @@ public class HiddenList extends Field {
      *
      * @return a list of Strings
      */
-    public List getValues() {
-        return (List) getValueObject();
+    @SuppressWarnings("unchecked")
+    public List<String> getValues() {
+        return (List<String>) getValueObject();
     }
 
     /**
@@ -143,7 +145,7 @@ public class HiddenList extends Field {
         String[] values = getContext().getRequestParameterValues(getName());
 
         if (values != null) {
-            List list = new ArrayList();
+            List<String> list = new ArrayList<String>();
             for (int i = 0; i < values.length; i++) {
                 list.add(values[i]);
             }
@@ -172,7 +174,7 @@ public class HiddenList extends Field {
      */
     @Override
     public void render(HtmlStringBuffer buffer) {
-        List values = getValues();
+        List<String> values = getValues();
 
         for (int i = 0; i < values.size(); i++) {
             buffer.elementStart("input");

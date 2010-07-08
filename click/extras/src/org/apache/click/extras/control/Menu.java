@@ -20,7 +20,6 @@ package org.apache.click.extras.control;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -1250,9 +1249,7 @@ public class Menu extends AbstractControl {
         buffer.closeTag();
         buffer.append("\n");
 
-        Iterator it = menu.getChildren().iterator();
-        while (it.hasNext()) {
-            Menu child = (Menu) it.next();
+        for (Menu child : menu.getChildren()) {
 
             if (canRender(child, depth)) {
 

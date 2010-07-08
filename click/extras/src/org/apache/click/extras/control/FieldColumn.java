@@ -69,7 +69,7 @@ public class FieldColumn extends Column {
     protected Field field;
 
     /** The ognl context map. */
-    private transient Map ognlContext;
+    private transient Map<?, ?> ognlContext;
 
     // ----------------------------------------------------------- Constructors
 
@@ -172,16 +172,17 @@ public class FieldColumn extends Column {
      * @param value the row object property value
      * @throws RuntimeException if an error occurred obtaining the property
      */
+    @SuppressWarnings("unchecked")
     public void setProperty(Object row, String propertyName, Object value) {
-        if (row instanceof Map) {
-            Map map = (Map) row;
+        if (row instanceof Map<?, ?>) {
+            Map<Object, Object> map = (Map<Object, Object>) row;
             if (map.containsKey(propertyName)) {
                 map.put(propertyName, value);
             }
 
         } else {
             if (ognlContext == null) {
-                ognlContext = new HashMap();
+                ognlContext = new HashMap<Object, Object>();
             }
 
             try {
@@ -208,6 +209,7 @@ public class FieldColumn extends Column {
      * @param context the request context
      * @param rowIndex the index of the current row within the parent table
      */
+    @Override
     protected void renderTableDataContent(Object row, HtmlStringBuffer buffer,
             Context context, int rowIndex) {
 

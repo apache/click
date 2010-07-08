@@ -172,7 +172,7 @@ public class LinkDecorator implements Decorator, Serializable {
     protected Table table;
 
     /** The method cached for rendering column values. */
-    protected transient Map methodCache;
+    protected transient Map<?, ?> methodCache;
 
     /** An optional parameter name for the {@link #idProperty}. */
     protected String parameterName;
@@ -419,7 +419,7 @@ public class LinkDecorator implements Decorator, Serializable {
      * @param controls the list of AbstractLink or ActionButtons to render
      * @param idProperty the row object identifier property name
      */
-    public LinkDecorator(Table table, List controls, String idProperty) {
+    public LinkDecorator(Table table, List<AbstractControl> controls, String idProperty) {
         if (table == null) {
             throw new IllegalArgumentException("Null table parameter");
         }
@@ -530,7 +530,7 @@ public class LinkDecorator implements Decorator, Serializable {
      */
     public String renderActionLinks(Object row, Context context) {
         if (methodCache == null) {
-            methodCache = new HashMap();
+            methodCache = new HashMap<Object, Object>();
         }
 
         Object value = PropertyUtils.getValue(row, idProperty, methodCache);
@@ -578,7 +578,7 @@ public class LinkDecorator implements Decorator, Serializable {
      */
     public String renderActionButtons(Object row, Context context) {
         if (methodCache == null) {
-            methodCache = new HashMap();
+            methodCache = new HashMap<Object, Object>();
         }
 
         Object value = PropertyUtils.getValue(row, idProperty, methodCache);
@@ -734,6 +734,7 @@ public class LinkDecorator implements Decorator, Serializable {
         /**
          * @see org.apache.click.Control#onProcess()
          */
+        @Override
         public boolean onProcess() {
             Context context = getContext();
             if (anyLinkOrButtonClicked()) {

@@ -226,7 +226,7 @@ public class CompressionFilter implements Filter {
                 return false;
             }
 
-            Enumeration e = request.getHeaders("Accept-Encoding");
+            Enumeration<?> e = request.getHeaders("Accept-Encoding");
 
             while (e.hasMoreElements()) {
                 String name = (String) e.nextElement();

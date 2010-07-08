@@ -94,7 +94,7 @@ public class PageScopeResolver implements ScopeMetadataResolver {
         ScopeMetadata sm = new ScopeMetadata();
 
         try {
-            Class beanClass = ClickUtils.classForName(beanDef.getBeanClassName());
+            Class<?> beanClass = ClickUtils.classForName(beanDef.getBeanClassName());
 
             if (Page.class.isAssignableFrom(beanClass)) {
                 sm.setScopeName(ConfigurableBeanFactory.SCOPE_PROTOTYPE);

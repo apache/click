@@ -53,7 +53,7 @@ public class SessionContext {
     private static SessionFactory sessionFactory;
 
     /** The ThreadLocal session holder. */
-    private static final ThreadLocal SESSION_HOLDER = new ThreadLocal();
+    private static final ThreadLocal<Session> SESSION_HOLDER = new ThreadLocal<Session>();
 
     /**
      * Initializes the SessionContext instance.
@@ -87,7 +87,7 @@ public class SessionContext {
     public Configuration createConfiguration() {
         try {
             // Try to instantiate AnnotationConfiguration by reflection
-            Class clazz = ClickUtils.classForName("org.hibernate.cfg.AnnotationConfiguration");
+            Class<?> clazz = ClickUtils.classForName("org.hibernate.cfg.AnnotationConfiguration");
             Configuration configuration = (Configuration) clazz.newInstance();
             return configuration;
         } catch (ClassNotFoundException e) {
@@ -122,7 +122,7 @@ public class SessionContext {
      * @throws HibernateException if an error occurs opening the session
      */
     public static Session getSession() throws HibernateException {
-        Session session = (Session) SESSION_HOLDER.get();
+        Session session = SESSION_HOLDER.get();
 
         if (session == null) {
             session = getSessionFactory().openSession();
@@ -139,7 +139,7 @@ public class SessionContext {
      * @throws HibernateException if an error occurs closing the session
      */
     public static void close() throws HibernateException {
-        Session session = (Session) SESSION_HOLDER.get();
+        Session session = SESSION_HOLDER.get();
 
         if (session != null && session.isOpen()) {
             session.close();

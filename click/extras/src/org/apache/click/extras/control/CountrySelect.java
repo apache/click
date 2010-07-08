@@ -212,7 +212,7 @@ public class CountrySelect extends Select {
             return;
         }
 
-        Set countryList = new TreeSet(new OptionLabelComparator(getLocale()));
+        Set<Option> countryList = new TreeSet<Option>(new OptionLabelComparator(getLocale()));
 
         Locale[] availableLocales = Locale.getAvailableLocales();
 
@@ -237,10 +237,10 @@ public class CountrySelect extends Select {
     /**
      * Provides a comparator for Option labels with locale-sensitive behaviour.
      */
-    static class OptionLabelComparator implements Comparator {
+    static class OptionLabelComparator implements Comparator<Option> {
 
         /** The locale comparator. */
-        private final Comparator comparator;
+        private final Comparator<Object> comparator;
 
         /**
          * Creates a new OptionLabelComparator object.
@@ -260,11 +260,8 @@ public class CountrySelect extends Select {
          * @param o2 The second Option to compare.
          * @return The value returned by comparing the localized labels.
          */
-        public final int compare(Object o1, Object o2) {
-            Option lhs = (Option) o1;
-            Option rhs = (Option) o2;
-
-            return comparator.compare(lhs.getLabel(), rhs.getLabel());
+        public final int compare(Option o1, Option o2) {
+            return comparator.compare(o1.getLabel(), o2.getLabel());
         }
     }
 }

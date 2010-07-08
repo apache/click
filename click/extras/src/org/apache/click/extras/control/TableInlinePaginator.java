@@ -51,7 +51,7 @@ public class TableInlinePaginator extends TablePaginator {
          * <tt>org/apache/click/extras/control/TableInlinePaginator.properties</tt>.
          */
         @Override
-        public Map getMessages() {
+        public Map<String, String> getMessages() {
             if (messages == null) {
                 messages = new MessagesMap(TableInlinePaginator.class, "");
             }

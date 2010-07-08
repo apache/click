@@ -485,7 +485,7 @@ public class TreeNode implements Serializable {
         //Iterate over the tree using a breadth first iterator. The level of the
         //last node found will indicate the depth of the tree.
         Object o = null;
-        for (Iterator it = new Tree.BreadthTreeIterator(this); it.hasNext();) {
+        for (Iterator<TreeNode> it = new Tree.BreadthTreeIterator(this); it.hasNext();) {
             o = it.next();
         }
         TreeNode node = (TreeNode) o;

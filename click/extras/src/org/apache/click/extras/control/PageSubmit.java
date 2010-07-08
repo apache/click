@@ -89,7 +89,7 @@ public class PageSubmit extends Submit {
      * @param name the button name
      * @param pageClass the target page class
      */
-    public PageSubmit(String name, Class pageClass) {
+    public PageSubmit(String name, Class<? extends Page> pageClass) {
         super(name);
 
         setPageClass(pageClass);
@@ -104,7 +104,7 @@ public class PageSubmit extends Submit {
      * @param label the button display label
      * @param pageClass the target page class
      */
-    public PageSubmit(String name, String label, Class pageClass) {
+    public PageSubmit(String name, String label, Class<? extends Page> pageClass) {
         super(name, label);
 
         setPageClass(pageClass);
@@ -129,7 +129,7 @@ public class PageSubmit extends Submit {
      *
      * @return the target page class to redirect to
      */
-    public Class getPageClass() {
+    public Class<? extends Page> getPageClass() {
         return pageClass;
     }
 
@@ -138,7 +138,7 @@ public class PageSubmit extends Submit {
      *
      * @param pageClass the target page class to redirect to
      */
-    public void setPageClass(Class pageClass) {
+    public void setPageClass(Class<? extends Page> pageClass) {
         if (pageClass == null) {
             throw new IllegalArgumentException("null pageClass parameter");
         }
