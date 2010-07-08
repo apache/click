@@ -898,6 +898,8 @@ public class Tree extends AbstractControl {
         bindRequestValue();
 
         ActionEventDispatcher.dispatchActionEvent(this, new ActionListener() {
+            private static final long serialVersionUID = 1L;
+
             public boolean onAction(Control source) {
                 return postProcess();
             }
@@ -2112,6 +2114,7 @@ public class Tree extends AbstractControl {
      * user navigates the tree.
      */
     protected class CookieHandler implements JavascriptHandler {
+        private static final long serialVersionUID = 1L;
 
         /** Cookie value delimiter. */
         private final static String DELIM = ",";
@@ -2463,6 +2466,7 @@ public class Tree extends AbstractControl {
      * will <strong>overwrite</strong> each others session attribute!
      */
     protected class SessionHandler implements JavascriptHandler {
+        private static final long serialVersionUID = 1L;
 
         /**
          * The reserved session key prefix for the selected paths

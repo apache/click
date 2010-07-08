@@ -45,6 +45,7 @@ import org.apache.commons.fileupload.ParameterParser;
  * project.
  */
 public class MemoryFileItem implements FileItem, FileItemHeadersSupport {
+    private static final long serialVersionUID = 1L;
 
     // -------------------------------------------------------------- Constants
 

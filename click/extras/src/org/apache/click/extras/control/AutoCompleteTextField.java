@@ -448,6 +448,7 @@ public abstract class AutoCompleteTextField extends TextField {
      */
     protected Behavior createBehavior() {
         AjaxBehavior behavior = new AjaxBehavior() {
+            private static final long serialVersionUID = 1L;
 
             @Override
             public Partial onAction(Control source) {
