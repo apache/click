@@ -285,20 +285,6 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Returns this Control CSS selector or <tt>null</tt>null if no CSS selector
-     * has been defined.
-     *
-     * @return this Control CSS selector or <tt>null</tt> if no CSS selector has
-     * been defined
-     */
-    public String getCssSelector() {
-        // TODO each control could have an optimized version of cssSelector
-        // targeting specifically that control. For now we just use a generic
-        // utility impl
-        return ClickUtils.getCssSelector(this);
-    }
-
-    /**
      * Returns <tt>true</tt> if this control is an AJAX target, <tt>false</tt>
      * otherwise.
      * <p/>

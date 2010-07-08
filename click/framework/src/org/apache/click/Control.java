@@ -468,7 +468,5 @@ public interface Control extends Serializable {
 
     public List<Behavior> getBehaviors();
 
-    public String getCssSelector();
-
     public boolean isAjaxTarget(Context context);
 }
