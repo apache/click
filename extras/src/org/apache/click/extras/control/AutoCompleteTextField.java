@@ -186,7 +186,7 @@ public abstract class AutoCompleteTextField extends TextField {
      * @param criteria the search criteria
      * @return the list of suggested values for the given search criteria
      */
-    abstract public List getAutoCompleteList(String criteria);
+    abstract public List<String> getAutoCompleteList(String criteria);
 
     // Public Methods ---------------------------------------------------------
 
@@ -456,7 +456,7 @@ public abstract class AutoCompleteTextField extends TextField {
                 String contentType = getPage().getContentType();
                 partial.setContentType(contentType);
 
-                List autocompleteList = getAutoCompleteList(getValue());
+                List<String> autocompleteList = getAutoCompleteList(getValue());
                 if (autocompleteList != null) {
                     HtmlStringBuffer buffer = new HtmlStringBuffer(10 + (autocompleteList.size() * 20));
                     renderAutoCompleteList(buffer, autocompleteList);

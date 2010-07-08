@@ -22,7 +22,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.click.Context;
@@ -202,8 +201,7 @@ public class PickList extends Field {
     // Instance Variables -----------------------------------------------------
 
     /** The select data provider. */
-    @SuppressWarnings("unchecked")
-    protected DataProvider dataProvider;
+    protected DataProvider<Option> dataProvider;
 
     /**
      * The list height. The default height is 8.
@@ -213,7 +211,7 @@ public class PickList extends Field {
     /**
      * The Option list.
      */
-    protected List optionList;
+    protected List<Option> optionList;
 
     /**
      * The label text for the selected list.
@@ -223,7 +221,7 @@ public class PickList extends Field {
     /**
      * The selected values.
      */
-    protected List selectedValues;
+    protected List<String> selectedValues;
 
     /**
      * The component size (width) in pixels. The default size is 400px.
@@ -289,7 +287,7 @@ public class PickList extends Field {
      */
     public void add(Object option) {
         if (option instanceof Option) {
-            getOptionList().add(option);
+            getOptionList().add((Option) option);
 
         } else if (option instanceof String) {
             getOptionList().add(new Option(option.toString()));
@@ -340,13 +338,12 @@ public class PickList extends Field {
      * @param options the Map of option values and labels to add
      * @throws IllegalArgumentException if options is null
      */
-    public void addAll(Map options) {
+    public void addAll(Map<?, ?> options) {
         if (options == null) {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        for (Iterator i = options.entrySet().iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry) i.next();
+        for (Map.Entry<?, ?> entry : options.entrySet()) {
             Option option = new Option(entry.getKey().toString(), entry
                     .getValue().toString());
             getOptionList().add(option);
@@ -398,7 +395,7 @@ public class PickList extends Field {
      * @throws IllegalArgumentException if objects or optionValueProperty
      * parameter is null
      */
-    public void addAll(Collection objects, String optionValueProperty,
+    public void addAll(Collection<?> objects, String optionValueProperty,
         String optionLabelProperty) {
         if (objects == null) {
             String msg = "objects parameter cannot be null";
@@ -413,11 +410,9 @@ public class PickList extends Field {
             return;
         }
 
-        Map methodCache = new HashMap();
+        Map<?, ?> methodCache = new HashMap<Object, Object>();
 
-        for (Iterator i = objects.iterator(); i.hasNext();) {
-            Object object = i.next();
-
+        for (Object object : objects) {
             try {
                 Object valueResult = PropertyUtils.getValue(object,
                     optionValueProperty, methodCache);
@@ -453,8 +448,7 @@ public class PickList extends Field {
      *
      * @return the PickList optionList DataProvider
      */
-    @SuppressWarnings("unchecked")
-    public DataProvider getDataProvider() {
+    public DataProvider<Option> getDataProvider() {
         return dataProvider;
     }
 
@@ -509,21 +503,21 @@ public class PickList extends Field {
      *
      * @return the Option list
      */
-    public List getOptionList() {
+    public List<Option> getOptionList() {
         if (optionList == null) {
 
-            DataProvider dp = getDataProvider();
+            DataProvider<Option> dp = getDataProvider();
 
             if (dp != null) {
-                Iterable iterableData = dp.getData();
+                Iterable<Option> iterableData = dp.getData();
 
-                if (iterableData instanceof List) {
+                if (iterableData instanceof List<?>) {
                     // Set optionList to data
-                    setOptionList((List) iterableData);
+                    setOptionList((List<Option>) iterableData);
 
                 } else {
                     // Create and populate the optionList from the Iterable data
-                    optionList = new ArrayList();
+                    optionList = new ArrayList<Option>();
 
                     if (iterableData != null) {
                         // Populate optionList from options
@@ -534,7 +528,7 @@ public class PickList extends Field {
                 }
             } else {
                 // Create empty list
-                optionList = new ArrayList();
+                optionList = new ArrayList<Option>();
             }
         }
         return optionList;
@@ -545,7 +539,7 @@ public class PickList extends Field {
      *
      * @param options the Option list
      */
-    public void setOptionList(List options) {
+    public void setOptionList(List<Option> options) {
         optionList = options;
     }
 
@@ -612,7 +606,7 @@ public class PickList extends Field {
      * @param value the name of the object property to render as the Option value
      * @throws IllegalArgumentException if options or value parameter is null
      */
-    public void setSelectedValues(Collection objects, String value) {
+    public void setSelectedValues(Collection<?> objects, String value) {
         if (objects == null) {
             String msg = "objects parameter cannot be null";
             throw new IllegalArgumentException(msg);
@@ -626,11 +620,9 @@ public class PickList extends Field {
             return;
         }
 
-        Map cache = new HashMap();
+        Map<?, ?> cache = new HashMap<Object, Object>();
 
-        for (Iterator i = objects.iterator(); i.hasNext();) {
-            Object object = i.next();
-
+        for (Object object : objects) {
             try {
                 Object valueResult = PropertyUtils.getValue(object, value, cache);
 
@@ -664,9 +656,9 @@ public class PickList extends Field {
      *
      * @return selected values as a List of Strings
      */
-    public List getSelectedValues() {
+    public List<String> getSelectedValues() {
         if (selectedValues == null) {
-            selectedValues = new ArrayList();
+            selectedValues = new ArrayList<String>();
         }
         return selectedValues;
     }
@@ -696,7 +688,7 @@ public class PickList extends Field {
      *
      * @param selectedValues the list of selected string values or null
      */
-    public void setSelectedValues(List selectedValues) {
+    public void setSelectedValues(List<String> selectedValues) {
         this.selectedValues = selectedValues;
     }
 
@@ -727,10 +719,11 @@ public class PickList extends Field {
      *
      * @param object a List of Strings
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void setValueObject(Object object) {
-        if (object instanceof List) {
-            setSelectedValues((List) object);
+        if (object instanceof List<?>) {
+            setSelectedValues((List<String>) object);
         }
     }
 
@@ -780,7 +773,7 @@ public class PickList extends Field {
     public void bindRequestValue() {
 
         // Load the selected items.
-        this.selectedValues = new ArrayList();
+        this.selectedValues = new ArrayList<String>();
 
         String[] values =
             getContext().getRequest().getParameterValues(getName());
@@ -806,7 +799,7 @@ public class PickList extends Field {
     @Override
     public void validate() {
         setError(null);
-        List values = getSelectedValues();
+        List<String> values = getSelectedValues();
 
         if (values.size() > 0) {
             return;
@@ -827,13 +820,12 @@ public class PickList extends Field {
      */
     @Override
     public void render(HtmlStringBuffer buffer) {
-        List optionList     = getOptionList();
-        List selectedValues = getSelectedValues();
-        List options        = new ArrayList();
+        List<Option> optionList      = getOptionList();
+        List<String> selectedValues  = getSelectedValues();
+        List<Map<String, Object>> options = new ArrayList<Map<String, Object>>();
 
-        for (int i = 0; i < optionList.size(); i++) {
-            Option option = (Option) optionList.get(i);
-            Map map = new HashMap();
+        for (Option option : optionList) {
+            Map<String, Object> map = new HashMap<String, Object>();
             map.put("option", option);
             map.put("selected", new Boolean(selectedValues.contains(option.getValue())));
             options.add(map);
@@ -867,7 +859,7 @@ public class PickList extends Field {
             setAttribute("class", cssClass);
         }
 
-        Map model = new HashMap();
+        Map<String, Object> model = new HashMap<String, Object>();
 
         model.put("id", getId());
         model.put("attributes", attributesBuffer.toString());
@@ -907,7 +899,7 @@ public class PickList extends Field {
      * @param buffer the specified buffer to render the template output to
      * @param model the model data to merge with the template
      */
-    protected void renderTemplate(HtmlStringBuffer buffer, Map model) {
+    protected void renderTemplate(HtmlStringBuffer buffer, Map<String, Object> model) {
         buffer.append(getContext().renderTemplate(PickList.class, model));
     }
 

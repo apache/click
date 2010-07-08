@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -211,8 +210,7 @@ public class CheckList extends Field {
     // Instance Variables -----------------------------------------------------
 
     /** The select data provider. */
-    @SuppressWarnings("unchecked")
-    protected DataProvider dataProvider;
+    protected DataProvider<Option> dataProvider;
 
     /** The height if null not scrollable. */
     protected String height;
@@ -386,13 +384,12 @@ public class CheckList extends Field {
      * @param options the Map of option values and labels to add
      * @throws IllegalArgumentException if options is null
      */
-    public void addAll(Map options) {
+    public void addAll(Map<?, ?> options) {
         if (options == null) {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        for (Iterator i = options.entrySet().iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry) i.next();
+        for (Map.Entry<?, ?> entry : options.entrySet()) {
             Option option = new Option(entry.getKey().toString(), entry
                     .getValue().toString());
             getOptionList().add(option);
@@ -443,7 +440,7 @@ public class CheckList extends Field {
      * @throws IllegalArgumentException if objects or optionValueProperty
      * parameter is null
      */
-    public void addAll(Collection objects, String optionValueProperty,
+    public void addAll(Collection<?> objects, String optionValueProperty,
         String optionLabelProperty) {
         if (objects == null) {
             String msg = "objects parameter cannot be null";
@@ -458,11 +455,9 @@ public class CheckList extends Field {
             return;
         }
 
-        Map methodCache = new HashMap();
+        Map<?, ?> methodCache = new HashMap<Object, Object>();
 
-        for (Iterator i = objects.iterator(); i.hasNext();) {
-            Object object = i.next();
-
+        for (Object object : objects) {
             try {
                 Object valueResult = PropertyUtils.getValue(object,
                     optionValueProperty, methodCache);
@@ -498,8 +493,7 @@ public class CheckList extends Field {
      *
      * @return the CheckList optionList DataProvider
      */
-    @SuppressWarnings("unchecked")
-    public DataProvider getDataProvider() {
+    public DataProvider<Option> getDataProvider() {
         return dataProvider;
     }
 
@@ -524,8 +518,7 @@ public class CheckList extends Field {
      *
      * @param dataProvider the CheckList option list DataProvider
      */
-    @SuppressWarnings("unchecked")
-    public void setDataProvider(DataProvider dataProvider) {
+    public void setDataProvider(DataProvider<Option> dataProvider) {
         this.dataProvider = dataProvider;
         if (dataProvider != null) {
             if (optionList != null) {
@@ -725,14 +718,14 @@ public class CheckList extends Field {
     public List<Option> getOptionList() {
         if (optionList == null) {
 
-            DataProvider dp = getDataProvider();
+            DataProvider<Option> dp = getDataProvider();
 
             if (dp != null) {
-                Iterable iterableData = dp.getData();
+                Iterable<Option> iterableData = dp.getData();
 
-                if (iterableData instanceof List) {
+                if (iterableData instanceof List<?>) {
                     // Set optionList to data
-                    setOptionList((List) iterableData);
+                    setOptionList((List<Option>) iterableData);
 
                 } else {
                     // Create and populate the optionList from the Iterable data
@@ -860,7 +853,7 @@ public class CheckList extends Field {
      *
      * @param selectedValues the list of selected string values or null
      */
-    public void setSelectedValues(List selectedValues) {
+    public void setSelectedValues(List<String> selectedValues) {
         this.selectedValues = selectedValues;
     }
 
@@ -890,10 +883,11 @@ public class CheckList extends Field {
      *
      * @param object a List of Strings
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void setValueObject(Object object) {
-        if (object instanceof List) {
-            setSelectedValues((List) object);
+        if (object instanceof List<?>) {
+            setSelectedValues((List<String>) object);
         }
     }
 
@@ -965,15 +959,15 @@ public class CheckList extends Field {
      * @param order values in the order to sort the list.
      */
     protected void sortOptions(String[] order) {
-        final List options = getOptionList();
-        final List orderList = new ArrayList(options.size());
+        final List<Option> options = getOptionList();
+        final List<Option> orderList = new ArrayList<Option>(options.size());
 
         for (int i = 0, size = order.length; i < size; i++) {
             String value = order[i];
             if (value != null) {
                 int oI = -1;
                 for (int j = 0, jSize = options.size(); j < jSize; j++) {
-                    Option optT = (Option) options.get(j);
+                    Option optT = options.get(j);
                     if (value.equals(optT.getValue())) {
                         oI = j;
                     }
@@ -1044,11 +1038,10 @@ public class CheckList extends Field {
         buffer.closeTag();
 
         // the options
-        List optionsList = getOptionList();
+        List<Option> optionsList = getOptionList();
         if (!optionsList.isEmpty()) {
             int i = -1;
-            for (Iterator it = optionsList.iterator(); it.hasNext();) {
-                Option option = (Option) it.next();
+            for (Option option : optionsList) {
                 i++;
 
                 buffer.append("<li>");
@@ -1072,7 +1065,7 @@ public class CheckList extends Field {
                 }
 
                 // set checked status
-                List values = getSelectedValues();
+                List<String> values = getSelectedValues();
                 for (int k = 0; k < values.size(); k++) {
                     if (String.valueOf(values.get(k)).equals(option.getValue())) {
                         buffer.appendAttribute("checked", "checked");

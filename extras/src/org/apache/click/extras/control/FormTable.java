@@ -527,22 +527,20 @@ public class FormTable extends Table {
                 int firstRow = 0;
                 int lastRow = 0;
 
-                if (getDataProvider() instanceof PagingDataProvider) {
+                if (getDataProvider() instanceof PagingDataProvider<?>) {
                     lastRow = getRowList().size();
                 } else {
                     firstRow = getFirstRow();
                     lastRow = getLastRow();
                 }
 
-                List rowList = getRowList();
-                List columnList = getColumnList();
+                List<?> rowList = getRowList();
+                List<Column> columnList = getColumnList();
 
                 for (int i = firstRow; i < lastRow; i++) {
                     Object row = rowList.get(i);
 
-                    for (int j = 0; j < columnList.size(); j++) {
-
-                        Column column = (Column) columnList.get(j);
+                    for (Column column : columnList) {
 
                         if (column instanceof FieldColumn) {
                             FieldColumn fieldColumn = (FieldColumn) column;
@@ -626,7 +624,7 @@ public class FormTable extends Table {
     protected void renderButtons(HtmlStringBuffer buffer) {
         Form form = getForm();
 
-        List buttonList = form.getButtonList();
+        List<Button> buttonList = form.getButtonList();
         if (!buttonList.isEmpty()) {
             buffer.append("<table cellpadding=\"0\" cellspacing=\"0\"");
             if (getAttribute("width") != null) {
@@ -639,12 +637,11 @@ public class FormTable extends Table {
             buffer.append(getId());
             buffer.append("-buttons\"><tbody>\n");
             buffer.append("<tr class=\"buttons\">");
-            for (int i = 0, size = buttonList.size(); i < size; i++) {
+            for (Button button : buttonList) {
                 buffer.append("<td class=\"buttons\"");
                 buffer.appendAttribute("style", form.getButtonStyle());
                 buffer.closeTag();
 
-                Button button = (Button) buttonList.get(i);
                 button.render(buffer);
 
                 buffer.append("</td>");

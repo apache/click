@@ -162,7 +162,7 @@ public class HibernateForm extends Form {
      * @param name the form name
      * @param valueClass the value object class
      */
-    public HibernateForm(String name, Class valueClass) {
+    public HibernateForm(String name, Class<?> valueClass) {
         super(name);
 
         if (valueClass == null) {
@@ -249,7 +249,7 @@ public class HibernateForm extends Form {
     public Object getValueObject() {
         if (StringUtils.isNotBlank(classField.getValue())) {
             try {
-                Class valueClass = ClickUtils.classForName(classField.getValue());
+                Class<?> valueClass = ClickUtils.classForName(classField.getValue());
 
                 Serializable oid = (Serializable) oidField.getValueObject();
 
@@ -350,6 +350,7 @@ public class HibernateForm extends Form {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
         applyMetaData();
         return super.onProcess();
@@ -365,6 +366,7 @@ public class HibernateForm extends Form {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         applyMetaData();
         super.render(buffer);
@@ -387,7 +389,7 @@ public class HibernateForm extends Form {
         }
 
         try {
-            Class valueClass = ClickUtils.classForName(classField.getValue());
+            Class<?> valueClass = ClickUtils.classForName(classField.getValue());
 
             String classname = getClassname(valueClass);
 
@@ -423,7 +425,7 @@ public class HibernateForm extends Form {
      * @param aClass the class to obtain the original name from
      * @return the original classname for the given class
      */
-    protected String getClassname(Class aClass) {
+    protected String getClassname(Class<?> aClass) {
 
         String classname = aClass.getName();
         if (classname.indexOf("$$") != -1) {
