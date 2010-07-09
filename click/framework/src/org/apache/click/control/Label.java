@@ -90,6 +90,7 @@ public class Label extends Field {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
         return true;
     }
@@ -101,6 +102,7 @@ public class Label extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         buffer.append(getLabel());
     }
@@ -112,6 +114,7 @@ public class Label extends Field {
      *
      * @return the label string value
      */
+    @Override
     public String toString() {
         return getLabel();
     }

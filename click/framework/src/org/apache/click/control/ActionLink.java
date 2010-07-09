@@ -340,6 +340,7 @@ public class ActionLink extends AbstractLink {
      *
      * @return the ActionLink anchor &lt;a&gt; tag HTML href attribute value
      */
+    @Override
     public String getHref() {
         return getHref(getValue());
     }

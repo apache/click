@@ -115,6 +115,7 @@ public class Checkbox extends Field {
      *
      * @return this controls html tag
      */
+    @Override
     public String getTag() {
         return "input";
     }
@@ -153,6 +154,7 @@ public class Checkbox extends Field {
      *
      * @return the Field value
      */
+    @Override
     public String getValue() {
         return String.valueOf(checked);
     }
@@ -165,6 +167,7 @@ public class Checkbox extends Field {
      *
      * @param value the Field value
      */
+    @Override
     public void setValue(String value) {
         checked = Boolean.valueOf(value);
      }
@@ -176,6 +179,7 @@ public class Checkbox extends Field {
      *
      * @return the object representation of the Field value
      */
+    @Override
     public Object getValueObject() {
         if (checked) {
             return Boolean.TRUE;
@@ -192,6 +196,7 @@ public class Checkbox extends Field {
      *
      * @param object the object value to set
      */
+    @Override
     public void setValueObject(Object object) {
         if (object != null && object instanceof Boolean) {
             checked = (Boolean) object;
@@ -203,6 +208,7 @@ public class Checkbox extends Field {
      *
      * @return the field JavaScript client side validation function
      */
+    @Override
     public String getValidationJavaScript() {
         if (isRequired()) {
             Object[] args = new Object[3];
@@ -223,6 +229,7 @@ public class Checkbox extends Field {
      * Set the {@link #checked} property to true if the fields value is
      * submitted.
      */
+    @Override
     public void bindRequestValue() {
         setChecked(getContext().getRequestParameter(getName()) != null);
     }
@@ -234,6 +241,7 @@ public class Checkbox extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 
@@ -283,6 +291,7 @@ public class Checkbox extends Field {
      * checked the error message defined by <tt>not-checked-error</tt>
      * property will be displayed.
      */
+    @Override
     public void validate() {
         if (isRequired() && !isChecked()) {
             setErrorMessage("not-checked-error");

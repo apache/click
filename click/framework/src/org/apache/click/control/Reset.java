@@ -92,6 +92,7 @@ public class Reset extends Button {
      *
      * @return the input type: '<tt>reset</tt>'
      */
+    @Override
     public String getType() {
         return "reset";
     }

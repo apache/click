@@ -176,6 +176,7 @@ public class FileField extends Field {
      *
      * @return this controls html tag
      */
+    @Override
     public String getTag() {
         return "input";
     }
@@ -222,6 +223,7 @@ public class FileField extends Field {
      *
      * @return the field JavaScript client side validation function
      */
+    @Override
     public String getValidationJavaScript() {
         if (isRequired()) {
             Object[] args = new Object[3];
@@ -242,6 +244,7 @@ public class FileField extends Field {
      * Set the {@link #fileItem} property from the multi-part form data
      * submission.
      */
+    @Override
     public void bindRequestValue() {
         fileItem = getContext().getFileItem(getName());
     }
@@ -251,6 +254,7 @@ public class FileField extends Field {
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
         return 96;
     }
@@ -262,6 +266,7 @@ public class FileField extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 
@@ -311,6 +316,7 @@ public class FileField extends Field {
      * </ul>
      * </blockquote>
      */
+    @Override
     public void validate() {
         setError(null);
 
