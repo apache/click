@@ -575,7 +575,7 @@ public class ClickServlet extends HttpServlet {
     protected void processPageEvents(Page page, Context context) throws Exception {
 
         ActionEventDispatcher eventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
-        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalDispatcher();
+        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
 
         boolean errorOccurred = page instanceof ErrorPage;
         // Support direct access of click-error.htm
@@ -1128,7 +1128,7 @@ public class ClickServlet extends HttpServlet {
 
             // notify callbacks of destroy event
             // TODO check that exceptions don't unnecessarily trigger preDestroy
-            ControlRegistry.getThreadLocalDispatcher().processPreDestroy(page.getContext());
+            ControlRegistry.getThreadLocalRegistry().processPreDestroy(page.getContext());
 
             List<Control> controls = page.getControls();
 
@@ -1772,7 +1772,7 @@ public class ClickServlet extends HttpServlet {
 
         ActionEventDispatcher eventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
 
-        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalDispatcher();
+        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
 
         // TODO Ajax requests shouldn't reach this code path
         // Support direct access of click-error.htm

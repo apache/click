@@ -333,7 +333,7 @@ public class MockContext extends Context {
      * Execute the preResponse callback event for all registered callbacks.
      */
     public void executePreResponseCallbackEvent() {
-        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
         registry.processPreResponse(this);
     }
@@ -342,7 +342,7 @@ public class MockContext extends Context {
      * Execute the preGetHeadElements callback event for all registered callbacks.
      */
     public void executePreGetHeadElementsCallbackEvent() {
-        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
         registry.processPreGetHeadElements(this);
     }
@@ -351,7 +351,7 @@ public class MockContext extends Context {
      * Execute the preDestroy callback event for all registered callbacks.
      */
     public void executePreDestroyCallbackEvent() {
-        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
         registry.processPreDestroy(this);
     }
@@ -373,7 +373,7 @@ public class MockContext extends Context {
      * method will remove any references to objects, thus freeing up memory.
      */
     public void reset() {
-        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
         registry.clear();
 
         ActionEventDispatcher actionEventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
