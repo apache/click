@@ -35,7 +35,7 @@ document.observe("dom:loaded", function() {
         // from the AjaxSelect.java Page
         new Ajax.Updater('$target', '$context$path', {
             method: 'get',
-            parameters: {customerId : select.value}
+            parameters: {'pageAction' : 'onChangeCustomer', 'customerId' : select.value}
         });
     });
 });

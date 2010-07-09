@@ -139,11 +139,20 @@
   </menu>
 
   <menu label="Ajax" path="#" imageSrc="/assets/images/lightning.png">
-    <menu label="Basic AJAX Demo" path="ajax/basic-ajax-demo.htm"/>
-    <menu label="AJAX Accordion" path="ajax/ajax-accordion.htm"/>
+    <menu label="AJAX Demo" path="ajax/ajax-demo.htm"/>
+    <menu separator="true"/>
+    <menu label="JavaScript AJAX Demo" path="ajax/compare/javascript-ajax-demo.htm"/>
+    <menu label="jQuery AJAX Demo" path="ajax/compare/jquery-ajax-demo.htm"/>
+    <menu label="Prototype AJAX Demo" path="ajax/compare/prototype-ajax-demo.htm"/>
+    <menu separator="true"/>
+    <menu label="Table AJAX Demo" path="ajax/table/table-ajax-demo.htm"/>
+    <menu separator="true"/>
+    <menu label="Form AJAX Demo" path="ajax/form/form-ajax-demo.htm"/>
+    <menu separator="true"/>
+    <menu label="AJAX Accordion" path="ajax/accordion/ajax-accordion.htm"/>
     <menu label="AJAX Auto Complete Field" path="ajax/auto-complete.htm"/>
-    <menu label="AJAX Live Scroller " path="ajax/ajax-live-scroller.htm"/>
-    <menu label="AJAX Select" path="ajax/ajax-select.htm"/>
+    <menu label="AJAX Live Scroller " path="ajax/scroller/ajax-live-scroller.htm"/>
+    <menu label="AJAX Select" path="ajax/select/ajax-select.htm"/>
   </menu>
 
   <menu label=" Integration" path="#" imageSrc="/assets/images/cayenne.png">

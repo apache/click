@@ -36,35 +36,35 @@ $(document).ready(function(){
     var loading = false;
 
     function loadMoreData() {
-        // Increment offset with the specified number of pages
-        offset+=pageSize;
-
         // Toggle flag to indicate that loading started
         loading = true;
+
+        // Increment offset with the specified number of pages
+        offset+=pageSize;
 
         // Show the scroll indicator
         jQuery('#scroll-indicator').css("display", "block");
 
-        jQuery.get('${context}${path}?offset=' + offset, function(data){
-                // Toggle flag to indicate that loading is finished
-                loading = false;
+        // Perform Ajax GET request. Note pageAction parameter which specifies the onScroll page method
+        jQuery.get('${context}${path}?pageAction=onScroll&offset=' + offset, function(data){
+            // If the server response contains no div element, unbind the window scroll event as no further data
+            // will be returned
+            if (data.indexOf("<div") < 0) {
+                jQuery(window).unbind('scroll');
+            } else {
+                // Otherwise we add the new data after the last customer
+                jQuery(".customer:last").after(data);
+            }
 
-                // If the server returns the "LAST_RECORD" indicator, we
-                // can unbind the window scroll event as no further data
-                // will be returned
-                if (data.indexOf("LAST_RECORD") >= 0) {
-                    $(window).unbind('scroll');
-                } else {
-                    // Otherwise we add the new data after the last customer
-                    $(".customer:last").after(data);
-                }
+            jQuery('#scroll-indicator').css("display", "none");
 
-                jQuery('#scroll-indicator').css("display", "none");
-            });
+            // Toggle flag to indicate that loading is finished
+            loading = false;
+        });
     }
 
     // Bind a scroll event to the window to detect if more data needs to be loaded
-    $(window).bind('scroll', function() {
+    jQuery(window).bind('scroll', function() {
 
         // If we are currently retrieving data, don't load again
         if (loading) {
@@ -73,12 +73,19 @@ $(document).ready(function(){
 
         // When scrolling near the bottom of the page, load more data from server
         if (nearEndOfPage()) {
+            // Incase we scrolled to end of page, move scrollbar slightly back
+            jQuery(window).scrollTop(jQuery(window).scrollTop() - 1);
             loadMoreData();
         }
     });
 
     // Return true if scrolling is 85% at the end of the page
     function nearEndOfPage() {
-        return $(window).scrollTop() > (0.85 * $(document).height() - $(window).height());
+        return jQuery(window).scrollTop() > getFetchThreshold();
+    }
+
+    // Return the threshold when more data should be fetched, equates to 85% of the document height
+    function getFetchThreshold() {
+        return 0.85 * jQuery(document).height() - jQuery(window).height();
     }
 })

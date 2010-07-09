@@ -1,0 +1,75 @@
+<p>
+    Demonstrates Click Ajax support using <a target="_blank" href="http://www.prototypejs.org/">Prototype</a>.
+    Compare this implementation with the <a href="$context/ajax/compare/javascript-ajax-demo.htm">Javascript</a> and
+    <a href="$context/ajax/compare/jquery-ajax-demo.htm">jQuery</a> demos.
+</p>
+
+$link
+
+<div id="target">
+<!-- Ajax response will be set here -->
+</div>
+
+<script type="text/javascript" src="$context/click/prototype/prototype.js"></script>
+
+<script type="text/javascript">
+    // This example uses Prototype for making Ajax requests:
+    // http://www.prototypejs.org/learn/introduction-to-ajax
+
+    // Register a function that is invoked as soon as the DOM is loaded
+    document.observe("dom:loaded", function() {
+
+        // Register a 'click' handler that makes an Ajax request
+        $('link-id').observe('click', function(event) {
+            // Make ajax request
+            makeRequest();
+
+            // Prevent the default browser behavior of navigating to the link
+            event.preventDefault();
+        })
+    })
+
+    function makeRequest() {
+        // The URL to make the Ajax request on should include enough information
+        // for Click to identify the target Ajax control and how to process the control.
+        // Normally Click uses the Control ID to identify the Ajax target. Here the
+        // target Control is the ActionLink with ID: 'link-id'. The ID parameter is appended to
+        // the url with a value of 1. The value is actually ignored by Click so it is optional
+        // and can be left out.
+        //
+        // Once Click identifies the target control it invokes that Control onProcess method.
+        // Simply processing a control is normally not enough to fire registered AjaxBehaviors.
+        // For example ActionLinks fire off their Behaviors (or ActionListener for non Ajax requests)
+        // based the value of the predefined parameter: 'actionLink'. The 'actionLink' parameter
+        // value specifies the name of the ActionLink that was clicked. So we append
+        // the 'actionLink' parameter and set the value as the ActionLink name -> 'link'.
+        var extraData = 'link-id=1&actionLink=link';
+        var url = '$context/ajax/compare/javascript-ajax-demo.htm';
+        new Ajax.Request(url, {
+            method:'get',
+            parameters: extraData,
+            onSuccess: function(transport){
+                updateLog(transport.responseText);
+            }
+        });
+
+        // The above example is for demonstration purposes only. Normally you can generify the URL by using
+        // the link 'href' and 'id' attributes as the URL. The link href already contains the server URL,
+        // actionLink, value and extra link parameters:
+        /*
+        var link = $('link-id');
+        var url = link.readAttribute('href');
+        var extraData = link.readAttribute('id') + '=1';
+        new Ajax.Request(url, {
+            method:'get',
+            parameters: extraData,
+            onSuccess: function(transport){
+                updateLog(transport.responseText);
+            }
+        });*/
+    }
+
+    function updateLog(data) {
+        $("target").update("<p class='infoMsg'>" + data + "</p>");
+    }
+</script>
