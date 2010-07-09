@@ -342,12 +342,14 @@ public class Partial {
     }
 
     /**
-     * Return the partial content type. If no content type is specified it will
-     * default to {@value #TEXT}.
+     * Return the partial content type, default is {@value #TEXT}.
      *
      * @return the response content type
      */
     public String getContentType() {
+        if (contentType == null) {
+            contentType = TEXT;
+        }
         return contentType;
     }
 
@@ -559,9 +561,6 @@ public class Partial {
         }
 
         String contentType = getContentType();
-        if (contentType == null) {
-            contentType = TEXT;
-        }
 
         if (getCharacterEncoding() == null) {
 
