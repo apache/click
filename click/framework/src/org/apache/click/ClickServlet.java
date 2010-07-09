@@ -339,9 +339,9 @@ public class ClickServlet extends HttpServlet {
             // Bind ActionEventDispatcher to current thread
             ActionEventDispatcher.pushThreadLocalDispatcher(eventDispatcher);
 
-            CallbackDispatcher callbackDispatcher = createCallbackDispatcher();
+            ControlRegistry controlRegistry = createControlRegistry();
             // Bind CallbackDispatcher to current thread
-            CallbackDispatcher.pushThreadLocalDispatcher(callbackDispatcher);
+            ControlRegistry.pushThreadLocalDispatcher(controlRegistry);
 
             Context context = createContext(request, response, isPost);
             // Bind context to current thread
@@ -423,7 +423,7 @@ public class ClickServlet extends HttpServlet {
                 if (request.getAttribute(MOCK_MODE_ENABLED) == null) {
                     Context.popThreadLocalContext();
                 }
-                CallbackDispatcher.popThreadLocalDispatcher();
+                ControlRegistry.popThreadLocalDispatcher();
                 ActionEventDispatcher.popThreadLocalDispatcher();
             }
         }
@@ -575,7 +575,7 @@ public class ClickServlet extends HttpServlet {
     protected void processPageEvents(Page page, Context context) throws Exception {
 
         ActionEventDispatcher eventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
-        CallbackDispatcher callbackDispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalDispatcher();
 
         boolean errorOccurred = page instanceof ErrorPage;
         // Support direct access of click-error.htm
@@ -583,9 +583,9 @@ public class ClickServlet extends HttpServlet {
             ErrorPage errorPage = (ErrorPage) page;
             errorPage.setMode(configService.getApplicationMode());
 
-            // Notify the dispatcher and callbackRegistry of the error
+            // Notify the eventDispatcher and controlRegistry of the error
             eventDispatcher.errorOccurred(errorPage.getError());
-            callbackDispatcher.errorOccurred(errorPage.getError());
+            controlRegistry.errorOccurred(errorPage.getError());
         }
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
@@ -613,8 +613,8 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
-        callbackDispatcher.processPreResponse(context);
-        callbackDispatcher.processPreGetHeadElements(context);
+        controlRegistry.processPreResponse(context);
+        controlRegistry.processPreGetHeadElements(context);
         performRender(page, context, partial);
     }
 
@@ -1128,7 +1128,7 @@ public class ClickServlet extends HttpServlet {
 
             // notify callbacks of destroy event
             // TODO check that exceptions don't unnecessarily trigger preDestroy
-            CallbackDispatcher.getThreadLocalDispatcher().processPreDestroy(page.getContext());
+            ControlRegistry.getThreadLocalDispatcher().processPreDestroy(page.getContext());
 
             List<Control> controls = page.getControls();
 
@@ -1663,12 +1663,12 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Creates and returns a new CallbackDispatcher instance.
+     * Creates and returns a new ControlRegistry instance.
      *
-     * @return the new CallbackDispatcher instance
+     * @return the new ControlRegistry instance
      */
-    protected CallbackDispatcher createCallbackDispatcher() {
-        return new CallbackDispatcher(configService);
+    protected ControlRegistry createControlRegistry() {
+        return new ControlRegistry(configService);
     }
 
     /**
@@ -1772,7 +1772,7 @@ public class ClickServlet extends HttpServlet {
 
         ActionEventDispatcher eventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
 
-        CallbackDispatcher callbackDispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+        ControlRegistry controlRegistry = ControlRegistry.getThreadLocalDispatcher();
 
         // TODO Ajax requests shouldn't reach this code path
         // Support direct access of click-error.htm
@@ -1782,7 +1782,7 @@ public class ClickServlet extends HttpServlet {
 
             // Notify the dispatcher and registry of the error
             eventDispatcher.errorOccurred(errorPage.getError());
-            callbackDispatcher.errorOccurred(errorPage.getError());
+            controlRegistry.errorOccurred(errorPage.getError());
         }
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
@@ -1798,8 +1798,8 @@ public class ClickServlet extends HttpServlet {
                 // Returned partial could be null
                 partial = performPageAction(page, pageAction, context);
 
-                callbackDispatcher.processPreResponse(context);
-                callbackDispatcher.processPreGetHeadElements(context);
+                controlRegistry.processPreResponse(context);
+                controlRegistry.processPreGetHeadElements(context);
 
                 renderPartial(partial, context);
             }
@@ -1810,10 +1810,10 @@ public class ClickServlet extends HttpServlet {
 
             // TODO: Ajax doesn't support forward. Is it still necessary to
             // check isForward?
-            if (callbackDispatcher.hasAjaxTargetControls() && !context.isForward()) {
+            if (controlRegistry.hasAjaxTargetControls() && !context.isForward()) {
 
                 // Perform onProcess for regsitered Ajax controls
-                processAjaxControls(context, eventDispatcher, callbackDispatcher);
+                processAjaxControls(context, eventDispatcher, controlRegistry);
 
                 // Fire behaviors registered during the onProcess event
                 // The target behavior will set the eventDispatcher partial instance
@@ -1822,8 +1822,8 @@ public class ClickServlet extends HttpServlet {
 
                 // Ensure we execute the beforeResponse and beforeGetHeadElements
                 // for Ajax requests
-                callbackDispatcher.processPreResponse(context);
-                callbackDispatcher.processPreGetHeadElements(context);
+                controlRegistry.processPreResponse(context);
+                controlRegistry.processPreGetHeadElements(context);
 
                 partial = eventDispatcher.getPartial();
 
@@ -1840,8 +1840,8 @@ public class ClickServlet extends HttpServlet {
                     performOnRender(page, context);
                 }
 
-                callbackDispatcher.processPreResponse(context);
-                callbackDispatcher.processPreGetHeadElements(context);
+                controlRegistry.processPreResponse(context);
+                controlRegistry.processPreGetHeadElements(context);
                 performRender(page, context);
             }
         } else {
@@ -1857,11 +1857,11 @@ public class ClickServlet extends HttpServlet {
      * processing, false otherwise.
      *
      * @param context the request context
-     * @param callbackDispatcher the callback dispatcher
+     * @param controlRegistry the control registry
      * @return true if the page should continue processing, false otherwise
      */
     protected boolean processAjaxControls(Context context,
-        ActionEventDispatcher eventDispatcher, CallbackDispatcher callbackDispatcher) {
+        ActionEventDispatcher eventDispatcher, ControlRegistry controlRegistry) {
 
         boolean continueProcessing = true;
 
@@ -1869,8 +1869,8 @@ public class ClickServlet extends HttpServlet {
 
         if (logger.isTraceEnabled()) {
             logger.trace("   the following controls have been registered as potential Ajax targets:");
-            if (!callbackDispatcher.hasAjaxTargetControls()) {
-                for (Control control : callbackDispatcher.getAjaxTargetControls()) {
+            if (!controlRegistry.hasAjaxTargetControls()) {
+                for (Control control : controlRegistry.getAjaxTargetControls()) {
                     HtmlStringBuffer buffer = new HtmlStringBuffer();
                     String controlClassName = ClassUtils.getShortClassName(control.getClass());
                     buffer.append("      ").append(controlClassName);
@@ -1882,7 +1882,7 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
-        for (Control control : callbackDispatcher.getAjaxTargetControls()) {
+        for (Control control : controlRegistry.getAjaxTargetControls()) {
 
             if (control.isAjaxTarget(context)) {
                 ajaxTarget = control;

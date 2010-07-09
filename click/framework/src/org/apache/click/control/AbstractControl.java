@@ -36,7 +36,7 @@ import javax.servlet.ServletContext;
 import org.apache.click.ActionEventDispatcher;
 import org.apache.click.ActionListener;
 import org.apache.click.Behavior;
-import org.apache.click.CallbackDispatcher;
+import org.apache.click.ControlRegistry;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
@@ -257,7 +257,7 @@ public abstract class AbstractControl implements Control {
             // Register control here in case behavior was added *after* the onInit event.
             // This can occur if the behavior is added in a listener event or during
             // onRender.
-            CallbackDispatcher.registerAjaxTarget(this);
+            ControlRegistry.registerAjaxTarget(this);
         }
     }
 
@@ -592,7 +592,7 @@ public abstract class AbstractControl implements Control {
         //    to ensure this code is called *before* onProcess. Leaving the code
         //    here opens problems if subclass does not call super.onInit
         if (hasBehaviors()) {
-           CallbackDispatcher.registerAjaxTarget(this);
+           ControlRegistry.registerAjaxTarget(this);
         }
     }
 

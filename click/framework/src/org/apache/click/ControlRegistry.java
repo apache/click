@@ -31,7 +31,7 @@ import org.apache.commons.lang.Validate;
  *
  * TODO: javadoc
  */
-public class CallbackDispatcher {
+public class ControlRegistry {
 
     // Constants --------------------------------------------------------------
 
@@ -52,7 +52,7 @@ public class CallbackDispatcher {
 
     // Constructors -----------------------------------------------------------
 
-    public CallbackDispatcher(ConfigService configService) {
+    public ControlRegistry(ConfigService configService) {
         this.logger = configService.getLogService();
     }
 
@@ -67,12 +67,12 @@ public class CallbackDispatcher {
      * @param control the control to register
      */
     public static void registerAjaxTarget(Control control) {
-        CallbackDispatcher instance = getThreadLocalDispatcher();
+        ControlRegistry instance = getThreadLocalDispatcher();
         instance.internalRegisterAjaxTarget(control);
     }
 
     public static void registerCallback(Control control, Callback callback) {
-        CallbackDispatcher instance = getThreadLocalDispatcher();
+        ControlRegistry instance = getThreadLocalDispatcher();
         instance.internalRegisterCallback(control, callback);
     }
 
@@ -223,7 +223,7 @@ public class CallbackDispatcher {
         return callbacks;
     }
 
-    static CallbackDispatcher getThreadLocalDispatcher() {
+    static ControlRegistry getThreadLocalDispatcher() {
         return getDispatcherStack().peek();
     }
 
@@ -232,7 +232,7 @@ public class CallbackDispatcher {
      *
      * @param callbackDispatcher the CallbackDispatcher to add
      */
-    static void pushThreadLocalDispatcher(CallbackDispatcher callbackDispatcher) {
+    static void pushThreadLocalDispatcher(ControlRegistry callbackDispatcher) {
         getDispatcherStack().push(callbackDispatcher);
     }
 
@@ -242,9 +242,9 @@ public class CallbackDispatcher {
      *
      * @return the callbackDispatcher instance on top of the dispatcher stack
      */
-    static CallbackDispatcher popThreadLocalDispatcher() {
+    static ControlRegistry popThreadLocalDispatcher() {
         RegistryStack registryStack = getDispatcherStack();
-        CallbackDispatcher callbackDispatcher = registryStack.pop();
+        ControlRegistry callbackDispatcher = registryStack.pop();
 
         if (registryStack.isEmpty()) {
             THREAD_LOCAL_REGISTRY.set(null);
@@ -267,7 +267,7 @@ public class CallbackDispatcher {
     /**
      * Provides an unsynchronized Stack.
      */
-    static class RegistryStack extends ArrayList<CallbackDispatcher> {
+    static class RegistryStack extends ArrayList<ControlRegistry> {
 
         /** Serialization version indicator. */
         private static final long serialVersionUID = 1L;
@@ -287,7 +287,7 @@ public class CallbackDispatcher {
          * @param callbackDispatcher the CallbackDispatcher to push onto this stack
          * @return the CallbackDispatcher pushed on this stack
          */
-        private CallbackDispatcher push(CallbackDispatcher callbackDispatcher) {
+        private ControlRegistry push(ControlRegistry callbackDispatcher) {
             add(callbackDispatcher);
 
             return callbackDispatcher;
@@ -298,8 +298,8 @@ public class CallbackDispatcher {
          *
          * @return the CallbackDispatcher at the top of this stack
          */
-        private CallbackDispatcher pop() {
-            CallbackDispatcher callbackDispatcher = peek();
+        private ControlRegistry pop() {
+            ControlRegistry callbackDispatcher = peek();
 
             remove(size() - 1);
 
@@ -312,7 +312,7 @@ public class CallbackDispatcher {
          *
          * @return the CallbackDispatcher at the top of this stack
          */
-        private CallbackDispatcher peek() {
+        private ControlRegistry peek() {
             int length = size();
 
             if (length == 0) {

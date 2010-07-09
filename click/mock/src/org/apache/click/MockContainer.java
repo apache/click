@@ -665,7 +665,7 @@ public class MockContainer {
             response.reset();
         }
         ActionEventDispatcher.getDispatcherStack().clear();
-        CallbackDispatcher.getDispatcherStack().clear();
+        ControlRegistry.getDispatcherStack().clear();
     }
 
     /**
