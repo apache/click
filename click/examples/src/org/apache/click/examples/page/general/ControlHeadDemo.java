@@ -75,7 +75,7 @@ public class ControlHeadDemo extends BorderPage {
                 headElements = super.getHeadElements();
 
                 // Add the JQuery library to the control
-                headElements.add(new JsImport("/assets/js/jquery-1.3.2.js"));
+                headElements.add(new JsImport("/assets/js/jquery-1.4.2.js"));
 
                 // Add the Rating JavaScript library to the control
                 headElements.add(new JsImport("/assets/rating/jquery.rating.js"));

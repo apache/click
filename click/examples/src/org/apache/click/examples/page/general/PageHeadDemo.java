@@ -76,7 +76,7 @@ public class PageHeadDemo extends BorderPage {
             headElements.add(new CssStyle("#" + field.getId() + " { font-size: 18px; }"));
 
             // Add the JQuery library to the Page
-            headElements.add(new JsImport("/assets/js/jquery-1.3.2.js"));
+            headElements.add(new JsImport("/assets/js/jquery-1.4.2.js"));
 
             // Add a JQuery template which adds a 'click' listener to the link
             // that will show/hide the field

@@ -85,7 +85,7 @@ public class AjaxLiveScroller extends BorderPage {
             headElements = super.getHeadElements();
 
             // Add the jQuery library
-            headElements.add(new JsImport("/assets/js/jquery-1.3.2.js"));
+            headElements.add(new JsImport("/assets/js/jquery-1.4.2.js"));
 
             // Create a default model and add the pageSize variable to pass to
             // the JavaScript template: ajax-live-scroller.js

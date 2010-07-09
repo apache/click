@@ -43,6 +43,7 @@ public class PrototypeAjaxDemoPage extends BorderPage {
         // Ajax code
         link.addBehavior(new AjaxBehavior() {
 
+            @Override
             public Partial onAction(Control source) {
                 // Formatted date instance that will be added to the
                 String now = format.currentDate("MMM, yyyy dd HH:MM:ss");
