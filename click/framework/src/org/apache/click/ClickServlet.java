@@ -1867,6 +1867,21 @@ public class ClickServlet extends HttpServlet {
 
         Control ajaxTarget = null;
 
+        if (logger.isTraceEnabled()) {
+            logger.trace("   the following controls have been registered as potential Ajax targets:");
+            if (callbackDispatcher.getBehaviorEnabledControls().isEmpty()) {
+                logger.trace("      *no* control has been registered");
+            } else {
+                for (Control control : callbackDispatcher.getBehaviorEnabledControls()) {
+                    HtmlStringBuffer buffer = new HtmlStringBuffer();
+                    String controlClassName = ClassUtils.getShortClassName(control.getClass());
+                    buffer.append("      ").append(controlClassName);
+                    buffer.append(": name='").append(control.getName()).append("'");
+                    logger.trace(buffer.toString());
+                }
+            }
+        }
+
         for (Control control : callbackDispatcher.getBehaviorEnabledControls()) {
 
             if (control.isAjaxTarget(context)) {
@@ -1884,7 +1899,7 @@ public class ClickServlet extends HttpServlet {
                 buffer.append(ajaxTarget.getName()).append("' ");
                 String className = ClassUtils.getShortClassName(ajaxTarget.getClass());
                 buffer.append(className);
-                buffer.append(".isAjaxTarget() : true (Ajax Control found)");
+                buffer.append(".isAjaxTarget() : true (target Ajax control found)");
                 logger.trace(buffer.toString());
             }
 
@@ -1905,7 +1920,7 @@ public class ClickServlet extends HttpServlet {
                 logger.trace(buffer.toString());
 
                 if (!eventDispatcher.hasBehaviorSourceSet()) {
-                    logger.trace("   *no* behavior was registered while processing control");
+                    logger.trace("   *no* behavior was registered while processing the control");
                 }
             }
         } else {
