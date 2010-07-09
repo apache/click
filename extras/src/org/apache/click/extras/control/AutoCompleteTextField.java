@@ -447,7 +447,7 @@ public abstract class AutoCompleteTextField extends TextField {
      * @return the field Ajax behavior instance
      */
     protected Behavior createBehavior() {
-        AjaxBehavior behavior = new AjaxBehavior() {
+        AjaxBehavior internalBehavior = new AjaxBehavior() {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -467,7 +467,7 @@ public abstract class AutoCompleteTextField extends TextField {
             }
         };
 
-        return behavior;
+        return internalBehavior;
     }
 
     /**
