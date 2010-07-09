@@ -240,12 +240,12 @@ public class MockContext extends Context {
      * @param response the mock response
      * @param clickServlet the mock clickServlet
      * @param actionEventDispatcher action and behavior dispatcher
-     * @param callbackDispatcher the control callback dispatcher
+     * @param controlRegistry the control registry
      * @return new Context instance
      */
     public static MockContext initContext(MockServletConfig servletConfig,
         MockRequest request, MockResponse response, ClickServlet clickServlet,
-        ActionEventDispatcher actionEventDispatcher, CallbackDispatcher callbackDispatcher) {
+        ActionEventDispatcher actionEventDispatcher, ControlRegistry controlRegistry) {
 
         try {
             //Sanity checks
@@ -287,12 +287,12 @@ public class MockContext extends Context {
                 actionEventDispatcher = new ActionEventDispatcher(configService);
             }
 
-            if (callbackDispatcher == null) {
-                callbackDispatcher = new CallbackDispatcher(configService);
+            if (controlRegistry == null) {
+                controlRegistry = new ControlRegistry(configService);
             }
 
             ActionEventDispatcher.pushThreadLocalDispatcher(actionEventDispatcher);
-            CallbackDispatcher.pushThreadLocalDispatcher(callbackDispatcher);
+            ControlRegistry.pushThreadLocalDispatcher(controlRegistry);
             Context.pushThreadLocalContext(mockContext);
 
             if (ClickUtils.getLogService() instanceof ConsoleLogService) {
@@ -333,27 +333,27 @@ public class MockContext extends Context {
      * Execute the preResponse callback event for all registered callbacks.
      */
     public void executePreResponseCallbackEvent() {
-        CallbackDispatcher dispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
 
-        dispatcher.processPreResponse(this);
+        registry.processPreResponse(this);
     }
 
     /**
      * Execute the preGetHeadElements callback event for all registered callbacks.
      */
     public void executePreGetHeadElementsCallbackEvent() {
-        CallbackDispatcher dispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
 
-        dispatcher.processPreGetHeadElements(this);
+        registry.processPreGetHeadElements(this);
     }
 
     /**
      * Execute the preDestroy callback event for all registered callbacks.
      */
     public void executePreDestroyCallbackEvent() {
-        CallbackDispatcher dispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
 
-        dispatcher.processPreDestroy(this);
+        registry.processPreDestroy(this);
     }
 
     /**
@@ -373,8 +373,8 @@ public class MockContext extends Context {
      * method will remove any references to objects, thus freeing up memory.
      */
     public void reset() {
-        CallbackDispatcher callbackDispatcher = CallbackDispatcher.getThreadLocalDispatcher();
-        callbackDispatcher.clear();
+        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
+        registry.clear();
 
         ActionEventDispatcher actionEventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
         actionEventDispatcher.clear();

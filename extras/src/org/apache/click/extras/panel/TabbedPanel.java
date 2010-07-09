@@ -20,7 +20,7 @@ package org.apache.click.extras.panel;
 
 import java.util.List;
 import org.apache.click.ActionListener;
-import org.apache.click.CallbackDispatcher;
+import org.apache.click.ControlRegistry;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.control.ActionLink;
@@ -409,7 +409,7 @@ public class TabbedPanel extends Panel {
     @Override
     public void onInit() {
         if (hasBehaviors()) {
-            CallbackDispatcher.registerAjaxTarget(this);
+            ControlRegistry.registerAjaxTarget(this);
         }
 
         initActivePanel();

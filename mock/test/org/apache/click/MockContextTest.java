@@ -213,7 +213,7 @@ public class MockContextTest extends TestCase {
         preResponseCalled = false;
         preDestroyCalled = false;
 
-        CallbackDispatcher.registerCallback(submit, new Callback() {
+        ControlRegistry.registerCallback(submit, new Callback() {
 
             public void preDestroy(Control source) {
                 preDestroyCalled = true;
@@ -228,10 +228,10 @@ public class MockContextTest extends TestCase {
             }
         });
 
-        CallbackDispatcher dispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
 
         // Assert there is one callback registered
-        assertEquals(1, dispatcher.getCallbacks().size());
+        assertEquals(1, registry.getCallbacks().size());
 
         // Process the preResponse callback event
         context.executePreResponseCallbackEvent();
@@ -249,7 +249,7 @@ public class MockContextTest extends TestCase {
         // The reason the callbacks are not automatically removed is because the
         // last callback is onDestroy, which is right before the request goes out
         // of scope
-        assertEquals(1, dispatcher.getCallbacks().size());
+        assertEquals(1, registry.getCallbacks().size());
     }
 
     /**
@@ -264,7 +264,7 @@ public class MockContextTest extends TestCase {
         preResponseCalled = false;
         preDestroyCalled = false;
 
-        CallbackDispatcher.registerCallback(submit, new Callback() {
+        ControlRegistry.registerCallback(submit, new Callback() {
 
             public void preDestroy(Control source) {
                 preDestroyCalled = true;
@@ -279,10 +279,10 @@ public class MockContextTest extends TestCase {
             }
         });
 
-        CallbackDispatcher dispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
 
         // Assert there is one callback registered
-        assertEquals(1, dispatcher.getCallbacks().size());
+        assertEquals(1, registry.getCallbacks().size());
 
         // Context reset should clear the dispatcher
         context.reset();
@@ -291,7 +291,7 @@ public class MockContextTest extends TestCase {
         // The reason the callbacks are not automatically removed is because the
         // last callback is onDestroy, which is right before the request goes out
         // of scope
-        assertEquals(0, dispatcher.getCallbacks().size());
+        assertEquals(0, registry.getCallbacks().size());
     }
 
     // Callback + Behavior tests ----------------------------------------------
@@ -353,11 +353,11 @@ public class MockContextTest extends TestCase {
         // Assert there are no behaviors registered after reset is invoked
         assertEquals(0, eventDispatcher.getBehaviorSourceSet().size());
 
-        CallbackDispatcher callbackDispatcher = CallbackDispatcher.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
 
         // Assert that the submit control is registered as a callback
-        assertEquals(1, callbackDispatcher.getAjaxTargetControls().size());
-        assertSame(submit, callbackDispatcher.getAjaxTargetControls().iterator().next());
+        assertEquals(1, registry.getAjaxTargetControls().size());
+        assertSame(submit, registry.getAjaxTargetControls().iterator().next());
 
         // Process the preResponse callback event
         context.executePreResponseCallbackEvent();
@@ -372,12 +372,12 @@ public class MockContextTest extends TestCase {
         assertTrue("preDestroy callback event was not processed", preDestroyCalled);
 
         // Assert that the callback was not removed after all events was processed
-        assertEquals(1, callbackDispatcher.getAjaxTargetControls().size());
+        assertEquals(1, registry.getAjaxTargetControls().size());
 
         // Test that reset will clear the callback dispatcher
         context.reset();
 
         // Assert that the callback was removed after reset
-        assertEquals(0, callbackDispatcher.getAjaxTargetControls().size());
+        assertEquals(0, registry.getAjaxTargetControls().size());
     }
 }
