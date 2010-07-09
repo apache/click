@@ -87,7 +87,7 @@ public class FormAjaxDemoPage extends BorderPage {
     public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
-            headElements.add(new JsImport("/assets/js/jquery-1.3.2.js"));
+            headElements.add(new JsImport("/assets/js/jquery-1.4.2.js"));
             headElements.add(new JsScript("/ajax/form/form-ajax-demo.js", new HashMap()));
         }
         return headElements;

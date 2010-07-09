@@ -118,7 +118,7 @@ public class DisabledDemo extends BorderPage {
     public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
-            headElements.add(new JsImport("/assets/js/jquery-1.3.2.js"));
+            headElements.add(new JsImport("/assets/js/jquery-1.4.2.js"));
 
             Map<String, Object> jsModel = new HashMap<String, Object>();
             headElements.add(new JsScript("/control/disabled-demo.js", jsModel));

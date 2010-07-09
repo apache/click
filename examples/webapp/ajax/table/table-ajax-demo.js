@@ -20,8 +20,10 @@
 // Register a function that is invoked as soon as the DOM is loaded
 jQuery(document).ready(function() {
 
-    // Register a 'click' handler on every link inside the table
-    jQuery("#table a").click(function(event){
+    // Register a 'live' click handler on every link inside the table.
+    // Note: the 'live' binding is a jQuery function that keeps the event bound even if the Table DOM is replaced
+    // http://api.jquery.com/live/
+    jQuery("#table td a").live('click', function(event){
         // Prevent the default browser behavior of navigating to the link
         event.preventDefault();
 
@@ -32,16 +34,36 @@ jQuery(document).ready(function() {
 
         if (callServer) {
             // Make ajax request
-            makeRequest(event);
+            editCustomer(event);
         }
+    })
+
+    // Register a 'live' click handler on the sorting links of the table header (<th>),
+    // as well as the paging links on the <div> banner.
+    // Note: the 'live' binding is a jQuery function that keeps the event bound even if the Table DOM is replaced
+    // http://api.jquery.com/live/
+    jQuery("#table th a, .pagelinks a").live('click', function(event){
+        // Prevent the default browser behavior of navigating to the link
+        event.preventDefault();
+        // Make ajax request
+        sortTable(event);
     })
 })
 
-function makeRequest(event) {
+function editCustomer(event) {
     var link = jQuery(event.target);
     var url = link.attr('href');
     jQuery.get(url, function(data) {
         // Update the result div with the server response
         jQuery("#result").html("<p class='infoMsg'>" + data + "</p>");
+    });
+}
+
+function sortTable(event) {
+    var link = jQuery(event.target);
+    var url = link.attr('href');
+    jQuery.get(url, function(data) {
+        // Update the table container with the new table
+        jQuery("#tableContainer").html(data);
     });
 }

@@ -41,7 +41,7 @@ public class AjaxAccordion extends BorderPage {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
-            headElements.add(new JsImport("/assets/js/jquery-1.3.2.js"));
+            headElements.add(new JsImport("/assets/js/jquery-1.4.2.js"));
             headElements.add(new JsImport("/assets/js/jquery.tools.min.js"));
             headElements.add(new CssImport("/assets/css/tabs-accordion.css"));
 

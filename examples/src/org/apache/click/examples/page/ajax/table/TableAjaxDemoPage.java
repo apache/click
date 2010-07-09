@@ -74,6 +74,19 @@ public class TableAjaxDemoPage extends BorderPage {
             }
         });
 
+        table.getControlLink().addBehavior(new AjaxBehavior() {
+
+            @Override
+            public Partial onAction(Control source) {
+
+                // NOTE: Ajax requests only process the target Control. Here we
+                // process the table in order to update paging and sorting state
+                table.onProcess();
+
+                return new Partial(table.toString(), Partial.HTML);
+            }
+        });
+
         addControl(table);
 
         // Setup customers table
@@ -119,7 +132,7 @@ public class TableAjaxDemoPage extends BorderPage {
     public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
-            headElements.add(new JsImport("/assets/js/jquery-1.3.2.js"));
+            headElements.add(new JsImport("/assets/js/jquery-1.4.2.js"));
             headElements.add(new JsScript("/ajax/table/table-ajax-demo.js", new HashMap()));
         }
         return headElements;
