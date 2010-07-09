@@ -21,6 +21,7 @@ package org.apache.click;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 
@@ -469,16 +470,16 @@ public interface Control extends Serializable {
      * <tt>Behavior</tt>s registered.
      *
      * @return <tt>true</tt> if this control has any
-     * <tt>Behavior</tt>s registered, <tt>false</tt> otherwise.
+     * <tt>Behavior</tt>s registered, <tt>false</tt> otherwise
      */
     public boolean hasBehaviors();
 
     /**
-     * Returns the list with all available behaviors for this control.
+     * Returns the list of behaviors for this control.
      *
-     * @return the list with this control's behaviors.
+     * @return the list with this control behaviors.
      */
-    public List<Behavior> getBehaviors();
+    public Set<Behavior> getBehaviors();
 
     /**
      * Returns <tt>true</tt> if this control is an AJAX target, <tt>false</tt>

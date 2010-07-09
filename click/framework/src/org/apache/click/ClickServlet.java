@@ -1810,7 +1810,7 @@ public class ClickServlet extends HttpServlet {
 
             // TODO: Ajax doesn't support forward. Is it still necessary to
             // check isForward?
-            if (callbackDispatcher.hasBehaviorEnabledControls() && !context.isForward()) {
+            if (callbackDispatcher.hasAjaxTargetControls() && !context.isForward()) {
 
                 // Perform onProcess for regsitered Ajax controls
                 processAjaxControls(context, eventDispatcher, callbackDispatcher);
@@ -1869,20 +1869,20 @@ public class ClickServlet extends HttpServlet {
 
         if (logger.isTraceEnabled()) {
             logger.trace("   the following controls have been registered as potential Ajax targets:");
-            if (callbackDispatcher.getBehaviorEnabledControls().isEmpty()) {
-                logger.trace("      *no* control has been registered");
-            } else {
-                for (Control control : callbackDispatcher.getBehaviorEnabledControls()) {
+            if (!callbackDispatcher.hasAjaxTargetControls()) {
+                for (Control control : callbackDispatcher.getAjaxTargetControls()) {
                     HtmlStringBuffer buffer = new HtmlStringBuffer();
                     String controlClassName = ClassUtils.getShortClassName(control.getClass());
                     buffer.append("      ").append(controlClassName);
                     buffer.append(": name='").append(control.getName()).append("'");
                     logger.trace(buffer.toString());
                 }
+            } else {
+                logger.trace("      *no* control has been registered");
             }
         }
 
-        for (Control control : callbackDispatcher.getBehaviorEnabledControls()) {
+        for (Control control : callbackDispatcher.getAjaxTargetControls()) {
 
             if (control.isAjaxTarget(context)) {
                 ajaxTarget = control;

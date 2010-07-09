@@ -21,6 +21,7 @@ package org.apache.click.control;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -140,7 +141,7 @@ public abstract class AbstractControl implements Control {
     protected ActionListener actionListener;
 
     /** The control's list of {@link org.apache.click.Behavior behaviors}. */
-    protected List<Behavior> behaviors;
+    protected Set<Behavior> behaviors;
 
     /**
      * The list of page HTML HEAD elements including: Javascript imports,
@@ -251,16 +252,13 @@ public abstract class AbstractControl implements Control {
      * @param behavior the AJAX behavior
      */
     public void addBehavior(Behavior behavior) {
-        if (getBehaviors().contains(behavior)) {
-            return;
+        boolean added = getBehaviors().add(behavior);
+        if (added) {
+            // Register control here in case behavior was added *after* the onInit event.
+            // This can occur if the behavior is added in a listener event or during
+            // onRender.
+            CallbackDispatcher.registerAjaxTarget(this);
         }
-
-        getBehaviors().add(behavior);
-
-        // Register control here in case behavior was added *after* the onInit event.
-        // This can occur if the behavior is added in a listener event or during
-        // onRender.
-        CallbackDispatcher.registerBehavior(this);
     }
 
     /**
@@ -277,9 +275,9 @@ public abstract class AbstractControl implements Control {
      *
      * @return the list with this control's behaviors.
      */
-    public List<Behavior> getBehaviors() {
+    public Set<Behavior> getBehaviors() {
         if (behaviors == null) {
-            behaviors = new ArrayList<Behavior>();
+            behaviors = new HashSet<Behavior>();
         }
         return behaviors;
     }
@@ -594,7 +592,7 @@ public abstract class AbstractControl implements Control {
         //    to ensure this code is called *before* onProcess. Leaving the code
         //    here opens problems if subclass does not call super.onInit
         if (hasBehaviors()) {
-           CallbackDispatcher.registerBehavior(this);
+           CallbackDispatcher.registerAjaxTarget(this);
         }
     }
 
