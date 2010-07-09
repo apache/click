@@ -29,7 +29,7 @@ import org.apache.click.Partial;
  *
  * TODO: javadoc
  */
-public abstract class AjaxBehavior implements Behavior, Serializable {
+public class AjaxBehavior implements Behavior, Serializable {
 
     // Constants --------------------------------------------------------------
 
@@ -45,9 +45,11 @@ public abstract class AjaxBehavior implements Behavior, Serializable {
      * @see org.apache.click.Behavior#onAction(org.apache.click.Control)
      *
      * @param source the control the behavior is attached to
-     * @return
+     * @return the partial response
      */
-    public abstract Partial onAction(Control source);
+    public Partial onAction(Control source) {
+        return null;
+    }
 
     /**
      * TODO: javadoc
