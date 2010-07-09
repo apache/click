@@ -293,6 +293,7 @@ public class Checkbox extends Field {
      */
     @Override
     public void validate() {
+        setError(null);
         if (isRequired() && !isChecked()) {
             setErrorMessage("not-checked-error");
         }
