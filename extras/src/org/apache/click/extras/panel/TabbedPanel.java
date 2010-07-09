@@ -409,7 +409,7 @@ public class TabbedPanel extends Panel {
     @Override
     public void onInit() {
         if (hasBehaviors()) {
-            CallbackDispatcher.registerBehavior(this);
+            CallbackDispatcher.registerAjaxTarget(this);
         }
 
         initActivePanel();

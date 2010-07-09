@@ -27,7 +27,7 @@ import org.apache.click.service.LogService;
 import org.apache.commons.lang.Validate;
 
 /**
- * Provides a Control event callback dispatcher.
+ * Provides a registry for Controls.
  *
  * TODO: javadoc
  */
@@ -36,13 +36,13 @@ public class CallbackDispatcher {
     // Constants --------------------------------------------------------------
 
     /** The thread local dispatcher holder. */
-    private static final ThreadLocal<DispatcherStack> THREAD_LOCAL_DISPATCHER =
-                    new ThreadLocal<DispatcherStack>();
+    private static final ThreadLocal<RegistryStack> THREAD_LOCAL_REGISTRY =
+                    new ThreadLocal<RegistryStack>();
 
     // Variables --------------------------------------------------------------
 
-    /** The set of registered behavior enabled controls. */
-    Set<Control> behaviorEnabledControls;
+    /** The set of Ajax target controls. */
+    Set<Control> ajaxTargetControls;
 
     /** The list of registered callbacks. */
     List<CallbackHolder> callbacks;
@@ -58,9 +58,17 @@ public class CallbackDispatcher {
 
     // Public Methods ---------------------------------------------------------
 
-    public static void registerBehavior(Control control) {
+    /**
+     * Register the control to be processed by the ClickServlet if the control
+     * is the Ajax target. A control is an Ajax target if the
+     * {@link Control#isAjaxTarget(org.apache.click.Context)} method returns true.
+     * Target controls have their {@link Control#onProcess()} method invoked.
+     *
+     * @param control the control to register
+     */
+    public static void registerAjaxTarget(Control control) {
         CallbackDispatcher instance = getThreadLocalDispatcher();
-        instance.internalRegisterBehavior(control);
+        instance.internalRegisterAjaxTarget(control);
     }
 
     public static void registerCallback(Control control, Callback callback) {
@@ -89,19 +97,19 @@ public class CallbackDispatcher {
             getCallbacks().clear();
         }
 
-        if (hasBehaviorEnabledControls()) {
-            getBehaviorEnabledControls().clear();
+        if (hasAjaxTargetControls()) {
+            getAjaxTargetControls().clear();
         }
     }
 
     /**
-     * Register the behavior source control.
+     * Register the ajax target control.
      *
-     * @param source the behavior source control
+     * @param control the ajax target control
      */
-    void internalRegisterBehavior(Control source) {
-        Validate.notNull(source, "Null source parameter");
-        getBehaviorEnabledControls().add(source);
+    void internalRegisterAjaxTarget(Control control) {
+        Validate.notNull(control, "Null control parameter");
+        getAjaxTargetControls().add(control);
     }
 
     /**
@@ -118,10 +126,9 @@ public class CallbackDispatcher {
     }
 
     void processPreResponse(Context context) {
-        if (hasBehaviorEnabledControls()) {
-            for (Control control : getBehaviorEnabledControls()) {
-                List<Behavior> behaviors = control.getBehaviors();
-                for (Behavior behavior : behaviors) {
+        if (hasAjaxTargetControls()) {
+            for (Control control : getAjaxTargetControls()) {
+                for (Behavior behavior : control.getBehaviors()) {
                     behavior.preResponse(control);
                 }
             }
@@ -137,10 +144,9 @@ public class CallbackDispatcher {
     }
 
     void processPreGetHeadElements(Context context) {
-        if (hasBehaviorEnabledControls()) {
-            for (Control control : getBehaviorEnabledControls()) {
-                List<Behavior> behaviors = control.getBehaviors();
-                for (Behavior behavior : behaviors) {
+        if (hasAjaxTargetControls()) {
+            for (Control control : getAjaxTargetControls()) {
+                for (Behavior behavior : control.getBehaviors()) {
                     behavior.preGetHeadElements(control);
                 }
             }
@@ -156,10 +162,9 @@ public class CallbackDispatcher {
     }
 
     void processPreDestroy(Context context) {
-        if (hasBehaviorEnabledControls()) {
-            for (Control control : getBehaviorEnabledControls()) {
-                List<Behavior> behaviors = control.getBehaviors();
-                for (Behavior behavior : behaviors) {
+        if (hasAjaxTargetControls()) {
+            for (Control control : getAjaxTargetControls()) {
+                for (Behavior behavior : control.getBehaviors()) {
                     behavior.preDestroy(control);
                 }
             }
@@ -177,8 +182,8 @@ public class CallbackDispatcher {
     /**
      * Checks if any control callbacks have been registered.
      */
-    boolean hasBehaviorEnabledControls() {
-        if (behaviorEnabledControls == null || behaviorEnabledControls.isEmpty()) {
+    boolean hasAjaxTargetControls() {
+        if (ajaxTargetControls == null || ajaxTargetControls.isEmpty()) {
             return false;
         }
         return true;
@@ -189,11 +194,11 @@ public class CallbackDispatcher {
      *
      * @return the set of behavior enabled controls.
      */
-    Set<Control> getBehaviorEnabledControls() {
-        if (behaviorEnabledControls == null) {
-            behaviorEnabledControls = new LinkedHashSet<Control>();
+    Set<Control> getAjaxTargetControls() {
+        if (ajaxTargetControls == null) {
+            ajaxTargetControls = new LinkedHashSet<Control>();
         }
-        return behaviorEnabledControls;
+        return ajaxTargetControls;
     }
 
     /**
@@ -238,22 +243,22 @@ public class CallbackDispatcher {
      * @return the callbackDispatcher instance on top of the dispatcher stack
      */
     static CallbackDispatcher popThreadLocalDispatcher() {
-        DispatcherStack dispatcherStack = getDispatcherStack();
-        CallbackDispatcher callbackDispatcher = dispatcherStack.pop();
+        RegistryStack registryStack = getDispatcherStack();
+        CallbackDispatcher callbackDispatcher = registryStack.pop();
 
-        if (dispatcherStack.isEmpty()) {
-            THREAD_LOCAL_DISPATCHER.set(null);
+        if (registryStack.isEmpty()) {
+            THREAD_LOCAL_REGISTRY.set(null);
         }
 
         return callbackDispatcher;
     }
 
-    static DispatcherStack getDispatcherStack() {
-        DispatcherStack dispatcherStack = THREAD_LOCAL_DISPATCHER.get();
+    static RegistryStack getDispatcherStack() {
+        RegistryStack dispatcherStack = THREAD_LOCAL_REGISTRY.get();
 
         if (dispatcherStack == null) {
-            dispatcherStack = new DispatcherStack(2);
-            THREAD_LOCAL_DISPATCHER.set(dispatcherStack);
+            dispatcherStack = new RegistryStack(2);
+            THREAD_LOCAL_REGISTRY.set(dispatcherStack);
         }
 
         return dispatcherStack;
@@ -262,7 +267,7 @@ public class CallbackDispatcher {
     /**
      * Provides an unsynchronized Stack.
      */
-    static class DispatcherStack extends ArrayList<CallbackDispatcher> {
+    static class RegistryStack extends ArrayList<CallbackDispatcher> {
 
         /** Serialization version indicator. */
         private static final long serialVersionUID = 1L;
@@ -272,7 +277,7 @@ public class CallbackDispatcher {
          *
          * @param initialCapacity specify initial capacity of this stack
          */
-        private DispatcherStack(int initialCapacity) {
+        private RegistryStack(int initialCapacity) {
             super(initialCapacity);
         }
 
