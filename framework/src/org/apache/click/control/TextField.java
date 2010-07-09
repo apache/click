@@ -198,6 +198,7 @@ public class TextField extends Field {
      *
      * @return this controls html tag
      */
+    @Override
     public String getTag() {
         return "input";
     }
@@ -286,6 +287,7 @@ public class TextField extends Field {
      *
      * @return the estimated rendered control size in characters
      */
+    @Override
     public int getControlSizeEst() {
         return 96;
     }
@@ -297,6 +299,7 @@ public class TextField extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
 
         buffer.elementStart(getTag());
@@ -354,6 +357,7 @@ public class TextField extends Field {
      * <li>field-required-error</li>
      * </ul></blockquote>
      */
+    @Override
     public void validate() {
         setError(null);
 
@@ -387,6 +391,7 @@ public class TextField extends Field {
      *
      * @return the field JavaScript client side validation function
      */
+    @Override
     public String getValidationJavaScript() {
         Object[] args = new Object[7];
         args[0] = getId();

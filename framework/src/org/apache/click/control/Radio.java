@@ -102,6 +102,7 @@ public class Radio extends Field {
      *
      * @return this controls html tag
      */
+    @Override
     public String getTag() {
         return "input";
     }
@@ -130,6 +131,7 @@ public class Radio extends Field {
      *
      * @return HTML element identifier attribute "id" value
      */
+    @Override
     public String getId() {
         if (hasAttributes() && getAttributes().containsKey("id")) {
             return getAttribute("id");
@@ -172,6 +174,7 @@ public class Radio extends Field {
      * @throws IllegalArgumentException if the given parent instance is
      * referencing <tt>this</tt> object: <tt>if (parent == this)</tt>
      */
+    @Override
     public void setParent(Object parent) {
         if (parent == this) {
             throw new IllegalArgumentException("Cannot set parent to itself");
@@ -229,6 +232,7 @@ public class Radio extends Field {
      *
      * @return the display label of the Field
      */
+    @Override
     public String getLabel() {
         if (label == null) {
             if (super.getName() != null) {
@@ -255,6 +259,7 @@ public class Radio extends Field {
      *
      * @return the name of the control
      */
+    @Override
     public String getName() {
         if (super.getName() != null) {
             return super.getName();
@@ -288,6 +293,7 @@ public class Radio extends Field {
      *
      * @param value the Field value
      */
+    @Override
     public void setValue(String value) {
         setChecked(getValue().equals(value));
         super.setValue(value);
@@ -299,6 +305,7 @@ public class Radio extends Field {
      * Bind the request submission, setting the Field {@link #checked} property
      * if defined in the request.
      */
+    @Override
     public void bindRequestValue() {
         String value = getRequestValue();
 
@@ -341,6 +348,7 @@ public class Radio extends Field {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         String id = getId();
 

@@ -127,6 +127,7 @@ public class PageLink extends AbstractLink {
      *
      * @return the PageLink HTML href attribute
      */
+    @Override
     public String getHref() {
         if (getPageClass() == null) {
             throw new IllegalStateException("target pageClass is not defined");
@@ -161,6 +162,7 @@ public class PageLink extends AbstractLink {
      *
      * @param listener the listener to invoke
      */
+    @Override
     public void setActionListener(ActionListener listener) {
     }
 
@@ -172,6 +174,7 @@ public class PageLink extends AbstractLink {
      * @param listener the listener object with the named method to invoke
      * @param method the name of the method to invoke
      */
+    @Override
     public void setListener(Object listener, String method) {
     }
 
@@ -203,6 +206,7 @@ public class PageLink extends AbstractLink {
      *
      * @return true
      */
+    @Override
     public boolean onProcess() {
         return true;
     }

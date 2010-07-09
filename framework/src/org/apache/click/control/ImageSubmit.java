@@ -126,6 +126,7 @@ public class ImageSubmit extends Submit {
      *
      * @return the input type: '<tt>image</tt>'
      */
+    @Override
     public String getType() {
         return "image";
     }
@@ -180,6 +181,7 @@ public class ImageSubmit extends Submit {
      * Bind the request submission, setting the field {@link Submit#clicked},
      * {@link #x} and {@link #y} if defined in the request.
      */
+    @Override
     public void bindRequestValue() {
 
         Context context = getContext();
@@ -212,6 +214,7 @@ public class ImageSubmit extends Submit {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 

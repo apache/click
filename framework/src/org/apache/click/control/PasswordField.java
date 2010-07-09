@@ -125,6 +125,7 @@ public class PasswordField extends TextField {
      *
      * @return the input type: '<tt>password</tt>'
      */
+    @Override
     public String getType() {
         return "password";
     }
