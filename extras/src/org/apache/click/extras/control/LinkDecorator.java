@@ -443,7 +443,8 @@ public class LinkDecorator implements Decorator, Serializable {
                     if (control instanceof AbstractLink) {
                         linksArray[i] = (AbstractLink) control;
                     } else {
-                        String msg = "Unsupported control type: " + object.getClass();
+                        String msg = "Unsupported control type: " + object.getClass()
+                            + ". Must be of type AbstractLink";
                         throw new RuntimeException(msg);
                     }
                 }
@@ -455,13 +456,15 @@ public class LinkDecorator implements Decorator, Serializable {
                     if (control instanceof ActionButton) {
                         buttonsArray[i] = (ActionButton) control;
                     } else {
-                        String msg = "Unsupported control type: " + object.getClass();
+                        String msg = "Unsupported control type: " + object.getClass()
+                            + ". Must be of type ActionButton";
                         throw new RuntimeException(msg);
                     }
                 }
 
             } else {
-                String msg = "Unsupported control type: " + object.getClass();
+                String msg = "Unsupported control type: " + object.getClass()
+                    + ". Must be of type AbstractLink or ActionButton";
                 throw new RuntimeException(msg);
             }
         }
