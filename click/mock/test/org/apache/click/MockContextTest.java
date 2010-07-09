@@ -356,8 +356,8 @@ public class MockContextTest extends TestCase {
         CallbackDispatcher callbackDispatcher = CallbackDispatcher.getThreadLocalDispatcher();
 
         // Assert that the submit control is registered as a callback
-        assertEquals(1, callbackDispatcher.getBehaviorEnabledControls().size());
-        assertSame(submit, callbackDispatcher.getBehaviorEnabledControls().iterator().next());
+        assertEquals(1, callbackDispatcher.getAjaxTargetControls().size());
+        assertSame(submit, callbackDispatcher.getAjaxTargetControls().iterator().next());
 
         // Process the preResponse callback event
         context.executePreResponseCallbackEvent();
@@ -372,12 +372,12 @@ public class MockContextTest extends TestCase {
         assertTrue("preDestroy callback event was not processed", preDestroyCalled);
 
         // Assert that the callback was not removed after all events was processed
-        assertEquals(1, callbackDispatcher.getBehaviorEnabledControls().size());
+        assertEquals(1, callbackDispatcher.getAjaxTargetControls().size());
 
         // Test that reset will clear the callback dispatcher
         context.reset();
 
         // Assert that the callback was removed after reset
-        assertEquals(0, callbackDispatcher.getBehaviorEnabledControls().size());
+        assertEquals(0, callbackDispatcher.getAjaxTargetControls().size());
     }
 }
