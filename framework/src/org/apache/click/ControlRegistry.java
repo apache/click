@@ -79,7 +79,7 @@ public class ControlRegistry {
     // Protected Methods ------------------------------------------------------
 
     /**
-     * Allow the dispatcher to handle the error that occurred.
+     * Allow the registry to handle the error that occurred.
      *
      * @param throwable the error which occurred during processing
      */
@@ -90,7 +90,7 @@ public class ControlRegistry {
     // Package Private Methods ------------------------------------------------
 
     /**
-     * Remove all callbacks and controls from this dispatcher.
+     * Remove all callbacks and controls from this registry.
      */
     void clear() {
         if (hasCallbacks()) {
@@ -224,44 +224,44 @@ public class ControlRegistry {
     }
 
     static ControlRegistry getThreadLocalRegistry() {
-        return getDispatcherStack().peek();
+        return getRegistryStack().peek();
     }
 
     /**
-     * Adds the specified CallbackDispatcher on top of the dispatcher stack.
+     * Adds the specified ControlRegistry on top of the registry stack.
      *
-     * @param callbackDispatcher the CallbackDispatcher to add
+     * @param controlRegistry the ControlRegistry to add
      */
-    static void pushThreadLocalDispatcher(ControlRegistry callbackDispatcher) {
-        getDispatcherStack().push(callbackDispatcher);
+    static void pushThreadLocalRegistry(ControlRegistry controlRegistry) {
+        getRegistryStack().push(controlRegistry);
     }
 
     /**
-     * Remove and return the callbackDispatcher instance on top of the
-     * dispatcher stack.
+     * Remove and return the controlRegistry instance on top of the
+     * registry stack.
      *
-     * @return the callbackDispatcher instance on top of the dispatcher stack
+     * @return the controlRegistry instance on top of the registry stack
      */
-    static ControlRegistry popThreadLocalDispatcher() {
-        RegistryStack registryStack = getDispatcherStack();
-        ControlRegistry callbackDispatcher = registryStack.pop();
+    static ControlRegistry popThreadLocalRegistry() {
+        RegistryStack registryStack = getRegistryStack();
+        ControlRegistry controlRegistry = registryStack.pop();
 
         if (registryStack.isEmpty()) {
             THREAD_LOCAL_REGISTRY.set(null);
         }
 
-        return callbackDispatcher;
+        return controlRegistry;
     }
 
-    static RegistryStack getDispatcherStack() {
-        RegistryStack dispatcherStack = THREAD_LOCAL_REGISTRY.get();
+    static RegistryStack getRegistryStack() {
+        RegistryStack controlRegistry = THREAD_LOCAL_REGISTRY.get();
 
-        if (dispatcherStack == null) {
-            dispatcherStack = new RegistryStack(2);
-            THREAD_LOCAL_REGISTRY.set(dispatcherStack);
+        if (controlRegistry == null) {
+            controlRegistry = new RegistryStack(2);
+            THREAD_LOCAL_REGISTRY.set(controlRegistry);
         }
 
-        return dispatcherStack;
+        return controlRegistry;
     }
 
     /**
@@ -273,7 +273,7 @@ public class ControlRegistry {
         private static final long serialVersionUID = 1L;
 
         /**
-         * Create a new DispatcherStack with the given initial capacity.
+         * Create a new RegistryStack with the given initial capacity.
          *
          * @param initialCapacity specify initial capacity of this stack
          */
@@ -282,41 +282,41 @@ public class ControlRegistry {
         }
 
         /**
-         * Pushes the CallbackDispatcher onto the top of this stack.
+         * Pushes the ControlRegistry onto the top of this stack.
          *
-         * @param callbackDispatcher the CallbackDispatcher to push onto this stack
-         * @return the CallbackDispatcher pushed on this stack
+         * @param controlRegistry the ControlRegistry to push onto this stack
+         * @return the ControlRegistry pushed on this stack
          */
-        private ControlRegistry push(ControlRegistry callbackDispatcher) {
-            add(callbackDispatcher);
+        private ControlRegistry push(ControlRegistry controlRegistry) {
+            add(controlRegistry);
 
-            return callbackDispatcher;
+            return controlRegistry;
         }
 
         /**
-         * Removes and return the CallbackDispatcher at the top of this stack.
+         * Removes and return the ControlRegistry at the top of this stack.
          *
-         * @return the CallbackDispatcher at the top of this stack
+         * @return the ControlRegistry at the top of this stack
          */
         private ControlRegistry pop() {
-            ControlRegistry callbackDispatcher = peek();
+            ControlRegistry controlRegistry = peek();
 
             remove(size() - 1);
 
-            return callbackDispatcher;
+            return controlRegistry;
         }
 
         /**
-         * Looks at the CallbackDispatcher at the top of this stack without
+         * Looks at the ControlRegistry at the top of this stack without
          * removing it.
          *
-         * @return the CallbackDispatcher at the top of this stack
+         * @return the ControlRegistry at the top of this stack
          */
         private ControlRegistry peek() {
             int length = size();
 
             if (length == 0) {
-                String msg = "No CallbackDispatcher available on ThreadLocal Dispatcher Stack";
+                String msg = "No ControlRegistry available on ThreadLocal Registry Stack";
                 throw new RuntimeException(msg);
             }
 
