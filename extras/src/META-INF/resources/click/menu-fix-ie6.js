@@ -12,7 +12,7 @@ if ( typeof Click.menu == 'undefined' )
 
 // Code adapted from jquery.bgiframe. Add an IFrame to the menu ensuring Select
 // elements does not burn through when menu is open
-Click.menu.fixHiddenMenu = function(menuId){
+Click.menu.fixHiddenMenu = (document.all && /msie 6\.0/i.test(navigator.userAgent) ? function(menuId) {
     var menu = document.getElementById(menuId);
 
     // If menu is not available, exit early
@@ -46,10 +46,10 @@ Click.menu.fixHiddenMenu = function(menuId){
         var el = document.createElement(html);
         ul.insertBefore(el);
     }
-}
+} : function() {});
 
 // Add 'over' class when hovering over menu items
-Click.menu.fixHover = function(menuId) {
+Click.menu.fixHover = (document.all && /msie 6\.0/i.test(navigator.userAgent) ? function(menuId) {
     var elements = document.getElementById(menuId);
     if (elements != null) {
         var list = elements.getElementsByTagName("LI");
@@ -65,4 +65,4 @@ Click.menu.fixHover = function(menuId) {
             }
         }
     }
-}
+} : function() {});
