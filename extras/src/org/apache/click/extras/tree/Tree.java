@@ -54,7 +54,7 @@ import org.apache.commons.lang.StringUtils;
  * on a hierarchy of {@link TreeNode}'s. Each TreeNode must provide a
  * uniquely identified node in the hierarchy.
  * <p/>
- * Below is screenshot of how the tree will render in a browser.
+ * Below is a screenshot of the tree in action.
  *
  * <table cellspacing='10'>
  * <tr>
@@ -565,7 +565,7 @@ public class Tree extends AbstractControl {
      * the tree's nodes.
      */
     public void bindExpandOrCollapseValues() {
-        expandOrCollapseNodeIds = getExpandLink().getParameterValues(EXPAND_TREE_NODE_PARAM); 
+        expandOrCollapseNodeIds = getExpandLink().getParameterValues(EXPAND_TREE_NODE_PARAM);
     }
 
     /**
@@ -1613,10 +1613,11 @@ public class Tree extends AbstractControl {
         buffer.append(uri);
         if (parameters != null && !parameters.isEmpty()) {
             buffer.append("?");
-            Iterator<String> i = parameters.keySet().iterator();
+            Iterator i = parameters.entrySet().iterator();
             while (i.hasNext()) {
-                String name = i.next();
-                String value = parameters.get(name).toString();
+                Map.Entry entry = (Map.Entry) i.next();
+                String name = entry.getKey().toString();
+                String value = entry.getValue().toString();
 
                 buffer.append(name);
                 buffer.append("=");
