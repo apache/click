@@ -2156,6 +2156,34 @@ public class ClickUtils {
     }
 
     /**
+     * Returns the class name minus the package name for the given class. If the
+     * class is an inner class the given default value is returned.
+     *
+     * @param cls the class to get the short name for
+     * @param defaultIfInnerClass the className to return if class is an inner
+     * class
+     * @return the class name without the package name or the default value if
+     * the class is an inner class
+     */
+    public static String getShortClassName(Class cls, String defaultIfInnerClass) {
+
+        // getShortClassName returns the classname without the package and also
+        // replaces inner class seperators ($) with dots (.)
+        String className = ClassUtils.getShortClassName(cls);
+
+        // If cls is not in a package
+        if (StringUtils.isBlank(className)) {
+            return defaultIfInnerClass;
+        }
+
+        // If inner class, use default value
+        if (className.contains(".")) {
+            className = defaultIfInnerClass;
+        }
+        return className;
+    }
+
+    /**
      * Return the application LogService instance using thread local Context
      * to perform the lookup.
      *
