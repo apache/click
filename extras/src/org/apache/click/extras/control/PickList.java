@@ -453,8 +453,8 @@ public class PickList extends Field {
     }
 
     /**
-     * Set the PickList option list DataProvider. The dataProvider can return
-     * any mixture of Option and OptionGroup values.
+     * Set the PickList option list DataProvider. The dataProvider must return
+     * a list containing Option values.
      * <p/>
      * Example usage:
      *
