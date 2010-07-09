@@ -35,7 +35,7 @@ public class ControlRegistry {
 
     // Constants --------------------------------------------------------------
 
-    /** The thread local dispatcher holder. */
+    /** The thread local registry holder. */
     private static final ThreadLocal<RegistryStack> THREAD_LOCAL_REGISTRY =
                     new ThreadLocal<RegistryStack>();
 
@@ -67,12 +67,12 @@ public class ControlRegistry {
      * @param control the control to register
      */
     public static void registerAjaxTarget(Control control) {
-        ControlRegistry instance = getThreadLocalDispatcher();
+        ControlRegistry instance = getThreadLocalRegistry();
         instance.internalRegisterAjaxTarget(control);
     }
 
     public static void registerCallback(Control control, Callback callback) {
-        ControlRegistry instance = getThreadLocalDispatcher();
+        ControlRegistry instance = getThreadLocalRegistry();
         instance.internalRegisterCallback(control, callback);
     }
 
@@ -223,7 +223,7 @@ public class ControlRegistry {
         return callbacks;
     }
 
-    static ControlRegistry getThreadLocalDispatcher() {
+    static ControlRegistry getThreadLocalRegistry() {
         return getDispatcherStack().peek();
     }
 

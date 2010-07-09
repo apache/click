@@ -228,7 +228,7 @@ public class MockContextTest extends TestCase {
             }
         });
 
-        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
         // Assert there is one callback registered
         assertEquals(1, registry.getCallbacks().size());
@@ -279,7 +279,7 @@ public class MockContextTest extends TestCase {
             }
         });
 
-        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
         // Assert there is one callback registered
         assertEquals(1, registry.getCallbacks().size());
@@ -353,7 +353,7 @@ public class MockContextTest extends TestCase {
         // Assert there are no behaviors registered after reset is invoked
         assertEquals(0, eventDispatcher.getBehaviorSourceSet().size());
 
-        ControlRegistry registry = ControlRegistry.getThreadLocalDispatcher();
+        ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
         // Assert that the submit control is registered as a callback
         assertEquals(1, registry.getAjaxTargetControls().size());
