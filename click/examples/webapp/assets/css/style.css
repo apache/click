@@ -317,3 +317,13 @@ div.dialogForm {
 	border-bottom: 1px solid #c0c0c0;
 	border-right: 1px solid #c0c0c0;
 }
+
+/*
+ * Ajax scroller example style.
+ */
+.customer {
+    border:1px solid black;
+    background:#eeeeee;
+    padding: 4px;
+    margin-bottom: 20px;
+}
