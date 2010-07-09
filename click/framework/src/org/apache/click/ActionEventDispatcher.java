@@ -131,8 +131,6 @@ public class ActionEventDispatcher {
      * Fire all the registered action events after the Page Controls have been
      * processed and return true if the page should continue processing.
      *
-     * @see #fireActionEvents(org.apache.click.Context, int)
-     *
      * @param context the request context
      *
      * @return true if the page should continue processing, false otherwise
@@ -284,10 +282,32 @@ public class ActionEventDispatcher {
 
         boolean continueProcessing = true;
 
+        if (logger.isTraceEnabled()) {
+            String sourceClassName = ClassUtils.getShortClassName(source.getClass());
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            buffer.append("   processing Behaviors for control: '");
+            buffer.append(source.getName()).append("' ");
+            buffer.append(sourceClassName);
+            logger.trace(buffer.toString());
+        }
+
         for (Behavior behavior : source.getBehaviors()) {
 
-            if (behavior.isRequestTarget(context)) {
+            boolean isRequestTarget = behavior.isRequestTarget(context);
 
+            if (logger.isTraceEnabled()) {
+                String behaviorClassName = ClassUtils.getShortClassName(behavior.getClass());
+                HtmlStringBuffer buffer = new HtmlStringBuffer();
+                buffer.append("      invoked: ");
+                buffer.append(behaviorClassName);
+                buffer.append(".isRequestTarget() : ");
+                buffer.append(isRequestTarget);
+                logger.trace(buffer.toString());
+            }
+
+            if (isRequestTarget) {
+
+                // The first non-null Partial returned will be rendered, other Partials are ignored
                 Partial behaviorPartial = behavior.onAction(source);
                 if (partial == null && behaviorPartial != null) {
                     partial = behaviorPartial;
@@ -295,10 +315,17 @@ public class ActionEventDispatcher {
 
                 if (logger.isTraceEnabled()) {
                     String behaviorClassName = ClassUtils.getShortClassName(behavior.getClass());
+                    String partialClassName = null;
+
+                    if (behaviorPartial != null) {
+                        partialClassName = ClassUtils.getShortClassName(behaviorPartial.getClass());
+                    }
+
                     HtmlStringBuffer buffer = new HtmlStringBuffer();
-                    buffer.append("   invoked: ");
+                    buffer.append("      invoked: ");
                     buffer.append(behaviorClassName);
-                    buffer.append(".isRequestTarget() : true");
+                    buffer.append(".onAction() : ");
+                    buffer.append(partialClassName);
 
                     if (partial == behaviorPartial && behaviorPartial != null) {
                         buffer.append(" (Partial content will be rendered)");
@@ -311,15 +338,6 @@ public class ActionEventDispatcher {
                     }
 
                     logger.trace(buffer.toString());
-
-                    if (partial == null) {
-                        buffer = new HtmlStringBuffer();
-                        buffer.append("   invoked: ");
-                        buffer.append(behaviorClassName);
-                        buffer.append(".onAction() : null");
-                        buffer.append(" (*no* Partial was returned by Behavior)");
-                        logger.trace(buffer.toString());
-                    }
                 }
 
                 continueProcessing = false;
