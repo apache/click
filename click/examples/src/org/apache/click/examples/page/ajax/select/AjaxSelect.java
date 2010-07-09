@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.click.examples.page.ajax;
+package org.apache.click.examples.page.ajax.select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +25,16 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.click.Context;
+import org.apache.click.Control;
+import org.apache.click.Partial;
+import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
 import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
+import org.apache.click.examples.control.ajax.CustomerPanel;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
@@ -52,6 +56,25 @@ public class AjaxSelect extends BorderPage {
     private CustomerService customerService;
 
     // Event Handlers ---------------------------------------------------------
+
+    // A pageAction that handles Ajax requests for a particular customer
+    public Partial onChangeCustomer() {
+        Partial partial = new Partial();
+
+        // Lookup customer based on request parameter 'customerId'
+        String customerId = getContext().getRequest().getParameter("customerId");
+        Customer customer = customerService.findCustomerByID(customerId);
+
+        // CustomerPanel will render the customer as an HTML snippet
+        CustomerPanel customerPanel = new CustomerPanel(this, customer);
+        partial.setContent(customerPanel.toString());
+
+        // Set content type and character encoding
+        partial.setCharacterEncoding("UTF-8");
+        partial.setContentType(Partial.HTML);
+
+        return partial;
+    }
 
     @Override
     public void onInit() {
@@ -88,9 +111,6 @@ public class AjaxSelect extends BorderPage {
             // $context, $path, $selector and $target
             Map<String, Object> model = ClickUtils.createTemplateModel(this, context);
 
-            // Set path to the AjaxCustomer Page path
-            model.put("path", context.getPagePath(AjaxCustomer.class));
-
             // Add a CSS selector, in this case the customerSelect ID attribute
             model.put("selector", customerSelect.getId());
 
@@ -99,7 +119,7 @@ public class AjaxSelect extends BorderPage {
             model.put("target", "customerDetails");
 
             // Include the Page associated JavaScript template
-            headElements.add(new JsScript("/ajax/ajax-select.js", model));
+            headElements.add(new JsScript("/ajax/select/ajax-select.js", model));
         }
 
         return headElements;

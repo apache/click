@@ -16,15 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.click.examples.page.ajax;
+package org.apache.click.examples.page.ajax.scroller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
+import org.apache.click.Partial;
 
 import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
+import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.util.ClickUtils;
@@ -33,7 +36,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * Demonstrates how to to dynamically load more customer while scrolling down
- * the Page.
+ * the Page. An Ajax request is made to a pageAction that sends back the new
+ * customers to display.
  */
 @Component
 public class AjaxLiveScroller extends BorderPage {
@@ -46,24 +50,32 @@ public class AjaxLiveScroller extends BorderPage {
     // Specifies the number of customers to retrieve at a time
     private int pageSize = 10;
 
-    // Event Handlers --------------------------------------------------------
-
     @Override
-    public void onGet() {
+    public void onInit() {
+        super.onInit();
+        int offset = 0;
+        List<Customer> customers = loadCustomers(offset, pageSize);
+        addModel("customers", customers);
+    }
+
+    /**
+     * A pageAction method that is called when the user scrolled to the bottom
+     * of the page and more data is needed.
+     */
+    public Partial onScroll() {
         // Check if the offset parameter was received.
         int offset = NumberUtils.toInt(getContext().getRequest().getParameter("offset"));
 
-        if (offset < 0) {
-            // If no offset was given, we assume this is not an Ajax request
-            // and set the offset to 0
-            offset = 0;
-
-            // We also set a message to display
-            addModel("msg", "Top customers");
-        }
+        List<Customer> customers = loadCustomers(offset, pageSize);
 
         // Return customers between the given offset and pageSize
-        addModel("customers", customerService.getTopCustomersForPage(offset, pageSize));
+        Map partialModel = new HashMap();
+        partialModel.put("customers", customers);
+        partialModel.put("format", getFormat());
+
+        // Return a partial for the customers.htm template and customers
+        Partial partial = new Partial("/ajax/scroller/customers.htm", partialModel, Partial.HTML);
+        return partial;
     }
 
     @Override
@@ -77,26 +89,17 @@ public class AjaxLiveScroller extends BorderPage {
 
             // Create a default model and add the pageSize variable to pass to
             // the JavaScript template: ajax-live-scroller.js
-            Map<String, Object> model = ClickUtils.createTemplateModel(this, getContext());
-            model.put("pageSize", pageSize);
+            Map<String, Object> jsModel = ClickUtils.createTemplateModel(this, getContext());
+            jsModel.put("pageSize", pageSize);
 
             // Note the actual JavaScript necessary to setup the dynamic scrolling
             // is specified in the Page JavaScript template: ajax-live-scroller.js.
-            headElements.add(new JsScript("/ajax/ajax-live-scroller.js", model));
+            headElements.add(new JsScript("/ajax/scroller/ajax-live-scroller.js", jsModel));
         }
         return headElements;
     }
 
-    // Public Methods ---------------------------------------------------------
-
-    @Override
-    public String getTemplate() {
-        // For Ajax requests we want to render the Page template only as there is
-        // no need to include the Border template in the response
-        if (getContext().isAjaxRequest()) {
-            return getPath();
-        } else {
-            return super.getTemplate();
-        }
+    private List<Customer> loadCustomers(int offset, int pageSize) {
+        return customerService.getTopCustomersForPage(offset, pageSize);
     }
 }

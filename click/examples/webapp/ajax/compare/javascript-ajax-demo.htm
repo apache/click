@@ -1,0 +1,91 @@
+<p>
+    Demonstrates Click Ajax support using JavaScript. Compare this implementation
+    with the <a href="$context/ajax/compare/jquery-ajax-demo.htm">jQuery</a> and
+    <a href="$context/ajax/compare/prototype-ajax-demo.htm">Prototype</a> demos.
+</p>
+
+$link
+
+<div id="target">
+<!-- Ajax response will be set here -->
+</div>
+
+<script type="text/javascript">
+    // Find the link via its ID attribute
+    var el = document.getElementById("link-id");
+
+    // Register an onclick listener that will make an Ajax request
+    if (el.addEventListener) {
+        // Standard event listener
+        el.addEventListener ("click", makeAjaxRequest, false);
+    } else if (el.attachEvent) {
+        // IE event listener
+        el.attachEvent ("onclick", makeAjaxRequest);
+    } else {
+        // Fallback event listener
+        el.onclick = makeAjaxRequest;
+    }
+
+    // Function to make Ajax request
+    function makeAjaxRequest(event) {
+        if(!event)
+            // IE doesn't pass event, instead event is available from window
+            event = window.event;
+
+        // The URL to make the Ajax request on should include enough information
+        // for Click to identify the target Ajax control and how to process the control.
+        // Normally Click uses the Control ID to identify the Ajax target. Here the
+        // target Control is the ActionLink with ID: 'link-id'. The ID parameter is appended to
+        // the url with a value of 1. The value is actually ignored by Click so it is optional
+        // and can be left out.
+        //
+        // Once Click identifies the target control it invokes that Control onProcess method.
+        // Simply processing a control is normally not enough to fire registered AjaxBehaviors.
+        // For example ActionLinks fire off their Behaviors (or ActionListener for non Ajax requests)
+        // based the value of the predefined parameter: 'actionLink'. The 'actionLink' parameter
+        // value specifies the name of the ActionLink that was clicked. So we append
+        // the 'actionLink' parameter and set the value as the ActionLink name -> 'link'.
+        var url = "$context/ajax/compare/javascript-ajax-demo.htm?" + "link-id=1&actionLink=link";
+
+        // The above example is for demonstration purposes only. Normally you can generify the URL by using
+        // the link 'href' and 'id' attributes as the URL. The link href already contains the server URL,
+        // actionLink, value and extra link parameters.
+        // var url = el.getAttribute("href") + '&' + el.getAttribute("id") + '=1';
+
+        // Create hthe XMLHttpRequest object. Not all IE versions support XMLHttpRequest so check for ActiveXObject
+        var request = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
+        request.open("POST", url, true);
+
+        // Set content-type header
+        request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+
+        // Set the X-Requested-With header. This way Click knows its an Ajax request.
+        // This header is the de-facto standard; most Ajax libraries such as Prototype, JQuery, Mootools, YUI
+        // set this header
+        request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+        request.onreadystatechange = function() {
+            // request.readystate of 4 means the Ajax request is complete and the response has been received
+            // request.status of 200 means the request was successful
+            if (request.readyState == 4 && request.status == 200) {
+                if (request.responseText) {
+                    updateLog(request.responseText);
+                }
+            }
+        };
+        request.send();
+
+        // Prevent the default link action and do nothing
+        if(event.preventDefault)
+            event.preventDefault();
+        else
+            // IE does not support preventDefault, instead set the returnValue to false
+            event.returnValue = false;
+    }
+
+    function updateLog(response) {
+        var div = document.getElementById("target");
+
+        div.innerHTML = "<p class='infoMsg'>" + response + "</p>";
+    }
+</script>

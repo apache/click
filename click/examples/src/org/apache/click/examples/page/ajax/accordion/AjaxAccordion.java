@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.click.examples.page.ajax;
+package org.apache.click.examples.page.ajax.accordion;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,11 +47,12 @@ public class AjaxAccordion extends BorderPage {
 
             // Note the actual JavaScript necessary to setup the accordion is
             // specified in the Page JavaScript template -> ajax-accordion.js.
-            headElements.add(new JsScript("/ajax/ajax-accordion.js", new HashMap()));
+            headElements.add(new JsScript("/ajax/accordion/ajax-accordion.js", new HashMap()));
 
             // Alternatively, the JsScript below could be used to add
             // the necessary JavaScript to setup the accordion, for example:
-            /* String content =
+            /*
+            String content =
                 "$(document).ready(function() {"
               + "  $('#accordion').tabs('#accordion div', {"
               + "    tabs: 'h2',"

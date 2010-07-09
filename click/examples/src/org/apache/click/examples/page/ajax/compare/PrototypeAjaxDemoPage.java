@@ -16,10 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.click.examples.page.ajax;
+package org.apache.click.examples.page.ajax.compare;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.click.Control;
 import org.apache.click.Partial;
 import org.apache.click.ajax.AjaxBehavior;
@@ -27,15 +25,15 @@ import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
 
 /**
- * Basic BasicAjaxDemoPage example using the jQuery JavaScript library.
+ * An Ajax example using Prototype library.
  */
-public class BasicAjaxDemoPage extends BorderPage {
+public class PrototypeAjaxDemoPage extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    private ActionLink link = new ActionLink("link", "here");
+    private ActionLink link = new ActionLink("link", "Make Ajax Request");
 
-    public BasicAjaxDemoPage() {
+    public PrototypeAjaxDemoPage() {
         link.setId("link-id");
 
         addControl(link);
@@ -49,8 +47,9 @@ public class BasicAjaxDemoPage extends BorderPage {
                 // Formatted date instance that will be added to the
                 String now = format.currentDate("MMM, yyyy dd HH:MM:ss");
 
-                // Return a partial containing the formatted date
-                return new Partial(now, Partial.HTML);
+                String msg = "Hello from Prototype at: " + now;
+                // Return a partial containing the message
+                return new Partial(msg, Partial.HTML);
             }
         });
     }

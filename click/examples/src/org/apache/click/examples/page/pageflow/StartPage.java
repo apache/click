@@ -25,6 +25,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.click.Context;
+import org.apache.click.Partial;
 import org.apache.click.control.Form;
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
@@ -35,11 +36,11 @@ import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.control.InvestmentSelect;
+import org.apache.click.examples.control.ajax.CustomerPanel;
 import org.apache.click.examples.domain.CourseBooking;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
-import org.apache.click.examples.page.ajax.AjaxCustomer;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.util.Bindable;
@@ -82,8 +83,7 @@ public class StartPage extends BorderPage {
                 List<Option> optionList = new ArrayList<Option>();
                 List<Customer> customerList = customerService.getCustomers();
                 for (Customer customer : customerList) {
-                    optionList.add(new Option(customer.getId(),
-                                                  customer.getName()));
+                    optionList.add(new Option(customer.getId(), customer.getName()));
                 }
                 return optionList;
             }
@@ -113,6 +113,25 @@ public class StartPage extends BorderPage {
     @Override
     public boolean onSecurityCheck() {
         return form.onSubmitCheck(this, "/pageflow/invalid-submit.html");
+    }
+
+    // A pageAction that handles Ajax requests for a particular customer
+    public Partial onChangeCustomer() {
+        Partial partial = new Partial();
+
+        // Lookup customer based on request parameter 'customerId'
+        String customerId = getContext().getRequest().getParameter("customerId");
+        Customer customer = customerService.findCustomerByID(customerId);
+
+        // CustomerPanel will render the customer as an HTML snippet
+        CustomerPanel customerPanel = new CustomerPanel(this, customer);
+        partial.setContent(customerPanel.toString());
+
+        // Set content type and character encoding
+        partial.setCharacterEncoding("UTF-8");
+        partial.setContentType(Partial.HTML);
+
+        return partial;
     }
 
     /**
@@ -175,20 +194,17 @@ public class StartPage extends BorderPage {
             // Create a model to pass to the Page JavaScript template. The
             // template recognizes the following Velocity variables:
             // $context, $path, $selector and $target
-            Map<String, Object> model = ClickUtils.createTemplateModel(this, context);
-
-            // Set path to the AjaxCustomer Page path
-            model.put("path", context.getPagePath(AjaxCustomer.class));
+            Map<String, Object> jsModel = ClickUtils.createTemplateModel(this, context);
 
             // Add a CSS selector, in this case the customerSelect ID attribute
-            model.put("selector", customerSelect.getId());
+            jsModel.put("selector", customerSelect.getId());
 
             // Add the ID of a target element in the Page template to replace
             // with new data, in this example the target is 'customerDetails'
-            model.put("target", "customerDetails");
+            jsModel.put("target", "customerDetails");
 
             // Include the ajax-select.js template
-            headElements.add(new JsScript("/ajax/ajax-select.js", model));
+            headElements.add(new JsScript("/ajax/select/ajax-select.js", jsModel));
         }
 
         return headElements;
