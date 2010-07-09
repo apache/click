@@ -23,7 +23,6 @@ import java.util.List;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
-import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
 
 /**
