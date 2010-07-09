@@ -292,7 +292,7 @@ public class MockContext extends Context {
             }
 
             ActionEventDispatcher.pushThreadLocalDispatcher(actionEventDispatcher);
-            ControlRegistry.pushThreadLocalDispatcher(controlRegistry);
+            ControlRegistry.pushThreadLocalRegistry(controlRegistry);
             Context.pushThreadLocalContext(mockContext);
 
             if (ClickUtils.getLogService() instanceof ConsoleLogService) {

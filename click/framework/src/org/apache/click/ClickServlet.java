@@ -340,8 +340,8 @@ public class ClickServlet extends HttpServlet {
             ActionEventDispatcher.pushThreadLocalDispatcher(eventDispatcher);
 
             ControlRegistry controlRegistry = createControlRegistry();
-            // Bind CallbackDispatcher to current thread
-            ControlRegistry.pushThreadLocalDispatcher(controlRegistry);
+            // Bind ControlRegistry to current thread
+            ControlRegistry.pushThreadLocalRegistry(controlRegistry);
 
             Context context = createContext(request, response, isPost);
             // Bind context to current thread
@@ -423,7 +423,7 @@ public class ClickServlet extends HttpServlet {
                 if (request.getAttribute(MOCK_MODE_ENABLED) == null) {
                     Context.popThreadLocalContext();
                 }
-                ControlRegistry.popThreadLocalDispatcher();
+                ControlRegistry.popThreadLocalRegistry();
                 ActionEventDispatcher.popThreadLocalDispatcher();
             }
         }
