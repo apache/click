@@ -327,3 +327,11 @@ div.dialogForm {
     padding: 4px;
     margin-bottom: 20px;
 }
+
+.errorMsg {
+	border: 1px solid #BD0000;
+	background-color: #EE0000;
+	margin: 0.5em;
+	padding: 0.5em;
+  color: #FFF;
+}

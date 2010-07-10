@@ -147,7 +147,8 @@
     <menu separator="true"/>
     <menu label="Table AJAX Demo" path="ajax/table/table-ajax-demo.htm"/>
     <menu separator="true"/>
-    <menu label="Form AJAX Demo" path="ajax/form/form-ajax-demo.htm"/>
+    <menu label="Simple Form AJAX Demo" path="ajax/form/simple-form-ajax.htm"/>
+    <menu label="Advanced Form AJAX Demo" path="ajax/form/advanced-form-ajax.htm"/>
     <menu separator="true"/>
     <menu label="AJAX Accordion" path="ajax/accordion/ajax-accordion.htm"/>
     <menu label="AJAX Auto Complete Field" path="ajax/auto-complete.htm"/>
