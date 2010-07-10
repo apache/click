@@ -24,9 +24,6 @@ jQuery(document).ready(function() {
     // Note: the 'live' binding is a jQuery function that keeps the event bound even if the Table DOM is replaced
     // http://api.jquery.com/live/
     jQuery("#table td a").live('click', function(event){
-        // Prevent the default browser behavior of navigating to the link
-        event.preventDefault();
-
         var callServer = true;
         if (jQuery(event.target).text()=="Delete") {
             callServer = window.confirm('Please confirm delete');
@@ -36,6 +33,9 @@ jQuery(document).ready(function() {
             // Make ajax request
             editCustomer(event);
         }
+
+        // Prevent the default browser behavior of navigating to the link
+        event.preventDefault();
     })
 
     // Register a 'live' click handler on the sorting links of the table header (<th>),
@@ -43,10 +43,11 @@ jQuery(document).ready(function() {
     // Note: the 'live' binding is a jQuery function that keeps the event bound even if the Table DOM is replaced
     // http://api.jquery.com/live/
     jQuery("#table th a, .pagelinks a").live('click', function(event){
-        // Prevent the default browser behavior of navigating to the link
-        event.preventDefault();
         // Make ajax request
         sortTable(event);
+
+        // Prevent the default browser behavior of navigating to the link
+        return false;
     })
 })
 

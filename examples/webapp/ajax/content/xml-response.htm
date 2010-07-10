@@ -1,10 +1,6 @@
 <script type="text/javascript" src="$context/assets/js/jquery-1.4.2.js"></script>
 
 <script type="text/javascript">
-    // This example uses jQuery for making Ajax requests:
-    // http://api.jquery.com/jQuery.get/
-    // http://api.jquery.com/jQuery.ajax/
-
     // Register a function that is invoked as soon as the DOM is loaded
     jQuery(document).ready(function() {
 
@@ -25,15 +21,16 @@
         jQuery.get(url, extraData, function(data) {
             // 'data' is the response received from the server
 
-            // We select the div element with the ID 'result' and set its
-            // content to the server response
-            jQuery("#result").html("<p class='infoMsg'>" + data + "</p>");
-        });
+            // Extract the <msg> and <date> values from the XML response and output the result
+            var root = jQuery(data);
+            var msg = root.find('msg').text();
+            var date = root.find('date').text();
+            jQuery("#result").html("<p class='infoMsg'>" + msg + date + "</p>");
+        }, {dataType:'xml'});
     }
 </script>
 
-This example demonstrates how an AjaxBehavior can be used to handle and respond
-to an Ajax request.
+This example shows how a Partial can return an XML response.
 
 <p/>
 

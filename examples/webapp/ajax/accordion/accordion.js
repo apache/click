@@ -18,7 +18,7 @@
 // *#
 
 /**
- * The ajax-accordion Page JavaScript.
+ * The accordion Page JavaScript.
  */
 
 // Wait until browser DOM is loaded

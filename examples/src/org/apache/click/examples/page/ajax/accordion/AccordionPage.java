@@ -27,10 +27,10 @@ import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
 
 /**
- * Provides an Ajax demo of <a target="_blank" class="external" href="http://flowplayer.org/tools/demos/tabs/accordion.html">jQuery Tools</a>
+ * Provides a demo of the <a target="_blank" class="external" href="http://flowplayer.org/tools/demos/tabs/accordion.html">jQuery Tools</a>
  * Accordion.
  */
-public class AjaxAccordion extends BorderPage {
+public class AccordionPage extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,8 +46,8 @@ public class AjaxAccordion extends BorderPage {
             headElements.add(new CssImport("/assets/css/tabs-accordion.css"));
 
             // Note the actual JavaScript necessary to setup the accordion is
-            // specified in the Page JavaScript template -> ajax-accordion.js.
-            headElements.add(new JsScript("/ajax/accordion/ajax-accordion.js", new HashMap()));
+            // specified in the Page JavaScript template -> accordion.js.
+            headElements.add(new JsScript("/ajax/accordion/accordion.js", new HashMap()));
 
             // Alternatively, the JsScript below could be used to add
             // the necessary JavaScript to setup the accordion, for example:
