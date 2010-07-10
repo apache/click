@@ -1869,7 +1869,7 @@ public class ClickServlet extends HttpServlet {
 
         if (logger.isTraceEnabled()) {
             logger.trace("   the following controls have been registered as potential Ajax targets:");
-            if (!controlRegistry.hasAjaxTargetControls()) {
+            if (controlRegistry.hasAjaxTargetControls()) {
                 for (Control control : controlRegistry.getAjaxTargetControls()) {
                     HtmlStringBuffer buffer = new HtmlStringBuffer();
                     String controlClassName = ClassUtils.getShortClassName(control.getClass());
