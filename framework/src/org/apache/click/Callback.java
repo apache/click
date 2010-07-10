@@ -19,38 +19,47 @@
 package org.apache.click;
 
 /**
- * TODO use a more suitable classname than Callback?
- *
- * Provides a callback for Control life cycle events. The following callbacks are defined:
+ * Provides a callback for Control life cycle events. These events can be used
+ * to further process the Control or its children.
+ * <p/>
+ * The following callback events are defined:
  * <ul>
  * <li>preResponse - occurs before the control markup is written to the response</li>
  * <li>preGetHeadElements - occurs after <tt>preResponse</tt> but before the control
  * {@link Control#getHeadElements() HEAD elements} are written to the response</li>
  * <li>preDestroy - occurs before the Control {@link Control#onDestroy() onDestroy} event handler.</li>
  * </ul>
+ *
+ * The events defined by Callback is useful to decorate or manipulate its source
+ * control, for example:
+ * <ul>
+ * <li>add/remove Control HEAD elements such as JavaScript and CSS dependencies and setup scripts</li>
+ * <li>add/remove Control attributes such as <tt>"class"</tt>, <tt>"style"</tt> etc</li>
+ * </ul>
  */
 public interface Callback {
 
     /**
-     * This callback occurs before the markup is written to the
-     * HttpServletResponse.
+     * This event occurs before the markup is written to the HttpServletResponse.
      *
-     * @param source the callback's control
+     * @param source the control the callback is registered with
      */
     public void preResponse(Control source);
 
     /**
-     * This callback occurs after {@link #preResponse(org.apache.click.Control)},
+     * This event occurs after {@link #preResponse(org.apache.click.Control)},
      * but before the Control's {@link Control#getHeadElements()} is called.
      *
-     * @param source the callback's control
+     * @param source the control the callback is registered with
      */
     public void preGetHeadElements(Control source);
 
     /**
-     * This callback occurs before the Control's {@link Control#onDestroy()} event handler.
+     * This event occurs before the Control {@link Control#onDestroy() onDestroy}
+     * event handler. This event allows the Callback to cleanup or store Control
+     * state in the Session.
      *
-     * @param source the callback's control
+     * @param source the control the callback is registered with
      */
     public void preDestroy(Control source);
 }
