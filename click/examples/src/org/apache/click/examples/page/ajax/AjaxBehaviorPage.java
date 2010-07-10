@@ -25,15 +25,20 @@ import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
 
 /**
- * Basic BasicAjaxDemoPage example using the jQuery JavaScript library.
+ * Demonstrates how to handle AJAX requests with an Ajax Behavior. The Behavior
+ * is added to the ActionLink and its onAction method is invoked to handle the
+ * AJAX request. The onAction method returns a Partial response that is streamed
+ * back to the browser.
+ *
+ * The client-side is implemented using the jQuery library.
  */
-public class AjaxDemoPage extends BorderPage {
+public class AjaxBehaviorPage extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
     private ActionLink link = new ActionLink("link", "here");
 
-    public AjaxDemoPage() {
+    public AjaxBehaviorPage() {
         link.setId("link-id");
 
         addControl(link);
