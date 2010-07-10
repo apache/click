@@ -139,7 +139,8 @@
   </menu>
 
   <menu label="Ajax" path="#" imageSrc="/assets/images/lightning.png">
-    <menu label="AJAX Demo" path="ajax/ajax-demo.htm"/>
+    <menu label="Ajax Demo - Behavior" path="ajax/ajax-behavior.htm"/>
+    <menu label="Ajax Demo - Page Action" path="ajax/page-action.htm"/>
     <menu separator="true"/>
     <menu label="JavaScript AJAX Demo" path="ajax/compare/javascript-ajax-demo.htm"/>
     <menu label="jQuery AJAX Demo" path="ajax/compare/jquery-ajax-demo.htm"/>

@@ -20,18 +20,23 @@
 
     function makeRequest() {
         var link = jQuery('#link-id');
-        var extraData = link.attr('id') + '=1';
         var url = link.attr('href');
+        // Set the pageAction to the onLinkClicked method in the Java Page class.
+        var extraData = 'pageAction=onLinkClicked';
         jQuery.get(url, extraData, function(data) {
-            // The data argument is the formatted date instance returned
-            // by the page Partial response.
+            // 'data' is the response received from the server
 
-            // Here we select the div element with the ID 'result' and set its
-            // content to the server date
+            // We select the div element with the ID 'result' and set its
+            // content to the server response
             jQuery("#result").html("<p class='infoMsg'>" + data + "</p>");
         });
     }
 </script>
+
+This example demonstrates how a PageAction can be used to handle and respond
+to an Ajax request.
+
+<p/>
 
 Click $link to fetch the date using Ajax.
 
