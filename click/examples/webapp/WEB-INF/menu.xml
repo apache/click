@@ -151,10 +151,13 @@
     <menu label="Simple Form AJAX Demo" path="ajax/form/simple-form-ajax.htm"/>
     <menu label="Advanced Form AJAX Demo" path="ajax/form/advanced-form-ajax.htm"/>
     <menu separator="true"/>
-    <menu label="AJAX Accordion" path="ajax/accordion/ajax-accordion.htm"/>
-    <menu label="AJAX Auto Complete Field" path="ajax/auto-complete.htm"/>
-    <menu label="AJAX Live Scroller " path="ajax/scroller/ajax-live-scroller.htm"/>
-    <menu label="AJAX Select" path="ajax/select/ajax-select.htm"/>
+    <menu label="XML response" path="ajax/content/xml-response.htm"/>
+    <menu label="JSON response" path="ajax/content/json-response.htm"/>
+    <menu separator="true"/>
+    <menu label="Accordion" path="ajax/accordion/accordion.htm"/>
+    <menu label="Auto Complete Field" path="ajax/auto-complete.htm"/>
+    <menu label="Live Scroller " path="ajax/scroller/ajax-live-scroller.htm"/>
+    <menu label="Select" path="ajax/select/ajax-select.htm"/>
   </menu>
 
   <menu label=" Integration" path="#" imageSrc="/assets/images/cayenne.png">

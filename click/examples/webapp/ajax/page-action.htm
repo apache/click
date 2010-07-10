@@ -14,7 +14,7 @@
             makeRequest();
 
             // Prevent the default browser behavior of navigating to the link
-            event.preventDefault();
+            return false;
         })
     })
 
@@ -38,7 +38,7 @@ to an Ajax request.
 
 <p/>
 
-Click $link to fetch the date using Ajax.
+Click $link to call the server using Ajax.
 
 <div id="result">
     <!-- Ajax response will be set here -->

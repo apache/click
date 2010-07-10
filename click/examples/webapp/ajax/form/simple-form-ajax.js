@@ -22,11 +22,11 @@ jQuery(document).ready(function() {
 
     // Register a 'click' handler on the submit button
     jQuery("#form_save").click(function(event){
-        // Prevent the default browser behavior of navigating to the link
-        event.preventDefault();
-
         // Post form to server
         postForm(event);
+
+        // Prevent the default browser behavior of navigating to the link
+        return false;
     })
 })
 
