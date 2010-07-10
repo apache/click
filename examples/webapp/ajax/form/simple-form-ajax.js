@@ -17,45 +17,42 @@
 // under the License.
 // *#
 
-// This demo uses jQuery but also contains a DateField which depends on Prototype.
-// Below we use jQuery.noConflict() in order for jQuery and Prototype to work together:
-// http://docs.jquery.com/Using_jQuery_with_Other_Libraries
-jQuery.noConflict();
-
-// Generally it is not recommended to use two JavaScript libraries together. Instead
-// it is highly recommended to use the third-party Click Calendar instead of DateField
-// when using jQuery or another JS library besides Prototype. See http://code.google.com/p/click-calendar/
-
 // Register a function that is invoked as soon as the DOM is loaded
 jQuery(document).ready(function() {
 
     // Register a 'click' handler on the submit button
-    jQuery("#form_save, #form_cancel").live('click', function(event){
+    jQuery("#form_save").click(function(event){
         // Prevent the default browser behavior of navigating to the link
         event.preventDefault();
 
-        // Post form
+        // Post form to server
         postForm(event);
     })
 })
 
 function postForm(event) {
+    // Retrieve the Form and submit button elements
     var form = jQuery("#form");
     var submit = jQuery(event.target);
-    
+
+    // The server URL can be retrieved from the Form 'action' event
     var url = form.attr('action');
+
+    // Use jQuery serialize function to serialize the Form controls into key/value pairs
+    // Note: the jQuery serialize function will *not* add the button name/value
+    // that submitted the form. We will add the submit button name/value manually
     var formData = form.serialize();
+
+    // Append the form ID attribute so that Click can identify the Ajax target Control
     formData+='&'+form.attr('id')+'=1';
+
+    // Append the name/value pair of the Submit button that submitted the Form
     formData+='&'+submit.attr('name')+'='+submit.attr('value');
 
     jQuery.post(url, formData, function(data) {
-        form.replaceWith(data);
-
-        // Replacing the Form with the Form from the Ajax response, means all
-        // event bindings are lost. For example the DateField button won't show
-        // the Calendar. Here we find the DateField setup script, and evaluate it
-        // again
-        var dateSetupScript = jQuery('#form_date-js-setup').html();
-        eval(dateSetupScript);
+        // Update the target div with the server response and style the div by adding a CSS class
+        var div = jQuery('#target');
+        div.addClass('infoMsg');
+        div.html(data);
     });
 }
