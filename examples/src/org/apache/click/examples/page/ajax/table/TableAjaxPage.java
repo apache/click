@@ -27,7 +27,7 @@ import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Column;
 import org.apache.click.control.Table;
-import org.apache.click.dataprovider.DataProvider;
+import org.apache.click.dataprovider.PagingDataProvider;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
@@ -38,10 +38,11 @@ import org.apache.click.extras.control.LinkDecorator;
 import org.springframework.stereotype.Component;
 
 /**
- * Basic Table Ajax Demo example using the jQuery JavaScript library.
+ * Demonstrates how to sort, page, edit and delete customers using the
+ * Table control and jQuery.
  */
 @Component
-public class TableAjaxDemoPage extends BorderPage {
+public class TableAjaxPage extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,7 +54,7 @@ public class TableAjaxDemoPage extends BorderPage {
     @Resource(name="customerService")
     private CustomerService customerService;
 
-    public TableAjaxDemoPage() {
+    public TableAjaxPage() {
         addControl(editLink);
         editLink.addBehavior(new AjaxBehavior() {
 
@@ -121,9 +122,20 @@ public class TableAjaxDemoPage extends BorderPage {
         column.setDecorator(new LinkDecorator(table, links, "id"));
         table.addColumn(column);
 
-        table.setDataProvider(new DataProvider<Customer>() {
+        // Use a Paging DataProvider to only retrieve the selected customers
+        table.setDataProvider(new PagingDataProvider<Customer>() {
+
             public List<Customer> getData() {
-                return customerService.getCustomers();
+                int start = table.getFirstRow();
+                int count = table.getPageSize();
+                String sortColumn = table.getSortedColumn();
+                boolean ascending = table.isSortedAscending();
+
+                return customerService.getCustomersForPage(start, count, sortColumn, ascending);
+            }
+
+            public int size() {
+                return customerService.getNumberOfCustomers();
             }
         });
     }
@@ -133,7 +145,7 @@ public class TableAjaxDemoPage extends BorderPage {
         if (headElements == null) {
             headElements = super.getHeadElements();
             headElements.add(new JsImport("/assets/js/jquery-1.4.2.js"));
-            headElements.add(new JsScript("/ajax/table/table-ajax-demo.js", new HashMap()));
+            headElements.add(new JsScript("/ajax/table/table-ajax.js", new HashMap()));
         }
         return headElements;
     }

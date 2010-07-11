@@ -31,7 +31,7 @@ jQuery(document).ready(function() {
 
         if (callServer) {
             // Make ajax request
-            editCustomer(event);
+            editOrDeleteCustomer(event);
         }
 
         // Prevent the default browser behavior of navigating to the link
@@ -51,7 +51,7 @@ jQuery(document).ready(function() {
     })
 })
 
-function editCustomer(event) {
+function editOrDeleteCustomer(event) {
     var link = jQuery(event.target);
     var url = link.attr('href');
     jQuery.get(url, function(data) {

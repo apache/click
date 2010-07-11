@@ -16,18 +16,24 @@
    specific language governing permissions and limitations
    under the License.*#
 -->
-
-In this Ajax example the form <a href="http://api.jquery.com/jQuery.post/" target="_blank" class="external">POSTed</a>
-to the server and is then <a href="http://api.jquery.com/replaceWith/" target="_blank" class="external">replaced with</a>
-a new form returned from the server. This example shows advanced feature such as validation and integrating the DateField
-control. For more advanced Ajax Forms (eg. file uploads) have a look at the
-<a href="http://jquery.malsup.com/form/">jQuery Form Plugin</a>.
+Demonstrates how to <a href="http://api.jquery.com/html/" class="external" target="_blank">update</a>
+a table through Ajax requests. This example uses an Ajax
+<a href="http://api.jquery.com/jQuery.get/" target="_blank" class="external">GET</a>
+request to <tt>sort</tt>, <tt>page</tt>, <tt>edit</tt> and <tt>delete</tt> customers.
+(The <tt>edit</tt> and <tt>delete</tt> functionality is not fully implemented though)
 <p/>
-See the <a href="$context/source-viewer.htm?filename=/ajax/form/advanced-form-ajax.js" target="_blank" class="external">advanced-form-ajax.js</a>
+See the <a href="$context/source-viewer.htm?filename=/ajax/table/table-ajax.js" target="_blank" class="external">table-ajax.js</a>
 script for details.
 
-$form
+<!--
+Note: the table is wrapped in a div, allowing us to easily replace both the table and its paginator
+from the server response
+-->
 
-<div id="feedback">
+<div id="tableContainer">
+$table
+</div>
 
+<div id="result">
+    
 </div>
