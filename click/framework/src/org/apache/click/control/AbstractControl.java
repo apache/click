@@ -247,18 +247,33 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Adds an AJAX Behavior.
+     * Add the given {@link org.apache.click.Behavior Behavior} to the control.
+     * <p/>
+     * <b>Stateful Page note:</b> care must be taken not to add duplicate behaviors.
+     * Duplicate behaviors can occur if a behavior is <tt>created</tt> and <tt>added</tt>
+     * to a Control in the {@link #onInit()} or {@link #onRender()} events.
+     * <p/>
+     * Instead add the behavior in the stateful Page constructor.
+     * If the Behavior must be added during the onInit event, declare the behavior
+     * as a Page variable to ensure the <tt>same instance</tt> is added to the Control.
+     * Since control behaviors are contained in a Set, adding the same Behavior
+     * instance won't lead to duplicates.
      *
-     * @param behavior the AJAX behavior
+     * @param behavior the behavior to add
      */
     public void addBehavior(Behavior behavior) {
-        boolean added = getBehaviors().add(behavior);
-        if (added) {
+        if (behavior == null) {
+            throw new IllegalArgumentException("Behavior cannot be null");
+        }
+
+        // If the control has behaviors yet, register the control as an AJAX target
+        if (!hasBehaviors()) {
             // Register control here in case behavior was added *after* the onInit event.
             // This can occur if the behavior is added in a listener event or during
             // onRender.
             ControlRegistry.registerAjaxTarget(this);
         }
+        getBehaviors().add(behavior);
     }
 
     /**
