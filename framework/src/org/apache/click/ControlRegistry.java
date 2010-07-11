@@ -27,9 +27,50 @@ import org.apache.click.service.LogService;
 import org.apache.commons.lang.Validate;
 
 /**
- * Provides a registry for Controls.
+ * Provides a centralized registry where Controls can be registered, allowing
+ * Click to provide advanced functionality such as AJAX
+ * {@link org.apache.click.Behavior Behaviors} and
+ * {@link org.apache.click.Callback Callbacks}.
+ * <p/>
+ * <b>Please note:</b> the registry is recreated each request and Controls have
+ * to be registered for every request.
  *
- * TODO: javadoc
+ * <h3>Behavior Usage</h3>
+ * TODO
+ *
+ * <h3>Callback Usage</h3>
+ * This class will only rarely be used by Control developers who want to create
+ * a custom Control with {@link org.apache.click.Callback Callback} functionality.
+ * <p/>
+ * Example:
+ * <pre class="prettyprint">
+ * public class MyControl extends AbstractControl {
+ *
+ *     // The Callback is registered during onInit to cater for both stateless and
+ *     // stateful pages
+ *     public void onInit() {
+ *         Callback callback = getCallback();
+ *         ControlRegistry.registerCallback(this, callback);
+ *     }
+ *
+ *     private Callback getCallback() {
+ *         callback = new Callback() {
+ *             public void preResponse(Control source) {
+ *                 // Invoked before the controls are rendered to the client
+ *                 addIndexToControlNames();
+ *             }
+ *
+ *             public void preGetHeadElements(Control source) {
+ *                 // Invoked before the HEAD elements are retrieved for each Control
+ *             }
+ *
+ *             public void preDestroy(Control source) {
+ *                 // Invoked before onDestroy event
+ *             }
+ *         };
+ *         return callback;
+ *     }
+ * } </pre>
  */
 public class ControlRegistry {
 
@@ -52,6 +93,11 @@ public class ControlRegistry {
 
     // Constructors -----------------------------------------------------------
 
+    /**
+     * Construct the ControlRegistry with the given ConfigService.
+     *
+     * @param configService the click application configuration service.
+     */
     public ControlRegistry(ConfigService configService) {
         this.logger = configService.getLogService();
     }
@@ -62,16 +108,46 @@ public class ControlRegistry {
      * Register the control to be processed by the ClickServlet if the control
      * is the Ajax target. A control is an Ajax target if the
      * {@link Control#isAjaxTarget(org.apache.click.Context)} method returns true.
-     * Target controls have their {@link Control#onProcess()} method invoked.
+     * Once a target control is identified, ClickServlet invokes its
+     * {@link Control#onProcess()} method invoked.
+     * <p/>
+     * <b>Please note:</b> the ControlRegistry is stateless. For each request
+     * a new registry is created. This means a control is only registered for
+     * a single request and must be registered again for subsequent requests.
      *
-     * @param control the control to register
+     * <b>Stateful Page note:</b> when invoking this method directly from a stateful
+     * page, ensure the control is registered on every request. Generally this
+     * means that for stateful pages this method should be used in the Page
+     * <tt>onInit</tt> method (which is invoked for every request) instead of the
+     * Page constructor (which is invoked only once). This warning can be ignored
+     * for stateless pages since both the constructor and onInit method is invoked
+     * every request.
+     *
+     * @param control the control to register as an Ajax target
      */
     public static void registerAjaxTarget(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("control cannot be null");
+        }
+
         ControlRegistry instance = getThreadLocalRegistry();
         instance.internalRegisterAjaxTarget(control);
     }
 
+    /**
+     * Register the source control and associated callback.
+     *
+     * @param source the behavior source control
+     * @param callback the callback to register
+     */
     public static void registerCallback(Control control, Callback callback) {
+        if (control == null) {
+            throw new IllegalArgumentException("control cannot be null");
+        }
+        if (callback == null) {
+            throw new IllegalArgumentException("callback cannot be null");
+        }
+
         ControlRegistry instance = getThreadLocalRegistry();
         instance.internalRegisterCallback(control, callback);
     }
@@ -103,9 +179,9 @@ public class ControlRegistry {
     }
 
     /**
-     * Register the ajax target control.
+     * Register the AJAX target control.
      *
-     * @param control the ajax target control
+     * @param control the AJAX target control
      */
     void internalRegisterAjaxTarget(Control control) {
         Validate.notNull(control, "Null control parameter");
@@ -113,16 +189,22 @@ public class ControlRegistry {
     }
 
     /**
-     * Register the behavior source control.
+     * Register the source control and associated callback.
      *
      * @param source the behavior source control
+     * @param callback the callback to register
      */
     void internalRegisterCallback(Control source, Callback callback) {
         Validate.notNull(source, "Null source parameter");
         Validate.notNull(callback, "Null callback parameter");
 
         CallbackHolder callbackHolder = new CallbackHolder(source, callback);
-        getCallbacks().add(callbackHolder);
+
+        // Guard against adding duplicate callbacks
+        List<CallbackHolder> localCallbacks = getCallbacks();
+        if (!localCallbacks.contains(callbackHolder)) {
+            localCallbacks.add(callbackHolder);
+        }
     }
 
     void processPreResponse(Context context) {
@@ -349,6 +431,49 @@ public class ControlRegistry {
 
         public void setControl(Control control) {
             this.control = control;
+        }
+
+        /**
+         * @see Object#equals(java.lang.Object)
+         *
+         * @param o the reference object with which to compare
+         * @return true if this object equals the given object
+         */
+        @Override
+        public boolean equals(Object o) {
+
+            //1. Use the == operator to check if the argument is a reference to this object.
+            if (o == this) {
+                return true;
+            }
+
+            //2. Use the instanceof operator to check if the argument is of the correct type.
+            if (!(o instanceof CallbackHolder)) {
+                return false;
+            }
+
+            //3. Cast the argument to the correct type.
+            CallbackHolder that = (CallbackHolder) o;
+
+            boolean equals = this.control == null ? that.control == null : this.control.equals(that.control);
+            if (!equals) {
+                return false;
+            }
+
+            return this.callback == null ? that.callback == null : this.callback.equals(that.callback);
+        }
+
+        /**
+         * @see java.lang.Object#hashCode()
+         *
+         * @return the CallbackHolder hashCode
+         */
+        @Override
+        public int hashCode() {
+            int result = 17;
+            result = 37 * result + (control == null ? 0 : control.hashCode());
+            result = 37 * result + (callback == null ? 0 : callback.hashCode());
+            return result;
         }
     }
 }
