@@ -175,6 +175,9 @@ public abstract class AbstractControl implements Control {
     /** The listener method name. */
     protected String listenerMethod;
 
+    /** Flag indicating whether the control has been registered as an AJAX target. */
+    boolean registeredAsAjaxTarget = false;
+
     // Constructors -----------------------------------------------------------
 
     /**
@@ -266,14 +269,8 @@ public abstract class AbstractControl implements Control {
             throw new IllegalArgumentException("Behavior cannot be null");
         }
 
-        // If the control has behaviors yet, register the control as an AJAX target
-        if (!hasBehaviors()) {
-            // Register control here in case behavior was added *after* the onInit event.
-            // This can occur if the behavior is added in a listener event or during
-            // onRender.
-            ControlRegistry.registerAjaxTarget(this);
-        }
         getBehaviors().add(behavior);
+        registerAsAjaxTarget();
     }
 
     /**
@@ -599,25 +596,24 @@ public abstract class AbstractControl implements Control {
      * @see org.apache.click.Control#onInit()
      */
     public void onInit() {
-        // Q: Why does onInit need to register callback instead of addBehavior?
-        // A: Because on stateful pages addBehavior might only be called once
-        //    when the control was created so we ensure the behavior is registered
-        //    before onProcess
-        //    TODO might want to extract the code below into ClickServlet itself
-        //    to ensure this code is called *before* onProcess. Leaving the code
-        //    here opens problems if subclass does not call super.onInit
-        if (hasBehaviors()) {
-           ControlRegistry.registerAjaxTarget(this);
-        }
+        // FAQ: Why does onInit need to register callback instead of addBehavior?
+        //   A: Because on stateful pages addBehavior might only be called once
+        //      when the control was created so we ensure the behavior is registered
+        //      before onProcess
+        registerAsAjaxTarget();
     }
 
     /**
-     * This method does nothing. Subclasses may override this method to perform
-     * clean up any resources.
+     * Cleans up the AbstractControl state.
+     * <p/>
+     * <b>Please note:</b> a common problem when overriding onDestroy in
+     * subclasses is forgetting to call <em>super.onDestroy()</em>. Consider
+     * carefully whether you should call <em>super.onDestroy()</em> or not.
      *
      * @see org.apache.click.Control#onDestroy()
      */
     public void onDestroy() {
+        registeredAsAjaxTarget = false;
     }
 
     /**
@@ -1024,6 +1020,23 @@ public abstract class AbstractControl implements Control {
             size += 20 * getAttributes().size();
         }
         return size;
+    }
+
+    // Package Private Methods ------------------------------------------------
+
+    /**
+     * Register the control as an AJAX target with the ControlRegistry. If the
+     * control is already registered, this method returns silently.
+     */
+    void registerAsAjaxTarget() {
+        if (registeredAsAjaxTarget) {
+            return;
+        }
+
+        if (hasBehaviors()) {
+            ControlRegistry.registerAjaxTarget(this);
+            registeredAsAjaxTarget = true;
+        }
     }
 
     // Private Methods --------------------------------------------------------
