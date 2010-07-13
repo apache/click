@@ -70,7 +70,7 @@ import org.apache.click.util.ClickUtils;
  *     // Check that nameField value is null
  *     Assert.assertNull(nameField.getValueObject());
  *
- *     // Simulate a form onProcess callback
+ *     // Simulate a form onProcess event
  *     form.onProcess();
  *
  *     // Check that nameField value is now bound to request value
@@ -330,27 +330,27 @@ public class MockContext extends Context {
     }
 
     /**
-     * Execute the preResponse callback event for all registered callbacks.
+     * Execute the preResponse method for all registered behaviors.
      */
-    public void executePreResponseCallbackEvent() {
+    public void executePreResponse() {
         ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
         registry.processPreResponse(this);
     }
 
     /**
-     * Execute the preGetHeadElements callback event for all registered callbacks.
+     * Execute the preGetHeadElements method for all registered behaviors.
      */
-    public void executePreGetHeadElementsCallbackEvent() {
+    public void executePreGetHeadElements() {
         ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
         registry.processPreGetHeadElements(this);
     }
 
     /**
-     * Execute the preDestroy callback event for all registered callbacks.
+     * Execute the preDestroy method for all registered behaviors.
      */
-    public void executePreDestroyCallbackEvent() {
+    public void executePreDestroy() {
         ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
         registry.processPreDestroy(this);
