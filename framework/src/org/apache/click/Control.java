@@ -467,7 +467,7 @@ public interface Control extends Serializable {
 
     /**
      * Returns <tt>true</tt> if this control has any
-     * <tt>Behavior</tt>s registered.
+     * <tt>Behavior</tt>s registered, <tt>false</tt> otherwise.
      *
      * @return <tt>true</tt> if this control has any
      * <tt>Behavior</tt>s registered, <tt>false</tt> otherwise
@@ -485,6 +485,38 @@ public interface Control extends Serializable {
      * Returns <tt>true</tt> if this control is an AJAX target, <tt>false</tt>
      * otherwise.
      * <p/>
+     * In order for a Control to be considered as an Ajax target it must be
+     * registered through {@link org.apache.click.ControlRegistry#registerAjaxTarget(org.apache.click.Control) ControlRegistry.registerAjaxTarget}.
+     * <p/>
+     * When the Click handles an AJAX request it iterates the Controls
+     * registered with the {@link org.apache.click.ControlRegistry ControlRegistry}
+     * and checks if one of them is the AJAX target by calling
+     * {@link #isAjaxTarget(org.apache.click.Context) isAjaxTarget}. If <tt>isAjaxTarget</tt>
+     * returns true, Click will process that Control's {@link #getBehaviors() behaviors}.
+     * <p/>
+     * <b>Please note:</b> there can only be one target control, so the first
+     * Control that is identified as the AJAX target will be processed, the other
+     * controls will be skipped.
+     * <p/>
+     * The most common way to check whether a Control is the Ajax target is to
+     * check if its {@link #getId ID} is available as a request parameter:
+     *
+     * <pre class="prettyprint">
+     * public MyControl extends AbstractControl {
+     *
+     *     ...
+     *
+     *     public boolean isAjaxTarget(Context context) {
+     *         return context.hasRequestParameter(getId());
+     *     }
+     * } </pre>
+     *
+     * Not every scenario can be covered through an ID attribute though. For example
+     * if an ActionLink is rendered multiple times on the same page, it cannot have an
+     * ID attribute, as that would lead to duplicate IDs, which isn't allowed by
+     * the HTML specification. Control implementations has to cater for how the
+     * control will be targeted. In the case of ActionLink it might check against
+     * its <tt>id</tt>, and if that isn't available check against its <tt>name</tt>.
      *
      * @param context the request context
      * @return <tt>true</tt> if this control is an AJAX target, <tt>false</tt>
