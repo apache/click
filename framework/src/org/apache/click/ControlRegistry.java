@@ -85,8 +85,8 @@ public class ControlRegistry {
     /** The set of Ajax target controls. */
     Set<Control> ajaxTargetControls;
 
-    /** The list of registered callbacks. */
-    List<CallbackHolder> callbacks;
+    /** The list of registered behaviors. */
+    List<BehaviorHolder> behaviors;
 
     /** The application log service. */
     LogService logger;
@@ -96,7 +96,7 @@ public class ControlRegistry {
     /**
      * Construct the ControlRegistry with the given ConfigService.
      *
-     * @param configService the click application configuration service.
+     * @param configService the click application configuration service
      */
     public ControlRegistry(ConfigService configService) {
         this.logger = configService.getLogService();
@@ -135,21 +135,39 @@ public class ControlRegistry {
     }
 
     /**
-     * Register the source control and associated callback.
+     * Register a control event interceptor for the given control and behavior.
+     * The control will be passed as the source control to the Behavior
+     * interception methods:
+     * {@link org.apache.click.Behavior#preGetHeadElements(org.apache.click.Control) preGetHeadElements(Control)},
+     * {@link org.apache.click.Behavior#preResponse(org.apache.click.Control) preResponse(Control) and
+     * {@link org.apache.click.Behavior#preDestroy()}.
+     * <p/>
+     * <b>Please note:</b> the ControlRegistry is stateless. For each request
+     * a new registry is created. This means a control and behavior is only
+     * registered for a single request and must be registered again for subsequent
+     * requests.
+     *
+     * <b>Stateful Page note:</b> when invoking this method directly from a stateful
+     * page, ensure the control is registered on every request. Generally this
+     * means that for stateful pages this method should be used in the Page
+     * <tt>onInit</tt> method (which is invoked for every request) instead of the
+     * Page constructor (which is invoked only once). This warning can be ignored
+     * for stateless pages since both the constructor and onInit method is invoked
+     * every request.
      *
      * @param source the behavior source control
-     * @param callback the callback to register
+     * @param behavior the behavior to register
      */
-    public static void registerCallback(Control control, Callback callback) {
+    public static void registerInterceptor(Control control, Behavior behavior) {
         if (control == null) {
             throw new IllegalArgumentException("control cannot be null");
         }
-        if (callback == null) {
-            throw new IllegalArgumentException("callback cannot be null");
+        if (behavior == null) {
+            throw new IllegalArgumentException("behavior cannot be null");
         }
 
         ControlRegistry instance = getThreadLocalRegistry();
-        instance.internalRegisterCallback(control, callback);
+        instance.internalRegisterCallback(control, behavior);
     }
 
     // Protected Methods ------------------------------------------------------
@@ -166,11 +184,11 @@ public class ControlRegistry {
     // Package Private Methods ------------------------------------------------
 
     /**
-     * Remove all callbacks and controls from this registry.
+     * Remove all behaviors and controls from this registry.
      */
     void clear() {
-        if (hasCallbacks()) {
-            getCallbacks().clear();
+        if (hasBehaviors()) {
+            getBehaviors().clear();
         }
 
         if (hasAjaxTargetControls()) {
@@ -189,21 +207,21 @@ public class ControlRegistry {
     }
 
     /**
-     * Register the source control and associated callback.
+     * Register the source control and associated behavior.
      *
      * @param source the behavior source control
-     * @param callback the callback to register
+     * @param behavior the behavior to register
      */
-    void internalRegisterCallback(Control source, Callback callback) {
+    void internalRegisterCallback(Control source, Behavior behavior) {
         Validate.notNull(source, "Null source parameter");
-        Validate.notNull(callback, "Null callback parameter");
+        Validate.notNull(behavior, "Null behavior parameter");
 
-        CallbackHolder callbackHolder = new CallbackHolder(source, callback);
+        BehaviorHolder behaviorHolder = new BehaviorHolder(source, behavior);
 
-        // Guard against adding duplicate callbacks
-        List<CallbackHolder> localCallbacks = getCallbacks();
-        if (!localCallbacks.contains(callbackHolder)) {
-            localCallbacks.add(callbackHolder);
+        // Guard against adding duplicate behaviors
+        List<BehaviorHolder> localBehaviors = getBehaviors();
+        if (!localBehaviors.contains(behaviorHolder)) {
+            localBehaviors.add(behaviorHolder);
         }
     }
 
@@ -216,11 +234,11 @@ public class ControlRegistry {
             }
         }
 
-        if (hasCallbacks()) {
-            for (CallbackHolder callbackHolder : getCallbacks()) {
-                Callback callback = callbackHolder.getCallback();
-                Control control = callbackHolder.getControl();
-                callback.preResponse(control);
+        if (hasBehaviors()) {
+            for (BehaviorHolder behaviorHolder : getBehaviors()) {
+                Behavior behavior = behaviorHolder.getBehavior();
+                Control control = behaviorHolder.getControl();
+                behavior.preResponse(control);
             }
         }
     }
@@ -234,11 +252,11 @@ public class ControlRegistry {
             }
         }
 
-        if (hasCallbacks()) {
-            for (CallbackHolder callbackHolder : getCallbacks()) {
-                Callback callback = callbackHolder.getCallback();
-                Control control = callbackHolder.getControl();
-                callback.preGetHeadElements(control);
+        if (hasBehaviors()) {
+            for (BehaviorHolder behaviorHolder : getBehaviors()) {
+                Behavior behavior = behaviorHolder.getBehavior();
+                Control control = behaviorHolder.getControl();
+                behavior.preGetHeadElements(control);
             }
         }
     }
@@ -252,17 +270,17 @@ public class ControlRegistry {
             }
         }
 
-        if (hasCallbacks()) {
-            for (CallbackHolder callbackHolder : getCallbacks()) {
-                Callback callback = callbackHolder.getCallback();
-                Control control = callbackHolder.getControl();
-                callback.preDestroy(control);
+        if (hasBehaviors()) {
+            for (BehaviorHolder behaviorHolder : getBehaviors()) {
+                Behavior behavior = behaviorHolder.getBehavior();
+                Control control = behaviorHolder.getControl();
+                behavior.preDestroy(control);
             }
         }
     }
 
     /**
-     * Checks if any control callbacks have been registered.
+     * Checks if any AJAX target control have been registered.
      */
     boolean hasAjaxTargetControls() {
         if (ajaxTargetControls == null || ajaxTargetControls.isEmpty()) {
@@ -284,25 +302,25 @@ public class ControlRegistry {
     }
 
     /**
-     * Checks if any control callbacks have been registered.
+     * Checks if any control behaviors have been registered.
      */
-    boolean hasCallbacks() {
-        if (callbacks == null || callbacks.isEmpty()) {
+    boolean hasBehaviors() {
+        if (behaviors == null || behaviors.isEmpty()) {
             return false;
         }
         return true;
     }
 
     /**
-     * Return the set of registered callbacks.
+     * Return the set of registered behaviors.
      *
-     * @return set of registered callbacks
+     * @return set of registered behaviors
      */
-    List<CallbackHolder> getCallbacks() {
-        if (callbacks == null) {
-            callbacks = new ArrayList<CallbackHolder>();
+    List<BehaviorHolder> getBehaviors() {
+        if (behaviors == null) {
+            behaviors = new ArrayList<BehaviorHolder>();
         }
-        return callbacks;
+        return behaviors;
     }
 
     static ControlRegistry getThreadLocalRegistry() {
@@ -406,23 +424,23 @@ public class ControlRegistry {
         }
     }
 
-    static class CallbackHolder {
+    static class BehaviorHolder {
 
-        private Callback callback;
+        private Behavior behavior;
 
         private Control control;
 
-        public CallbackHolder(Control control, Callback callback) {
+        public BehaviorHolder(Control control, Behavior behavior) {
             this.control = control;
-            this.callback = callback;
+            this.behavior = behavior;
         }
 
-        public Callback getCallback() {
-            return callback;
+        public Behavior getBehavior() {
+            return behavior;
         }
 
-        public void setCallback(Callback callback) {
-            this.callback = callback;
+        public void setBehavior(Behavior behavior) {
+            this.behavior = behavior;
         }
 
         public Control getControl() {
@@ -448,31 +466,31 @@ public class ControlRegistry {
             }
 
             //2. Use the instanceof operator to check if the argument is of the correct type.
-            if (!(o instanceof CallbackHolder)) {
+            if (!(o instanceof BehaviorHolder)) {
                 return false;
             }
 
             //3. Cast the argument to the correct type.
-            CallbackHolder that = (CallbackHolder) o;
+            BehaviorHolder that = (BehaviorHolder) o;
 
             boolean equals = this.control == null ? that.control == null : this.control.equals(that.control);
             if (!equals) {
                 return false;
             }
 
-            return this.callback == null ? that.callback == null : this.callback.equals(that.callback);
+            return this.behavior == null ? that.behavior == null : this.behavior.equals(that.behavior);
         }
 
         /**
          * @see java.lang.Object#hashCode()
          *
-         * @return the CallbackHolder hashCode
+         * @return the BehaviorHolder hashCode
          */
         @Override
         public int hashCode() {
             int result = 17;
             result = 37 * result + (control == null ? 0 : control.hashCode());
-            result = 37 * result + (callback == null ? 0 : callback.hashCode());
+            result = 37 * result + (behavior == null ? 0 : behavior.hashCode());
             return result;
         }
     }

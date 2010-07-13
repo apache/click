@@ -36,7 +36,7 @@ public class MockContextTest extends TestCase {
     /** Indicates that an actionListener was invoked. */
     private boolean submitCalled = false;
 
-    /** Indicators that callback events was invoked. */
+    /** Indicators that behavior events was invoked. */
     private boolean preGetHeadElementsCalled = false;
     private boolean preResponseCalled = false;
     private boolean preDestroyCalled = false;
@@ -169,7 +169,7 @@ public class MockContextTest extends TestCase {
      * Test that registered behaviors are removed through the method
      * MockContext.reset().
      */
-    public void testResetBehaviors() {
+    public void testResetAjaxBehaviors() {
         MockContext context = MockContext.initContext();
         MockRequest request = context.getMockRequest();
         request.setParameter("save", "save");
@@ -199,12 +199,12 @@ public class MockContextTest extends TestCase {
         assertEquals(0, dispatcher.getBehaviorSourceSet().size());
     }
 
-    // Test Callbacks ---------------------------------------------------------
+    // Test Behavior Interceptor Methods --------------------------------------
 
     /**
-     * Test that context can properly process callbacks.
+     * Test that context can properly process Behavior interceptor methods.
      */
-    public void testProcessCallbacks() {
+    public void testProcessBehaviorInterceptorMethods() {
         MockContext context = MockContext.initContext();
 
         Submit submit = new Submit("save");
@@ -213,7 +213,15 @@ public class MockContextTest extends TestCase {
         preResponseCalled = false;
         preDestroyCalled = false;
 
-        ControlRegistry.registerCallback(submit, new Callback() {
+        ControlRegistry.registerInterceptor(submit, new Behavior() {
+
+            public boolean isRequestTarget(Context context) {
+                return false;
+            }
+
+            public Partial onAction(Control source) {
+                return null;
+            }
 
             public void preDestroy(Control source) {
                 preDestroyCalled = true;
@@ -230,32 +238,32 @@ public class MockContextTest extends TestCase {
 
         ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
-        // Assert there is one callback registered
-        assertEquals(1, registry.getCallbacks().size());
+        // Assert there is one behavior registered
+        assertEquals(1, registry.getBehaviors().size());
 
-        // Process the preResponse callback event
-        context.executePreResponseCallbackEvent();
-        assertTrue("preResponse callback event was not processed", preResponseCalled);
+        // Process the preResponse interceptor methods
+        context.executePreResponse();
+        assertTrue("preResponse was not processed", preResponseCalled);
 
-        // Process the preGetHeadElements callback event
-        context.executePreGetHeadElementsCallbackEvent();
-        assertTrue("preGetHeadElements callback event was not processed", preGetHeadElementsCalled);
+        // Process the preGetHeadElements interceptor methods
+        context.executePreGetHeadElements();
+        assertTrue("preGetHeadElements was not processed", preGetHeadElementsCalled);
 
-        // Process the preGetHeadElements callback event
-        context.executePreDestroyCallbackEvent();
-        assertTrue("preDestroy callback event was not processed", preDestroyCalled);
+        // Process the preGetHeadElements interceptor methods
+        context.executePreDestroy();
+        assertTrue("preDestroy was not processed", preDestroyCalled);
 
-        // Assert that the callback was not removed after all events was processed
-        // The reason the callbacks are not automatically removed is because the
-        // last callback is onDestroy, which is right before the request goes out
-        // of scope
-        assertEquals(1, registry.getCallbacks().size());
+        // Assert that the behavior was not removed after all events was processed
+        // The reason the behaviors are not automatically removed is because the
+        // last behavior is onDestroy, which is right before the request goes out
+        // of scope anyway
+        assertEquals(1, registry.getBehaviors().size());
     }
 
     /**
-     * Test that context can properly fire callbacks.
+     * Test that context can properly fire and reset behavior interceptors.
      */
-    public void testResetCallbacks() {
+    public void testResetControlInterceptors() {
         MockContext context = MockContext.initContext();
 
         Submit submit = new Submit("save");
@@ -264,7 +272,15 @@ public class MockContextTest extends TestCase {
         preResponseCalled = false;
         preDestroyCalled = false;
 
-        ControlRegistry.registerCallback(submit, new Callback() {
+        ControlRegistry.registerInterceptor(submit, new Behavior() {
+
+            public boolean isRequestTarget(Context context) {
+                return false;
+            }
+
+            public Partial onAction(Control source) {
+                return null;
+            }
 
             public void preDestroy(Control source) {
                 preDestroyCalled = true;
@@ -281,25 +297,25 @@ public class MockContextTest extends TestCase {
 
         ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
-        // Assert there is one callback registered
-        assertEquals(1, registry.getCallbacks().size());
+        // Assert there is one behavior registered
+        assertEquals(1, registry.getBehaviors().size());
 
         // Context reset should clear the dispatcher
         context.reset();
 
-        // Assert that the callback was not removed after all events was processed
-        // The reason the callbacks are not automatically removed is because the
-        // last callback is onDestroy, which is right before the request goes out
-        // of scope
-        assertEquals(0, registry.getCallbacks().size());
+        // Assert that the behavior was not removed after all events was processed
+        // The reason the behaviors are not automatically removed is because the
+        // last behavior is onDestroy, which is right before the request goes out
+        // of scope anyway
+        assertEquals(0, registry.getBehaviors().size());
     }
 
-    // Callback + Behavior tests ----------------------------------------------
+    // Behavior tests ---------------------------------------------------------
 
     /**
-     * Test that context can properly process callbacks and behaviors.
+     * Test that context can properly process behaviors.
      */
-    public void testProcessBehaviorAndCallbacks() {
+    public void testProcessBehaviors() {
         MockContext context = MockContext.initContext();
         MockRequest request = context.getMockRequest();
         request.setParameter("save", "save");
@@ -355,29 +371,29 @@ public class MockContextTest extends TestCase {
 
         ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
-        // Assert that the submit control is registered as a callback
+        // Assert that the submit control is registered as an AJAX target
         assertEquals(1, registry.getAjaxTargetControls().size());
         assertSame(submit, registry.getAjaxTargetControls().iterator().next());
 
-        // Process the preResponse callback event
-        context.executePreResponseCallbackEvent();
-        assertTrue("preResponse callback event was not processed", preResponseCalled);
+        // Process the preResponse interceptor methods
+        context.executePreResponse();
+        assertTrue("preResponse was not processed", preResponseCalled);
 
-        // Process the preGetHeadElements callback event
-        context.executePreGetHeadElementsCallbackEvent();
-        assertTrue("preGetHeadElements callback event was not processed", preGetHeadElementsCalled);
+        // Process the preGetHeadElements interceptor methods
+        context.executePreGetHeadElements();
+        assertTrue("preGetHeadElements was not processed", preGetHeadElementsCalled);
 
-        // Process the preGetHeadElements callback event
-        context.executePreDestroyCallbackEvent();
-        assertTrue("preDestroy callback event was not processed", preDestroyCalled);
+        // Process the preGetHeadElements interceptor methods
+        context.executePreDestroy();
+        assertTrue("preDestroy was not processed", preDestroyCalled);
 
-        // Assert that the callback was not removed after all events was processed
+        // Assert that the behaviors was not removed after all events was processed
         assertEquals(1, registry.getAjaxTargetControls().size());
 
-        // Test that reset will clear the callback dispatcher
+        // Test that reset will clear the ControlRegistry
         context.reset();
 
-        // Assert that the callback was removed after reset
+        // Assert that the behavior was removed after reset
         assertEquals(0, registry.getAjaxTargetControls().size());
     }
 }

@@ -19,16 +19,41 @@
 package org.apache.click;
 
 /**
- * Behaviors are added to Controls to provide enhanced features such as
- * Ajax. Behaviors extend the {@link Callback} interface which
- * allows them to <tt>decorate</tt> their associated Controls.
- *
+ * Behaviors are added to Controls to provide more advanced features such as
+ * Ajax support.
  * <p/>
- * Behaviors expose a listener method through
- * {@link #onAction(org.apache.click.Control)}, which Click will invoke if
- * the method {@link #isRequestTarget(org.apache.click.Context)} returns true.
+ * To handle an Ajax request, Behaviors expose a listener method,
+ * {@link #onAction(org.apache.click.Control) onAction}, which Click will
+ * invoke if the Behavior method {@link #isRequestTarget(org.apache.click.Context) isRequestTarget}
+ * returns true.
+ * <p/>
+ * <b>Please note:</b> a behavior <tt>onAction</tt> method is only invoked if the
+ * Control is the Ajax target, in other words,
+ * {@link org.apache.click.Control#isAjaxTarget(org.apache.click.Context) isAjaxTarget}
+ * must return true.
+ * <p/>
+ * Behaviors also provide interceptor methods for specific Control life
+ * cycle events. These interceptor methods can be used to further process the
+ * control or the control children.
+ * <p/>
+ * The following interceptor methods are defined:
+ *
+ * <ul>
+ * <li>preResponse - occurs before the control markup is written to the response</li>
+ * <li>preGetHeadElements - occurs after <tt>preResponse</tt> but before the control
+ * {@link Control#getHeadElements() HEAD elements} are written to the response</li>
+ * <li>preDestroy - occurs before the Control {@link Control#onDestroy() onDestroy}
+ * event handler.</li>
+ * </ul>
+ *
+ * These events allow the Behavior to <tt>decorate</tt> a control, for example:
+ * <ul>
+ * <li>add/remove Control HEAD elements such as JavaScript and CSS dependencies
+ * and setup scripts</li>
+ * <li>add/remove Control attributes such as <tt>"class"</tt>, <tt>"style"</tt> etc</li>
+ * </ul>
  */
-public interface Behavior extends Callback {
+public interface Behavior {
 
     /**
      * The behavior action method.
@@ -41,7 +66,7 @@ public interface Behavior extends Callback {
     public Partial onAction(Control source);
 
     /**
-     * Return true if the behavior is the requeset target, false otherwise.
+     * Return true if the behavior is the request target, false otherwise.
      * <p/>
      * This method is queried by Click to determine if the behavior's
      * {@link #onAction(org.apache.click.Control)} method should be called in
@@ -82,6 +107,29 @@ public interface Behavior extends Callback {
      * @param context the request context
      * @return true if the behavior is the request target, false otherwise
      */
-    // TODO move this method to another interface/class?
     public boolean isRequestTarget(Context context);
+
+    /**
+     * This event occurs before the markup is written to the HttpServletResponse.
+     *
+     * @param source the control the behavior is registered with
+     */
+    public void preResponse(Control source);
+
+    /**
+     * This event occurs after {@link #preResponse(org.apache.click.Control)},
+     * but before the Control's {@link Control#getHeadElements()} is called.
+     *
+     * @param source the control the behavior is registered with
+     */
+    public void preGetHeadElements(Control source);
+
+    /**
+     * This event occurs before the Control {@link Control#onDestroy() onDestroy}
+     * event handler. This event allows the behavior to cleanup or store Control
+     * state in the Session.
+     *
+     * @param source the control the behavior is registered with
+     */
+    public void preDestroy(Control source);
 }
