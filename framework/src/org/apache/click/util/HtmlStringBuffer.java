@@ -211,7 +211,7 @@ public class HtmlStringBuffer {
             ClickUtils.appendEscapeString(string, this);
 
         } else {
-            append(value);
+            append(string);
         }
 
         return this;
