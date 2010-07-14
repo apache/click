@@ -491,43 +491,43 @@ public class Partial {
 
         HttpServletResponse response = context.getResponse();
 
-        Reader reader = getReader();
-        InputStream inputStream = getInputStream();
+        Reader localReader = getReader();
+        InputStream localInputStream = getInputStream();
 
         try {
-            String content = getContent();
-            byte[] bytes = getBytes();
+            String localContent = getContent();
+            byte[] localBytes = getBytes();
 
-            String template = getTemplate();
-            if (template != null) {
+            String localTemplate = getTemplate();
+            if (localTemplate != null) {
                 Map<String, Object> templateModel = getModel();
                 if (templateModel == null) {
                     templateModel = new HashMap<String, Object>();
                 }
-                String result = context.renderTemplate(template, templateModel);
-                reader = new StringReader(result);
+                String result = context.renderTemplate(localTemplate, templateModel);
+                localReader = new StringReader(result);
 
-            } else if (content != null) {
-                reader = new StringReader(content);
-            } else if (bytes != null) {
-                inputStream = new ByteArrayInputStream(bytes);
+            } else if (localContent != null) {
+                localReader = new StringReader(localContent);
+            } else if (localBytes != null) {
+                localInputStream = new ByteArrayInputStream(localBytes);
             }
 
-            if (reader != null) {
+            if (localReader != null) {
                 Writer writer = response.getWriter();
                 char[] buffer = new char[WRITER_BUFFER_SIZE];
                 int len = 0;
-                while (-1 != (len = reader.read(buffer))) {
+                while (-1 != (len = localReader.read(buffer))) {
                     writer.write(buffer, 0, len);
                 }
                 writer.flush();
                 writer.close();
 
-            } else if (inputStream != null) {
+            } else if (localInputStream != null) {
                 byte[] buffer = new byte[OUTPUT_BUFFER_SIZE];
                 int len = 0;
                 OutputStream outputStream = response.getOutputStream();
-                while (-1 != (len = inputStream.read(buffer))) {
+                while (-1 != (len = localInputStream.read(buffer))) {
                     outputStream.write(buffer, 0, len);
                 }
                 outputStream.flush();
@@ -538,8 +538,8 @@ public class Partial {
             throw new RuntimeException(e);
 
         } finally {
-            ClickUtils.close(inputStream);
-            ClickUtils.close(reader);
+            ClickUtils.close(localInputStream);
+            ClickUtils.close(localReader);
         }
     }
 
@@ -560,20 +560,20 @@ public class Partial {
             response.setDateHeader("Expires", new Date(1L).getTime());
         }
 
-        String contentType = getContentType();
+        String localContentType = getContentType();
 
         if (getCharacterEncoding() == null) {
 
             // Fallback to request character encoding
             if (context.getRequest().getCharacterEncoding() != null) {
-                response.setContentType(contentType + "; charset="
+                response.setContentType(localContentType + "; charset="
                     + context.getRequest().getCharacterEncoding());
             } else {
-                response.setContentType(contentType);
+                response.setContentType(localContentType);
             }
 
         } else {
-            response.setContentType(contentType + "; charset=" + getCharacterEncoding());
+            response.setContentType(localContentType + "; charset=" + getCharacterEncoding());
         }
     }
 }
