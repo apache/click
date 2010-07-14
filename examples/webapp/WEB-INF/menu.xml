@@ -48,9 +48,11 @@
     <menu label="Direct Page" path="general/direct-page.htm" target="_blank"/>
     <menu label="Exception Demo" path="general/exception.htm"/>
     <menu label="Flash Attribute" path="general/flash.htm"/>
-    <menu label="Page Action" path="general/page-action.htm"/>
     <menu label="Page Imports" path="general/page-imports-example.htm"/>
     <menu label="Page Security" path="security/secure.htm"/>
+    <menu separator="true"/>
+    <menu label="Page Action Image" path="general/page-action-image.htm"/>
+    <menu label="Page Action Link" path="general/page-action-link.htm"/>
     <menu separator="true"/>
     <menu label="JSP Hello World" path="jsp/hello-world.htm"/>
     <menu label="JSP Customer Table" path="jsp/customer-table.htm"/>
