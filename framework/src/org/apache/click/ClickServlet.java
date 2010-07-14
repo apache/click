@@ -883,7 +883,7 @@ public class ClickServlet extends HttpServlet {
             }
 
         } else if (partial != null) {
-            renderPartial(partial, context);
+            renderPartial(partial, page, context);
 
         } else if (page.getPath() != null) {
             // Render template unless the request was a page action. This check
@@ -1017,10 +1017,11 @@ public class ClickServlet extends HttpServlet {
      * Render the given Partial response. If the partial is null, nothing is
      * rendered.
      *
-     * @param partial the partial resopnse to render
+     * @param partial the partial response to render
+     * @param page the requested page
      * @param context the request context
      */
-    protected void renderPartial(Partial partial, Context context) {
+    protected void renderPartial(Partial partial, Page page, Context context) {
         if (partial == null) {
             return;
         }
@@ -1816,7 +1817,7 @@ public class ClickServlet extends HttpServlet {
                 controlRegistry.processPreResponse(context);
                 controlRegistry.processPreGetHeadElements(context);
 
-                renderPartial(partial, context);
+                renderPartial(partial, page, context);
             }
         }
 
@@ -1843,7 +1844,7 @@ public class ClickServlet extends HttpServlet {
                 partial = eventDispatcher.getPartial();
 
                 // Render the partial
-                renderPartial(partial, context);
+                renderPartial(partial, page, context);
 
             } else {
 
