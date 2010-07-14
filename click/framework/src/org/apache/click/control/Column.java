@@ -1346,7 +1346,7 @@ public class Column implements Serializable {
             Context context, int rowIndex) {
 
         if (getDecorator() != null) {
-            Object value = getDecorator().render(row, context);
+            String value = getDecorator().render(row, context);
             if (value != null) {
                 buffer.append(value);
             }
