@@ -174,9 +174,6 @@ public class Page implements Serializable {
     /** The HTTP response headers. */
     protected Map<String, Object> headers;
 
-    /** The headers have been edited flag, to support copy on write. */
-    protected boolean headersEdited;
-
     /** The map of localized page resource messages. **/
     protected transient Map<String, String> messages;
 
@@ -594,32 +591,38 @@ public class Page implements Serializable {
 
     /**
      * Return the map of HTTP header to be set in the HttpServletResponse.
-     * Note to edit header values use {@link #setHeader(String, Object)} as
-     * headers Map is initially unmodifiable.
      *
      * @return the map of HTTP header to be set in the HttpServletResponse
      */
     public Map<String, Object> getHeaders() {
+        if (headers == null) {
+            headers = new HashMap<String, Object>();
+        }
         return headers;
     }
 
     /**
-     * Set the named header with the given value. This method uses copy on
-     * write to the headers Map, as the initial loaded headers Map is
-     * unmodifiable.
+     * Return true if the page has headers, false otherwise.
+     *
+     * @return true if the page has headers, false otherwise
+     */
+    public boolean hasHeaders() {
+        return headers != null && !headers.isEmpty();
+    }
+
+    /**
+     * Set the named header with the given value. Value can be either a String,
+     * Date or Integer.
      *
      * @param name the name of the header
-     * @param value the value of the header
+     * @param value the value of the header, either a String, Date or Integer
      */
     public void setHeader(String name, Object value) {
         if (name == null) {
             throw new IllegalArgumentException("Null header name parameter");
         }
-        if (!headersEdited) {
-            headersEdited = true;
-            headers = new HashMap<String, Object>(headers);
-        }
-        headers.put(name, value);
+
+        getHeaders().put(name, value);
     }
 
     /**

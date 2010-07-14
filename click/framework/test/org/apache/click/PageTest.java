@@ -20,6 +20,7 @@ package org.apache.click;
 
 import junit.framework.TestCase;
 import org.apache.click.control.Form;
+import org.apache.click.pages.HeaderTestPage;
 import org.apache.click.pages.JspRedirectPage;
 import org.apache.click.pages.RedirectToHtm;
 import org.apache.click.pages.RedirectToJsp;
@@ -198,5 +199,43 @@ public class PageTest extends TestCase {
         assertEquals(2, page.getControls().size());
         assertSame(child1, page.getControls().get(0));
         assertSame(child2, page.getControls().get(1));
+    }
+
+    /**
+     * Check that headers can be set during page constructor
+     *
+     * CLK-711
+     */
+    public void testSetPageHeaders() {
+        MockContext.initContext();
+
+        HeaderTestPage headerTestPage = new HeaderTestPage();
+        assertEquals(headerTestPage.getHeaders().get(headerTestPage.expiresHeader), headerTestPage.expiresValue);
+    }
+
+    /**
+     * Check that headers can be set during page constructor and that default
+     * headers won't override the explicitly set headers.
+     *
+     * CLK-711
+     */
+    public void testOverrideDefaultHeaders() {
+        MockContainer container = new MockContainer("web");
+        container.start();
+
+        HeaderTestPage headerTestPage = container.testPage(HeaderTestPage.class);
+
+        System.out.println(headerTestPage.getHeaders());
+
+        // Check that 'Expires' header (a default header) has been set by Page
+        // and not been overridden by ClickServlet
+        assertEquals(headerTestPage.getHeaders().get(headerTestPage.expiresHeader), headerTestPage.expiresValue);
+
+        // A Default header. In this test we check that this header is added to the page headers
+        String pragmaHeader = "Pragma";
+        String pragmaValue = "no-cache";
+        assertEquals(headerTestPage.getHeaders().get(pragmaHeader), pragmaValue);
+
+        container.stop();
     }
 }
