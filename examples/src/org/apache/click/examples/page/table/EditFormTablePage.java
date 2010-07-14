@@ -83,6 +83,7 @@ public class EditFormTablePage extends BorderPage {
          * FormTable (table) so that paging and sorting will still work, even
          * if the Form was not submitted.
          */
+        @Override
         public boolean onProcess() {
             if (form.isFormSubmission()) {
                 return super.onProcess();
@@ -263,7 +264,9 @@ public class EditFormTablePage extends BorderPage {
 
     private void refreshTableCustomers() {
         List<Customer> allCustomers = customerService.getCustomersSortedBy(Customer.DATE_JOINED_PROPERTY, false);
-        List<Customer> customers = allCustomers.subList(0, NUM_ROWS);
-        table.setRowList(customers);
+        if (!allCustomers.isEmpty()) {
+            List<Customer> customers = allCustomers.subList(0, NUM_ROWS);
+            table.setRowList(customers);
+        }
     }
 }
