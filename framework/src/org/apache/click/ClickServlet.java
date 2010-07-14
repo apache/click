@@ -57,6 +57,7 @@ import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PageImports;
 import org.apache.click.util.PropertyUtils;
 import org.apache.click.util.RequestTypeConverter;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
@@ -941,7 +942,7 @@ public class ClickServlet extends HttpServlet {
 
         Writer writer = getWriter(response);
 
-        if (page.getHeaders() != null) {
+        if (page.hasHeaders()) {
             setPageResponseHeaders(response, page.getHeaders());
         }
 
@@ -1264,8 +1265,19 @@ public class ClickServlet extends HttpServlet {
 
             activatePageInstance(newPage);
 
-            if (newPage.getHeaders() == null) {
-                newPage.setHeaders(configService.getPageHeaders(path));
+            Map<String, Object> defaultHeaders = configService.getPageHeaders(path);
+            if (newPage.hasHeaders()) {
+
+                // Don't override existing headers
+                Map pageHeaders = newPage.getHeaders();
+                for (Map.Entry entry : defaultHeaders.entrySet()) {
+                    if (!pageHeaders.containsKey(entry.getKey())) {
+                        pageHeaders.put(entry.getKey(), entry.getValue());
+                    }
+                }
+
+            } else {
+                newPage.getHeaders().putAll(defaultHeaders);
             }
 
             newPage.setPath(path);
@@ -1497,9 +1509,13 @@ public class ClickServlet extends HttpServlet {
                 long time = ((Date) value).getTime();
                 response.setDateHeader(name, time);
 
-            } else {
+            } else if (value instanceof Integer) {
                 int intValue = (Integer) value;
                 response.setIntHeader(name, intValue);
+
+            } else if (value != null) {
+                throw new IllegalStateException("Invalid Page header value type: "
+                    + value.getClass() + ". Header value must of type String, Date or Integer.");
             }
         }
     }
