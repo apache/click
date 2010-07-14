@@ -364,6 +364,9 @@ public class Radio extends Field {
         } else {
             addStyleClass("error");
         }
+        if (getTabIndex() > 0) {
+            buffer.appendAttribute("tabindex", getTabIndex());
+        }
         if (isChecked()) {
             buffer.appendAttribute("checked", "checked");
         }
