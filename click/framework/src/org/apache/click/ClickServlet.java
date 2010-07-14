@@ -57,7 +57,6 @@ import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PageImports;
 import org.apache.click.util.PropertyUtils;
 import org.apache.click.util.RequestTypeConverter;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
