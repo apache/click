@@ -80,7 +80,6 @@ public class ExcelExportPage extends BorderPage {
 
         // Set response headers
         response.setHeader("Content-Disposition", "attachment; filename=\"report.xls\"");
-        response.setHeader("Pragma", "no-cache");
 
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
