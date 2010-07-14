@@ -23,15 +23,17 @@ import org.apache.click.control.PageLink;
 import org.apache.click.examples.page.BorderPage;
 
 /**
- * Provides an Page action demo.
+ * Provides a PageAction demo. The PageLink sets a PAGE_ACTION to the page method
+ * 'getDate'. Clicking on the PageLink will invoke the 'getDate' method and render
+ * the Partial response.
  */
-public class PageAction extends BorderPage {
+public class PageActionLink extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    private PageLink link = new PageLink("link", "Get Date", PageAction.class);
+    private PageLink link = new PageLink("link", "Get Date", PageActionLink.class);
 
-    public PageAction() {
+    public PageActionLink() {
         addControl(link);
 
         // We set a PAGE_ACTION to invoke the getDate method below
