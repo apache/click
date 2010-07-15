@@ -141,6 +141,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         DEFAULT_HEADERS.put("Expires", new Date(1L));
     }
 
+    private static final String GOOGLE_APP_ENGINE = "Google App Engine";
+
     // ------------------------------------------------ Package Private Members
 
     /** The Map of global page headers. */
@@ -200,6 +202,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /** The application TemplateService. */
     private MessagesMapService messagesMapService;
 
+    /** Flag indicating whether Click is running on Google App Engine. */
+    private boolean onGoogleAppEngine = false;
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -213,6 +218,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         Validate.notNull(servletContext, "Null servletContext parameter");
 
         this.servletContext = servletContext;
+
+        onGoogleAppEngine = servletContext.getServerInfo().startsWith(GOOGLE_APP_ENGINE);
 
         // Set default logService early to log errors when services fail.
         logService = new ConsoleLogService();
@@ -1307,43 +1314,44 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     private void deployFiles(Element rootElm) throws Exception {
 
-        boolean isResourcesDeployable = isResourcesDeployable();
+        boolean isResourcesDeployable = onGoogleAppEngine ? false : isResourcesDeployable();
 
         if (isResourcesDeployable) {
-            try {
-                if (getLogService().isTraceEnabled()) {
-                    String deployTarget = servletContext.getRealPath("/");
-                    getLogService().trace("resource deploy folder: "
-                        + deployTarget);
-                }
-
-                deployControls(getResourceRootElement("/click-controls.xml"));
-                deployControls(getResourceRootElement("/extras-controls.xml"));
-                deployControls(rootElm);
-                deployControlSets(rootElm);
-                deployResourcesOnClasspath();
-
-            } catch (Error ignore) {
-                // Google App Engine (GAE) can indicate that resources are deployable
-                // when they are not, and will throw an error if restricted classes
-                // such as FileOutputStream are accessed. We will log a warning
-                // to indicate that resources could not be deployed.
-                isResourcesDeployable = false;
+            if (getLogService().isTraceEnabled()) {
+                String deployTarget = servletContext.getRealPath("/");
+                getLogService().trace("resource deploy folder: "
+                    + deployTarget);
             }
+
+            deployControls(getResourceRootElement("/click-controls.xml"));
+            deployControls(getResourceRootElement("/extras-controls.xml"));
+            deployControls(rootElm);
+            deployControlSets(rootElm);
+            deployResourcesOnClasspath();
         }
 
         if (!isResourcesDeployable) {
-            String msg = "could not deploy Click resources to the"
-                + " 'click' web folder.\nThis can occur if the call to"
-                + " ServletContext.getRealPath(\"/\") returns null, which means"
-                + " the web application cannot determine the file system path"
-                + " to deploy files to. Another common problem is if the web"
-                + " application is not allowed to write to the file"
-                + " system.\nTo resolve this issue please see the Click user-guide:"
-                + " http://click.apache.org/docs/user-guide/html/ch04s03.html#deploying-restricted-env"
-                + " \nIgnore this warning in the future once you have settled on a"
-                + " deployment strategy";
-            getLogService().warn(msg);
+
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            if (onGoogleAppEngine) {
+                buffer.append("Google App Engine does not support deploying");
+                buffer.append(" resources to the 'click' web folder.\n");
+
+            } else {
+                buffer.append("could not deploy Click resources to the 'click'");
+                buffer.append(" web folder.\nThis can occur if the call to");
+                buffer.append(" ServletContext.getRealPath(\"/\") returns null, which means");
+                buffer.append(" the web application cannot determine the file system path");
+                buffer.append(" to deploy files to. This issue also occurs if the web");
+                buffer.append(" application is not allowed to write to the file");
+                buffer.append(" system.\n");
+            }
+
+            buffer.append("To resolve this issue please see the Click user-guide:");
+            buffer.append(" http://click.apache.org/docs/user-guide/html/ch04s03.html#deploying-restricted-env");
+            buffer.append(" \nIgnore this warning once you have settled on a");
+            buffer.append(" deployment strategy");
+            getLogService().warn(buffer.toString());
         }
     }
 
@@ -1729,9 +1737,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     private void loadCharset(Element rootElm) {
-        String charset = rootElm.getAttribute("charset");
-        if (charset != null && charset.length() > 0) {
-            this.charset = charset;
+        String localCharset = rootElm.getAttribute("charset");
+        if (localCharset != null && localCharset.length() > 0) {
+            this.charset = localCharset;
         }
     }
 
@@ -1759,6 +1767,18 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         List fileList = new ArrayList();
 
         Set resources = servletContext.getResourcePaths("/");
+        if (onGoogleAppEngine) {
+            // resources could be immutable so create copy
+            Set tempResources = new HashSet();
+
+            // Load the two GAE preconfigured automapped folders
+            tempResources.addAll(servletContext.getResourcePaths("/page"));
+            tempResources.addAll(servletContext.getResourcePaths("/pages"));
+            tempResources.addAll(resources);
+
+            // assign copy to resources
+            resources = Collections.unmodifiableSet(tempResources);
+        }
 
         // Add all resources within web application
         for (Iterator i = resources.iterator(); i.hasNext();) {

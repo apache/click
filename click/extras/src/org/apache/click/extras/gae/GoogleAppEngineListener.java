@@ -24,8 +24,13 @@ import javax.servlet.ServletContextListener;
 import ognl.OgnlRuntime;
 
 /**
- * Provides Google App Engine (GAE) support for Click applications.
- * <p/>
+ * Provides <a href="http://code.google.com/appengine/docs/java/overview.html" class="external" target="_blank">Google App Engine</a>
+ * (GAE) support for Click applications. GAE is a free Java hosting service
+ * provided by Google that allows you to quickly and easily make your Click
+ * applications available online.
+ *
+ * <h3>Configuration</h3>
+ *
  * To deploy Click applications to GAE, you need to set the
  * <tt>GoogleAppEngineListener</tt> listener in your <tt>web.xml</tt>:
  *
@@ -74,6 +79,31 @@ import ognl.OgnlRuntime;
  *
  * &lt;/appengine-web-app&gt; </pre>
  *
+ * <h3>Performance Filter</h3>
+ *
+ * If you use Click's {@link org.apache.click.extras.filter.PerformanceFilter}
+ * you should also exclude the following static files from GAE, so that
+ * PerformanceFilter can set their <tt>expiry headers</tt>:
+ * <tt>*.css</tt>, <tt>*.js</tt>, <tt>*.png</tt> and <tt>*.gif</tt>. For example:
+ *
+ * <pre class="codeHtml">
+ * &lt;?xml version="1.0" encoding="utf-8"?&gt;
+ * &lt;appengine-web-app xmlns="http://appengine.google.com/ns/1.0"&gt;
+ *
+ *     ...
+ *
+ *     &lt;!-- Exclude the following files from being served as static files by GAE,
+ *             as they will be processed by Click's PerformanceFilter. --&gt;
+ *     &lt;static-files&gt;
+ *         &lt;<span class="blue">exclude</span> path="<span class="red">**.htm</span>" /&gt;
+ *         &lt;<span class="blue">exclude</span> path="<span class="red">**.css</span>" /&gt;
+ *         &lt;<span class="blue">exclude</span> path="<span class="red">**.js</span>" /&gt;
+ *         &lt;<span class="blue">exclude</span> path="<span class="red">**.png</span>" /&gt;
+ *         &lt;<span class="blue">exclude</span> path="<span class="red">**.gif</span>" /&gt;
+ *     &lt;/static-files&gt;
+ *
+ * &lt;/appengine-web-app&gt; </pre>
+ *
  * <h3>File Uploads</h3>
  *
  * GAE does not allow web application to write to files on disk. This poses a
@@ -101,32 +131,76 @@ import ognl.OgnlRuntime;
  *    &lt;/file-upload-service&gt;
  * &lt;/click-app&gt; </pre>
  *
- * <h3>Performance Filter</h3>
+ * <h2>Limitations</h2>
  *
- * If you use Click's {@link org.apache.click.extras.filter.PerformanceFilter}
- * you should also exclude the following static files from GAE, so that
- * PerformanceFilter can set their <tt>expiry headers</tt>:
- * <tt>*.css</tt>, <tt>*.js</tt>, <tt>*.png</tt> and <tt>*.gif</tt>. For example:
+ * <h3>Page Automapping</h3>
+ * GAE does not always adhere to the Servlet specification. One of the areas that affects
+ * Click directly is the <a href="../../../../../../user-guide/html/ch04s02.html#application-automapping">automatic mapping</a>
+ * of Page templates to page classes. GAE does not implement the ServletContext
+ * method <tt>getResourcePaths("/")</tt>. Instead of returning the resources under
+ * the web-app root, it returns an empty set. Click needs these resources to map
+ * between page templates and classes, and since GAE does not return anything,
+ * it isn't possible to perform the automapping.
+ * <p/>
+ * Fortunately GAE does work properly for resources under subfolders of the web-app root.
+ * For example if the folders <span class="blue">/path</span> or <span class="blue">/paths</span>
+ * exists under the web-app root, calling <tt>getResourcePaths("/path")</tt> or
+ * <tt>getResourcePaths("/paths")</tt> will return the set of resources contained
+ * under these folders.
+ * <p/>
+ * Taking advantage of the fact that GAE supports subfolders, Click
+ * provides automapping support to GAE applications with a slight caveat: Page
+ * templates <b>must</b> be placed under the folders <span class="blue">/path</span>
+ * or <span class="blue">/paths</span> of the web-app root. Click explicitly
+ * maps these two folders if it is running on GAE, other subfolders are not supported.
+ * <p/>
+ * <b>Please note:</b> manual mapping works as expected.
+ * <p/>
+ * Below is an automapping example for the folder <span class="blue">/page</span>
+ * (note the page template <tt>index.htm</tt> is not placed under the folder
+ * <tt>/page</tt>, and has to be mapped manually):
  *
- * <pre class="codeHtml">
- * &lt;?xml version="1.0" encoding="utf-8"?&gt;
- * &lt;appengine-web-app xmlns="http://appengine.google.com/ns/1.0"&gt;
+ * <pre class="codeConfig">
+ * /index.htm
+ * <span class="blue">/page</span>/search.htm
+ * <span class="blue">/page</span>/customer/customer-edit.htm
+ * <span class="blue">/page</span>/customer/customer-search.htm </pre>
  *
- *     ...
+ * The Page classes are placed under the <span class="blue">page</span> package:
  *
- *     &lt;!-- Exclude the following files from being served as static files by GAE,
- *             as they will be processed by Click's PerformanceFilter. --&gt;
- *     &lt;static-files&gt;
- *         &lt;<span class="blue">exclude</span> path="<span class="red">**.htm</span>" /&gt;
- *         &lt;<span class="blue">exclude</span> path="<span class="red">**.css</span>" /&gt;
- *         &lt;<span class="blue">exclude</span> path="<span class="red">**.js</span>" /&gt;
- *         &lt;<span class="blue">exclude</span> path="<span class="red">**.png</span>" /&gt;
- *         &lt;<span class="blue">exclude</span> path="<span class="red">**.gif</span>" /&gt;
- *     &lt;/static-files&gt;
+ * <pre class="codeConfig">
+ * com.mycorp<span class="blue">.page</span>.IndexPage.java
+ * com.mycorp<span class="blue">.page</span>.SearchPage.java
+ * com.mycorp<span class="blue">.page</span>.customer.CustomerEditPage.java
+ * com.mycorp<span class="blue">.page</span>.customer.CustomerSearchPage.java </pre>
  *
- * &lt;/appengine-web-app&gt; </pre>
+ * Lastly define the <tt>click.xml</tt> to automatically map page templates
+ * and classes under the package <tt>com.mycorp</tt>:
  *
- * <h3>Deployment issues</h3>
+ * <pre class="prettyprint">
+ * &lt;click-app&gt;
+ *
+ *   &lt;pages package="com.mycorp"&gt;
+ *     &lt;page path="/index.htm" classname="page.IndexPage"/&gt;
+ *   &lt;/pages&gt;
+ *
+ *   &lt;mode value="production"/&gt;
+ *
+ * &lt;/click-app&gt; </pre>
+ *
+ * <b>Please note:</b> automapping will work in a GAE <tt>development</tt> environment
+ * but not when hosted on the server. GAE uses the Jetty server for local development
+ * which properly implements <tt>getResourcePaths("/")</tt>.
+ * <p/>
+ * <b>Also note:</b> when running Click on GAE in development mode, it will appear
+ * that automapping is working when it really isn't. This is because
+ * Click uses a variety of ways to detect new page templates in development mode.
+ * So even though automapping failed, Click still serves page requests because it
+ * used an alternative way of looking up the template template. While these techniques
+ * are useful for development modes it impacts performance and is not used
+ * in production mode.
+ *
+ * <h3>Deployment limitation</h3>
  *
  * On application startup, Click automatically deploys all its JavaScript, CSS
  * and image resources to the "<tt>/click</tt>" folder in the root directory of
