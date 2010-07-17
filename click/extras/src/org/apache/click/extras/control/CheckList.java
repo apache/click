@@ -926,29 +926,30 @@ public class CheckList extends Field {
         }
 
         // Load the selected items.
-        this.selectedValues = new ArrayList<String>();
+        List<String> localSelectedValues = new ArrayList<String>();
 
-        String[] values = context.getRequestParameterValues(getName());
+        String[] parameterValues = context.getRequestParameterValues(getName());
 
-        if (values != null) {
-            for (String value1 : values) {
-                this.selectedValues.add(value1);
+        if (parameterValues != null) {
+            for (String parameterValue : parameterValues) {
+                localSelectedValues.add(parameterValue);
             }
         }
 
         if (isSortable()) {
-            String[] order = context.getRequest().getParameterValues(
+            String[] orderParameterValues = context.getRequest().getParameterValues(
                     getName() + "_order");
-            if (order != null) {
-                this.sortorder = new ArrayList<String>(order.length);
-                for (String value : order) {
-                    if (value != null) {
-                        sortorder.add(value);
+            if (orderParameterValues != null) {
+                this.sortorder = new ArrayList<String>(orderParameterValues.length);
+                for (String orderParameterValue : orderParameterValues) {
+                    if (orderParameterValue != null) {
+                        sortorder.add(orderParameterValue);
                     }
                 }
-                sortOptions(order);
+                sortOptions(orderParameterValues);
             }
         }
+        setSelectedValues(localSelectedValues);
     }
 
     /**
@@ -963,12 +964,12 @@ public class CheckList extends Field {
         final List<Option> orderList = new ArrayList<Option>(options.size());
 
         for (int i = 0, size = order.length; i < size; i++) {
-            String value = order[i];
-            if (value != null) {
+            String orderValue = order[i];
+            if (orderValue != null) {
                 int oI = -1;
                 for (int j = 0, jSize = options.size(); j < jSize; j++) {
                     Option optT = options.get(j);
-                    if (value.equals(optT.getValue())) {
+                    if (orderValue.equals(optT.getValue())) {
                         oI = j;
                     }
                 }

@@ -773,7 +773,7 @@ public class PickList extends Field {
     public void bindRequestValue() {
 
         // Load the selected items.
-        List localSelectedValues = new ArrayList<String>();
+        List<String> localSelectedValues = new ArrayList<String>();
 
         String[] parameterValues =
             getContext().getRequest().getParameterValues(getName());
