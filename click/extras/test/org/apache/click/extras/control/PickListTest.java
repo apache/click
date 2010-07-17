@@ -21,11 +21,23 @@ package org.apache.click.extras.control;
 import junit.framework.TestCase;
 import org.apache.click.MockContainer;
 import org.apache.click.MockContext;
+import org.apache.commons.lang.StringUtils;
 
-public class TabbedFormTest extends TestCase {
+/**
+ * Provides tests for the PickList control.
+ */
+public class PickListTest extends TestCase {
 
-    public void testGetHeadElements() {
-        // TabbedForm uses Velocity to render its template. In this test we start a
+    /**
+     * Check that PickList style attribute is only rendered once.
+     *
+     * CLK-712: In Click 2.2.0 the class attribute was removed before rendering the
+     * pickList attributes, after which the class attribute was added again.
+     * This could cause concurrent modification exceptions if the PickList is rendered
+     * by multiple threads.
+     */
+    public void testClassAttributeRenderin() {
+        // PickList uses Velocity to render its template. In this test we start a
         // MockContainer which also configures Velocity
         MockContainer container = new MockContainer("web");
         container.start();
@@ -36,13 +48,21 @@ public class TabbedFormTest extends TestCase {
         MockContext.initContext(container.getServletConfig(),
             container.getRequest(), container.getResponse(), container.getClickServlet());
 
-        TabbedForm form = new TabbedForm("form");
+        PickList pickList = new PickList("pickList");
 
-        assertTrue(form.toString().indexOf("<form") > 0);
-        assertTrue(form.getHeadElements().toString().indexOf("/control.js") > 0);
-        assertTrue(form.getHeadElements().toString().indexOf("/control.css") > 0);
-        assertTrue(form.getHeadElements().toString().indexOf("/extras-control.css") > 0);
-        
+        pickList.addStyleClass("white");
+
+        String pickListStr = pickList.toString();
+
+        // Perform checks within the first 60 characters
+        pickListStr = pickListStr.substring(0, 60);
+
+        // Check that class attribute was rendered
+        assertEquals(1, StringUtils.countMatches(pickListStr, "class=\"white picklist\""));
+
+        // Check that class attribute was rendered once
+        assertEquals(1, StringUtils.countMatches(pickListStr, "class="));
+
         container.stop();
     }
 }

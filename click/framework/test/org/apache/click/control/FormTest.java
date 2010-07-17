@@ -23,6 +23,7 @@ import junit.framework.TestCase;
 import org.apache.click.MockContext;
 import org.apache.click.Page;
 import org.apache.click.servlet.MockRequest;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Test Form behavior.
@@ -816,6 +817,35 @@ public class FormTest extends TestCase {
         assertSame(child2, form.getControls().get(1));
         assertSame(child1, form.getButtonList().get(0));
         assertSame(child2, form.getButtonList().get(1));
+    }
+
+    /**
+     * Check that Label style attribute is not rendered on the parent TD element.
+     *
+     * CLK-712: In Click 2.2.0 the label style attribute was removed before rendering the
+     * label attributes, after which the label style attribute was added again.
+     * This could cause concurrent modification exceptions if the Form is rendered
+     * by multiple threads.
+     */
+    public void testLabelStyle() {
+        Form form = new Form("form");
+
+        Label label = new Label("label");
+        form.add(label);
+
+        // Parent hint should be rendered as the TD style
+        label.setParentStyleHint("color: white;");
+
+        // Label style should not be rendered
+        label.setStyle("color", "black");
+
+        String formStr = form.toString();
+
+        // Check that parentStyleHint style was rendered
+        assertEquals(1, StringUtils.countMatches(formStr, "style=\"color: white;\""));
+
+        // Check that the label style was not rendered
+        assertEquals(1, StringUtils.countMatches(formStr, "style="));
     }
 
     /**
