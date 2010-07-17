@@ -905,27 +905,29 @@ public class Select extends Field {
     @Override
     public void bindRequestValue() {
 
-        selectedValues = new ArrayList<String>(5);
+        List localSelectedValues = new ArrayList<String>(5);
 
         // Process single item select case.
         if (!isMultiple()) {
             // Load the selected item.
             value = getContext().getRequestParameter(getName());
-            selectedValues.add(value);
+            localSelectedValues.add(value);
 
         // Process the multiple item select case.
         } else {
 
             // Load the selected items.
-            String[] values =
+            String[] parameterValues =
                 getContext().getRequest().getParameterValues(getName());
 
-            if (values != null) {
-                for (int i = 0; i < values.length; i++) {
-                    selectedValues.add(values[i]);
+            if (parameterValues != null) {
+                for (String parameterValue : parameterValues) {
+                    localSelectedValues.add(parameterValue);
                 }
             }
         }
+
+        setSelectedValues(localSelectedValues);
     }
 
     /**

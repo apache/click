@@ -773,16 +773,18 @@ public class PickList extends Field {
     public void bindRequestValue() {
 
         // Load the selected items.
-        this.selectedValues = new ArrayList<String>();
+        List localSelectedValues = new ArrayList<String>();
 
-        String[] values =
+        String[] parameterValues =
             getContext().getRequest().getParameterValues(getName());
 
-        if (values != null) {
-            for (int i = 0; i < values.length; i++) {
-                selectedValues.add(values[i]);
+        if (parameterValues != null) {
+            for (String parameterValue : parameterValues) {
+                localSelectedValues.add(parameterValue);
             }
         }
+
+        setSelectedValues(localSelectedValues);
     }
 
     /**
@@ -820,14 +822,14 @@ public class PickList extends Field {
      */
     @Override
     public void render(HtmlStringBuffer buffer) {
-        List<Option> optionList      = getOptionList();
-        List<String> selectedValues  = getSelectedValues();
+        List<Option> localOptionList      = getOptionList();
+        List<String> localSelectedValues  = getSelectedValues();
         List<Map<String, Object>> options = new ArrayList<Map<String, Object>>();
 
-        for (Option option : optionList) {
+        for (Option option : localOptionList) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("option", option);
-            map.put("selected", new Boolean(selectedValues.contains(option.getValue())));
+            map.put("selected", localSelectedValues.contains(option.getValue()));
             options.add(map);
         }
 
@@ -869,12 +871,12 @@ public class PickList extends Field {
         model.put("unselectedLabel", unselectedLabel);
         model.put("format", new Format());
         if (getSize() != 0) {
-            model.put("size", new Integer(getSize()));
+            model.put("size", getSize());
         }
-        model.put("height", new Integer(getHeight()));
-        model.put("valid", new Boolean(isValid()));
-        model.put("disabled", new Boolean(isDisabled()));
-        model.put("readOnly", new Boolean(isReadonly()));
+        model.put("height", getHeight());
+        model.put("valid", isValid());
+        model.put("disabled", isDisabled());
+        model.put("readOnly", isReadonly());
 
         renderTemplate(buffer, model);
     }
