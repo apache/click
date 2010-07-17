@@ -905,7 +905,7 @@ public class Select extends Field {
     @Override
     public void bindRequestValue() {
 
-        List localSelectedValues = new ArrayList<String>(5);
+        List<String> localSelectedValues = new ArrayList<String>(5);
 
         // Process single item select case.
         if (!isMultiple()) {
