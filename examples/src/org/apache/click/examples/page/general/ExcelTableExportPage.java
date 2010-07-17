@@ -22,11 +22,11 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.click.Page;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.Column;
 import org.apache.click.control.PageLink;
 import org.apache.click.control.Table;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.examples.control.exporter.ExcelTableExporter;
 import org.apache.click.examples.control.exporter.ExportTable;
 import org.apache.click.examples.domain.Customer;
@@ -73,23 +73,27 @@ public class ExcelTableExportPage extends BorderPage {
         setupExporter(table3);
         table3.setExportAttachment(ExportTable.EXPORTER_INLINE);
 
+        // A simple caching dataProvider that only retrieves customers once
+        DataProvider dataProvider = new DataProvider() {
+
+            List<Customer> customers;
+
+            public List<Customer> getData() {
+                if (customers == null) {
+                    customers = customerService.getCustomersSortedByName(10);
+                }
+                return customers;
+            }
+        };
+
         addControl(table1);
+        table1.setDataProvider(dataProvider);
         addControl(table2);
+        table2.setDataProvider(dataProvider);
         addControl(table3);
+        table3.setDataProvider(dataProvider);
+
         addControl(editLink);
-    }
-
-    // Event Handlers ---------------------------------------------------------
-
-    /**
-     * @see Page#onRender()
-     */
-    @Override
-    public void onRender() {
-        List<Customer> customers = customerService.getCustomersSortedByName(10);
-        table1.setRowList(customers);
-        table2.setRowList(customers);
-        table3.setRowList(customers);
     }
 
     //  Private Methods --------------------------------------------------------
