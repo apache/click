@@ -143,15 +143,16 @@
   <menu label="Ajax" path="#" imageSrc="/assets/images/lightning.png">
     <menu label="Ajax Demo - Behavior" path="ajax/ajax-behavior.htm"/>
     <menu label="Ajax Demo - Page Action" path="ajax/page-action.htm"/>
+    <menu label="Ajax Fallback Demo" path="ajax/ajax-fallback.htm"/>
     <menu separator="true"/>
-    <menu label="JavaScript AJAX Demo" path="ajax/compare/javascript-ajax-demo.htm"/>
-    <menu label="jQuery AJAX Demo" path="ajax/compare/jquery-ajax-demo.htm"/>
-    <menu label="Prototype AJAX Demo" path="ajax/compare/prototype-ajax-demo.htm"/>
+    <menu label="JavaScript Ajax Demo" path="ajax/compare/javascript-ajax-demo.htm"/>
+    <menu label="jQuery Ajax Demo" path="ajax/compare/jquery-ajax-demo.htm"/>
+    <menu label="Prototype Ajax Demo" path="ajax/compare/prototype-ajax-demo.htm"/>
     <menu separator="true"/>
-    <menu label="Table AJAX Demo" path="ajax/table/table-ajax.htm"/>
+    <menu label="Table Ajax Demo" path="ajax/table/table-ajax.htm"/>
     <menu separator="true"/>
-    <menu label="Simple Form AJAX Demo" path="ajax/form/simple-form-ajax.htm"/>
-    <menu label="Advanced Form AJAX Demo" path="ajax/form/advanced-form-ajax.htm"/>
+    <menu label="Simple Form Ajax Demo" path="ajax/form/simple-form-ajax.htm"/>
+    <menu label="Advanced Form Ajax Demo" path="ajax/form/advanced-form-ajax.htm"/>
     <menu separator="true"/>
     <menu label="XML response" path="ajax/content/xml-response.htm"/>
     <menu label="JSON response" path="ajax/content/json-response.htm"/>
