@@ -51,18 +51,21 @@ public class PickListTest extends TestCase {
         PickList pickList = new PickList("pickList");
 
         pickList.addStyleClass("white");
+        pickList.setAttribute("title", "test");
 
         String pickListStr = pickList.toString();
 
-        // Perform checks within the first 60 characters
-        pickListStr = pickListStr.substring(0, 60);
+        // Perform checks within the first 100 characters
+        pickListStr = pickListStr.substring(0, 100);
 
         // Check that class attribute was rendered
         assertEquals(1, StringUtils.countMatches(pickListStr, "class=\"white picklist\""));
 
+        // Check that the title attribute was rendered
+        assertEquals(1, StringUtils.countMatches(pickListStr, "title=\"test\""));
+
         // Check that class attribute was rendered once
         assertEquals(1, StringUtils.countMatches(pickListStr, "class="));
-
         container.stop();
     }
 }
