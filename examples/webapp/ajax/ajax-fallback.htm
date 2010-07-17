@@ -1,0 +1,71 @@
+<!--
+#* Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.*#
+-->
+
+This example demonstrates how to support both an Ajax and non-Ajax <tt>action</tt>
+event. If JavaScript is enabled an Ajax request is made, if JavaScript is disabled
+a normal HTTP request is made. On the server an <tt>AjaxBehavior</tt> handles the
+Ajax request while an <tt>ActionListener</tt> handles the non-Ajax event.
+
+<p/>
+
+Click $link to call the server (disable the browser JavaScript to see the fallback
+behavior in action)
+
+<div id="result">
+    <!-- The AJAX and non-AJAX response will be displayed here -->
+    #if($msg)
+      <p class="infoMsg">
+        $msg
+      <p/>
+    #end
+</div>
+
+<script type="text/javascript" src="$context/assets/js/jquery-1.4.2.js"></script>
+
+<script type="text/javascript">
+    // This example uses jQuery for making Ajax requests:
+    // http://api.jquery.com/jQuery.get/
+    // http://api.jquery.com/jQuery.ajax/
+
+    // Register a function that is invoked as soon as the DOM is loaded
+    jQuery(document).ready(function() {
+
+        // Register a 'click' handler that makes an Ajax request
+        jQuery("#link-id").click(function(event){
+            // Make ajax request
+            makeRequest();
+
+            // Prevent the default browser behavior of navigating to the link
+            return false;
+        })
+    })
+
+    function makeRequest() {
+        var link = jQuery('#link-id');
+        var extraData = link.attr('id') + '=1';
+        var url = link.attr('href');
+        jQuery.get(url, extraData, function(data) {
+            // 'data' is the response received from the server
+
+            // We select the div element with the ID 'result' and set its
+            // content to the server response
+            jQuery("#result").html("<p class='infoMsg'>" + data + "</p>");
+        });
+    }
+</script>
