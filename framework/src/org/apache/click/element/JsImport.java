@@ -18,6 +18,7 @@
  */
 package org.apache.click.element;
 
+import java.util.Map;
 import org.apache.click.Context;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -215,13 +216,13 @@ public class JsImport extends ResourceElement {
         String src = getSrc();
         renderResourcePath(buffer, "src", src);
 
-        // Temporarily remove src attribute while other attributes are rendered
-        setAttribute("src", null);
-
-        appendAttributes(buffer);
-
-        // Restore src attribute
-        setAttribute("src", src);
+        Map<String, String> localAttributes = getAttributes();
+        for (String name : localAttributes.keySet()) {
+            if (!name.equals("id") && !name.equals("src")) {
+                Object value = localAttributes.get(name);
+                buffer.appendAttributeEscaped(name, value);
+            }
+        }
 
         buffer.closeTag();
 
