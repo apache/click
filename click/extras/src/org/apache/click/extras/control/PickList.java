@@ -837,14 +837,10 @@ public class PickList extends Field {
         HtmlStringBuffer attributesBuffer = new HtmlStringBuffer();
 
         // Add the CSS class 'picklist' to buffer
-        String cssClass = null;
         if (hasAttribute("class")) {
-            cssClass = getAttribute("class");
+            String cssClass = getAttribute("class");
             attributesBuffer.append("class=\"");
             if (cssClass != null) {
-                // If class attribute exists, temporarily remove it
-                setAttribute("class", null);
-
                 attributesBuffer.append(cssClass).append(" ");
             }
             attributesBuffer.append("picklist\"");
@@ -853,12 +849,13 @@ public class PickList extends Field {
         }
 
         if (hasAttributes()) {
-            attributesBuffer.appendAttributes(getAttributes());
-        }
-
-        // Restore class attribute
-        if (cssClass != null) {
-            setAttribute("class", cssClass);
+            Map<String, String> localAttributes = getAttributes();
+            for (String attrName : localAttributes.keySet()) {
+                if (!attrName.equals("id") && !attrName.equals("class")) {
+                    Object attrValue = localAttributes.get(attrName);
+                    attributesBuffer.appendAttributeEscaped(attrName, attrValue);
+                }
+            }
         }
 
         Map<String, Object> model = new HashMap<String, Object>();

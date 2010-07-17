@@ -18,6 +18,7 @@
  */
 package org.apache.click.element;
 
+import java.util.Map;
 import org.apache.click.Context;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -216,13 +217,13 @@ public class CssImport extends ResourceElement {
         String href = getHref();
         renderResourcePath(buffer, "href", href);
 
-        // Temporarily remove href attribute while other attributes are rendered
-        setAttribute("href", null);
-
-        appendAttributes(buffer);
-
-        // Restore href attribute
-        setAttribute("href", href);
+        Map<String, String> localAttributes = getAttributes();
+        for (String name : localAttributes.keySet()) {
+            if (!name.equals("id") && !name.equals("href")) {
+                Object value = localAttributes.get(name);
+                buffer.appendAttributeEscaped(name, value);
+            }
+        }
 
         buffer.elementEnd();
 

@@ -2509,17 +2509,12 @@ public class Form extends AbstractContainer {
                     }
 
                     if (label.hasAttributes()) {
-                        //Temporarily remove the style attribute
-                        String tempStyle = null;
-                        if (label.hasAttribute("style")) {
-                            tempStyle = label.getAttribute("style");
-                            label.setAttribute("style", null);
-                        }
-                        buffer.appendAttributes(label.getAttributes());
-
-                        //Put style back in attribute map
-                        if (tempStyle != null) {
-                            label.setAttribute("style", tempStyle);
+                        Map<String, String> labelAttributes = label.getAttributes();
+                        for (String labelAttrName : labelAttributes.keySet()) {
+                            if (!labelAttrName.equals("id") && !labelAttrName.equals("style")) {
+                                Object labelAttrValue = labelAttributes.get(labelAttrName);
+                                buffer.appendAttributeEscaped(labelAttrName, labelAttrValue);
+                            }
                         }
                     }
                     buffer.append(">");
