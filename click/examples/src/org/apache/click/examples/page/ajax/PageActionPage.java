@@ -48,11 +48,11 @@ public class PageActionPage extends BorderPage {
 
     // Note the pageAction method signature: a no-arg method returning a Partial
     public Partial onLinkClicked() {
-        // Formatted date instance that will be added to the
+        // Formatted date instance that will be returned to the browser
         String now = format.currentDate("MMM, yyyy dd HH:MM:ss");
 
-        String msg = "PageAction method <tt>onLinkClicked()</tt> invoked at: "
-            + now;
+        String msg = "PageAction method <tt>onLinkClicked()</tt> invoked at: " + now;
+
         // Return a partial containing the message
         return new Partial(msg, Partial.HTML);
     }
