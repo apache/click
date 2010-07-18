@@ -85,12 +85,12 @@
     <para>The Page class provides a
     <ulink url="../../click-api/org/apache/click/Page.html#model">model</ulink>
     attribute which is used to hold all the objects that are rendered in the
-    page's Velocity template. The model may also contain
+    page Velocity template. The model may also contain
     <ulink url="../../click-api/org/apache/click/Control.html">Control</ulink>
     objects, which provide user interface controls on the Page.
     </para>
 
-    <para>Pages also have an associated
+    <para>Pages also provides access to the
     <ulink url="../../click-api/org/apache/click/Context.html">Context</ulink>
     object which references all the javax.servlet objects associated with the
     request. When programming in Click you use the Context object to access
@@ -156,7 +156,7 @@
     </figure>
 
     <para>Stepping through this GET request sequence, a new Page instance is
-    created and the attributes for the Page are set (context, format, headers,
+    created and the attributes for the Page are set (format, headers,
     path). Next, request parameter values are bound to any matching public
     Page variables.
     </para>
