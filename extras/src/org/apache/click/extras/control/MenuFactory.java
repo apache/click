@@ -301,6 +301,10 @@ public class MenuFactory implements Serializable {
 
         Menu rootMenu = loadFromMenuXml(name, fileName, accessController, menuClass);
 
+        // Retrieve headElements to guard against race conditions when initializing
+        // menus from multiple threads. CLK-713
+        rootMenu.getHeadElements();
+
         ServletContext servletContext = Context.getThreadLocalContext().getServletContext();
         ConfigService configService = ClickUtils.getConfigService(servletContext);
 

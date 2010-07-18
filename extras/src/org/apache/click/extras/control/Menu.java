@@ -565,7 +565,7 @@ public class Menu extends AbstractControl {
      * @return true if the menu contains any child submenus
      */
     public boolean hasChildren() {
-        if (children == null || children.size() == 0) {
+        if (children == null || children.isEmpty()) {
             return false;
         }
         return true;
@@ -688,16 +688,16 @@ public class Menu extends AbstractControl {
             return label;
         }
 
-        String name = getName();
+        String localName = getName();
 
-        if (name != null) {
+        if (localName != null) {
             Menu root = findRootMenu();
 
             // Use root menu messages to lookup the label
-            String i18nLabel = root.getMessage(name + ".label");
+            String i18nLabel = root.getMessage(localName + ".label");
 
             if (i18nLabel == null) {
-                i18nLabel = ClickUtils.toLabel(name);
+                i18nLabel = ClickUtils.toLabel(localName);
             }
 
             // NOTE: don't cache the i18nLabel, since menus are often cached
@@ -802,10 +802,10 @@ public class Menu extends AbstractControl {
             selected = true;
 
         } else {
-            String path = getPath();
-            if (path != null) {
-                path = path.startsWith("/") ? path : "/" + path;
-                selected = path.equals(pageToView);
+            String localPath = getPath();
+            if (localPath != null) {
+                localPath = localPath.startsWith("/") ? localPath : "/" + localPath;
+                selected = localPath.equals(pageToView);
             } else {
                 selected = false;
             }
@@ -966,15 +966,15 @@ public class Menu extends AbstractControl {
             return title;
         }
 
-        String name = getName();
+        String localName = getName();
 
-        if (name != null) {
+        if (localName != null) {
             // Use root menu messages to lookup the title
             Menu root = findRootMenu();
 
             // NOTE: don't cache the i18nTitle, since menus are often cached
             // statically
-            return root.getMessage(name + ".title");
+            return root.getMessage(localName + ".title");
         }
 
         return null;
@@ -1003,21 +1003,21 @@ public class Menu extends AbstractControl {
      * @return the menu anchor HREF attribute
      */
     public String getHref() {
-        String path = getPath();
+        String localPath = getPath();
         if (isExternal()) {
-            return path;
+            return localPath;
         }
 
-        if ("#".equals(path)) {
-            return getContext().getResponse().encodeURL(path);
+        if ("#".equals(localPath)) {
+            return getContext().getResponse().encodeURL(localPath);
 
         } else {
             Context context = getContext();
-            if (path == null) {
+            if (localPath == null) {
                 // Guard against rendering "null" in the href
-                path = "";
+                localPath = "";
             }
-            return context.getResponse().encodeURL(context.getRequest().getContextPath() + "/" + path);
+            return context.getResponse().encodeURL(context.getRequest().getContextPath() + "/" + localPath);
         }
     }
 
@@ -1057,14 +1057,10 @@ public class Menu extends AbstractControl {
             jsImport = new JsImport("/click/menu-fix-ie6.js", versionIndicator);
             jsImport.setConditionalComment(JsImport.IF_LESS_THAN_IE7);
             headElements.add(jsImport);
-        }
 
-        // Note: the setup script is recreated and checked if it is contained in
-        // the headElement. This check cater for when the menu is used by another
-        // Control using the fly-weight pattern eg. FormTable.
-        JsScript script = new JsScript();
-        script.setId(id + "-js-setup");
-        if (!headElements.contains(script)) {
+            JsScript script = new JsScript();
+            script.setId(id + "-js-setup");
+
             // Script must be executed as soon as browser dom is ready
             script.setExecuteOnDomReady(true);
             script.setConditionalComment(JsImport.IF_LESS_THAN_IE7);
