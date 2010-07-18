@@ -1028,7 +1028,7 @@ public class Menu extends AbstractControl {
      * <ul>
      * <li><tt>click/menu.css</tt></li>
      * <li><tt>click/control.js</tt></li>
-     * <li><tt>click/menu-fix-ie6.js</tt> (fixes menu burnthrough and hover issues)</li>
+     * <li><tt>click/menu-fix-ie6.js</tt> (fixes IE6 menu burnthrough and hover issues)</li>
      * </ul>
      *
      * @see org.apache.click.Control#getHeadElements()
@@ -1059,6 +1059,9 @@ public class Menu extends AbstractControl {
             headElements.add(jsImport);
         }
 
+        // Note: the setup script is recreated and checked if it is contained in
+        // the headElement. This check cater for when the menu is used by another
+        // Control using the fly-weight pattern eg. FormTable.
         JsScript script = new JsScript();
         script.setId(id + "-js-setup");
         if (!headElements.contains(script)) {

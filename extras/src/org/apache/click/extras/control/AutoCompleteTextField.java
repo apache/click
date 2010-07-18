@@ -326,6 +326,9 @@ public abstract class AutoCompleteTextField extends TextField {
                 versionIndicator));
         }
 
+        // Note: the setup script is recreated and checked if it is contained in
+        // the headElement. This check cater for when the field is used by another
+        // Control using the fly-weight pattern eg. FormTable.
         String fieldId = getId();
         JsScript script = new JsScript();
         script.setId(fieldId + "-autocomplete");
