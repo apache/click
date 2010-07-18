@@ -877,9 +877,9 @@ public class DateField extends TextField {
         JsScript script = new JsScript();
         script.setId(fieldId + "-js-setup");
 
-        // Note the Calendar options script is recreated and checked if it
-        // is contained in the headElement. This caters for when the field is
-        // used in a fly-weight pattern such as FormTable.
+        // Note: the setup script is recreated and checked if it is contained in
+        // the headElement. This check cater for when the field is used by another
+        // Control using the fly-weight pattern eg. FormTable.
         if (!headElements.contains(script)) {
 
             // Script must be executed as soon as browser dom is ready
