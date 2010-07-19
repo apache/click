@@ -120,7 +120,7 @@ public class ActionEventDispatcher {
      *
      * @param source the source control which behaviors should be fired
      */
-    public static void dispatchBehavior(Control source) {
+    public static void dispatchBehaviors(Control source) {
         Validate.notNull(source, "Null source parameter");
 
         ActionEventDispatcher instance = getThreadLocalDispatcher();
