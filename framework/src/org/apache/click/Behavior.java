@@ -19,22 +19,21 @@
 package org.apache.click;
 
 /**
- * Behaviors are added to Controls to provide more advanced features such as
- * Ajax support.
+ * Behaviors provide a mechanism to influence how Controls behave at runtime.
+ * Behaviors are added to a Control and uses interceptor methods to decorate and
+ * enhance the source Control. Behaviors are most often used to add Ajax support
+ * to Controls.
  * <p/>
- * To handle an Ajax request, Behaviors expose a listener method,
- * {@link #onAction(org.apache.click.Control) onAction}, which Click will
- * invoke if the Behavior method {@link #isRequestTarget(org.apache.click.Context) isRequestTarget}
- * returns true.
+ * To handle an Ajax request Behavior exposes the listener method: {@link #onAction(org.apache.click.Control) onAction}.
+ * The <tt>onAction</tt> method returns a Partial response that is rendered back
+ * to the browser. Before Click invokes the <tt>onAction</tt> method it checks
+ * whether the request is targeted at the Behavior by calling the method
+ * {@link #isRequestTarget(org.apache.click.Context) Behavior.isRequestTarget()}.
+ * Click will only invoke <tt>onAction</tt> if <tt>isRequestTarget</tt> returns true.
  * <p/>
- * <b>Please note:</b> a behavior <tt>onAction</tt> method is only invoked if the
- * Control is the Ajax target, in other words,
- * {@link org.apache.click.Control#isAjaxTarget(org.apache.click.Context) isAjaxTarget}
- * must return true.
- * <p/>
- * Behaviors also provide interceptor methods for specific Control life
- * cycle events. These interceptor methods can be used to further process the
- * control or the control children.
+ * Behaviors also provide interceptor methods for specific Control life cycle events.
+ * These interceptor methods can be implemented to further process and decorate
+ * the control or its children.
  * <p/>
  * The following interceptor methods are defined:
  *
