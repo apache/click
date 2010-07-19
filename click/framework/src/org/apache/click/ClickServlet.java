@@ -1869,10 +1869,11 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Process all ajax controls and return true if the page should continue
+     * Process all Ajax controls and return true if the page should continue
      * processing, false otherwise.
      *
      * @param context the request context
+     * @param eventDispatcher the event dispatcher
      * @param controlRegistry the control registry
      * @return true if the page should continue processing, false otherwise
      */
@@ -1881,43 +1882,10 @@ public class ClickServlet extends HttpServlet {
 
         boolean continueProcessing = true;
 
-        Control ajaxTarget = null;
-
-        if (logger.isTraceEnabled()) {
-            logger.trace("   the following controls have been registered as potential Ajax targets:");
-            if (controlRegistry.hasAjaxTargetControls()) {
-                for (Control control : controlRegistry.getAjaxTargetControls()) {
-                    HtmlStringBuffer buffer = new HtmlStringBuffer();
-                    String controlClassName = ClassUtils.getShortClassName(control.getClass());
-                    buffer.append("      ").append(controlClassName);
-                    buffer.append(": name='").append(control.getName()).append("'");
-                    logger.trace(buffer.toString());
-                }
-            } else {
-                logger.trace("      *no* control has been registered");
-            }
-        }
-
-        for (Control control : controlRegistry.getAjaxTargetControls()) {
-
-            if (control.isAjaxTarget(context)) {
-                ajaxTarget = control;
-                // The first matching control will be processed. Multiple matching
-                // controls are not supported
-                break;
-            }
-        }
+        // Find the ajax target control for the Ajax request
+        Control ajaxTarget = getAjaxTarget(context, controlRegistry);
 
         if (ajaxTarget != null) {
-            if (logger.isTraceEnabled()) {
-                HtmlStringBuffer buffer = new HtmlStringBuffer();
-                buffer.append("   invoked: '");
-                buffer.append(ajaxTarget.getName()).append("' ");
-                String className = ClassUtils.getShortClassName(ajaxTarget.getClass());
-                buffer.append(className);
-                buffer.append(".isAjaxTarget() : true (target Ajax control found)");
-                logger.trace(buffer.toString());
-            }
 
             // Process the control
             if (!ajaxTarget.onProcess()) {
@@ -1938,12 +1906,6 @@ public class ClickServlet extends HttpServlet {
                 if (!eventDispatcher.hasBehaviorSourceSet()) {
                     logger.trace("   *no* behavior was registered while processing the control");
                 }
-            }
-        } else {
-
-            if (logger.isTraceEnabled()) {
-                String msg = "   *no* target control was found for Ajax request";
-                logger.trace(msg);
             }
         }
 
@@ -2196,6 +2158,61 @@ public class ClickServlet extends HttpServlet {
     }
 
     // Private methods --------------------------------------------------------
+
+    /**
+     * Find and return the Ajax target control or null if no Ajax target was found.
+     *
+     * @param context the request context
+     * @param controlRegistry the control registry
+     * @return the target Ajax target control or null if no Ajax target was found
+     */
+    private Control getAjaxTarget(Context context, ControlRegistry controlRegistry) {
+
+        Control ajaxTarget = null;
+
+        if (logger.isTraceEnabled()) {
+            logger.trace("   the following controls have been registered as potential Ajax targets:");
+            if (controlRegistry.hasAjaxTargetControls()) {
+                for (Control control : controlRegistry.getAjaxTargetControls()) {
+                    HtmlStringBuffer buffer = new HtmlStringBuffer();
+                    String controlClassName = ClassUtils.getShortClassName(control.getClass());
+                    buffer.append("      ").append(controlClassName);
+                    buffer.append(": name='").append(control.getName()).append("'");
+                    logger.trace(buffer.toString());
+                }
+            } else {
+                logger.trace("      *no* control has been registered");
+            }
+        }
+
+        for (Control control : controlRegistry.getAjaxTargetControls()) {
+
+            if (control.isAjaxTarget(context)) {
+                ajaxTarget = control;
+                // The first matching control will be processed. Multiple matching
+                // controls are not supported
+                break;
+            }
+        }
+
+        if (logger.isTraceEnabled()) {
+            if (ajaxTarget == null) {
+                String msg = "   *no* target control was found for Ajax request";
+                logger.trace(msg);
+
+            } else {
+                HtmlStringBuffer buffer = new HtmlStringBuffer();
+                buffer.append("   invoked: '");
+                buffer.append(ajaxTarget.getName()).append("' ");
+                String className = ClassUtils.getShortClassName(ajaxTarget.getClass());
+                buffer.append(className);
+                buffer.append(".isAjaxTarget() : true (target Ajax control found)");
+                logger.trace(buffer.toString());
+            }
+        }
+
+        return ajaxTarget;
+    }
 
     /**
      * Log the request parameter names and values.
