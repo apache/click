@@ -80,7 +80,7 @@ import org.apache.click.util.HtmlStringBuffer;
  *         setValue(requestValue);
  *
  *         // Invoke any listener of MyField
- *         return registerActionEvent();
+ *         return dispatchActionEvent();
  *     }
  * }
  * </pre>
@@ -926,9 +926,10 @@ public abstract class AbstractControl implements Control {
     // Protected Methods ------------------------------------------------------
 
     /**
-     * Dispatch an ActionListener event with the {@link org.apache.click.ActionEventDispatcher}.
+     * Dispatch an Action event to the {@link org.apache.click.ActionEventDispatcher}.
      *
      * @see org.apache.click.ActionEventDispatcher#dispatchActionEvent(org.apache.click.Control, org.apache.click.ActionListener)
+     * @see org.apache.click.ActionEventDispatcher#dispatchBehavior(org.apache.click.Control)
      */
     protected void dispatchActionEvent() {
         if (getActionListener() != null) {
