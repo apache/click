@@ -27,7 +27,7 @@ package org.apache.click;
  * To handle an Ajax request Behavior exposes the listener method: {@link #onAction(org.apache.click.Control) onAction}.
  * The <tt>onAction</tt> method returns a Partial response that is rendered back
  * to the browser. Before Click invokes the <tt>onAction</tt> method it checks
- * whether the request is targeted at the Behavior by calling the method
+ * whether the request is targeted at that Behavior by calling the method
  * {@link #isRequestTarget(org.apache.click.Context) Behavior.isRequestTarget()}.
  * Click will only invoke <tt>onAction</tt> if <tt>isRequestTarget</tt> returns true.
  * <p/>
