@@ -1790,8 +1790,8 @@ public class ClickServlet extends HttpServlet {
 
         ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
 
-        // TODO Ajax requests shouldn't reach this code path
-        // Support direct access of click-error.htm
+        // TODO Ajax requests shouldn't reach this code path since errors
+        // are rendered directly
         if (page instanceof ErrorPage) {
             ErrorPage errorPage = (ErrorPage) page;
             errorPage.setMode(configService.getApplicationMode());
@@ -1848,12 +1848,22 @@ public class ClickServlet extends HttpServlet {
 
             } else {
 
+                // If no target Ajax controls have been registered fallback to
+                // the old behavior or processing and rendering the page template
                 continueProcessing = performOnProcess(page, context, eventDispatcher);
 
                 if (continueProcessing) {
                     performOnPostOrGet(page, context, context.isPost());
 
                     performOnRender(page, context);
+                }
+
+                // If Ajax request does not target a valid page, return a 404
+                // repsonse status, allowing JavaScript to display a proper message
+                if (ConfigService.NOT_FOUND_PATH.equals(page.getPath())) {
+                    HttpServletResponse response = context.getResponse();
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    return;
                 }
 
                 controlRegistry.processPreResponse(context);
@@ -1912,6 +1922,31 @@ public class ClickServlet extends HttpServlet {
         return continueProcessing;
     }
 
+    /**
+     * Provides an Ajax exception handler. Exceptions are wrapped inside a
+     * <tt>div</tt> element and streamed back to the browser. The response status
+     * is set to an {@link javax.servlet.http.HttpServletResponse#SC_INTERNAL_SERVER_ERROR HTTP 500 error}
+     * which allows the JavaScript that initiated the Ajax request to handle
+     * the error as appropriate.
+     * <p/>
+     * If Click is running in <tt>development</tt> modes the exception stackTrace
+     * will be rendered, in <tt>production</tt> modes an error message is
+     * rendered.
+     * <p/>
+     * Below is an example error response:
+     *
+     * <pre class="prettyprint">
+     * &lt;div id='errorReport' class='errorReport'&gt;
+     * The application encountered an unexpected error.
+     * &lt;/div&gt;
+     * </pre>
+     *
+     * @param request the servlet request
+     * @param response the servlet response
+     * @param isPost determines whether the request is a POST
+     * @param exception the error causing exception
+     * @param pageClass the page class with the error
+     */
     protected void handleAjaxException(HttpServletRequest request,
         HttpServletResponse response, boolean isPost, Throwable exception,
         Class<? extends Page> pageClass) {
@@ -1926,9 +1961,15 @@ public class ClickServlet extends HttpServlet {
                 writer = getPrintWriter(response);
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
-                // TODO: use return an ErrorReport instance instead?
+                // TODO: use an ErrorReport instance instead?
                 writer.write("<div id='errorReport' class='errorReport'>\n");
-                exception.printStackTrace(writer);
+
+                if (configService.isProductionMode() || configService.isProfileMode()) {
+                    writer.write("The application encountered an unexpected error.");
+                } else {
+                    exception.printStackTrace(writer);
+                }
+
                 writer.write("\n</div>");
             } finally {
                 if (writer != null) {
@@ -2088,7 +2129,6 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * TODO turn into utility method?
      * Retrieve a writer instance for the given context.
      *
      * @param response the servlet response
