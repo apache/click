@@ -27,48 +27,55 @@ import org.apache.click.service.LogService;
 import org.apache.commons.lang.Validate;
 
 /**
- * Provides a centralized registry where Controls can be registered, allowing
- * Click to provide advanced functionality such as AJAX
- * {@link org.apache.click.Behavior Behaviors} and
- * {@link org.apache.click.Callback Callbacks}.
+ * Provides a centralized registry where Controls can be registered and processed
+ * by the ClickServlet. The registry is often used by Controls to register
+ * themselves as targets for Ajax requests.
  * <p/>
- * <b>Please note:</b> the registry is recreated each request and Controls have
- * to be registered for every request.
+ * <b>Please note:</b> a new registry is created for every request.
  *
- * <h3>Behavior Usage</h3>
- * TODO
+ * <h3>Register Control as an Ajax Target</h3>
+ * Below is an example of a Control registering itself as an Ajax target:
  *
- * <h3>Callback Usage</h3>
- * This class will only rarely be used by Control developers who want to create
- * a custom Control with {@link org.apache.click.Callback Callback} functionality.
- * <p/>
- * Example:
  * <pre class="prettyprint">
- * public class MyControl extends AbstractControl {
+ * public class AbstractControl implements Control {
  *
- *     // The Callback is registered during onInit to cater for both stateless and
- *     // stateful pages
+ *     public void addBehavior(Behavior behavior) {
+ *         getBehaviors().add(behavior);
+ *         // Adding a behavior also registers the Control as an Ajax target
+ *         ControlRegistry.registerAjaxTarget(this);
+ *     }
+ * } </pre>
+ *
+ * <h3>Register Interceptor</h3>
+ * Below is an example of a Container registering a Behavior in order to intercept
+ * and decorate its child controls:
+ *
+ * <pre class="prettyprint">
+ * public class MyContainer extends AbstractContainer {
+ *
  *     public void onInit() {
- *         Callback callback = getCallback();
- *         ControlRegistry.registerCallback(this, callback);
+ *         Behavior behavior = getBehavior();
+ *         ControlRegistry.registerInterceptor(this, behavior);
  *     }
  *
- *     private Callback getCallback() {
- *         callback = new Callback() {
+ *     private Behavior getBehavior() {
+ *         behavior = new Behavior() {
+ *
+ *             // This method is invoked before the controls are rendered to the client
  *             public void preResponse(Control source) {
- *                 // Invoked before the controls are rendered to the client
- *                 addIndexToControlNames();
+ *                 // Here we can add a CSS class attribute to each child control
+ *                 addCssClassToChildControls();
  *             }
  *
+ *             // This method is invoked before the HEAD elements are retrieved for each Control
  *             public void preGetHeadElements(Control source) {
- *                 // Invoked before the HEAD elements are retrieved for each Control
  *             }
  *
+ *             // This method is invoked before the Control onDestroy event
  *             public void preDestroy(Control source) {
- *                 // Invoked before onDestroy event
  *             }
  *         };
- *         return callback;
+ *         return behavior;
  *     }
  * } </pre>
  */
