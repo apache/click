@@ -926,7 +926,7 @@ public abstract class AbstractControl implements Control {
     // Protected Methods ------------------------------------------------------
 
     /**
-     * Dispatch an Action event to the {@link org.apache.click.ActionEventDispatcher}.
+     * Dispatch an action event to the {@link org.apache.click.ActionEventDispatcher}.
      *
      * @see org.apache.click.ActionEventDispatcher#dispatchActionEvent(org.apache.click.Control, org.apache.click.ActionListener)
      * @see org.apache.click.ActionEventDispatcher#dispatchBehavior(org.apache.click.Control)
@@ -937,7 +937,7 @@ public abstract class AbstractControl implements Control {
         }
 
         if (hasBehaviors()) {
-            ActionEventDispatcher.dispatchBehavior(this);
+            ActionEventDispatcher.dispatchBehaviors(this);
         }
     }
 
