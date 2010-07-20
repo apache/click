@@ -1850,6 +1850,12 @@ public class ClickServlet extends HttpServlet {
 
                 // If no target Ajax controls have been registered fallback to
                 // the old behavior or processing and rendering the page template
+               if (logger.isTraceEnabled()) {
+                    String msg = "   *no* Ajax target controls have been registered."
+                        + " Will process the page as a normal non Ajax request.";
+                    logger.trace(msg);
+                }
+
                 continueProcessing = performOnProcess(page, context, eventDispatcher);
 
                 if (continueProcessing) {
