@@ -1829,7 +1829,7 @@ public class ClickServlet extends HttpServlet {
             if (controlRegistry.hasAjaxTargetControls() && !context.isForward()) {
 
                 // Perform onProcess for regsitered Ajax controls
-                processAjaxControls(context, eventDispatcher, controlRegistry);
+                processAjaxTargetControls(context, eventDispatcher, controlRegistry);
 
                 // Fire behaviors registered during the onProcess event
                 // The target behavior will set the eventDispatcher partial instance
@@ -1879,7 +1879,7 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Process all Ajax controls and return true if the page should continue
+     * Process all Ajax target controls and return true if the page should continue
      * processing, false otherwise.
      *
      * @param context the request context
@@ -1887,7 +1887,7 @@ public class ClickServlet extends HttpServlet {
      * @param controlRegistry the control registry
      * @return true if the page should continue processing, false otherwise
      */
-    protected boolean processAjaxControls(Context context,
+    protected boolean processAjaxTargetControls(Context context,
         ActionEventDispatcher eventDispatcher, ControlRegistry controlRegistry) {
 
         boolean continueProcessing = true;
