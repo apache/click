@@ -2243,7 +2243,7 @@ public class ClickServlet extends HttpServlet {
 
         if (logger.isTraceEnabled()) {
             if (ajaxTarget == null) {
-                String msg = "   *no* target control was found for Ajax request";
+                String msg = "   *no* target control was found for the Ajax request";
                 logger.trace(msg);
 
             } else {
