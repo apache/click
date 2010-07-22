@@ -293,7 +293,7 @@ public class SubmitLink extends ActionLink {
             return "";
         }
         if (parameterPrefix == null) {
-            parameterPrefix = getName() + '_';
+            parameterPrefix = "_";
         }
         return parameterPrefix;
     }
