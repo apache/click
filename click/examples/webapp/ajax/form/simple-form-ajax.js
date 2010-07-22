@@ -33,7 +33,7 @@ jQuery(document).ready(function() {
 function postForm(event) {
     // Retrieve the Form and submit button elements
     var form = jQuery("#form");
-    var submit = jQuery(event.target);
+    var submit = jQuery(event.currentTarget);
 
     // The server URL can be retrieved from the Form 'action' event
     var url = form.attr('action');
