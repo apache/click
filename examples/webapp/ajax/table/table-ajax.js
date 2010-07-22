@@ -25,7 +25,7 @@ jQuery(document).ready(function() {
     // http://api.jquery.com/live/
     jQuery("#table td a").live('click', function(event){
         var callServer = true;
-        if (jQuery(event.target).text()=="Delete") {
+        if (jQuery(event.currentTarget).text()=="Delete") {
             callServer = window.confirm('Please confirm delete');
         }
 
@@ -52,7 +52,7 @@ jQuery(document).ready(function() {
 })
 
 function editOrDeleteCustomer(event) {
-    var link = jQuery(event.target);
+    var link = jQuery(event.currentTarget);
     var url = link.attr('href');
     jQuery.get(url, function(data) {
         // Update the result div with the server response
@@ -61,7 +61,7 @@ function editOrDeleteCustomer(event) {
 }
 
 function sortTable(event) {
-    var link = jQuery(event.target);
+    var link = jQuery(event.currentTarget);
     var url = link.attr('href');
     jQuery.get(url, function(data) {
         // Update the table container with the new table
