@@ -232,6 +232,11 @@ Select.setAttribute("onchange", "Click.submit(form, false)");
             Fixed a potential memory leak when undeploying a click application.
             [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-706">CLK-706</a>].
          </li>
+         <li class="change">
+              Fixed issue where setting <tt>autobinding="default"</tt> throws exception.
+              This issue was raised by Tsay Yaw Hann
+              [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-714">CLK-714</a>].
+          </li>
           <li class="change">
               Update to the latest version for some of the JARs dependencies: log4j-1.2.16, freemarker-2.3.16,
               commons-codec-1.4, and commons-lang-2.5.
