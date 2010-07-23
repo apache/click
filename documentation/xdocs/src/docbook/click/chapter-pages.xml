@@ -58,9 +58,12 @@
 
   <literallayout>&lt;page path="<varname>search.jsp</varname>" classname="<token>com.mycorp.page.Search</token>"/&gt;</literallayout>
 
-  <para>At runtime Click automatically converts the page path from
-  <varname>.jsp</varname> to <varname>.htm</varname> and back, so there is no
-  need to map the <varname>.jsp</varname> extension in <filename>web.xml</filename>.
+  <para>Please note, Click does not handle JSP requests directly, instead it forwards
+  JSP requests to the servlet container. Do not map the ClickServlet to handle
+  <filename>*.jsp</filename> requests in <filename>web.xml</filename>. Instead
+  <varname>.jsp</varname> templates are accessed with a <varname>.htm</varname>
+  extension. At runtime Click will convert the page path from
+  <varname>.jsp</varname> to <varname>.htm</varname> and back.
   </para>
 
   <sect1 id="classes" remap="h2">
