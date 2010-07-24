@@ -22,7 +22,7 @@ import java.io.Serializable;
 import org.apache.click.Behavior;
 import org.apache.click.Context;
 import org.apache.click.Control;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 
 /**
  * Provides an abstract implementation of the Behavior interface.
@@ -45,9 +45,9 @@ public class AjaxBehavior implements Behavior, Serializable {
      * @see org.apache.click.Behavior#onAction(org.apache.click.Control)
      *
      * @param source the control the behavior is attached to
-     * @return the partial response
+     * @return the action result
      */
-    public Partial onAction(Control source) {
+    public ActionResult onAction(Control source) {
         return null;
     }
 

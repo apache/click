@@ -19,7 +19,7 @@
 package org.apache.click.examples.page.ajax.compare;
 
 import org.apache.click.Control;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
@@ -44,13 +44,13 @@ public class JavascriptAjaxDemoPage extends BorderPage {
         link.addBehavior(new AjaxBehavior() {
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 // Formatted date instance that will be added to the
                 String now = format.currentDate("MMM, yyyy dd HH:MM:ss");
 
                 String msg = "Hello from JavaScript at: " + now;
-                // Return a partial containing the message
-                return new Partial(msg, Partial.HTML);
+                // Return an action result containing the message
+                return new ActionResult(msg, ActionResult.HTML);
             }
         });
     }

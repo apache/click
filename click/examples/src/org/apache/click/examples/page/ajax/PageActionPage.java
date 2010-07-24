@@ -18,19 +18,19 @@
  */
 package org.apache.click.examples.page.ajax;
 
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
 
 /**
  * Demonstrates how a Page Action can be used to handle an AJAX request.
  * The Page Action is invoked by Click to handle the AJAX request.
- * The Page Action method returns a Partial response that is streamed back to the
+ * The Page Action method returns an ActionResult that is rendered to the
  * browser.
  *
  * A Page Action is a regular method defined on a Page with the following signature:
  * - the method must take no arguments
- * - the method must return a Partial
+ * - the method must return an ActionResult
  *
  * PageActions provide the simplest way to handle Ajax requests.
  *
@@ -46,14 +46,14 @@ public class PageActionPage extends BorderPage {
         addControl(link);
     }
 
-    // Note the pageAction method signature: a no-arg method returning a Partial
-    public Partial onLinkClicked() {
+    // Note the pageAction method signature: a no-arg method returning an ActionResult
+    public ActionResult onLinkClicked() {
         // Formatted date instance that will be returned to the browser
         String now = format.currentDate("MMM, yyyy dd HH:MM:ss");
 
         String msg = "PageAction method <tt>onLinkClicked()</tt> invoked at: " + now;
 
-        // Return a partial containing the message
-        return new Partial(msg, Partial.HTML);
+        // Return an action result containing the message
+        return new ActionResult(msg, ActionResult.HTML);
     }
 }

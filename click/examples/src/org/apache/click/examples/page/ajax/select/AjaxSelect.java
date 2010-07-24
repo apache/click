@@ -26,7 +26,7 @@ import javax.annotation.Resource;
 
 import org.apache.click.Context;
 import org.apache.click.Control;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
@@ -58,8 +58,8 @@ public class AjaxSelect extends BorderPage {
     // Event Handlers ---------------------------------------------------------
 
     // A pageAction that handles Ajax requests for a particular customer
-    public Partial onChangeCustomer() {
-        Partial partial = new Partial();
+    public ActionResult onChangeCustomer() {
+        ActionResult actionResult = new ActionResult();
 
         // Lookup customer based on request parameter 'customerId'
         String customerId = getContext().getRequest().getParameter("customerId");
@@ -67,13 +67,13 @@ public class AjaxSelect extends BorderPage {
 
         // CustomerPanel will render the customer as an HTML snippet
         CustomerPanel customerPanel = new CustomerPanel(this, customer);
-        partial.setContent(customerPanel.toString());
+        actionResult.setContent(customerPanel.toString());
 
         // Set content type and character encoding
-        partial.setCharacterEncoding("UTF-8");
-        partial.setContentType(Partial.HTML);
+        actionResult.setCharacterEncoding("UTF-8");
+        actionResult.setContentType(ActionResult.HTML);
 
-        return partial;
+        return actionResult;
     }
 
     @Override

@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.servlet.ServletContext;
 import org.apache.click.Context;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.util.ClickUtils;
 import org.apache.commons.io.IOUtils;
@@ -36,25 +36,25 @@ public class PageActionImage extends BorderPage {
     private static final long serialVersionUID = 1L;
 
     /**
-     * This page method is invoked from the <img> element and returns a Partial
+     * This page method is invoked from the <img> element and returns an ActionResult
      * instance containing the static image data.
      */
-    public Partial getStaticImageData() {
+    public ActionResult getStaticImageData() {
         // Load the static image 'click-icon-blue-32.png'
         byte[] imageData = loadImageData("click-icon-blue-32.png");
 
         // Lookup the contentType for a PNG image
         String contentType = ClickUtils.getMimeType("png");
 
-        // Return a Partial containing the image data
-        return new Partial(imageData, contentType);
+        // Return an ActionResult containing the image data
+        return new ActionResult(imageData, contentType);
     }
 
     /**
-     * This page method is invoked from the <img> element and returns a Partial
+     * This page method is invoked from the <img> element and returns an ActionResult
      * instance containing the image data specified by the imageName parameter.
      */
-    public Partial getDynamicImageData() {
+    public ActionResult getDynamicImageData() {
         Context context = getContext();
 
         // Retrieve the image name parameter from the request
@@ -66,8 +66,8 @@ public class PageActionImage extends BorderPage {
         // Lookup the contentType for a PNG image
         String contentType = ClickUtils.getMimeType("png");
 
-        // Return a Partial containing the image data
-        return new Partial(imageData, contentType);
+        // Return an ActionResult containing the image data
+        return new ActionResult(imageData, contentType);
     }
 
     private byte[] loadImageData(String imageName) {

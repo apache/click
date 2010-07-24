@@ -27,7 +27,7 @@ import org.apache.click.Behavior;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.TextField;
 import org.apache.click.element.CssImport;
@@ -454,19 +454,19 @@ public abstract class AutoCompleteTextField extends TextField {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public Partial onAction(Control source) {
-                Partial partial = new Partial();
+            public ActionResult onAction(Control source) {
+                ActionResult actionResult = new ActionResult();
 
                 String contentType = getPage().getContentType();
-                partial.setContentType(contentType);
+                actionResult.setContentType(contentType);
 
                 List<?> autocompleteList = getAutoCompleteList(getValue());
                 if (autocompleteList != null) {
                     HtmlStringBuffer buffer = new HtmlStringBuffer(10 + (autocompleteList.size() * 20));
                     renderAutoCompleteList(buffer, autocompleteList);
-                    partial.setContent(buffer.toString());
+                    actionResult.setContent(buffer.toString());
                 }
-                return partial;
+                return actionResult;
             }
         };
 

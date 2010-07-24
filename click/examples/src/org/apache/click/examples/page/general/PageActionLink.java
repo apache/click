@@ -18,14 +18,14 @@
  */
 package org.apache.click.examples.page.general;
 
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.control.PageLink;
 import org.apache.click.examples.page.BorderPage;
 
 /**
  * Provides a PageAction demo. The PageLink sets a PAGE_ACTION to the page method
  * 'getDate'. Clicking on the PageLink will invoke the 'getDate' method and render
- * the Partial response.
+ * the ActionResult.
  */
 public class PageActionLink extends BorderPage {
 
@@ -43,7 +43,7 @@ public class PageActionLink extends BorderPage {
     /**
      * This method will be invoked when the link is clicked.
      */
-    public Partial getDate() {
-        return new Partial(format.currentDate("MMM dd, yyyy HH:MM:ss"));
+    public ActionResult getDate() {
+        return new ActionResult(format.currentDate("MMM dd, yyyy HH:MM:ss"));
     }
 }

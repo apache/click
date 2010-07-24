@@ -21,7 +21,7 @@ package org.apache.click.examples.page.ajax.form;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.click.Control;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.Field;
 import org.apache.click.control.Form;
@@ -49,10 +49,10 @@ public class SimpleFormAjaxPage extends BorderPage {
         saveBtn.addBehavior(new AjaxBehavior() {
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 // Return a success response
                 // Form data can be saved here
-                return new Partial("Hello " + nameFld.getValue(), Partial.HTML);
+                return new ActionResult("Hello " + nameFld.getValue(), ActionResult.HTML);
             }
         });
 

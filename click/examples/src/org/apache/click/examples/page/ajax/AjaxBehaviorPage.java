@@ -19,7 +19,7 @@
 package org.apache.click.examples.page.ajax;
 
 import org.apache.click.Control;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
@@ -27,8 +27,8 @@ import org.apache.click.examples.page.BorderPage;
 /**
  * Demonstrates how to handle AJAX requests with an Ajax Behavior. The Behavior
  * is added to the ActionLink and its onAction method is invoked to handle the
- * AJAX request. The onAction method returns a Partial response that is streamed
- * back to the browser.
+ * AJAX request. The onAction method returns an ActionResult that is rendered
+ * to the browser.
  *
  * The client-side is implemented using the jQuery library.
  */
@@ -49,13 +49,13 @@ public class AjaxBehaviorPage extends BorderPage {
         link.addBehavior(new AjaxBehavior() {
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 // Formatted date instance that will be added to the
                 String now = format.currentDate("MMM, yyyy dd HH:MM:ss");
 
                 String msg = "AjaxBehavior <tt>onAction()</tt> method invoked at: " + now;
-                // Return a partial containing the message
-                return new Partial(msg, Partial.HTML);
+                // Return an action result containing the message
+                return new ActionResult(msg, ActionResult.HTML);
             }
         });
     }
