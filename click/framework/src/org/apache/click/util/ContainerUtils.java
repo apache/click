@@ -615,6 +615,8 @@ public class ContainerUtils {
      * @param controlMap the container's map of controls keyed on control name
      * @return the new control that replaced the current control
      *
+     * @deprecated this method was used for stateful pages, which have been deprecated
+     *
      * @throws IllegalArgumentException if the currentControl or newControl is
      * null
      * @throws IllegalStateException if the controlIndex = -1
