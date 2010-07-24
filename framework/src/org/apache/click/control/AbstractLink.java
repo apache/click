@@ -270,9 +270,6 @@ public abstract class AbstractLink extends AbstractControl {
      * Return the link request parameter value for the given name, or null if
      * the parameter value does not exist.
      *
-     * @deprecated use {@link org.apache.click.Context#getRequestParameter(java.lang.String)}
-     * instead
-     *
      * @param name the name of request parameter
      * @return the link request parameter value
      */
@@ -339,9 +336,6 @@ public abstract class AbstractLink extends AbstractControl {
      * Return the link request parameter values for the given name, or null if
      * the parameter values does not exist.
      *
-     * @deprecated use {@link org.apache.click.Context#getRequestParameterValues(java.lang.String)}
-     * instead
-     *
      * @param name the name of request parameter
      * @return the link request parameter values
      */
@@ -386,9 +380,6 @@ public abstract class AbstractLink extends AbstractControl {
     /**
      * Return the AbstractLink parameters Map.
      *
-     * @deprecated use {@link org.apache.click.Context#getRequestParameter(java.lang.String)}
-     * instead
-     *
      * @return the AbstractLink parameters Map
      */
     public Map<String, Object> getParameters() {
@@ -396,6 +387,42 @@ public abstract class AbstractLink extends AbstractControl {
             parameters = new HashMap<String, Object>(4);
         }
         return parameters;
+    }
+
+    /**
+     * Set the AbstractLink parameter map.
+     *
+     * @param parameters the link parameter map
+     */
+    public void setParameters(Map parameters) {
+        this.parameters = parameters;
+    }
+
+    /**
+     * Defines a link parameter that will have its value bound to a matching
+     * request parameter. {@link #setParameter(java.lang.String, java.lang.Object) setParameter}
+     * implicitly defines a parameter as well.
+     * <p/>
+     * <b>Please note:</b> parameters need only be defined for Ajax requests.
+     * For non-Ajax requests, <tt>all</tt> incoming request parameters
+     * are bound, whether they are defined or not. This behavior may change in a
+     * future release.
+     * <p/>
+     * <b>Also note:</b> link parameters are bound to request parameters
+     * during the {@link #onProcess()} event, so link parameters must be defined
+     * in the Page constructor or <tt>onInit()</tt> event.
+     *
+     * @param name the name of the parameter to define
+     */
+    public void defineParameter(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        Map<String, Object> localParameters = getParameters();
+        if (!localParameters.containsKey(name)) {
+            localParameters.put(name, null);
+        }
     }
 
     /**
@@ -504,9 +531,9 @@ public abstract class AbstractLink extends AbstractControl {
         if (id != null) {
             return context.getRequestParameter(id) != null;
         } else {
-            String name = getName();
-            if (name != null) {
-                return name.equals(context.getRequestParameter(ActionLink.ACTION_LINK));
+            String localName = getName();
+            if (localName != null) {
+                return localName.equals(context.getRequestParameter(ActionLink.ACTION_LINK));
             }
         }
         return false;
@@ -677,17 +704,15 @@ public abstract class AbstractLink extends AbstractControl {
     /**
      * This method binds the submitted request parameters to the link
      * parameters.
-     *
-     * @deprecated binding link parameters can cause memory leaks, use
-     * {@link org.apache.click.Context#getRequestParameter(java.lang.String)}
-     * instead
+     * <p/>
+     * For non-Ajax requests this method will bind <tt>all</tt> incoming request
+     * parameters to the link. For Ajax requests this method will only bind
+     * the parameters already defined on the link.
      *
      * @param context the request context
      */
     @SuppressWarnings("unchecked")
     protected void bindRequestParameters(Context context) {
-        // TODO: remove this method in a future release since it can lead to
-        // memory leaks
         HttpServletRequest request = context.getRequest();
 
         Set<String> parameterNames = null;
@@ -700,10 +725,12 @@ public abstract class AbstractLink extends AbstractControl {
 
         for (String param : parameterNames) {
             String[] values = request.getParameterValues(param);
-            // Do not process parameters that are not defined as it would nullify
-            // parameters that was explicitly set during Page.onInit. This only
-            // occurs for Ajax requests which processes all parameters defined
-            // on the link
+            // Do not process request parameters that return null values. Null
+            // values are only returned if the request parameter is not present.
+            // A null value can only occur for Ajax requests which processes
+            // parameters defined on the link, not the incoming parameters.
+            // The reason for not processing the null value is because it would
+            // nullify parametesr that was set during onInit
             if (values == null) {
                 continue;
             }

@@ -304,9 +304,6 @@ public class ActionButton extends Button {
      * Return the button request parameter value for the given name, or null if
      * the parameter value does not exist.
      *
-     * @deprecated use {@link org.apache.click.Context#getRequestParameter(java.lang.String)}
-     * instead
-     *
      * @param name the name of request parameter
      * @return the button request parameter value
      */
@@ -341,9 +338,6 @@ public class ActionButton extends Button {
     /**
      * Return the ActionButton parameters Map.
      *
-     * @deprecated use {@link org.apache.click.Context#getRequestParameter(java.lang.String)}
-     * instead
-     *
      * @return the ActionButton parameters Map
      */
     public Map<String, Object> getParameters() {
@@ -351,6 +345,42 @@ public class ActionButton extends Button {
             parameters = new HashMap<String, Object>(4);
         }
         return parameters;
+    }
+
+    /**
+     * Set the ActionButton parameter map.
+     *
+     * @param parameters the button parameter map
+     */
+    public void setParameters(Map parameters) {
+        this.parameters = parameters;
+    }
+
+    /**
+     * Defines a button parameter that will have its value bound to a matching
+     * request parameter. {@link #setParameter(java.lang.String, java.lang.Object) setParameter}
+     * implicitly defines a parameter as well.
+     * <p/>
+     * <b>Please note:</b> parameters need only be defined for Ajax requests.
+     * For non-Ajax requests, <tt>all</tt> incoming request parameters
+     * are bound, whether they are defined or not. This behavior may change in a
+     * future release.
+     * <p/>
+     * <b>Also note:</b> button parameters are bound to request parameters
+     * during the {@link #onProcess()} event, so button parameters must be defined
+     * in the Page constructor or <tt>onInit()</tt> event.
+     *
+     * @param name the name of the parameter to define
+     */
+    public void defineParameter(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        Map<String, Object> localParameters = getParameters();
+        if (!localParameters.containsKey(name)) {
+            localParameters.put(name, null);
+        }
     }
 
     /**
@@ -487,12 +517,10 @@ public class ActionButton extends Button {
         clicked = getName().equals(context.getRequestParameter(ACTION_BUTTON));
 
         if (clicked) {
-            String value = context.getRequestParameter(VALUE);
-            if (value != null) {
-                setValue(value);
+            String localValue = context.getRequestParameter(VALUE);
+            if (localValue != null) {
+                setValue(localValue);
             }
-            // TODO refactor link not to bind parameters since it can lead to
-            // memory leaks, especially when using Ajax. Remove the line below
             bindRequestParameters(context);
         }
     }
@@ -567,17 +595,15 @@ public class ActionButton extends Button {
     /**
      * This method binds the submitted request parameters to the buttons
      * parameters.
-     *
-     * @deprecated binding button parameters can cause memory leaks, use
-     * {@link org.apache.click.Context#getRequestParameter(java.lang.String)}
-     * instead
+     * <p/>
+     * For non-Ajax requests this method will bind <tt>all</tt> incoming request
+     * parameters to the link. For Ajax requests this method will only bind
+     * the parameters already defined on the link.
      *
      * @param context the request context
      */
     @SuppressWarnings("unchecked")
     protected void bindRequestParameters(Context context) {
-        // TODO: remove this method in a future release since it can lead to
-        // memory leaks
         HttpServletRequest request = context.getRequest();
 
         Set<String> parameterNames = null;
@@ -590,10 +616,12 @@ public class ActionButton extends Button {
 
         for (String param : parameterNames) {
             String[] values = request.getParameterValues(param);
-            // Do not process parameters that are not defined as it would nullify
-            // parameters that was explicitly set during Page.onInit. This only
-            // occurs for Ajax requests which processes all parameters defined
-            // on the link
+            // Do not process request parameters that return null values. Null
+            // values are only returned if the request parameter is not present.
+            // A null value can only occur for Ajax requests which processes
+            // parameters defined on the button, not the incoming parameters.
+            // The reason for not processing the null value is because it would
+            // nullify parametesr that was set during onInit
             if (values == null) {
                 continue;
             }
