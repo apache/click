@@ -271,9 +271,6 @@ public class SubmitLink extends ActionLink {
     /**
      * Set the parameter prefix that is applied to the SubmitLink parameters.
      *
-     * @deprecated the link request parameter binding will be removed in a future
-     * release, thus removing the need for parameter prefixing
-     *
      * @param prefix the parameter prefix
      */
     public void setParameterPrefix(String prefix) {
@@ -282,9 +279,6 @@ public class SubmitLink extends ActionLink {
 
     /**
      * Return the parameter prefix that is applied to the SubmitLink parameters.
-     *
-     * @deprecated the link request parameter binding will be removed in a future
-     * release, thus removing the need for parameter prefixing
      *
      * @return the parameter prefix that is applied to the SubmitLink parameters.
      */
@@ -383,17 +377,17 @@ public class SubmitLink extends ActionLink {
         if (hasParameters()) {
             Iterator i = getParameters().keySet().iterator();
             while (i.hasNext()) {
-                String name = i.next().toString();
-                if (!name.equals(ACTION_LINK) && !name.equals(VALUE)) {
-                    Object paramValue = getParameters().get(name);
+                String localName = i.next().toString();
+                if (!localName.equals(ACTION_LINK) && !localName.equals(VALUE)) {
+                    Object paramValue = getParameters().get(localName);
                     if (paramValue instanceof String[]) {
                         String[] paramValues = (String[]) paramValue;
                         for (int j = 0; j < paramValues.length; j++) {
-                            renderParameter(name, paramValues[j], prefix,
+                            renderParameter(localName, paramValues[j], prefix,
                                 buffer, context);
                         }
                     } else {
-                        renderParameter(name, paramValue, prefix, buffer,
+                        renderParameter(localName, paramValue, prefix, buffer,
                             context);
                     }
                 }
@@ -417,16 +411,6 @@ public class SubmitLink extends ActionLink {
             // SubmitLink parameters are prefixed when included inside a Form
             String prefix = getParameterPrefix();
 
-            // TODO: create a VALUE for SubmitLink with a static prefix in order
-            // to obscure the parameter from Form fields
-            /*
-            String value = context.getRequestParameter(prefix + VALUE);
-            if (value != null) {
-                setValue(value);
-            }*/
-
-            // TODO refactor link not to bind parameters since it can lead to
-            // memory leaks, especially when using Ajax. Remove the code below
             HttpServletRequest request = context.getRequest();
             Set<String> parameterNames = request.getParameterMap().keySet();
 
