@@ -249,6 +249,8 @@ public class FieldSet extends Field implements Container {
      * @param newControl the control to replace the current control
      * @return the new control that replaced the current control
      *
+     * @deprecated this method was used for stateful pages, which have been deprecated
+     *
      * @throws IllegalArgumentException if the currentControl or newControl is
      * null
      * @throws IllegalStateException if the currentControl is not contained in
