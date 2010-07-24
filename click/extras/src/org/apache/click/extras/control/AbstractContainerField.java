@@ -182,6 +182,8 @@ public abstract class AbstractContainerField extends Field implements Container 
      * the container
      * @return the new control that replaced the current control
      *
+     * @deprecated this method was used for stateful pages, which have been deprecated
+     *
      * @throws IllegalArgumentException if the currentControl or newControl is
      * null
      * @throws IllegalStateException if the currentControl is not contained in

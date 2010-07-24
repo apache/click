@@ -61,6 +61,8 @@ public interface Container extends Control {
      * Replace the current control with the new control, and return the newly
      * added control.
      *
+     * @deprecated this method was used for stateful pages, which have been deprecated
+     *
      * @param currentControl the control currently contained in the container
      * @param newControl the control to replace the current control contained in
      * the container
