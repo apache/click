@@ -143,10 +143,10 @@ public class MockContextTest extends TestCase {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 // When action is invoked, set flag to true
                 submitCalled = true;
-                return new Partial();
+                return new ActionResult();
             }
         });
         assertTrue(submit.onProcess());
@@ -180,9 +180,9 @@ public class MockContextTest extends TestCase {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 // When action is invoked, set flag to true
-                return new Partial();
+                return new ActionResult();
             }
         });
         assertTrue(submit.onProcess());
@@ -219,7 +219,7 @@ public class MockContextTest extends TestCase {
                 return false;
             }
 
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 return null;
             }
 
@@ -278,7 +278,7 @@ public class MockContextTest extends TestCase {
                 return false;
             }
 
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 return null;
             }
 
@@ -331,10 +331,10 @@ public class MockContextTest extends TestCase {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 // When action is invoked, set flag to true
                 submitCalled = true;
-                return new Partial();
+                return new ActionResult();
             }
 
             @Override
