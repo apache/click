@@ -175,9 +175,6 @@ public abstract class AbstractControl implements Control {
     /** The listener method name. */
     protected String listenerMethod;
 
-    /** Flag indicating whether the control has been registered as an AJAX target. */
-    boolean registeredAsAjaxTarget = false;
-
     // Constructors -----------------------------------------------------------
 
     /**
@@ -246,21 +243,11 @@ public abstract class AbstractControl implements Control {
      * <tt>Behavior</tt>s registered, <tt>false</tt> otherwise.
      */
     public boolean hasBehaviors() {
-        return (behaviors != null && behaviors.size() > 0);
+        return (behaviors != null && !behaviors.isEmpty());
     }
 
     /**
      * Add the given {@link org.apache.click.Behavior Behavior} to the control.
-     * <p/>
-     * <b>Stateful Page note:</b> care must be taken not to add duplicate behaviors.
-     * Duplicate behaviors can occur if a behavior is <tt>created</tt> and <tt>added</tt>
-     * to a Control in the {@link #onInit()} or {@link #onRender()} events.
-     * <p/>
-     * Instead add the behavior in the stateful Page constructor.
-     * If the Behavior must be added during the onInit event, declare the behavior
-     * as a Page variable to ensure the <tt>same instance</tt> is added to the Control.
-     * Since control behaviors are contained in a Set, adding the same Behavior
-     * instance won't lead to duplicates.
      *
      * @param behavior the behavior to add
      */
@@ -269,8 +256,12 @@ public abstract class AbstractControl implements Control {
             throw new IllegalArgumentException("Behavior cannot be null");
         }
 
+        // Ensure we register the behavior only once
+        if (!hasBehaviors()) {
+            ControlRegistry.registerAjaxTarget(this);
+        }
+
         getBehaviors().add(behavior);
-        registerAsAjaxTarget();
     }
 
     /**
@@ -586,34 +577,21 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * If a behavior has been attached to this control, it will be registered
-     * with the {@link org.apache.click.CallbackDispatcher}.
-     * <p/>
-     * <b>Please note:</b> a common problem when overriding onInit in
-     * subclasses is forgetting to call <em>super.onInit()</em>. Consider
-     * carefully whether you should call <em>super.onInit()</em> or not.
+     * This method does nothing. Subclasses may override this method to perform
+     * initialization.
      *
      * @see org.apache.click.Control#onInit()
      */
     public void onInit() {
-        // FAQ: Why does onInit need to register callback instead of addBehavior?
-        //   A: Because on stateful pages addBehavior might only be called once
-        //      when the control was created so we ensure the behavior is registered
-        //      before onProcess
-        registerAsAjaxTarget();
     }
 
     /**
-     * Cleans up the AbstractControl state.
-     * <p/>
-     * <b>Please note:</b> a common problem when overriding onDestroy in
-     * subclasses is forgetting to call <em>super.onDestroy()</em>. Consider
-     * carefully whether you should call <em>super.onDestroy()</em> or not.
+     * This method does nothing. Subclasses may override this method to perform
+     * clean up any resources.
      *
      * @see org.apache.click.Control#onDestroy()
      */
     public void onDestroy() {
-        registeredAsAjaxTarget = false;
     }
 
     /**
@@ -1021,23 +999,6 @@ public abstract class AbstractControl implements Control {
             size += 20 * getAttributes().size();
         }
         return size;
-    }
-
-    // Package Private Methods ------------------------------------------------
-
-    /**
-     * Register the control as an AJAX target with the ControlRegistry. If the
-     * control is already registered, this method returns silently.
-     */
-    void registerAsAjaxTarget() {
-        if (registeredAsAjaxTarget) {
-            return;
-        }
-
-        if (hasBehaviors()) {
-            ControlRegistry.registerAjaxTarget(this);
-            registeredAsAjaxTarget = true;
-        }
     }
 
     // Private Methods --------------------------------------------------------
