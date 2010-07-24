@@ -490,8 +490,6 @@ public class ActionLink extends AbstractLink {
             if (value != null) {
                 setValue(value);
             }
-            // TODO refactor link not to bind parameters since it can lead to
-            // memory leaks, especially when using Ajax. Remove the line below
             bindRequestParameters(context);
         }
     }
