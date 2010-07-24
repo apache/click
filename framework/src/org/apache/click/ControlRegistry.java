@@ -122,14 +122,6 @@ public class ControlRegistry {
      * a new registry is created. This means a control is only registered for
      * a single request and must be registered again for subsequent requests.
      *
-     * <b>Stateful Page note:</b> when invoking this method directly from a stateful
-     * page, ensure the control is registered on every request. Generally this
-     * means that for stateful pages this method should be used in the Page
-     * <tt>onInit</tt> method (which is invoked for every request) instead of the
-     * Page constructor (which is invoked only once). This warning can be ignored
-     * for stateless pages since both the constructor and onInit method is invoked
-     * every request.
-     *
      * @param control the control to register as an Ajax target
      */
     public static void registerAjaxTarget(Control control) {
