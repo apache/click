@@ -84,59 +84,6 @@ versions please email the Click user group.
   <dd>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
       <li class="change">
-        AbstractLink binds all incoming request parameters to its own parameter map.
-        There are a number of pitfalls binding parameters to links, namely:
-        <ul style="margin-top:1em">
-            <li>
-                all parameters are bound to the link, even unwanted parameters. This
-                becomes prevalent when replacing the default link behavior
-                with Ajax requests. The Ajax parameters are bound to link
-                parameters, leading to links that render parameters not meant for
-                that link
-            </li>
-            <li>
-                it can lead to memory leaks in stateful pages
-            </li>
-        </ul>
-        If you are using one of the deprecated <tt>getter</tt> methods, you can
-        simply replace it with their Context counterparts:
-        <ul style="margin-top:1em">
-            <li>
-                replace <a href="click-api/org/apache/click/control/AbstractLink.html#getParameter(java.lang.String)">AbstractLink.getParameter(String)</a>
-                with <a href="click-api/org/apache/click/Context.html#getRequestParameter(java.lang.String)">Context.getRequestParameter(String)</a>
-            </li>
-            <li>
-                replace <a href="click-api/org/apache/click/control/AbstractLink.html#getParameters()">AbstractLink.getParameters()</a>
-                with <a href="click-api/org/apache/click/Context.html#getRequest()">HttpServletRequest.getParameterMap()</a>
-            </li>
-            <li>
-                replace <a href="click-api/org/apache/click/control/AbstractLink.html#getParameterValues(java.lang.String)">AbstractLink.getParameterValues(String)</a>
-                with <a href="click-api/org/apache/click/Context.html#getRequestParameterValues(java.lang.String)">Context.getRequestParameterValues(String)</a>
-            </li>
-        </ul>
-        Before:
-        <pre class="prettyprint">
-public void onGet() {
-    if (link.isClicked()) {
-        String value = link.getValue();
-        String id = link.getParameter("id");
-        String[] myArray = link.getParameterValues("myArray");
-    }
-}
-</pre>
-        After:
-        <pre class="prettyprint">
-public void onGet() {
-    if (link.isClicked()) {
-        Context context = getContext();
-        String value = link.getValue();
-        String id = context.getRequestParameter("id");
-        String[] myArray = context.getRequestParameterValues("myArray");
-    }
-}
-</pre>
-      </li>
-      <li class="change">
         The DateField control now accepts month and day names spelled in the 
         locale of the browser or application (see 
         <a href="click-api/org/apache/click/Context.html#getLocale()">Context.getLocale()</a>).

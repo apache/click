@@ -68,7 +68,8 @@
 <h2>Road Map</h2>
 New Click releases will be released every quarter with the next version Click 2.3.0
 scheduled for the end of June 2010. Tentative features for the next release
-includes improved Ajax support and @Bindable support for Page getters/setters.
+includes improved Ajax support, Page Action support and a Java based configuration
+service.
 
 <p>&nbsp;</p>
 
@@ -76,7 +77,7 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
 
 <dl>
   <dt><a name="2.3.0"></a>
-      <div class="release-header">Latest Release - Version 2.3.0 Milestone 1 - ?? July 2010</div>
+      <div class="release-header">Latest Release - Version 2.3.0 Milestone 1 - ?? August 2010</div>
   </dt>
   <dd>
       <div style="margin-left:-2em;margin-bottom:1em;">
@@ -88,48 +89,14 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
       </div>
       <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
         <li class="change">
+          Added <a target="_blank" class="external" href="http://www.avoka.com/click-examples/">examples</a>
+          showcasing the new Ajax support. See the Ajax Menu for the full list.
+        </li>
+        <li class="change">
           Added an example FieldSeparator Control and example usage page
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-544">CLK-544</a>].
         </li>
       </ul>
-
-    <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
-      <b>Deprecated:</b>
-    </div>
-    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
-      <li class="change">
-          Deprecated the AbstractLink <tt>parameter</tt> getter methods. You should
-          still set parameters on links, however binding link parameters to incoming
-          request parameters will be removed in a future release. The main issues
-          with binding link parameters is that all incoming request parameters
-          are bound which can lead to undesirable link parameters (especially
-          problematic for Ajax requests) and possibly memory leaks.
-          <p/>
-          Deprecated methods are:
-          <ul>
-              <li>
-                  <a href="click-api/org/apache/click/control/AbstractLink.html#getParameter(java.lang.String)">AbstractLink.getParameter(String)</a>
-                  - use <a href="click-api/org/apache/click/Context.html#getRequestParameter(java.lang.String)">Context.getRequestParameter(String)</a>
-                  instead
-              </li>
-              <li>
-                  <a href="click-api/org/apache/click/control/AbstractLink.html#getParameters()">AbstractLink.getParameters()</a>
-                  - use <a href="click-api/org/apache/click/Context.html#getRequest()">HttpServletRequest.getParameterMap()</a>
-                  instead
-              </li>
-              <li>
-                  <a href="click-api/org/apache/click/control/AbstractLink.html#getParameterValues(java.lang.String)">AbstractLink.getParameterValues(String)</a>
-                  - use <a href="click-api/org/apache/click/Context.html#getRequestParameterValues(java.lang.String)">Context.getRequestParameterValues(String)</a>
-                  instead
-              </li>
-              <li>
-                  <a href="extras-api/org/apache/click/extras/control/SubmitLink.html#setParameterPrefix(java.lang.String)">SubmitLink.setParameterPrefix(String)</a>
-                  - parameter prefixing was only necessary for binding incoming
-                  request parameters
-              </li>
-           </ul>
-      </li>
-    </ul>
       <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
         <b>New features and issues resolved:</b>
       </div>
@@ -166,10 +133,6 @@ includes improved Ajax support and @Bindable support for Page getters/setters.
               This change allows one to override the default <tt>date-format-pattern</tt>
               from the page properties file: <tt>click-page.properties</tt>.
               [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-705">CLK-705</a>].
-          </li>
-          <li class="change">
-              Deprecated the AbstractLink parameter <tt>getter</tt> methods
-              [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-685">CLK-685</a>].
           </li>
           <li class="change">
               Added a renderId property to ResourceElement to exclude the ID attribute from rendering
