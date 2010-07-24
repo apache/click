@@ -1395,31 +1395,37 @@ public class Table extends AbstractControl {
      */
     @Override
     public boolean onProcess() {
-        ActionLink controlLink = getControlLink();
+        ActionLink localControlLink = getControlLink();
 
-        controlLink.onProcess();
+        // Ensure parameters are defined to cater for Ajax requests that uses
+        // strict parameter binding
+        localControlLink.defineParameter(PAGE);
+        localControlLink.defineParameter(COLUMN);
+        localControlLink.defineParameter(ASCENDING);
+        localControlLink.defineParameter(SORT);
 
-        if (controlLink.isClicked()) {
-            Context context = getContext();
-            String page = context.getRequestParameter(PAGE);
+        localControlLink.onProcess();
+
+        if (localControlLink.isClicked()) {
+            String page = localControlLink.getParameter(PAGE);
             if (NumberUtils.isNumber(page)) {
                 setPageNumber(Integer.parseInt(page));
             } else {
                 setPageNumber(0);
             }
 
-            String column = context.getRequestParameter(COLUMN);
+            String column = localControlLink.getParameter(COLUMN);
             if (column != null) {
                 setSortedColumn(column);
             }
 
-            String ascending = context.getRequestParameter(ASCENDING);
+            String ascending = localControlLink.getParameter(ASCENDING);
             if (ascending != null) {
                 setSortedAscending("true".equals(ascending));
             }
 
             // Flip sorting order
-            if ("true".equals(context.getRequestParameter(SORT))) {
+            if ("true".equals(localControlLink.getParameter(SORT))) {
                 setSortedAscending(!isSortedAscending());
             }
         }

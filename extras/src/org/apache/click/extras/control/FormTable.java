@@ -33,6 +33,7 @@ import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.control.ActionLink;
 import org.apache.click.dataprovider.PagingDataProvider;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.util.NumberUtils;
 
 /**
  * Provides a FormTable data grid control.
@@ -473,26 +474,16 @@ public class FormTable extends Table {
      */
     @Override
     public boolean onProcess() {
-        ActionLink controlLink = getControlLink();
+        ActionLink localControlLink = getControlLink();
 
         boolean continueProcessing = super.onProcess();
 
-        if (controlLink.isClicked()) {
-            Context context = getContext();
-            getForm().getField(PAGE).setValue(context.getRequestParameter(PAGE));
+        if (localControlLink.isClicked()) {
+            getForm().getField(PAGE).setValue(Integer.toString(getPageNumber()));
 
-            getForm().getField(COLUMN).setValue(context.getRequestParameter(COLUMN));
+            getForm().getField(COLUMN).setValue(getSortedColumn());
 
-            String ascending = context.getRequestParameter(ASCENDING);
-            getForm().getField(ASCENDING).setValue(ascending);
-
-            // Table.onProcess() flips the sort order, so to ensure the ASCENDING
-            // Field value is in sync with the Table, we flip the field value as
-            // well.
-            String sort = context.getRequestParameter(SORT);
-            if ("true".equals(sort) || ascending == null) {
-                getForm().getField(ASCENDING).setValue("true".equals(ascending) ? "false" : "true");
-            }
+            getForm().getField(ASCENDING).setValue(Boolean.toString(isSortedAscending()));
 
         } else {
 
