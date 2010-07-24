@@ -183,10 +183,6 @@ public interface Control extends Serializable {
      *     }
      * } </pre>
      *
-     * The above approach is safe to use with controls added to <tt>stateful</tt>
-     * pages since the HEAD elements are only added to the list once, when the
-     * method is invoked the first time.
-     * <p/>
      * Alternatively one can add the HEAD elements in the Control's constructor:
      *
      * <pre class="prettyprint">
@@ -206,33 +202,6 @@ public interface Control extends Serializable {
      * {@link #onInit()}, {@link #onProcess()}, {@link #onRender()}
      * etc.
      * <p/>
-     * <b>Please note:</b> when adding HEAD elements from event handlers,
-     * its possible that the control will be added to a
-     * {@link Page#stateful Stateful} page, so you will need to set the HEAD
-     * elements list to <tt>null</tt> in the Control's {@link #onDestroy()}
-     * event handler, otherwise the HEAD elements list will continue to grow
-     * with each request:
-     *
-     * <pre class="prettyprint">
-     * public MyControl extends AbstractControl {
-     *
-     *     // Set HEAD elements in the onInit event handler
-     *     public void onInit() {
-     *
-     *         // Add HEAD elements
-     *         JsImport jsImport = new JsImport("/mycorp/mycontrol/mycontrol.js");
-     *         getHeadElements().add(jsImport);
-     *
-     *         CssImport cssImport = new CssImport("/mycorp/mycontrol/mycontrol.css");
-     *         getHeadElements().add(cssImport);
-     *     }
-     *
-     *     public void onDestroy() {
-     *         // Nullify the HEAD elements
-     *         headElements = null;
-     *     }
-     * } </pre>
-     *
      * The order in which JS and CSS files are included will be preserved in the
      * page.
      * <p/>

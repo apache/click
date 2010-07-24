@@ -196,6 +196,9 @@ public class Page implements Serializable {
     /**
      * The page is stateful and should be saved to the users HttpSession
      * between requests, default value is false.
+     *
+     * @deprecated stateful pages are not supported anymore, use stateful
+     * Controls instead
      */
     protected boolean stateful;
 
@@ -350,9 +353,6 @@ public class Page implements Serializable {
      * <p/>
      * This method is guaranteed to be called before the Page object reference
      * goes out of scope and is available for garbage collection.
-     * <p/>
-     * Stateful pages will have this method invoked before they are saved to
-     * the session.
      */
     public void onDestroy() {
     }
@@ -681,10 +681,6 @@ public class Page implements Serializable {
      *     }
      * } </pre>
      *
-     * The above approach can safely be used with <tt>stateful</tt> pages since
-     * the HEAD elements are only added to the list once, when the method is
-     * invoked the first time.
-     * <p/>
      * Alternatively one can add the HEAD elements in the Page constructor:
      *
      * <pre class="prettyprint">
@@ -703,36 +699,6 @@ public class Page implements Serializable {
      * {@link #onInit()}, {@link #onGet()}, {@link #onPost()}, {@link #onRender()}
      * etc.
      * <p/>
-     * <b>Please note:</b> when adding HEAD elements from event handlers on
-     * {@link #stateful Stateful} pages, you will need to set the HEAD elements
-     * list to <tt>null</tt> in the {@link #onDestroy()} event handler,
-     * otherwise the HEAD elements list will continue to grow with each request:
-     *
-     * <pre class="prettyprint">
-     * public MyPage extends Page {
-     *
-     *     public MyPage() {
-     *         // Activate stateful page
-     *         setStateful(true);
-     *     }
-     *
-     *     // Set HEAD elements in the onInit event handler
-     *     public void onInit() {
-     *
-     *         // Add HEAD elements
-     *         JsImport jsImport = new JsImport("/mycorp/js/mypage.js");
-     *         getHeadElements().add(jsImport);
-     *
-     *         CssImport cssImport = new CssImport("/mycorp/js/mypage.css");
-     *         getHeadElements().add(cssImport);
-     *     }
-     *
-     *     public void onDestroy() {
-     *         // Nullify the HEAD elements
-     *         headElements = null;
-     *     }
-     * } </pre>
-     *
      * The order in which JS and CSS files are included will be preserved in the
      * page.
      * <p/>
@@ -1005,6 +971,9 @@ public class Page implements Serializable {
      * Return true if the page is stateful and should be saved in the users
      * HttpSession between requests, default value is false.
      *
+     * @deprecated stateful pages are not supported anymore, use stateful
+     * Controls instead
+     *
      * @return true if the page is stateful and should be saved in the users
      * session
      */
@@ -1028,6 +997,9 @@ public class Page implements Serializable {
      * number of requests and then setting it to <tt>false</tt> again at which
      * point Click will remove the Page from the HttpSession, freeing up memory
      * for the server.
+     *
+     * @deprecated stateful pages are not supported anymore, use stateful
+     * Controls instead
      *
      * @param stateful the flag indicating whether the page should be saved
      *         between user requests
