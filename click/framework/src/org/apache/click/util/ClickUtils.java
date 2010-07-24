@@ -60,7 +60,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.control.AbstractControl;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.ActionLink;
@@ -2086,14 +2086,14 @@ public class ClickUtils {
      *
      * @param target the target object with the method to invoke
      * @param method the name of the method to invoke
-     * @return a Partial response
+     * @return an ActionResult instance
      */
-    public static Partial invokeAction(Object target, String method) {
+    public static ActionResult invokeAction(Object target, String method) {
 
         Object result = invokeMethod(target, method);
 
-        if (result == null || result instanceof Partial) {
-            return (Partial) result;
+        if (result == null || result instanceof ActionResult) {
+            return (ActionResult) result;
 
         } else {
 
@@ -2102,7 +2102,7 @@ public class ClickUtils {
                 targetMethod = target.getClass().getMethod(method);
 
                 String msg =
-                    "Invalid target method, missing Partial return type: "
+                    "Invalid target method, missing ActionResult return type: "
                     + targetMethod;
                 throw new RuntimeException(msg);
             } catch (Exception e) {
