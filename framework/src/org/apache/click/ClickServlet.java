@@ -590,13 +590,13 @@ public class ClickServlet extends HttpServlet {
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
 
-        Partial partial = null;
+        ActionResult actionResult = null;
         if (continueProcessing && !errorOccurred) {
             // Handle page method
             String pageAction = context.getRequestParameter(Page.PAGE_ACTION);
             if (pageAction != null) {
-                // Returned partial could be null
-                partial = performPageAction(page, pageAction, context);
+                // Returned actionResult could be null
+                actionResult = performPageAction(page, pageAction, context);
                 continueProcessing = false;
             }
         }
@@ -615,7 +615,7 @@ public class ClickServlet extends HttpServlet {
 
         controlRegistry.processPreResponse(context);
         controlRegistry.processPreGetHeadElements(context);
-        performRender(page, context, partial);
+        performRender(page, context, actionResult);
     }
 
     /**
@@ -638,15 +638,15 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Perform the page action for the given page and return the Partial response.
+     * Perform the page action for the given page and return the action result.
      *
      * @param page the page which action to perform
      * @param pageAction the name of the page action
      * @param context the request context
-     * @return the page action Partial response
+     * @return the page action ActionResult instance
      */
-    protected Partial performPageAction(Page page, String pageAction, Context context) {
-        Partial partial = ClickUtils.invokeAction(page, pageAction);
+    protected ActionResult performPageAction(Page page, String pageAction, Context context) {
+        ActionResult actionResult = ClickUtils.invokeAction(page, pageAction);
 
         if (logger.isTraceEnabled()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer();
@@ -654,14 +654,14 @@ public class ClickServlet extends HttpServlet {
             buffer.append("   invoked: ");
             buffer.append(pageClassName);
             buffer.append(".").append(pageAction).append("() : ");
-            if (partial == null) {
-                buffer.append("null (*no* Partial was returned by PageAction)");
+            if (actionResult == null) {
+                buffer.append("null (*no* ActionResult was returned by PageAction)");
             } else {
-                buffer.append(ClassUtils.getShortClassName(partial.getClass()));
+                buffer.append(ClassUtils.getShortClassName(actionResult.getClass()));
             }
             logger.trace(buffer.toString());
         }
-        return partial;
+        return actionResult;
     }
 
     /**
@@ -831,10 +831,10 @@ public class ClickServlet extends HttpServlet {
      *
      * @param page page to render
      * @param context the request context
-     * @param partial the partial response object
+     * @param actionResult the action result
      * @throws java.lang.Exception if error occurs
      */
-    protected void performRender(Page page, Context context, Partial partial)
+    protected void performRender(Page page, Context context, ActionResult actionResult)
         throws Exception {
 
         // Process page interceptors, and abort rendering if specified
@@ -882,13 +882,13 @@ public class ClickServlet extends HttpServlet {
                 dispatcher.forward(request, response);
             }
 
-        } else if (partial != null) {
-            renderPartial(partial, page, context);
+        } else if (actionResult != null) {
+            renderActionResult(actionResult, page, context);
 
         } else if (page.getPath() != null) {
             // Render template unless the request was a page action. This check
             // guards against the scenario where the page action returns null
-            // instead of a partial instance
+            // instead of a action result
             if (context.getRequestParameter(Page.PAGE_ACTION) == null) {
                 String pagePath = page.getPath();
 
@@ -1014,21 +1014,21 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Render the given Partial response. If the partial is null, nothing is
+     * Render the given ActionResult. If the action result is null, nothing is
      * rendered.
      *
-     * @param partial the partial response to render
+     * @param actionResult the action result to render
      * @param page the requested page
      * @param context the request context
      */
-    protected void renderPartial(Partial partial, Page page, Context context) {
-        if (partial == null) {
+    protected void renderActionResult(ActionResult actionResult, Page page, Context context) {
+        if (actionResult == null) {
             return;
         }
 
         long startTime = System.currentTimeMillis();
 
-        partial.render(context);
+        actionResult.render(context);
 
         if (!configService.isProductionMode()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(50);
@@ -1036,10 +1036,10 @@ public class ClickServlet extends HttpServlet {
                 buffer.append("   ");
             }
 
-            buffer.append("renderPartial (");
-            buffer.append(partial.getContentType());
+            buffer.append("renderActionResult (");
+            buffer.append(actionResult.getContentType());
             buffer.append(")");
-            String template = partial.getTemplate();
+            String template = actionResult.getTemplate();
             if (template != null) {
                 buffer.append(": ");
                 buffer.append(template);
@@ -1803,7 +1803,7 @@ public class ClickServlet extends HttpServlet {
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
 
-        Partial partial = null;
+        ActionResult actionResult = null;
         if (continueProcessing) {
 
             // Handle page method
@@ -1811,13 +1811,13 @@ public class ClickServlet extends HttpServlet {
             if (pageAction != null) {
                 continueProcessing = false;
 
-                // Returned partial could be null
-                partial = performPageAction(page, pageAction, context);
+                // Returned action result could be null
+                actionResult = performPageAction(page, pageAction, context);
 
                 controlRegistry.processPreResponse(context);
                 controlRegistry.processPreGetHeadElements(context);
 
-                renderPartial(partial, page, context);
+                renderActionResult(actionResult, page, context);
             }
         }
 
@@ -1832,7 +1832,7 @@ public class ClickServlet extends HttpServlet {
                 processAjaxTargetControls(context, eventDispatcher, controlRegistry);
 
                 // Fire behaviors registered during the onProcess event
-                // The target behavior will set the eventDispatcher partial instance
+                // The target behavior will set the eventDispatcher action result instance
                 // to render
                 eventDispatcher.fireBehaviors(context);
 
@@ -1841,10 +1841,10 @@ public class ClickServlet extends HttpServlet {
                 controlRegistry.processPreResponse(context);
                 controlRegistry.processPreGetHeadElements(context);
 
-                partial = eventDispatcher.getPartial();
+                actionResult = eventDispatcher.getActionResult();
 
-                // Render the partial
-                renderPartial(partial, page, context);
+                // Render the actionResult
+                renderActionResult(actionResult, page, context);
 
             } else {
 
@@ -1878,7 +1878,7 @@ public class ClickServlet extends HttpServlet {
             }
         } else {
             // If security check fails for an Ajax request, Click returns without
-            // any rendering. It is up to the user to render a Partial response
+            // any rendering. It is up to the user to render an ActionResult
             // in the onSecurityCheck event
             // Note: this code path is also followed if a pageAction is invoked
         }

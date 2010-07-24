@@ -19,13 +19,13 @@
 package org.apache.click.examples.page.ajax.content;
 
 import org.apache.click.Control;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
 
 /**
- * Demonstrates how a Partial can return a JSON response.
+ * Demonstrates how an ActionResult can return a JSON response.
  */
 public class JsonResponsePage extends BorderPage {
 
@@ -44,13 +44,13 @@ public class JsonResponsePage extends BorderPage {
         link.addBehavior(new AjaxBehavior() {
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 // Formatted date instance that will be added to the
                 String now = format.currentDate("MMM, yyyy dd HH:MM:ss");
 
                 String msg = "{\"msg\": \"JSON returned at: \", \"date\": \"" + now + "\"}";
-                // Return a partial containing the message
-                return new Partial(msg, Partial.JSON);
+                // Return an action result containing the message
+                return new ActionResult(msg, ActionResult.JSON);
             }
         });
     }

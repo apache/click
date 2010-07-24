@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 
 import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
@@ -62,20 +62,20 @@ public class AjaxLiveScroller extends BorderPage {
      * A pageAction method that is called when the user scrolled to the bottom
      * of the page and more data is needed.
      */
-    public Partial onScroll() {
+    public ActionResult onScroll() {
         // Check if the offset parameter was received.
         int offset = NumberUtils.toInt(getContext().getRequest().getParameter("offset"));
 
         List<Customer> customers = loadCustomers(offset, pageSize);
 
         // Return customers between the given offset and pageSize
-        Map partialModel = new HashMap();
-        partialModel.put("customers", customers);
-        partialModel.put("format", getFormat());
+        Map actionResultModel = new HashMap();
+        actionResultModel.put("customers", customers);
+        actionResultModel.put("format", getFormat());
 
-        // Return a partial for the customers.htm template and customers
-        Partial partial = new Partial("/ajax/scroller/customers.htm", partialModel, Partial.HTML);
-        return partial;
+        // Return an action result for the customers.htm template and customers
+        ActionResult actionResult = new ActionResult("/ajax/scroller/customers.htm", actionResultModel, ActionResult.HTML);
+        return actionResult;
     }
 
     @Override

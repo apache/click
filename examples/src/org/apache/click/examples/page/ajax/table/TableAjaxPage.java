@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import javax.annotation.Resource;
 import org.apache.click.Control;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Column;
@@ -59,9 +59,9 @@ public class TableAjaxPage extends BorderPage {
         editLink.addBehavior(new AjaxBehavior() {
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 Customer customer = customerService.getCustomerForID(editLink.getValue());
-                return new Partial("Edit Clicked for customer: " + customer.getName(), Partial.TEXT);
+                return new ActionResult("Edit Clicked for customer: " + customer.getName(), ActionResult.TEXT);
             }
         });
 
@@ -69,22 +69,22 @@ public class TableAjaxPage extends BorderPage {
         deleteLink.addBehavior(new AjaxBehavior() {
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 Customer customer = customerService.getCustomerForID(deleteLink.getValue());
-                return new Partial("Delete Clicked for customer: " + customer.getName(), Partial.TEXT);
+                return new ActionResult("Delete Clicked for customer: " + customer.getName(), ActionResult.TEXT);
             }
         });
 
         table.getControlLink().addBehavior(new AjaxBehavior() {
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
 
                 // NOTE: Ajax requests only process the target Control. Here we
                 // process the table in order to update paging and sorting state
                 table.onProcess();
 
-                return new Partial(table.toString(), Partial.HTML);
+                return new ActionResult(table.toString(), ActionResult.HTML);
             }
         });
 

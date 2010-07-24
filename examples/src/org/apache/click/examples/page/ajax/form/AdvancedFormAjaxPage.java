@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.apache.click.Control;
 import org.apache.click.ControlRegistry;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
@@ -61,20 +61,20 @@ public class AdvancedFormAjaxPage extends BorderPage {
         save.addBehavior(new AjaxBehavior() {
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 // Update the form which might contain errors
-                return new Partial(form.toString(), Partial.HTML);
+                return new ActionResult(form.toString(), ActionResult.HTML);
             }
         });
 
         cancel.addBehavior(new AjaxBehavior() {
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 // Update the form and ensure errors and values have been cleared
                 form.clearValues();
                 form.clearErrors();
-                return new Partial(form.toString(), Partial.HTML);
+                return new ActionResult(form.toString(), ActionResult.HTML);
             }
         });
 

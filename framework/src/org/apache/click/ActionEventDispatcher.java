@@ -83,10 +83,10 @@ public class ActionEventDispatcher {
     Set<Control> behaviorSourceSet;
 
     /**
-     * The {@link org.apache.click.Partial} response to render. This partial is
-     * set from the target Behavior.
+     * The {@link org.apache.click.ActionResult} to render. This action result is
+     * returned from the target Behavior.
      */
-    Partial partial;
+    ActionResult actionResult;
 
     /** The application log service. */
     LogService logger;
@@ -307,33 +307,34 @@ public class ActionEventDispatcher {
 
             if (isRequestTarget) {
 
-                // The first non-null Partial returned will be rendered, other Partials are ignored
-                Partial behaviorPartial = behavior.onAction(source);
-                if (partial == null && behaviorPartial != null) {
-                    partial = behaviorPartial;
+                // The first non-null ActionResult returned will be rendered, other
+                // ActionResult instances are ignored
+                ActionResult behaviorActionResult = behavior.onAction(source);
+                if (actionResult == null && behaviorActionResult != null) {
+                    actionResult = behaviorActionResult;
                 }
 
                 if (logger.isTraceEnabled()) {
                     String behaviorClassName = ClassUtils.getShortClassName(behavior.getClass());
-                    String partialClassName = null;
+                    String actionResultClassName = null;
 
-                    if (behaviorPartial != null) {
-                        partialClassName = ClassUtils.getShortClassName(behaviorPartial.getClass());
+                    if (behaviorActionResult != null) {
+                        actionResultClassName = ClassUtils.getShortClassName(behaviorActionResult.getClass());
                     }
 
                     HtmlStringBuffer buffer = new HtmlStringBuffer();
                     buffer.append("      invoked: ");
                     buffer.append(behaviorClassName);
                     buffer.append(".onAction() : ");
-                    buffer.append(partialClassName);
+                    buffer.append(actionResultClassName);
 
-                    if (partial == behaviorPartial && behaviorPartial != null) {
-                        buffer.append(" (Partial content will be rendered)");
+                    if (actionResult == behaviorActionResult && behaviorActionResult != null) {
+                        buffer.append(" (ActionResult will be rendered)");
                     } else {
-                        if (behaviorPartial == null) {
-                            buffer.append(" (Partial is null and will be ignored)");
+                        if (behaviorActionResult == null) {
+                            buffer.append(" (ActionResult is null and will be ignored)");
                         } else {
-                            buffer.append(" (Partial will be ignored since another Behavior already retuned a non-null Partial)");
+                            buffer.append(" (ActionResult will be ignored since another Behavior already retuned a non-null ActionResult)");
                         }
                     }
 
@@ -441,12 +442,12 @@ public class ActionEventDispatcher {
     }
 
     /**
-     * Return the Partial Ajax response or null if no behavior was dispatched.
+     * Return the Behavior's action result or null if no behavior was dispatched.
      *
-     * @return the Partial Ajax response or null if no behavior was dispatched
+     * @return the Behavior's action result or null if no behavior was dispatched
      */
-    Partial getPartial() {
-        return partial;
+    ActionResult getActionResult() {
+        return actionResult;
     }
 
     /**

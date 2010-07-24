@@ -19,13 +19,13 @@
 package org.apache.click.examples.page.ajax.content;
 
 import org.apache.click.Control;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
 
 /**
- * Demonstrates how a Partial can return an XML response.
+ * Demonstrates how an ActionResult can return an XML response.
  */
 public class XmlResponsePage extends BorderPage {
 
@@ -44,7 +44,7 @@ public class XmlResponsePage extends BorderPage {
         link.addBehavior(new AjaxBehavior() {
 
             @Override
-            public Partial onAction(Control source) {
+            public ActionResult onAction(Control source) {
                 // Formatted date instance that will be added to the
                 String now = format.currentDate("MMM, yyyy dd HH:MM:ss");
 
@@ -52,8 +52,8 @@ public class XmlResponsePage extends BorderPage {
                     + "<msg>XML returned at: </msg>"
                     + "<date>" + now + "</date>"
                     + "</payload>";
-                // Return a partial containing the message
-                return new Partial(msg, Partial.XML);
+                // Return an action result containing the message
+                return new ActionResult(msg, ActionResult.XML);
             }
         });
     }

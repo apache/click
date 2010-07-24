@@ -25,7 +25,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
@@ -71,9 +71,9 @@ public class ExcelExportPage extends BorderPage {
      * This is a "pageAction" method and will render the Excel spreadsheet.
      *
      * Note the signature of the pageAction: a public, no-argument method
-     * returning a Partial instance.
+     * returning an ActionResult instance.
      */
-    public Partial renderSpreadsheet() {
+    public ActionResult renderSpreadsheet() {
         HttpServletResponse response = getContext().getResponse();
 
         HSSFWorkbook wb = createWorkbook();
@@ -86,9 +86,9 @@ public class ExcelExportPage extends BorderPage {
             wb.write(baos);
 
             String contentTyype = ClickUtils.getMimeType(".xls");
-            Partial partial = new Partial(baos.toByteArray(), contentTyype);
+            ActionResult actionResult = new ActionResult(baos.toByteArray(), contentTyype);
 
-            return partial;
+            return actionResult;
 
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);
