@@ -425,8 +425,11 @@ public class Table extends AbstractControl {
      * Flag indicating if <tt>rowList</tt> is nullified when
      * <tt>onDestroy()</tt> is invoked, default is true. This flag only applies
      * to <tt>stateful</tt> pages.
-     * <p/>
+     *
      * @see #setNullifyRowListOnDestroy(boolean)
+     *
+     * @deprecated stateful pages are not supported anymore, use stateful
+     * Controls instead
      */
     protected boolean nullifyRowListOnDestroy = true;
 
@@ -1018,7 +1021,9 @@ public class Table extends AbstractControl {
     @Override
     public void setName(String name) {
         super.setName(name);
-        getControlLink().setName(getName() + "-controlLink");
+        ActionLink localControlLink = getControlLink();
+        localControlLink.setName(getName() + "-controlLink");
+        localControlLink.setParent(this);
     }
 
     /**
