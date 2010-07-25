@@ -98,8 +98,8 @@ import org.apache.click.util.ClickUtils;
  *
  * The {@link #contentType} of the ActionResult must be set to the appropriate type
  * in order for the client to recognize the response. ActionResult provides constants
- * for some of the more common <tt>content types</tt>, including: {@value XML},
- * {@value HTML}, {@value JSON}, {@value TEXT}.
+ * for some of the common <tt>content types</tt>, including: {@link #XML text/xml},
+ * {@link #HTML text/html}, {@link #JSON application/json}, {@link #TEXT text/plain}.
  * <p/>
  * For example:
  * <pre class="prettyprint">
