@@ -85,6 +85,39 @@ service.
       when upgrading from previous releases.
       </div>
       <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+        <b>Deprecated:</b>
+      </div>
+      <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+        <li class="change">
+          Deprecated stateful page support: <a href="click-api/org/apache/click/Page.html#setStateful(boolean)">Page.setStateful()</a>.
+          <p/>
+          Stateful pages had the following issues:
+          <ul>
+            <li>
+            Stateful pages was introduced to make it easier to store page state across
+            multiple HTTP requests. However developing a stateful page is very different
+            from developing a stateless one and this lead to Click applications that are
+            inconsistent and harder to maintain.
+            </li>
+            <li>
+            In addition stateful page support has never been implemented consistently
+            across the framework and some components did not work correctly.
+            </li>
+            <li>
+            Stateful pages are very coarse grained, making it difficult to control
+            which objects are stored in the session.
+            </li>
+            <li>
+            Stateful pages have also introduced unnecessary complexity in the framework
+            itself, which can now be phased out.
+            </li>
+          </ul>
+          Unfortunately there is no direct upgrade path from a stateful page.
+          However the majority of use cases are catered for by the new stateful
+          controls: Table, Form, TabbedPanel, Field and AbstractLink.
+        </li>
+      </ul>
+      <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
       <b>New examples:</b>
       </div>
       <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
