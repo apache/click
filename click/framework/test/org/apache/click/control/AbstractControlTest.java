@@ -19,8 +19,6 @@
 package org.apache.click.control;
 
 import junit.framework.TestCase;
-import org.apache.click.MockContext;
-import org.apache.click.ajax.AjaxBehavior;
 
 /**
  * Test AbstractLink behavior.
@@ -32,20 +30,6 @@ public class AbstractControlTest extends TestCase {
      * target.
      */
     public void testRegisterAsAjaxTargetThroughAddBehavior() {
-        MockContext.initContext();
-
-        AbstractControl control = new AbstractControl() {
-            @Override
-            public String getTag() {
-                return null;
-            }
-        };
-
-        assertFalse(control.registeredAsAjaxTarget);
-        control.addBehavior(new AjaxBehavior());
-        assertTrue(control.registeredAsAjaxTarget);
-
-        control.onInit();
     }
 
     /**
@@ -53,27 +37,5 @@ public class AbstractControlTest extends TestCase {
      * if it has behaviors.
      */
     public void testRegisterAsAjaxTargetThroughOnInit() {
-        MockContext.initContext();
-
-        AbstractControl control = new AbstractControl() {
-            @Override
-            public String getTag() {
-                return null;
-            }
-        };
-
-        // Since no behaviors have been added yet, check that onInit does not
-        // register the control as an AJAX target
-        assertFalse(control.registeredAsAjaxTarget);
-        control.onInit();
-        assertFalse(control.registeredAsAjaxTarget);
-
-        // Bypass addBehavior which would register the control with the ControlRegistry
-        control.getBehaviors().add(new AjaxBehavior());
-        assertFalse(control.registeredAsAjaxTarget);
-
-        // Check that onInit does register the control as an AJAX target
-        control.onInit();
-        assertTrue(control.registeredAsAjaxTarget);
     }
 }
