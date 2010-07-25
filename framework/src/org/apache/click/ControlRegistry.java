@@ -54,12 +54,12 @@ import org.apache.commons.lang.Validate;
  * public class MyContainer extends AbstractContainer {
  *
  *     public void onInit() {
- *         Behavior behavior = getBehavior();
- *         ControlRegistry.registerInterceptor(this, behavior);
+ *         Behavior controlInterceptor = getInterceptor();
+ *         ControlRegistry.registerInterceptor(this, controlInterceptor);
  *     }
  *
- *     private Behavior getBehavior() {
- *         behavior = new Behavior() {
+ *     private Behavior getInterceptor() {
+ *         Behavior controlInterceptor = new Behavior() {
  *
  *             // This method is invoked before the controls are rendered to the client
  *             public void preResponse(Control source) {
@@ -75,7 +75,7 @@ import org.apache.commons.lang.Validate;
  *             public void preDestroy(Control source) {
  *             }
  *         };
- *         return behavior;
+ *         return controlInterceptor;
  *     }
  * } </pre>
  */
@@ -92,8 +92,8 @@ public class ControlRegistry {
     /** The set of Ajax target controls. */
     Set<Control> ajaxTargetControls;
 
-    /** The list of registered behaviors. */
-    List<BehaviorHolder> behaviors;
+    /** The list of registered interceptors. */
+    List<InterceptorHolder> interceptors;
 
     /** The application log service. */
     LogService logger;
@@ -134,39 +134,31 @@ public class ControlRegistry {
     }
 
     /**
-     * Register a control event interceptor for the given control and behavior.
+     * Register a control event interceptor for the given Control and Behavior.
      * The control will be passed as the source control to the Behavior
-     * interception methods:
+     * interceptor methods:
      * {@link org.apache.click.Behavior#preGetHeadElements(org.apache.click.Control) preGetHeadElements(Control)},
-     * {@link org.apache.click.Behavior#preResponse(org.apache.click.Control) preResponse(Control) and
-     * {@link org.apache.click.Behavior#preDestroy()}.
+     * {@link org.apache.click.Behavior#preResponse(org.apache.click.Control) preResponse(Control)} and
+     * {@link org.apache.click.Behavior#preDestroy(org.apache.click.Control) preDestroy(Control)}.
      * <p/>
      * <b>Please note:</b> the ControlRegistry is stateless. For each request
      * a new registry is created. This means a control and behavior is only
-     * registered for a single request and must be registered again for subsequent
+     * registered for a single request and will be registered again on subsequent
      * requests.
      *
-     * <b>Stateful Page note:</b> when invoking this method directly from a stateful
-     * page, ensure the control is registered on every request. Generally this
-     * means that for stateful pages this method should be used in the Page
-     * <tt>onInit</tt> method (which is invoked for every request) instead of the
-     * Page constructor (which is invoked only once). This warning can be ignored
-     * for stateless pages since both the constructor and onInit method is invoked
-     * every request.
-     *
-     * @param source the behavior source control
-     * @param behavior the behavior to register
+     * @param source the interceptor source control
+     * @param controlInterceptor the control interceptor to register
      */
-    public static void registerInterceptor(Control control, Behavior behavior) {
+    public static void registerInterceptor(Control control, Behavior controlInterceptor) {
         if (control == null) {
             throw new IllegalArgumentException("control cannot be null");
         }
-        if (behavior == null) {
-            throw new IllegalArgumentException("behavior cannot be null");
+        if (controlInterceptor == null) {
+            throw new IllegalArgumentException("control interceptor cannot be null");
         }
 
         ControlRegistry instance = getThreadLocalRegistry();
-        instance.internalRegisterCallback(control, behavior);
+        instance.internalRegisterInterceptor(control, controlInterceptor);
     }
 
     // Protected Methods ------------------------------------------------------
@@ -183,11 +175,11 @@ public class ControlRegistry {
     // Package Private Methods ------------------------------------------------
 
     /**
-     * Remove all behaviors and controls from this registry.
+     * Remove all interceptors and ajax target controls from this registry.
      */
     void clear() {
-        if (hasBehaviors()) {
-            getBehaviors().clear();
+        if (hasInterceptors()) {
+            getInterceptors().clear();
         }
 
         if (hasAjaxTargetControls()) {
@@ -206,21 +198,21 @@ public class ControlRegistry {
     }
 
     /**
-     * Register the source control and associated behavior.
+     * Register the source control and associated interceptor.
      *
-     * @param source the behavior source control
-     * @param behavior the behavior to register
+     * @param source the interceptor source control
+     * @param interceptor the control interceptor to register
      */
-    void internalRegisterCallback(Control source, Behavior behavior) {
+    void internalRegisterInterceptor(Control source, Behavior controlInterceptor) {
         Validate.notNull(source, "Null source parameter");
-        Validate.notNull(behavior, "Null behavior parameter");
+        Validate.notNull(controlInterceptor, "Null interceptor parameter");
 
-        BehaviorHolder behaviorHolder = new BehaviorHolder(source, behavior);
+        InterceptorHolder interceptorHolder = new InterceptorHolder(source, controlInterceptor);
 
-        // Guard against adding duplicate behaviors
-        List<BehaviorHolder> localBehaviors = getBehaviors();
-        if (!localBehaviors.contains(behaviorHolder)) {
-            localBehaviors.add(behaviorHolder);
+        // Guard against adding duplicate interceptors
+        List<InterceptorHolder> localInterceptors = getInterceptors();
+        if (!localInterceptors.contains(interceptorHolder)) {
+            localInterceptors.add(interceptorHolder);
         }
     }
 
@@ -233,11 +225,11 @@ public class ControlRegistry {
             }
         }
 
-        if (hasBehaviors()) {
-            for (BehaviorHolder behaviorHolder : getBehaviors()) {
-                Behavior behavior = behaviorHolder.getBehavior();
-                Control control = behaviorHolder.getControl();
-                behavior.preResponse(control);
+        if (hasInterceptors()) {
+            for (InterceptorHolder interceptorHolder : getInterceptors()) {
+                Behavior interceptor = interceptorHolder.getInterceptor();
+                Control control = interceptorHolder.getControl();
+                interceptor.preResponse(control);
             }
         }
     }
@@ -251,11 +243,11 @@ public class ControlRegistry {
             }
         }
 
-        if (hasBehaviors()) {
-            for (BehaviorHolder behaviorHolder : getBehaviors()) {
-                Behavior behavior = behaviorHolder.getBehavior();
-                Control control = behaviorHolder.getControl();
-                behavior.preGetHeadElements(control);
+        if (hasInterceptors()) {
+            for (InterceptorHolder interceptorHolder : getInterceptors()) {
+                Behavior interceptor = interceptorHolder.getInterceptor();
+                Control control = interceptorHolder.getControl();
+                interceptor.preGetHeadElements(control);
             }
         }
     }
@@ -269,11 +261,11 @@ public class ControlRegistry {
             }
         }
 
-        if (hasBehaviors()) {
-            for (BehaviorHolder behaviorHolder : getBehaviors()) {
-                Behavior behavior = behaviorHolder.getBehavior();
-                Control control = behaviorHolder.getControl();
-                behavior.preDestroy(control);
+        if (hasInterceptors()) {
+            for (InterceptorHolder interceptorHolder : getInterceptors()) {
+                Behavior interceptor = interceptorHolder.getInterceptor();
+                Control control = interceptorHolder.getControl();
+                interceptor.preDestroy(control);
             }
         }
     }
@@ -301,25 +293,25 @@ public class ControlRegistry {
     }
 
     /**
-     * Checks if any control behaviors have been registered.
+     * Checks if any control interceptors have been registered.
      */
-    boolean hasBehaviors() {
-        if (behaviors == null || behaviors.isEmpty()) {
+    boolean hasInterceptors() {
+        if (interceptors == null || interceptors.isEmpty()) {
             return false;
         }
         return true;
     }
 
     /**
-     * Return the set of registered behaviors.
+     * Return the set of registered control interceptors.
      *
-     * @return set of registered behaviors
+     * @return set of registered interceptors
      */
-    List<BehaviorHolder> getBehaviors() {
-        if (behaviors == null) {
-            behaviors = new ArrayList<BehaviorHolder>();
+    List<InterceptorHolder> getInterceptors() {
+        if (interceptors == null) {
+            interceptors = new ArrayList<InterceptorHolder>();
         }
-        return behaviors;
+        return interceptors;
     }
 
     static ControlRegistry getThreadLocalRegistry() {
@@ -423,23 +415,23 @@ public class ControlRegistry {
         }
     }
 
-    static class BehaviorHolder {
+    static class InterceptorHolder {
 
-        private Behavior behavior;
+        private Behavior interceptor;
 
         private Control control;
 
-        public BehaviorHolder(Control control, Behavior behavior) {
+        public InterceptorHolder(Control control, Behavior interceptor) {
             this.control = control;
-            this.behavior = behavior;
+            this.interceptor = interceptor;
         }
 
-        public Behavior getBehavior() {
-            return behavior;
+        public Behavior getInterceptor() {
+            return interceptor;
         }
 
-        public void setBehavior(Behavior behavior) {
-            this.behavior = behavior;
+        public void setInterceptor(Behavior interceptor) {
+            this.interceptor = interceptor;
         }
 
         public Control getControl() {
@@ -465,31 +457,31 @@ public class ControlRegistry {
             }
 
             //2. Use the instanceof operator to check if the argument is of the correct type.
-            if (!(o instanceof BehaviorHolder)) {
+            if (!(o instanceof InterceptorHolder)) {
                 return false;
             }
 
             //3. Cast the argument to the correct type.
-            BehaviorHolder that = (BehaviorHolder) o;
+            InterceptorHolder that = (InterceptorHolder) o;
 
             boolean equals = this.control == null ? that.control == null : this.control.equals(that.control);
             if (!equals) {
                 return false;
             }
 
-            return this.behavior == null ? that.behavior == null : this.behavior.equals(that.behavior);
+            return this.interceptor == null ? that.interceptor == null : this.interceptor.equals(that.interceptor);
         }
 
         /**
          * @see java.lang.Object#hashCode()
          *
-         * @return the BehaviorHolder hashCode
+         * @return the InterceptorHolder hashCode
          */
         @Override
         public int hashCode() {
             int result = 17;
             result = 37 * result + (control == null ? 0 : control.hashCode());
-            result = 37 * result + (behavior == null ? 0 : behavior.hashCode());
+            result = 37 * result + (interceptor == null ? 0 : interceptor.hashCode());
             return result;
         }
     }

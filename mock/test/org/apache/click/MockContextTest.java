@@ -238,8 +238,8 @@ public class MockContextTest extends TestCase {
 
         ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
-        // Assert there is one behavior registered
-        assertEquals(1, registry.getBehaviors().size());
+        // Assert there is one interceptor registered
+        assertEquals(1, registry.getInterceptors().size());
 
         // Process the preResponse interceptor methods
         context.executePreResponse();
@@ -257,7 +257,7 @@ public class MockContextTest extends TestCase {
         // The reason the behaviors are not automatically removed is because the
         // last behavior is onDestroy, which is right before the request goes out
         // of scope anyway
-        assertEquals(1, registry.getBehaviors().size());
+        assertEquals(1, registry.getInterceptors().size());
     }
 
     /**
@@ -297,17 +297,17 @@ public class MockContextTest extends TestCase {
 
         ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
-        // Assert there is one behavior registered
-        assertEquals(1, registry.getBehaviors().size());
+        // Assert there is one interceptor registered
+        assertEquals(1, registry.getInterceptors().size());
 
         // Context reset should clear the dispatcher
         context.reset();
 
-        // Assert that the behavior was not removed after all events was processed
-        // The reason the behaviors are not automatically removed is because the
-        // last behavior is onDestroy, which is right before the request goes out
+        // Assert that the interceptor was not removed after all events was processed
+        // The reason the interceptor are not automatically removed is because the
+        // last interceptor is onDestroy, which is right before the request goes out
         // of scope anyway
-        assertEquals(0, registry.getBehaviors().size());
+        assertEquals(0, registry.getInterceptors().size());
     }
 
     // Behavior tests ---------------------------------------------------------
