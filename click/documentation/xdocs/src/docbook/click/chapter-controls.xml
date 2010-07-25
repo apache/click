@@ -77,7 +77,7 @@
     <itemizedlist>
       <listitem>
         <para>
-          <ulink url="../../click-api/org/apache/click/Control.html#getHeadElements">getHeadElements()</ulink>
+          <ulink url="../../click-api/org/apache/click/Control.html#getHeadElements()">getHeadElements()</ulink>
           - defines the controls HTML header imports.
         </para>
       </listitem>
