@@ -1044,6 +1044,12 @@ public void onGet() {
   <sect1 id="stateful-pages" remap="h2">
     <title>Stateful Pages</title>
 
+    <para><symbol>PLEASE NOTE:</symbol> stateful pages have been deprecated in
+    Click 2.3.0 and will be removed in a future release. Do not use stateful pages
+    in your applications. Instead use stateful controls or HttpSession to store
+    state between requests.
+    </para>
+
     <para>Click supports stateful pages where the state of the page is saved
     between the users requests. Stateful pages are useful in a number of
     scenarios including:
