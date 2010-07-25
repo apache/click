@@ -628,6 +628,11 @@ public interface Controller {
    support you can render directly to the servlet response and bypass the page
    template rendering.
    <p/>
+   In order to bypass the Page template rendering you <strong>must</strong> set
+   the <tt>Page path</tt> to <tt>null</tt>. If Click does not know the location of the
+   Page template, it won't render it. If you do not set the Page path to null,
+   Click will attempt to render the Page template which can lead to undesirable results.
+   <p/>
    Here is an example to render either a PDF or Excel document:
 <pre class="prettyprint">
 
