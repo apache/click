@@ -964,6 +964,230 @@ public void onPost() {
 
   </sect1>
 
+  <sect1 id="page-actions" remap="h2">
+    <title>Page Actions</title>
+
+    <para>Page Action is a feature to directly invoke a <literal>Page method</literal>
+    from the browser. The Page Action method returns an
+    <ulink url="../../click-api/org/apache/click/ActionResult.html">ActionResult</ulink>
+    object that is rendered directly to the browser. In other words the Page template will
+    not be rendered. More on this later.
+    </para>
+
+    <para>To invoke a Page Action, specify the parameter <varname>"pageAction"</varname>
+    and the name of the page method, for example: <symbol>"onRenderImage"</symbol>.
+    </para>
+
+    <para>Let's take a quick look at how a Page Action can be leveraged to retrieve
+    an image. In this example we'll create an HTML <literal>&lt;img&gt;</literal>
+    element which <literal>src</literal> attribute specifies the Page Action
+    that will return the image data.
+    </para>
+
+    <para>First we create our template:
+    </para>
+
+    <programlisting language="xml">&lt;img src="/mycorp/images.htm?<varname>pageAction</varname>=<symbol>onRenderImage</symbol>"/&gt;
+</programlisting>
+
+    <para>Next we create our ImagePage with a Page Action method called
+    <symbol>onRenderImage</symbol> that returns an <token>ActionResult</token>
+    instance:
+    </para>
+
+    <programlisting language="java">public class ImagePage extends Page {
+
+    public <token>ActionResult</token> <symbol>onRenderImage()</symbol> {
+        byte[] imageData = getImageAsBytes();
+        String contentType = ClickUtils.getMimeType("png");
+        return new <token>ActionResult</token>(imageData, contentType);
+    }
+} </programlisting>
+
+    <para>A Page Action is a normal Page method with the following signature:
+    a <symbol>public no-arg</symbol> method returning an <token>ActionResult</token>
+    instance:
+    </para>
+
+<programlisting language="java">
+// The Page Action method is public, doesn't accept any arguments and returns an ActionResult
+public <token>ActionResult</token> <symbol>onRenderImage()</symbol> {
+    byte[] imageData = getImageAsBytes();
+    String contentType = ClickUtils.getMimeType("png");
+    return new <token>ActionResult</token>(imageData, contentType);
+} </programlisting>
+
+    <para>The <token>ActionResult</token> contains the data that is rendered to
+    the client browser. In the example above, the result will the Image byte array
+    with a Content-Type of: <literal>"images/png"</literal>.
+    </para>
+
+     <sect2 id="page-action-execution" remap="h3">
+      <title>Page Action Execution</title>
+
+        <para>Page Actions are page methods that handle the processing of a user
+        request and render a result to the browser. The execution sequence for a
+        Page Action being processed and rendered is illustrated in the figure below.
+        </para>
+
+        <figure id="page-action-sequence-diagram">
+          <title>Page Action Request Sequence Diagram
+          </title>
+          <inlinemediaobject>
+            <imageobject>
+            <imagedata fileref="images/pages/page-action-sequence-diagram.png" format="PNG" scale="65"/>
+            </imageobject>
+          </inlinemediaobject>
+        </figure>
+
+        <para>Stepping through this Page Action request sequence, a new Page instance
+        is created and the attributes for the Page are set (format, headers). Next,
+        request parameter values are bound to matching Page fields.
+        </para>
+
+        <para>Then the <methodname>onSecurityCheck()</methodname> handler is executed.
+        This method can be used to ensure the user is authorized to access the Page Action,
+        and if necessary abort any further processing. If
+        <methodname>onSecurityCheck()</methodname> return false, no response is
+        sent back to the client. Note, if you want to send a specific response to
+        the client or perform a redirect you have to do that from the
+        <methodname>onSecurityCheck()</methodname> event, since other Page events
+        are not processed.
+        </para>
+
+        <para>Next the target <methodname>page method</methodname> is invoked
+        which returns an <classname>ActionResult</classname> that is rendered to
+        the client.</para>
+
+        <para>If the page method returns <literal>null</literal> no response is
+        rendered to the browser.
+        </para>
+
+      </sect2>
+
+      <sect2 id="page-action-result" remap="h3">
+      <title>ActionResult</title>
+
+        <para>An ActionResult represents the content returned by a Page Action
+        which is then rendered to the client browser. ActionResults normally
+        contains HTML or image data that is rendered to the browser. When a Page
+        Action is invoked the Page template rendering is bypassed and only the
+        ActionResult content is rendered to the browser. This allows a Page Action
+        to return a "partial" response, as opposed to a "full" response, because
+        the Page template (which can be viewed as a "full" response) is bypassed
+        when invoking a Page Action.
+        </para>
+
+      </sect2>
+
+      <sect2 id="page-action-example" remap="h3">
+      <title>Page Action Example</title>
+
+        <para>Let's step through a Page Action example. First we create an ImagePage
+        class with the method "getImageData" which is the Page Action we want to invoke:
+        </para>
+
+        <programlisting language="java">public ImagePage extends Page {
+
+    public ActionResult getImageData() {
+        byte[] imageData = loadImageData();
+        String contentType = ClickUtils.getContentType("png");
+        return new ActionResult(imageData, contentType);
+    }
+} </programlisting>
+
+        <para>Next we have the page template image.htm:
+        </para>
+
+        <programlisting language="xml">&lt;html&gt;
+  &lt;body&gt;
+
+    &lt;img src="/mycorp/image.htm?<varname>pageAction</varname>=<symbol>getImageData</symbol>"/&gt;
+
+  &lt;/body&gt;
+&lt;/html&gt; </programlisting>
+
+      <para>The browser renders the <literal>&lt;img&gt;</literal> element and
+      requests the image src url. Click invokes the page method <symbol>getImageData</symbol>
+      and renders the result to the browser.
+      </para>
+
+      <para>Looking at the output log we see the following trace:
+      </para>
+
+      <literallayout>[Click] [info ] handleRequest:  /image.htm - 84 ms
+[Click] [debug] GET http://localhost:8080/mycorp/image.htm
+[Click] [trace]    is Ajax request: false
+[Click] [trace]    request param: pageAction=getImageData
+[Click] [trace]    invoked: ImagePage.&lt;&lt;init&gt;&gt;
+[Click] [trace]    invoked: ImagePage.onSecurityCheck() : true
+[Click] [trace]    invoked: ImagePage.getImageData() : ActionResult
+[Click] [info ]    renderActionResult (image/png) - 0 ms
+[Click] [trace]    invoked: ImagePage.onDestroy()
+[Click] [info ] handleRequest:  /image.htm - 98 ms</literallayout>
+
+      </sect2>
+
+      <sect2 id="page-action-accessing-request-parameters" remap="h3">
+      <title>Accessing Request Parameters</title>
+
+        <para>Request parameters can be accessed through the <classname>Context</classname>
+        as shown below:
+        </para>
+
+        <programlisting language="java">public ImagePage extends Page {
+
+    public ActionResult getImageData() {
+        // Retrieve a request parameter through the Context
+        Context context = getContext();
+        String imageName = context.getRequestParameter("imageName");
+
+        byte[] imageData = loadImageData(imageName);
+        String contentType = ClickUtils.getContentType("png");
+        return new ActionResult(imageData, contentType);
+    }
+} </programlisting>
+
+      </sect2>
+
+      <sect2 id="page-action-set-response-headers" remap="h3">
+      <title>Set response headers and status code</title>
+
+      <para>When handling a Page Action you might need to set the HTTP response
+      headers or status code. You do this through the Servlet API's,
+      <classname>HttpServetlResponse</classname> which can be accessed
+      through the <classname>Context</classname>.
+      </para>
+
+      <para>For example:
+      </para>
+
+<programlisting language="java">package examples.page;
+
+import java.util.Date;
+import org.apache.click.Page;
+
+public ImagePage extends Page {
+
+    public ActionResult getImageData() {
+        // Headers and Status code are set on the HttpServletResponse
+        HttpServletResponse response = getContext().getResponse();
+
+        // The headers can be set as follows:
+        response.setHeader("Content-Disposition", "attachment; filename=\"report.xls\"");
+
+        ...
+
+        // The response status can be set as follows:
+        response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+
+        ...
+    }
+} </programlisting>
+
+      </sect2>
+  </sect1>
+
   <sect1 id="page-direct-rendering" remap="h2">
     <title>Direct Rendering</title>
 
