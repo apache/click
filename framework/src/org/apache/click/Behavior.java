@@ -19,7 +19,7 @@
 package org.apache.click;
 
 /**
- * Behaviors provide a mechanism to influence how Controls behave at runtime.
+ * Behaviors provide a mechanism for changing how Controls behave at runtime.
  * Behaviors are added to a Control and uses interceptor methods to decorate and
  * enhance the source Control. Behaviors are most often used to add Ajax support
  * to Controls.
