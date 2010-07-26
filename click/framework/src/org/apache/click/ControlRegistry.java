@@ -28,8 +28,10 @@ import org.apache.commons.lang.Validate;
 
 /**
  * Provides a centralized registry where Controls can be registered and interact
- * with the ClickServlet. The registry is often used by Controls to register
- * themselves as the target of an Ajax request.
+ * with the ClickServlet. The registry can be used by Controls to register
+ * themselves as potential <tt>targets</tt> for Ajax requests. The ControlRegistry
+ * provides the ClickServlet with easy access to those Controls that have
+ * Behaviors and want to handle and process Ajax requests.
  * <p/>
  * <b>Please note:</b> a new registry is created for every request.
  *
