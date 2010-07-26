@@ -451,20 +451,20 @@ public interface Control extends Serializable {
     public Set<Behavior> getBehaviors();
 
     /**
-     * Returns <tt>true</tt> if this control is an AJAX target, <tt>false</tt>
+     * Returns <tt>true</tt> if this control is an Ajax target, <tt>false</tt>
      * otherwise.
      * <p/>
      * In order for a Control to be considered as an Ajax target it must be
      * registered through {@link org.apache.click.ControlRegistry#registerAjaxTarget(org.apache.click.Control) ControlRegistry.registerAjaxTarget}.
      * <p/>
-     * When the Click handles an AJAX request it iterates the Controls
+     * When the Click handles an Ajax request it iterates the Controls
      * registered with the {@link org.apache.click.ControlRegistry ControlRegistry}
-     * and checks if one of them is the AJAX target by calling
+     * and checks if one of them is the Ajax target by calling
      * {@link #isAjaxTarget(org.apache.click.Context) isAjaxTarget}. If <tt>isAjaxTarget</tt>
      * returns true, Click will process that Control's {@link #getBehaviors() behaviors}.
      * <p/>
      * <b>Please note:</b> there can only be one target control, so the first
-     * Control that is identified as the AJAX target will be processed, the other
+     * Control that is identified as the Ajax target will be processed, the other
      * controls will be skipped.
      * <p/>
      * The most common way to check whether a Control is the Ajax target is to
@@ -488,7 +488,7 @@ public interface Control extends Serializable {
      * its <tt>id</tt>, and if that isn't available check against its <tt>name</tt>.
      *
      * @param context the request context
-     * @return <tt>true</tt> if this control is an AJAX target, <tt>false</tt>
+     * @return <tt>true</tt> if this control is an Ajax target, <tt>false</tt>
      * otherwise
      */
     public boolean isAjaxTarget(Context context);
