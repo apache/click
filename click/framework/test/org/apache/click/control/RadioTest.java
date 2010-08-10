@@ -229,7 +229,6 @@ public class RadioTest extends TestCase {
         
         public boolean fired;
 
-        @Override
         public boolean onAction(Control source) {
             fired = true;
             return true;
