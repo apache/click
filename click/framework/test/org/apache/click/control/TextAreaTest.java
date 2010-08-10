@@ -84,7 +84,8 @@ public class TextAreaTest extends TestCase {
         assertTrue(textArea.onProcess());
         assertFalse(textArea.isValid());
         assertEquals("ratherlongtextvalue", textArea.getValue());
-        assertEquals("ratherlongtextvalue", textArea.getValueObject());   
+        assertEquals("ratherlongtextvalue", textArea.getValueObject());
+        assertTrue(textArea.toString().contains("class=\"error\""));
     }
 
     /**
@@ -100,5 +101,112 @@ public class TextAreaTest extends TestCase {
         
         // Check that the value <script> is not rendered
         assertTrue(field.toString().indexOf(value) < 0);
+    }
+    
+    /**
+     * Coverage test of constructors.
+     */
+    public void testConstructors() {
+        TextArea field = new TextArea();
+        assertNull(field.getName());
+        
+        field = new TextArea("field", true);
+        assertTrue(field.isRequired());
+        
+        field = new TextArea("field", "label");
+        assertEquals("label", field.getLabel());
+        
+        field = new TextArea("field", "label", true);
+        assertEquals("label", field.getLabel());
+        assertTrue(field.isRequired());
+
+        field = new TextArea("field", 25, 4);
+        assertEquals(25, field.getCols());
+        assertEquals(4, field.getRows());
+        
+        field = new TextArea("field", "label", 25, 4);
+        assertEquals("label", field.getLabel());
+        assertEquals(25, field.getCols());
+        assertEquals(4, field.getRows());
+
+        field = new TextArea("field", "label", 25, 4, true);
+        assertEquals("label", field.getLabel());
+        assertEquals(25, field.getCols());
+        assertEquals(4, field.getRows());
+        assertTrue(field.isRequired());
+    }
+    
+    /**
+     * Coverage test of tab-index.
+     */
+    public void testTabIndex() {
+        MockContext.initContext();
+        
+        TextArea field = new TextArea("field");
+        field.setTabIndex(5);
+
+        assertTrue(field.toString().contains("tabindex=\"5\""));
+    }
+
+    /**
+     * Coverage test of disabled property.
+     */
+    public void testDisabled() {
+        MockContext.initContext();
+        
+        TextArea field = new TextArea("field");
+        field.setDisabled(true);
+
+        assertTrue(field.toString().contains("class=\"disabled\""));
+        assertTrue(field.toString().contains("disabled=\"disabled\""));
+    }
+
+    /**
+     * Coverage test of readonly property.
+     */
+    public void testReadonly() {
+        MockContext.initContext();
+        
+        TextArea field = new TextArea("field");
+        field.setReadonly(true);
+
+        assertTrue(field.toString().contains("readonly=\"readonly\""));
+    }
+
+    /**
+     * Coverage test of cols and rows property.
+     */
+    public void testColsRows() {
+        MockContext.initContext();
+        
+        TextArea field = new TextArea("field");
+        field.setCols(25);
+        field.setRows(4);
+        
+        assertTrue(field.toString().contains("cols=\"25\""));
+        assertTrue(field.toString().contains("rows=\"4\""));
+    }
+
+    /**
+     * Coverage test of help property.
+     */
+    public void testHelp() {
+        MockContext.initContext();
+        
+        TextArea field = new TextArea("field");
+        field.setHelp("help");
+
+        assertTrue(field.toString().contains("help"));
+    }
+
+    /**
+     * Coverage test of validation javascript.
+     */
+    public void testValidationJS() {
+        MockContext.initContext();
+        
+        TextArea field = new TextArea("field");
+
+        assertTrue(field.getValidationJavaScript().startsWith("function validate_field()"));
     }
 }

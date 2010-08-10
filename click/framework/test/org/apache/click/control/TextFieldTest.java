@@ -250,4 +250,100 @@ public class TextFieldTest extends TestCase {
         // Check that field does not trim its request value
         assertEquals(value, field.getValue());
     }
+    
+    /**
+     * Coverage test of constructors.
+     */
+    public void testConstructors() {
+        TextField field = new TextField("field", true);
+        assertTrue(field.isRequired());
+        
+        field = new TextField("field", "label");
+        assertEquals("label", field.getLabel());
+        
+        field = new TextField("field", "label", true);
+        assertEquals("label", field.getLabel());
+        assertTrue(field.isRequired());
+
+        field = new TextField("field", "label", 25);
+        assertEquals("label", field.getLabel());
+        assertEquals(25, field.getSize());
+        
+        field = new TextField("field", "label", 25, true);
+        assertEquals("label", field.getLabel());
+        assertEquals(25, field.getSize());
+        assertTrue(field.isRequired());
+    }
+    
+    /**
+     * Coverage test of tab-index.
+     */
+    public void testTabIndex() {
+        MockContext.initContext();
+        
+        TextField field = new TextField("field");
+        field.setTabIndex(5);
+
+        assertTrue(field.toString().contains("tabindex=\"5\""));
+    }
+
+    /**
+     * Coverage test of disabled property.
+     */
+    public void testDisabled() {
+        MockContext.initContext();
+        
+        TextField field = new TextField("field");
+        field.setDisabled(true);
+
+        assertTrue(field.toString().contains("class=\"disabled\""));
+        assertTrue(field.toString().contains("disabled=\"disabled\""));
+    }
+
+    /**
+     * Coverage test of readonly property.
+     */
+    public void testReadonly() {
+        MockContext.initContext();
+        
+        TextField field = new TextField("field");
+        field.setReadonly(true);
+
+        assertTrue(field.toString().contains("readonly=\"readonly\""));
+    }
+
+    /**
+     * Coverage test of max-length property.
+     */
+    public void testMaxLength() {
+        MockContext.initContext();
+        
+        TextField field = new TextField("field");
+        field.setMaxLength(25);
+
+        assertTrue(field.toString().contains("maxlength=\"25\""));
+    }
+
+    /**
+     * Coverage test of help property.
+     */
+    public void testHelp() {
+        MockContext.initContext();
+        
+        TextField field = new TextField("field");
+        field.setHelp("help");
+
+        assertTrue(field.toString().contains("help"));
+    }
+
+    /**
+     * Coverage test of validation javascript.
+     */
+    public void testValidationJS() {
+        MockContext.initContext();
+        
+        TextField field = new TextField("field");
+
+        assertTrue(field.getValidationJavaScript().startsWith("function validate_field()"));
+    }
 }
