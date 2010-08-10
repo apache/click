@@ -48,7 +48,6 @@ public class ButtonTest extends TestCase {
         button.setActionListener(new ActionListener() {
             private static final long serialVersionUID = 1L;
 
-            @Override
             public boolean onAction(Control source) {
                 check[0] = true;
                 return false;
