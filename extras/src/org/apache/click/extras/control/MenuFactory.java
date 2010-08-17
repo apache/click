@@ -166,7 +166,7 @@ public class MenuFactory implements Serializable {
     protected final static Set<String> DEFAULT_ATTRIBUTES = new HashSet<String>();
 
     /** The menu cache. */
-    protected static Map<String, Menu> menuCache;
+    protected static final Map<String, Menu> menuCache = new ConcurrentHashMap<String, Menu>();
 
     static {
         DEFAULT_ATTRIBUTES.add("name");
@@ -562,9 +562,6 @@ public class MenuFactory implements Serializable {
      * @return the map containing menus cached by name
      */
     protected Map<String, Menu> getMenuCache() {
-        if (menuCache == null) {
-            menuCache = new ConcurrentHashMap<String, Menu>();
-        }
         return menuCache;
     }
 
