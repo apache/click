@@ -3003,7 +3003,7 @@ public class Form extends AbstractContainer {
     /**
      * Provides a HiddenField which does not bind to incoming values.
      */
-    private class NonbindableHiddenField extends HiddenField {
+    private static class NonbindableHiddenField extends HiddenField {
 
         private static final long serialVersionUID = 1L;
 
@@ -3042,7 +3042,7 @@ public class Form extends AbstractContainer {
      * Provides a HiddenField which name and value cannot be changed, once it
      * is set.
      */
-    private class ImmutableHiddenField extends HiddenField {
+    private static class ImmutableHiddenField extends HiddenField {
 
         private static final long serialVersionUID = 1L;
 
