@@ -230,6 +230,7 @@ class DeployUtils<T> {
                                 children.add(entry.getName());
                             }
                         }
+                        jarInput.close();
                     } else {
                         // Some servlet containers allow reading from "directory"
                         // resources like text file, listing the child resources
@@ -255,6 +256,7 @@ class DeployUtils<T> {
                                     children.add(line);
                                 }
                             }
+                            reader.close();
                         }
                     }
 
@@ -472,7 +474,9 @@ class DeployUtils<T> {
         InputStream is = null;
         try {
             is = url.openStream();
-            is.read(buffer, 0, JAR_MAGIC.length);
+            if (is.read(buffer, 0, JAR_MAGIC.length) != JAR_MAGIC.length) {
+                return false;
+            }
             if (Arrays.equals(buffer, JAR_MAGIC)) {
                 if (logService.isInfoEnabled()) {
                     logService.info("found jar: " + url);
