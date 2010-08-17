@@ -1172,7 +1172,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             pageByClassMap.put(page.pageClass, page);
 
         } else if (value instanceof List) {
-            ((List) value).add(value);
+            ((List) value).add(page);
 
         } else if (value instanceof XmlConfigService.PageElm) {
             List list = new ArrayList();
