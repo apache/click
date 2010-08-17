@@ -178,7 +178,7 @@ public class LongField extends NumberField {
     public Integer getInteger() {
         Long value = getLong();
         if (value != null) {
-            return new Integer(value.intValue());
+            return Integer.valueOf(value.intValue());
         } else {
             return null;
         }

@@ -95,7 +95,7 @@ public class RequestTypeConverter implements TypeConverter {
 
             } else {
                 if ((toType == Integer.class) || (toType == Integer.TYPE)) {
-                    result = new Integer((int) OgnlOps.longValue(value));
+                    result = Integer.valueOf((int) OgnlOps.longValue(value));
 
                 } else if ((toType == Double.class) || (toType == Double.TYPE)) {
                     result = new Double(OgnlOps.doubleValue(value));
@@ -104,16 +104,16 @@ public class RequestTypeConverter implements TypeConverter {
                     result = Boolean.valueOf(value.toString());
 
                 } else if ((toType == Byte.class) || (toType == Byte.TYPE)) {
-                    result = new Byte((byte) OgnlOps.longValue(value));
+                    result = Byte.valueOf((byte) OgnlOps.longValue(value));
 
                 } else if ((toType == Character.class) || (toType == Character.TYPE)) {
-                    result = new Character((char) OgnlOps.longValue(value));
+                    result = Character.valueOf((char) OgnlOps.longValue(value));
 
                 } else if ((toType == Short.class) || (toType == Short.TYPE)) {
-                    result = new Short((short) OgnlOps.longValue(value));
+                    result = Short.valueOf((short) OgnlOps.longValue(value));
 
                 } else if ((toType == Long.class) || (toType == Long.TYPE)) {
-                    result = new Long(OgnlOps.longValue(value));
+                    result = Long.valueOf(OgnlOps.longValue(value));
 
                 } else if ((toType == Float.class) || (toType == Float.TYPE)) {
                     result = new Float(OgnlOps.doubleValue(value));
