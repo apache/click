@@ -1412,7 +1412,7 @@ public class MockRequest implements HttpServletRequest {
      *
      * @author Frank Bille (billen)
      */
-    private class UploadedFile {
+    private static class UploadedFile {
 
         /** Name of the file field. */
         private String fieldName;
