@@ -192,6 +192,7 @@ public class LongField extends NumberField {
      *
      * @return the Long object representation of the Field value
      */
+    @Override
     public Object getValueObject() {
         return getLong();
     }
@@ -203,6 +204,7 @@ public class LongField extends NumberField {
      *
      * @param object the object value to set
      */
+    @Override
     public void setValueObject(Object object) {
         if (object != null) {
             value = object.toString();
@@ -229,6 +231,7 @@ public class LongField extends NumberField {
      * </ul>
      * </blockquote>
      */
+    @Override
     public void validate() {
         setError(null);
 

@@ -205,6 +205,7 @@ public class IntegerField extends NumberField {
      *
      * @return the Integer object representation of the Field value
      */
+    @Override
     public Object getValueObject() {
         return getInteger();
     }
@@ -216,6 +217,7 @@ public class IntegerField extends NumberField {
      *
      * @param object the object value to set
      */
+    @Override
     public void setValueObject(Object object) {
         if (object != null) {
             setValue(object.toString());
@@ -245,6 +247,7 @@ public class IntegerField extends NumberField {
      * </ul>
      * </blockquote>
      */
+    @Override
     public void validate() {
         setError(null);
 
