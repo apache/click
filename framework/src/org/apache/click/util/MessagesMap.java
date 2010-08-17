@@ -385,6 +385,9 @@ public class MessagesMap implements Map<String, String> {
             if (this == o) {
                 return true;
             }
+            if (!(o instanceof CacheKey)) {
+                return false;
+            }
 
             CacheKey that = (CacheKey) o;
 
