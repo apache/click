@@ -218,10 +218,10 @@ public class CssImport extends ResourceElement {
         renderResourcePath(buffer, "href", href);
 
         Map<String, String> localAttributes = getAttributes();
-        for (String name : localAttributes.keySet()) {
+        for (Map.Entry<String, String> entry : localAttributes.entrySet()) {
+            String name = entry.getKey();
             if (!name.equals("id") && !name.equals("href")) {
-                Object value = localAttributes.get(name);
-                buffer.appendAttributeEscaped(name, value);
+                buffer.appendAttributeEscaped(name, entry.getValue());
             }
         }
 

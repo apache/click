@@ -350,10 +350,10 @@ public class HtmlStringBuffer {
         if (attributes == null) {
             throw new IllegalArgumentException("Null attributes parameter");
         }
-        for (String name : attributes.keySet()) {
+        for (Map.Entry<String, String> entry : attributes.entrySet()) {
+            String name = entry.getKey();
             if (!name.equals("id")) {
-                Object value = attributes.get(name);
-                appendAttributeEscaped(name, value);
+                appendAttributeEscaped(name, entry.getValue());
             }
         }
 
@@ -376,10 +376,10 @@ public class HtmlStringBuffer {
         if (!attributes.isEmpty()) {
             append(" style=\"");
 
-            for (String name : attributes.keySet()) {
-                append(name);
+            for (Map.Entry<String, String> entry : attributes.entrySet()) {
+                append(entry.getKey());
                 append(":");
-                append(attributes.get(name));
+                append(entry.getValue());
                 append(";");
             }
 
