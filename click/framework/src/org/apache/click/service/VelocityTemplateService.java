@@ -701,7 +701,7 @@ public class VelocityTemplateService implements TemplateService {
             this.logger = configService.getLogService();
 
             Integer level = (Integer) rs.getApplicationAttribute(LOG_LEVEL);
-            if (level instanceof Integer) {
+            if (level != null) {
                 logLevel = level;
 
             } else {

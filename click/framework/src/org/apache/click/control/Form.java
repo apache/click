@@ -1000,7 +1000,7 @@ public class Form extends AbstractContainer {
             if (field instanceof Button) {
                 getButtonList().remove(field);
 
-            } else if (field instanceof Field) {
+            } else {
                 getFieldList().remove(field);
             }
         }
