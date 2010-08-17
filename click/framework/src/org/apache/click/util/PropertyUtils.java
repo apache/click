@@ -280,6 +280,9 @@ public class PropertyUtils {
             if (this == o) {
                 return true;
             }
+            if (!(o instanceof CacheKey)) {
+                return false;
+            }
 
             CacheKey that = (CacheKey) o;
 
