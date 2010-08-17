@@ -181,7 +181,7 @@ public class FreemarkerTemplateService implements TemplateService {
         configuration.setTemplateLoader(multiLoader);
 
         // Set the template cache duration in seconds
-        if (configService.isProductionMode() | configService.isProfileMode()) {
+        if (configService.isProductionMode() || configService.isProfileMode()) {
             configuration.setTemplateUpdateDelay(getCacheDuration());
 
         } else {
