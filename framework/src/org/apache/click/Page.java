@@ -1195,9 +1195,11 @@ public class Page implements Serializable {
         if (params != null && !params.isEmpty()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-            for (Iterator<String> i = params.keySet().iterator(); i.hasNext();) {
-                String paramName = i.next();
-                Object paramValue = params.get(paramName);
+            Iterator<? extends Map.Entry<String, ?>> i = params.entrySet().iterator();
+            while (i.hasNext()) {
+                Map.Entry<String, ?> entry = i.next(); 
+                String paramName = entry.getKey();
+                Object paramValue = entry.getValue();
 
                 // Check for multivalued parameter
                 if (paramValue instanceof String[]) {

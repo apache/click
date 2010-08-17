@@ -217,10 +217,10 @@ public class JsImport extends ResourceElement {
         renderResourcePath(buffer, "src", src);
 
         Map<String, String> localAttributes = getAttributes();
-        for (String name : localAttributes.keySet()) {
+        for (Map.Entry<String, String> entry : localAttributes.entrySet()) {
+            String name = entry.getKey();
             if (!name.equals("id") && !name.equals("src")) {
-                Object value = localAttributes.get(name);
-                buffer.appendAttributeEscaped(name, value);
+                buffer.appendAttributeEscaped(name, entry.getValue());
             }
         }
 

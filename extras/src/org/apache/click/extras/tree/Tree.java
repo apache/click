@@ -1611,11 +1611,11 @@ public class Tree extends AbstractControl {
                 new HtmlStringBuffer(uri.length() + (parameters.size() * 20));
 
         buffer.append(uri);
-        if (parameters != null && !parameters.isEmpty()) {
+        if (!parameters.isEmpty()) {
             buffer.append("?");
-            Iterator i = parameters.entrySet().iterator();
+            Iterator<? extends Map.Entry<String, ?>> i = parameters.entrySet().iterator();
             while (i.hasNext()) {
-                Map.Entry entry = (Map.Entry) i.next();
+                Map.Entry<String, ?> entry = i.next();
                 String name = entry.getKey().toString();
                 String value = entry.getValue().toString();
 

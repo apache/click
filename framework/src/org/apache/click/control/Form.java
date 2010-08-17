@@ -2510,10 +2510,10 @@ public class Form extends AbstractContainer {
 
                     if (label.hasAttributes()) {
                         Map<String, String> labelAttributes = label.getAttributes();
-                        for (String labelAttrName : labelAttributes.keySet()) {
+                        for (Map.Entry<String, String> entry : labelAttributes.entrySet()) {
+                            String labelAttrName = entry.getKey();
                             if (!labelAttrName.equals("id") && !labelAttrName.equals("style")) {
-                                Object labelAttrValue = labelAttributes.get(labelAttrName);
-                                buffer.appendAttributeEscaped(labelAttrName, labelAttrValue);
+                                buffer.appendAttributeEscaped(labelAttrName, entry.getValue());
                             }
                         }
                     }
