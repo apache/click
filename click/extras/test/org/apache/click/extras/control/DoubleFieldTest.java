@@ -18,21 +18,25 @@
  */
 package org.apache.click.extras.control;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
+import org.apache.click.control.Form;
 import org.apache.click.servlet.MockRequest;
 
 public class DoubleFieldTest extends TestCase {
 
     Locale defaultLocale;
 
+    @Override
     protected void setUp() throws Exception {
         defaultLocale = Locale.getDefault();
         Locale.setDefault(Locale.US);
     }
 
+    @Override
     protected void tearDown() throws Exception {
         Locale.setDefault(defaultLocale);
     }
@@ -168,4 +172,30 @@ public class DoubleFieldTest extends TestCase {
         assertEquals(new Double(123.4), doubleField.getValueObject());
     }
 
+    /**
+     * Test that the fix for double->BigDecimal conversion work.
+     */
+    public void testFormCopyBigDecimal() {
+        MockContext.initContext(Locale.US);
+        
+        Form form = new Form("form");
+
+        DoubleField field = new DoubleField("numfield");
+        form.add(field);
+        
+        field.setValue("0.1");
+        
+        MyObj obj = new MyObj(); 
+        form.copyTo(obj);
+
+        assertEquals("0.1", obj.numfield.toString());
+    }
+    
+    public static class MyObj {
+        public BigDecimal numfield;
+        
+        public void setNumfield(BigDecimal value) {
+            this.numfield = value;
+        }
+    }
 }
