@@ -488,12 +488,11 @@ public class ClickUtils {
         buffer.append("<form name=\"form\" method=\"post\" style=\"{display:none;}\" action=\"");
         buffer.append(target);
         buffer.append("\">");
-        for (Object name : params.keySet()) {
-            String value = params.get(name).toString();
+        for (Map.Entry<?, ?> entry : params.entrySet()) {
             buffer.elementStart("textarea");
-            buffer.appendAttribute("name", name);
+            buffer.appendAttribute("name", entry.getKey());
             buffer.elementEnd();
-            buffer.append(value);
+            buffer.append(entry.getValue());
             buffer.elementEnd("textarea");
         }
         buffer.append("</form></body></html>");
