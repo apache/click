@@ -1284,19 +1284,19 @@ public class Tree extends AbstractControl {
      * @return string specific css class to apply
      */
     protected String getExpandClass(TreeNode treeNode) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (isExpandedParent(treeNode)) {
-            buffer.append("expanded");
+            sb.append("expanded");
         } else if (treeNode.getChildren().size() > 0) {
-            buffer.append("collapsed");
+            sb.append("collapsed");
         } else {
-            buffer.append("leaf");
+            sb.append("leaf");
         }
 
         if (treeNode.isLastChild()) {
-            buffer.append("LastNode");
+            sb.append("LastNode");
         }
-        return buffer.toString();
+        return sb.toString();
     }
 
     /**
@@ -1968,9 +1968,9 @@ public class Tree extends AbstractControl {
          * @return the newly create string
          */
         protected String buildString(String prefix, String infix, String postfix) {
-            StringBuffer buffer = new StringBuffer();
-            buffer.append(prefix).append(infix).append(postfix);
-            return buffer.toString();
+            StringBuilder sb = new StringBuilder();
+            sb.append(prefix).append(infix).append(postfix);
+            return sb.toString();
         }
     }
 
@@ -2009,13 +2009,13 @@ public class Tree extends AbstractControl {
         @Override
         public void init(TreeNode treeNode) {
             super.init(treeNode);
-            StringBuffer tmp = new StringBuffer();
-            tmp.append("handleNodeExpansion(this,event,'").append(expandId).append("','");
-            tmp.append(iconId).append("'); handleCookie(this,event,'").append(expandId).append("','");
-            tmp.append(treeNode.getId()).append("','");
-            tmp.append(expandedCookieName).append("','");
-            tmp.append(collapsedCookieName).append("'); return false;");
-            nodeExpansionString = tmp.toString();
+            StringBuilder sb = new StringBuilder();
+            sb.append("handleNodeExpansion(this,event,'").append(expandId).append("','");
+            sb.append(iconId).append("'); handleCookie(this,event,'").append(expandId).append("','");
+            sb.append(treeNode.getId()).append("','");
+            sb.append(expandedCookieName).append("','");
+            sb.append(collapsedCookieName).append("'); return false;");
+            nodeExpansionString = sb.toString();
         }
     }
 
