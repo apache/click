@@ -45,11 +45,13 @@ package org.apache.click;
  * event handler.</li>
  * </ul>
  *
- * These events allow the Behavior to <tt>decorate</tt> a control, for example:
+ * These interceptor methods allow the Behavior to <tt>decorate</tt> a control,
+ * for example:
+ *
  * <ul>
- * <li>add/remove Control HEAD elements such as JavaScript and CSS dependencies
+ * <li>add or remove Control HEAD elements such as JavaScript and CSS dependencies
  * and setup scripts</li>
- * <li>add/remove Control attributes such as <tt>"class"</tt>, <tt>"style"</tt> etc</li>
+ * <li>add or remove Control attributes such as <tt>"class"</tt>, <tt>"style"</tt> etc.</li>
  * </ul>
  */
 public interface Behavior {
@@ -72,10 +74,10 @@ public interface Behavior {
      * response to a request.
      * <p/>
      * By exposing this method through the Behavior interface it provides
-     * implementers fine grained control over when a behavior should be the
-     * request target.
+     * implementers with fine grained control over whether the Behavior's
+     * {@link #onAction(org.apache.click.Control)} method should be invoked or not.
      * <p/>
-     * Example below:
+     * Below is an example implementation:
      *
      * <pre class="prettyprint">
      * public CustomBehavior implements Behavior {
