@@ -1496,10 +1496,13 @@ public class Menu extends AbstractControl {
             servletContext.getResourceAsStream(DEFAULT_CONFIG_FILE);
 
         if (inputStream == null) {
-            String msg =
-                "could not find configuration file:" + DEFAULT_CONFIG_FILE
-                + " or menu.xml on classpath";
-            throw new RuntimeException(msg);
+            inputStream = ClickUtils.getResourceAsStream("/menu.xml", Menu.class);
+            if (inputStream == null) {
+                String msg =
+                    "could not find configuration file:" + DEFAULT_CONFIG_FILE
+                    + " or menu.xml on classpath";
+                throw new RuntimeException(msg);
+            }
         }
 
         Document document = ClickUtils.buildDocument(inputStream);
