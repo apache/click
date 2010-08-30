@@ -1898,8 +1898,8 @@ public class ClickServlet extends HttpServlet {
 
         boolean continueProcessing = true;
 
-        // Find the ajax target control for the Ajax request
-        Control ajaxTarget = getAjaxTargetControl(context, controlRegistry);
+        // Resolve the Ajax target control for this request
+        Control ajaxTarget = resolveAjaxTargetControl(context, controlRegistry);
 
         if (ajaxTarget != null) {
 
@@ -2206,13 +2206,14 @@ public class ClickServlet extends HttpServlet {
     // Private methods --------------------------------------------------------
 
     /**
-     * Find and return the Ajax target control or null if no Ajax target was found.
+     * Resolve and return the Ajax target control for this request or null if no
+     * Ajax target was found.
      *
      * @param context the request context
      * @param controlRegistry the control registry
      * @return the target Ajax target control or null if no Ajax target was found
      */
-    private Control getAjaxTargetControl(Context context, ControlRegistry controlRegistry) {
+    private Control resolveAjaxTargetControl(Context context, ControlRegistry controlRegistry) {
 
         Control ajaxTarget = null;
 
