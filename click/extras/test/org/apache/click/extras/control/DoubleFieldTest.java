@@ -180,22 +180,22 @@ public class DoubleFieldTest extends TestCase {
         
         Form form = new Form("form");
 
-        DoubleField field = new DoubleField("numfield");
-        form.add(field);
-        
-        field.setValue("0.1");
-        
+        DoubleField decimalField = new DoubleField("decimalField");
+        String decimalValue = "0.1";
+        decimalField.setValue(decimalValue);
+        form.add(decimalField);
+
         MyObj obj = new MyObj(); 
         form.copyTo(obj);
 
-        assertEquals("0.1", obj.numfield.toString());
+        assertEquals(decimalValue, obj.decimalField.toString());
     }
     
     public static class MyObj {
-        public BigDecimal numfield;
+        public BigDecimal decimalField;
         
-        public void setNumfield(BigDecimal value) {
-            this.numfield = value;
+        public void setDecimalField(BigDecimal value) {
+            this.decimalField = value;
         }
     }
 }
