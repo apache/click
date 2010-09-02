@@ -1,160 +1,160 @@
-format 66
+format 74
 
 classinstance 128002 class_ref 128002 // ClickServlet
- write_horizontally no  name ""   xyz 89.8321 4.6 2000 life_line_z 2000
+ write_horizontally no  name ""   xyz 89.0321 5.6 2000 life_line_z 2000
 classinstance 128898 class_ref 129538 // Browser
-  drawing_mode actor  name ""   xyz 16.6902 5.7 2005 life_line_z 2000
+  drawing_mode actor  name ""   xyz 19.2902 6.5 2005 life_line_z 2000
 classinstance 129666 class_ref 129666 // Page
- color orange write_horizontally yes  name ""   mortal  xyz 259.4 95.6436 2000 life_line_z 2000
+ color orange write_horizontally yes  name ""   mortal  xyz 264.8 92.2 2000 life_line_z 2000
 classinstance 129794 class_ref 129794 // Control
-  name ""   mortal  xyz 406.172 91.7274 2000 life_line_z 2000
+  drawing_mode class  name ""   mortal  xyz 407.172 92.9274 2000 life_line_z 2000
 durationcanvas 129026 classinstance_ref 128898 // :Browser
-  xyzwh 34 53.6 2010 11 480
+  xyzwh 38 53.4 2010 11 480
 end
 durationcanvas 129154 classinstance_ref 128002 // :ClickServlet
-  xyzwh 120 55.4 2010 11 485
+  xyzwh 119 53.4 2010 11 480
   overlappingdurationcanvas 135682
-    xyzwh 126 70 2020 11 401
+    xyzwh 125 70 2020 11 401
     overlappingdurationcanvas 135810
-      xyzwh 132 345.2 2030 11 114
+      xyzwh 131 345.2 2030 11 114
     end
   end
 end
 durationcanvas 129922 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 278 141.6 2010 11 24
+  xyzwh 282 141.4 2010 11 24
 end
 durationcanvas 130178 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 278 171.6 2010 11 24
+  xyzwh 283 171.4 2010 11 24
 end
 durationcanvas 131202 classinstance_ref 129794 // :Control
-  xyzwh 424 201.6 2010 11 24
+  xyzwh 426 201.4 2010 11 24
 end
 durationcanvas 132482 classinstance_ref 129794 // :Control
-  xyzwh 425 230.2 2010 11 24
+  xyzwh 426 230.2 2010 11 24
 end
 durationcanvas 132994 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 278 259 2010 11 24
+  xyzwh 282 259 2010 11 24
 end
 durationcanvas 133250 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 278 290.2 2010 11 24
+  xyzwh 283 290.2 2010 11 24
 end
 durationcanvas 133506 classinstance_ref 129794 // :Control
   xyzwh 425 319 2010 11 24
 end
 durationcanvas 134018 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 278 369 2010 11 24
+  xyzwh 283 369 2010 11 24
 end
 durationcanvas 134274 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 278 401.6 2010 11 24
+  xyzwh 283 401.4 2010 11 24
 end
 durationcanvas 134530 classinstance_ref 129794 // :Control
-  xyzwh 425 434 2010 11 24
+  xyzwh 426 434 2010 11 24
 end
 durationcanvas 135938 classinstance_ref 129794 // :Control
-  xyzwh 425 470.2 2010 11 24
+  xyzwh 426 470.2 2010 11 24
 end
 durationcanvas 136194 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 278 494 2010 11 24
+  xyzwh 283 494 2010 11 24
 end
 msg 129282 synchronous
   from durationcanvas_ref 129026
   to durationcanvas_ref 129154
-  yz 58 3010 explicitmsg "doGet"
-  show_full_operations_definition default drawing_language default
-  label_xy 58 48
+  yz 57 3010 explicitmsg "doGet"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 58 47
 reflexivemsg 129538 synchronous
   to durationcanvas_ref 135682
-  yz 70 3005 explicitmsg "handleRequest"
-  show_full_operations_definition default drawing_language default
+  yz 69 3005 explicitmsg "handleRequest"
+  show_full_operations_definition default drawing_language default show_context_mode default
   label_xy 161 67
 msg 130050 synchronous
   from durationcanvas_ref 135682
   to durationcanvas_ref 129922
-  yz 151 3010 explicitmsg "onSecurityCheck : boolean"
-  show_full_operations_definition yes drawing_language uml
-  label_xy 143 138
+  yz 147 3010 explicitmsg "onSecurityCheck : boolean"
+  show_full_operations_definition yes drawing_language uml show_context_mode default
+  label_xy 143 134
 msg 130306 synchronous
   from durationcanvas_ref 135682
   to durationcanvas_ref 130178
-  yz 182 3010 explicitmsg "onInit"
-  show_full_operations_definition default drawing_language default
-  label_xy 191 172
+  yz 176 3010 explicitmsg "onInit"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 191 167
 msg 131330 synchronous
   from durationcanvas_ref 135682
   to durationcanvas_ref 131202
-  yz 210 3010 explicitmsg "onInit"
-  show_full_operations_definition yes drawing_language uml
-  label_xy 349 197
+  yz 206 3010 explicitmsg "onInit"
+  show_full_operations_definition yes drawing_language uml show_context_mode default
+  label_xy 349 193
 msg 132610 synchronous
   from durationcanvas_ref 135682
   to durationcanvas_ref 132482
-  yz 242 3010 explicitmsg "onProcess : boolean"
-  show_full_operations_definition default drawing_language default
-  label_xy 314 231
+  yz 235 3010 explicitmsg "onProcess : boolean"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 314 224
 msg 133122 synchronous
   from durationcanvas_ref 135682
   to durationcanvas_ref 132994
-  yz 266 3010 explicitmsg "onGet"
-  show_full_operations_definition default drawing_language default
-  label_xy 189 255
+  yz 265 3010 explicitmsg "onGet"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 189 254
 msg 133378 synchronous
   from durationcanvas_ref 135682
   to durationcanvas_ref 133250
-  yz 299 3010 explicitmsg "onRender"
-  show_full_operations_definition default drawing_language default
-  label_xy 181 288
+  yz 296 3010 explicitmsg "onRender"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 181 285
 msg 133634 synchronous
   from durationcanvas_ref 135682
   to durationcanvas_ref 133506
-  yz 328 3010 explicitmsg "onRender"
-  show_full_operations_definition default drawing_language default
-  label_xy 334 317
+  yz 325 3010 explicitmsg "onRender"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 334 314
 reflexivemsg 133890 synchronous
   to durationcanvas_ref 135810
-  yz 345 3005 explicitmsg "renderTemplate"
-  show_full_operations_definition default drawing_language default
-  label_xy 167 341
+  yz 343 3005 explicitmsg "renderTemplate"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 167 337
 msg 134146 synchronous
   from durationcanvas_ref 135810
   to durationcanvas_ref 134018
-  yz 378 3010 explicitmsg "getModel : Map"
-  show_full_operations_definition default drawing_language default
-  label_xy 166 366
+  yz 375 3010 explicitmsg "getModel : Map"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 166 362
 msg 134402 synchronous
   from durationcanvas_ref 135810
   to durationcanvas_ref 134274
-  yz 412 3010 explicitmsg "getTemplate : String"
-  show_full_operations_definition default drawing_language default
-  label_xy 152 400
+  yz 407 3010 explicitmsg "getTemplate : String"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 152 395
 msg 134658 synchronous
   from durationcanvas_ref 135810
   to durationcanvas_ref 134530
-  yz 445 3010 explicitmsg "toString : String"
-  show_full_operations_definition default drawing_language default
-  label_xy 318 433
+  yz 440 3010 explicitmsg "toString : String"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 318 428
 msg 136066 synchronous
   from durationcanvas_ref 129154
   to durationcanvas_ref 135938
-  yz 478 2015 explicitmsg "onDestroy"
-  show_full_operations_definition default drawing_language default
-  label_xy 334 467
+  yz 475 2015 explicitmsg "onDestroy"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 334 464
 msg 136322 synchronous
   from durationcanvas_ref 129154
   to durationcanvas_ref 136194
-  yz 505 2015 explicitmsg "onDestroy"
-  show_full_operations_definition default drawing_language default
-  label_xy 175 493
+  yz 499 2015 explicitmsg "onDestroy"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 175 488
 msg 136450 return
   from durationcanvas_ref 129154
   to durationcanvas_ref 129026
-  yz 518 2020 unspecifiedmsg
-  show_full_operations_definition default drawing_language default
+  yz 517 2020 unspecifiedmsg
+  show_full_operations_definition default drawing_language default show_context_mode default
 preferred_whz 0 0 1.2
 end

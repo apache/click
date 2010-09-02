@@ -1,16 +1,16 @@
-format 66
+format 74
 "apache" // org::click::apache
-  revision 2
-  modified_by 2 "bob"
+  revision 10
+  modified_by 2 "bschellink"
   // class settings
   //class diagram settings
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default show_class_context_mode default show_msg_context_mode default
   //collaboration diagram settings
-  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default show_msg_context default draw_all_relations default shadow default show_stereotype_properties default
   //object diagram settings
    write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
   //component diagram settings
@@ -28,13 +28,13 @@ format 66
   
   classview 128002 "classes"
     //class diagram settings
-    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
     //collaboration diagram settings
-    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default show_msg_context default draw_all_relations default shadow default show_stereotype_properties default
     //object diagram settings
      write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
     //sequence diagram settings
-    show_full_operations_definition default write_horizontally default class_drawing_mode class drawing_language java draw_all_relations yes shadow default show_stereotype_properties default
+    show_full_operations_definition default write_horizontally default class_drawing_mode class drawing_language java draw_all_relations yes shadow default show_stereotype_properties default show_class_context_mode default show_msg_context_mode default
     //state diagram settings
     package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
     show_activities default region_horizontally default drawing_language default show_stereotype_properties default
@@ -105,8 +105,14 @@ format 66
 	idl_decl ""
       end
 
-      classrelation 128130 // #context
-	relation_ref 128002 // #context
+      operation 169602 "isAjaxRequest"
+	public explicit_return_type "boolean"
+	nparams 0
+	
+	
+	
+	
+	
       end
     end
 
@@ -173,6 +179,16 @@ format 66
       idl_decl ""
       explicit_switch_type ""
       
+      operation 176130 "getContext"
+	public return_type class_ref 130946 // Context
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
       operation 130050 "addControl"
 	public explicit_return_type "void"
 	nparams 1
@@ -286,15 +302,6 @@ format 66
 	
       end
 
-      attribute 128002 "context"
-	protected explicit_type "Context"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
       attribute 129282 "controls"
 	protected explicit_type "List"
 	cpp_decl ""
@@ -367,14 +374,6 @@ format 66
 	idl_decl ""
       end
 
-      classrelation 128002 // (#context)
-	relation 128002 o--- name "#context"
-	  a role_name "" multiplicity "1" private
-	    classrelation_ref 128002 // (#context)
-	  b role_name "" multiplicity "1" private
-	    classrelation_ref 128130 // #context
-      end
-
       classrelation 129282 // (#controls)
 	relation 129154 *--- name "#controls"
 	  a role_name "" multiplicity "1" private
@@ -383,12 +382,50 @@ format 66
 	    classrelation_ref 129410 // #controls
       end
 
-      classrelation 129538 // (#model)
-	relation 129282 *--- name "#model"
-	  a role_name "" multiplicity "1" private
-	    classrelation_ref 129538 // (#model)
+      classrelation 151426 // <association>
+	relation 149506 ----
+	  a role_name "" multiplicity "0..*" private
+	    classrelation_ref 151426 // <association>
 	  b role_name "" multiplicity "1" private
-	    classrelation_ref 129666 // #model
+	    classrelation_ref 151554 // <association>
+      end
+
+      classrelation 143490 // (#controls)
+	relation 142210 o--- name "#controls"
+	  a role_name "" multiplicity "0..*" private
+	    classrelation_ref 143490 // (#controls)
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 143618 // (#controls)
+      end
+
+      classrelation 150786 // <directional aggregation>
+	relation 149122 o-->
+	  a role_name "" private
+	    classrelation_ref 150786 // <directional aggregation>
+	  b parent class_ref 129794 // Control
+      end
+
+      classrelation 150914 // <aggregation>
+	relation 149250 o---
+	  a role_name "" private
+	    classrelation_ref 150914 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 151042 // <aggregation>
+      end
+
+      classrelation 151938 // (#model)
+	relation 149762 o--- name "#model"
+	  a role_name "" multiplicity "0..*" private
+	    classrelation_ref 151938 // (#model)
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 152066 // #model
+      end
+
+      classrelation 152194 // <unidirectional association>
+	relation 149890 --->
+	  a role_name "" private
+	    classrelation_ref 152194 // <unidirectional association>
+	  b parent class_ref 130946 // Context
       end
     end
 
@@ -546,6 +583,246 @@ ${members}};
 
       classrelation 130178 // <aggregation>
 	relation_ref 129538 // <aggregation>
+      end
+
+      operation 141570 "getBehaviors"
+	public explicit_return_type "Set"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 141698 "hasBehaviors"
+	public explicit_return_type "boolean"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      operation 141442 "isAjaxTarget"
+	public explicit_return_type "boolean"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      classrelation 143106 // <aggregation>
+	relation_ref 141954 // <aggregation>
+      end
+
+      classrelation 143618 // (#controls)
+	relation_ref 142210 // #controls
+      end
+
+      classrelation 143746 // (#behaviors)
+	relation 142338 o--- name "#behaviors"
+	  a role_name "" multiplicity "0..*" private
+	    classrelation_ref 143746 // (#behaviors)
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 143874 // (#behaviors)
+      end
+
+      classrelation 151042 // <aggregation>
+	relation_ref 149250 // <aggregation>
+      end
+
+      classrelation 151554 // <association>
+	relation_ref 149506 // <association>
+      end
+    end
+
+    class 144770 "Behavior"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 162562 "onAction"
+	public return_type class_ref 144898 // ActionResult
+	nparams 1
+	  param in name "source" type class_ref 129794 // Control
+	
+	
+	
+	
+	
+      end
+
+      operation 162690 "isRequestTarget"
+	public explicit_return_type "boolean"
+	nparams 1
+	  param in name "context" type class_ref 130946 // Context
+	
+	
+	
+	
+	
+      end
+
+      operation 162818 "preResponse"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "source" type class_ref 129794 // Control
+	
+	
+	
+	
+	
+      end
+
+      operation 162946 "preGetHeadElements"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "source" type class_ref 129794 // Control
+	
+	
+	
+	
+	
+      end
+
+      operation 163074 "preDestroy"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "source" type class_ref 129794 // Control
+	
+	
+	
+	
+	
+      end
+
+      classrelation 143874 // (#behaviors)
+	relation_ref 142338 // #behaviors
+      end
+
+      classrelation 144002 // <aggregation>
+	relation 142466 o---
+	  a role_name "" private
+	    classrelation_ref 144002 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 144130 // <aggregation>
+      end
+
+      classrelation 144258 // <unidirectional association>
+	relation 142594 --->
+	  a role_name "" private
+	    classrelation_ref 144258 // <unidirectional association>
+	  b parent class_ref 144898 // ActionResult
+      end
+    end
+
+    class 144898 "ActionResult"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 148354 "setContent"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "content" explicit_type "String"
+	
+	
+	
+	
+	
+      end
+
+      operation 148610 "setBytes"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "bytes" explicit_type "byte[]"
+	
+	
+	
+	
+	
+      end
+
+      operation 148738 "setTemplate"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "templateName" explicit_type "String"
+	
+	
+	
+	
+	
+      end
+
+      operation 148866 "setModel"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "model" type class_ref 132226 // Map
+	
+	
+	
+	
+	
+      end
+
+      operation 148482 "setContentType"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "contentType" explicit_type "String"
+	
+	
+	
+	
+	
+      end
+
+      classrelation 144130 // <aggregation>
+	relation_ref 142466 // <aggregation>
+      end
+    end
+
+    class 151426 "ControlRegistry"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 155906 "registerAjaxTarget"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "control" type class_ref 129794 // Control
+	
+	
+	
+	
+	
+      end
+
+      operation 156034 "registerInterceptor"
+	public explicit_return_type ""
+	nparams 2
+	  param in name "control" type class_ref 129794 // Control
+	  param in name "behavior" type class_ref 144770 // Behavior
+	
+	
+	
+	
+	
       end
     end
   end
