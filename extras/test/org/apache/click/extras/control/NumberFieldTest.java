@@ -18,6 +18,8 @@
  */
 package org.apache.click.extras.control;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Map;
@@ -25,6 +27,7 @@ import java.util.Map;
 import org.apache.click.MockContext;
 
 import junit.framework.TestCase;
+import org.apache.click.control.Form;
 import org.apache.click.servlet.MockRequest;
 
 public class NumberFieldTest extends TestCase{
@@ -193,5 +196,76 @@ public class NumberFieldTest extends TestCase{
         assertFalse(engF.isValid());
         assertEquals("some text", engF.getValue());    
     }
-    
+
+
+    /**
+     * Test that the fix for number->BigDecimal conversion work.
+     *
+     * CLK-694.
+     */
+    public void testFormCopyBigDecimal() {
+        MockContext.initContext(Locale.US);
+
+        Form form = new Form("form");
+
+        NumberField bigDecimalField = new NumberField("bigDecimalField");
+        NumberField bigIntegerField = new NumberField("bigIntegerField");
+
+        // Specify a very large value
+        String bigValue = "999999999999999999";
+        bigDecimalField.setValue(bigValue);
+        form.add(bigDecimalField);
+        bigIntegerField.setValue(bigValue);
+        form.add(bigIntegerField);
+
+        MyObj obj = new MyObj();
+        form.copyTo(obj);
+
+        assertEquals(bigValue, obj.bigDecimalField.toString());
+        assertEquals(bigValue, obj.bigIntegerField.toString());
+    }
+
+    /**
+     * Test that Field->BigInteger conversion works.
+     */
+    public void testFormCopyBigInteger() {
+        MockContext.initContext(Locale.US);
+
+        Form form = new Form("form");
+
+        NumberField bigDecimalField = new NumberField("bigDecimalField");
+        NumberField bigIntegerField = new NumberField("bigIntegerField");
+
+        // Specify a very large value
+        String bigValue = "999999999999999999";
+        bigDecimalField.setValue(bigValue);
+        form.add(bigDecimalField);
+        bigIntegerField.setValue(bigValue);
+        form.add(bigIntegerField);
+
+        MyObj obj = new MyObj();
+        form.copyTo(obj);
+
+        assertEquals(bigValue, obj.bigDecimalField.toString());
+        assertEquals(bigValue, obj.bigIntegerField.toString());
+    }
+
+    /**
+     * POJO for testing of copying values between Fields and domain objects.
+     */
+    public static class MyObj {
+
+        public BigDecimal bigDecimalField;
+
+        public BigInteger bigIntegerField;
+
+        public void setBigDecimalField(BigDecimal value) {
+            this.bigDecimalField = value;
+        }
+
+        public void setBigIntegerField(BigInteger value) {
+            this.bigIntegerField = value;
+        }
+    }
+
 }
