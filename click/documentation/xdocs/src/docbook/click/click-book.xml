@@ -4,6 +4,7 @@
     <!ENTITY chapter-introduction SYSTEM "chapter-introduction.xml" >
     <!ENTITY chapter-pages SYSTEM "chapter-pages.xml" >
     <!ENTITY chapter-controls SYSTEM "chapter-controls.xml" >
+    <!ENTITY chapter-ajax SYSTEM "chapter-ajax.xml" >
     <!ENTITY chapter-configuration SYSTEM "chapter-configuration.xml" >
     <!ENTITY chapter-best-practices SYSTEM "chapter-best-practices.xml" >
     ]>
@@ -55,6 +56,7 @@
   &chapter-introduction;
   &chapter-pages;
   &chapter-controls;
+  &chapter-ajax;
   &chapter-configuration;
   &chapter-best-practices;
 
