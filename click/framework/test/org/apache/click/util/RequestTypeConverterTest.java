@@ -18,6 +18,8 @@
  */
 package org.apache.click.util;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Locale;
 import junit.framework.TestCase;
 
@@ -31,7 +33,9 @@ public class RequestTypeConverterTest extends TestCase {
      */
     public void test() {
         RequestTypeConverter rtc = new RequestTypeConverter();
-        
+        assertEquals("true", rtc.convertValue("true", Boolean.class).toString());
+        assertEquals("false", rtc.convertValue("false", Boolean.class).toString());
+
         assertNull(rtc.convertValue(null, java.util.Date.class));
         assertNull(rtc.convertValue(null, java.sql.Date.class));
         assertNull(rtc.convertValue(null, java.sql.Time.class));
@@ -96,5 +100,29 @@ public class RequestTypeConverterTest extends TestCase {
         assertNotNull(date12);
 //        assertEquals(date10, date11);
         assertEquals(date11, date12);
+    }
+
+    /**
+     * Check that very large BigDecimal numbers are converted correctly.
+     * CLK-694.
+     */
+    public void testLargeBigDecimalConvertion() {
+        RequestTypeConverter rtc = new RequestTypeConverter();
+
+        String requestParam = "9999999999999999999999999999999999999999999999999.99";
+        BigDecimal bd = (BigDecimal) rtc.convertValue(requestParam, BigDecimal.class);
+
+        assertEquals(requestParam, bd.toString());
+    }
+
+    /**
+     * Check that very large BigInteger numbers are converted correctly.
+     */
+    public void testLargeBigIntegerConvertion() {
+        RequestTypeConverter rtc = new RequestTypeConverter();
+
+        String requestParam = "99999999999999999999999999999999999999999999999";
+        BigInteger bi = (BigInteger) rtc.convertValue(requestParam, BigInteger.class);
+        assertEquals(requestParam, bi.toString());
     }
 }
