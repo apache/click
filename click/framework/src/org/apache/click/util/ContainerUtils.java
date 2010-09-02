@@ -893,7 +893,7 @@ public class ContainerUtils {
      * @param path the full expression path (used for logging purposes)
      * @return the getter method
      */
-    private final static Method findGetter(Object object, String property,
+    private static Method findGetter(Object object, String property,
         String path) {
 
         // Find the getter for property
@@ -933,7 +933,7 @@ public class ContainerUtils {
      * @param path the full expression path (used for logging)
      * @return the getter result
      */
-    private final static Object invokeGetter(Method getterMethod, Object source,
+    private static Object invokeGetter(Method getterMethod, Object source,
         String property, String path) {
 
         try {
@@ -963,7 +963,7 @@ public class ContainerUtils {
      * @param path the full expression path (used for logging purposes)
      * @return the setter method
      */
-    private final static Method findSetter(Object source,
+    private static Method findSetter(Object source,
         String property, Class<?> targetClass, String path) {
         Method method = null;
 
@@ -996,7 +996,7 @@ public class ContainerUtils {
      * @param property the setter method property name (used for logging)
      * @param path the full expression path (used for logging)
      */
-    private final static void invokeSetter(Method setterMethod, Object source,
+    private static void invokeSetter(Method setterMethod, Object source,
         Object target, String property, String path) {
 
         try {
@@ -1397,7 +1397,13 @@ public class ContainerUtils {
             }
             return OgnlOps.convertValue(value, toType);
         }
-        
+
+        /**
+     * Convert the given value into a BigDecimal.
+     *
+     * @param value the object to convert into a BigDecimal
+     * @return the converted BigDecimal value
+     */
         private BigDecimal bigDecValue( Object value ) {
             if (value == null)
                 return BigDecimal.valueOf(0L);
@@ -1406,10 +1412,7 @@ public class ContainerUtils {
                 return (BigDecimal)value;
             if ( c == BigInteger.class )
                 return new BigDecimal( (BigInteger)value );
-            if ( c.getSuperclass() == Number.class )
-                //return new BigDecimal( ((Number)value).doubleValue() );
-                return BigDecimal.valueOf(((Number)value).doubleValue());
-            if ( c == Boolean.class )
+                  if ( c == Boolean.class )
                 return BigDecimal.valueOf(((Boolean)value).booleanValue()? 1 : 0 );
             if ( c == Character.class )
                 return BigDecimal.valueOf(((Character)value).charValue() );

@@ -122,7 +122,7 @@ public class RequestTypeConverter implements TypeConverter {
                     result = OgnlOps.bigIntValue(value);
 
                 } else if (toType == BigDecimal.class) {
-                    result = OgnlOps.bigDecValue(value);
+                    result = bigDecValue(value);
 
                 } else  if (toType == String.class) {
                     result = OgnlOps.stringValue(value);
@@ -264,4 +264,31 @@ public class RequestTypeConverter implements TypeConverter {
         }
     }
 
+    /**
+     * Convert the given value into a BigDecimal.
+     *
+     * @param value the object to convert into a BigDecimal
+     * @return the converted BigDecimal value
+     */
+    private BigDecimal bigDecValue(Object value) {
+        if (value == null) {
+            return BigDecimal.valueOf(0L);
+        }
+        Class<?> c = value.getClass();
+        if (c == BigDecimal.class) {
+            return (BigDecimal) value;
+        }
+        if (c == BigInteger.class) {
+            return new BigDecimal((BigInteger) value);
+        }
+
+        if (c == Boolean.class) {
+            return BigDecimal.valueOf(((Boolean) value).booleanValue() ? 1 : 0);
+        }
+        if (c == Character.class) {
+            return BigDecimal.valueOf(((Character) value).charValue());
+        }
+
+        return new BigDecimal(value.toString().trim());
+    }
 }
