@@ -25,7 +25,9 @@ import org.apache.click.pages.JspRedirectPage;
 import org.apache.click.pages.RedirectToHtm;
 import org.apache.click.pages.RedirectToJsp;
 import org.apache.click.pages.RedirectToSelfPage;
+import org.apache.click.pages.RequestBindingPage;
 import org.apache.click.pages.SetPathToJspPage;
+import org.apache.click.servlet.MockRequest;
 
 /**
  * Tests for the Page class.
@@ -235,6 +237,31 @@ public class PageTest extends TestCase {
         String pragmaHeader = "Pragma";
         String pragmaValue = "no-cache";
         assertEquals(headerTestPage.getHeaders().get(pragmaHeader), pragmaValue);
+
+        container.stop();
+    }
+
+    /**
+     * Check that Page variables are bound to request parameters.
+     */
+    public void testRequestParameterBinding() {
+        MockContainer container = new MockContainer("web");
+        container.start();
+
+        MockRequest request = container.getRequest();
+        String bigDecimalValue = "100.99";
+        String stringValue = "hello";
+        String boolValue = "true";
+
+        request.setParameter("bigDecimal", bigDecimalValue);
+        request.setParameter("string", stringValue);
+        request.setParameter("bool", boolValue);
+
+        RequestBindingPage page = container.testPage(RequestBindingPage.class);
+
+        assertEquals(bigDecimalValue.toString(), page.getBigDecimal().toString());
+        assertEquals(stringValue, page.getString());
+        assertEquals(boolValue, Boolean.toString(page.getBoolean()));
 
         container.stop();
     }
