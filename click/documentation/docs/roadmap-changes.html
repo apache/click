@@ -67,7 +67,7 @@
 
 <h2>Road Map</h2>
 New Click releases will be released every quarter with the next version Click 2.3.0
-scheduled for the end of June 2010. Tentative features for the next release
+scheduled for the end of October 2010. Tentative features for the next release
 includes improved Ajax support, Page Action support and a Java based configuration
 service.
 
@@ -77,13 +77,56 @@ service.
 
 <dl>
   <dt><a name="2.3.0"></a>
-      <div class="release-header">Latest Release - Version 2.3.0 Milestone 1 - ?? August 2010</div>
+      <div class="release-header">Latest Release - Version 2.3.0 Milestone 1 - ?? October 2010</div>
   </dt>
   <dd>
       <div style="margin-left:-2em;margin-bottom:1em;">
       <b>IMPORTANT:</b> be sure to read the <a href="upgrade-path.html#2.3.0">upgrade path</a>
       when upgrading from previous releases.
       </div>
+      <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+        <b>Major new features</b>
+      </div>
+      <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+        <li>
+          Ajax support.
+        </li>
+        <li>
+          Page Action support.
+        </li>
+        <li>
+          Stateful Controls.
+        </li>
+      </ul>
+      <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+        <b>New documentation:</b>
+      </div>
+      <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+        <li>
+          Added a chapter on <a href="user-guide/html/ch04.html">Ajax</a>,
+          covering <a href="user-guide/html/ch04s02.html">Behaviors</a>,
+          <a href="user-guide/html/ch04s03.html">Ajax execution flow</a>
+          and a full <a href="user-guide/html/ch04s04.html">example</a>.
+        </li>
+        <li>
+          Added a section covering the new
+          <a href="user-guide/html/ch02s07.html">Page Action</a> support.
+        </li>
+      </ul>
+      <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+      <b>New examples:</b>
+      </div>
+      <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+        <li class="change">
+          Added <a target="_blank" class="external" href="http://www.avoka.com/click-examples/">examples</a>
+          showcasing the new Ajax support. See the Ajax Menu for the full list
+          of examples.
+        </li>
+        <li class="change">
+          Added an example FieldSeparator Control and example usage page
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-544">CLK-544</a>].
+        </li>
+      </ul>
       <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
         <b>Deprecated:</b>
       </div>
@@ -118,19 +161,6 @@ service.
         </li>
       </ul>
       <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
-      <b>New examples:</b>
-      </div>
-      <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
-        <li class="change">
-          Added <a target="_blank" class="external" href="http://www.avoka.com/click-examples/">examples</a>
-          showcasing the new Ajax support. See the Ajax Menu for the full list.
-        </li>
-        <li class="change">
-          Added an example FieldSeparator Control and example usage page
-          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-544">CLK-544</a>].
-        </li>
-      </ul>
-      <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
         <b>New features and issues resolved:</b>
       </div>
       <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
@@ -142,7 +172,7 @@ service.
           </li>
           <li class="change">
             Added <a href="click-api/org/apache/click/service/MessagesMapService.html">MessagesMapService</a>
-            interface to support plugable messages map implementations
+            interface to support pluggable messages map implementations
             [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-655">CLK-655</a>].
           </li>
           <li class="change">
@@ -249,6 +279,10 @@ Select.setAttribute("onchange", "Click.submit(form, false)");
               Replace EDU.oswego.cs.dl.util.concurrent.ConcurrentReaderHashMap with java.util.concurrent.ConcurrentHashMap.
               This issue was raised and fixed by Henry Saputra
               [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-636">CLK-636</a>].
+          </li>
+          <li class="change">
+              Removed ognl.OgnlOps dependency.
+              [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-694">CLK-694</a>].
           </li>
       </ul>
   </dd>
