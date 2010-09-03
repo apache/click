@@ -262,7 +262,7 @@ and return a result without reloading the whole page.
       </listitem>
       <listitem>
         <para>
-          <ulink url="../../click-api/org/apache/click/ActionResult.html#setModel(java.util.Map)">setModel(Map)</ulink>
+          <ulink url="../../click-api/org/apache/click/ActionResult.html#setContentType(java.lang.String)">setContentType(String)</ulink>
           - set the ActionResult content type, for example: <literal>text/html</literal>,
           <literal>text/xml</literal>, <literal>application/json</literal> etc.
         </para>
