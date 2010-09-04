@@ -971,7 +971,7 @@ public void onPost() {
     from the browser. The Page Action method returns an
     <ulink url="../../click-api/org/apache/click/ActionResult.html">ActionResult</ulink>
     object that is rendered directly to the browser. In other words the Page template will
-    not be rendered. More on this later.
+    not be rendered.
     </para>
 
     <para>To invoke a Page Action, specify the parameter <varname>"pageAction"</varname>
@@ -987,7 +987,7 @@ public void onPost() {
     <para>First we create our template:
     </para>
 
-    <programlisting language="xml">&lt;img src="/mycorp/images.htm?<varname>pageAction</varname>=<symbol>onRenderImage</symbol>"/&gt;
+    <programlisting language="xml">&lt;img src="$context/mycorp/image.htm?<varname>pageAction</varname>=<symbol>onRenderImage</symbol>"/&gt;
 </programlisting>
 
     <para>Next we create our ImagePage with a Page Action method called
