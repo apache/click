@@ -393,7 +393,7 @@ function validateForm(msgs, id, align, style) {
  */
 Click.submit=function(form, validate) {
     if (typeof form == 'undefined') {
-        alert('Error: form is undefined. Usage: Click.submit(formName)');
+        alert('Error: form is undefined. Usage: Click.submit(form)');
         return false;
     }
 
