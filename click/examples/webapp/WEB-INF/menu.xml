@@ -161,6 +161,9 @@
     <menu label="Auto Complete Field" path="ajax/auto-complete.htm"/>
     <menu label="Live Scroller " path="ajax/scroller/ajax-live-scroller.htm"/>
     <menu label="Select" path="ajax/select/ajax-select.htm"/>
+    <menu separator="true"/>
+    <menu label="Ajax Redirect" path="ajax/ajax-redirect.htm"/>
+    <menu label="Ajax Security" path="ajax/ajax-secure.htm"/>
   </menu>
 
   <menu label=" Integration" path="#" imageSrc="/assets/images/cayenne.png">
