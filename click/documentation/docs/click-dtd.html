@@ -79,7 +79,7 @@ Click application XML descriptor Documentation Type Definition (DTD) :
   &lt;!-- Page template formatter class. An new format object added to
        the Velocity context under the key: "format". --&gt;
   &lt;!ELEMENT <span class="red">format</span> (#PCDATA)&gt;
-    &lt;!ATTLIST <span class="red">format</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">org.apache.click.util.Format</span>"&gt;
+    &lt;!ATTLIST <span class="red">format</span> <span class="blue">classname</span> CDATA "<span class="green">org.apache.click.util.Format</span>"&gt;
  
   &lt;!-- Application mode, which configures logging and caching. --&gt;
   &lt;!ELEMENT <span class="red">mode</span> (#PCDATA)&gt;
@@ -98,7 +98,7 @@ Click application XML descriptor Documentation Type Definition (DTD) :
 
   &lt;!-- File Upload Service. --&gt;
   &lt;!ELEMENT <span class="red">file-upload-service</span> (property*)&gt;
-    &lt;!ATTLIST <span class="red">file-upload-service</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">org.apache.click.service.FileUploadService</span>"&gt;
+    &lt;!ATTLIST <span class="red">file-upload-service</span> <span class="blue">classname</span> CDATA  "<span class="green">org.apache.click.service.FileUploadService</span>"&gt;
  
     &lt;!-- Property definition. --&gt;
     &lt;!ELEMENT <span class="red">property</span> (#PCDATA)&gt;
@@ -107,19 +107,19 @@ Click application XML descriptor Documentation Type Definition (DTD) :
 
   &lt;!-- Log Service. --&gt;
   &lt;!ELEMENT <span class="red">log-service</span> (property*)&gt;
-    &lt;!ATTLIST <span class="red">log-service</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">org.apache.click.service.ConsoleLogService</span>"&gt;
+    &lt;!ATTLIST <span class="red">log-service</span> <span class="blue">classname</span> CDATA "<span class="green">org.apache.click.service.ConsoleLogService</span>"&gt;
 
   &lt;!-- Messages Map Service. --&gt;
   &lt;!ELEMENT <span class="red">messages-map-service</span> (property*)&gt;
-    &lt;!ATTLIST <span class="red">messages-map-service</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">org.apache.click.service.DefaultMessagesMapService</span>"&gt;
+    &lt;!ATTLIST <span class="red">messages-map-service</span> <span class="blue">classname</span> CDATA "<span class="green">org.apache.click.service.DefaultMessagesMapService</span>"&gt;
 
   &lt;!-- Resource Service. --&gt;
   &lt;!ELEMENT <span class="red">resource-service</span> (property*)&gt;
-    &lt;!ATTLIST <span class="red">resource-service</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">org.apache.click.service.ClickResourceService</span>"&gt;
+    &lt;!ATTLIST <span class="red">resource-service</span> <span class="blue">classname</span> CDATA "<span class="green">org.apache.click.service.ClickResourceService</span>"&gt;
 
   &lt;!-- Template Service. --&gt;
   &lt;!ELEMENT <span class="red">template-service</span> (property*)&gt;
-    &lt;!ATTLIST <span class="red">template-service</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">org.apache.click.service.VelocityTemplateService</span>"&gt;
+    &lt;!ATTLIST <span class="red">template-service</span> <span class="blue">classname</span> CDATA "<span class="green">org.apache.click.service.VelocityTemplateService</span>"&gt;
 
   &lt;!-- Application page interceptors. --&gt;
   &lt;!ELEMENT page-interceptor (property*)&gt;
