@@ -1,0 +1,104 @@
+<!--
+#* Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.*#
+-->
+
+<!-- Ajax response will be set here -->
+<div id="result" class="errorMsg">
+  #set ($flash = "")
+  #set ($flash = $session.flash)
+  #if ($flash != "")
+    $flash
+  #end
+</div>
+
+Clicking the link will perform a redirect and display a permission denied message: $secureLinkWithRedirect
+
+<p/>
+
+Clicking the link will show a permission denied message without doing a redirect: $secureLinkWithMessage
+
+
+<script type="text/javascript" src="$context/assets/js/jquery-1.4.2.js"></script>
+
+<script type="text/javascript">
+    // This example uses jQuery for making Ajax requests:
+    // http://api.jquery.com/jQuery.get/
+    // http://api.jquery.com/jQuery.ajax/
+
+    // Register a function that is invoked as soon as the DOM is loaded
+    jQuery(document).ready(function() {
+        var resultElm = jQuery("#result")
+
+        // Hide the result div initially if it contains no content
+        if (jQuery.trim(resultElm.text()).length == 0) {
+          resultElm.css("display", "none");
+        } else {
+            resultElm.css("display", "block");
+        }
+
+        // Register a 'click' handler that makes an Ajax request
+        jQuery("#secureLinkWithRedirectId").click(function(event){
+            // Make ajax request
+            redirectLinkClicked();
+
+            // Prevent the default browser behavior of navigating to the link
+            return false;
+        })
+
+ // Register a 'click' handler that makes an Ajax request
+        jQuery("#secureLinkWithMessageId").click(function(event){
+            // Make ajax request
+            messageLinkClicked();
+
+            // Prevent the default browser behavior of navigating to the link
+            return false;
+        })
+    })
+
+    function redirectLinkClicked() {
+        var link = jQuery('#secureLinkWithRedirectId');
+        var extraData = link.attr('id') + '=1';
+        var url = link.attr('href');
+        jQuery.get(url, extraData, function(data, textStatus, xhr) {
+            // Retrieve the url to redirect from the Ajax response header
+            var redirect_url = xhr.getResponseHeader('REDIRECT_URL');
+            // Perform the redirect
+            window.location = redirect_url;
+
+        });
+    }
+
+    function messageLinkClicked() {
+        var link = jQuery('#secureLinkWithMessageId');
+        var extraData = link.attr('id') + '=1';
+        var url = link.attr('href');
+
+        jQuery.get(url, extraData, function(data) {
+            // 'data' is the response received from the server
+
+            // We select the div element with the ID 'result' and set its
+            // content to the server response
+            var el = jQuery("#result").html(data);
+
+            // Make the element visible
+            el.css("display", "block");
+
+            
+        });
+    }
+</script>
