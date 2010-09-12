@@ -62,7 +62,7 @@
   <!-- Page template formatter class. An new format object added to
        the Velocity context under the key: "format". -->
   <!ELEMENT format (#PCDATA)>
-   <!ATTLIST format classname CDATA #FIXED "org.apache.click.util.Format">
+   <!ATTLIST format classname CDATA "org.apache.click.util.Format">
 
   <!-- Application mode, which configures logging and caching. -->
   <!ELEMENT mode (#PCDATA)>
@@ -81,7 +81,7 @@
 
   <!-- File Upload Service. -->
   <!ELEMENT file-upload-service (property*)>
-   <!ATTLIST file-upload-service classname CDATA #FIXED "org.apache.click.service.FileUploadService">
+   <!ATTLIST file-upload-service classname CDATA "org.apache.click.service.FileUploadService">
 
     <!-- Property definition. -->
     <!ELEMENT property (#PCDATA)>
@@ -90,15 +90,15 @@
 
   <!-- Log Service. -->
   <!ELEMENT log-service (property*)>
-   <!ATTLIST log-service classname CDATA #FIXED "org.apache.click.service.ConsoleLogService">
+   <!ATTLIST log-service classname CDATA "org.apache.click.service.ConsoleLogService">
 
   <!-- Resource Service class. -->
   <!ELEMENT resource-service (property*)>
-   <!ATTLIST resource-service classname CDATA #FIXED "org.apache.click.service.ClickResourceService">
+   <!ATTLIST resource-service classname CDATA "org.apache.click.service.ClickResourceService">
 
   <!-- Template Service class. -->
   <!ELEMENT template-service (property*)>
-   <!ATTLIST template-service classname CDATA #FIXED "org.apache.click.service.VelocityTemplateService">
+   <!ATTLIST template-service classname CDATA "org.apache.click.service.VelocityTemplateService">
 
   <!-- Application page interceptors. -->
   <!ELEMENT page-interceptor (property*)>

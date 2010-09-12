@@ -771,7 +771,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
       </para>
 
       <literallayout>&lt;!ELEMENT <symbol>format</symbol> (#PCDATA)&gt;
-    &lt;ATTLIST format <varname>classname</varname> CDATA #FIXED "org.apache.click.util.Format"&gt;</literallayout>
+    &lt;ATTLIST format <varname>classname</varname> CDATA "org.apache.click.util.Format"&gt;</literallayout>
 
       <para>By default all Click pages are configured with a
       <ulink url="../../click-api/org/apache/click/util/Format.html">org.apache.click.util.Format</ulink>
