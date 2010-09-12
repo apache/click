@@ -1050,10 +1050,13 @@ public <token>ActionResult</token> <symbol>onRenderImage()</symbol> {
         and if necessary abort any further processing. If
         <methodname>onSecurityCheck()</methodname> return false, no response is
         sent back to the client. Note, if you want to send a specific response to
-        the client or perform a redirect you have to do that from the
+        the client you have to do that from the
         <methodname>onSecurityCheck()</methodname> event, since other Page events
-        are not processed.
-        </para>
+        are not executed. Please see
+        <ulink url="http://www.avoka.com/click-examples/ajax/ajax-secure.htm">this</ulink>
+        example for some strategies on implementing
+        <methodname>onSecurityCheck</methodname>  to handle ajax requests.
+            </para>
 
         <para>Next the target <methodname>page method</methodname> is invoked
         which returns an <classname>ActionResult</classname> that is rendered to

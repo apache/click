@@ -27,10 +27,13 @@ import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
 
 /**
- * Provides an <tt>onSecurityCheck</tt> example secure Page for handling Ajax
- * requests. Two links are presented to the user. Clicking on the first link will
- * redirect the user to this page and show an error message. Clicking on the
- * second link will show an error message without redirecting to another page.
+ * Provides an example Page showing how to perform redirects with Ajax requests.
+ *
+ * Since Ajax does not support redirects we return the url to redirect to in a
+ * custom response url called 'REDIRECT_URL'. The client-side then uses JavaScript
+ * to simulate a redirect by setting the value of window.location to the redirect
+ * url.
+ *
  */
 public class AjaxRedirectPage extends BorderPage {
 

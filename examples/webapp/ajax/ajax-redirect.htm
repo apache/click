@@ -31,8 +31,8 @@ Clicking the link above will send an Ajax request to the server which returns
 a url to redirect to. The url is returned from the server in a custom response
 header called <tt>'REDIRECT_URL'</tt>.
 <p/>
-Since Ajax does not support redirects, JavaScript is used to navigate the user to
-the given url by setting the <tt>window.location</tt> value to the url.
+Since Ajax does not support redirects, JavaScript is used to simulate a redirect
+by setting the value of <tt>window.location</tt> to the redirect url.
 
 <script type="text/javascript" src="$context/assets/js/jquery-1.4.2.js"></script>
 
