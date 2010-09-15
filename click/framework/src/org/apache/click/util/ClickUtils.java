@@ -540,7 +540,7 @@ public class ClickUtils {
     }
 
     /**
-     * A helper method which binds the submitted request value to the Field's
+     * A helper method that binds the submitted request value to the Field's
      * value. Since Field values are only bound during the <tt>"onProcess"</tt>
      * event, this method can be used to bind a submitted Field value during
      * the <tt>"onInit"</tt> event, which occurs <b>before</b> the
@@ -586,7 +586,7 @@ public class ClickUtils {
     }
 
     /**
-     * A helper method which binds the submitted request value to the Link's
+     * A helper method that binds the submitted request value to the Link's
      * value. See {@link #bind(org.apache.click.control.Field)} for a detailed
      * description.
      * <p/>
@@ -604,7 +604,7 @@ public class ClickUtils {
     }
 
     /**
-     * A helper method which binds the submitted request values of all Fields
+     * A helper method that binds the submitted request values of all Fields
      * and Links inside the given container or child containers. See
      * {@link #bind(org.apache.click.control.Field)} for a detailed description.
      * <p/>
@@ -646,7 +646,7 @@ public class ClickUtils {
     }
 
     /**
-     * A helper method which binds and validates the Field's submitted request
+     * A helper method that binds and validates the Field's submitted request
      * value. This method will return true if the validation succeeds, false
      * otherwise. See {@link #bind(org.apache.click.control.Field)} for a
      * detailed description.
@@ -691,16 +691,38 @@ public class ClickUtils {
     }
 
     /**
-     * A helper method which binds and validates the submitted request values
+     * A helper method that binds and validates the submitted request values
      * of all Fields and Links inside the given container or child containers.
      * This method will return true if the validation succeeds, false
-     * otherwise. See {@link #bind(org.apache.click.control.Field)} for a
+     * otherwise.
+     * <p/>
+     * See {@link #bindAndValidate(org.apache.click.control.Form)} for a
      * detailed description.
+     *
+     * @param container the container which Fields and Links to bind and
+     * validate
+     * @return true if all Fields are valid, false otherwise
+     */
+    public static boolean bindAndValidate(Container container) {
+        Context context = Context.getThreadLocalContext();
+        if (canBind(container, context)) {
+            return bindAndValidate(container, context);
+        }
+        return false;
+    }
+
+    /**
+     * * A helper method that binds and validates the submitted request values
+     * of all Fields and Links inside the given Form or child containers. Note,
+     * the Form itself is also validated.
+     * <p/>
+     * This method will return true if the validation succeeds, false otherwise.
+     * See {@link #bind(org.apache.click.control.Field)} for a detailed
+     * description.
      * <p/>
      * This method delegates to
      * {@link #canBind(org.apache.click.Control, org.apache.click.Context)}
-     * to check if the Container Fields and Links can be bound and
-     * validated.
+     * to check if the Form Fields and Links can be bound and validated.
      *
      * <pre class="prettyprint">
      * public void onInit() {
@@ -727,14 +749,14 @@ public class ClickUtils {
      *     }
      * } </pre>
      *
-     * @param container the container which Fields and Links to bind and
-     * validate
-     * @return true if all Fields are valid, false otherwise
+     * @param form the form which Fields and Links to bind and validate
+     * @return true if the form, it's fields and links was bound and valid, false
+     * otherwise
      */
-    public static boolean bindAndValidate(Container container) {
+    public static boolean bindAndValidate(Form form) {
         Context context = Context.getThreadLocalContext();
-        if (canBind(container, context)) {
-            return bindAndValidate(container, context);
+        if (canBind(form, context)) {
+            return bindAndValidate(form, context);
         }
         return false;
     }
@@ -810,6 +832,9 @@ public class ClickUtils {
         }
 
         Form form = ContainerUtils.findForm(control);
+        if (form == null && control instanceof Form) {
+            form = (Form) control;
+        }
         if (form != null) {
             return form.isFormSubmission();
         }
@@ -2924,7 +2949,7 @@ public class ClickUtils {
     // -------------------------------------------------------- Private Methods
 
     /**
-     * A helper method which binds the submitted request values of all Fields
+     * A helper method that binds the submitted request values of all Fields
      * and Links inside the given container or child containers.
      * <p/>
      * For Field controls, this method delegates to
@@ -2959,7 +2984,7 @@ public class ClickUtils {
     }
 
     /**
-     * A helper method which binds and validates the submitted request values
+     * A helper method that binds and validates the submitted request values
      * of all Fields and Links inside the given container or child containers.
      * <p/>
      * For Field controls, this method delegates to
@@ -2977,7 +3002,7 @@ public class ClickUtils {
             Control control = container.getControls().get(i);
             if (control instanceof Container) {
 
-                // Include fields but skip fieldSets
+                // Bind and validate fields only
                 if (control instanceof Field) {
                     if (!bindAndValidate((Field) control, context)) {
                         valid = false;
@@ -3005,7 +3030,42 @@ public class ClickUtils {
     }
 
     /**
-     * A helper method which binds and validates the Field's submitted request
+     * A helper method that binds and validates the submitted request values
+     * of all Fields and Links inside the given Form or child containers. Note,
+     * the Form itself is also validated.
+     * <p/>
+     * For Field controls, this method delegates to
+     * {@link #bindField(org.apache.click.control.Field, org.apache.click.Context)}.
+     *
+     * @param form the Form which Fields and Links to bind and validate
+     * @param context the request context
+     * @return true if the form, it's fields and links was bound and valid, false
+     * otherwise
+     */
+    private static boolean bindAndValidate(Form form, Context context) {
+        if (!bindAndValidate((Container) form, context)) {
+            return false;
+        }
+
+        if (form.getValidate()) {
+            // Keep reference to current error
+            String errorReference = form.getError();
+
+            // Validate form. If validation fails the form error will be changed
+            form.validate();
+
+            boolean valid = form.isValid();
+
+            // Revert back to original error
+            form.setError(errorReference);
+
+            return valid;
+        }
+        return true;
+    }
+
+    /**
+     * A helper method that binds and validates the Field's submitted request
      * value.
      * <p/>
      * This method delegates to

@@ -34,6 +34,7 @@ import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.TextField;
+import org.apache.click.servlet.MockRequest;
 
 /**
  * Tests for ClickUtils.
@@ -511,6 +512,41 @@ public class ClickUtilsTest extends TestCase {
         result = ClickUtils.decodePasswordCookie(cookie, 21);
         
         assertFalse(username.equals(result[0]));
-        assertFalse(password.equals(result[1]));        
+        assertFalse(password.equals(result[1]));
+    }
+
+    /**
+     *
+     */
+    public void testBindAndValidateForm() {
+        MockContext context = MockContext.initContext();
+        MockRequest request = context.getMockRequest();
+        request.setParameter("form_name", "form");
+        request.setParameter("firstName", "steve");
+
+final String formError = "error";
+        Form form = new Form("form") {
+
+            @Override
+            public void validate() {
+                setError(formError);
+            }
+        };
+
+        TextField field = new TextField("firstName");
+        form.add(field);
+
+        // assert field has no value
+        assertEquals("", field.getValue());
+
+        boolean valid = ClickUtils.bindAndValidate(form);
+        assertFalse(valid);
+
+        // assert that the field value is bound
+        assertEquals("steve", field.getValue());
+
+        // assert that the form error was reset, leaving form in a valid state
+            assertEquals(null, form.getError());
+        assertTrue(form.isValid());
     }
 }
