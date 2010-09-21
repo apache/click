@@ -1983,40 +1983,51 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 path = pathValue;
             }
 
-            // Set pageClass
-            String value = element.getAttribute("classname");
-            if (value != null) {
-                if (pagesPackage.trim().length() > 0) {
-                    value = pagesPackage + "." + value;
-                }
-            } else {
+            // Retrieve page classname
+            String classname = element.getAttribute("classname");
+
+            if (classname == null) {
                 String msg = "No classname defined for page path " + path;
                 throw new RuntimeException(msg);
             }
 
+            Class tmpPageClass = null;
+            String classFound = null;
+
             try {
 
-                pageClass = ClickUtils.classForName(value);
+                    // First, lookup classname as provided
+                    tmpPageClass = ClickUtils.classForName(classname);
+                    classFound = classname;
 
             } catch (ClassNotFoundException cnfe) {
+// For backward compatibility prefix classname with package name
+                String prefixedClassname = classname;
 
-                // If a pagesPackage was delcared provide a descriptive error message
-                if (StringUtils.isNotBlank(pagesPackage)) {
+                if (pagesPackage.trim().length() > 0) {
+                    prefixedClassname = pagesPackage + "." + classname;
+                }
+
+                try {
+                    // CLK-704
+                    // For backward compatibility, lookup classname prefixed with the package name
+
+                    tmpPageClass = ClickUtils.classForName(prefixedClassname);
+                    classFound = prefixedClassname;
+
+                } catch (ClassNotFoundException cnfe2) {
+                    // Throw original exception which used the given classname
                     String msg = "No class was found for the Page classname: '"
-                        + value + "'. Please note that Click automatically adds"
-                        + " the given package '" + pagesPackage + "' to page"
-                        + " classnames. If you need to specify an absolute"
-                        + " classname declare a <pages>...</pages> element"
-                        + " without a package attribute.";
+                        + classname + "'.";
                     throw new RuntimeException(msg, cnfe);
-                } else {
-                    throw cnfe;
                 }
             }
 
+            pageClass = tmpPageClass;
+
             if (!Page.class.isAssignableFrom(pageClass)) {
-                String msg = "Page class " + value
-                             + " is not a subclass of org.apache.click.Page";
+                String msg = "Page class '" + classFound
+                             + "' is not a subclass of org.apache.click.Page";
                 throw new RuntimeException(msg);
             }
 
