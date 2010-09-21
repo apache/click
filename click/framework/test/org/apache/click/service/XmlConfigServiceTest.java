@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.UnavailableException;
 
 import junit.framework.TestCase;
 import org.apache.click.Context;
@@ -360,6 +361,74 @@ public class XmlConfigServiceTest extends TestCase {
         container.start();
 
         container.stop();
+
+        deleteDir(tmpdir);
+    }
+
+    /**
+     * Test that manually loaded pages should specify absolute classnames, but
+     * for backward compatibility fallback to appending package to classname if
+     * absolute classname is not found.
+     *
+     * CLK-704
+     */
+    public void testLoadManualPagesByClassname() throws Exception {
+        File tmpdir = makeTmpDir();
+
+        PrintStream pstr = makeXmlStream(tmpdir, "WEB-INF/click.xml");
+        pstr.println("<click-app>");
+
+        // Dclare the pages package
+                pstr.println("<pages package='org.apache.click.pages'/>");
+        pstr.println("<pages package='org.apache.click.pages'>");
+
+        // Check that page with absolute classname is resolved
+        pstr.println("  <page path='page.htm' classname='org.apache.click.pages.BinaryPage'/>");
+        // For backward compatibility, check that page with classname is resolved as well.
+        // In this case Click will prefix the classname with the package declared above.
+        pstr.println("  <page path='page.htm' classname='BinaryPage'/>");
+        pstr.println("</pages>");
+        pstr.println("</click-app>");
+        pstr.close();
+
+        MockContainer container = new MockContainer(tmpdir.getAbsolutePath());
+        container.start();
+
+        container.stop();
+        deleteDir(tmpdir);
+    }
+
+    /**
+     * Test that manually loaded pages that does not exist, throws appropriate
+     * exception.
+     *
+     * CLK-704
+     */
+    public void testLoadManualNonExistentPageByClassname() throws Exception {
+        File tmpdir = makeTmpDir();
+
+        PrintStream pstr = makeXmlStream(tmpdir, "WEB-INF/click.xml");
+        pstr.println("<click-app>");
+
+        // Dclare the pages package
+                pstr.println("<pages package='org.apache.click.pages'/>");
+        pstr.println("<pages package='org.apache.click.pages'>");
+
+        // Check non existent page
+        pstr.println("  <page path='page.htm' classname='org.apache.click.pages.noSuchPage'/>");
+        pstr.println("</pages>");
+        pstr.println("</click-app>");
+        pstr.close();
+
+        MockContainer container = null;
+        try {
+            container = new MockContainer(tmpdir.getAbsolutePath());
+            container.start();
+            fail("No class called NoSuchPage exists. Container should fail to start up");
+        } catch (Exception expected) {
+        } finally {
+            container.stop();
+        }
 
         deleteDir(tmpdir);
     }
