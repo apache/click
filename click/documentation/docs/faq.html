@@ -85,6 +85,8 @@
   </li>
   <li><a href="#why-velocity">Why doesn't Click use FreeMarker as the default rendering engine?</a>
   </li>
+  <li><a href="#portlet">Can Click be used to develop Portlet applications?</a>
+  </li>
   <li><a href="#why-click">Why develop a new Web Application Framework?</a>
   </li>
 </ol>
@@ -819,8 +821,20 @@ public MyPage extends Page {
   </dd>
 
 
+  <dt><a name="portlet"></a>
+      <b>24.&nbsp; Can Click be used to develop Portlet applications?</b>
+  </dt>
+  <dd>
+  Unfortunately no. Click is built on top of the Servlet specification which is
+  incompatible with the Portlet specification. However in a future Click release
+  the <a target="_blank" class="external" href="http://portals.apache.org/bridges/">Portals Bridges</a>
+  project could be leveraged to allow Click applications to run inside a Portlet
+  container.
+  </dd>
+
+
   <dt><a name="why-click"></a>
-      <b>24.&nbsp; Why develop a new Web Application Framework?</b>
+      <b>25.&nbsp; Why develop a new Web Application Framework?</b>
   </dt>
   <dd>
   Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
