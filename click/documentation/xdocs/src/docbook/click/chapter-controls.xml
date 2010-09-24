@@ -851,7 +851,14 @@ ${form.endTag()}</programlisting>
       <para>However it is possible to "generify" the layout using template
       engines such as Velocity, Freemarker and JSP.
       <ulink url="../../click-api/org/apache/click/control/Form.html#velocity-macros">Macro.vm</ulink>
-      is an example of a generic form layout using Velocity.
+      is an example of a generic and reuable form layout using Velocity.
+      </para>
+      <para>
+      <ulink url="../../click-api/org/apache/click/control/Panel.html">Panels</ulink>
+      provide another good way to build generic and reusable template based layouts.
+      </para>
+      <para>Once your generic templates are in place, they can easily be reused
+      in your project or even shared across multiple projects.
       </para>
 
     </sect2>
@@ -1073,8 +1080,8 @@ public class EmployeePage extends Page {
       components.
       </para>
 
-      <para>However once your custom layout components are in place, it can be
-      reused across your project and boost productivity.
+      <para>However once your custom layout components are in place, they can
+      easily be reused in your project or even shared across multiple projects.
       </para>
 
       <para>Whether you use the <link linkend="template-layout">template</link>
