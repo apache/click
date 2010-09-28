@@ -1981,7 +1981,8 @@ public class ClickUtils {
 
     /**
      * Return an encoded URL value for the given object using the context
-     * request character encoding.
+     * request character encoding or "UTF-8" if the request character encoding
+     * is not specified.
      * <p/>
      * For example <tt>(http://host?name=value with spaces)</tt> will become
      * <tt>(http://host?name=value%20with%20spaces)</tt>.
@@ -2005,7 +2006,7 @@ public class ClickUtils {
 
         try {
             if (charset == null) {
-                return URLEncoder.encode(object.toString());
+                return URLEncoder.encode(object.toString(), "UTF-8");
 
             } else {
                 return URLEncoder.encode(object.toString(), charset);
