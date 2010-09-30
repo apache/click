@@ -1043,7 +1043,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
 
             pagesPackage = pagesPackage.trim();
-            if (pagesPackage.endsWith(".")) {
+            if (pagesPackage.endsWith(".") && pagesPackage.length() > 1) {
                 pagesPackage =
                     pagesPackage.substring(0, pagesPackage.length() - 2);
             }
@@ -1992,41 +1992,41 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
 
             Class tmpPageClass = null;
-            String classFound = null;
+            String classnameFound = null;
 
             try {
 
                     // First, lookup classname as provided
                     tmpPageClass = ClickUtils.classForName(classname);
-                    classFound = classname;
+                    classnameFound = classname;
 
             } catch (ClassNotFoundException cnfe) {
-// For backward compatibility prefix classname with package name
-                String prefixedClassname = classname;
 
                 if (pagesPackage.trim().length() > 0) {
-                    prefixedClassname = pagesPackage + "." + classname;
-                }
+                    // For backward compatibility prefix classname with package name
+                    String prefixedClassname = pagesPackage + "." + classname;
 
-                try {
-                    // CLK-704
-                    // For backward compatibility, lookup classname prefixed with the package name
+                    try {
+                        // CLK-704
+                        // For backward compatibility, lookup classname prefixed with the package name
 
-                    tmpPageClass = ClickUtils.classForName(prefixedClassname);
-                    classFound = prefixedClassname;
+                        tmpPageClass =
+                            ClickUtils.classForName(prefixedClassname);
+                        classnameFound = prefixedClassname;
 
-                } catch (ClassNotFoundException cnfe2) {
-                    // Throw original exception which used the given classname
-                    String msg = "No class was found for the Page classname: '"
-                        + classname + "'.";
-                    throw new RuntimeException(msg, cnfe);
+                    } catch (ClassNotFoundException cnfe2) {
+                        // Throw original exception which used the given classname
+                        String msg = "No class was found for the Page classname: '"
+                            + classname + "'.";
+                        throw new RuntimeException(msg, cnfe);
+                    }
                 }
             }
 
             pageClass = tmpPageClass;
 
             if (!Page.class.isAssignableFrom(pageClass)) {
-                String msg = "Page class '" + classFound
+                String msg = "Page class '" + classnameFound
                              + "' is not a subclass of org.apache.click.Page";
                 throw new RuntimeException(msg);
             }
