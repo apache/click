@@ -754,8 +754,8 @@
     For example:
     </para>
 
-    <programlisting language="xml">&lt;pages package="com.mycorp.page" automapping="annotation"/&gt;
-  &lt;page path="click/error.htm" classname="ErrorPage"/&gt;
+    <programlisting language="xml">&lt;pages package="com.mycorp.page" autobinding="annotation"/&gt;
+  &lt;page path="click/error.htm" classname="com.mycorp.page.ErrorPage"/&gt;
 &lt;/pages&gt;</programlisting>
 
     <para>Generally applications handle transactional errors using service layer code
