@@ -867,7 +867,9 @@ public void onPost() {
     method, returning the path of the border template to render. For example:
     </para>
 
-    <programlisting language="java">public class BorderedPage extends Page {
+    <programlisting language="java">package com.mycorp.page;
+
+public class BorderedPage extends Page {
 
     /**
      * @see Page#getTemplate()
@@ -906,9 +908,11 @@ public void onPost() {
     <para>An example bordered Home page is provided below:
     </para>
 
-    <literallayout>&lt;page path="<varname>home.htm</varname>" classname="<token>Home</token>"/&gt;</literallayout>
+    <literallayout>&lt;page path="<varname>home.htm</varname>" classname="<token>com.mycorp.page.Home</token>"/&gt;</literallayout>
 
-    <programlisting language="java">public class Home extends BorderedPage {
+    <programlisting language="java">package com.mycorp.page;
+
+public class Home extends BorderedPage {
 
     public String title = "Home";
 

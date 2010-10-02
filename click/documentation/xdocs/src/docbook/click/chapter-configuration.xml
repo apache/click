@@ -220,9 +220,12 @@
 
     <programlisting language="xml">&lt;click-app charset="UTF-8" locale="de"&gt;
 
-  &lt;!-- Specify the Java package where Page classes can be found --&gt;
+  &lt;!-- To aid Click's automapping, specify the Java package where Page classes can be found --&gt;
   &lt;pages package="com.mycorp.banking.page"&gt;
-    &lt;page path="index.htm" classname="Home"/&gt;
+  &lt;!-- We have to manually define the mapping between the Home page class and index.htm template
+  because this page doesn't follow the automatic mapping convention of naming the page class and
+  template the same--&gt;
+    &lt;page path="index.htm" classname="com.mycorp.banking.page.Home"/&gt;
   &lt;/pages&gt;
 
   &lt;!-- Specify a second Java package where Page classes can be found --&gt;
@@ -295,12 +298,12 @@
    &lt;!ATTLIST pages <varname>automapping</varname> (true|false) "true"&gt;
    &lt;!ATTLIST pages <varname>autobinding</varname> (default|annotation|none) "default"&gt;</literallayout>
 
-      <para>The pages element can specify a default <varname>package</varname> name
-      which is prepended to the classname of any pages defined.
+      <para>The pages element can specify a base <varname>package</varname>
+      that Click should use for mapping page templates to page classes.
       </para>
 
       <para>The pages element also defines the <varname>automapping</varname> and
-      <varname>automapping</varname> attributes which is discussed in the
+      <varname>autobinding</varname> attributes which is discussed in the
       <link linkend="application-automapping">Page Automapping</link> and
       <link linkend="application-autobinding">Page Autobinding</link> sections
       respectively.
@@ -374,11 +377,11 @@
         </para>
 
         <para>Automapping will attempt to associate each page template (*.htm)
-        and JSP file in the web application (excluding those under the WEB-INF
-        and click directories) to a Page class. Automapped pages are loaded after
-        the manually defined pages are loaded, and manually defined pages takes
-        preference. When automapping is enabled the Click application will log
-        the page mappings when in debug or trace mode.
+        and JSP file in the web application (excluding those under WEB-INF) to a
+        Page class. Automapped pages are loaded after the manually defined pages
+        are loaded, and manually defined pages takes preference.
+        When automapping is enabled the page mappings will be logged if Click is
+        running in debug or trace mode.
         </para>
 
         <para>For example, given the following page path to class mapping:
@@ -392,34 +395,63 @@ security/logout.htm           =&gt; <token>com.mycorp.page.security.Logout</toke
 security/change-password.htm  =&gt; <token>com.mycorp.page.security.ChangePassword</token></literallayout>
 
         <para>The above mapping could be configured manually by setting the
-        <symbol>automapping</symbol> attribute to "false" and using the package
-        prefix, for example:
+        <symbol>automapping</symbol> attribute to <literal>false</literal>,
+        for example:
         </para>
 
         <programlisting language="xml">&lt;click-app&gt;
-  &lt;pages package="<token>com.mycorp.page</token>" <symbol>automapping</symbol>="false"&gt;
-    &lt;page path="index.htm"                    classname="<token>Home</token>"/&gt;
-    &lt;page path="search.htm"                   classname="<token>Search</token>"/&gt;
-    &lt;page path="contacts/contacts.htm"        classname="<token>contacts.Contacts</token>"/&gt;
-    &lt;page path="security/login.htm"           classname="<token>security.Login</token>"/&gt;
-    &lt;page path="security/logout.htm"          classname="<token>security.Logout</token>"/&gt;
-    &lt;page path="security/change-password.htm" classname="<token>security.ChangePassword</token>"/&gt;
+  &lt;pages automapping="false"&gt;
+    &lt;page path="index.htm"                    classname="<token>com.mycorp.page.Home</token>"/&gt;
+    &lt;page path="search.htm"                   classname="<token>com.mycorp.page.Search</token>"/&gt;
+    &lt;page path="contacts/contacts.htm"        classname="<token>com.mycorp.page.contacts.Contacts</token>"/&gt;
+    &lt;page path="security/login.htm"           classname="<token>com.mycorp.page.security.Login</token>"/&gt;
+    &lt;page path="security/logout.htm"          classname="<token>com.mycorp.page.security.Logout</token>"/&gt;
+    &lt;page path="security/change-password.htm" classname="<token>com.mycorp.page.security.ChangePassword</token>"/&gt;
   &lt;/pages&gt;
 &lt;/click-app&gt;</programlisting>
 
-        <para>By using <symbol>automapping</symbol> the page paths will automatically
-        map to page classes: (except for Home page which doesn't automatically map
-        to index.html)
+        <para>For an application with many pages, it is cumbersome to manually map
+        each page template to its associated class. This is where
+        <symbol>automapping</symbol> comes in.
+        </para>
+
+        <para>By setting <symbol>automapping</symbol> to <literal>true</literal>,
+        Click will automatically map page templates to page classes. To map a
+        template to a page class, Click converts the template path to the Page
+        classname. In the example above, Click will convert the template
+        <token>search.htm</token> to the class <token>Search</token> by
+        capitilizing the template name and removing the <literal>.htm</literal>
+        extension. Of course this is not enough to map the template to the class.
+        what is missing is the class package, <token>com.mycorp.page</token>.
+        To help Click map the page, you can set the base <literal>package</literal>
+        attribute as shown in the next example.
+        </para>
+
+        <para>Below is the full configuration to automatically map the templates
+        to pages (except for index.htm which doesn't automatically map to Home
+        page and has to be mapped manually):
         </para>
 
         <programlisting language="xml">&lt;click-app&gt;
   &lt;pages package="<token>com.mycorp.page</token>" <symbol>automapping</symbol>="true"&gt;
-    &lt;page path="index.htm" classname="Home"/&gt;
+    &lt;page path="index.htm" classname="com.mycorp.page.Home"/&gt;
   &lt;/pages&gt;
 &lt;/click-app&gt;</programlisting>
 
-        <para>Note <symbol>automapping</symbol> is true by default, so it could be
-        omitted from the configuration file.
+        <para>Note: <symbol>automapping</symbol> is <literal>true</literal> by
+        default, so it could be omitted.
+        </para>
+
+        <para>If a page template is placed in a <literal>sub folder</literal>
+        of the root web folder, it's associated page class must be placed in an
+        equivalently named <literal>sub package</literal> of the base package in
+        order for the page to be mapped automatically. In the mapping above the
+        page template <token>security/change-password.htm</token> is located in
+        the <token>security</token> folder under the web root. In order for Click
+        to correctly map the page template to it's class, the class must be
+        located in the <token>security</token> package of the
+        base package <token>com.mycorp.page</token>. The absolute page classname
+        is thus: <token>com.mycorp.page.security.ChangePassword</token>.
         </para>
 
         <para>The page template name to classname convention is:
@@ -430,9 +462,9 @@ change_password.htm  =&gt;  <token>ChangePassword</token>
 changePassword.htm   =&gt;  <token>ChangePassword</token>
 ChangePassword.htm   =&gt;  <token>ChangePassword</token></literallayout>
 
-        <para>When automapping pages, if a class cannot be found Click will attempt
-        to add the 'Page' suffix to the classname if not already present and map
-        this. For example:
+        <para>During automapping, if a page class cannot be found, Click will
+        add the 'Page' suffix to the classname (if not already present) and
+        attempt to map the page template to this modified classname. For example:
         </para>
 
         <literallayout>customer.htm         =&gt;  <token>CustomerPage</token>
@@ -721,17 +753,20 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
 &lt;/click-app&gt;</programlisting>
 
         <para>Alternatively you can define your headers individually in pages or
-        for all application pages by setting header values. For example to switch
-        off caching in the login page, note the value for a Date type should
-        be a long number value:
+        for all application pages by setting header values. For example, to
+        switch off caching in the <literal>Login</literal> page, set the
+        following page cache control headers:
         </para>
 
         <programlisting language="xml">&lt;pages package="com.mycorp.page"&gt;
-  &lt;page path="login.htm" classname="Login"&gt;
+  &lt;page path="login.htm" classname="com.mycorp.page.Login"&gt;
     &lt;header name="Pragma" value="no-cache"/&gt;
     &lt;header name="Expires" value="1" type="Date"/&gt;
   &lt;/page&gt;
 &lt;/pages&gt;</programlisting>
+
+        <para>Note: the value for a Date type should be a long number value.
+        </para>
 
         <para>If you wanted to enable caching for a particular page you could set
         the following page cache control header. This will mark the page as cachable
@@ -739,7 +774,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         </para>
 
         <programlisting language="xml">&lt;pages package="com.mycorp.page"&gt;
-  &lt;page path="home.htm" classname="Home"&gt;
+  &lt;page path="home.htm" classname="com.mycorp.page.Home"&gt;
     &lt;header name="Cache-Control" value="max-age=3600, public, must-revalidate"/&gt;
   &lt;/page&gt;
 &lt;/pages&gt;</programlisting>
