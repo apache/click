@@ -19,7 +19,6 @@
 package org.apache.click.extras.control;
 
 import java.util.List;
-import org.apache.click.Context;
 
 import org.apache.click.control.Button;
 import org.apache.click.control.Column;
@@ -33,7 +32,6 @@ import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.control.ActionLink;
 import org.apache.click.dataprovider.PagingDataProvider;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.util.NumberUtils;
 
 /**
  * Provides a FormTable data grid control.
