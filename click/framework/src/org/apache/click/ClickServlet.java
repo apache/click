@@ -1067,7 +1067,7 @@ public class ClickServlet extends HttpServlet {
         // Log request parameters
         if (logger.isTraceEnabled()) {
             logger.trace("   is Ajax request: " + context.isAjaxRequest());
-            logRequestParameters(request);
+            logRequestParameters(request)
         }
 
         String path = context.getResourcePath();
