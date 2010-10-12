@@ -1125,11 +1125,12 @@ public class ClickServlet extends HttpServlet {
      */
     @SuppressWarnings("deprecation")
     protected void processPageOnDestroy(Page page, long startTime) {
+        Context context = page.getContext();
         if (page.hasControls()) {
 
             // notify callbacks of destroy event
             // TODO check that exceptions don't unnecessarily trigger preDestroy
-            ControlRegistry.getThreadLocalRegistry().processPreDestroy(page.getContext());
+            ControlRegistry.getThreadLocalRegistry().processPreDestroy(context);
 
             List<Control> controls = page.getControls();
 
@@ -1154,7 +1155,7 @@ public class ClickServlet extends HttpServlet {
         // Reset the page navigation state
         try {
             // Reset the path
-            String path = page.getContext().getResourcePath();
+            String path = context.getResourcePath();
             page.setPath(path);
 
             // Reset the forward
@@ -1175,9 +1176,9 @@ public class ClickServlet extends HttpServlet {
             page.onDestroy();
 
             if (page.isStateful()) {
-                page.getContext().setSessionAttribute(page.getClass().getName(), page);
+                context.setSessionAttribute(page.getClass().getName(), page);
             } else {
-                page.getContext().removeSessionAttribute(page.getClass().getName());
+                context.removeSessionAttribute(page.getClass().getName());
             }
 
             if (logger.isTraceEnabled()) {
