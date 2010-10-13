@@ -36,7 +36,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * You can read more about programmatic layout
  * <a href="../../../../../../user-guide/html/ch03s07.html#programmatic-layout">here</a>.
  * <p/>
- * Also see this <a href="http://www.avoka.com/click-examples/form/contact-details.htm">example</a>
+ * Also see this <a href="http://click.avoka.com/click-examples/form/contact-details.htm">example</a>
  * of how HtmlFieldSet is used to provide a custom layout.
  */
 public class HtmlFieldSet extends FieldSet {
