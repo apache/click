@@ -561,7 +561,7 @@ production-error-message=
 &lt;/html&gt; </programlisting>
 
   <para>A live demo showing how to add HEAD elements from a custom Control can
-  be seen <ulink url="http://www.avoka.com/click-examples/general/control-head-demo.htm">here</ulink>.
+  be seen <ulink url="http://click.avoka.com/click-examples/general/control-head-demo.htm">here</ulink>.
   </para>
 
   </sect1>
@@ -1060,7 +1060,7 @@ public class EmployeePage extends Page {
       transformed into a fancy looking form.
       </para>
 
-      <para>There is a <ulink url="http://www.avoka.com/click-examples/form/contact-details.htm">live demo</ulink>
+      <para>There is a <ulink url="http://click.avoka.com/click-examples/form/contact-details.htm">live demo</ulink>
       showing the programmatic approach.
       </para>
 
