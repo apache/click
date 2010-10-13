@@ -944,7 +944,7 @@ public class ErrorPage extends org.apache.click.util.ErrorPage {
 &lt;/html&gt;</programlisting>
 
     <para>A live demo is available
-    <ulink url="http://www.avoka.com/click-examples/general/page-imports-example.htm">here</ulink>
+    <ulink url="http://click.avoka.com/click-examples/general/page-imports-example.htm">here</ulink>
     </para>
 
   </sect1>

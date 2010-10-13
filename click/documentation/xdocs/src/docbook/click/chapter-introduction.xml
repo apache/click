@@ -51,7 +51,7 @@
 
   <para>Possibly the best way to see how Click works is to dive right in and
   look at some examples. (The examples are also available online at
-  <ulink url="http://www.avoka.com/click-examples/">http://www.avoka.com/click-examples/</ulink>
+  <ulink url="http://click.avoka.com/click-examples/">http://click.avoka.com/click-examples/</ulink>
   under the menu "Intro Examples".)
   </para>
 
@@ -839,7 +839,7 @@ public HelloWorld extends Page {
       and the fields HTML markup. This is a great feature for quickly building
       screens, and the form control provides a number of layout options. See the
       Click Examples for an interactive
-      <ulink url="http://www.avoka.com/click-examples/form/form-properties.htm">Form Properties demo</ulink>.
+      <ulink url="http://click.avoka.com/click-examples/form/form-properties.htm">Form Properties demo</ulink>.
       </para>
 
       <para>For fine grained page design you can specifically layout form and

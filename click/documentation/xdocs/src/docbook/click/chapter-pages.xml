@@ -1057,7 +1057,7 @@ public <token>ActionResult</token> <symbol>onRenderImage()</symbol> {
         the client you have to do that from the
         <methodname>onSecurityCheck()</methodname> event, since other Page events
         are not executed. Please see
-        <ulink url="http://www.avoka.com/click-examples/ajax/ajax-secure.htm">this</ulink>
+        <ulink url="http://click.avoka.com/click-examples/ajax/ajax-secure.htm">this</ulink>
         example for some strategies on implementing
         <methodname>onSecurityCheck</methodname>  to handle ajax requests.
             </para>
@@ -1613,7 +1613,7 @@ public class SearchPage extends Page implements Serializable {
 &lt;/html&gt; </programlisting>
 
     <para>A live demo showing how to add HEAD elements to a Page can be seen
-    <ulink url="http://www.avoka.com/click-examples/general/page-head-demo.htm">here</ulink>.
+    <ulink url="http://click.avoka.com/click-examples/general/page-head-demo.htm">here</ulink>.
     </para>
 
   </sect1>
