@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ContainerUtils;
@@ -879,6 +880,55 @@ public class FieldSet extends Field implements Container {
     }
 
     /**
+     * Return the FieldSet state. The state will include all the input Field
+     * values and other FieldSets contained in this FieldSet or child containers.
+     *
+     * @return the state of input Fields and FieldSets contained in this FieldSet
+     */
+    @Override
+    public Object getState() {
+        List<Field> fields = new ArrayList<Field>();
+        addStatefulFields(this, fields);
+        Map<String, Object> stateMap = new HashMap<String, Object>();
+        for(Field field : fields) {
+            Object state = field.getState();
+            if(state != null) {
+                stateMap.put(field.getName(), state);
+            }
+        }
+
+        if (stateMap.isEmpty()) {
+            return null;
+        }
+        return stateMap;
+    }
+
+    /**
+     * Set the FieldSet state. The state will be applied to all the input Fields
+     * and FieldSets contained in the FieldSet or child containers.
+     *
+     * @param state the FieldSet state to set
+     */
+    @Override
+    public void setState(Object state) {
+        if (state == null) {
+            return;
+        }
+
+        Map stateMap = (Map) state;
+        List<Field> fields = new ArrayList<Field>();
+        addStatefulFields(this, fields);
+
+        for(Field field : fields) {
+            String fieldName = field.getName();
+            if (stateMap.containsKey(fieldName)) {
+                Object fieldState = stateMap.get(fieldName);
+                field.setState(fieldState);
+            }
+        }
+    }
+
+    /**
      * Render the HTML representation of the FieldSet.
      * <p/>
      * The size of buffer is determined by {@link #getControlSizeEst()}.
@@ -933,6 +983,50 @@ public class FieldSet extends Field implements Container {
             buffer.elementEnd(getTag());
             buffer.append("\n");
         }
+    }
+
+    /**
+     * Remove the FieldSet state from the session for the given request context.
+     *
+     * @see #saveState(org.apache.click.Context)
+     * @see #restoreState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    @Override
+    public void removeState(Context context) {
+        ClickUtils.removeState(this, getName(), context);
+    }
+
+    /**
+     * Restore the FieldSet state from the session for the given request context.
+     * <p/>
+     * This method delegates to {@link #setState(java.lang.Object)} to set the
+     * field restored state.
+     *
+     * @see #saveState(org.apache.click.Context)
+     * @see #removeState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    @Override
+    public void restoreState(Context context) {
+        ClickUtils.restoreState(this, getName(), context);
+    }
+
+    /**
+     * Save the FieldSet state to the session for the given request context.
+     * <p/>
+     * * This method delegates to {@link #getState()} to retrieve the field state
+     * to save.
+     *
+     * @see #restoreState(org.apache.click.Context)
+     * @see #removeState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    public void saveState(Context context) {
+        ClickUtils.saveState(this, getName(), context);
     }
 
     /**
@@ -1251,6 +1345,29 @@ public class FieldSet extends Field implements Container {
             return false;
         } else {
             return ((Field) control).isHidden();
+        }
+    }
+
+    /**
+     * Add fields for the given Container to the specified field list,
+     * recursively including any Fields contained in child containers.
+     *
+     * @param container the container to obtain the fields from
+     * @param fields the list of contained fields
+     */
+    private void addStatefulFields(final Container container, final List<Field> fields) {
+        for (Control control : container.getControls()) {
+            if (control instanceof Label || control instanceof Button) {
+                // Skip buttons and labels
+                continue;
+            }
+
+            if (control instanceof Field) {
+                fields.add((Field) control);
+            } else if (control instanceof Container) {
+                Container childContainer = (Container) control;
+                addStatefulFields(childContainer, fields);
+            }
         }
     }
 }

@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
+import org.apache.click.Stateful;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
@@ -504,7 +505,7 @@ import org.apache.commons.lang.StringUtils;
  * @see Field
  * @see Submit
  */
-public class Form extends AbstractContainer {
+public class Form extends AbstractContainer implements Stateful {
 
     // Constants --------------------------------------------------------------
 
@@ -926,6 +927,8 @@ public class Form extends AbstractContainer {
      * the form
      * @return the new control that replaced the current control
      *
+     * @deprecated this method was used for stateful pages, which have been deprecated
+     *
      * @throws IllegalArgumentException if the currentControl or newControl is
      * null
      * @throws IllegalStateException if the currentControl is not contained in
@@ -1330,6 +1333,7 @@ public class Form extends AbstractContainer {
         }
         this.name = name;
 
+        // TODO: Remove with stateful pages
         HiddenField bypassValidationField = (HiddenField) getField(BYPASS_VALIDATION);
         if (bypassValidationField == null) {
             // Create a hidden field which name and value cannot be change
@@ -1338,10 +1342,11 @@ public class Form extends AbstractContainer {
             insertIndexOffset++;
         }
 
+        // TODO: Remove with stateful pages
         HiddenField nameField = (HiddenField) getField(FORM_NAME);
         if (nameField == null) {
-            // Create a hidden field which name cannot be changed
-            nameField = new NonbindableHiddenField(FORM_NAME, String.class);
+            // Create a hidden field that won't be processed and name cannot change
+            nameField = new NonProcessedHiddenField(FORM_NAME, String.class);
             add(nameField);
             insertIndexOffset++;
         }
@@ -1902,6 +1907,53 @@ public class Form extends AbstractContainer {
     }
 
     /**
+     * Return the form state. The state will include all the input Field values
+     * and FieldSets contained in the Form or child containers.
+     *
+     * @return the state of input Fields and FieldSets contained in the form
+     */
+    public Object getState() {
+        List<Field> fields = new ArrayList<Field>();
+        addStatefulFields(this, fields);
+        Map<String, Object> stateMap = new HashMap<String, Object>();
+        for(Field field : fields) {
+            Object state = field.getState();
+            if(state != null) {
+                stateMap.put(field.getName(), state);
+            }
+        }
+
+        if (stateMap.isEmpty()) {
+            return null;
+        }
+        return stateMap;
+    }
+
+    /**
+     * Set the Form state. The state will be applied to all the input Fields
+     * and FieldSets contained in the Form or child containers.
+     *
+     * @param state the Form state to set
+     */
+    public void setState(Object state) {
+        if (state == null) {
+            return;
+        }
+
+        Map stateMap = (Map) state;
+        List<Field> fields = new ArrayList<Field>();
+        addStatefulFields(this, fields);
+
+        for(Field field : fields) {
+            String fieldName = field.getName();
+            if (stateMap.containsKey(fieldName)) {
+                Object fieldState = stateMap.get(fieldName);
+                field.setState(fieldState);
+            }
+        }
+    }
+
+    /**
      * Process the Form and its child controls only if the Form was submitted
      * by the user.
      * <p/>
@@ -2170,6 +2222,48 @@ public class Form extends AbstractContainer {
     }
 
     /**
+     * Remove the Form state from the session for the given request context.
+     *
+     * @see #saveState(org.apache.click.Context)
+     * @see #restoreState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    public void removeState(Context context) {
+        ClickUtils.removeState(this, getName(), context);
+    }
+
+    /**
+     * Restore the Form state from the session for the given request context.
+     * <p/>
+     * This method delegates to {@link #setState(java.lang.Object)} to set the
+     * form restored state.
+     *
+     * @see #saveState(org.apache.click.Context)
+     * @see #removeState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    public void restoreState(Context context) {
+        ClickUtils.restoreState(this, getName(), context);
+    }
+
+    /**
+     * Save the Form state to the session for the given request context.
+     * <p/>
+     * * This method delegates to {@link #getState()} to retrieve the form state
+     * to save.
+     *
+     * @see #restoreState(org.apache.click.Context)
+     * @see #removeState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    public void saveState(Context context) {
+        ClickUtils.saveState(this, getName(), context);
+    }
+
+    /**
      * Return the rendered opening form tag and all the forms hidden fields.
      *
      * @return the rendered form start tag and the forms hidden fields
@@ -2325,7 +2419,7 @@ public class Form extends AbstractContainer {
         // CLK-267: check against adding a duplicate field
         HiddenField field = (HiddenField) getField(submitTokenName);
         if (field == null) {
-            field = new NonbindableHiddenField(submitTokenName, Long.class);
+            field = new NonProcessedHiddenField(submitTokenName, Long.class);
             add(field);
             insertIndexOffset++;
         }
@@ -2983,6 +3077,32 @@ public class Form extends AbstractContainer {
 
     // Private Methods --------------------------------------------------------
 
+         /**
+     * Add fields for the given Container to the specified field list,
+     * recursively including any Fields contained in child containers.
+     *
+     * @param container the container to obtain the fields from
+     * @param fields the list of contained fields
+     */
+    private void addStatefulFields(final Container container, final List<Field> fields) {
+        for (Control control : container.getControls()) {
+            if (control instanceof Label
+                || control instanceof Button
+                || control instanceof NonProcessedHiddenField
+                ) {
+                // Skip buttons and labels and NonProcessedHiddenFields
+                continue;
+            }
+
+            if (control instanceof Field) {
+                fields.add((Field) control);
+            } else if (control instanceof Container) {
+                Container childContainer = (Container) control;
+                addStatefulFields(childContainer, fields);
+            }
+        }
+    }
+
     /**
      * Return true if the control is hidden, false otherwise.
      *
@@ -3001,9 +3121,10 @@ public class Form extends AbstractContainer {
     // Inner Classes ----------------------------------------------------------
 
     /**
-     * Provides a HiddenField which does not bind to incoming values.
+     * Provides a HiddenField which does not get processed or bind to its
+     * incoming value. In addition the field name cannot be changed once set.
      */
-    private static class NonbindableHiddenField extends HiddenField {
+    private static class NonProcessedHiddenField extends HiddenField {
 
         private static final long serialVersionUID = 1L;
 
@@ -3013,46 +3134,17 @@ public class Form extends AbstractContainer {
          * @param name the field name
          * @param valueClass the Class of the value Object
          */
-        public NonbindableHiddenField(String name, Class<?> valueClass) {
+        public NonProcessedHiddenField(String name, Class<?> valueClass) {
             super(name, valueClass);
         }
 
         /**
-         * This method is overridden to not change the field name once it is set.
-         *
-         * @param name the name of the field
-         */
-        @Override
-        public void setName(String name) {
-            if (this.name != null) {
-                return;
-            }
-            super.setName(name);
-        }
-
-        /**
-         * Overridden to not bind to request value.
-         */
-        @Override
-        public void bindRequestValue() {
-        }
-    }
-
-    /**
-     * Provides a HiddenField which name and value cannot be changed, once it
-     * is set.
-     */
-    private static class ImmutableHiddenField extends HiddenField {
-
-        private static final long serialVersionUID = 1L;
-
-       /**
          * Create a field with the given name and value.
          *
          * @param name the field name
          * @param value the value of the field
          */
-        public ImmutableHiddenField(String name, Object value) {
+        public NonProcessedHiddenField(String name, Object value) {
             super(name, value);
         }
 
@@ -3067,6 +3159,33 @@ public class Form extends AbstractContainer {
                 return;
             }
             super.setName(name);
+        }
+
+        /**
+         * Overridden to not process the field or bind to its request value.
+         */
+        @Override
+        public boolean onProcess() {
+            return true;
+        }
+    }
+
+    /**
+     * Provides a HiddenField which name and value cannot be changed, once it
+     * is set.
+     */
+    private static class ImmutableHiddenField extends NonProcessedHiddenField {
+
+        private static final long serialVersionUID = 1L;
+
+       /**
+         * Create a field with the given name and value.
+         *
+         * @param name the field name
+         * @param value the value of the field
+         */
+        public ImmutableHiddenField(String name, Object value) {
+            super(name, value);
         }
 
         /**

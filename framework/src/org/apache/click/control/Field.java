@@ -21,6 +21,7 @@ package org.apache.click.control;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
+import org.apache.click.Stateful;
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.click.util.ClickUtils;
@@ -179,7 +180,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * </dd>
  * </dl>
  */
-public abstract class Field extends AbstractControl {
+public abstract class Field extends AbstractControl implements Stateful {
 
     // Constants --------------------------------------------------------------
 
@@ -1033,6 +1034,36 @@ public abstract class Field extends AbstractControl {
     }
 
     /**
+     * Return the Field state. The following state is returned:
+     * <ul>
+     * <li>{@link #getValue() field value}</li>
+     * </ul>
+     *
+     * @return the Field state
+     */
+    public Object getState() {
+        String state = getValue();
+        if (StringUtils.isEmpty(state)) {
+            return null;
+        }
+        return state;
+    }
+
+    /**
+     * Set the Field state.
+     *
+     * @param state the Field state to set
+     */
+    public void setState(Object state) {
+        if (state == null) {
+            return;
+        }
+
+        String fieldState = (String) state;
+        setValue(fieldState);
+    }
+
+    /**
      * This method processes the page request returning true to continue
      * processing or false otherwise. The Field <tt>onProcess()</tt> method is
      * typically invoked by the Form <tt>onProcess()</tt> method when
@@ -1082,6 +1113,48 @@ public abstract class Field extends AbstractControl {
         dispatchActionEvent();
 
         return true;
+    }
+
+    /**
+     * Remove the Field state from the session for the given request context.
+     *
+     * @see #saveState(org.apache.click.Context)
+     * @see #restoreState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    public void removeState(Context context) {
+        ClickUtils.removeState(this, getName(), context);
+    }
+
+    /**
+     * Restore the Field state from the session for the given request context.
+     * <p/>
+     * This method delegates to {@link #setState(java.lang.Object)} to set the
+     * field restored state.
+     *
+     * @see #saveState(org.apache.click.Context)
+     * @see #removeState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    public void restoreState(Context context) {
+        ClickUtils.restoreState(this, getName(), context);
+    }
+
+    /**
+     * Save the Field state to the session for the given request context.
+     * <p/>
+     * * This method delegates to {@link #getState()} to retrieve the field state
+     * to save.
+     *
+     * @see #restoreState(org.apache.click.Context)
+     * @see #removeState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    public void saveState(Context context) {
+        ClickUtils.saveState(this, getName(), context);
     }
 
     /**
