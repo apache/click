@@ -61,6 +61,7 @@ import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.click.ActionResult;
+import org.apache.click.Stateful;
 import org.apache.click.control.AbstractControl;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.ActionLink;
@@ -2566,6 +2567,112 @@ public class ClickUtils {
     }
 
     /**
+     * Remove the control state from the session for the given stateful control,
+     * control name and request context.
+     *
+     * @param control the stateful control which state to restore
+     * @param controlName the name of the control which state to restore
+     * @param context the request context
+     */
+    public static void removeState(Stateful control, String controlName, Context context) {
+        if (control == null) {
+            throw new IllegalStateException("Control cannot be null.");
+        }
+        if (controlName == null) {
+            throw new IllegalStateException(ClassUtils.getShortClassName(control.getClass())
+                + " name has not been set. State cannot be restored until the name is set");
+        }
+        if (context == null) {
+            throw new IllegalStateException("Context cannot be null.");
+        }
+
+        String resourcePath = context.getResourcePath();
+        Map pageMap = ClickUtils.getPageState(resourcePath, context);
+        if (pageMap != null) {
+            Object pop = pageMap.remove(controlName);
+
+            // Check if control state was emoved
+            if (pop != null) {
+                // If control state was removed, set session attribute to force
+                // session replication in a cluster
+                context.setSessionAttribute(resourcePath, pageMap);
+            }
+        }
+    }
+
+    /**
+     * Restore the control state from the session for the given stateful control,
+     * control name and request context.
+     * <p/>
+     * This method delegates to {@link org.apache.click.Stateful#setState(java.lang.Object)}
+     * to restore the control state.
+     *
+     * @param control the stateful control which state to restore
+     * @param controlName the name of the control which state to restore
+     * @param context the request context
+     */
+    public static void restoreState(Stateful control, String controlName, Context context) {
+        if (control == null) {
+            throw new IllegalStateException("Control cannot be null.");
+        }
+        if (controlName == null) {
+            throw new IllegalStateException(ClassUtils.getShortClassName(control.getClass())
+                + " name has not been set. State cannot be restored until the name is set");
+        }
+        if (context == null) {
+            throw new IllegalStateException("Context cannot be null.");
+        }
+
+        String resourcePath = context.getResourcePath();
+            Map pageMap = ClickUtils.getPageState(resourcePath, context);
+            if (pageMap != null) {
+                control.setState(pageMap.get(controlName));
+        }
+    }
+
+    /**
+     * Save the control state in the session for the given stateful control,
+     * control name and request context.
+     * <p/>
+     * * This method delegates to {@link org.apache.click.Stateful#getState()}
+     * to retrieve the control state to save.
+     *
+     * @param control the stateful control which state to save
+     * @param controlName the name of the control control which state to save
+     * @param context the request context
+     */
+    public static void saveState(Stateful control, String controlName, Context context) {
+        if (control == null) {
+            throw new IllegalStateException("Control cannot be null.");
+        }
+        if (controlName == null) {
+            throw new IllegalStateException(ClassUtils.getShortClassName(control.getClass())
+                + " name has not been set. State cannot be saved until the name is set");
+        }
+        if (context == null) {
+            throw new IllegalStateException("Context cannot be null.");
+        }
+
+        String resourcePath = context.getResourcePath();
+        Map pageMap = getOrCreatePageState(resourcePath, context);
+        Object state = control.getState();
+        if (state == null) {
+            // Set null state to see if it differs from previous state
+            Object pop = pageMap.put(controlName, state);
+            if(pop != null) {
+                // Previous state differs from current state, so set the
+                // session attribute to force session replication in a cluster
+                context.setSessionAttribute(resourcePath, pageMap);
+            }
+        } else {
+            pageMap.put(controlName, state);
+            // After control state has been added to the page state, set the
+            // session attribute to force session replication in a cluster
+            context.setSessionAttribute(resourcePath, pageMap);
+        }
+    }
+
+    /**
      * Return the getter method name for the given property name.
      *
      * @param property the property name
@@ -3126,6 +3233,42 @@ public class ClickUtils {
         }
         field.bindRequestValue();
         return true;
+    }
+
+    /**
+     * Retrieve or create the map where page state is stored in.
+     *
+     * @see #getPageState(java.lang.String, org.apache.click.Context)
+     *
+     * @param pagePath the path under which the page state is stored in the
+     * session
+     * @param context the request context
+     * @return the map where page state is stored in
+     */
+    private static Map getOrCreatePageState(String pagePath, Context context) {
+                Map pageMap = getPageState(pagePath, context);
+        if (pageMap == null) {
+            pageMap = new HashMap();
+        }
+        return pageMap;
+    }
+
+    /**
+     * Retrieve the map for the given pagePath from the session where page state
+     * is stored in.
+     *
+     * @param pagePath the path under which the page state is stored in the
+     * session
+     * @param context the request context
+     * @return the map where page state is stored in
+     */
+    private static Map getPageState(String pagePath, Context context) {
+        Object storedPageValue = context.getSessionAttribute(pagePath);
+        Map pageMap = null;
+        if (storedPageValue != null) {
+            pageMap = (Map) storedPageValue;
+        }
+        return pageMap;
     }
 
     /**
