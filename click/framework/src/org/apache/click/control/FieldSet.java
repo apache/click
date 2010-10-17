@@ -880,8 +880,12 @@ public class FieldSet extends Field implements Container {
     }
 
     /**
-     * Return the FieldSet state. The state will include all the input Field
-     * values and other FieldSets contained in this FieldSet or child containers.
+     * Return the FieldSet state. The following state is returned:
+     *
+     * <ul>
+     * <li>all the input Field values and other FieldSets contained in this
+     * FieldSet and child containers.</li>
+     * </ul>
      *
      * @return the state of input Fields and FieldSets contained in this FieldSet
      */
