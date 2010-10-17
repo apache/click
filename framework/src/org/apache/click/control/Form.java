@@ -1907,8 +1907,12 @@ public class Form extends AbstractContainer implements Stateful {
     }
 
     /**
-     * Return the form state. The state will include all the input Field values
-     * and FieldSets contained in the Form or child containers.
+     * Return the form state. The following state is returned:
+     *
+     * <ul>
+     * <li>all the input Field values and FieldSets contained in the Form and
+     * child containers.</li>
+     * </ul>
      *
      * @return the state of input Fields and FieldSets contained in the form
      */
