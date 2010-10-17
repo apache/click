@@ -2591,11 +2591,16 @@ public class ClickUtils {
         if (pageMap != null) {
             Object pop = pageMap.remove(controlName);
 
-            // Check if control state was emoved
-            if (pop != null) {
-                // If control state was removed, set session attribute to force
-                // session replication in a cluster
-                context.setSessionAttribute(resourcePath, pageMap);
+            if (pageMap.isEmpty()) {
+                // If this was the last state for the page, remove the page state map
+                context.removeSessionAttribute(resourcePath);
+            } else {
+                // Check if control state was emoved
+                if (pop != null) {
+                    // If control state was removed, set session attribute to force
+                    // session replication in a cluster
+                    context.setSessionAttribute(resourcePath, pageMap);
+                }
             }
         }
     }
