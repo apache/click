@@ -18,11 +18,15 @@
  */
 package org.apache.click.control;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
 import org.apache.click.Page;
 import org.apache.click.servlet.MockRequest;
+import org.apache.click.util.ClickUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -60,10 +64,10 @@ public class FormTest extends TestCase {
 
         // Add submitCheckField as a request parameter
         request.setParameter(Form.SUBMIT_CHECK + form.getName() + "_" + context.getResourcePath(), submitCheckField.getValue());
-        
+
         // Simulate a second submit check.
         valid = form.onSubmitCheck(page, "/invalid-submit.html");
-        
+
         // Assert the second onSubmitCheck did succeed as well.
         Assert.assertTrue(valid);
     }
@@ -100,7 +104,7 @@ public class FormTest extends TestCase {
         // token is set in the request parameters.
         valid = form.onSubmitCheck(page, "/invalid-submit.html");
         Assert.assertTrue(valid);
-        
+
         // Now imagine the SUBMIT_CHECK token is removed by a hacker. To simulate
         // such a scenario we remove the submitTokenName from the request paramters.
         request.removeParameter(submitTokenName);
@@ -133,7 +137,7 @@ public class FormTest extends TestCase {
 
         // Simulate a form onProcess callback
         form.onProcess();
-        
+
         // Check that nameField value is now bound to request value
         Assert.assertEquals(requestValue, nameField.getValueObject());
     }
@@ -141,14 +145,14 @@ public class FormTest extends TestCase {
     /**
      * Check that Form processes controls even if their names is not defined.
      *
-     * CLK-463  
+     * CLK-463
      */
     public void testProcessControlWhenNameIsNull() {
         MockContext context = MockContext.initContext();
         context.getMockRequest().setParameter("form_name", "form");
         String fieldValue = "test";
         context.getMockRequest().setParameter("field", fieldValue);
-        
+
         Form form = new Form("form");
         Panel panel = new Panel();
         TextField textField = new TextField("field");
@@ -156,15 +160,15 @@ public class FormTest extends TestCase {
         form.add(panel);
 
         assertEquals("", textField.getValue());
-        
+
         form.onProcess();
-        
+
         assertEquals(fieldValue, textField.getValue());
     }
 
     /** Form which index position to test. */
     private Form testForm;
-    
+
     /** Field which position is tracked in the Form. */
     private HiddenField trackField;
 
@@ -176,7 +180,7 @@ public class FormTest extends TestCase {
     public void setUp() {
         // Create form.
         testForm = new Form("form");
-        
+
         // Form automatically creates and adds two HiddenFields. One for storing
         // the form anem between requests and one for tracking if form validation
         // is bypassed. The form name field is at index 1 at the start
@@ -207,7 +211,7 @@ public class FormTest extends TestCase {
         assertTrue(testForm.getControls().indexOf(nameField) == 0);
         // nameField index: #fieldList=0
         assertTrue(testForm.getFieldList().indexOf(nameField) == 0);
-        
+
         // trackField index: #controls=1
         assertTrue(testForm.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=1
@@ -230,7 +234,7 @@ public class FormTest extends TestCase {
         assertTrue(testForm.getControls().indexOf(nameField) == 0);
         // nameField index: #fieldList=0
         assertTrue(testForm.getFieldList().indexOf(nameField) == 0);
-        
+
         // trackField index: #controls=1
         assertTrue(testForm.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=1
@@ -253,7 +257,7 @@ public class FormTest extends TestCase {
         assertTrue(testForm.getControls().indexOf(table) == 0);
         // table index: #fieldList=-1
         assertTrue(testForm.getFieldList().indexOf(table) == -1);
-        
+
         // trackField index: #controls=1
         assertTrue(testForm.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=0
@@ -299,7 +303,7 @@ public class FormTest extends TestCase {
         assertTrue(testForm.getControls().indexOf(hidden) == 0);
         // hidden index: #fieldList=0
         assertTrue(testForm.getFieldList().indexOf(hidden) == 0);
-        
+
         // trackField index: #controls=1
         assertTrue(testForm.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=1
@@ -323,12 +327,12 @@ public class FormTest extends TestCase {
         assertTrue(testForm.getControls().indexOf(trackField) == 1);
         // trackField index: #fieldList=1
         assertTrue(testForm.getFieldList().indexOf(trackField) == 1);
-        
+
         int expectedSize = 3;
         // Check the list sizes to be 3
         assertTrue(testForm.getControls().size() == expectedSize);
         assertTrue(testForm.getFieldList().size() == expectedSize);
-        
+
         // Removing field should shift up trackField index
         testForm.remove(field);
 
@@ -336,7 +340,7 @@ public class FormTest extends TestCase {
         // Check the list sizes to be 2
         assertTrue(testForm.getControls().size() == expectedSize);
         assertTrue(testForm.getFieldList().size() == expectedSize);
-        
+
         // trackField index: #controls=0
         assertTrue(testForm.getControls().indexOf(trackField) == 0);
         // trackField index: #fieldList=0
@@ -352,18 +356,18 @@ public class FormTest extends TestCase {
 
         // Check that fieldWidth is empty
         assertTrue(testForm.getFieldWidths().isEmpty());
-            
+
         int colspan = 4;
         testForm.add(field, colspan);
 
         // Check that fieldWidth has entry for field
         assertTrue(testForm.getFieldWidths().size() == 1);
-        
+
         Integer width = testForm.getFieldWidths().get(field.getName());
         assertEquals(4, width.intValue());
 
         testForm.remove(field);
-        
+
         // Check that fieldWidth is empty
         assertTrue(testForm.getFieldWidths().isEmpty());
     }
@@ -377,18 +381,18 @@ public class FormTest extends TestCase {
 
         // Check that fieldWidth is empty
         assertTrue(testForm.getFieldWidths().isEmpty());
-            
+
         int colspan = 4;
         testForm.add(table, colspan);
 
         // Check that fieldWidth has entry for table
         assertTrue(testForm.getFieldWidths().size() == 1);
-        
+
         Integer width = testForm.getFieldWidths().get(table.getName());
         assertEquals(4, width.intValue());
 
         testForm.remove(table);
-        
+
         // Check that fieldWidth is empty
         assertTrue(testForm.getFieldWidths().isEmpty());
     }
@@ -399,7 +403,7 @@ public class FormTest extends TestCase {
      *
      * The main use case for Form.getFieldList() is that it enables one to use
      * Velocity to render Fields e.g.:
-     * 
+     *
      * #foreach ($field in $form.fieldList)
      *   <td>$field.label:</td> <td>$field</td>
      * #end
@@ -443,13 +447,13 @@ public class FormTest extends TestCase {
 
         // Check that list contains FieldSet
         assertTrue(form.getFieldList().contains(fieldSet));
-        
+
         // Check that list does *not* contains the FieldSet's Field
         assertFalse(form.getFieldList().contains(fieldSetField));
 
         // Check that list does *not* contain Div
         assertFalse(form.getFieldList().contains(div));
-        
+
         // Check that list does *not* contain Button
         assertFalse(form.getFieldList().contains(button));
 
@@ -501,7 +505,7 @@ public class FormTest extends TestCase {
         // Add Field to FieldSet
         TextField fieldSetField = new TextField("fieldSetField");
         fieldSet.add(fieldSetField);
-        
+
         // Add Button to FieldSet
         Button fieldSetButton = new Button("fieldSetButton");
         fieldSet.add(fieldSetButton);
@@ -511,16 +515,16 @@ public class FormTest extends TestCase {
 
         // Check that button list does *not* contains FieldSet
         assertFalse(form.getButtonList().contains(fieldSet));
-        
+
         // Check that button list does *not* contains the FieldSet's Field
         assertFalse(form.getButtonList().contains(fieldSetField));
 
         // Check that button list does *not* contain Div
         assertFalse(form.getButtonList().contains(div));
-        
+
         // Check that button list does contain Button
         assertTrue(form.getButtonList().contains(button));
-        
+
         // Check that button list does *not* contain FieldSetButton since that
         // button was not directly added to Form
         assertFalse(form.getButtonList().contains(fieldSetButton));
@@ -542,7 +546,7 @@ public class FormTest extends TestCase {
      *
      * Also check that Form.getFields() returns a cached Map so that access to
      * Form.getFields() is fast.
-     * 
+     *
      * Q: Why not return Fields only?
      * A: Form will then have to maintain another map besides #controlMap.
      *    However it could lead to issues when users iterate the map and receive
@@ -561,7 +565,7 @@ public class FormTest extends TestCase {
 
         String buttonName = "button";
         form.add(new Button(buttonName));
-        
+
         // Assemble FieldSet
         String fieldSetName = "fieldSet";
         FieldSet fieldSet = new FieldSet(fieldSetName);
@@ -575,10 +579,10 @@ public class FormTest extends TestCase {
         assertTrue(form.getFields().containsKey(fieldName));
         assertTrue(form.getFields().containsKey(divName));
         assertTrue(form.getFields().containsKey(buttonName));
-        
+
         // Check that map contains FieldSet
         assertTrue(form.getFields().containsKey(fieldSetName));
-        
+
         // Check that map does *not* contain the FieldSet's Field
         assertFalse(form.getFields().containsKey(fieldSetFieldName));
 
@@ -592,17 +596,17 @@ public class FormTest extends TestCase {
      */
     public void testInsert() {
         Form form = new Form("form");
-        
+
         int defaultFieldSize = 17;
         form.setDefaultFieldSize(defaultFieldSize);
-        
+
         TextField field = new TextField("name");
-        
+
         // Assert that defaultFieldSize is not equal to field size
         assertFalse(defaultFieldSize == field.getSize());
 
         form.add(field);
-        
+
         // Assert that after adding field, defaultFieldSize is equal to field size
         assertTrue(defaultFieldSize == field.getSize());
     }
@@ -634,7 +638,7 @@ public class FormTest extends TestCase {
         } catch (Exception e) {
             fail("Button can be added");
         }
-        
+
         // Check that table can be added
         try {
             form.add(new Table("table"));
@@ -642,7 +646,7 @@ public class FormTest extends TestCase {
             fail("Table can be added");
         }
     }
-    
+
     /**
      * Test that add(Control, int) works properly.
      */
@@ -663,7 +667,7 @@ public class FormTest extends TestCase {
         } catch (Exception e) {
             fail("TextField can be added");
         }
-        
+
         // Check that table can be added
         try {
             form.add(new Table("table"), 1);
@@ -688,18 +692,18 @@ public class FormTest extends TestCase {
 
     /**
      * Tests the Form insert performance.
-     * 
+     *
      * Creating 100 000 forms with 20 fields takes 1034 ms -> 1934 inserts per ms.
-     * 
+     *
      * System used: Sun JDK 1.4, Dual core, 2.16GHz, 2.00GB RAM, Windows XP
      */
     public void testInsertPerf() {
         // Specify the amount of text fields to create
         int textFieldCount = 15;
-        
+
         // Number of times to populate a form with fields
         int loops = Integer.getInteger("click.perf.loops", 100000);
-        
+
         long time = 0;
         for (int i = 0; i < loops; i++) {
             Form form = new Form("form");
@@ -846,6 +850,82 @@ public class FormTest extends TestCase {
 
         // Check that the label style was not rendered
         assertEquals(1, StringUtils.countMatches(formStr, "style="));
+    }
+
+    /**
+     * Test that Form.getState contains the state of all the Fields in the Form.
+     *  Also test that Immutable HiddenFields are not saved as it is unnecessary
+     * state to keep in memory.
+
+     * CLK-715
+     */
+    public void testGetState() {
+        // Setup Form and Fields
+        Form form = new Form("form");
+        Field nameField  = new TextField("name");
+        Field ageField = new TextField("age");
+        nameField.setValue("Steve");
+        ageField.setValue("10");
+        form.add(nameField);
+        form.add(ageField);
+
+        FieldSet fs = new FieldSet("address");
+        Field streetField  = new TextField("street");
+        streetField.setValue("short");
+        fs.add(streetField);
+        form.add(fs);
+
+        // Dummy onSubmitCheck to ensure submit check hiddenField is added by the Form
+        form.onSubmitCheck(new Page(), "dummy.htm");
+
+        Object state = form.getState();
+        Map formStateMap = (Map) state;
+
+        assertEquals(formStateMap.get(nameField.getName()), nameField.getValue());
+        assertEquals(formStateMap.get(ageField.getName()), ageField.getValue());
+        assertNotNull(formStateMap.get(fs.getName()));
+
+        // Retrieve FieldSet state
+        Object fsState = formStateMap.get(fs.getName());
+        Map fsStateMap = (Map) fsState;
+        assertEquals(fsStateMap.get(streetField.getName()), streetField.getValue());
+
+        // Check that only the fields defined above are returned
+        assertEquals(3, formStateMap.size());
+    }
+
+    /**
+     * Test that Form.setState correctly set the state of the Fields in the Form.
+     *
+     * CLK-715
+     */
+    public void testSetState() {
+        // Setup Form and Fields
+        Form form = new Form("form");
+        Field nameField  = new TextField("name");
+        Field ageField = new TextField("age");
+        form.add(nameField);
+        form.add(ageField);
+
+        FieldSet fs = new FieldSet("address");
+        Field streetField  = new TextField("street");
+        fs.add(streetField);
+        form.add(fs);
+
+        // Setup state
+        Map formStateMap = new HashMap();
+        formStateMap.put("name", "Steve");
+        formStateMap.put("age", "10");
+        Map fsStateMap = new HashMap();
+        fsStateMap.put("street", "short");
+        formStateMap.put("address", fsStateMap);
+
+        form.setState(formStateMap);
+
+        // Check that field values were restored
+        assertEquals("Steve", nameField.getValue());
+        assertEquals("10", ageField.getValue());
+        assertEquals("short", streetField.getValue());
     }
 
     /**
