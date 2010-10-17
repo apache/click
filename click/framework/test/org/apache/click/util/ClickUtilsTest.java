@@ -30,6 +30,7 @@ import org.apache.click.Context;
 import org.apache.click.MockContext;
 import org.apache.click.Page;
 import org.apache.click.control.Checkbox;
+import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
@@ -548,5 +549,92 @@ final String formError = "error";
         // assert that the form error was reset, leaving form in a valid state
             assertEquals(null, form.getError());
         assertTrue(form.isValid());
+    }
+
+    /**
+     * Test that Clickutils#saveState saves the state to the session.
+     *
+     * CLK-715
+     */
+    public void testSaveState() {
+        String pagePath = "/page.htm";
+        MockContext context = MockContext.initContext(pagePath);
+
+        // Setup Form
+        Form form = new Form("form");
+        Field nameField  = new TextField("name");
+        nameField.setValue("Steve");
+        form.add(nameField);
+
+        // Save form state to the session
+        ClickUtils.saveState(form, form.getName(), context);
+
+        // Test that page state is stored in session under the Page path
+        assertNotNull(context.getSessionAttribute(pagePath));
+    }
+
+    /**
+     * Test that ClickUtils#restoreState restore the state from the session.
+     *
+     * CLK-715
+     */
+    public void testRestoreState() {
+        String pagePath = "/page.htm";
+        MockContext context = MockContext.initContext(pagePath);
+
+        // Setup Form and Fields
+        Form form = new Form("form");
+        Field nameField  = new TextField("name");
+        form.add(nameField);
+
+        Map pageStateMap = new HashMap();
+
+        // Page state is stored in session under the Page path
+        context.setSessionAttribute(pagePath, pageStateMap);
+
+        Map formStateMap = new HashMap();
+        formStateMap.put("name", "Steve");
+
+        // Controls are stored in the Page Map under their names
+        pageStateMap.put(form.getName(), formStateMap);
+
+        // Restore form state
+        ClickUtils.restoreState(form, form.getName(), context);
+
+        assertEquals("Steve", nameField.getValue());
+    }
+
+    /**
+     * Test that ClickUtil#removeState removes the state from the session.
+     *
+     * CLK-715
+     */
+    public void testRemoveState() {
+        String pagePath = "/page.htm";
+        MockContext context = MockContext.initContext(pagePath);
+
+        // Setup Form
+        Form form = new Form("form");
+
+        Map pageStateMap = new HashMap();
+
+        // Page state is stored in session under the Page path
+        context.setSessionAttribute(pagePath, pageStateMap);
+        assertNotNull(context.getSessionAttribute(pagePath));
+
+        Map formStateMap = new HashMap();
+
+        // Controls are stored in the Page Map under their names
+        pageStateMap.put(form.getName(), formStateMap);
+
+        // Remove form state
+        ClickUtils.removeState(form, form.getName(), context);
+
+        // Test that form state has been removed from the session
+        assertNull(pageStateMap.get(form.getName()));
+
+        // Since formState was the only state in the page map, test that
+        // pageMap is also cleared from the session
+        assertNull(context.getSessionAttribute(pagePath));
     }
 }
