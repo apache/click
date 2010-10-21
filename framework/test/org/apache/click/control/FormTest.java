@@ -17,8 +17,6 @@
  * under the License.
  */
 package org.apache.click.control;
-
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import junit.framework.Assert;
@@ -26,7 +24,6 @@ import junit.framework.TestCase;
 import org.apache.click.MockContext;
 import org.apache.click.Page;
 import org.apache.click.servlet.MockRequest;
-import org.apache.click.util.ClickUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
