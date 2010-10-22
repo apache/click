@@ -346,4 +346,36 @@ public class TextFieldTest extends TestCase {
 
         assertTrue(field.getValidationJavaScript().startsWith("function validate_field()"));
     }
+
+    /**
+     * Test that TextField.getState contains the field value.
+     * CLK-715
+     */
+    public void testGetState() {
+        // Setup Field
+        Field field  = new TextField("name");
+        field.setValue("Steve");
+
+        Object state = field.getState();
+
+        assertEquals(state, field.getValue());
+    }
+
+    /**
+     * Test that Field.setState set the field value.
+     *
+     * CLK-715
+     */
+    public void testSetState() {
+        // Setup Field
+        Field field  = new TextField("name");
+
+        // Setup state
+        String state = "Steve";
+
+        field.setState(state);
+
+        // Check that field value was restored
+        assertEquals("Steve", field.getValue());
+    }
 }
