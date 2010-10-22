@@ -18,6 +18,8 @@
  */
 package org.apache.click.control;
 
+import java.util.HashMap;
+import java.util.Map;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
 
@@ -57,5 +59,46 @@ public class AbstractLinkTest extends TestCase {
         link.setParameter("param1", "value1");
 
         assertTrue(link.toString().indexOf("&amp;") > 0);
+    }
+
+    /**
+     * Test that AbstractLink.getState contains the link parameters.
+     * CLK-715
+     */
+    public void testGetState() {
+        // Setup link
+
+        ActionLink link  = new ActionLink("name");
+
+        link.setParameter("name", "Steve");
+        link.setParameter("age", "10");
+        link.setValue("myval");
+
+        Map state = (Map) link.getState();
+
+        assertEquals(state, link.getParameters());
+        assertEquals(state.get("value"), link.getValue());
+    }
+
+    /**
+     * Test that AbstractLink.setState set the link parameters.
+     *
+     * CLK-715
+     */
+    public void testSetState() {
+        // Setup link
+        ActionLink link  = new ActionLink("name");
+
+        // Setup state
+        Map state = new HashMap();
+        state.put("name", "Steve");
+        state.put("age", "10");
+        state.put("value", "myval");
+
+        link.setState(state);
+
+        // Check that link parameters is restored
+        assertEquals("Steve", link.getParameter("name"));
+        assertEquals("myval", link.getValue());
     }
 }
