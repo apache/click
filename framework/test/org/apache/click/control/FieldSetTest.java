@@ -23,7 +23,6 @@ import java.util.Map;
 import junit.framework.TestCase;
 import org.apache.click.Control;
 import org.apache.click.MockContext;
-import org.apache.click.Page;
 import org.apache.commons.lang.StringUtils;
 
 /**
