@@ -19,6 +19,7 @@
 package org.apache.click.control;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.Map;
@@ -164,5 +165,72 @@ public class TableTest extends TestCase {
         table.addColumn(column);
 
         assertTrue(table.toString().contains("<caption>caption<tt>tt</tt></caption>"));
+    }
+
+    /**
+     * Test that Table.getState contains the table internal state.
+     * CLK-715
+     */
+    public void testGetState() {
+        // Setup table
+
+        Table table  = new Table("table");
+        // Set table state
+        int pageNumber = 5;
+        boolean ascending = false;
+        String sortedColumn = "Dummy";
+        String linkValue = "myval";
+
+        table.setPageNumber(pageNumber);
+        table.setSortedAscending(ascending);
+        table.setSortedColumn(sortedColumn);
+        table.getControlLink().setValue(linkValue);
+
+        // Retrieve table state
+        Object[] state = (Object[]) table.getState();
+
+        // Perform tests
+        assertEquals(state[0], pageNumber);
+        assertEquals(state[1], sortedColumn);
+        assertEquals(state[2], ascending);
+
+        Map controlLinkParams = (Map) state[3];
+
+        assertEquals(controlLinkParams, table.getControlLink().getParameters());
+        assertEquals(controlLinkParams.get("value"), linkValue);
+    }
+
+    /**
+     * Test that Table.setState set the table internal state.
+     *
+     * CLK-715
+     */
+    public void testSetState() {
+                // Setup table
+
+        Table table  = new Table("table");
+        // Set table state
+        int pageNumber = 5;
+        boolean ascending = false;
+        String sortedColumn = "Dummy";
+        String linkValue = "myval";
+
+        Object[] state = new Object[4];
+        state[0] = Integer.valueOf(pageNumber);
+        state[1] = sortedColumn;
+        state[2] = Boolean.valueOf(ascending);
+        Map controlLinkParams = new HashMap();
+        controlLinkParams.put("value", linkValue);
+        state[3] = controlLinkParams;
+
+        // Set table state
+        table.setState(state);
+
+        // Perform tests
+        assertEquals(pageNumber, table.getPageNumber());
+        assertEquals(sortedColumn, table.getSortedColumn());
+        assertEquals(ascending, table.isSortedAscending());
+        assertEquals(controlLinkParams, table.getControlLink().getParameters());
+        assertEquals(linkValue, table.getControlLink().getValue());
     }
 }

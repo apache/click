@@ -29,6 +29,7 @@ import java.util.StringTokenizer;
 import org.apache.click.Context;
 
 import org.apache.click.Control;
+import org.apache.click.Stateful;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.CssStyle;
 import org.apache.click.element.Element;
@@ -278,7 +279,7 @@ import org.apache.commons.lang.math.NumberUtils;
  * } </pre>
  *
  * For a live demonstration see the
- * <a href="http://www.avoka.com/click-examples/table/large-dataset-demo.htm">Large Dataset Demo</a>.
+ * <a href="http://click.avoka.com/click-examples/table/large-dataset-demo.htm">Large Dataset Demo</a>.
  * <p/>
  *
  * See the W3C HTML reference
@@ -291,7 +292,7 @@ import org.apache.commons.lang.math.NumberUtils;
  * @see Column
  * @see Decorator
  */
-public class Table extends AbstractControl {
+public class Table extends AbstractControl implements Stateful {
 
     // Constants --------------------------------------------------------------
 
@@ -1282,6 +1283,85 @@ public class Table extends AbstractControl {
     }
 
     /**
+     * Return the Table state. The following state is returned:
+     * <ul>
+     * <li>{@link #getPageNumber()}</li>
+     * <li>{@link #isSortedAscending()}</li>
+     * <li>{@link #getSortedColumn()}</li>
+     * <li>{@link #getControlLink() controlLink parameters}</li>
+     * </ul>
+     *
+     * @return the Table state
+     */
+    public Object getState() {
+        Object[] tableState = new Object[4];
+        boolean hasState = false;
+
+        int currentPageNumber = getPageNumber();
+        if (currentPageNumber != 0) {
+            hasState = true;
+            tableState[0] = Integer.valueOf(currentPageNumber);
+        }
+
+        String currentSortedColumn = getSortedColumn();
+        if (currentSortedColumn != null) {
+            hasState = true;
+            tableState[1] = currentSortedColumn;
+        }
+
+        boolean currentSortedAscending = isSortedAscending();
+        if (!currentSortedAscending) {
+            hasState = true;
+            tableState[2] = Boolean.valueOf(currentSortedAscending);
+        }
+
+        Object controlLinkState = getControlLink().getState();
+        if (controlLinkState != null) {
+            hasState = true;
+            tableState[3] = controlLinkState;
+        }
+
+        if (hasState) {
+            return tableState;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Set the Table state.
+     *
+     * @param state the Table state to set
+     */
+    public void setState(Object state) {
+        if (state == null) {
+            return;
+        }
+
+        Object[] tableState = (Object[]) state;
+
+        if (tableState[0] != null) {
+            int storedPageNumber = ((Integer) tableState[0]).intValue();
+            setPageNumber(storedPageNumber);
+        }
+
+        if (tableState[1] != null) {
+            String storedSortedColumn = (String) tableState[1];
+            setSortedColumn(storedSortedColumn);
+        }
+
+        if (tableState[2] != null) {
+            boolean storedAscending = ((Boolean) tableState[2]).booleanValue();
+            setSortedAscending(storedAscending);
+        }
+
+        if (tableState[3] != null) {
+            Object controlLinkState = tableState[3];
+            getControlLink().setState(controlLinkState);
+        }
+    }
+
+    /**
      * Return the table HTML &lt;td&gt; width attribute.
      *
      * @return the table HTML &lt;td&gt; width attribute
@@ -1563,6 +1643,48 @@ public class Table extends AbstractControl {
                 renderPaginator(buffer);
             }
         }
+    }
+
+    /**
+     * Remove the Table state from the session for the given request context.
+     *
+     * @param context the request context
+     *
+     * @see #saveState(org.apache.click.Context)
+     * @see #restoreState(org.apache.click.Context)
+     */
+    public void removeState(Context context) {
+        ClickUtils.removeState(this, getName(), context);
+    }
+
+    /**
+     * Restore the Table state from the session for the given request context.
+     * <p/>
+     * This method delegates to {@link #setState(java.lang.Object)} to set the
+     * table restored state.
+     *
+     * @param context the request context
+     *
+     * @see #saveState(org.apache.click.Context)
+     * @see #removeState(org.apache.click.Context)
+     */
+    public void restoreState(Context context) {
+        ClickUtils.restoreState(this, getName(), context);
+    }
+
+    /**
+     * Save the Table state to the session for the given request context.
+     * <p/>
+     * * This method delegates to {@link #getState()} to retrieve the table state
+     * to save.
+     *
+     * @see #restoreState(org.apache.click.Context)
+     * @see #removeState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    public void saveState(Context context) {
+        ClickUtils.saveState(this, getName(), context);
     }
 
     // Protected Methods ------------------------------------------------------

@@ -25,6 +25,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import org.apache.click.Context;
+import org.apache.click.Stateful;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -40,7 +41,7 @@ import org.apache.commons.lang.StringUtils;
  * @see ActionLink
  * @see Submit
  */
-public abstract class AbstractLink extends AbstractControl {
+public abstract class AbstractLink extends AbstractControl implements Stateful {
 
     private static final long serialVersionUID = 1L;
 
@@ -549,6 +550,35 @@ public abstract class AbstractLink extends AbstractControl {
     }
 
     /**
+     * Return the link state. The following state is returned:
+     * <ul>
+     * <li>{@link #getParameters() link parameters}</li>
+     * </ul>
+     *
+     * @return the link state
+     */
+    public Object getState() {
+        if (hasParameters()) {
+            return getParameters();
+        }
+        return null;
+    }
+
+    /**
+     * Set the link state.
+     *
+     * @param state the link state to set
+     */
+    public void setState(Object state) {
+        if (state == null) {
+            return;
+        }
+
+        Map linkState = (Map) state;
+        setParameters(linkState);
+    }
+
+    /**
      * Render the HTML representation of the anchor link. This method
      * will render the entire anchor link including the tags, the label and
      * any attributes, see {@link #setAttribute(String, String)} for an
@@ -621,6 +651,48 @@ public abstract class AbstractLink extends AbstractControl {
 
             buffer.elementEnd(getTag());
         }
+    }
+
+    /**
+     * Remove the link state from the session for the given request context.
+     *
+     * @see #saveState(org.apache.click.Context)
+     * @see #restoreState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    public void removeState(Context context) {
+        ClickUtils.removeState(this, getName(), context);
+    }
+
+    /**
+     * Restore the link state from the session for the given request context.
+     * <p/>
+     * This method delegates to {@link #setState(java.lang.Object)} to set the
+     * link restored state.
+     *
+     * @see #saveState(org.apache.click.Context)
+     * @see #removeState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    public void restoreState(Context context) {
+        ClickUtils.restoreState(this, getName(), context);
+    }
+
+    /**
+     * Save the link state to the session for the given request context.
+     * <p/>
+     * * This method delegates to {@link #getState()} to retrieve the link state
+     * to save.
+     *
+     * @see #restoreState(org.apache.click.Context)
+     * @see #removeState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    public void saveState(Context context) {
+        ClickUtils.saveState(this, getName(), context);
     }
 
     // Protected Methods ------------------------------------------------------
