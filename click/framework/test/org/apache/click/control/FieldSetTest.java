@@ -18,9 +18,12 @@
  */
 package org.apache.click.control;
 
+import java.util.HashMap;
+import java.util.Map;
 import junit.framework.TestCase;
 import org.apache.click.Control;
 import org.apache.click.MockContext;
+import org.apache.click.Page;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -504,6 +507,78 @@ public class FieldSetTest extends TestCase {
 
         // Check that the label style was not rendered
         assertEquals(1, StringUtils.countMatches(fieldsetStr, "style="));
+    }
+
+    /**
+     * Test that FieldSet.getState contains the state of all the Fields in the
+     * FieldSet.
+     * CLK-715
+     */
+    public void testGetState() {
+        // Setup FieldSet and Fields
+        FieldSet fs = new FieldSet("fieldSet");
+        Field nameField  = new TextField("name");
+        Field ageField = new TextField("age");
+        nameField.setValue("Steve");
+        ageField.setValue("10");
+        fs.add(nameField);
+        fs.add(ageField);
+
+        FieldSet childFs = new FieldSet("address");
+        Field streetField  = new TextField("street");
+        streetField.setValue("short");
+        childFs.add(streetField);
+        fs.add(childFs);
+
+        Object state = fs.getState();
+        Map fsStateMap = (Map) state;
+
+        // Check that only the fields defined above are returned
+        assertEquals(3, fsStateMap.size());
+
+        assertEquals(fsStateMap.get(nameField.getName()), nameField.getValue());
+        assertEquals(fsStateMap.get(ageField.getName()), ageField.getValue());
+        assertNotNull(fsStateMap.get(childFs.getName()));
+
+        // Retrieve FieldSet state
+        Object childFsState = fsStateMap.get(childFs.getName());
+        Map childFsStateMap = (Map) childFsState;
+        assertEquals(childFsStateMap.get(streetField.getName()), streetField.getValue());
+    }
+
+    /**
+     * Test that FieldSet.setState correctly set the state of the Fields in the
+     * FieldSet.
+     *
+     * CLK-715
+     */
+    public void testSetState() {
+        // Setup FieldSet and Fields
+        FieldSet fs = new FieldSet("fieldSet");
+        Field nameField  = new TextField("name");
+        Field ageField = new TextField("age");
+        fs.add(nameField);
+        fs.add(ageField);
+
+        FieldSet childFs = new FieldSet("address");
+        Field streetField  = new TextField("street");
+        childFs.add(streetField);
+        fs.add(childFs);
+
+        // Setup state
+        Map fsStateMap = new HashMap();
+        fsStateMap.put("name", "Steve");
+        fsStateMap.put("age", "10");
+        Map childFsStateMap = new HashMap();
+        childFsStateMap.put("street", "short");
+        fsStateMap.put("address", childFsStateMap);
+
+        fs.setState(fsStateMap);
+
+        // Check that field values were restored
+        assertEquals("Steve", nameField.getValue());
+        assertEquals("10", ageField.getValue());
+        assertEquals("short", streetField.getValue());
     }
 
     /**
