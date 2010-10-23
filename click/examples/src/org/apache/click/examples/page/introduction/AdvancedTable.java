@@ -19,6 +19,8 @@
 package org.apache.click.examples.page.introduction;
 
 import java.util.List;
+import org.apache.click.ActionListener;
+import org.apache.click.Control;
 
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.ActionLink;
@@ -57,9 +59,6 @@ public class AdvancedTable extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public AdvancedTable() {
-        // Set Page to stateful to preserve Table sort and paging state while editing customers
-        setStateful(true);
-
         table.setClass(Table.CLASS_ITS);
         table.setPageSize(10);
         table.setShowBanner(true);
@@ -107,6 +106,27 @@ public class AdvancedTable extends BorderPage {
         Integer id = deleteLink.getValueInteger();
         getCustomerService().deleteCustomer(id);
         return true;
+    }
+
+    @Override
+    public void onInit() {
+        super.onInit();
+
+        // Restore the table sort and paging state from the session
+        table.restoreState(getContext());
+
+        table.getControlLink().setActionListener(new ActionListener() {
+
+            public boolean onAction(Control source) {
+                // Save Table sort and paging state between requests.
+                // NOTE: we set the listener on the table's Link control which is invoked
+                // when the Link is clicked, such as when paging or sorting.
+                // This ensures the table state is only saved when the state changes, and
+                // cuts down on unnecessary session replication in a cluster environment.
+                table.saveState(getContext());
+                return true;
+            }
+        });
     }
 
     // Public Methods ---------------------------------------------------------
