@@ -233,4 +233,30 @@ public class TableTest extends TestCase {
         assertEquals(controlLinkParams, table.getControlLink().getParameters());
         assertEquals(linkValue, table.getControlLink().getValue());
     }
+
+    /**
+     * Test CLK-241. Table Headers use incorrect title attribute (table-last-title)
+     * when sortable=true.
+     */
+    public void testNoTitleOnLinkWhenSorting() {
+        MockContext.initContext("/mock.htm");
+
+        List<Foo> foos = new ArrayList<Foo>();
+        foos.add(new Foo("foo1"));
+        foos.add(new Foo("foo2"));
+
+        Table table = new Table("table");
+        table.setPageSize(1);
+        table.setPaginatorAttachment(Table.PAGINATOR_ATTACHED);
+        table.setBannerPosition(Table.POSITION_TOP);
+        table.setSortable(true);
+        table.setRowList(foos);
+        Column column = new Column("name");
+        table.addColumn(column);
+
+        // Test that Name header column does not render a title attribute
+        // that was set by the TablePaginator
+        assertTrue(table.toString().contains("<th class=\"sortable\"><a href=\"/mock/mock.htm?actionLink=table-controlLink&amp;column=name&amp;page=0\">Name"));
+    }
+
 }
