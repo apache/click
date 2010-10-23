@@ -192,6 +192,7 @@ public class TablePaginator implements Renderable {
             } else {
                 buffer.append(table.getMessage("table-page-links-nobanner", args));
             }
+            controlLink.setTitle(null);
         }
     }
 
