@@ -30,7 +30,6 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.TableInlinePaginator;
-import org.apache.click.util.Bindable;
 import org.apache.click.dataprovider.DataProvider;
 
 /**
@@ -40,25 +39,19 @@ public class TableStyles extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form();
-    @Bindable protected Table table = new Table();
+    private Form form = new Form("form");
+    private Table table = new Table("table");
 
     private Select styleSelect = new Select("style", "Table Style:");
     private Checkbox hoverCheckbox = new Checkbox("hover", "Hover Rows:");
 
-    /**
-     * Spring injected CustomerService bean. The service is marked as transient
-     * since the page is stateful and we don't want to serialize the service
-     * along with the page.
-     */
-    private transient CustomerService customerService;
+        private CustomerService customerService;
 
     // Constructor -----------------------------------------------------------
 
     public TableStyles() {
-        // Store form's selection data  in the session so is data will be
-        // available after table control GET requests have been processed
-        setStateful(true);
+        addControl(form);
+        addControl(table);
 
         // Setup table style select.
         form.setColumns(3);
@@ -72,6 +65,9 @@ public class TableStyles extends BorderPage {
 
         hoverCheckbox.setAttribute("onclick", "form.submit();");
         form.add(hoverCheckbox);
+
+        // Rexstore form's selection data  from the session
+        form.restoreState(getContext());
 
         // Setup customers table
         table.setClass(styleSelect.getValue());
@@ -118,6 +114,16 @@ public class TableStyles extends BorderPage {
     // Event Handlers ---------------------------------------------------------
 
     /**
+     * @see org.apache.click.Page#onPost()
+     */
+    @Override
+    public void onPost() {
+         // Save the posted form data in the session, so this data will be
+        // available for future requests
+        form.saveState(getContext());
+    }
+
+    /**
      * @see org.apache.click.Page#onRender()
      */
     @Override
@@ -129,7 +135,7 @@ public class TableStyles extends BorderPage {
     // Public Methods ---------------------------------------------------------
 
     /**
-     * Return CustomerService instance from Spring application context.
+     * Return CustomerService instance.
      *
      * @return CustomerService instance
      */
@@ -138,7 +144,8 @@ public class TableStyles extends BorderPage {
     }
 
     /**
-     * Set the CustomerService instance from Spring application context.
+     * Set the CustomerService instance that is injected by the Spring
+     * application context.
      *
      * @param customerService the customerService instance to inject
      */

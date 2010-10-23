@@ -19,6 +19,9 @@
 package org.apache.click.examples.page.table;
 
 import java.util.List;
+import org.apache.click.ActionListener;
+import org.apache.click.Context;
+import org.apache.click.Control;
 
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.ActionLink;
@@ -64,13 +67,11 @@ public class SearchTablePage extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public SearchTablePage() {
-        setStateful(true);
-
         // Setup the search form
         form.setColumns(2);
         form.add(nameField);
         form.add(dateField);
-        form.add(new Submit("Search"));
+        form.add(new Submit("Search", this, "onSearchClick"));
         form.add(new Submit("Clear", this, "onClearClick"));
         form.add(new SpacerButton());
         form.add(new Submit("New...", this, "onNewClick"));
@@ -128,14 +129,61 @@ public class SearchTablePage extends BorderPage {
 
     // Event Handlers ---------------------------------------------------------
 
+    @Override
+    public void onInit() {
+        super.onInit();
+        Context context = getContext();
+
+        // Restore form and table state from the session
+        form.restoreState(context);
+        table.restoreState(context);
+
+        table.getControlLink().setActionListener(new ActionListener() {
+            public boolean onAction(Control source) {
+                // Save Table sort and paging state between requests.
+                // NOTE: we set the listener on the table's Link control which is invoked
+                // when the Link is clicked, such as when paging or sorting.
+                // This ensures the table state is only saved when the state changes, and
+                // cuts down on unnecessary session replication in a cluster environment.
+                table.saveState(getContext());
+                return true;
+            }
+        });
+
+    }
+
+    /**
+     * Handle the search button click event.
+     *
+     * @return true
+     */
+    public boolean onSearchClick() {
+        // Save Form search field value between requests.
+                // NOTE: we only save the from when the search button is clicked.
+                // This ensures the form state is only saved when the state changes, and
+                // cuts down on unnecessary session replication in a cluster environment.
+        form.saveState(getContext());
+        return true;
+    }
+
     /**
      * Handle the clear button click event.
      *
      * @return true
      */
     public boolean onClearClick() {
+        // Clear field values
         form.clearErrors();
         form.clearValues();
+
+        // Clear table state
+        table.setPageNumber(0);
+        table.setSortedColumn(null);
+
+        // Remove table and form state from the session
+        Context context = getContext();
+        form.removeState(context);
+        table.removeState(context);
         return true;
     }
 
