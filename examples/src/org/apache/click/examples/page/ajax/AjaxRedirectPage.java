@@ -22,7 +22,7 @@ import java.util.Date;
 import org.apache.click.ActionResult;
 import org.apache.click.Context;
 import org.apache.click.Control;
-import org.apache.click.ajax.AjaxBehavior;
+import org.apache.click.ajax.DefaultAjaxBehavior;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
 
@@ -46,7 +46,7 @@ public class AjaxRedirectPage extends BorderPage {
         redirectLink.setId("redirectLinkId");
         addControl(redirectLink);
 
-        redirectLink.addBehavior(new AjaxBehavior() {
+        redirectLink.addBehavior(new DefaultAjaxBehavior() {
 
             @Override
             public ActionResult onAction(Control source) {

@@ -21,7 +21,7 @@ package org.apache.click.examples.page.ajax;
 import org.apache.click.ActionListener;
 import org.apache.click.Control;
 import org.apache.click.ActionResult;
-import org.apache.click.ajax.AjaxBehavior;
+import org.apache.click.ajax.DefaultAjaxBehavior;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
 
@@ -41,7 +41,7 @@ public class AjaxFallbackPage extends BorderPage {
         addControl(link);
 
         // If JavaScript is enabled, the AjaxBehavior will be called
-        link.addBehavior(new AjaxBehavior() {
+        link.addBehavior(new DefaultAjaxBehavior() {
 
             @Override
             public ActionResult onAction(Control source) {
