@@ -118,11 +118,14 @@ public class ControlRegistry {
      * is the Ajax target. A control is an Ajax target if the
      * {@link Control#isAjaxTarget(org.apache.click.Context)} method returns true.
      * Once a target control is identified, ClickServlet invokes its
-     * {@link Control#onProcess()} method invoked.
+     * {@link Control#onProcess()} method.
      * <p/>
-     * <b>Please note:</b> the ControlRegistry is stateless. For each request
-     * a new registry is created. This means a control is only registered for
-     * a single request and must be registered again for subsequent requests.
+     * In addition, the target control's behaviors (if any) will be processed and
+     * their interceptor methods invoked, passing the control to the behavior
+     * interceptor methods:
+     * {@link org.apache.click.Behavior#preGetHeadElements(org.apache.click.Control) preGetHeadElements(Control)},
+     * {@link org.apache.click.Behavior#preResponse(org.apache.click.Control) preResponse(Control)} and
+     * {@link org.apache.click.Behavior#preDestroy(org.apache.click.Control) preDestroy(Control)}.
      *
      * @param control the control to register as an Ajax target
      */
@@ -142,11 +145,6 @@ public class ControlRegistry {
      * {@link org.apache.click.Behavior#preGetHeadElements(org.apache.click.Control) preGetHeadElements(Control)},
      * {@link org.apache.click.Behavior#preResponse(org.apache.click.Control) preResponse(Control)} and
      * {@link org.apache.click.Behavior#preDestroy(org.apache.click.Control) preDestroy(Control)}.
-     * <p/>
-     * <b>Please note:</b> the ControlRegistry is stateless. For each request
-     * a new registry is created. This means a control and behavior is only
-     * registered for a single request and will be registered again on subsequent
-     * requests.
      *
      * @param source the interceptor source control
      * @param controlInterceptor the control interceptor to register
@@ -283,9 +281,9 @@ public class ControlRegistry {
     }
 
     /**
-     * Return the set of behavior enabled controls.
+     * Return the set of potential Ajax target controls.
      *
-     * @return the set of behavior enabled controls.
+     * @return the set of potential Ajax target controls
      */
     Set<Control> getAjaxTargetControls() {
         if (ajaxTargetControls == null) {
