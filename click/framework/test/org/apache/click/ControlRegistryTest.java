@@ -19,7 +19,7 @@
 package org.apache.click;
 
 import junit.framework.TestCase;
-import org.apache.click.ajax.AjaxBehavior;
+import org.apache.click.ajax.DefaultAjaxBehavior;
 import org.apache.click.control.TextField;
 
 /**
@@ -37,7 +37,7 @@ public class ControlRegistryTest extends TestCase {
 
         TextField field = new TextField("field");
         assertFalse(registry.hasAjaxTargetControls());
-        field.addBehavior(new AjaxBehavior());
+        field.addBehavior(new DefaultAjaxBehavior());
         assertTrue(registry.hasAjaxTargetControls());
     }
 
@@ -53,12 +53,12 @@ public class ControlRegistryTest extends TestCase {
 
         // Test that adding behavior registers control as ajax target
         assertFalse(registry.hasAjaxTargetControls());
-        field.addBehavior(new AjaxBehavior());
+        field.addBehavior(new DefaultAjaxBehavior());
         assertTrue(registry.hasAjaxTargetControls());
         assertEquals(1, registry.getAjaxTargetControls().size());
 
         // Test that adding another behavior does not register the control twice
-        field.addBehavior(new AjaxBehavior());
+        field.addBehavior(new DefaultAjaxBehavior());
         assertEquals(1, registry.getAjaxTargetControls().size());
 
         // Test that invoking onInit does not register the control twice
@@ -76,7 +76,7 @@ public class ControlRegistryTest extends TestCase {
 
         TextField field = new TextField("field");
 
-        Behavior interceptor = new AjaxBehavior();
+        Behavior interceptor = new DefaultAjaxBehavior();
 
         // Check interceptor is registered with registry
         assertFalse(registry.hasInterceptors());
@@ -96,7 +96,7 @@ public class ControlRegistryTest extends TestCase {
 
         TextField field = new TextField("field");
 
-        Behavior interceptor = new AjaxBehavior();
+        Behavior interceptor = new DefaultAjaxBehavior();
 
         // Check interceptor is registered with registry
         assertFalse(registry.hasInterceptors());
