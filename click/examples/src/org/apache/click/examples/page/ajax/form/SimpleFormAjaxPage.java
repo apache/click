@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.apache.click.Control;
 import org.apache.click.ActionResult;
-import org.apache.click.ajax.AjaxBehavior;
+import org.apache.click.ajax.DefaultAjaxBehavior;
 import org.apache.click.control.Field;
 import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
@@ -46,7 +46,7 @@ public class SimpleFormAjaxPage extends BorderPage {
         form.add(nameFld);
         form.add(saveBtn);
 
-        saveBtn.addBehavior(new AjaxBehavior() {
+        saveBtn.addBehavior(new DefaultAjaxBehavior() {
 
             @Override
             public ActionResult onAction(Control source) {
@@ -59,7 +59,7 @@ public class SimpleFormAjaxPage extends BorderPage {
         // NOTE: we add a Behavior to Form so that Click registers the Form as an Ajax target
         // ALSO NOTE: we don't implement the onAction method as the ok Submit
         // handles the Behavior action event
-        form.addBehavior(new AjaxBehavior());
+        form.addBehavior(new DefaultAjaxBehavior());
 
         // Instead of adding a behavior, the same can be achived by explicitly registering the Form as an Ajax Target:
         // ControlRegistry.registerAjaxTarget(form);

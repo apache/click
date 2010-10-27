@@ -20,7 +20,7 @@ package org.apache.click.examples.page.ajax.compare;
 
 import org.apache.click.Control;
 import org.apache.click.ActionResult;
-import org.apache.click.ajax.AjaxBehavior;
+import org.apache.click.ajax.DefaultAjaxBehavior;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
 
@@ -41,7 +41,7 @@ public class JavascriptAjaxDemoPage extends BorderPage {
         // Add an Ajax behavior to the link. The behavior will be invoked when the
         // link is clicked. See the basic-ajax-demo.htm template for the client-side
         // Ajax code
-        link.addBehavior(new AjaxBehavior() {
+        link.addBehavior(new DefaultAjaxBehavior() {
 
             @Override
             public ActionResult onAction(Control source) {

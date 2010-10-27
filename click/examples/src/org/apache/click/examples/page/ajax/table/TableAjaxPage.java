@@ -24,6 +24,7 @@ import javax.annotation.Resource;
 import org.apache.click.Control;
 import org.apache.click.ActionResult;
 import org.apache.click.ajax.AjaxBehavior;
+import org.apache.click.ajax.DefaultAjaxBehavior;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Column;
 import org.apache.click.control.Table;
@@ -56,7 +57,7 @@ public class TableAjaxPage extends BorderPage {
 
     public TableAjaxPage() {
         addControl(editLink);
-        editLink.addBehavior(new AjaxBehavior() {
+        editLink.addBehavior(new DefaultAjaxBehavior() {
 
             @Override
             public ActionResult onAction(Control source) {
@@ -66,7 +67,7 @@ public class TableAjaxPage extends BorderPage {
         });
 
         addControl(deleteLink);
-        deleteLink.addBehavior(new AjaxBehavior() {
+        deleteLink.addBehavior(new DefaultAjaxBehavior() {
 
             @Override
             public ActionResult onAction(Control source) {
@@ -75,7 +76,7 @@ public class TableAjaxPage extends BorderPage {
             }
         });
 
-        table.getControlLink().addBehavior(new AjaxBehavior() {
+        table.getControlLink().addBehavior(new DefaultAjaxBehavior() {
 
             @Override
             public ActionResult onAction(Control source) {
