@@ -213,14 +213,6 @@ public class MockContextTest extends TestCase {
 
         ControlRegistry.registerInterceptor(submit, new Behavior() {
 
-            public boolean isRequestTarget(Context context) {
-                return false;
-            }
-
-            public ActionResult onAction(Control source) {
-                return null;
-            }
-
             public void preDestroy(Control source) {
                 preDestroyCalled = true;
             }
