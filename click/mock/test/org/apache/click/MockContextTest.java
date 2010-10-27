@@ -19,7 +19,7 @@
 package org.apache.click;
 
 import junit.framework.TestCase;
-import org.apache.click.ajax.AjaxBehavior;
+import org.apache.click.ajax.DefaultAjaxBehavior;
 import org.apache.click.control.Submit;
 import org.apache.click.servlet.MockServletConfig;
 import org.apache.click.servlet.MockServletContext;
@@ -139,8 +139,7 @@ public class MockContextTest extends TestCase {
 
         Submit submit = new Submit("save");
         // Register an ajax behavior
-        submit.addBehavior(new AjaxBehavior() {
-            private static final long serialVersionUID = 1L;
+        submit.addBehavior(new DefaultAjaxBehavior() {
 
             @Override
             public ActionResult onAction(Control source) {
@@ -154,7 +153,7 @@ public class MockContextTest extends TestCase {
         ActionEventDispatcher dispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
 
         // Assert there is one behavior registered
-        assertEquals(1, dispatcher.getBehaviorSourceSet().size());
+        assertEquals(1, dispatcher.getAjaxBehaviorSourceSet().size());
 
         // Fire all behaviors registered in the onProcess method
         context.executeBehaviors();
@@ -162,7 +161,7 @@ public class MockContextTest extends TestCase {
         assertTrue("Submit behavior was not invoked", submitCalled);
 
         // Assert there are no behaviors registered after reset is invoked
-        assertEquals(0, dispatcher.getBehaviorSourceSet().size());
+        assertEquals(0, dispatcher.getAjaxBehaviorSourceSet().size());
     }
 
     /**
@@ -176,8 +175,7 @@ public class MockContextTest extends TestCase {
 
         Submit submit = new Submit("save");
         // Register an ajax behavior
-        submit.addBehavior(new AjaxBehavior() {
-            private static final long serialVersionUID = 1L;
+        submit.addBehavior(new DefaultAjaxBehavior() {
 
             @Override
             public ActionResult onAction(Control source) {
@@ -190,13 +188,13 @@ public class MockContextTest extends TestCase {
         ActionEventDispatcher dispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
 
         // Assert there is one behavior registered
-        assertEquals(1, dispatcher.getBehaviorSourceSet().size());
+        assertEquals(1, dispatcher.getAjaxBehaviorSourceSet().size());
 
         // Context reset should clear the dispatcher
         context.reset();
 
         // Assert there are no behaviors registered after reset is invoked
-        assertEquals(0, dispatcher.getBehaviorSourceSet().size());
+        assertEquals(0, dispatcher.getAjaxBehaviorSourceSet().size());
     }
 
     // Test Behavior Interceptor Methods --------------------------------------
@@ -327,8 +325,7 @@ public class MockContextTest extends TestCase {
         preResponseCalled = false;
         preDestroyCalled = false;
 
-        submit.addBehavior(new AjaxBehavior() {
-            private static final long serialVersionUID = 1L;
+        submit.addBehavior(new DefaultAjaxBehavior() {
 
             @Override
             public ActionResult onAction(Control source) {
@@ -359,7 +356,7 @@ public class MockContextTest extends TestCase {
         ActionEventDispatcher eventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
 
         // Assert there is one behavior registered
-        assertEquals(1, eventDispatcher.getBehaviorSourceSet().size());
+        assertEquals(1, eventDispatcher.getAjaxBehaviorSourceSet().size());
 
         // Fire all behaviors registered in the onProcess method
         context.executeBehaviors();
@@ -367,7 +364,7 @@ public class MockContextTest extends TestCase {
         assertTrue("Submit behavior was not invoked", submitCalled);
 
         // Assert there are no behaviors registered after reset is invoked
-        assertEquals(0, eventDispatcher.getBehaviorSourceSet().size());
+        assertEquals(0, eventDispatcher.getAjaxBehaviorSourceSet().size());
 
         ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
