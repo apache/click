@@ -326,7 +326,7 @@ public class MockContext extends Context {
         ActionEventDispatcher dispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
 
         // Fire behaviors
-        return dispatcher.fireBehaviors(this);
+        return dispatcher.fireAjaxBehaviors(this);
     }
 
     /**
