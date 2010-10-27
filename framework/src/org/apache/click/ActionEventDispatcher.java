@@ -24,6 +24,7 @@ import java.util.LinkedHashSet;
 
 import java.util.List;
 import java.util.Set;
+import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.service.ConfigService;
 import org.apache.click.service.LogService;
 import org.apache.click.util.HtmlStringBuffer;
@@ -31,8 +32,8 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.Validate;
 
 /**
- * Provides a control ActionListener and Behavior dispatcher. The
- * ClickServlet will dispatch registered ActionListeners and Behaviors after
+ * Provides a control ActionListener and AjaxBehavior dispatcher. The
+ * ClickServlet will dispatch registered ActionListeners and AjaxBehaviors after
  * page controls have been processed.
  *
  * <h4>Example Usage</h4>
@@ -79,8 +80,8 @@ public class ActionEventDispatcher {
     /** The list of registered event listeners. */
     List<ActionListener> eventListenerList;
 
-    /** The set of Controls with attached Behaviors. */
-    Set<Control> behaviorSourceSet;
+    /** The set of Controls with attached AjaxBehaviors. */
+    Set<Control> ajaxBehaviorSourceSet;
 
     /**
      * The {@link org.apache.click.ActionResult} to render. This action result is
@@ -115,16 +116,16 @@ public class ActionEventDispatcher {
     }
 
     /**
-     * Register the source control which behaviors should be fired by the
+     * Register the source control which AjaxBehaviors should be fired by the
      * ClickServlet.
      *
      * @param source the source control which behaviors should be fired
      */
-    public static void dispatchBehaviors(Control source) {
+    public static void dispatchAjaxBehaviors(Control source) {
         Validate.notNull(source, "Null source parameter");
 
         ActionEventDispatcher instance = getThreadLocalDispatcher();
-        instance.registerBehaviorSource(source);
+        instance.registerAjaxBehaviorSource(source);
     }
 
     /**
@@ -145,22 +146,22 @@ public class ActionEventDispatcher {
     }
 
     /**
-     * Fire all the registered behaviors after the Page Controls have been
-     * processed and return true if the page should continue processing.
+     * Fire all the registered AjaxBehaviors and return true if the page should
+     * continue processing, false otherwise.
      *
-     * @see #fireBehaviors(org.apache.click.Context, java.util.Set)
+     * @see #fireAjaxBehaviors(org.apache.click.Context, java.util.Set)
      *
      * @param context the request context
      *
      * @return true if the page should continue processing, false otherwise
      */
-    public boolean fireBehaviors(Context context) {
+    public boolean fireAjaxBehaviors(Context context) {
 
-        if (!hasBehaviorSourceSet()) {
+        if (!hasAjaxBehaviorSourceSet()) {
             return true;
         }
 
-        return fireBehaviors(context, getBehaviorSourceSet());
+        return fireAjaxBehaviors(context, getAjaxBehaviorSourceSet());
     }
 
     // Protected Methods ------------------------------------------------------
@@ -235,30 +236,30 @@ public class ActionEventDispatcher {
     }
 
     /**
-     * Fire the behaviors for the given control set and return true if the page
+     * Fire the AjaxBehaviors for the given control set and return true if the page
      * should continue processing, false otherwise.
      * <p/>
-     * This method can be overridden if you need to customize the way behaviors
-     * are fired.
+     * This method can be overridden if you need to customize the way
+     * AjaxBehaviors are fired.
      *
-     * @see #fireBehavior(org.apache.click.Context, org.apache.click.Control)
+     * @see #fireAjaxBehaviors(org.apache.click.Context, org.apache.click.Control)
      *
      * @param context the request context
-     * @param behaviorSourceSet the set of controls with attached behaviors
+     * @param ajaxBbehaviorSourceSet the set of controls with attached AjaxBehaviors
      *
      * @return true if the page should continue processing, false otherwise
      */
-    protected boolean fireBehaviors(Context context, Set<Control> behaviorSourceSet) {
+    protected boolean fireAjaxBehaviors(Context context, Set<Control> ajaxBbehaviorSourceSet) {
 
         boolean continueProcessing = true;
 
-        for (Iterator<Control> it = behaviorSourceSet.iterator(); it.hasNext();) {
+        for (Iterator<Control> it = ajaxBbehaviorSourceSet.iterator(); it.hasNext();) {
             Control source = it.next();
 
             // Pop the first entry in the set
             it.remove();
 
-            if (!fireBehavior(context, source)) {
+            if (!fireAjaxBehaviors(context, source)) {
                 continueProcessing = false;
             }
         }
@@ -267,18 +268,20 @@ public class ActionEventDispatcher {
     }
 
     /**
-     * Fire the behavior for the given control and return true if the page
-     * should continue processing, false otherwise.
+     * Fire the AjaxBehaviors for the given control and return true if the
+     * page should continue processing, false otherwise. AjaxBehaviors will
+     * only fire if their {@link org.apache.click.ajax.AjaxBehavior#isAjaxTarget(org.apache.click.Context) isAjaxTarget()}
+     * method returns true.
      * <p/>
-     * This method can be overridden if you need to customize the way behaviors
-     * are fired.
+     * This method can be overridden if you need to customize the way
+     * AjaxBehaviors are fired.
      *
      * @param context the request context
      * @param source the control which attached behaviors should be fired
      *
      * @return true if the page should continue processing, false otherwise
      */
-    protected boolean fireBehavior(Context context, Control source) {
+    protected boolean fireAjaxBehaviors(Context context, Control source) {
 
         boolean continueProcessing = true;
 
@@ -293,71 +296,85 @@ public class ActionEventDispatcher {
 
         for (Behavior behavior : source.getBehaviors()) {
 
-            boolean isRequestTarget = behavior.isRequestTarget(context);
+            if (behavior instanceof AjaxBehavior) {
+                AjaxBehavior ajaxBehavior = (AjaxBehavior) behavior;
 
-            if (logger.isTraceEnabled()) {
-                String behaviorClassName = ClassUtils.getShortClassName(behavior.getClass());
-                HtmlStringBuffer buffer = new HtmlStringBuffer();
-                buffer.append("      invoked: ");
-                buffer.append(behaviorClassName);
-                buffer.append(".isRequestTarget() : ");
-                buffer.append(isRequestTarget);
-                logger.trace(buffer.toString());
-            }
-
-            if (isRequestTarget) {
-
-                // The first non-null ActionResult returned will be rendered, other
-                // ActionResult instances are ignored
-                ActionResult behaviorActionResult = behavior.onAction(source);
-                if (actionResult == null && behaviorActionResult != null) {
-                    actionResult = behaviorActionResult;
-                }
+                boolean isAjaxTarget = ajaxBehavior.isAjaxTarget(context);
 
                 if (logger.isTraceEnabled()) {
-                    String behaviorClassName = ClassUtils.getShortClassName(behavior.getClass());
-                    String actionResultClassName = null;
-
-                    if (behaviorActionResult != null) {
-                        actionResultClassName = ClassUtils.getShortClassName(behaviorActionResult.getClass());
-                    }
-
+                    String behaviorClassName = ClassUtils.getShortClassName(
+                        ajaxBehavior.getClass());
                     HtmlStringBuffer buffer = new HtmlStringBuffer();
                     buffer.append("      invoked: ");
                     buffer.append(behaviorClassName);
-                    buffer.append(".onAction() : ");
-                    buffer.append(actionResultClassName);
-
-                    if (actionResult == behaviorActionResult && behaviorActionResult != null) {
-                        buffer.append(" (ActionResult will be rendered)");
-                    } else {
-                        if (behaviorActionResult == null) {
-                            buffer.append(" (ActionResult is null and will be ignored)");
-                        } else {
-                            buffer.append(" (ActionResult will be ignored since another Behavior already retuned a non-null ActionResult)");
-                        }
-                    }
-
+                    buffer.append(".isAjaxTarget() : ");
+                    buffer.append(isAjaxTarget);
                     logger.trace(buffer.toString());
                 }
 
-                continueProcessing = false;
-                break;
+                if (isAjaxTarget) {
+
+                    // The first non-null ActionResult returned will be rendered, other
+                    // ActionResult instances are ignored
+                    ActionResult behaviorActionResult =
+                        ajaxBehavior.onAction(source);
+                    if (actionResult == null && behaviorActionResult != null) {
+                        actionResult = behaviorActionResult;
+                    }
+
+                    if (logger.isTraceEnabled()) {
+                        String behaviorClassName = ClassUtils.getShortClassName(
+                            ajaxBehavior.getClass());
+                        String actionResultClassName = null;
+
+                        if (behaviorActionResult != null) {
+                            actionResultClassName = ClassUtils.getShortClassName(
+                                behaviorActionResult.getClass());
+                        }
+
+                        HtmlStringBuffer buffer = new HtmlStringBuffer();
+                        buffer.append("      invoked: ");
+                        buffer.append(behaviorClassName);
+                        buffer.append(".onAction() : ");
+                        buffer.append(actionResultClassName);
+
+                        if (actionResult == behaviorActionResult
+                            && behaviorActionResult != null) {
+                            buffer.append(" (ActionResult will be rendered)");
+                        } else {
+                            if (behaviorActionResult == null) {
+                                buffer.append(" (ActionResult is null and will be ignored)");
+                            } else {
+                                buffer.append(" (ActionResult will be ignored since another AjaxBehavior already retuned a non-null ActionResult)");
+                            }
+                        }
+
+                        logger.trace(buffer.toString());
+                    }
+
+                    continueProcessing = false;
+                    break;
+                }
             }
         }
 
         if (logger.isTraceEnabled()) {
 
-            // Provide trace if no target behavior was found
-            if (continueProcessing) {
+            //if (hasAjaxBehavior) {
+
+                // continueProcessing is true if no AjaxBehavior was the target
+                // of the request
+              if (continueProcessing) {
                 HtmlStringBuffer buffer = new HtmlStringBuffer();
-                String sourceClassName = ClassUtils.getShortClassName(source.getClass());
-                buffer.append("   *no* target behavior found for '");
+                String sourceClassName = ClassUtils.getShortClassName(
+                    source.getClass());
+                buffer.append("   *no* target AjaxBehavior found for '");
                 buffer.append(source.getName()).append("' ");
                 buffer.append(sourceClassName);
-                buffer.append(" - invoking Behavior.isRequestTarget() returned false for all behaviors");
+                buffer.append(" - invoking AjaxBehavior.isAjaxTarget() returned false for all ajax behaviors");
                 logger.trace(buffer.toString());
             }
+             //}
         }
 
         // Ajax requests stops further processing
@@ -381,14 +398,14 @@ public class ActionEventDispatcher {
     }
 
     /**
-     * Register the behavior source control.
+     * Register the AjaxBehavior source control.
      *
-     * @param source the behavior source control
+     * @param source the AjaxBehavior source control
      */
-    void registerBehaviorSource(Control source) {
+    void registerAjaxBehaviorSource(Control source) {
         Validate.notNull(source, "Null source parameter");
 
-        getBehaviorSourceSet().add(source);
+        getAjaxBehaviorSourceSet().add(source);
     }
 
     /**
@@ -436,8 +453,8 @@ public class ActionEventDispatcher {
             getEventListenerList().clear();
         }
 
-        if (hasBehaviorSourceSet()) {
-            getBehaviorSourceSet().clear();
+        if (hasAjaxBehaviorSourceSet()) {
+            getAjaxBehaviorSourceSet().clear();
         }
     }
 
@@ -451,27 +468,27 @@ public class ActionEventDispatcher {
     }
 
     /**
-     * Return true if a control with behaviors was registered, false otherwise.
+     * Return true if a control with AjaxBehaviors was registered, false otherwise.
      *
-     * @return true if a control with behaviors was registered, false otherwise.
+     * @return true if a control with AjaxBehaviors was registered, false otherwise.
      */
-    boolean hasBehaviorSourceSet() {
-        if (behaviorSourceSet == null || behaviorSourceSet.isEmpty()) {
+    boolean hasAjaxBehaviorSourceSet() {
+        if (ajaxBehaviorSourceSet == null || ajaxBehaviorSourceSet.isEmpty()) {
             return false;
         }
         return true;
     }
 
     /**
-     * Return the set of controls with attached behaviors.
+     * Return the set of controls with attached AjaxBehaviors.
      *
-     * @return set of control with attached behaviors
+     * @return set of control with attached AjaxBehaviors
      */
-    Set<Control> getBehaviorSourceSet() {
-        if (behaviorSourceSet == null) {
-            behaviorSourceSet = new LinkedHashSet<Control>();
+    Set<Control> getAjaxBehaviorSourceSet() {
+        if (ajaxBehaviorSourceSet == null) {
+            ajaxBehaviorSourceSet = new LinkedHashSet<Control>();
         }
-        return behaviorSourceSet;
+        return ajaxBehaviorSourceSet;
     }
 
     /**

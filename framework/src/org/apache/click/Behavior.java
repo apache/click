@@ -20,18 +20,10 @@ package org.apache.click;
 
 /**
  * Behaviors provide a mechanism for changing how Controls behave at runtime.
- * Behaviors are added to a Control and uses interceptor methods to decorate and
- * enhance the source Control. Behaviors are most often used to add Ajax support
- * to Controls.
+ * Behaviors are added to a Control and provides interceptor methods to decorate
+ * and enhance the source Control.
  * <p/>
- * To handle an Ajax request Behavior exposes the listener method: {@link #onAction(org.apache.click.Control) onAction}.
- * The <tt>onAction</tt> method returns an ActionResult that is rendered back
- * to the browser. Before Click invokes the <tt>onAction</tt> method it checks
- * whether the request is targeted at that Behavior by calling the method
- * {@link #isRequestTarget(org.apache.click.Context) Behavior.isRequestTarget()}.
- * Click will only invoke <tt>onAction</tt> if <tt>isRequestTarget</tt> returns true.
- * <p/>
- * Behaviors also provide interceptor methods for specific Control life cycle events.
+ * Behaviors provide interceptor methods for specific Control life cycle events.
  * These interceptor methods can be implemented to further process and decorate
  * the control or its children.
  * <p/>
@@ -55,60 +47,6 @@ package org.apache.click;
  * </ul>
  */
 public interface Behavior {
-
-    /**
-     * The behavior action method.
-     *
-     * TODO: javadoc
-     *
-     * @param source the control the behavior is attached to
-     * @return the action result instance
-     */
-    public ActionResult onAction(Control source);
-
-    /**
-     * Return true if the behavior is the request target, false otherwise.
-     * <p/>
-     * This method is queried by Click to determine if the behavior's
-     * {@link #onAction(org.apache.click.Control)} method should be called in
-     * response to a request.
-     * <p/>
-     * By exposing this method through the Behavior interface it provides
-     * implementers with fine grained control over whether the Behavior's
-     * {@link #onAction(org.apache.click.Control)} method should be invoked or not.
-     * <p/>
-     * Below is an example implementation:
-     *
-     * <pre class="prettyprint">
-     * public CustomBehavior implements Behavior {
-     *
-     *     private String eventType;
-     *
-     *     public CustomBehavior(String eventType) {
-     *         // The event type of the behavior
-     *         super(eventType);
-     *     }
-     *
-     *     public boolean isRequestTarget(Context context) {
-     *         // Retrieve the eventType parameter from the incoming request
-     *         String eventType = context.getRequestParameter("type");
-     *
-     *         // Check if this Behavior's eventType matches the request
-     *         // "type" parameter
-     *         return StringUtils.equalsIgnoreCase(this.eventType, eventType);
-     *     }
-     *
-     *     public ActionResult onAction(Control source) {
-     *         // If isRequestTarget returned true, the onAction method will be
-     *         // invoked
-     *         ...
-     *     }
-     * } </pre>
-     *
-     * @param context the request context
-     * @return true if the behavior is the request target, false otherwise
-     */
-    public boolean isRequestTarget(Context context);
 
     /**
      * This event occurs before the markup is written to the HttpServletResponse.

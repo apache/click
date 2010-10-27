@@ -18,78 +18,77 @@
  */
 package org.apache.click.ajax;
 
-import java.io.Serializable;
+import org.apache.click.ActionResult;
 import org.apache.click.Behavior;
 import org.apache.click.Context;
 import org.apache.click.Control;
-import org.apache.click.ActionResult;
 
 /**
- * Provides an abstract implementation of the Behavior interface.
- *
- * TODO: javadoc
+ * AjaxBehavior extends the basic Behavior functionality to allow Controls to
+ * handle and process incoming Ajax requests.
+ * <p/>
+ * To handle an Ajax request, AjaxBehavior exposes the listener method:
+ * {@link #onAction(org.apache.click.Control) onAction}.
+ * The <tt>onAction</tt> method returns an ActionResult that is rendered back
+ * to the browser.
+ * <p/>
+ * Before Click invokes the <tt>onAction</tt> method it checks whether the request
+ * is targeted at the AjaxBehavior by invoking the method
+ * {@link #isAjaxTarget(org.apache.click.Context) Behavior.isAjaxTarget()}.
+ * Click will only invoke <tt>onAction</tt> if <tt>isAjaxTarget</tt> returns true.
  */
-public class AjaxBehavior implements Behavior, Serializable {
-
-    // Constants --------------------------------------------------------------
-
-    private static final long serialVersionUID = 1L;
-
-    // Variables --------------------------------------------------------------
-
-    protected boolean headElementsProcessed = false;
-
-    // Behavior Methods--------------------------------------------------------
+public interface AjaxBehavior extends Behavior {
 
     /**
-     * @see org.apache.click.Behavior#onAction(org.apache.click.Control)
      *
-     * @param source the control the behavior is attached to
-     * @return the action result
-     */
-    public ActionResult onAction(Control source) {
-        return null;
-    }
-
-    /**
      * TODO: javadoc
      *
-     * @param context
-     * @return
+     * @param source the control the behavior is attached to
+     * @return the action result instance
      */
-    public boolean isRequestTarget(Context context) {
-        return true;
-    }
-
-    // Callback Methods -------------------------------------------------------
+    public ActionResult onAction(Control source);
 
     /**
+     * Return true if the behavior is the request target, false otherwise.
+     * <p/>
+     * This method is queried by Click to determine if the behavior's
+     * {@link #onAction(org.apache.click.Control)} method should be called in
+     * response to a request.
+     * <p/>
+     * By exposing this method through the Behavior interface it provides
+     * implementers with fine grained control over whether the Behavior's
+     * {@link #onAction(org.apache.click.Control)} method should be invoked or not.
+     * <p/>
+     * Below is an example implementation:
      *
-     * @param source
+     * <pre class="prettyprint">
+     * public CustomBehavior implements Behavior {
+     *
+     *     private String eventType;
+     *
+     *     public CustomBehavior(String eventType) {
+     *         // The event type of the behavior
+     *         super(eventType);
+     *     }
+     *
+     *     public boolean isAjaxTarget(Context context) {
+     *         // Retrieve the eventType parameter from the incoming request
+     *         String eventType = context.getRequestParameter("type");
+     *
+     *         // Check if this Behavior's eventType matches the request
+     *         // "type" parameter
+     *         return StringUtils.equalsIgnoreCase(this.eventType, eventType);
+     *     }
+     *
+     *     public ActionResult onAction(Control source) {
+     *         // If isAjaxTarget returned true, the onAction method will be
+     *         // invoked
+     *         ...
+     *     }
+     * } </pre>
+     *
+     * @param context the request context
+     * @return true if the behavior is the request target, false otherwise
      */
-    public void preResponse(Control source) {
-    }
-
-    public void preGetHeadElements(Control source) {
-        // Guard against adding HEAD elements to more than one control
-        if (headElementsProcessed) {
-            return;
-        }
-
-        addHeadElements(source);
-
-        headElementsProcessed = true;
-    }
-
-    public void preDestroy(Control source) {
-        headElementsProcessed = false;
-    }
-
-    // Protected methods ------------------------------------------------------
-
-    protected void addHeadElements(Control source) {
-        // Subclasses can override the default to add head specific elements
-        // NOTE: if this method is ever made public the headElementsProcessed
-        // check should be done here
-    }
+    public boolean isAjaxTarget(Context context);
 }
