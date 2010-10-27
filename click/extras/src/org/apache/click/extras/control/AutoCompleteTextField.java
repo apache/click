@@ -29,6 +29,7 @@ import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.click.ActionResult;
 import org.apache.click.ajax.AjaxBehavior;
+import org.apache.click.ajax.DefaultAjaxBehavior;
 import org.apache.click.control.TextField;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.Element;
@@ -450,8 +451,7 @@ public abstract class AutoCompleteTextField extends TextField {
      * @return the field Ajax behavior instance
      */
     protected Behavior createBehavior() {
-        AjaxBehavior internalBehavior = new AjaxBehavior() {
-            private static final long serialVersionUID = 1L;
+        AjaxBehavior internalBehavior = new DefaultAjaxBehavior() {
 
             @Override
             public ActionResult onAction(Control source) {
