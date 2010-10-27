@@ -1832,10 +1832,10 @@ public class ClickServlet extends HttpServlet {
                 // Perform onProcess for regsitered Ajax controls
                 processAjaxTargetControls(context, eventDispatcher, controlRegistry);
 
-                // Fire behaviors registered during the onProcess event
-                // The target behavior will set the eventDispatcher action result instance
-                // to render
-                eventDispatcher.fireBehaviors(context);
+                // Fire AjaxBehaviors registered during the onProcess event
+                // The target AjaxBehavior will set the eventDispatcher action
+                // result instance to render
+                eventDispatcher.fireAjaxBehaviors(context);
 
                 // Ensure we execute the beforeResponse and beforeGetHeadElements
                 // for Ajax requests
@@ -1850,7 +1850,7 @@ public class ClickServlet extends HttpServlet {
             } else {
 
                 // If no target Ajax controls have been registered fallback to
-                // the old behavior or processing and rendering the page template
+                // the old behavior of processing and rendering the page template
                if (logger.isTraceEnabled()) {
                     String msg = "   *no* Ajax target controls have been registered."
                         + " Will process the page as a normal non Ajax request.";
@@ -1920,8 +1920,8 @@ public class ClickServlet extends HttpServlet {
                 buffer.append(".onProcess() : ").append(continueProcessing);
                 logger.trace(buffer.toString());
 
-                if (!eventDispatcher.hasBehaviorSourceSet()) {
-                    logger.trace("   *no* behavior was registered while processing the control");
+                if (!eventDispatcher.hasAjaxBehaviorSourceSet()) {
+                    logger.trace("   *no* AjaxBehavior was registered while processing the control");
                 }
             }
         }

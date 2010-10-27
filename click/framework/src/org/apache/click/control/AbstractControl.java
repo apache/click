@@ -907,7 +907,7 @@ public abstract class AbstractControl implements Control {
      * Dispatch an action event to the {@link org.apache.click.ActionEventDispatcher}.
      *
      * @see org.apache.click.ActionEventDispatcher#dispatchActionEvent(org.apache.click.Control, org.apache.click.ActionListener)
-     * @see org.apache.click.ActionEventDispatcher#dispatchBehavior(org.apache.click.Control)
+     * @see org.apache.click.ActionEventDispatcher#dispatchAjaxBehaviors(org.apache.click.Control)
      */
     protected void dispatchActionEvent() {
         if (getActionListener() != null) {
@@ -915,7 +915,7 @@ public abstract class AbstractControl implements Control {
         }
 
         if (hasBehaviors()) {
-            ActionEventDispatcher.dispatchBehaviors(this);
+            ActionEventDispatcher.dispatchAjaxBehaviors(this);
         }
     }
 
