@@ -29,11 +29,13 @@ import org.apache.commons.lang.Validate;
 /**
  * Provides a centralized registry where Controls can be registered and interact
  * with the ClickServlet. The registry can be used by Controls to register
- * themselves as potential <tt>targets</tt> for Ajax requests. The ControlRegistry
- * provides the ClickServlet with easy access to those Controls that have
- * Behaviors and want to handle and process Ajax requests.
+ * themselves as potential <tt>targets</tt> of Ajax requests (If a control is
+ * an Ajax request target, it's <tt>onProcess()</tt> method is invoked, other
+ * controls are not processed).
  * <p/>
- * <b>Please note:</b> a new registry is created for every request.
+ * The ControlRegistry provides the ClickServlet with easy access to Controls
+ * that want to be processed for Ajax requests and also to their AjaxBehaviors
+ * that want to handle and respond to those requests.
  *
  * <h3>Register Control as an Ajax Target</h3>
  * Below is an example of a Control registering itself as an Ajax target:
