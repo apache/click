@@ -28,14 +28,21 @@ import org.apache.commons.lang.Validate;
 
 /**
  * Provides a centralized registry where Controls can be registered and interact
- * with the ClickServlet. The registry can be used by Controls to register
- * themselves as potential <tt>targets</tt> of Ajax requests (If a control is
- * an Ajax request target, it's <tt>onProcess()</tt> method is invoked, other
- * controls are not processed).
+ * with the Click runtime.
  * <p/>
- * The ControlRegistry provides the ClickServlet with easy access to Controls
- * that want to be processed for Ajax requests and also to their AjaxBehaviors
- * that want to handle and respond to those requests.
+ * The primary use of the ControlRegistry is for Controls to register themselves
+ * as potential <tt>targets</tt> of Ajax requests
+ * (If a control is an Ajax request target, it's <tt>onProcess()</tt>
+ * method is invoked while other controls are not processed).
+ * <p/>
+ * Registering controls as Ajax targets serves a dual purpose. In addition to
+ * being potential Ajax targets, these controls will have all their Behaviors
+ * processed by the Click runtime.
+ * <p/>
+ * Thus the ControlRegistry provides the Click runtime  with easy access to Controls
+ * that want to be processed for Ajax requests. It also provides quick access
+ * to Controls that have Behaviors, and particularly AjaxBehaviors that want to
+ * handle and respond to Ajax requests.
  *
  * <h3>Register Control as an Ajax Target</h3>
  * Below is an example of a Control registering itself as an Ajax target:
@@ -116,18 +123,17 @@ public class ControlRegistry {
     // Public Methods ---------------------------------------------------------
 
     /**
-     * Register the control to be processed by the ClickServlet if the control
+     * Register the control to be processed by the Click runtime if the control
      * is the Ajax target. A control is an Ajax target if the
      * {@link Control#isAjaxTarget(org.apache.click.Context)} method returns true.
-     * Once a target control is identified, ClickServlet invokes its
+     * Once a target control is identified, Click invokes its
      * {@link Control#onProcess()} method.
      * <p/>
-     * In addition, the target control's behaviors (if any) will be processed and
-     * their interceptor methods invoked, passing the control to the behavior
-     * interceptor methods:
-     * {@link org.apache.click.Behavior#preGetHeadElements(org.apache.click.Control) preGetHeadElements(Control)},
-     * {@link org.apache.click.Behavior#preResponse(org.apache.click.Control) preResponse(Control)} and
-     * {@link org.apache.click.Behavior#preDestroy(org.apache.click.Control) preDestroy(Control)}.
+     * This method serves a dual purpose as all controls registered here
+     * will also have their Behaviors (if any) processed. Processing
+     * {@link org.apache.click.Behavior Behaviors}
+     * means their interceptor methods will be invoked during the request
+     * life cycle, passing the control as the argument.
      *
      * @param control the control to register as an Ajax target
      */
