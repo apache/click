@@ -1829,7 +1829,7 @@ public class ClickServlet extends HttpServlet {
             // check isForward?
             if (controlRegistry.hasAjaxTargetControls() && !context.isForward()) {
 
-                // Perform onProcess for regsitered Ajax controls
+                // Perform onProcess for regsitered Ajax target controls
                 processAjaxTargetControls(context, eventDispatcher, controlRegistry);
 
                 // Fire AjaxBehaviors registered during the onProcess event
@@ -1849,7 +1849,7 @@ public class ClickServlet extends HttpServlet {
 
             } else {
 
-                // If no target Ajax controls have been registered fallback to
+                // If no Ajax target controls have been registered fallback to
                 // the old behavior of processing and rendering the page template
                if (logger.isTraceEnabled()) {
                     String msg = "   *no* Ajax target controls have been registered."
@@ -2254,7 +2254,7 @@ public class ClickServlet extends HttpServlet {
                 buffer.append(ajaxTarget.getName()).append("' ");
                 String className = ClassUtils.getShortClassName(ajaxTarget.getClass());
                 buffer.append(className);
-                buffer.append(".isAjaxTarget() : true (target Ajax control found)");
+                buffer.append(".isAjaxTarget() : true (Ajax target control found)");
                 logger.trace(buffer.toString());
             }
         }
