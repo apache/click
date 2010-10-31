@@ -1092,4 +1092,203 @@ public class EmployeePage extends Page {
 
     </sect2>
   </sect1>
+
+<sect1 id="behavior" remap="h2">
+    <title>Behavior</title>
+Behaviors provide the ability to change how Controls behave at runtime.
+<para><ulink url="../../click-api/org/apache/click/Behavior.html">Behavior</ulink>
+is an interface that provides <emphasis>interceptor methods</emphasis> for certain
+<classname>Control</classname> life cycle events. These
+<emphasis>interceptor methods</emphasis> can be implemented to decorate and
+enhance the control and its children. This allows for making changes to Controls
+such as adding/removing JavaScript and CSS Elements, adding/removing attributes,
+etc.
+</para>
+
+<para>Behaviors are added to Controls through the
+<ulink url="../../click-api/org/apache/click/control/AbstractControl.html#addBehavior(org.apache.click.Behavior)">AbstractControl.addBehavior(Behavior)</ulink>
+method, and the same Behavior can be shared by multiple Controls.
+</para>
+
+    <para>The <classname>Control</classname>, <classname>AbstractControl</classname>
+    and <classname>Behavior</classname>, classes are shown in the figure below.
+    </para>
+
+    <figure id="behavior-class-diagram">
+      <title>Behavior Class Diagram</title>
+      <inlinemediaobject>
+        <imageobject>
+          <imagedata fileref="images/controls/behavior-class-diagram.png" format="PNG" scale="65"/>
+        </imageobject>
+      </inlinemediaobject>
+    </figure>
+
+    <para>Control exposes the following Behavior related methods:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Control.html#getBehaviors()">getBehaviors()</ulink>
+          - returns the Control's Set of Behaviors
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Control.html#hasBehaviors()">hasBehaviors()</ulink>
+          - returns true if the Control has any Behaviors
+        </para>
+      </listitem>
+  </itemizedlist>
+
+    <para>AbstractControl contains a <classname>Set</classname> that holds the
+    <classname>Behaviors</classname> added to the <classname>Control</classname>.
+    It also exposes the following methods for managing <classname>Behaviors</classname>:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+            <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#addBehavior(org.apache.click.Behavior)">addBehavior(Behavior)</ulink>
+          - adds the given Behavior to the Control's Set of Behaviors
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#removeBehavior(org.apache.click.Behavior)">removeBehavior(Behavior)</ulink>
+          - removes the given Behavior from the Control's Set of Behaviors
+        </para>
+      </listitem>
+  </itemizedlist>
+
+    <para>The Behavior interface (<emphasis>interceptor methods</emphasis>) is
+    covered next:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Behavior.html#preResponse(org.apache.click.Control)">preResponse(Control)</ulink>
+          - defines an interceptor method that is invoked before the response is written.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Behavior.html#preGetHeadElements(org.apache.click.Control)">preGetHeadElements(Control)</ulink>
+          - defines an interceptor method that is invoked after <methodname>preResponse()</methodname>
+          but before the <classname>Control</classname> <methodname>getHeadElements()</methodname>
+          is called. This is a good place to add custom JavaScript or CSS elements
+          to Controls.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="../../click-api/org/apache/click/Behavior.html#preDestroy(org.apache.click.Control)">preDestroy()</ulink>
+          - defines an interceptor method that is invoked before the
+          <classname>Control</classname> <methodname>onDestroy()</methodname>
+          event handler. This interceptor method allows the behavior to cleanup
+          any resources.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <sect2 id="behavior-execution" remap="h3">
+        <title>Behavior Execution</title>
+
+        <para>When a Behavior is added to a Control, the Control is automatically
+        registered with the
+        <ulink url="../../click-api/org/apache/click/ControlRegistry.html">ControlRegistry</ulink>.
+        Registering with the ControlRegistry allows the Click runtime to quickly
+        and easily access controls that have Behaviors and process them. Controls
+        without behaviors won't be registered and won't be processed.
+        </para>
+
+        <para>Click will invoke all the registered Behavior's
+        <emphasis>interceptor methods</emphasis> at
+        the appropriate time during the <classname>Control</classname> life
+        cycle.
+        </para>
+    </sect2>
+
+
+    <sect2 id="behavior-example" remap="h3">
+        <title>Behavior Example</title>
+        <para>Let's look at a simple Behavior example. Say
+        we want to put focus on a Field in our Form. Normally we would use the
+        following JavaScript snippet somewhere in our page template:
+        </para>
+
+    <programlisting language="javascript">
+        document.getElementById('form_nameField').focus();
+</programlisting>
+
+<para>If we want this behavior on another page we can copy and paste
+this snippet to the other page template and update the field ID. Alternatively
+we can create a custom <classname>FocusBehavior</classname> that adds the
+necessary JavaScript to a target Field:
+</para>
+
+<programlisting language="java">
+    public class FocusBehavior implements Behavior {
+
+        public void preGetHeadElements(Control control) {
+            String id = control.getId();
+            JsScript jsScript = new JsScript("document.getElementById('" + id + "').focus();");
+
+            // Set script to execute as soon as browser dom is ready. NOTE: The
+            // JavaScript logic determining when the DOM is ready is added by
+            // the Form control, through the script '/click/control.js'.
+            script.setExecuteOnDomReady(true);
+
+            // Add the JavaScript element to the Control
+            control.getHeadElements().add(jsScript);
+        }
+
+        ...
+    } </programlisting>
+
+        <para>Below is an example using the <classname>FocusBehavior</classname>:
+        </para>
+
+<programlisting language="java">
+    public class MyPage extends Page {
+
+    private Form form = new Form("form");
+    private TextField nameField = new TextField("nameField");
+
+        public MyPage() {
+            addControl(form);
+            form.add(nameField);
+
+            // Create the custom behavior
+            FocusBehavior focus = new FocusBehavior();
+
+            // Add the behavior to the field
+            nameField.addBehavior(focus);
+        }
+    } </programlisting>
+
+    <para>At runtime the <emphasis>nameField</emphasis> will be registered with
+    the <classname>ControlRegistry</classname> when the <classname>FocusBehavior</classname>
+    is added to the field.
+    </para>
+
+    <para>Before the Control's HEAD elements are rendered, Click will invoke the
+    <classname>FocusBehavior</classname> <emphasis>interceptor method</emphasis>,
+    <ulink url="../../click-api/org/apache/click/Behavior.html#preGetHeadElements(org.apache.click.Control)">preGetHeadElements(Control)</ulink>,
+    passing the <emphasis>nameField</emphasis> as an argument.
+    </para>
+
+    <para>The FocusBehavior <methodname>preGetHeadElements</methodname> method
+    will add the JavaScript code to the Field HEAD elements which will be rendered
+    as part of the server response.
+    </para>
+
+    <para>Our JavaScript snippet is executed by the browser as soon as the DOM
+    is ready, in other words <emphasis>after</emphasis> our nameField has been
+    rendered. Focus will be set on the <emphasis>nameField</emphasis>.
+</para>
+
+    </sect2>
+</sect1>
 </chapter>

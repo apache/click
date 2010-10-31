@@ -52,23 +52,23 @@ and return a result without reloading the whole page.
   <para><emphasis role="bold">Please note:</emphasis> Click is responsible
   for handling server-side requests. It is up to you to develop the client-side
   logic necessary to make the Ajax request, process the server response
-  and handle errors. Fortunately this step is quite easy since Click is a
-  stateless framework and Page URLs are obvious and transparent.
-  </para>
+  and handle errors. This is easier than it sounds though as there is a wide
+  range of free JavaScript libraries and plugins available to help develop
+  rich HTML front-ened. Since Click is a stateless framework and Page URLs
+  are bookmarkable, it is easy to integrate Click with existing JavaScript
+  technologies such as:
 
-  <para>It is also possible to write custom Behaviors (covered later) that renders
-  the client-side code necessary to initiate Ajax requests and handle Ajax responses
-  and errors. In fact once you become familiar Click's Ajax handling, you will
-  likely create custom Behaviors to streamline and encapsulate your client-side
-  code.
-  </para>
-
-  <para><emphasis role="bold">Also note:</emphasis> Click doesn't care what
-  client-side technology you use. You can use pure JavaScript or one of the
-  popular JavaScript libraries such as:
-  <ulink url="http://www.jquery.com">jQuery</ulink>,
-  <ulink url="http://www.prototypejs.org/">Prototype</ulink>,
+    <ulink url="http://www.jquery.com">jQuery</ulink>,
+  <ulink url="http://www.prototypejs.org/">Prototype</ulink> and
   <ulink url="http://mootools.net/">MooTools</ulink> to name a few.
+  </para>
+
+  <para>It is also possible to write custom
+  <ulink url="../../click-api/org/apache/click/ajax/AjaxBehavior.html">AjaxBehaviors</ulink>
+  (covered later) that renders the client-side code necessary to initiate Ajax
+  requests and handle Ajax responses and errors. In fact once you become familiar
+  Click's Ajax handling, you will likely create custom AjaxBehaviors to
+  streamline and encapsulate your client-side code.
   </para>
 
   <para>In this chapter we'll look at the Ajax support provided by Click. There
@@ -77,51 +77,53 @@ and return a result without reloading the whole page.
 
   <itemizedlist>
     <listitem>
-      <para><link linkend="ajax-behaviors">Ajax Behaviors</link> - a Behavior
-      can change how a Control behave at runtime, allowing the Control to handle
-      and process Ajax requests. Behaviors are added to Controls through
-      <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#addBehavior(org.apache.click.Behavior)">AbstractControl.addBehavior()</ulink>
+      <para><link linkend="ajax-behavior">AjaxBehavior</link> - AjaxBehavior
+      is a specialized
+      <ulink url="../../click-api/org/apache/click/Behavior.html">Behavior</ulink>
+      that enables Controls to handle and respond to Ajax requests
       </para>
     </listitem>
 
     <listitem>
       <para><link linkend="ajax-page-action">Page Actions</link> - Page Actions
       was covered <link linkend="page-actions">earlier</link> and provides a
-      popular way to handle and process Ajax requests
+      simple way to handle and respond to Ajax requests
       </para>
     </listitem>
   </itemizedlist>
 
   </sect1>
 
-  <sect1 id="ajax-behaviors" remap="h2">
-    <title>Ajax Behaviors</title>
+  <sect1 id="ajax-behavior" remap="h2">
+    <title>AjaxBehavior</title>
 
-    <para><ulink url="../../click-api/org/apache/click/Behavior.html">Behaviors</ulink>
-    can change how Controls behave at runtime. The default Behavior implementation,
-    <ulink url="../../click-api/org/apache/click/ajax/AjaxBehavior.html">AjaxBehavior</ulink>,
-    can be added to a Control, enabling that control to handle, process and respond
-    to Ajax requests.
+    <para><ulink url="ajax-behavior">AjaxBehavior</ulink> is an interface that
+    extends Behavior (covered <link linkend="behavior">earlier</link>) and
+    adds the ability to handle and process incoming Ajax requests.
     </para>
 
-    <para>
-    Behaviors are added to controls through
-    <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#addBehavior(org.apache.click.Behavior)">AbstractControl.addBehavior()</ulink>
-    and the same Behavior can be shared by multiple Controls.
+    <para>Click also provides a default AjaxBehavior implementation,
+    <ulink url="../../click-api/org/apache/click/ajax/DefaultAjaxBehavior.html">DefaultAjaxBehavior</ulink>.
+    Using this class you only need to implement the methods you are interested in.
     </para>
 
-    <para>Behaviors provides an
-    <ulink url="../../click-api/org/apache/click/Behavior.html#onAction(org.apache.click.Control)">onAction</ulink>
+
+    <para>AjaxBehaviors, like Behaviors, are added to controls
+    through the <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#addBehavior(org.apache.click.Behavior)">AbstractControl.addBehavior()</ulink>
+    method.
+    </para>
+
+    <para>AjaxBehaviors provides an
+    <ulink url="../../click-api/org/apache/click/ajax/AjaxBehavior.html#onAction(org.apache.click.Control)">onAction</ulink>
     method (similar to <classname>ActionListener</classname>) that is invoked to
-    handle and process the Ajax request. The <methodname>onAction</methodname>
+    handle Ajax requests. The <methodname>onAction</methodname>
     method returns an <ulink url="../../click-api/org/apache/click/ActionResult.html">ActionResult</ulink>
-    containing the data rendered to the browser. In addition Behaviors provides
-    <literal>interceptor</literal> methods to decorate and enhance the Control.
+    containing the data to be rendered to the browser.
     </para>
 
-    <para>The <classname>Control</classname>,
-    <classname>Behavior</classname> and <classname>ActionResult</classname>
-    class is depicted in the figure below.
+    <para>The <classname>Control</classname>, <classname>Behavior</classname>,
+    <classname>AjaxBehavior</classname> and <classname>ActionResult</classname>
+    classes are depicted in the figure below.
     </para>
 
     <figure id="ajax-behavior-class-diagram">
@@ -133,102 +135,62 @@ and return a result without reloading the whole page.
       </inlinemediaobject>
     </figure>
 
-    <para>The Control contains a <classname>Set</classname> that holds the
-    <classname>Behaviors</classname> added to the <classname>Control</classname>.
-    The Control interface exposes the following methods for handling Ajax requests:
+    <para>The following method is exposed by Control in order to handle Ajax
+    requests:
     </para>
 
     <itemizedlist>
       <listitem>
         <para>
-          <ulink url="../../click-api/org/apache/click/Control.html#getBehaviors()">getBehaviors()</ulink>
-          - returns the Control's Set of Behaviors
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <ulink url="../../click-api/org/apache/click/Control.html#hasBehaviors()">hasBehaviors()</ulink>
-          - returns true if the Control has any Behaviors.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <ulink url="../../click-api/org/apache/click/Control.html#isAjaxTarget(org.apache.click.Context)">isAjaxTarget()</ulink>
+          <ulink url="../../click-api/org/apache/click/Control.html#isAjaxTarget(org.apache.click.Context)">isAjaxTarget(Context)</ulink>
           - Returns true if the control is the Ajax request <literal>target</literal>,
           false otherwise. The <literal>Ajax target control</literal> is the Control
-          which <methodname>onProcess</methodname> method will be invoked. The most
-          common way to target a specific server side control is to give it an
+          which <methodname>onProcess</methodname> method will be invoked. Other
+          controls won't be processed. The most common way to target a specific
+          server side control is to give it an
           <ulink url="../../click-api/org/apache/click/control/AbstractControl.html#setId(java.lang.String)">HTML ID</ulink>
-          attribute, that is then passed as an Ajax request parameter to the server.
+          attribute, which is then passed as an Ajax request parameter to the server.
           More on this later.
         </para>
       </listitem>
     </itemizedlist>
 
-    <para>The Behavior interface is covered next:
+    <para>The Behavior interface has been covered <link linkend="behavior-class-diagram">already</link>
+    so we'll look at AjaxBehavior next:
     </para>
 
     <itemizedlist>
       <listitem>
         <para>
-          <ulink url="../../click-api/org/apache/click/Behavior.html#onAction(org.apache.click.Control)">onAction()</ulink>
-          - the Behavior action method for handling Ajax requests.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <ulink url="../../click-api/org/apache/click/Behavior.html#isRequestTarget(org.apache.click.Context)">isRequestTarget()</ulink>
-          - determines whether the behavior is the request target or not. Click
-          will only invoke <methodname>onAction</methodname> if
-          <methodname>isRequestTarget()</methodname> returns true. This method
+          <ulink url="../../click-api/org/apache/click/Behavior.html#isAjaxTarget(org.apache.click.Context)">isAjaxTarget(Context)</ulink>
+          - determines whether the AjaxBehavior is the request target or not. Click
+          will only invoke the AjaxBehavior <methodname>onAction</methodname> method
+          if <methodname>isAjaxTarget</methodname> returns true. This
           allows for fine grained control over the exection of the <methodname>onAction</methodname>
           method.
         </para>
       </listitem>
       <listitem>
         <para>
-          <ulink url="../../click-api/org/apache/click/Behavior.html#preResponse(org.apache.click.Control)">preResponse()</ulink>
-          - defines an interceptor method that is invoked before the response is written.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <ulink url="../../click-api/org/apache/click/Behavior.html#preGetHeadElements(org.apache.click.Control)">preGetHeadElements()</ulink>
-          - defines an interceptor method that is invoked after <methodname>preResponse()</methodname>
-          but before the <classname>Control</classname> <methodname>getHeadElements()</methodname>
-          is called.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <ulink url="../../click-api/org/apache/click/Behavior.html#preDestroy(org.apache.click.Control)">preDestroy()</ulink>
-          - defines an interceptor method that is invoked before the
-          <classname>Control</classname> <methodname>onDestroy()</methodname>
-          event handler. This interceptor method allows the behavior to cleanup
-          any resources.
+          <ulink url="../../click-api/org/apache/click/ajax/AjaxBehavior.html#onAction(org.apache.click.Control)">onAction(Control)</ulink>
+          - the AjaxBehavior action method for handling Ajax requests.
         </para>
       </listitem>
     </itemizedlist>
 
-    <para>The <classname>Behavior</classname> provides an <methodname>onAction</methodname>
-    method for handling Ajax requests. The <methodname>onAction</methodname>
-    method returns an <classname>ActionResult</classname> containing the data that
-    is rendered to the browser.
+    <para>The <methodname>onAction</methodname> method returns an
+    <classname>ActionResult</classname> instance, containing the data to be
+    rendered to the browser. ActionResult can return any type of response: String,
+    byte array or a Velocity (Freemarker) template.
     </para>
 
-    <para>The <methodname>isRequestTarget</methodname> method controls whether or
+    <para>The <methodname>isAjaxTarget</methodname> method controls whether or
     not the <methodname>onAction</methodname> method should be invoked.
-    <methodname>isRequestTarget()</methodname> is typically used to target the
-    Behavior for specific JavaScript events. For example a Behavior might only
-    handle <literal>onclick</literal> or <literal>onblur</literal> JavaScript events.
-    For this to work the client-side code initiating the Ajax request should pass
+    <methodname>isAjaxTarget()</methodname> is typically used to target the
+    AjaxBehavior for specific JavaScript events. For example an AjaxBehavior might
+    only handle <literal>click</literal> or <literal>blur</literal> JavaScript events.
+    Of course the client-side code initiating the Ajax request should pass
     the JavaScript event to the server.
-    </para>
-
-    <para>The <classname>Behavior</classname> also provides a number of interceptor
-    methods for specific <classname>Control</classname> life cycle events. These
-    interceptor methods can be implemented to process and decorate the control or
-    its children.
     </para>
 
     <para>Lastly the <classname>ActionResult</classname> methods are shown below:
@@ -269,25 +231,20 @@ and return a result without reloading the whole page.
       </listitem>
     </itemizedlist>
 
-    <para>An ActionResult is returned by the Behavior <methodname>onAction</methodname>
-    method and contains the data to render to the browser. ActionResult can return
-    any response to the browser: String, byte array or a template.
-    </para>
-
   </sect1>
 
   <sect1 id="ajax-behavior-execution" remap="h2">
-    <title>Ajax Behavior Execution</title>
+    <title>AjaxBehavior Execution</title>
 
-    <para>The execution sequence for an <classname>Ajax Behavior</classname>
-    being processed and rendered is illustrated in the figure below. You'll note
+    <para>The execution sequence for an <classname>AjaxBehavior</classname>
+    being processed and rendered is illustrated in the figure below. Note
     that it is similar to a normal HTTP request flow. The main differences are that
-    Ajax requests do not have an onGet or onRender event. Another difference
-    is that only the <literal>Ajax target Control</literal> is processed.
+    Ajax requests do not have an onGet or onRender event and that only the
+    <literal>Ajax target Control</literal> is processed.
     </para>
 
     <figure id="ajax-behavior-sequence-diagram">
-      <title>Ajax Behavior Sequence Diagram</title>
+      <title>AjaxBehavior Sequence Diagram</title>
       <inlinemediaobject>
         <imageobject>
           <imagedata fileref="images/ajax/ajax-request-sequence-diagram.png" format="PNG" scale="58"/>
@@ -311,64 +268,92 @@ and return a result without reloading the whole page.
     create and setup controls and <classname>Behaviors</classname>.
     <methodname>onInit</methodname> is an ideal place to add <classname>Behaviors</classname>
     to <classname>Controls</classname>. When a Behavior is added to a Control that
-    Control is automatically registered with the ClickServlet as a potential
-    <literal>Ajax target control</literal>.
+    Control is automatically registered with the
+    <ulink url="../../click-api/org/apache/click/ControlRegistry.html">ControlRegistry</ulink>
+    as a potential
+    <ulink url="../../click-api/org/apache/click/ControlRegistry.html#registerAjaxTarget(org.apache.click.Control)">Ajax target control</ulink>.
     </para>
 
     <para>The next step is to find and process the <literal>Ajax target control</literal>.
     First the ClickServlet needs to determine which Control is the Ajax target.
-    To resolve the target Control the ClickServlet iterates over all the registered
-    Controls and invokes each Control's method: <methodname>isAjaxTarget()</methodname>.
-    The first control which isAjaxTarget() returns true will be resolved as the
-    Ajax target. The most common way for a Control to be resolved as the Ajax
-    target is to check if its ID attribute is passed as a request parameter. It
-    is then up the client-side JavaScript code that initiated the Ajax request
-    to ensure the Control ID is sent as part of the Ajax request. Note, if the
+    To resolve the target Control the ClickServlet iterates over all the Controls
+    registered with the ControlsRegistry and invokes each Control's
+    <methodname>isAjaxTarget</methodname> method. The first control which
+    <methodname>isAjaxTarget</methodname> method returns <emphasis>true</emphasis>,
+    will be the Ajax target.
+    </para>
+
+    <para>The simplest <methodname>isAjaxTarget</methodname> implementation is
+    to return <emphasis>true</emphasis> if the Control ID is passed as a request
+    parameter. The client-side JavaScript code that initiate the Ajax request,
+    must ensure the Control ID is sent as part of the Ajax request. Note, if the
     ClickServlet cannot find a target control, no response is rendered.
     </para>
 
     <para>If an Ajax target control is found, the ClickServlet will invoke
     that control's <methodname>onProcess</methodname> method. Other controls are not
-    processed. It is important to note that processing a control for an Ajax request
-    has the same requirements as processing a control for a non-Ajax request.
-    In other words, in addition to the Control ID (or other identifier), the Ajax
-    request must send all the parameters normally expected by the target Control
-    and its children. For example, a Field expects it's <literal>name/value</literal>
-    parameter while an ActionLink expects its <literal>actionLink/name</literal>
-    parameter.
+    processed.
     </para>
 
-    <para>Next, the target control <classname>Behaviors</classname> are fired.
-    The ClickServlet iterates over the control Behaviors and for each
-    Behavior invoke the method: <methodname>isRequestTarget()</methodname>. Each
-    Behavior which <methodname>isRequestTarget</methodname> method returns true
-    will have their <methodname>onAction</methodname> method invoked to handle
-    the Ajax request. The Behavior <methodname>onAction</methodname> method
-    returns an <classname>ActionResult</classname> that is rendered to the browser.
+    <para>
+    <emphasis role="bold">Please note:</emphasis> since Click is a stateless framework,
+    processing a control for an Ajax request has the same requirements as processing
+    a control for a non-Ajax request. In other words, in addition to the Control
+    ID (or other identifier), the Ajax request must include all the parameters
+    normally expected by the target Control and its children. For example, a
+    Field expects it's <literal>name/value</literal> parameter while an ActionLink
+    expects its <literal>actionLink/name</literal> parameter.
+    Putting it another way, if for example an ActionLink is clicked and
+    we only pass the link's HTML ID parameter, Click will identify the link
+    as the Ajax target control and invoke the link's
+    <methodname>onProcess</methodname> method. The
+    <methodname>onProcess</methodname> method is where the link's values are
+    bound and if it was clicked it's action event (AjaxBehavior) will be fired.
+    An ActionLink is "clicked" if the <literal>actionLink</literal> parameter
+    has a value matching the link's name. If no <literal>actionLink</literal>
+    parameter is present, the server doesn't know that the link was clicked
+     and won't fire the AjaxBehavior's <methodname>onAction</methodname> event.
+    So for an Ajax request it is still necessary to pass all the parameters
+    normally expected by the ActionLink <methodname>onProcess</methodname> method.
+    For ActionLink that means the Ajax request must include it's
+    <literal>href</literal> parameters while a Form would require all it's
+    Field <literal>name/value</literal> pairs.
     </para>
 
-    <para>Please note: multiple Behaviors can handle the Ajax request, however
-    only the first ActionResult returned will be rendered to the browser. If an
-    onAction method returns null, the ActionResult from the next Behavior onAction
-    method will be used. If all onAction methods returns null, no response is
-    rendered.
+    <para>Next, the target control <classname>AjaxBehaviors</classname> are
+    fired. The ClickServlet iterates over the control AjaxBehaviors and for each
+    AjaxBehavior invoke the method: <methodname>isAjaxTarget</methodname>.
+    Each AjaxBehavior which <methodname>isAjaxTarget</methodname> method returns
+    <emphasis>true</emphasis>, will have their <methodname>onAction</methodname>
+    method invoked to handle the Ajax request. The AjaxBehavior's
+    <methodname>onAction</methodname> method returns an
+    <classname>ActionResult</classname> that is rendered to the browser.
+    </para>
+
+    <para>Please note: multiple AjaxBehaviors can handle the same Ajax request,
+    however only the first <classname>ActionResult</classname> returned will be
+    rendered to the browser. If an <methodname>onAction</methodname> method
+    returns <literal>null</literal>, the <classname>ActionResult</classname>
+    returned by the next AjaxBehavior's onAction method will be used. If all
+    onAction methods returns null, no response is rendered.
     </para>
 
     <para>Next the ActionResult is rendered to the browser.</para>
 
     <para>The final step in this sequence is invoking each control's onDestroy()
-    method and lastly invoke the Page's onDestroy() method.</para>
+    method and lastly invoke the Page onDestroy() method.</para>
   </sect1>
 
   <sect1 id="first-ajax-example" remap="h2">
     <title>First Ajax Example</title>
 
-    <para>In this first example we demonstrate how to handle Ajax requests with an
-    <symbol>AjaxBehavior</symbol>. AjaxBehavior is the default implementation of
-    the <classname>Behavior</classname> interface. Below we show the Page class,
-    <classname>AjaxBehaviorPage.java</classname>, and how an
-    <symbol>AjaxBehavior</symbol> is added to an ActionLink called link with an
-    HTML ID <varname>link-id</varname>. The AjaxBehavior <varname>onAction</varname>
+    <para>In this first example we demonstrate how to handle Ajax requests with a
+    <symbol>DefaultAjaxBehavior</symbol>. DefaultAjaxBehavior is the default
+    implementation of the <classname>AjaxBehavior</classname> interface. Below is
+    the Page class, <classname>AjaxBehaviorPage.java</classname>, showing a
+    <symbol>DefaultAjaxBehavior</symbol> added to an ActionLink, called
+    <emphasis>link</emphasis> with an HTML ID of <varname>link-id</varname>.
+    The <symbol>DefaultAjaxBehavior</symbol> <varname>onAction</varname>
     method will be invoked to handle the Ajax request. The <varname>onAction</varname>
     method returns an <token>ActionResult</token> that is rendered to the browser.
     </para>
@@ -384,9 +369,9 @@ and return a result without reloading the whole page.
 
         addControl(link);
 
-        // Add an Ajax behavior to the link. The behavior will be invoked when the
+        // Add a DefaultAjaxBehavior to the link. The DefaultAjaxBehavior will be invoked when the
         // link is clicked.
-        link.addBehavior(new <symbol>AjaxBehavior()</symbol> { <co id="co-ajax-behavior" linkends="ca-ajax-behavior"/>
+        link.addBehavior(new <symbol>DefaultAjaxBehavior()</symbol> { <co id="co-ajax-behavior" linkends="ca-ajax-behavior"/>
 
             @Override
             public <token>ActionResult</token> <varname>onAction</varname>(Control source) { <co id="co-ajax-behavior-method" linkends="ca-ajax-behavior-method"/>
@@ -405,42 +390,42 @@ and return a result without reloading the whole page.
 
     <calloutlist>
       <callout arearefs="co-link-id" id="ca-link-id">
-        <para>We assign to the ActionLink the HTML ID: <varname>link-id</varname>.
+        <para>We assign to ActionLink the HTML ID: <varname>link-id</varname>.
         The ID will be used to identify the ActionLink as the
         <literal>Ajax target control</literal>. The client-side JavaScript code
         is expected to send this ID as an Ajax request parameter.
         </para>
       </callout>
       <callout arearefs="co-ajax-behavior" id="ca-ajax-behavior">
-        <para>Next we add an <symbol>AjaxBehavior</symbol> to the ActionLink.
-        Adding a Behavior to a control will also register that control as a
-        potential <literal>Ajax target control</literal>.
+        <para>Next we add the <symbol>DefaultAjaxBehavior</symbol> to the ActionLink.
+        Adding a Behavior to a control will also register that control with the
+        <ulink url="../../click-api/org/apache/click/ControlRegistry.html">ControlRegistry</ulink>
+        as a potential <literal>Ajax target control</literal>.
         </para>
       </callout>
       <callout arearefs="co-ajax-behavior-method" id="ca-ajax-behavior-method">
-        <para>We also implement the Behavior <varname>onAction</varname> method
-        in order to handle the Ajax request.
+        <para>We also implement the <symbol>DefaultAjaxBehavior</symbol>
+        <varname>onAction</varname> method in order to handle the Ajax request.
         </para>
       </callout>
       <callout arearefs="co-ajax-action-result" id="ca-ajax-action-result">
-        <para>Lastly we return an <token>ActionResult</token> containing HTML
-        content that is rendered to the browser.
+        <para>Finally we return an <token>ActionResult</token> containing some
+        HTML content that is rendered to the browser.
         </para>
       </callout>
     </calloutlist>
 
-    <para>Next we show the Page template <literal>ajax-behavior.htm</literal>,
-    containing the client-side JavaScript code that will initiate an Ajax request.
+    <para>Below we show the Page template <literal>ajax-behavior.htm</literal>,
+    containing the client-side JavaScript code that will initiate the Ajax request.
     </para>
 
-    <para><emphasis role="bold">Please note:</emphasis> we assume you are familiar
-    with basic JavaScript skills. In this example we use the <ulink url="http://www.jquery.com">jQuery</ulink>
-    JavaScript library, but any other library can be used, even raw JavaScript.
-    Also see the online Click examples for more Ajax examples.
+    <para><emphasis role="bold">Note:</emphasis> the example below uses the
+    <ulink url="http://www.jquery.com">jQuery</ulink> library, but any other
+    library can be used. Also see the online Click examples for more Ajax demos.
     </para>
 
     <programlisting language="javascript">&lt;!-- // $link is a Velocity reference that will render an ActionLink at runtime. --&gt;
-Click $link to call the server using Ajax.
+Click $link to make an Ajax request to the server.
 
 &lt;div id="result"&gt;
     &lt;!-- // Ajax response will be set here --&gt;
@@ -476,13 +461,14 @@ Click $link to call the server using Ajax.
         // attribute as request parameters
         var extraData = link.attr('id') + '=1'; <co id="co-ajax-link-id" linkends="ca-ajax-link-id"/>
 
-        // The Ajax URL is set to the link 'href' URL which contains all the link default parameters, including it's name/value pair: 'actionLink=link'
+        // The Ajax URL is set to the link 'href' URL which contains all the link default parameters,
+        // including it's name/value pair: 'actionLink=link'
         var url = link.attr('href'); <co id="co-ajax-jq-href" linkends="ca-ajax-jq-href"/>
 
         jQuery.get(url, extraData, function(data) {
-            // 'data' is the response returned from the server
+            // 'data' is the response returned by the server
 
-            // We update the div with the ID 'result' and set its content to the server response
+            // Find the div element with the id "result", and set its content to the server response
             jQuery("#result").html("&lt;p&gt;" + data + "&lt;/p&gt;"); <co id="co-ajax-jq-response" linkends="ca-ajax-jq-response"/>
         });
     }
@@ -493,33 +479,34 @@ Click $link to call the server using Ajax.
         <para>We start off with a jQuery <ulink url="http://api.jquery.com/ready/">ready</ulink>
         function that is executed as soon as the browser DOM has been loaded.
         This ensures that the function body is executed <literal>before</literal>
-        the page images are downloaded, which leads to a more responsive GUI.
+        the page images are downloaded, which results in a more responsive UI.
         </para>
       </callout>
       <callout arearefs="co-ajax-link-id" id="ca-ajax-link-id">
-        <para>Next is an important step. We need to pass the link <varname>HTML ID</varname>
+        <para>This is an important step. We need to pass the link's <varname>HTML ID</varname>
         attribute as request parameters in order for the server to identify <literal>which</literal>
         server-side control is the <literal>Ajax target</literal>. We use the jQuery
         <literal>attr</literal> function to lookup the link's <varname>HTML ID</varname>
-        attribute. Click does not care about <literal>value</literal> of the
-        parameter, so we pass in a value of <varname>1</varname>, but any other
-        value could be used.
+        attribute. Click doesn't actually use the <literal>value</literal> of the
+        parameter, it is enough that the <literal>name</literal> is present.
+        In this example we pass a value of <varname>1</varname>, but any
+        other value could be used, or even left out.
         </para>
       </callout>
       <callout arearefs="co-ajax-jq-href" id="ca-ajax-jq-href">
-        <para>Next step is also important. We can't just pass in the Control HTML ID.
-        Although the HTML ID identifies which Control is the target control, that
-        only instructs Click to process the control. The Control <methodname>onProcess</methodname>
-        method is where the Control values are bound, validated and action event
-        is fired. So what is needed is to pass all the parameters normally expected
-        by the ActionLink <methodname>onProcess</methodname> method. In the case
-        of ActionLink, that means the Ajax request must include it's <varname>href</varname>
-        parameters. The easiest way to do this is to use jQuery to set the Ajax
-        <literal>URL</literal> to the ActionLink <varname>href</varname> value.
+        <para>This is another important step. In addition to the ActionLink HTML ID
+        pararameter, we also need to send the link's <varname>href</varname>
+        parameters, otherwise the  ActionLink <methodname>onProcess</methodname>
+        method won't fire the <classname>AjaxBehavior</classname>
+        <methodname>onAction</methodname> event. An easy way to achieve this to
+        set the Ajax <varname>URL</varname> to the ActionLink
+        <varname>href</varname> value.
         </para>
       </callout>
       <callout arearefs="co-ajax-jq-response" id="ca-ajax-jq-response">
-        <para>Lastly TODO
+        <para>Finally we the jQuery
+        <ulink url="http://api.jquery.com/html/#html2">html</ulink> function
+        to update the <emphasis>div</emphasis> content with the server response.
         </para>
       </callout>
     </calloutlist>
@@ -540,33 +527,33 @@ Click $link to call the server using Ajax.
 [Click] [trace]    invoked: 'link' ActionLink.onInit()
 [Click] [trace]    <token>the following controls have been registered as potential Ajax targets:</token>
 [Click] [trace]       ActionLink: name='link'
-[Click] [trace]    invoked: 'link' ActionLink.<symbol>isAjaxTarget()</symbol> : <varname>true</varname> (target Ajax control found)
+[Click] [trace]    invoked: 'link' ActionLink.<symbol>isAjaxTarget()</symbol> : <varname>true</varname> (Ajax target control found)
 [Click] [trace]    invoked: 'link' ActionLink.<symbol>onProcess()</symbol> : <varname>true</varname>
-[Click] [trace]    <token>processing Behaviors for control: 'link' ActionLink</token>
+[Click] [trace]    <token>processing AjaxBehaviors for control: 'link' ActionLink</token>
 [Click] [trace]       invoked: AjaxBehaviorPage.1.<symbol>isRequestTarget()</symbol> : <varname>true</varname>
 [Click] [trace]       invoked: AjaxBehaviorPage.1.<symbol>onAction()</symbol> : <varname>ActionResult</varname> (ActionResult will be rendered)
-[Click] [info ]    <token>renderActionResult</token> (text/html) - 0 ms
+[Click] [info ]    <token>renderActionResult</token> (text/html) - 1 ms
 [Click] [trace]    invoked: 'link' ActionLink.onDestroy()
 [Click] [trace]    invoked: AjaxBehaviorPage.onDestroy()
-[Click] [info ] handleRequest:  /ajax/ajax-behavior.htm - 68 ms</literallayout>
+[Click] [info ] handleRequest:  /ajax/ajax-behavior.htm - 25 ms</literallayout>
 
       <para>First thing we notice is that the request is recognized as an
       <symbol>Ajax request</symbol>.
       </para>
 
-      <para>We can also see from the log that the Ajax request sent the parameters,
+      <para>We can also see from the log that the Ajax request passed the parameters,
       <varname>link-id=1</varname> and <varname>actionLink=link</varname> to the server.
       <varname>link-id</varname> is the ActionLink HTML ID attribute that will be used
       to identify the Control as the <literal>Ajax request target</literal>.
       </para>
 
-      <para>Next the log prints which controls have been registered as <literal>potential
-      Ajax targets</literal>. In our example we added a Behavior to the ActionLink
+      <para>Next, the log prints which controls have been registered as <literal>potential
+      Ajax targets</literal>. In our example we added an AjaxBehavior to the ActionLink
       so the ActionLink is registered as an Ajax target.
       </para>
 
-      <para>Next the ActionLink#<symbol>isAjaxTarget</symbol> was invoked and because
-      it returned <varname>true</varname>, ActionLink will be set as the
+      <para>Next, the ActionLink#<symbol>isAjaxTarget</symbol> was invoked and because
+      it returned <varname>true</varname>, ActionLink will be used as the
       <literal>Ajax target control.</literal>
       </para>
 
@@ -574,16 +561,16 @@ Click $link to call the server using Ajax.
       <symbol>onProcess</symbol> is called.
       </para>
 
-      <para>Next, the log shows it found the <literal>target Behavior</literal>.
-      by invoking Behavior#<symbol>isRequestTarget</symbol> method, which
-      also returned <varname>true</varname>.
+      <para>Next, the log shows it found the <literal>target AjaxBehavior</literal>
+      by invoking the AjaxBehavior#<symbol>isRequestTarget</symbol> method, which
+      returned <varname>true</varname>.
       </para>
 
-      <para>The Behavior#<symbol>onAction</symbol> is invoked which returns an
+      <para>The AjaxBehavior#<symbol>onAction</symbol> is invoked which returns an
       <varname>ActionResult</varname>.
       </para>
 
-      <para>Finally the <varname>ActionResult</varname> is rendered to the browser.
+      <para>Finally, the <varname>ActionResult</varname> is rendered to the browser.
       </para>
     </sect2>
 
@@ -591,10 +578,12 @@ Click $link to call the server using Ajax.
       <title>Ajax Trace Log - No Ajax Target Control Found</title>
 
       <para>Below we show a log trace where no <literal>Ajax target control</literal>
-      is found. The most common reason that can happen is if the JavaScript code
+      is found. The most common reason this can occur is if the JavaScript code
       that initiates the Ajax request does not send the necessary request parameters
-      to identify the <literal>Ajax target control</literal>. Another common reason
-      is if no Behavior was added to a Control.
+      to identify the <literal>Ajax target control</literal>. Another problem is
+      if no Control is registered ith the <classname>ControlRegistry</classname>,
+      thus there is no potential <literal>Ajax target control</literal>. This can
+      occur if no Behavior is added to a Control.
       </para>
 
       <literallayout>[Click] [debug] GET http://localhost:8080/mycorp/ajax/ajax-behavior.htm
@@ -611,29 +600,29 @@ Click $link to call the server using Ajax.
 [Click] [trace]    invoked: AjaxBehaviorPage.onDestroy()
 [Click] [info ] handleRequest:  /ajax/ajax-behavior.htm - 87 ms</literallayout>
 
-      <para>Notice from the log that the only Ajax request parameters sent was
+      <para>Notice from the log that the only request parameters sent is
       <varname>actionLink=link</varname>.
       </para>
 
-      <para>Next the log prints which controls have been registered as <literal>potential
-      Ajax targets</literal>. In our example we added a Behavior to the ActionLink
-      so the ActionLink is registered as an Ajax target.
+      <para>Next, the log prints which controls have been registered as <literal>potential
+      Ajax targets</literal>. In our example we added an AjaxBehavior to the
+      ActionLink so the ActionLink is registered as an Ajax target.
       </para>
 
-      <para>Next we see that <symbol>*no*</symbol> Ajax target control was found.
-      The reason is because the ActionLink ID attribute, <literal>link-id</literal>,
-      does not match the incoming request parameter, <literal>actionLink=link</literal>,
+      <para>Finally, we see that <symbol>*no*</symbol> Ajax target control was found.
+      This is because the ActionLink ID attribute, <varname>link-id</varname>,
+      does not match the incoming request parameter, <varname>actionLink=link</varname>,
       hence the ActionLink was not identified as the <literal>Ajax request target</literal>
       and no response is rendered.
       </para>
     </sect2>
 
-    <sect2 id="ajax-trace-log-no-target-behavior" remap="h3">
-      <title>Ajax Trace Log - No Target Behavior Found</title>
+    <sect2 id="ajax-trace-log-no-target-ajax-behavior" remap="h3">
+      <title>Ajax Trace Log - No Target AjaxBehavior Found</title>
 
-      <para>Below we show a log trace where a no <literal>target behavior</literal>
-      is found. The reason this can happen is if the <symbol>isRequestTarget</symbol>
-      of the <classname>Behaviors</classname> added to the Control returns false.
+      <para>Below we show a log trace where no <literal>target AjaxBehavior</literal>
+      is found. This can occur if no <classname>AjaxBehavior's</classname>
+      <symbol>isRequestTarget</symbol> returns true.
       </para>
 
       <literallayout>[Click] [debug] GET http://localhost:9999/mycorp/ajax/ajax-behavior.htm
@@ -646,11 +635,11 @@ Click $link to call the server using Ajax.
 [Click] [trace]    invoked: 'link' ActionLink.onInit()
 [Click] [trace]    the following controls have been registered as potential Ajax targets:
 [Click] [trace]       ActionLink: name='link'
-[Click] [trace]    invoked: 'link' ActionLink.isAjaxTarget() : true (target Ajax control found)
+[Click] [trace]    invoked: 'link' ActionLink.isAjaxTarget() : true (Ajax target control found)
 [Click] [trace]    invoked: 'link' ActionLink.onProcess() : true
-[Click] [trace]    <token>processing Behaviors for control: 'link' ActionLink</token>
+[Click] [trace]    <token>processing AjaxBehaviors for control: 'link' ActionLink</token>
 [Click] [trace]       invoked: AjaxBehaviorPage.1.<symbol>isRequestTarget()</symbol> : <varname>false</varname>
-[Click] [trace]    <symbol>*no*</symbol> target behavior found for <varname>'link' ActionLink</varname> - invoking Behavior.isRequestTarget() returned false for all behaviors
+[Click] [trace]    <symbol>*no*</symbol> target AjaxBehavior found for <varname>'link' ActionLink</varname> - invoking AjaxBehavior.isRequestTarget() returned false for all AjaxBehaviors
 [Click] [trace]    invoked: 'link' ActionLink.onDestroy()
 [Click] [trace]    invoked: AjaxBehaviorPage.onDestroy()
 [Click] [info ] handleRequest:  /ajax/ajax-behavior.htm - 80 ms
@@ -660,12 +649,12 @@ Click $link to call the server using Ajax.
       <varname>link-id=1</varname> and <varname>actionLink=link</varname> to the server.
       </para>
 
-      <para>Next we notice that the Behavior <symbol>isRequestTarget()</symbol>
+      <para>Next we notice that the AjaxBehavior <symbol>isRequestTarget()</symbol>
       returned <varname>false</varname>.
       </para>
 
-      <para>Finally we see that <symbol>*no*</symbol> target behavior was found
-      for the <literal>Ajax target control</literal> <varname>'link' ActionLink</varname>.
+      <para>Finally we see that <symbol>*no*</symbol> target AjaxBehavior was found
+      for the <literal>Ajax target control</literal>, <varname>'link' ActionLink</varname>.
       </para>
     </sect2>
 
@@ -674,18 +663,22 @@ Click $link to call the server using Ajax.
   <sect1 id="ajax-page-action" remap="h2">
     <title>Ajax Page Action</title>
 
-    <para>Page Actions are page methods that can be invoked directly from the
-    browser. So instead of handling the Ajax request with a Control, the request
-    is handled with a page method. Like Behaviors, page methods returns an
-    ActionResult containing the Ajax data rendered to the browser.
+    <para>Page Actions are <emphasis>page methods</emphasis> that can be invoked
+    directly from the browser. So instead of handling the Ajax request with a
+    Control, the request is handled with a <emphasis>page method</emphasis>.
     </para>
 
-    <para>Page Actions have already been covered earlier. Please click
-    <link linkend="page-actions">here</link> for a detailed discussion.
+    <para>Similar to the AjaxBehavior <methodname>onAction</methodname> method,
+    <emphasis>page methods</emphasis> returns an <classname>ActionResult</classname>
+    containing the data to render to the browser.
+    </para>
+
+    <para>Page Actions have been covered earlier. Please click
+    <link linkend="page-actions">here</link> for a detailed overview.
     </para>
 
     <para>Using a Page Action for handling an Ajax request is no different from
-    a normal HTTP request. To invoke a Page Action, specify the parameter
+    the normal HTTP version. To invoke a Page Action, specify the parameter
     <varname>"pageAction"</varname> and the name of the page method eg:
     <symbol>"onLinkClicked"</symbol>.
     </para>
@@ -697,7 +690,7 @@ Click $link to call the server using Ajax.
 
 <programlisting language="javascript">jQuery('#some-link-id').click(function() {
 
-  // The page url
+  // The ViewCustomerPage url
   var url = '$context/view-customers.htm';
 
   // Specify the pageAction parameter and page method to invoke: 'onLinkClicked'
@@ -733,8 +726,8 @@ Click $link to call the server using Ajax.
 } </programlisting>
 
     <para>The <token>ActionResult</token> contains the data that is rendered to the
-    client browser. In the example above, the action result is an HTML snippet with
-    today's date.
+    client browser. In the example above, the action result is an HTML snippet
+    containing todays date.
     </para>
 
   </sect1>
@@ -763,12 +756,12 @@ Click $link to call the server using Ajax.
 
     <para>Here is an example showing how to return different types of responses:</para>
 
-    <programlisting language="java">public class ViewCustomerPage extends Page {
+    <programlisting language="java">public class HelloWorldPage extends Page {
 
     ...
 
     public void onInit() {
-        Behavior htmlBehavior = new AjaxBehavior() {
+        Behavior htmlBehavior = new DefaultAjaxBehavior() {
             public ActionResult onAction() {
                 String html = "&lt;h1&gt;Hello world&lt;/h1&gt;";
 
@@ -780,7 +773,7 @@ Click $link to call the server using Ajax.
 
         ...
 
-        Behavior xmlBehavior = new AjaxBehavior() {
+        Behavior xmlBehavior = new DefaultAjaxBehavior() {
             public ActionResult onAction() {
                 String xml = "&lt;payload&gt;Hello world&lt;/payload&gt;";
 
@@ -792,7 +785,7 @@ Click $link to call the server using Ajax.
 
         ...
 
-        Behavior jsonBehavior = new AjaxBehavior() {
+        Behavior jsonBehavior = new DefaultAjaxBehavior() {
             public ActionResult onAction() {
                 String json = "{\"value\": \"Hello world\"}";
 
