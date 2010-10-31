@@ -288,7 +288,7 @@ public class ActionEventDispatcher {
         if (logger.isTraceEnabled()) {
             String sourceClassName = ClassUtils.getShortClassName(source.getClass());
             HtmlStringBuffer buffer = new HtmlStringBuffer();
-            buffer.append("   processing Behaviors for control: '");
+            buffer.append("   processing AjaxBehaviors for control: '");
             buffer.append(source.getName()).append("' ");
             buffer.append(sourceClassName);
             logger.trace(buffer.toString());
@@ -360,8 +360,6 @@ public class ActionEventDispatcher {
 
         if (logger.isTraceEnabled()) {
 
-            //if (hasAjaxBehavior) {
-
                 // continueProcessing is true if no AjaxBehavior was the target
                 // of the request
               if (continueProcessing) {
@@ -371,10 +369,9 @@ public class ActionEventDispatcher {
                 buffer.append("   *no* target AjaxBehavior found for '");
                 buffer.append(source.getName()).append("' ");
                 buffer.append(sourceClassName);
-                buffer.append(" - invoking AjaxBehavior.isAjaxTarget() returned false for all ajax behaviors");
+                buffer.append(" - invoking AjaxBehavior.isAjaxTarget() returned false for all AjaxBehaviors");
                 logger.trace(buffer.toString());
             }
-             //}
         }
 
         // Ajax requests stops further processing
