@@ -1,4 +1,4 @@
-window_sizes 1440 838 371 718 800 82
+window_sizes 1436 838 371 718 800 82
 windows_style
 diagrams
   sequencediagram_ref 128002 // post-sequence-diagram
@@ -7,8 +7,8 @@ diagrams
     1063 682 120 4 216 0
   classdiagram_ref 147458 // ajax-class-diagram
     1063 682 100 4 0 0
-  sequencediagram_ref 147586 // detailed-ajax-request-sequence-diagram
-    1063 682 110 4 0 0
+  active  sequencediagram_ref 147586 // detailed-ajax-request-sequence-diagram
+    1063 682 110 4 216 0
   sequencediagram_ref 131714 // control-post-sequence-diagram
     846 545 120 4 0 0
   classdiagram_ref 132994 // control-class-diagram
@@ -23,19 +23,19 @@ diagrams
     833 531 100 4 0 0
   sequencediagram_ref 130562 // get-sequence-diagram
     1059 682 120 4 0 0
-  active  classdiagram_ref 160770 // behavior-class-diagram
+  classdiagram_ref 160770 // behavior-class-diagram
     1063 682 100 4 0 0
 end
 show_stereotypes
 marked
   class_ref 137346 // ConfigService
 end
-selected classrelation_ref 143874 // (#behaviors)
+selected sequencediagram_ref 147586 // detailed-ajax-request-sequence-diagram
 open
   classview_ref 139650 // ajax
   classview_ref 146178 // behavior
   classview_ref 131714 // classes
-  class_ref 144770 // Behavior
-  class_ref 164482 // AbstractControl
+  
+  package_ref 131586 // click
 end
 end

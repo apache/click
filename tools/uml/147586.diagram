@@ -1,81 +1,81 @@
 format 74
 
 classinstance 146434 class_ref 129794 // Control
-  drawing_mode class  name ""   mortal  xyz 391.542 87.9631 2000 life_line_z 2000
+  drawing_mode class  name ""   mortal  xyz 392.342 87.9631 2000 life_line_z 2000
 classinstance 146562 class_ref 129538 // Browser
-  drawing_mode actor  name ""   xyz 3.62858 3.83015 2005 life_line_z 2000
+  drawing_mode actor  name ""   xyz 4.02858 3.6 2005 life_line_z 2000
 classinstance 146690 class_ref 129666 // Page
- write_horizontally yes  name ""   mortal  xyz 253.281 83.7329 2000 life_line_z 2000
+ write_horizontally yes  name ""   mortal  xyz 253.381 83.5329 2000 life_line_z 2000
 classinstance 146818 class_ref 128002 // ClickServlet
- write_horizontally no  name ""   xyz 74.8815 3.62193 2000 life_line_z 2000
+ write_horizontally no  name ""   xyz 74.5815 3.8 2000 life_line_z 2000
 classinstance 151042 class_ref 144898 // ActionResult
- color orange  name ""   mortal  xyz 756.496 398.989 2000 life_line_z 2000
+ color orange  name ""   mortal  xyz 756.396 399.289 2000 life_line_z 2000
 classinstance 151426 class_ref 151426 // ControlRegistry
- color orange  name ""   mortal  xyz 535.795 87.3371 2000 life_line_z 2000
+ color orange  name ""   mortal  xyz 535.495 87.0371 2000 life_line_z 2000
 classinstance 155522 class_ref 157954 // AjaxBehavior
- color orange  name ""   mortal  xyz 692.025 93.5111 2000 life_line_z 2000
+ color orange  name ""   mortal  xyz 692.325 94.3111 2000 life_line_z 2000
 durationcanvas 146946 classinstance_ref 146434 // :Control
-  xyzwh 410 229.03 2010 11 25
+  xyzwh 411 229.3 2010 11 25
 end
 durationcanvas 147586 classinstance_ref 146690 // :Page
-  xyzwh 272 631.981 2010 11 25
+  xyzwh 272 631.9 2010 11 25
 end
 durationcanvas 147714 classinstance_ref 146818 // :ClickServlet
-  xyzwh 104 55.4397 2010 11 595
+  xyzwh 104 55.6 2010 11 595
   overlappingdurationcanvas 147842
-    xyzwh 110 68.466 2020 11 545
+    xyzwh 110 68 2020 11 545
     overlappingdurationcanvas 147970
-      xyzwh 116 559.392 2030 11 39
+      xyzwh 116 559.4 2030 11 39
     end
     overlappingdurationcanvas 152706
-      xyzwh 116 266.932 2030 11 99
+      xyzwh 116 266.5 2030 11 99
     end
     overlappingdurationcanvas 154754
-      xyzwh 116 396.096 2030 11 79
+      xyzwh 116 396.5 2030 11 79
     end
   end
 end
 durationcanvas 148098 classinstance_ref 146690 // :Page
-  xyzwh 272 172.767 2010 11 47
+  xyzwh 272 172.5 2010 11 47
 end
 durationcanvas 148610 classinstance_ref 146434 // :Control
-  xyzwh 410 609.551 2010 11 25
+  xyzwh 411 609.3 2010 11 25
 end
 durationcanvas 148738 classinstance_ref 146562 // :Browser
-  xyzwh 22 58.9865 2010 11 595
+  xyzwh 23 58.5 2010 11 595
 end
 durationcanvas 148866 classinstance_ref 146690 // :Page
-  xyzwh 272 134.4 2010 11 25
+  xyzwh 272 134.8 2010 11 25
 end
 durationcanvas 151170 classinstance_ref 151042 // :ActionResult
-  xyzwh 788 575.705 2010 11 25
+  xyzwh 788 575.1 2010 11 25
 end
 durationcanvas 151938 classinstance_ref 146434 // :Control
-  xyzwh 410 182.469 2010 11 29
+  xyzwh 411 182.8 2010 11 29
 end
 durationcanvas 152194 classinstance_ref 151426 // :ControlRegistry
   color orange
-  xyzwh 575 188.274 2010 11 25
+  xyzwh 574 188 2010 11 25
 end
 durationcanvas 153730 classinstance_ref 146434 // :Control
-  xyzwh 410 342.702 2010 11 49
+  xyzwh 411 342.8 2010 11 49
   overlappingdurationcanvas 153986
-    xyzwh 416 360.91 2020 11 25
+    xyzwh 417 360.6 2020 11 25
   end
 end
 durationcanvas 154242 classinstance_ref 151426 // :ControlRegistry
-  xyzwh 575 279.099 2010 11 25
+  xyzwh 574 279.3 2010 11 25
 end
 durationcanvas 154498 classinstance_ref 146434 // :Control
-  xyzwh 410 303.932 2010 11 25
+  xyzwh 411 303.5 2010 11 25
 end
 durationcanvas 155650 classinstance_ref 155522 // :AjaxBehavior
   color orange
-  xyzwh 725 392.354 2010 11 25
+  xyzwh 726 408.8 2010 11 25
 end
 durationcanvas 155906 classinstance_ref 155522 // :AjaxBehavior
   color orange
-  xyzwh 725 443.124 2010 11 25
+  xyzwh 726 443.5 2010 11 25
 end
 msg 148994 synchronous
   from durationcanvas_ref 147842
@@ -104,7 +104,7 @@ reflexivemsg 150146 synchronous
   to durationcanvas_ref 147970
   yz 559 3005 explicitmsg "renderActionResult"
   show_full_operations_definition default drawing_language default show_context_mode default
-  label_xy 149 549
+  label_xy 149 556
 msg 150402 return
   from durationcanvas_ref 147714
   to durationcanvas_ref 148738
@@ -150,7 +150,7 @@ reflexivemsg 152834 synchronous
   to durationcanvas_ref 152706
   yz 265 2035 explicitmsg "resolveAjaxTargetControl"
   show_full_operations_definition default drawing_language default show_context_mode default
-  label_xy 148 259
+  label_xy 148 262
 msg 153858 synchronous
   from durationcanvas_ref 152706
   to durationcanvas_ref 153730
@@ -161,7 +161,7 @@ reflexivemsg 154114 synchronous
   to durationcanvas_ref 153986
   yz 359 2025 explicitmsg "dispatchAjaxBehaviors"
   show_full_operations_definition default drawing_language default show_context_mode default
-  label_xy 450 354
+  label_xy 450 353
 msg 154370 synchronous
   from durationcanvas_ref 152706
   to durationcanvas_ref 154242
@@ -176,15 +176,15 @@ msg 154626 synchronous
   label_xy 291 298
 reflexivemsg 154882 synchronous
   to durationcanvas_ref 154754
-  yz 396 2035 explicitmsg "fireAjaxBehaviors"
+  yz 395 2035 explicitmsg "fireAjaxBehaviors"
   show_full_operations_definition default drawing_language default show_context_mode default
-  label_xy 136 391
+  label_xy 148 394
 msg 155778 synchronous
   from durationcanvas_ref 154754
   to durationcanvas_ref 155650
-  yz 400 3005 explicitmsg "isAjaxTarget : boolean"
+  yz 416 3005 explicitmsg "isAjaxTarget : boolean"
   show_full_operations_definition default drawing_language default show_context_mode default
-  label_xy 587 386
+  label_xy 610 404
 msg 156034 synchronous
   from durationcanvas_ref 154754
   to durationcanvas_ref 155906
