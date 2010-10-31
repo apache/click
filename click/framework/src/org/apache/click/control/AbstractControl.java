@@ -237,19 +237,25 @@ public abstract class AbstractControl implements Control {
 
     /**
      * Returns <tt>true</tt> if this control has any
-     * <tt>Behavior</tt>s registered.
-     *
-     * @return <tt>true</tt> if this control has any
      * <tt>Behavior</tt>s registered, <tt>false</tt> otherwise.
+     *
+     * @return <tt>true</tt> if this control has any <tt>Behavior</tt>s registered,
+     * <tt>false</tt> otherwise
      */
     public boolean hasBehaviors() {
         return (behaviors != null && !behaviors.isEmpty());
     }
 
     /**
-     * Add the given {@link org.apache.click.Behavior Behavior} to the control.
+     * Add the given <tt>Behavior</tt> to the control's Set of
+     * {@link #getBehaviors() Behaviors}.
+     * <p/>
+     * In addition, the Control will be registered with the
+     * {@link org.apache.click.ControlRegistry#registerAjaxTarget(org.apache.click.Control) ControlRegistry}
+     * as a potential <tt>Ajax target control</tt> and to have it's
+     * <tt>Behaviors</tt> processed by the Click runtime.
      *
-     * @param behavior the behavior to add
+     * @param behavior the <tt>Behavior</tt> to add
      */
     public void addBehavior(Behavior behavior) {
         if (behavior == null) {
@@ -265,18 +271,19 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Removes form this Control a <tt>behavior</tt>.
+     * Remove the given <tt>Behavior</tt> from the Control's Set of
+     * {@link #getBehaviors() Behaviors}.
      *
-     * @param behavior the <tt>behavior</tt> to remove.
+     * @param behavior the <tt>Behavior</tt> to remove
      */
     public void removeBehavior(Behavior behavior) {
         getBehaviors().remove(behavior);
     }
 
     /**
-     * Returns the list with all available behaviors for this control.
+     * Returns the Set of <tt>Behaviors</tt> for this control.
      *
-     * @return the list with this control's behaviors.
+     * @return the Set of <tt>Behaviors</tt> for this control
      */
     public Set<Behavior> getBehaviors() {
         if (behaviors == null) {
