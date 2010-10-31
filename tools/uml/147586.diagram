@@ -1,0 +1,194 @@
+format 74
+
+classinstance 146434 class_ref 129794 // Control
+  drawing_mode class  name ""   mortal  xyz 391.542 87.9631 2000 life_line_z 2000
+classinstance 146562 class_ref 129538 // Browser
+  drawing_mode actor  name ""   xyz 3.62858 3.83015 2005 life_line_z 2000
+classinstance 146690 class_ref 129666 // Page
+ write_horizontally yes  name ""   mortal  xyz 253.281 83.7329 2000 life_line_z 2000
+classinstance 146818 class_ref 128002 // ClickServlet
+ write_horizontally no  name ""   xyz 74.8815 3.62193 2000 life_line_z 2000
+classinstance 151042 class_ref 144898 // ActionResult
+ color orange  name ""   mortal  xyz 756.496 398.989 2000 life_line_z 2000
+classinstance 151426 class_ref 151426 // ControlRegistry
+ color orange  name ""   mortal  xyz 535.795 87.3371 2000 life_line_z 2000
+classinstance 155522 class_ref 157954 // AjaxBehavior
+ color orange  name ""   mortal  xyz 692.025 93.5111 2000 life_line_z 2000
+durationcanvas 146946 classinstance_ref 146434 // :Control
+  xyzwh 410 229.03 2010 11 25
+end
+durationcanvas 147586 classinstance_ref 146690 // :Page
+  xyzwh 272 631.981 2010 11 25
+end
+durationcanvas 147714 classinstance_ref 146818 // :ClickServlet
+  xyzwh 104 55.4397 2010 11 595
+  overlappingdurationcanvas 147842
+    xyzwh 110 68.466 2020 11 545
+    overlappingdurationcanvas 147970
+      xyzwh 116 559.392 2030 11 39
+    end
+    overlappingdurationcanvas 152706
+      xyzwh 116 266.932 2030 11 99
+    end
+    overlappingdurationcanvas 154754
+      xyzwh 116 396.096 2030 11 79
+    end
+  end
+end
+durationcanvas 148098 classinstance_ref 146690 // :Page
+  xyzwh 272 172.767 2010 11 47
+end
+durationcanvas 148610 classinstance_ref 146434 // :Control
+  xyzwh 410 609.551 2010 11 25
+end
+durationcanvas 148738 classinstance_ref 146562 // :Browser
+  xyzwh 22 58.9865 2010 11 595
+end
+durationcanvas 148866 classinstance_ref 146690 // :Page
+  xyzwh 272 134.4 2010 11 25
+end
+durationcanvas 151170 classinstance_ref 151042 // :ActionResult
+  xyzwh 788 575.705 2010 11 25
+end
+durationcanvas 151938 classinstance_ref 146434 // :Control
+  xyzwh 410 182.469 2010 11 29
+end
+durationcanvas 152194 classinstance_ref 151426 // :ControlRegistry
+  color orange
+  xyzwh 575 188.274 2010 11 25
+end
+durationcanvas 153730 classinstance_ref 146434 // :Control
+  xyzwh 410 342.702 2010 11 49
+  overlappingdurationcanvas 153986
+    xyzwh 416 360.91 2020 11 25
+  end
+end
+durationcanvas 154242 classinstance_ref 151426 // :ControlRegistry
+  xyzwh 575 279.099 2010 11 25
+end
+durationcanvas 154498 classinstance_ref 146434 // :Control
+  xyzwh 410 303.932 2010 11 25
+end
+durationcanvas 155650 classinstance_ref 155522 // :AjaxBehavior
+  color orange
+  xyzwh 725 392.354 2010 11 25
+end
+durationcanvas 155906 classinstance_ref 155522 // :AjaxBehavior
+  color orange
+  xyzwh 725 443.124 2010 11 25
+end
+msg 148994 synchronous
+  from durationcanvas_ref 147842
+  to durationcanvas_ref 148098
+  yz 178 3010 explicitmsg "onInit"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 176 168
+msg 149250 synchronous
+  from durationcanvas_ref 147842
+  to durationcanvas_ref 148866
+  yz 142 3010 explicitmsg "onSecurityCheck : boolean"
+  show_full_operations_definition yes drawing_language uml show_context_mode default
+  label_xy 128 130
+msg 149506 synchronous
+  from durationcanvas_ref 148738
+  to durationcanvas_ref 147714
+  yz 61 3010 explicitmsg "doGet"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 43 51
+reflexivemsg 149634 synchronous
+  to durationcanvas_ref 147842
+  yz 68 3005 explicitmsg "handleRequest"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 146 67
+reflexivemsg 150146 synchronous
+  to durationcanvas_ref 147970
+  yz 559 3005 explicitmsg "renderActionResult"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 149 549
+msg 150402 return
+  from durationcanvas_ref 147714
+  to durationcanvas_ref 148738
+  yz 521 2020 unspecifiedmsg
+  show_full_operations_definition default drawing_language default show_context_mode default
+msg 150658 synchronous
+  from durationcanvas_ref 147714
+  to durationcanvas_ref 147586
+  yz 637 2015 explicitmsg "onDestroy"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 161 626
+msg 150786 synchronous
+  from durationcanvas_ref 147842
+  to durationcanvas_ref 146946
+  yz 237 3010 explicitmsg "onInit"
+  show_full_operations_definition yes drawing_language uml show_context_mode default
+  label_xy 334 223
+msg 150914 synchronous
+  from durationcanvas_ref 147714
+  to durationcanvas_ref 148610
+  yz 616 2015 explicitmsg "onDestroy"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 319 605
+msg 151298 synchronous
+  from durationcanvas_ref 147970
+  to durationcanvas_ref 151170
+  yz 582 2035 explicitmsg "render"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 745 572
+msg 152066 synchronous
+  from durationcanvas_ref 148098
+  to durationcanvas_ref 151938
+  yz 187 3015 explicitmsg "addBehavior(Behavior)"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 295 174
+msg 152322 synchronous
+  from durationcanvas_ref 151938
+  to durationcanvas_ref 152194
+  yz 196 2015 explicitmsg "registerAjaxTarget(Control)"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 436 182
+reflexivemsg 152834 synchronous
+  to durationcanvas_ref 152706
+  yz 265 2035 explicitmsg "resolveAjaxTargetControl"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 148 259
+msg 153858 synchronous
+  from durationcanvas_ref 152706
+  to durationcanvas_ref 153730
+  yz 348 2035 explicitmsg "onProcess : boolean"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 298 333
+reflexivemsg 154114 synchronous
+  to durationcanvas_ref 153986
+  yz 359 2025 explicitmsg "dispatchAjaxBehaviors"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 450 354
+msg 154370 synchronous
+  from durationcanvas_ref 152706
+  to durationcanvas_ref 154242
+  yz 284 3005 explicitmsg "getAjaxTargetControls"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 448 271
+msg 154626 synchronous
+  from durationcanvas_ref 152706
+  to durationcanvas_ref 154498
+  yz 310 3005 explicitmsg "isAjaxTarget : boolean"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 291 298
+reflexivemsg 154882 synchronous
+  to durationcanvas_ref 154754
+  yz 396 2035 explicitmsg "fireAjaxBehaviors"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 136 391
+msg 155778 synchronous
+  from durationcanvas_ref 154754
+  to durationcanvas_ref 155650
+  yz 400 3005 explicitmsg "isAjaxTarget : boolean"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 587 386
+msg 156034 synchronous
+  from durationcanvas_ref 154754
+  to durationcanvas_ref 155906
+  yz 447 3005 explicitmsg "onAction(Control) : ActionResult"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 559 430
+end

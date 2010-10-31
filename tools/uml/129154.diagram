@@ -17,26 +17,26 @@ classcanvas 129410 class_ref 132354 // Object
   xyz 360 466 2000
 end
 relationcanvas 130050 relation_ref 142210 // #controls
-  decenter_begin 575
+  decenter_begin 574
   decenter_end 179
-  from ref 128002 z 2001 label "#controls" italic xyz 172.5 182 2001 to ref 128642
+  from ref 128002 z 2001 label "#controls" italic xyz 172 182 2001 to ref 128642
   no_role_a no_role_b
   multiplicity_a_pos 402 210 3000 multiplicity_b_pos 176 210 3000
 end
 relationcanvas 130690 relation_ref 149506 // <association>
-  decenter_begin 857
+  decenter_begin 856
   from ref 128002 z 2001 to ref 128642
   no_role_a no_role_b
-  multiplicity_a_pos 402 308 3000 multiplicity_b_pos 173 312 3000
+  multiplicity_a_pos 402 308 3000 multiplicity_b_pos 176 308 3000
 end
 relationcanvas 131074 relation_ref 149762 // #model
   decenter_begin 850
-  from ref 128002 z 2001 label "#model" italic xyz 170 277.5 2001 to ref 129410
+  from ref 128002 z 2001 label "#model" italic xyz 170 277 2001 to ref 129410
   no_role_a no_role_b
-  multiplicity_a_pos 343 458 3000 multiplicity_b_pos 203 305 3000
+  multiplicity_a_pos 355 479 3000 multiplicity_b_pos 176 312 3000
 end
 relationcanvas 131202 relation_ref 149890 // <unidirectional association>
-  decenter_begin 197
+  decenter_begin 196
   from ref 128002 z 2001 to ref 128130
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b

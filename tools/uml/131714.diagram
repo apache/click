@@ -1,22 +1,22 @@
 format 74
 
 classinstance 128002 class_ref 128002 // ClickServlet
- write_horizontally no  name ""   xyz 88.6321 4.6 2000 life_line_z 2000
+ write_horizontally no  name ""   xyz 88.2321 5 2000 life_line_z 2000
 classinstance 128898 class_ref 129538 // Browser
-  drawing_mode actor  name ""   xyz 19.6902 5.9 2005 life_line_z 2000
+  drawing_mode actor  name ""   xyz 20.4902 5.7 2005 life_line_z 2000
 classinstance 129666 class_ref 129666 // Page
- write_horizontally yes  name ""   mortal  xyz 258.7 97.0436 2000 life_line_z 2000
+ write_horizontally yes  name ""   mortal  xyz 259.3 96.8436 2000 life_line_z 2000
 classinstance 129794 class_ref 129794 // Control
- color orange  drawing_mode class  name ""   mortal  xyz 406.172 97.1274 2000 life_line_z 2000
+ color orange  drawing_mode class  name ""   mortal  xyz 406.172 96.9274 2000 life_line_z 2000
 durationcanvas 129026 classinstance_ref 128898 // :Browser
-  xyzwh 38 51.7 2010 11 474
+  xyzwh 38 51.4 2010 11 474
 end
 durationcanvas 129154 classinstance_ref 128002 // :ClickServlet
-  xyzwh 117 56.2 2010 11 472
+  xyzwh 118 56.2 2010 11 472
   overlappingdurationcanvas 135682
-    xyzwh 123 70 2020 11 401
+    xyzwh 124 70 2020 11 401
     overlappingdurationcanvas 135810
-      xyzwh 129 344 2030 11 114
+      xyzwh 130 344 2030 11 114
     end
   end
 end
@@ -24,7 +24,7 @@ durationcanvas 129922 classinstance_ref 129666 // :Page
   xyzwh 277 139 2010 11 24
 end
 durationcanvas 130178 classinstance_ref 129666 // :Page
-  xyzwh 277 169 2010 11 24
+  xyzwh 278 169 2010 11 24
 end
 durationcanvas 131202 classinstance_ref 129794 // :Control
   color orange
@@ -35,20 +35,20 @@ durationcanvas 132482 classinstance_ref 129794 // :Control
   xyzwh 425 229 2010 11 24
 end
 durationcanvas 132994 classinstance_ref 129666 // :Page
-  xyzwh 277 259 2010 11 24
+  xyzwh 278 259 2010 11 24
 end
 durationcanvas 133250 classinstance_ref 129666 // :Page
-  xyzwh 277 289 2010 11 24
+  xyzwh 278 289 2010 11 24
 end
 durationcanvas 133506 classinstance_ref 129794 // :Control
   color orange
-  xyzwh 425 313.4 2010 11 24
+  xyzwh 425 312.8 2010 11 24
 end
 durationcanvas 134018 classinstance_ref 129666 // :Page
-  xyzwh 277 376 2010 11 24
+  xyzwh 278 376.4 2010 11 24
 end
 durationcanvas 134274 classinstance_ref 129666 // :Page
-  xyzwh 276 407 2010 11 24
+  xyzwh 278 406.6 2010 11 24
 end
 durationcanvas 134530 classinstance_ref 129794 // :Control
   color orange
@@ -59,17 +59,17 @@ durationcanvas 135938 classinstance_ref 129794 // :Control
   xyzwh 425 469 2010 11 24
 end
 durationcanvas 136194 classinstance_ref 129666 // :Page
-  xyzwh 277 494 2010 11 24
+  xyzwh 278 494 2010 11 24
 end
 msg 129282 synchronous
   from durationcanvas_ref 129026
   to durationcanvas_ref 129154
-  yz 58.9 3010 explicitmsg "doPost"
+  yz 58 3010 explicitmsg "doPost"
   show_full_operations_definition default drawing_language default show_context_mode default
-  label_xy 56 48.9
+  label_xy 56 48
 reflexivemsg 129538 synchronous
   to durationcanvas_ref 135682
-  yz 69 3005 explicitmsg "handleRequest"
+  yz 70 3005 explicitmsg "handleRequest"
   show_full_operations_definition default drawing_language default show_context_mode default
   label_xy 161 67
 msg 130050 synchronous
@@ -116,7 +116,7 @@ msg 133634 synchronous
   label_xy 334 308
 reflexivemsg 133890 synchronous
   to durationcanvas_ref 135810
-  yz 342 3005 explicitmsg "renderTemplate"
+  yz 344 3005 explicitmsg "renderTemplate"
   show_full_operations_definition default drawing_language default show_context_mode default
   label_xy 164 339
 msg 134146 synchronous
@@ -152,7 +152,7 @@ msg 136322 synchronous
 msg 136450 return
   from durationcanvas_ref 129154
   to durationcanvas_ref 129026
-  yz 513.9 2020 unspecifiedmsg
+  yz 513 2020 unspecifiedmsg
   show_full_operations_definition default drawing_language default show_context_mode default
 preferred_whz 0 0 1.2
 end

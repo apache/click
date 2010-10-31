@@ -1,28 +1,28 @@
 format 74
 
 classinstance 128002 class_ref 128002 // ClickServlet
- write_horizontally no  name ""   xyz 89.0321 5.6 2000 life_line_z 2000
+ write_horizontally no  name ""   xyz 89.8321 6.2 2000 life_line_z 2000
 classinstance 128898 class_ref 129538 // Browser
-  drawing_mode actor  name ""   xyz 19.2902 6.5 2005 life_line_z 2000
+  drawing_mode actor  name ""   xyz 18.8902 6.5 2005 life_line_z 2000
 classinstance 129666 class_ref 129666 // Page
- color orange write_horizontally yes  name ""   mortal  xyz 264.8 92.2 2000 life_line_z 2000
+ color orange write_horizontally yes  name ""   mortal  xyz 264.6 92 2000 life_line_z 2000
 classinstance 129794 class_ref 129794 // Control
-  drawing_mode class  name ""   mortal  xyz 407.172 92.9274 2000 life_line_z 2000
+  drawing_mode class  name ""   mortal  xyz 407.372 92.9274 2000 life_line_z 2000
 durationcanvas 129026 classinstance_ref 128898 // :Browser
-  xyzwh 38 53.4 2010 11 480
+  xyzwh 37 53.4 2010 11 480
 end
 durationcanvas 129154 classinstance_ref 128002 // :ClickServlet
-  xyzwh 119 53.4 2010 11 480
+  xyzwh 118 53.4 2010 11 480
   overlappingdurationcanvas 135682
-    xyzwh 125 70 2020 11 401
+    xyzwh 124 70 2020 11 401
     overlappingdurationcanvas 135810
-      xyzwh 131 345.2 2030 11 114
+      xyzwh 130 345.2 2030 11 114
     end
   end
 end
 durationcanvas 129922 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 282 141.4 2010 11 24
+  xyzwh 283 141.4 2010 11 24
 end
 durationcanvas 130178 classinstance_ref 129666 // :Page
   color orange
@@ -36,14 +36,14 @@ durationcanvas 132482 classinstance_ref 129794 // :Control
 end
 durationcanvas 132994 classinstance_ref 129666 // :Page
   color orange
-  xyzwh 282 259 2010 11 24
+  xyzwh 283 259 2010 11 24
 end
 durationcanvas 133250 classinstance_ref 129666 // :Page
   color orange
   xyzwh 283 290.2 2010 11 24
 end
 durationcanvas 133506 classinstance_ref 129794 // :Control
-  xyzwh 425 319 2010 11 24
+  xyzwh 426 319 2010 11 24
 end
 durationcanvas 134018 classinstance_ref 129666 // :Page
   color orange
@@ -71,7 +71,7 @@ msg 129282 synchronous
   label_xy 58 47
 reflexivemsg 129538 synchronous
   to durationcanvas_ref 135682
-  yz 69 3005 explicitmsg "handleRequest"
+  yz 70 3005 explicitmsg "handleRequest"
   show_full_operations_definition default drawing_language default show_context_mode default
   label_xy 161 67
 msg 130050 synchronous
@@ -118,7 +118,7 @@ msg 133634 synchronous
   label_xy 334 314
 reflexivemsg 133890 synchronous
   to durationcanvas_ref 135810
-  yz 343 3005 explicitmsg "renderTemplate"
+  yz 345 3005 explicitmsg "renderTemplate"
   show_full_operations_definition default drawing_language default show_context_mode default
   label_xy 167 337
 msg 134146 synchronous

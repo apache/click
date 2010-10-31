@@ -23,19 +23,19 @@ diagrams
     833 531 100 4 0 0
   sequencediagram_ref 130562 // get-sequence-diagram
     1059 682 120 4 0 0
-  active  sequencediagram_ref 140930 // page-action-sequence-diagram
-    833 531 100 4 0 0
-  sequencediagram_ref 160770 // ajax-request-sequence-diagram
-    846 545 100 4 0 0
+  active  classdiagram_ref 160770 // behavior-class-diagram
+    1063 682 100 4 0 0
 end
 show_stereotypes
 marked
   class_ref 137346 // ConfigService
 end
-selected sequencediagram_ref 140930 // page-action-sequence-diagram
+selected classrelation_ref 143874 // (#behaviors)
 open
-  classview_ref 129154 // pages
   classview_ref 139650 // ajax
+  classview_ref 146178 // behavior
   classview_ref 131714 // classes
+  class_ref 144770 // Behavior
+  class_ref 164482 // AbstractControl
 end
 end

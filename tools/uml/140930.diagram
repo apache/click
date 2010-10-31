@@ -1,0 +1,90 @@
+format 74
+
+classinstance 132738 class_ref 128002 // ClickServlet
+ write_horizontally no  name ""   xyz 87.6321 7.5 2000 life_line_z 2000
+classinstance 132866 class_ref 129538 // Browser
+  drawing_mode actor  name ""   xyz 13.2902 5.9 2005 life_line_z 2000
+classinstance 132994 class_ref 129666 // Page
+ color orange write_horizontally yes  name ""   mortal  xyz 298.5 75.3 2000 life_line_z 2000
+classinstance 137218 class_ref 144898 // ActionResult
+  name ""   mortal  xyz 368.9 75.3 2000 life_line_z 2000
+durationcanvas 133122 classinstance_ref 132994 // :Page
+  color orange
+  xyzwh 317 123 2010 11 24
+end
+durationcanvas 134530 classinstance_ref 132994 // :Page
+  color orange
+  xyzwh 317 337 2010 11 24
+end
+durationcanvas 134658 classinstance_ref 132866 // :Browser
+  xyzwh 32 52 2010 11 319
+end
+durationcanvas 134786 classinstance_ref 132738 // :ClickServlet
+  xyzwh 117 54 2010 11 318
+  overlappingdurationcanvas 134914
+    xyzwh 123 72 2020 11 269
+    overlappingdurationcanvas 135042
+      xyzwh 129 267 2030 11 42
+    end
+  end
+end
+durationcanvas 137346 classinstance_ref 132994 // :Page
+  color orange
+  xyzwh 317 167 2010 11 72
+end
+durationcanvas 138498 classinstance_ref 137218 // :ActionResult
+  color yellow
+  xyzwh 400 287 2010 11 25
+end
+msg 135170 synchronous
+  from durationcanvas_ref 134658
+  to durationcanvas_ref 134786
+  yz 58 3010 explicitmsg "doGet"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 54 48
+reflexivemsg 135298 synchronous
+  to durationcanvas_ref 135042
+  yz 267 3005 explicitmsg "renderActionResult"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 149 250
+reflexivemsg 135426 synchronous
+  to durationcanvas_ref 134914
+  yz 72 3005 explicitmsg "handleRequest"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 159 67
+msg 135810 return
+  from durationcanvas_ref 134786
+  to durationcanvas_ref 134658
+  yz 356 2020 unspecifiedmsg
+  show_full_operations_definition default drawing_language default show_context_mode default
+msg 136322 synchronous
+  from durationcanvas_ref 134786
+  to durationcanvas_ref 134530
+  yz 342 2015 explicitmsg "onDestroy"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 173 330
+msg 136962 synchronous
+  from durationcanvas_ref 134914
+  to durationcanvas_ref 133122
+  yz 127 3010 explicitmsg "onSecurityCheck : boolean"
+  show_full_operations_definition yes drawing_language uml show_context_mode default
+  label_xy 163 115
+msg 137474 synchronous
+  from durationcanvas_ref 134914
+  to durationcanvas_ref 137346
+  yz 172 2025 explicitmsg "performPageAction : ActionResult"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 143 160
+msg 138114 return
+  from durationcanvas_ref 137346
+  to durationcanvas_ref 134914
+  yz 221 2025 explicitmsg "ActionResult"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 201 207
+msg 138626 synchronous
+  from durationcanvas_ref 135042
+  to durationcanvas_ref 138498
+  yz 294 3010 explicitmsg "render"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 345 280
+end

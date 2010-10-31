@@ -1,0 +1,41 @@
+format 74
+
+classcanvas 128386 class_ref 129794 // Control
+  draw_all_relations default hide_attributes yes hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir no show_parameter_name no package_name_in_tab default class_drawing_mode class drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  hidden_operations
+    operation_ref 131330 // getContext
+    operation_ref 133122 // getHeadElements
+    operation_ref 132994 // getId
+    operation_ref 134530 // getMessages
+    operation_ref 132738 // getName
+    operation_ref 132866 // setName
+    operation_ref 134658 // getParent
+    operation_ref 134786 // setParent
+    operation_ref 134914 // onDeploy
+    operation_ref 128258 // onInit
+    operation_ref 128386 // onProcess
+    operation_ref 128514 // onRender
+    operation_ref 129282 // onDestroy
+    operation_ref 141442 // isAjaxTarget
+  xyzwh 30.2 13.8 2000 199 85
+end
+classcanvas 129666 class_ref 144770 // Behavior
+  draw_all_relations default hide_attributes yes hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir no show_parameter_name no package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 349.1 131.7 2000
+end
+classcanvas 130818 class_ref 164482 // AbstractControl
+  draw_all_relations default hide_attributes yes hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir no show_parameter_name no package_name_in_tab default class_drawing_mode class drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 48 140 2000
+end
+relationcanvas 130946 relation_ref 163202 // <generalisation>
+  from ref 130818 z 2001 to ref 128386
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 131202 relation_ref 163458 // #behaviors
+  decenter_begin 492
+  from ref 130818 z 2001 label "#behaviors" italic xyz 247.5 157 3000 to ref 129666
+  no_role_a no_role_b
+  multiplicity_a_pos 322 178 3000 multiplicity_b_pos 212 178 3000
+end
+end

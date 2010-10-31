@@ -1,0 +1,52 @@
+format 74
+
+classcanvas 128386 class_ref 129794 // Control
+  draw_all_relations default hide_attributes yes hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir no show_parameter_name no package_name_in_tab default class_drawing_mode class drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  hidden_operations
+    operation_ref 131330 // getContext
+    operation_ref 133122 // getHeadElements
+    operation_ref 132994 // getId
+    operation_ref 134530 // getMessages
+    operation_ref 132738 // getName
+    operation_ref 132866 // setName
+    operation_ref 134658 // getParent
+    operation_ref 134786 // setParent
+    operation_ref 134914 // onDeploy
+    operation_ref 128258 // onInit
+    operation_ref 128386 // onProcess
+    operation_ref 128514 // onRender
+    operation_ref 129282 // onDestroy
+    operation_ref 141570 // getBehaviors
+    operation_ref 141698 // hasBehaviors
+  xyzwh 14.4 16.1 2000 191 85
+end
+classcanvas 129538 class_ref 144898 // ActionResult
+  draw_all_relations default hide_attributes yes hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir no show_parameter_name no package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 345.3 305.1 2000
+end
+classcanvas 129666 class_ref 144770 // Behavior
+  draw_all_relations default hide_attributes yes hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir no show_parameter_name no package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  color yellow
+  xyz 319.2 23.2 2000
+end
+classcanvas 130306 class_ref 157954 // AjaxBehavior
+  draw_all_relations default hide_attributes yes hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir no show_parameter_name no package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 323.2 177.9 2000
+end
+relationcanvas 129922 relation_ref 142338 // #behaviors
+  decenter_begin 560
+  from ref 128386 z 2001 label "#behaviors" italic xyz 214.5 40 2001 to ref 129666
+  no_role_a no_role_b
+  multiplicity_a_pos 292 70 3000 multiplicity_b_pos 214 70 3000
+end
+relationcanvas 130562 relation_ref 156546 // <generalisation>
+  from ref 130306 z 2001 to ref 129666
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130690 relation_ref 156674 // <unidirectional association>
+  from ref 130306 z 2001 to ref 129538
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end
