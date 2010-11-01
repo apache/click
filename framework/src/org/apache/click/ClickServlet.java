@@ -614,7 +614,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         controlRegistry.processPreResponse(context);
-        controlRegistry.processPreGetHeadElements(context);
+        controlRegistry.processPreRenderHeadElements(context);
         performRender(page, context, actionResult);
     }
 
@@ -1816,7 +1816,7 @@ public class ClickServlet extends HttpServlet {
                 actionResult = performPageAction(page, pageAction, context);
 
                 controlRegistry.processPreResponse(context);
-                controlRegistry.processPreGetHeadElements(context);
+                controlRegistry.processPreRenderHeadElements(context);
 
                 renderActionResult(actionResult, page, context);
             }
@@ -1840,7 +1840,7 @@ public class ClickServlet extends HttpServlet {
                 // Ensure we execute the beforeResponse and beforeGetHeadElements
                 // for Ajax requests
                 controlRegistry.processPreResponse(context);
-                controlRegistry.processPreGetHeadElements(context);
+                controlRegistry.processPreRenderHeadElements(context);
 
                 actionResult = eventDispatcher.getActionResult();
 
@@ -1874,7 +1874,7 @@ public class ClickServlet extends HttpServlet {
                 }
 
                 controlRegistry.processPreResponse(context);
-                controlRegistry.processPreGetHeadElements(context);
+                controlRegistry.processPreRenderHeadElements(context);
                 performRender(page, context);
             }
         } else {

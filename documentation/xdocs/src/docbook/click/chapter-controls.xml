@@ -1174,7 +1174,7 @@ method, and the same Behavior can be shared by multiple Controls.
       </listitem>
       <listitem>
         <para>
-          <ulink url="../../click-api/org/apache/click/Behavior.html#preGetHeadElements(org.apache.click.Control)">preGetHeadElements(Control)</ulink>
+          <ulink url="../../click-api/org/apache/click/Behavior.html#preRenderHeadElements(org.apache.click.Control)">preRenderHeadElements(Control)</ulink>
           - defines an interceptor method that is invoked after <methodname>preResponse()</methodname>
           but before the <classname>Control</classname> <methodname>getHeadElements()</methodname>
           is called. This is a good place to add custom JavaScript or CSS elements
@@ -1231,7 +1231,7 @@ necessary JavaScript to a target Field:
 <programlisting language="java">
     public class FocusBehavior implements Behavior {
 
-        public void preGetHeadElements(Control control) {
+        public void preRenderHeadElements(Control control) {
             String id = control.getId();
             JsScript jsScript = new JsScript("document.getElementById('" + id + "').focus();");
 
@@ -1275,11 +1275,11 @@ necessary JavaScript to a target Field:
 
     <para>Before the Control's HEAD elements are rendered, Click will invoke the
     <classname>FocusBehavior</classname> <emphasis>interceptor method</emphasis>,
-    <ulink url="../../click-api/org/apache/click/Behavior.html#preGetHeadElements(org.apache.click.Control)">preGetHeadElements(Control)</ulink>,
+    <ulink url="../../click-api/org/apache/click/Behavior.html#preRenderHeadElements(org.apache.click.Control)">preRenderHeadElements(Control)</ulink>,
     passing the <emphasis>nameField</emphasis> as an argument.
     </para>
 
-    <para>The FocusBehavior <methodname>preGetHeadElements</methodname> method
+    <para>The FocusBehavior <methodname>preRenderHeadElements</methodname> method
     will add the JavaScript code to the Field HEAD elements which will be rendered
     as part of the server response.
     </para>

@@ -65,7 +65,7 @@ public class DefaultAjaxBehavior implements AjaxBehavior {
     public void preResponse(Control source) {
     }
 
-    public void preGetHeadElements(Control source) {
+    public void preRenderHeadElements(Control source) {
         // Guard against adding HEAD elements to more than one control
         if (headElementsProcessed) {
             return;

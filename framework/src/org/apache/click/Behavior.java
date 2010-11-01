@@ -31,7 +31,7 @@ package org.apache.click;
  *
  * <ul>
  * <li>preResponse - occurs before the control markup is written to the response</li>
- * <li>preGetHeadElements - occurs after <tt>preResponse</tt> but before the control
+ * <li>preRenderHeadElements - occurs after <tt>preResponse</tt> but before the control
  * {@link Control#getHeadElements() HEAD elements} are written to the response</li>
  * <li>preDestroy - occurs before the Control {@link Control#onDestroy() onDestroy}
  * event handler.</li>
@@ -61,7 +61,7 @@ public interface Behavior {
      *
      * @param source the control the behavior is registered with
      */
-    public void preGetHeadElements(Control source);
+    public void preRenderHeadElements(Control source);
 
     /**
      * This event occurs before the Control {@link Control#onDestroy() onDestroy}

@@ -79,7 +79,7 @@ import org.apache.commons.lang.Validate;
  *             }
  *
  *             // This method is invoked before the HEAD elements are retrieved for each Control
- *             public void preGetHeadElements(Control source) {
+ *             public void preRenderHeadElements(Control source) {
  *             }
  *
  *             // This method is invoked before the Control onDestroy event
@@ -150,7 +150,7 @@ public class ControlRegistry {
      * Register a control event interceptor for the given Control and Behavior.
      * The control will be passed as the source control to the Behavior
      * interceptor methods:
-     * {@link org.apache.click.Behavior#preGetHeadElements(org.apache.click.Control) preGetHeadElements(Control)},
+     * {@link org.apache.click.Behavior#preRenderHeadElements(org.apache.click.Control) preRenderHeadElements(Control)},
      * {@link org.apache.click.Behavior#preResponse(org.apache.click.Control) preResponse(Control)} and
      * {@link org.apache.click.Behavior#preDestroy(org.apache.click.Control) preDestroy(Control)}.
      *
@@ -242,11 +242,11 @@ public class ControlRegistry {
         }
     }
 
-    void processPreGetHeadElements(Context context) {
+    void processPreRenderHeadElements(Context context) {
         if (hasAjaxTargetControls()) {
             for (Control control : getAjaxTargetControls()) {
                 for (Behavior behavior : control.getBehaviors()) {
-                    behavior.preGetHeadElements(control);
+                    behavior.preRenderHeadElements(control);
                 }
             }
         }
@@ -255,7 +255,7 @@ public class ControlRegistry {
             for (InterceptorHolder interceptorHolder : getInterceptors()) {
                 Behavior interceptor = interceptorHolder.getInterceptor();
                 Control control = interceptorHolder.getControl();
-                interceptor.preGetHeadElements(control);
+                interceptor.preRenderHeadElements(control);
             }
         }
     }
