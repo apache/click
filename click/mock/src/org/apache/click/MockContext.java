@@ -339,12 +339,12 @@ public class MockContext extends Context {
     }
 
     /**
-     * Execute the preGetHeadElements method for all registered behaviors.
+     * Execute the preRenderHeadElements method for all registered behaviors.
      */
-    public void executePreGetHeadElements() {
+    public void executePreRenderHeadElements() {
         ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
 
-        registry.processPreGetHeadElements(this);
+        registry.processPreRenderHeadElements(this);
     }
 
     /**

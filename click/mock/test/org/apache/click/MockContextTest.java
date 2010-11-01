@@ -37,7 +37,7 @@ public class MockContextTest extends TestCase {
     private boolean submitCalled = false;
 
     /** Indicators that behavior events was invoked. */
-    private boolean preGetHeadElementsCalled = false;
+    private boolean preRenderHeadElementsCalled = false;
     private boolean preResponseCalled = false;
     private boolean preDestroyCalled = false;
 
@@ -207,7 +207,7 @@ public class MockContextTest extends TestCase {
 
         Submit submit = new Submit("save");
 
-        preGetHeadElementsCalled = false;
+        preRenderHeadElementsCalled = false;
         preResponseCalled = false;
         preDestroyCalled = false;
 
@@ -217,8 +217,8 @@ public class MockContextTest extends TestCase {
                 preDestroyCalled = true;
             }
 
-            public void preGetHeadElements(Control source) {
-                preGetHeadElementsCalled = true;
+            public void preRenderHeadElements(Control source) {
+                preRenderHeadElementsCalled = true;
             }
 
             public void preResponse(Control source) {
@@ -235,11 +235,11 @@ public class MockContextTest extends TestCase {
         context.executePreResponse();
         assertTrue("preResponse was not processed", preResponseCalled);
 
-        // Process the preGetHeadElements interceptor methods
-        context.executePreGetHeadElements();
-        assertTrue("preGetHeadElements was not processed", preGetHeadElementsCalled);
+        // Process the preRenderHeadElements interceptor methods
+        context.executePreRenderHeadElements();
+        assertTrue("preRenderHeadElements was not processed", preRenderHeadElementsCalled);
 
-        // Process the preGetHeadElements interceptor methods
+        // Process the preRenderHeadElements interceptor methods
         context.executePreDestroy();
         assertTrue("preDestroy was not processed", preDestroyCalled);
 
@@ -258,7 +258,7 @@ public class MockContextTest extends TestCase {
 
         Submit submit = new Submit("save");
 
-        preGetHeadElementsCalled = false;
+        preRenderHeadElementsCalled = false;
         preResponseCalled = false;
         preDestroyCalled = false;
 
@@ -276,8 +276,8 @@ public class MockContextTest extends TestCase {
                 preDestroyCalled = true;
             }
 
-            public void preGetHeadElements(Control source) {
-                preGetHeadElementsCalled = true;
+            public void preRenderHeadElements(Control source) {
+                preRenderHeadElementsCalled = true;
             }
 
             public void preResponse(Control source) {
@@ -313,7 +313,7 @@ public class MockContextTest extends TestCase {
         Submit submit = new Submit("save");
 
         submitCalled = false;
-        preGetHeadElementsCalled = false;
+        preRenderHeadElementsCalled = false;
         preResponseCalled = false;
         preDestroyCalled = false;
 
@@ -332,8 +332,8 @@ public class MockContextTest extends TestCase {
             }
 
             @Override
-            public void preGetHeadElements(Control source) {
-                preGetHeadElementsCalled = true;
+            public void preRenderHeadElements(Control source) {
+                preRenderHeadElementsCalled = true;
             }
 
             @Override
@@ -368,11 +368,11 @@ public class MockContextTest extends TestCase {
         context.executePreResponse();
         assertTrue("preResponse was not processed", preResponseCalled);
 
-        // Process the preGetHeadElements interceptor methods
-        context.executePreGetHeadElements();
-        assertTrue("preGetHeadElements was not processed", preGetHeadElementsCalled);
+        // Process the preRenderHeadElements interceptor methods
+        context.executePreRenderHeadElements();
+        assertTrue("preRenderHeadElements was not processed", preRenderHeadElementsCalled);
 
-        // Process the preGetHeadElements interceptor methods
+        // Process the preRenderHeadElements interceptor methods
         context.executePreDestroy();
         assertTrue("preDestroy was not processed", preDestroyCalled);
 
