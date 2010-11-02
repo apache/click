@@ -20,9 +20,10 @@ package org.apache.click.extras.panel;
 
 import java.util.List;
 import org.apache.click.ActionListener;
-import org.apache.click.ControlRegistry;
 import org.apache.click.Context;
 import org.apache.click.Control;
+import org.apache.click.Page;
+import org.apache.click.Stateful;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Panel;
 import org.apache.click.element.CssImport;
@@ -137,7 +138,7 @@ import org.apache.commons.lang.math.NumberUtils;
  * &lt;/body&gt;
  * &lt;/html&gt; </pre>
  */
-public class TabbedPanel extends Panel {
+public class TabbedPanel extends Panel implements Stateful {
 
     private static final long serialVersionUID = 1L;
 
@@ -339,6 +340,68 @@ public class TabbedPanel extends Panel {
     }
 
     /**
+     * Return the TabbedPanel state. The following state is returned:
+     * <ul>
+     * <li>The {@link #getActivePanel() activePanel's} name</li>
+     * <li>The {@link #getTabLink() tabLink} parameters</li>
+     * </ul>
+     *
+     * @return the TabbedPanel state
+     */
+    public Object getState() {
+        Object[] panelState = new Object[2];
+        boolean hasState = false;
+
+        Panel localActivePanel = getActivePanel();
+        if (localActivePanel != null) {
+            String activePanelName = localActivePanel.getName();
+            hasState = true;
+            panelState[0] = activePanelName;
+        }
+
+        Object tabLinkState = getTabLink().getState();
+
+        if (tabLinkState != null) {
+            hasState = true;
+            panelState[1] = tabLinkState;
+        }
+
+        if (hasState) {
+            return panelState;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Set the TabbedPanel state.
+     *
+     * @param state the tabbedPanel state to set
+     */
+    public void setState(Object state) {
+        if (state == null) {
+            return;
+        }
+
+        Object[] panelState = (Object[]) state;
+
+        if (panelState[0] != null) {
+
+            String activePanelName = (String) panelState[0];
+               Control control = getControlMap().get(activePanelName);
+                if (control instanceof Panel) {
+                    Panel localActivePanel = (Panel) control;
+                    setActivePanel(localActivePanel);
+                }
+            }
+
+        if (panelState[1] != null) {
+            Object tabLinkState = panelState[1];
+            getTabLink().setState(tabLinkState);
+        }
+    }
+
+    /**
      * Set the tab switch listener.  If the listener <b>and</b> method are
      * non-null, then the listener will be called whenever a request to switch
      * tabs is placed by clicking the link associated with that tab.
@@ -408,10 +471,6 @@ public class TabbedPanel extends Panel {
      */
     @Override
     public void onInit() {
-        if (hasBehaviors()) {
-            ControlRegistry.registerAjaxTarget(this);
-        }
-
         initActivePanel();
 
         for (int i = 0, size = getControls().size(); i < size; i++) {
@@ -478,6 +537,48 @@ public class TabbedPanel extends Panel {
                 control.onRender();
             }
         }
+    }
+
+    /**
+     * Remove the TabbedPanel state from the session for the given request context.
+     *
+     * @param context the request context
+     *
+     * @see #saveState(org.apache.click.Context)
+     * @see #restoreState(org.apache.click.Context)
+     */
+    public void removeState(Context context) {
+        ClickUtils.removeState(this, getName(), context);
+    }
+
+    /**
+     * Restore the TabbedPanel state from the session for the given request context.
+     * <p/>
+     * This method delegates to {@link #setState(java.lang.Object)} to set the
+     * panel's restored state.
+     *
+     * @param context the request context
+     *
+     * @see #saveState(org.apache.click.Context)
+     * @see #removeState(org.apache.click.Context)
+     */
+    public void restoreState(Context context) {
+        ClickUtils.restoreState(this, getName(), context);
+    }
+
+    /**
+     * Save the TabbedPanel state to the session for the given request context.
+     * <p/>
+     * * This method delegates to {@link #getState()} to retrieve the panel's
+     * state to save.
+     *
+     * @see #restoreState(org.apache.click.Context)
+     * @see #removeState(org.apache.click.Context)
+     *
+     * @param context the request context
+     */
+    public void saveState(Context context) {
+        ClickUtils.saveState(this, getName(), context);
     }
 
     // ------------------------------------------------------ Protected Methods
