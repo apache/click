@@ -27,7 +27,6 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.panel.TabbedPanel;
-import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -38,8 +37,8 @@ public class TabbedPanelDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected TabbedPanel tabbedPanel = new TabbedPanel();
-    @Bindable protected List<Customer> customers;
+    private TabbedPanel tabbedPanel = new TabbedPanel("tabbedPanel");
+    private List<Customer> customers;
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -47,6 +46,8 @@ public class TabbedPanelDemo extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public TabbedPanelDemo() {
+        addControl(tabbedPanel);
+
         Panel panel1 = new Panel("panel1", "panel/customersPanel1.htm");
         panel1.setLabel("The First Panel");
         tabbedPanel.add(panel1);
@@ -76,6 +77,7 @@ public class TabbedPanelDemo extends BorderPage {
     @Override
     public void onRender() {
         customers = customerService.getCustomersSortedByName(12);
+        addModel("customers", customers);
     }
 
 }
