@@ -18,6 +18,9 @@
  */
 package org.apache.click.control;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
 
@@ -41,5 +44,101 @@ public class SelectTest extends TestCase {
         
         // Check that the value <script> is not rendered
         assertTrue(select.toString().indexOf(value) < 0);
+    }
+
+    /**
+     * Test that Select.getState contains the select value.
+     * CLK-715
+     */
+    public void testGetState() {
+        // Setup Select
+        Select select  = new Select("gender");
+        select.add(new Option("male"));
+        select.add(new Option("female"));
+
+        String expectedState = "female";
+        select.setValue(expectedState);
+
+        // Setup Select value
+        List<String> selectedValues = new ArrayList<String>();
+        selectedValues.add(expectedState);
+        select.setSelectedValues(selectedValues);
+
+        Object state = select.getState();
+
+        // Perform tests
+        assertEquals(expectedState, state);
+        assertEquals(state, select.getValue());
+        assertEquals(state, select.getSelectedValues().get(0));
+    }
+
+    /**
+     * Test that Select.getState contains the select values.
+     * CLK-715
+     */
+    public void testGetStateMultiple() {
+        // Setup Select
+        Select select  = new Select("gender");
+        select.add(new Option("male"));
+        select.add(new Option("female"));
+                select.setMultiple(true);
+
+        // Setup Select values
+        List<String> selectedValues = new ArrayList<String>();
+        selectedValues.add("male");
+        selectedValues.add("female");
+        select.setSelectedValues(selectedValues);
+
+        String[] state = (String[]) select.getState();
+
+        Object expectedState = "male";
+        assertEquals(expectedState, state[0]);
+
+        // Perform tests
+        String[] expectedStateArray = new String[] {"male", "female"};
+        assertTrue(Arrays.equals(expectedStateArray, state));
+
+        assertTrue(Arrays.equals(state, select.getSelectedValues().toArray()));
+    }
+
+    /**
+     * Test that Select.setState set the select value.
+     *
+     * CLK-715
+     */
+    public void testSetState() {
+        // Setup Select
+        Select select  = new Select("gender");
+        select.add(new Option("male"));
+        select.add(new Option("female"));
+
+        String expectedState = "female";
+
+        select.setState(expectedState);
+
+        // Perform tests
+        assertEquals(expectedState, select.getValue());
+        assertEquals(expectedState, select.getSelectedValues().get(0));
+    }
+
+    /**
+     * Test that Select.setState set the select value if multiple is true.
+     *
+     * CLK-715
+     */
+    public void testSetStateMultiple() {
+        // Setup Select
+        Select select  = new Select("gender");
+        select.setMultiple(true);
+        select.add(new Option("male"));
+        select.add(new Option("female"));
+
+        String[] expectedState = {"male", "female"};
+
+        select.setState(expectedState);
+
+        // Perform tests
+        assertEquals(expectedState[0], select.getValue());
+        assertTrue(Arrays.equals(expectedState, select.getSelectedValues().toArray()));
     }
 }
