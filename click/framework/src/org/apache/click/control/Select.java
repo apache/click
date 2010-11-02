@@ -20,6 +20,7 @@ package org.apache.click.control;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -928,6 +929,54 @@ public class Select extends Field {
         }
 
         setSelectedValues(localSelectedValues);
+    }
+
+    /**
+     * Return the Select state. The following state is returned, depending on
+     * whether {@link #isMultiple()} is <tt>true</tt> or <tt>false</tt>:
+     * <ul>
+     * <li>{@link #getValue()} if {@link #isMultiple()} is <tt>false</tt></li>
+     * <li>{@link #getSelectedValues()} if {@link #isMultiple()} is <tt>true</tt></li>
+     * </ul>
+     *
+     * @return the Select state
+     */
+    @Override
+    public Object getState() {
+        if (isMultiple()) {
+            List selectedState = getSelectedValues();
+            if (selectedState.isEmpty()) {
+                return null;
+            } else {
+                return selectedState.toArray(new String[0]);
+            }
+        } else {
+            return super.getState();
+        }
+    }
+
+    /**
+     * Set the Select state.
+     *
+     * @param state the Select state to set
+     */
+    @Override
+    public void setState(Object state) {
+        if (state == null) {
+            return;
+        }
+
+        List<String> localSelectedState = new ArrayList<String>(5);
+
+        if (state instanceof String) {
+            String selectState = (String) state;
+            setValue(selectState);
+            localSelectedState.add(selectState);
+        } else {
+            String[] selectState = (String[]) state;
+            localSelectedState = Arrays.asList(selectState);
+        }
+        setSelectedValues(localSelectedState);
     }
 
     /**
