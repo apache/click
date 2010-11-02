@@ -18,6 +18,8 @@
  */
 package org.apache.click.extras.panel;
 
+import java.util.HashMap;
+import java.util.Map;
 import junit.framework.TestCase;
 import org.apache.click.ActionListener;
 import org.apache.click.Control;
@@ -159,5 +161,74 @@ public class TabbedPanelTest extends TestCase {
         assertSame(child2, panel.getPanels().get(1));
         assertTrue(child1.isActive());
         assertFalse(child2.isActive());
+    }
+
+
+    /**
+     * Test that TabbedPanel.getState contains the active panel.
+     *
+     * CLK-715
+     */
+    public void testGetState() {
+        // Setup Panel
+        TabbedPanel panel = new TabbedPanel("panel");
+
+        // Add two panels named child1 and child2
+        Panel child1 = new Panel("child1");
+        Panel child2 = new Panel("child2");
+        panel.add(child1);
+        panel.add(child2);
+
+        Map expectedTabLinkState = new HashMap();
+        expectedTabLinkState.put("id", "1");
+        panel.getTabLink().setParameters(expectedTabLinkState);
+
+        panel.setActivePanel(child2);
+
+        String expectedActivePanel = "child2";
+
+        // Get state
+        Object[] state = (Object[]) panel.getState();
+
+        // Perform tests
+        assertEquals(expectedActivePanel, state[0]);
+        assertEquals(expectedTabLinkState, state[1]);
+    }
+
+    /**
+     * Test that TabbedPanel.setState set the active panel.
+     *
+     * CLK-715
+     */
+    public void testSetState() {
+        // Setup Panel
+        TabbedPanel panel = new TabbedPanel("panel");
+
+        // Add two panels named child1 and child2
+        Panel child1 = new Panel("child1");
+        Panel child2 = new Panel("child2");
+        panel.add(child1);
+        panel.add(child2);
+
+        Map expectedTabLinkState = new HashMap();
+        expectedTabLinkState.put("id", "1");
+
+        String expectedActivePanelName = "child2";
+
+        Object[] state = new Object[2];
+        state[0] = expectedActivePanelName;
+        state[1] = expectedTabLinkState;
+
+        // Initially child1 should be active
+        assertEquals(child1, panel.getActivePanel());
+        // TabLink shouldn't have any parameters
+        assertEquals(0, panel.getTabLink().getParameters().size());
+
+        // Set state
+        panel.setState(state);
+
+        // Perform tests
+        assertEquals(panel.getActivePanel().getName(), expectedActivePanelName);
+        assertEquals(expectedTabLinkState, panel.getTabLink().getParameters());
     }
 }
