@@ -22,7 +22,6 @@ import java.util.List;
 import org.apache.click.ActionListener;
 import org.apache.click.Context;
 import org.apache.click.Control;
-import org.apache.click.Page;
 import org.apache.click.Stateful;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Panel;
@@ -464,7 +463,7 @@ public class TabbedPanel extends Panel implements Stateful {
      * Initialize the child controls contained in the panel. Note with the child
      * panels only the active panel will be initialized.
      * <p/>
-     * If <tt>tabPanelIndex</tt> request parameter present this value will be
+     * If <tt>tabPanelIndex</tt> request parameter is present, this value will be
      * used to specify the active panel. The panel index is a zero based integer.
      *
      * @see org.apache.click.Control#onInit()
