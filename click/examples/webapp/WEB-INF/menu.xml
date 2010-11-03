@@ -130,6 +130,8 @@
     <menu label="Simple Panel" path="panel/simple-panel-demo.htm"/>
     <menu label="List Panel" path="panel/list-panel-demo.htm"/>
     <menu label="Tabbed Panel" path="panel/tabbed-panel-demo.htm"/>
+    <menu label="Tabbed Panel with Controls" path="panel/tabbed-panel-with-controls.htm"/>
+    <menu label="Stateful Tabbed Panel" path="panel/stateful-tabbed-panel-demo.htm"/>
     <menu label="Filter Panel" path="panel/filter-panel-demo.htm"/>
     <menu label="Column Panel" path="panel/panel-column-demo.htm"/>
     <menu label="Reusable Panel" path="panel/reusable-panel-demo.htm"/>
