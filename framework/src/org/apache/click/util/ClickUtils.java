@@ -1936,7 +1936,7 @@ public class ClickUtils {
      * URL encode the specified value using the "UTF-8" encoding scheme.
      * <p/>
      * For example <tt>(http://host?name=value with spaces)</tt> will become
-     * <tt>(http://host?name=value%20with%20spaces)</tt>.
+     * <tt>(http://host?name=value+with+spaces)</tt>.
      * <p/>
      * This method uses {@link URLEncoder#encode(java.lang.String, java.lang.String)}
      * internally.
@@ -1959,7 +1959,7 @@ public class ClickUtils {
     /**
      * URL decode the specified value using the "UTF-8" encoding scheme.
      * <p/>
-     * For example <tt>(http://host?name=value%20with%20spaces)</tt> will become
+     * For example <tt>(http://host?name=value+with+spaces)</tt> will become
      * <tt>(http://host?name=value with spaces)</tt>.
      * <p/>
      * This method uses {@link URLDecoder#decode(java.lang.String, java.lang.String)}
@@ -1986,7 +1986,7 @@ public class ClickUtils {
      * is not specified.
      * <p/>
      * For example <tt>(http://host?name=value with spaces)</tt> will become
-     * <tt>(http://host?name=value%20with%20spaces)</tt>.
+     * <tt>(http://host?name=value+with+spaces)</tt>.
      * <p/>
      * This method uses
      * {@link URLEncoder#encode(java.lang.String, java.lang.String)} internally.

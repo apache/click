@@ -18,9 +18,13 @@
  */
 package org.apache.click.extras.control;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import junit.framework.TestCase;
 import org.apache.click.MockContainer;
 import org.apache.click.MockContext;
+import org.apache.click.control.Option;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -36,7 +40,7 @@ public class PickListTest extends TestCase {
      * This could cause concurrent modification exceptions if the PickList is rendered
      * by multiple threads.
      */
-    public void testClassAttributeRenderin() {
+    public void testClassAttributeRendering() {
         // PickList uses Velocity to render its template. In this test we start a
         // MockContainer which also configures Velocity
         MockContainer container = new MockContainer("web");
@@ -67,5 +71,65 @@ public class PickListTest extends TestCase {
         // Check that class attribute was rendered once
         assertEquals(1, StringUtils.countMatches(pickListStr, "class="));
         container.stop();
+    }
+
+    /**
+     * Test that PickList.getState contains all the selected values.
+     * CLK-715
+     */
+    public void testGetState() {
+        // Setup PickList
+        PickList pickList  = new PickList("languages");
+
+        pickList.add(new Option("002", "C/C++"));
+        pickList.add(new Option("003", "C#"));
+        pickList.add(new Option("004", "Fortran"));
+        pickList.add(new Option("005", "Java"));
+        pickList.add(new Option("006", "Ruby"));
+        pickList.add(new Option("007", "Perl"));
+        pickList.add(new Option("008", "Visual Basic"));
+
+        // Setup PickList selected values
+        pickList.addSelectedValue("004");
+        pickList.addSelectedValue("005");
+
+        String[] state = (String[]) pickList.getState();
+
+        // Perform tests
+        String[] expectedStateArray = new String[] {"004", "005"};
+        assertTrue(Arrays.equals(expectedStateArray, state));
+        assertTrue(Arrays.equals(state, pickList.getSelectedValues().toArray()));
+    }
+
+    /**
+     * Test that PickList.setState set the PickList selected values.
+     *
+     * CLK-715
+     */
+    public void testSetState() {
+        // Setup PickList
+        PickList pickList  = new PickList("languages");
+
+        pickList.add(new Option("002", "C/C++"));
+        pickList.add(new Option("003", "C#"));
+        pickList.add(new Option("004", "Fortran"));
+        pickList.add(new Option("005", "Java"));
+        pickList.add(new Option("006", "Ruby"));
+        pickList.add(new Option("007", "Perl"));
+        pickList.add(new Option("008", "Visual Basic"));
+
+                List expectedSelectedValues = new ArrayList();
+        assertEquals(expectedSelectedValues, pickList.getSelectedValues());
+
+        // Setup PickList selected values
+        String[] expectedState = {"004", "005"};
+
+        // Set state
+        pickList.setState(expectedState);
+
+        // Perform tests
+        assertEquals("", pickList.getValue()); // PickList use value but selectedValues instead
+        assertTrue(Arrays.equals(expectedState, pickList.getSelectedValues().toArray()));
+        assertEquals(pickList.getSelectedValues(), (pickList.getValueObject()));
     }
 }
