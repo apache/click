@@ -404,15 +404,53 @@ public class ClickUtilsTest extends TestCase {
         Map<String, String> map3 = ClickUtils.getParentMessages(textField2);
         assertNotNull(map3);
         assertEquals(1, map3.size());
-        assertFalse(map3 == Collections.EMPTY_MAP);        
+        assertFalse(map3 == Collections.EMPTY_MAP);
+    }
+
+    /**
+     * Sanity check for ClickUtils.decodeURL.
+     */
+    public void testDecodeURL() {
+
+        String path = "value+with%20spaces";
+        String value = ClickUtils.decodeURL(path);
+
+        String expected = "value with spaces";
+        assertEquals(expected, value);
+    }
+
+    /**
+     * Sanity check for ClickUtils.encodeURL.
+     */
+    public void testEncodeURL() {
+        String expected = "1000";
+        String value = ClickUtils.encodeURL(expected);
+        assertEquals(expected, value);
+
+        // Java URLEncoder.encode uses HTML's application/x-www-form-urlencoded
+        // MIME format, thus spaces are encoded to +, not %20
+        String path = "value with spaces";
+        value = ClickUtils.encodeURL(path);
+
+        expected = "value+with+spaces";
+        assertEquals(expected, value);
     }
 
     /**
      * Sanity check for ClickUtils.encodeUrl.
      */
     public void testEncodeUrl() {
-        String value = ClickUtils.encodeUrl("1000", Context.getThreadLocalContext());
-        assertEquals("1000", value);
+        String expected = "1000";
+        String value = ClickUtils.encodeUrl(expected, Context.getThreadLocalContext());
+        assertEquals(expected, value);
+
+        // Java URLEncoder.encode uses HTML's application/x-www-form-urlencoded
+        // MIME format, thus spaces are encoded to +, not %20
+        String path = "value with spaces";
+        value = ClickUtils.encodeUrl(path, Context.getThreadLocalContext());
+
+        expected = "value+with+spaces";
+        assertEquals(expected, value);
     }
 
     /**
