@@ -788,6 +788,43 @@ public class PickList extends Field {
     }
 
     /**
+     * Return the PickList state. The following state is returned:
+     * <ul>
+     * <li>{@link #getSelectedValues()}</li>
+     * </ul>
+     *
+     * @return the PickList state
+     */
+    @Override
+    public Object getState() {
+            List selectedState = getSelectedValues();
+        if (selectedState.isEmpty()) {
+            return null;
+        } else {
+            return selectedState.toArray(new String[0]);
+        }
+    }
+
+    /**
+     * Set the PickList state.
+     *
+     * @param state the PickList state to set
+     */
+    @Override
+    public void setState(Object state) {
+        if (state == null) {
+            return;
+        }
+
+        String[] pickListState = (String[]) state;
+        List<String> localSelectedState = new ArrayList<String>(pickListState.length);
+        for (String val : pickListState) {
+            localSelectedState.add(val);
+        }
+        setSelectedValues(localSelectedState);
+    }
+
+    /**
      * Validate the PickList request submission.
      * <p/>
      * A field error message is displayed if a validation error occurs.
