@@ -131,5 +131,9 @@ public class PickListTest extends TestCase {
         assertEquals("", pickList.getValue()); // PickList use value but selectedValues instead
         assertTrue(Arrays.equals(expectedState, pickList.getSelectedValues().toArray()));
         assertEquals(pickList.getSelectedValues(), (pickList.getValueObject()));
+
+        // Make sure we can still add values to the PickList after state is
+        // restored
+        pickList.addSelectedValue("004");
     }
 }
