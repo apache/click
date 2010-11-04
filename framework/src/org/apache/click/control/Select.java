@@ -974,7 +974,9 @@ public class Select extends Field {
             localSelectedState.add(selectState);
         } else {
             String[] selectState = (String[]) state;
-            localSelectedState = Arrays.asList(selectState);
+            for (String val : selectState) {
+            localSelectedState.add(val);
+        }
         }
         setSelectedValues(localSelectedState);
     }

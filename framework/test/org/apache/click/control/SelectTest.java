@@ -119,6 +119,10 @@ public class SelectTest extends TestCase {
         // Perform tests
         assertEquals(expectedState, select.getValue());
         assertEquals(expectedState, select.getSelectedValues().get(0));
+
+        // Make sure we can still add values to the Select after state is
+        // restored
+        select.getSelectedValues().add("male");
     }
 
     /**
@@ -140,5 +144,9 @@ public class SelectTest extends TestCase {
         // Perform tests
         assertEquals(expectedState[0], select.getValue());
         assertTrue(Arrays.equals(expectedState, select.getSelectedValues().toArray()));
+
+        // Make sure we can still add values to the Select after state is
+        // restored
+        select.getSelectedValues().add("male");
     }
 }
