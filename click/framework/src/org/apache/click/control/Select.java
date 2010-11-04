@@ -966,14 +966,16 @@ public class Select extends Field {
             return;
         }
 
-        List<String> localSelectedState = new ArrayList<String>(5);
+        List<String> localSelectedState = null;
 
         if (state instanceof String) {
+            localSelectedState = new ArrayList<String>(1);
             String selectState = (String) state;
             setValue(selectState);
             localSelectedState.add(selectState);
         } else {
             String[] selectState = (String[]) state;
+            localSelectedState = new ArrayList<String>(selectState.length);
             for (String val : selectState) {
             localSelectedState.add(val);
         }
