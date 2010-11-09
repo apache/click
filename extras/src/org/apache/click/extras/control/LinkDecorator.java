@@ -419,7 +419,7 @@ public class LinkDecorator implements Decorator, Serializable {
      * @param controls the list of AbstractLink or ActionButtons to render
      * @param idProperty the row object identifier property name
      */
-    public LinkDecorator(Table table, List<AbstractControl> controls, String idProperty) {
+    public LinkDecorator(Table table, List<? extends AbstractControl> controls, String idProperty) {
         if (table == null) {
             throw new IllegalArgumentException("Null table parameter");
         }
