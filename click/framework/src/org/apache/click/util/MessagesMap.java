@@ -120,7 +120,7 @@ public class MessagesMap implements Map<String, String> {
      *
      * @param baseClass the target class
      * @param globalResource the global resource bundle name
-     * @param the resource bundle locale.
+     * @param locale the resource bundle locale.
      */
     public MessagesMap(Class<?> baseClass, String globalResource, Locale locale) {
         Validate.notNull(baseClass, "Null object parameter");
@@ -266,7 +266,37 @@ public class MessagesMap implements Map<String, String> {
 
     // ------------------------------------------------------ Protected Methods
 
-    private void ensureInitialized() {
+    /**
+     * Return the ResourceBundle for the given resource name and locale. By
+     * default this method will create a ResourceBundle using the standard JDK
+     * method: {@link java.util.ResourceBundle#getBundle(java.lang.String, java.util.Locale, java.lang.ClassLoader)}.
+     * <p/>
+     * You can create your own custom ResourceBundle by overriding this method.
+     * <p/>
+     * In order for Click to use your custom MessagesMap implementation, you
+     * need to provide your own {@link org.apache.click.service.MessagesMapService}
+     * or extend {@link org.apache.click.service.DefaultMessagesMapService}.
+     * <p/>
+     * The method {@link org.apache.click.service.MessagesMapService#createMessagesMap(baseClass, globalBaseName, locale) createMessagesMap},
+     * can be implemented to return your custom MessagesMap instances.
+     *
+     * @param resourceName the resource bundle name
+     * @param locale the resource bundle locale.
+     *
+     * @return the ResourceBundle for the given resource name and locale
+     */
+    protected ResourceBundle createResourceBundle(String resourceName, Locale locale) {
+        return ClickUtils.getBundle(resourceName, locale);
+    }
+
+    /**
+     * This method initializes and populates the internal{@link #messages} map
+     * and {@link #MESSAGES_CACHE} if it is not already initialized.
+     * <p/>
+     * <b>Please Note:</b> populating {@link #MESSAGES_CACHE} is not thread safe
+     * and access to the cache must be properly synchronized.
+     */
+    protected void ensureInitialized() {
         if (messages == null) {
 
             CacheKey resourceKey = new CacheKey(globalBaseName,
@@ -311,16 +341,22 @@ public class MessagesMap implements Map<String, String> {
         }
     }
 
-    private void loadResourceValuesIntoMap(String resourceName, Map<String, String> map) {
-        if (resourceName == null) {
+    /**
+     * Load the values of the given resourceBundleName into the map.
+     *
+     * @param resourceBundleName the resource bundle name
+     * @param map the map to load resource values into
+     */
+    protected void loadResourceValuesIntoMap(String resourceBundleName, Map<String, String> map) {
+        if (resourceBundleName == null) {
             return;
         }
 
-        String resourceKey = resourceName + locale.toString();
+        String resourceKey = resourceBundleName + locale.toString();
 
         if (!NOT_FOUND_CACHE.contains(resourceKey)) {
             try {
-                ResourceBundle resources = ClickUtils.getBundle(resourceName, locale);
+                ResourceBundle resources = createResourceBundle(resourceBundleName, locale);
 
                 Enumeration<String> e = resources.getKeys();
                 while (e.hasMoreElements()) {
@@ -334,6 +370,8 @@ public class MessagesMap implements Map<String, String> {
             }
         }
     }
+
+    // Private Methods --------------------------------------------------------
 
     /**
      * See DRY Performance article by Kirk Pepperdine.
