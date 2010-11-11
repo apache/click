@@ -88,13 +88,13 @@ Action support and light-weight stateful controls to replace stateful pages.
       </div>
       <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
         <li>
-          Ajax support.
+          <a href="user-guide/html/ch04.html">Ajax</a> support.
         </li>
         <li>
-          Page Action support.
+          <a href="user-guide/html/ch02s07.html">Page Action</a> support.
         </li>
         <li>
-          Stateful Controls.
+          <a href="click-api/org/apache/click/Stateful.html">Stateful</a> Controls.
         </li>
       </ul>
       <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
@@ -166,7 +166,7 @@ Action support and light-weight stateful controls to replace stateful pages.
           </ul>
           Unfortunately there is no direct upgrade path from a stateful page.
           However the majority of use cases are catered for by the new stateful
-          controls: Table, Form, TabbedPanel, Field and AbstractLink.
+          support in the controls: Table, Form, TabbedPanel, Field and AbstractLink.
         </li>
       </ul>
       <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
@@ -183,6 +183,11 @@ Action support and light-weight stateful controls to replace stateful pages.
             Added <a href="click-api/org/apache/click/service/MessagesMapService.html">MessagesMapService</a>
             interface to support pluggable messages map implementations
             [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-655">CLK-655</a>].
+          </li>
+          <li class="change">
+            Improved <a href="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</a>
+            to be extendable and customizable
+            [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-728">CLK-728</a>].
           </li>
           <li class="change">
             Added support for loading <a href="extras-api/org/apache/click/extras/control/DateField.html">DateField</a>
