@@ -18,8 +18,13 @@
  */
 package org.apache.click.control;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
 import junit.framework.TestCase;
+import org.apache.click.MockContainer;
 import org.apache.click.MockContext;
+import org.apache.click.pages.FileFieldPage;
 
 /**
  * Test FileField behavior.
@@ -43,5 +48,45 @@ public class FileFieldTest extends TestCase {
         
         // Check that the value <script> is not rendered
         assertTrue(field.toString().indexOf(value) < 0);
+    }
+
+    /**
+     * Check that FileField onProcess works properly for multipart requests.
+     */
+    public void testOnProcess() {
+        try {
+            MockContainer container = new MockContainer("web");
+
+        container.start();
+
+          // Prepare a file for upload
+        String fileName = "test.htm";
+        String filePath = "/web/" + fileName;
+            URL resource = FieldTest.class.getResource(filePath);
+            URI uri = new URI(resource.toString());
+            File file = new File(uri);
+
+            // Prepare container parameters
+            String fieldName = "fileField";
+            container.setParameter(fieldName, file, "text/html");
+            container.setParameter("form_name", "form");
+
+            FileFieldPage page = container.testPage(FileFieldPage.class);
+
+        FileField field = page.getFileField();
+
+        // Perform tests
+        assertNotNull(field.getFileItem());
+        field.getFileItem().getName();
+        assertEquals(fieldName, field.getFileItem().getFieldName());
+        assertEquals(fileName, field.getFileItem().getName());
+        assertEquals(file.length(), field.getFileItem().getSize());
+
+        container.stop();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
     }
 }
