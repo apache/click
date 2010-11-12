@@ -147,6 +147,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     /**
      * @see javax.servlet.ServletRequest#getParameter(String)
      */
+    @Override
     public String getParameter(String name) {
         if (isMultipartRequest) {
             Object value = getMultipartParameterMap().get(name);
@@ -174,6 +175,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     /**
      * @see javax.servlet.ServletRequest#getParameterNames()
      */
+    @Override
     @SuppressWarnings("unchecked")
     public Enumeration getParameterNames() {
         if (isMultipartRequest) {
@@ -187,6 +189,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     /**
      * @see javax.servlet.ServletRequest#getParameterValues(String)
      */
+    @Override
     public String[] getParameterValues(String name) {
         if (isMultipartRequest) {
             Object values = getMultipartParameterMap().get(name);
@@ -207,6 +210,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     /**
      * @see javax.servlet.ServletRequest#getParameterMap()
      */
+    @Override
     @SuppressWarnings("unchecked")
     public Map getParameterMap() {
         if (isMultipartRequest) {
