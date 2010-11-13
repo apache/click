@@ -154,23 +154,22 @@ public class Button extends Field {
     public boolean onProcess() {
         Context context = getContext();
 
-        if (!context.isAjaxRequest()) {
-            return true;
-        }
+        if (context.isAjaxRequest()) {
 
-        if (isDisabled()) {
-            // Switch off disabled property if control has incoming request
-            // parameter. Normally this means the field was enabled via JS
-            if (context.hasRequestParameter(getName())) {
-                setDisabled(false);
-            } else {
-                // If field is disabled skip process event
-                return true;
+            if (isDisabled()) {
+                // Switch off disabled property if control has incoming request
+                // parameter. Normally this means the field was enabled via JS
+                if (context.hasRequestParameter(getName())) {
+                    setDisabled(false);
+                } else {
+                    // If field is disabled skip process event
+                    return true;
+                }
             }
-        }
 
-        if (context.hasRequestParameter(getName())) {
-            dispatchActionEvent();
+            if (context.hasRequestParameter(getName())) {
+                dispatchActionEvent();
+            }
         }
 
         return true;
