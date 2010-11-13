@@ -1,3 +1,4 @@
+
 #*********************************
  * Write drop down menu and Search
  *********************************#
@@ -8,8 +9,7 @@
 <tr>
 
 <td>
-<div id="searchbar">
-<div class="menustyle" id="menu">
+<div class="menustyle" id="$rootMenu.id">
   <ul class="menubar" id="dmenu">
     #foreach ($topMenu in $rootMenu.children)
       #if ($topMenu.isUserInRoles() || $topMenu.isUserInChildMenuRoles())
@@ -30,7 +30,6 @@
 	#end
 	</ul>
   </div>
-</div>
 </td>
 
 </tr>
