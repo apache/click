@@ -349,6 +349,12 @@ public class Context {
      * @return true if the request contains the named parameter
      */
     public boolean hasRequestParameter(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("hasRequestParameter was called"
+                + " with null name argument. This is often caused when a"
+                + " Control binds to a request parameter, but its name was not"
+                + " set.");
+        }
         return (getRequestParameter(name) != null);
     }
 
