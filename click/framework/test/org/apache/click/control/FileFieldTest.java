@@ -62,7 +62,7 @@ public class FileFieldTest extends TestCase {
           // Prepare a file for upload
         String fileName = "test.htm";
         String filePath = "/web/" + fileName;
-            URL resource = FileFieldTest.class.getResource(filePath);
+            URL resource = container.getClass().getResource(filePath);
             URI uri = new URI(resource.toString());
             File file = new File(uri);
 
