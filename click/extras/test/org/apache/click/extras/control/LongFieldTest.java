@@ -44,8 +44,9 @@ public class LongFieldTest extends TestCase {
         assertFalse(longField.isValid());
         assertEquals("123.4", longField.getValue());
         assertNull(longField.getValueObject());
-        
-        request.getParameterMap().clear();
+
+        // Test not required + blank value
+        request.getParameterMap().put("id", "");
         
         assertTrue(longField.onProcess());
         assertTrue(longField.isValid());

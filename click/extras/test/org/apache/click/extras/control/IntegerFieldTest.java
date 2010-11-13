@@ -45,13 +45,16 @@ public class IntegerFieldTest extends TestCase {
         assertEquals("123.4", intField.getValue());
         assertNull(intField.getValueObject());
         
-        request.getParameterMap().clear();
+        // Test not required + blank value
+        request.getParameterMap().put("id", "");
         
         assertTrue(intField.onProcess());
         assertTrue(intField.isValid());
         assertEquals("", intField.getValue());
         assertNull(intField.getValueObject());
-        
+
+        // Test not required + blank value
+        request.getParameterMap().put("id", "");
         intField.setRequired(true);
         assertTrue(intField.onProcess());
         assertFalse(intField.isValid());

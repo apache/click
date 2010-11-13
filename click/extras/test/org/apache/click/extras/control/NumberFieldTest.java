@@ -181,8 +181,9 @@ public class NumberFieldTest extends TestCase{
         engF = new NumberField("en");
         engF.setPattern("0");
         
+        // Test required + blank value
         engF.setRequired(true);
-        params.remove("en");
+        params.put("en", "");
         
         assertTrue(engF.onProcess());
         assertFalse(engF.isValid());

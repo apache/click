@@ -71,14 +71,14 @@ public class DoubleFieldTest extends TestCase {
 
         request.getParameterMap().put("id", "0");
         
-        // Test not required zero value
+        // Test not required + zero value
         doubleField.setRequired(false);
         assertTrue(doubleField.onProcess());
         assertTrue(doubleField.isValid());
         assertEquals("0", doubleField.getValue());
         assertEquals(new Double(0), doubleField.getValueObject());
         
-        // Test required zero value
+        // Test required + zero value
         doubleField.setRequired(true);
         assertTrue(doubleField.onProcess());
         assertTrue(doubleField.isValid());
@@ -87,14 +87,16 @@ public class DoubleFieldTest extends TestCase {
         
         request.getParameterMap().clear();
 
-        // Test not required blank value
+        // Test not required + blank value
+        request.getParameterMap().put("id", "");
         doubleField.setRequired(false);
         assertTrue(doubleField.onProcess());
         assertTrue(doubleField.isValid());
         assertEquals("", doubleField.getValue());
         assertNull(doubleField.getValueObject());
 
-        // Test required blank value
+        // Test required + blank value
+        request.getParameterMap().put("id", "");
         doubleField.setRequired(true);
         assertTrue(doubleField.onProcess());
         assertFalse(doubleField.isValid());
