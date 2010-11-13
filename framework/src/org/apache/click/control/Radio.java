@@ -307,9 +307,9 @@ public class Radio extends Field {
      */
     @Override
     public void bindRequestValue() {
-        String value = getRequestValue();
+        String localValue = getRequestValue();
 
-        setChecked(getValue().equals(value));
+        setChecked(getValue().equals(localValue));
     }
 
     /**
