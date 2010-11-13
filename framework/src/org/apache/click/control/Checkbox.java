@@ -19,6 +19,7 @@
 package org.apache.click.control;
 
 import java.text.MessageFormat;
+import org.apache.click.Context;
 
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -232,6 +233,40 @@ public class Checkbox extends Field {
     @Override
     public void bindRequestValue() {
         setChecked(getContext().getRequestParameter(getName()) != null);
+    }
+
+    /**
+     * Process the request Context setting the checked value if selected
+     * and invoking the control's listener if defined.
+     *
+     * @return true to continue Page event processing, false otherwise
+     */
+    @Override
+    public boolean onProcess() {
+        if (isDisabled()) {
+            Context context = getContext();
+
+            // Switch off disabled property if control has incoming request
+            // parameter. Normally this means the field was enabled via JS
+            if (context.hasRequestParameter(getName())) {
+                setDisabled(false);
+            } else {
+                // If field is disabled skip process event
+                return true;
+            }
+        }
+
+        // In Html an unchecked Checkbox does not submit it's name/value so we
+        // always validate and dispatch registered events
+        bindRequestValue();
+
+        if (getValidate()) {
+            validate();
+        }
+
+        dispatchActionEvent();
+
+        return true;
     }
 
     /**

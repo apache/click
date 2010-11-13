@@ -1091,26 +1091,20 @@ public abstract class Field extends AbstractControl implements Stateful {
      */
     @Override
     public boolean onProcess() {
-        if (isDisabled()) {
-            Context context = getContext();
+        Context context = getContext();
 
-            // Switch off disabled property if control has incoming request
-            // parameter. Normally this means the field was enabled via JS
-            if (context.hasRequestParameter(getName())) {
-                setDisabled(false);
-            } else {
-                // If field is disabled skip process event
-                return true;
+        if (context.hasRequestParameter(getName())) {
+            // Only process field if it participated in the incoming request
+            setDisabled(false);
+
+            bindRequestValue();
+
+            if (getValidate()) {
+                validate();
             }
+
+            dispatchActionEvent();
         }
-
-        bindRequestValue();
-
-        if (getValidate()) {
-            validate();
-        }
-
-        dispatchActionEvent();
 
         return true;
     }
