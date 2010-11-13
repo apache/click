@@ -495,7 +495,7 @@ public class RadioGroup extends Field {
         appendAttributes(buffer);
         buffer.closeTag();
 
-        String value = getValue();
+        String localValue = getValue();
 
         final int size = getRadioList().size();
 
@@ -509,8 +509,8 @@ public class RadioGroup extends Field {
                 radio.setDisabled(true);
             }
 
-            if (value != null && value.length() > 0) {
-                if (radio.getValue().equals(value)) {
+            if (localValue != null && localValue.length() > 0) {
+                if (radio.getValue().equals(localValue)) {
                     radio.setChecked(true);
                 } else {
                     radio.setChecked(false);
