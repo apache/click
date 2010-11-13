@@ -19,6 +19,7 @@
 package org.apache.click.control;
 
 import java.text.MessageFormat;
+import org.apache.click.Context;
 
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -260,6 +261,33 @@ public class FileField extends Field {
     }
 
     /**
+     * Overrides onProcess to use {@link org.apache.click.Context#getFileItem(java.lang.String)}.
+     *
+     * @see org.apache.click.control.Field#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
+     */
+    @Override
+    public boolean onProcess() {
+        Context context = getContext();
+
+        if (context.getFileItemMap().containsKey(getName())) {
+            // Only process field if it participated in the incoming request
+            setDisabled(false);
+
+            bindRequestValue();
+
+            if (getValidate()) {
+                validate();
+            }
+
+            dispatchActionEvent();
+        }
+
+        return true;
+    }
+
+    /**
      * Render the HTML representation of the FileField.
      *
      * @see #toString()
@@ -321,8 +349,8 @@ public class FileField extends Field {
         setError(null);
 
         if (isRequired()) {
-            FileItem fileItem = getFileItem();
-            if (fileItem == null || StringUtils.isBlank(fileItem.getName())) {
+            FileItem localFileItem = getFileItem();
+            if (localFileItem == null || StringUtils.isBlank(localFileItem.getName())) {
                 setErrorMessage("file-required-error");
             }
         }

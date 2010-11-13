@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.click.Context;
 
 import org.apache.click.Control;
 import org.apache.click.control.Container;
@@ -302,7 +303,32 @@ public abstract class AbstractContainerField extends Field implements Container 
      */
     @Override
     public boolean onProcess() {
-        boolean continueProcessing = super.onProcess();
+        boolean performProcessing = true;
+
+        if (isDisabled()) {
+            Context context = getContext();
+
+            // Switch off disabled property if field has an incoming request
+            // parameter.
+            if (context.hasRequestParameter(getName())) {
+                setDisabled(false);
+
+            } else {
+                // If field is disabled skip processing and validation
+                performProcessing = false;
+            }
+        }
+
+        if (performProcessing) {
+            bindRequestValue();
+
+            if (getValidate()) {
+                validate();
+            }
+            dispatchActionEvent();
+        }
+
+        boolean continueProcessing = true;
 
         if (hasControls()) {
             for (Control control : getControls()) {
