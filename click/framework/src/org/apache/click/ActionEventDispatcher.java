@@ -69,7 +69,7 @@ public class ActionEventDispatcher {
     // Constants --------------------------------------------------------------
 
      /** The thread local dispatcher holder. */
-    private static final ThreadLocal<DispatcherStack> THREAD_LOCAL_DISPATCHER
+    private static final ThreadLocal<DispatcherStack> THREAD_LOCAL_DISPATCHER_STACK
         = new ThreadLocal<DispatcherStack>();
 
     // Variables --------------------------------------------------------------
@@ -129,6 +129,33 @@ public class ActionEventDispatcher {
     }
 
     /**
+     * Return the thread local ActionEventDispatcher instance.
+     *
+     * @return the thread local ActionEventDispatcher instance.
+     * @throws RuntimeException if an ActionEventDispatcher is not available on
+     * the thread
+     */
+    public static ActionEventDispatcher getThreadLocalDispatcher() {
+        return getDispatcherStack().peek();
+    }
+
+    /**
+     * Returns true if an ActionEventDispatcher instance is available on the
+     * current thread, false otherwise.
+     * <p/>
+     * Unlike {@link #getThreadLocalDispatcher()} this method can safely be used
+     * and will not throw an exception if an ActionEventDispatcher is not
+     * available on the current thread.
+     */
+    public static boolean hasThreadLocalDispatcher() {
+        DispatcherStack dispatcherStack = THREAD_LOCAL_DISPATCHER_STACK.get();
+        if (dispatcherStack == null) {
+            return false;
+        }
+        return !dispatcherStack.isEmpty();
+    }
+
+    /**
      * Fire all the registered action events after the Page Controls have been
      * processed and return true if the page should continue processing.
      *
@@ -174,17 +201,6 @@ public class ActionEventDispatcher {
     protected void errorOccurred(Throwable throwable) {
         // Clear the control listeners and behaviors from the dispatcher
         clear();
-    }
-
-    /**
-     * Return the thread local dispatcher instance.
-     *
-     * @return the thread local dispatcher instance.
-     * @throws RuntimeException if a ActionEventDispatcher is not available on the
-     * thread
-     */
-    protected static ActionEventDispatcher getThreadLocalDispatcher() {
-        return getDispatcherStack().peek();
     }
 
     /**
@@ -508,7 +524,7 @@ public class ActionEventDispatcher {
         ActionEventDispatcher actionEventDispatcher = dispatcherStack.pop();
 
         if (dispatcherStack.isEmpty()) {
-            THREAD_LOCAL_DISPATCHER.set(null);
+            THREAD_LOCAL_DISPATCHER_STACK.set(null);
         }
 
         return actionEventDispatcher;
@@ -520,11 +536,11 @@ public class ActionEventDispatcher {
      * @return stack data structure where ActionEventDispatcher are stored
      */
     static DispatcherStack getDispatcherStack() {
-        DispatcherStack dispatcherStack = THREAD_LOCAL_DISPATCHER.get();
+        DispatcherStack dispatcherStack = THREAD_LOCAL_DISPATCHER_STACK.get();
 
         if (dispatcherStack == null) {
             dispatcherStack = new DispatcherStack(2);
-            THREAD_LOCAL_DISPATCHER.set(dispatcherStack);
+            THREAD_LOCAL_DISPATCHER_STACK.set(dispatcherStack);
         }
 
         return dispatcherStack;

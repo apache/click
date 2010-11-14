@@ -95,7 +95,7 @@ public class ControlRegistry {
     // Constants --------------------------------------------------------------
 
     /** The thread local registry holder. */
-    private static final ThreadLocal<RegistryStack> THREAD_LOCAL_REGISTRY =
+    private static final ThreadLocal<RegistryStack> THREAD_LOCAL_REGISTRY_STACK =
                     new ThreadLocal<RegistryStack>();
 
     // Variables --------------------------------------------------------------
@@ -121,6 +121,33 @@ public class ControlRegistry {
     }
 
     // Public Methods ---------------------------------------------------------
+
+    /**
+     * Return the thread local ControlRegistry instance.
+     *
+     * @return the thread local ControlRegistry instance.
+     * @throws RuntimeException if a ControlRegistry is not available on the
+     * thread
+     */
+    public static ControlRegistry getThreadLocalRegistry() {
+        return getRegistryStack().peek();
+    }
+
+    /**
+     * Returns true if a ControlRegistry instance is available on the current
+     * thread, false otherwise.
+     * <p/>
+     * Unlike {@link #getThreadLocalRegistry()} this method can safely be used
+     * and will not throw an exception if a ControlRegistry is not available on
+     * the current thread.
+     */
+    public static boolean hasThreadLocalRegistry() {
+        RegistryStack registryStack = THREAD_LOCAL_REGISTRY_STACK.get();
+        if (registryStack == null) {
+            return false;
+        }
+        return !registryStack.isEmpty();
+    }
 
     /**
      * Register the control to be processed by the Click runtime if the control
@@ -322,10 +349,6 @@ public class ControlRegistry {
         return interceptors;
     }
 
-    static ControlRegistry getThreadLocalRegistry() {
-        return getRegistryStack().peek();
-    }
-
     /**
      * Adds the specified ControlRegistry on top of the registry stack.
      *
@@ -346,21 +369,21 @@ public class ControlRegistry {
         ControlRegistry controlRegistry = registryStack.pop();
 
         if (registryStack.isEmpty()) {
-            THREAD_LOCAL_REGISTRY.set(null);
+            THREAD_LOCAL_REGISTRY_STACK.set(null);
         }
 
         return controlRegistry;
     }
 
     static RegistryStack getRegistryStack() {
-        RegistryStack controlRegistry = THREAD_LOCAL_REGISTRY.get();
+        RegistryStack registryStack = THREAD_LOCAL_REGISTRY_STACK.get();
 
-        if (controlRegistry == null) {
-            controlRegistry = new RegistryStack(2);
-            THREAD_LOCAL_REGISTRY.set(controlRegistry);
+        if (registryStack == null) {
+            registryStack = new RegistryStack(2);
+            THREAD_LOCAL_REGISTRY_STACK.set(registryStack);
         }
 
-        return controlRegistry;
+        return registryStack;
     }
 
     /**
