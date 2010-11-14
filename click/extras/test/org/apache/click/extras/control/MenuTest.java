@@ -18,9 +18,13 @@
  */
 package org.apache.click.extras.control;
 
+import java.util.Collections;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
 import org.apache.click.Page;
+import org.apache.click.extras.security.RoleAccessController;
+import org.apache.click.servlet.MockPrincipal;
+import org.apache.click.servlet.MockRequest;
 
 public class MenuTest extends TestCase {
 
@@ -55,6 +59,44 @@ public class MenuTest extends TestCase {
 
         assertEquals("Root Label", menu.getLabel());
         assertEquals("Root Title", menu.getTitle());
+    }
+
+    /**
+     * Check that menu without any roles defined (it's public) can be viewed by
+     * the user.
+     *
+     * CLK-724
+     */
+    public void testAccessForMenuWithoutRoles() {
+        // Setup
+        Menu menu = new Menu("menu");
+        RoleAccessController controller = new RoleAccessController();
+        menu.setAccessController(controller);
+
+        MockRequest request = new MockRequest();
+        String role = "userRole";
+        MockPrincipal principal = new MockPrincipal("bob", role);
+        request.setUserPrincipal(principal);
+
+        // Perform tests
+        assertTrue(menu.isUserInRoles());
+    }
+
+    public void testAccessForMenu() {
+        // Setup
+        Menu menu = new Menu("menu");
+        String role = "userRole";
+        menu.setRoles(Collections.singletonList(role));
+
+        RoleAccessController controller = new RoleAccessController();
+        menu.setAccessController(controller);
+
+        MockContext context = MockContext.initContext();
+        MockPrincipal principal = new MockPrincipal("bob", role);
+        context.getMockRequest().setUserPrincipal(principal);
+
+        // Perform tests
+        assertTrue(menu.isUserInRoles());
     }
 
     public class MyMenu extends Menu {
