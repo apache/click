@@ -30,6 +30,10 @@ public interface AccessController {
     /**
      * Return true if the user request has access to the specified security
      * resource (role, permission, authority).
+     * <p/>
+     * <b>Please note:</b> this method must cater for a <tt>null</tt> resource
+     * argument. The given resource can be <tt>null</tt> for anonymous or public
+     * resources and allows this implementation to allow or deny access.
      *
      * @param request the user request
      * @param resource the security resource (role, permission, authority)

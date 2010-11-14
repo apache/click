@@ -861,8 +861,13 @@ public class Menu extends AbstractControl {
      * menus have the user in one of their menu roles. Otherwise the method will
      * return false.
      * <p/>
-     * This method internally uses the <tt>HttpServletRequest</tt> function <tt>isUserInRole(rolename)</tt>,
-     * where the rolenames are derived from the {@link #getRoles()} property.
+     * This method internally uses the
+     * {@link org.apache.click.extras.security.AccessController#hasAccess(javax.servlet.http.HttpServletRequest, java.lang.String) AccessController#hasAccess(HttpServletRequest request, String roleName)}
+     * method where the rolenames are derived from the {@link #getRoles()} property.
+     * <p/>
+     * If no {@link #getRoles()} are defined the AccessController are invoked
+     * with a <tt>null</tt> argument to determine whether access is permitted to
+     * menus without roles.
      *
      * @return true if the user is in one of the menu roles, or false otherwise
      * @throws IllegalStateException if the menu accessController is not defined
@@ -875,11 +880,16 @@ public class Menu extends AbstractControl {
 
         HttpServletRequest request = getContext().getRequest();
 
-        for (int i = 0, size = getRoles().size(); i < size; i++) {
-            String rolename = getRoles().get(i);
-            if (getAccessController().hasAccess(request, rolename)) {
-                return true;
+        if (hasRoles()) {
+            for (int i = 0, size = getRoles().size(); i < size; i++) {
+                String rolename = getRoles().get(i);
+                if (getAccessController().hasAccess(request, rolename)) {
+                    return true;
+                }
             }
+        } else {
+            // Check access for menus without roles. CLK-724
+            return getAccessController().hasAccess(request, null);
         }
 
         return false;
@@ -1290,11 +1300,7 @@ public class Menu extends AbstractControl {
      */
     protected boolean canRender(Menu menu, int depth) {
         // TODO add and check visible property
-        if (menu.hasRoles()) {
-            return menu.isUserInRoles();
-        } else {
-            return true;
-        }
+        return menu.isUserInRoles();
     }
 
     /**
