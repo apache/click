@@ -181,6 +181,10 @@ public class MockContext extends Context {
      */
     public static MockContext initContext(HttpServletRequest request) {
         MockContext mockContext = new MockContext(request);
+
+        // Remove lingering ThreadLocal variables of the Mock stack
+        mockContext.cleanup();
+
         Context.pushThreadLocalContext(mockContext);
         return (MockContext) Context.getThreadLocalContext();
     }
@@ -291,6 +295,9 @@ public class MockContext extends Context {
                 controlRegistry = new ControlRegistry(configService);
             }
 
+            // Remove lingering ThreadLocal variables of the Mock stack
+        mockContext.cleanup();
+
             ActionEventDispatcher.pushThreadLocalDispatcher(actionEventDispatcher);
             ControlRegistry.pushThreadLocalRegistry(controlRegistry);
             Context.pushThreadLocalContext(mockContext);
@@ -373,10 +380,26 @@ public class MockContext extends Context {
      * method will remove any references to objects, thus freeing up memory.
      */
     public void reset() {
-        ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
-        registry.clear();
+        if (ControlRegistry.hasThreadLocalRegistry()) {
+            ControlRegistry registry = ControlRegistry.getThreadLocalRegistry();
+            registry.clear();
+        }
 
-        ActionEventDispatcher actionEventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
-        actionEventDispatcher.clear();
+        if (ActionEventDispatcher.hasThreadLocalDispatcher()) {
+            ActionEventDispatcher actionEventDispatcher = ActionEventDispatcher.getThreadLocalDispatcher();
+            actionEventDispatcher.clear();
+        }
+    }
+
+    /**
+     * Cleanup the MockContext.
+     * <p/>
+     * This method removes any lingering ThreadLocal variables from the Mock stack.
+     */
+    void cleanup() {
+        // Cleanup ThreadLocals
+        Context.getContextStack().clear();
+        ControlRegistry.getRegistryStack().clear();
+        ActionEventDispatcher.getDispatcherStack().clear();
     }
 }

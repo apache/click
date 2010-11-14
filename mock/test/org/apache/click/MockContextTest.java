@@ -385,4 +385,20 @@ public class MockContextTest extends TestCase {
         // Assert that the behavior was removed after reset
         assertEquals(0, registry.getAjaxTargetControls().size());
     }
+
+    /**
+     * Test that initContext removes previous Contexts from the ThreadLocal.
+     */
+    public void testInitContextCleanup() {
+        MockContext.initContext();
+        assertEquals(1, Context.getContextStack().size());
+        assertEquals(1, ActionEventDispatcher.getDispatcherStack().size());
+        assertEquals(1, ControlRegistry.getRegistryStack().size());
+
+        MockContext.initContext();
+        assertEquals(1, Context.getContextStack().size());
+        assertEquals(1, ActionEventDispatcher.getDispatcherStack().size());
+        assertEquals(1, ControlRegistry.getRegistryStack().size());
+        
+    }
 }
