@@ -865,7 +865,7 @@ public class Menu extends AbstractControl {
      * {@link org.apache.click.extras.security.AccessController#hasAccess(javax.servlet.http.HttpServletRequest, java.lang.String) AccessController#hasAccess(HttpServletRequest request, String roleName)}
      * method where the rolenames are derived from the {@link #getRoles()} property.
      * <p/>
-     * If no {@link #getRoles()} are defined the AccessController are invoked
+     * If no {@link #getRoles() roles} are defined, the AccessController are invoked
      * with a <tt>null</tt> argument to determine whether access is permitted to
      * menus without roles.
      *
