@@ -205,6 +205,15 @@ Action support and light-weight stateful controls to replace stateful pages.
             [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-650">CLK-650</a>].
           </li>
           <li class="change">
+              Added support for Menus that do not have <tt>roles</tt> defined.
+              If no roles are defined,
+              <a href="extras-api/org/apache/click/extras/control/Menu.html#isUserInRoles()">IsUserInRoles</a>
+              passes a <tt>null</tt> argument to
+              <a href="extras-api/org/apache/click/extras/security/AccessController.html#hasAccess(javax.servlet.http.HttpServletRequest, java.lang.String)">hasAccess</a>
+              to determine whether access is permitted to menus without roles
+              [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-724">CLK-724</a>].
+          </li>
+          <li class="change">
               Changed AbstractControl not to render the <tt>name</tt>
               attribute since it is only used for Field controls
               [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-699">CLK-699</a>].
