@@ -60,8 +60,8 @@ public class Context {
      */
     static final String CONTEXT_FATAL_ERROR = "_context_fatal_error";
 
-    /** The thread local context. */
-    private static final ThreadLocal<ContextStack> THREAD_LOCAL_CONTEXT = new ThreadLocal<ContextStack>();
+    /** The thread local context stack. */
+    private static final ThreadLocal<ContextStack> THREAD_LOCAL_CONTEXT_STACK = new ThreadLocal<ContextStack>();
 
     // ----------------------------------------------------- Instance Variables
 
@@ -199,7 +199,7 @@ public class Context {
      * false otherwise
      */
     public static boolean hasThreadLocalContext() {
-        ContextStack contextStack = THREAD_LOCAL_CONTEXT.get();
+        ContextStack contextStack = THREAD_LOCAL_CONTEXT_STACK.get();
         if (contextStack == null) {
             return false;
         }
@@ -852,11 +852,11 @@ public class Context {
      * @return stack data structure where Context's are stored
      */
     static ContextStack getContextStack() {
-        ContextStack contextStack = THREAD_LOCAL_CONTEXT.get();
+        ContextStack contextStack = THREAD_LOCAL_CONTEXT_STACK.get();
 
         if (contextStack == null) {
             contextStack = new ContextStack(2);
-            THREAD_LOCAL_CONTEXT.set(contextStack);
+            THREAD_LOCAL_CONTEXT_STACK.set(contextStack);
         }
 
         return contextStack;
@@ -881,7 +881,7 @@ public class Context {
         Context context = contextStack.pop();
 
         if (contextStack.isEmpty()) {
-            THREAD_LOCAL_CONTEXT.remove();
+            THREAD_LOCAL_CONTEXT_STACK.remove();
         }
 
         return context;
