@@ -174,9 +174,13 @@ Action support and light-weight stateful controls to replace stateful pages.
       </div>
       <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
           <li class="change">
-              Improve fields to only be processed if there is a matching request
+              Improve fields to only be processed if they have an incoming request
               parameter. This improvement streamlines dynamic forms since fields
-              added at runtime won't bind their values or be validated
+              added at runtime during s POST request won't bind their values and
+              won't be validated for that request. In subsequent requests the Field
+              will have an incoming parameter and so will have it's value bound and
+              validated. Another advantage is that dynamically added Fields won't
+              have their default value overridden in the POST request they were added in
             [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-722">CLK-722</a>].
           </li>
           <li class="change">
