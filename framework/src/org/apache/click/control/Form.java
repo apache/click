@@ -668,7 +668,7 @@ public class Form extends AbstractContainer implements Stateful {
      * Track the index offset when adding Controls. This ensures HiddenFields
      * added by Form does not interfere with Controls added by users.
      */
-    private int insertIndexOffset;
+    private int insertIndexOffset; // Ensures hiddenFields added by Form are always at the end of the controlList
 
     /** Flag indicating whether validation is bypassed or not. */
     private Boolean bypassValidation = null;
