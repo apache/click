@@ -202,4 +202,25 @@ public class CheckboxTest extends TestCase {
         field.setValueObject(true);
         assertTrue(field.isChecked());
     }
+
+    /**
+     * Coverage test of onProcess for an unchecked Checkbox.
+     */
+    public void testUncheckedOnProcess() {
+        MockContext.initContext();
+
+        Checkbox field = new Checkbox("field");
+
+        // Initially checkbox is checked
+        field.setChecked(true);
+
+        assertTrue(field.isChecked());
+
+        // Note, no request parameter for the checkbox has been set, so it should
+        // be unchecked
+        field.onProcess();
+
+        // Check that checkbox hs been unchecked
+        assertFalse(field.isChecked());
+    }
 }
