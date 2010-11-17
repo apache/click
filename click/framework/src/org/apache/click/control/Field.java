@@ -748,8 +748,8 @@ public abstract class Field extends AbstractControl implements Stateful {
                     return readonly;
                 }
             } else if (control instanceof Form) {
-                Form form = (Form) control;
-                if (form.isReadonly()) {
+                Form localForm = (Form) control;
+                if (localForm.isReadonly()) {
                     return true;
                 } else {
                     return readonly;
@@ -1172,10 +1172,10 @@ public abstract class Field extends AbstractControl implements Stateful {
      * @return a normalized label for error message display
      */
     protected String getErrorLabel() {
-        String label = getLabel().trim();
-        label = (label.endsWith(":"))
-                ? label.substring(0, label.length() - 1) : label;
-        return label;
+        String localLabel = getLabel().trim();
+        localLabel = (localLabel.endsWith(":"))
+                ? localLabel.substring(0, localLabel.length() - 1) : localLabel;
+        return localLabel;
     }
 
     /**
