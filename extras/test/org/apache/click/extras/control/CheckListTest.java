@@ -113,4 +113,41 @@ public class CheckListTest extends TestCase {
         // Check that the value <script> is not rendered
         assertTrue(checkList.toString().indexOf(value) < 0);
     }
+
+    /**
+     * Check that required CheckList is invalid if not filled in.
+     *
+     * CLK-722
+     */
+    public void testRequiredInvalid() {
+        MockContext.initContext();
+        CheckList cl = new CheckList("cl");
+        cl.setRequired(true);
+        int[] in = {1,2,3,4,5,6};
+        List<Option> ol = createOptionsList(in);
+        cl.setOptionList(ol);
+        cl.onProcess();
+
+        // Perform test
+        assertFalse(cl.isValid());
+    }
+
+    /**
+     * Check that required CheckList is valid if at least one checkbox is checked.
+     *
+     * CLK-722
+     */
+    public void testRequiredValid() {
+        MockContext context = MockContext.initContext();
+        context.getMockRequest().setParameter("cl", "1");
+        CheckList cl = new CheckList("cl");
+        cl.setRequired(true);
+        int[] in = {1,2,3,4,5,6};
+        List<Option> ol = createOptionsList(in);
+        cl.setOptionList(ol);
+        cl.onProcess();
+
+        // Perform test
+        assertTrue(cl.isValid());
+    }
 }

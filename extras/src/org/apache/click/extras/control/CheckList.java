@@ -953,6 +953,40 @@ public class CheckList extends Field {
     }
 
     /**
+     * Process the request Context setting the CheckList selectedValues if
+     * selected and invoking the control's listener if defined.
+     *
+     * @return true to continue Page event processing, false otherwise
+     */
+    @Override
+    public boolean onProcess() {
+        if (isDisabled()) {
+            Context context = getContext();
+
+            // Switch off disabled property if control has incoming request
+            // parameter. Normally this means the field was enabled via JS
+            if (context.hasRequestParameter(getName())) {
+                setDisabled(false);
+            } else {
+                // If field is disabled skip process event
+                return true;
+            }
+        }
+
+        // In Html an unchecked CheckList does not submit it's name/value so we
+        // always validate and dispatch registered events
+        bindRequestValue();
+
+        if (getValidate()) {
+            validate();
+        }
+
+        dispatchActionEvent();
+
+        return true;
+    }
+
+    /**
      * Sorts the current Options List. This method is called
      * in {@link #bindRequestValue()} when the CheckList
      * is sortable.
