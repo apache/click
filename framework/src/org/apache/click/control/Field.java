@@ -317,8 +317,8 @@ public abstract class Field extends AbstractControl implements Stateful {
                     return disabled;
                 }
             } else if (control instanceof Form) {
-                Form form = (Form) control;
-                if (form.isDisabled()) {
+                Form localForm = (Form) control;
+                if (localForm.isDisabled()) {
                     return true;
                 } else {
                     return disabled;
