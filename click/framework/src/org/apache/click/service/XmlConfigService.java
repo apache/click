@@ -956,6 +956,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     protected boolean isResourcesDeployable() {
         // Only deploy if writes are allowed
+        if (onGoogleAppEngine) {
+            // Google doesn't allow writes
+            return false;
+        }
         return ClickUtils.isResourcesDeployable(servletContext);
     }
 
@@ -1314,7 +1318,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     private void deployFiles(Element rootElm) throws Exception {
 
-        boolean isResourcesDeployable = onGoogleAppEngine ? false : isResourcesDeployable();
+        boolean isResourcesDeployable = isResourcesDeployable();
 
         if (isResourcesDeployable) {
             if (getLogService().isTraceEnabled()) {
