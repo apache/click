@@ -326,7 +326,7 @@ public class SubmitLink extends ActionLink {
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(60);
         buffer.append("return");
-        if (getForm().getValidate() && getForm().isJavaScriptValidation()) {
+        if (getForm().isJavaScriptValidation()) {
             buffer.append(" on_");
             buffer.append(getForm().getId());
             buffer.append("_submit() &&");
@@ -484,9 +484,9 @@ public class SubmitLink extends ActionLink {
 
         // Check that the link is attached to a Form and the onClick attribute
         // has not been set
-        Form form = getForm();
-        if (form != null && getOnClick() == null) {
-            setOnClick(getSubmitScript(form.getId()));
+        Form localForm = getForm();
+        if (localForm != null && getOnClick() == null) {
+            setOnClick(getSubmitScript(localForm.getId()));
         }
 
         super.render(buffer);
