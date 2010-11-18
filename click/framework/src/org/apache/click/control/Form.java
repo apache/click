@@ -2822,7 +2822,9 @@ public class Form extends AbstractContainer implements Stateful {
 
         // Reset bypass flag to ensure it does not influence the validate flag
         bypassValidation = Boolean.FALSE;
-        if (getValidate() && isJavaScriptValidation()) {
+
+        // Render JavaScript form validation code
+        if (isJavaScriptValidation()) {
             buffer.append("<tr style=\"display:none\" id=\"");
             buffer.append(getId());
             buffer.append("-errorsTr\"><td width='100%' align=\"");
@@ -2947,7 +2949,7 @@ public class Form extends AbstractContainer implements Stateful {
         bypassValidation = Boolean.FALSE;
 
         // Render JavaScript form validation code
-        if (getValidate() && isJavaScriptValidation()) {
+        if (isJavaScriptValidation()) {
             List<String> functionNames = new ArrayList<String>();
 
             buffer.append("<script type=\"text/javascript\"><!--\n");
