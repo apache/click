@@ -28,7 +28,7 @@ function printValues() {
     var state = document.getElementById('${stateId}');
     var city = document.getElementById('${cityId}');
     var suburb = document.getElementById('${suburbId}');
-    
+
     var html = 'Selected state: key -> ' + state.value + ', value -> ' + state.options[state.selectedIndex].text;
     html+="<br>" + 'Selected city: key -> ' + city.value  + ', value -> ' + city.options[city.selectedIndex].text;
     html+="<br>" + 'Selected suburb: key -> ' + suburb.value  + ', value -> ' + suburb.options[suburb.selectedIndex].text;
@@ -47,6 +47,6 @@ function handleChange(id, form) {
         // Clear dependent Select value
         select.selectedIndex=0;
     }
-    // Submit form and bypass server-side validation
-    Click.submit(form, false);
+    // Submit form
+    form.submit();
 }
