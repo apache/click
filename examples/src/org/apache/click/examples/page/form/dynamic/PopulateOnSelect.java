@@ -37,7 +37,7 @@ import org.apache.click.util.ClickUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Demonstrate how to populate Select controls.
+ * Demonstrate how to dynamically populate Select controls.
  */
 public class PopulateOnSelect extends BorderPage {
 
@@ -79,18 +79,18 @@ public class PopulateOnSelect extends BorderPage {
         fieldSet.add(city);
         fieldSet.add(suburb);
 
+        form.add(save);
+
         // build the Selects in the onInit phase
         buildSelects();
-
-        form.add(save);
     }
 
     // Public Methods ---------------------------------------------------------
 
     public void buildSelects() {
-        state.setDefaultOption(new Option("---"));
-        city.setDefaultOption(new Option("---"));
-        suburb.setDefaultOption(new Option("---"));
+        state.setDefaultOption(Option.EMPTY_OPTION);
+        city.setDefaultOption(Option.EMPTY_OPTION);
+        suburb.setDefaultOption(Option.EMPTY_OPTION);
 
         // Populate the States. Do this before binding requests
         populateStateData();
@@ -113,6 +113,11 @@ public class PopulateOnSelect extends BorderPage {
 
         // If city is selected, proceed to populate suburbs
         populateSuburbData(city.getValue());
+
+        // If save was not clicked, don't validate
+        if(form.isFormSubmission() && !save.isClicked()) {
+            form.setValidate(false);
+        }
     }
 
     @Override
@@ -120,14 +125,14 @@ public class PopulateOnSelect extends BorderPage {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
-            Map<String, Object> model = new HashMap<String, Object>();
-            model.put("stateId", state.getId());
-            model.put("cityId", city.getId());
-            model.put("suburbId", suburb.getId());
+            Map<String, Object> templateModel = new HashMap<String, Object>();
+            templateModel.put("stateId", state.getId());
+            templateModel.put("cityId", city.getId());
+            templateModel.put("suburbId", suburb.getId());
 
             // populate-on-select.js is a Velocity template which is rendered directly
             // from this Page
-            JsScript script = new JsScript("/form/dynamic/populate-on-select.js", model);
+            JsScript script = new JsScript("/form/dynamic/populate-on-select.js", templateModel);
             headElements.add(script);
         }
         return headElements;
