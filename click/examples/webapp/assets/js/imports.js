@@ -387,37 +387,29 @@ function validateForm(msgs, id, align, style) {
 }
 
 /**
- * Submit the form and optionally validate the fields.
+ * Submit the form and checks that no field or button is called 'submit' as
+ * it causes JS exceptions.
  *
- * Usage: <input onclick="Click.submit(form, false)">
+ * Usage: <input onclick="Click.submit(form)">
  */
-Click.submit=function(form, validate) {
+Click.submit=function(form) {
     if (typeof form == 'undefined') {
-        alert('Error: form is undefined. Usage: Click.submit(formName)');
+        alert('Error: form is undefined. Usage: Click.submit(form)');
         return false;
     }
 
-    // Validate is true by default
-    validate = (typeof validate == 'undefined') ? true : validate;
-
-    if (form) {
+if (form) {
         var formElements = form.elements;
         for (var i=0; i < formElements.length; i++) {
             var el = formElements[i];
     		    if(el.name=='submit'){
-               alert('Error: In order to submit the Form through JavaScript, buttons and fields must not be named "submit". Please rename the button/field called "submit".');
-               return false;
-           }
-        }
-        if (!validate) {
-            // Bypass JS validation
-            var input = document.getElementById(form.id + '_bypass_validation');
-            if (input) {
-                input.value='true';
+                alert('Error: In order to submit the Form through JavaScript, buttons and fields must not be named "submit". Please rename the button/field called "submit".');
+                return false;
             }
         }
-        form.submit();
     }
+    form.submit();
+    return true;
 }
 
 /* Validate Functions */

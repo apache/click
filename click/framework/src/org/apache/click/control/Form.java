@@ -471,31 +471,34 @@ import org.apache.commons.lang.StringUtils;
  * and in a hidden field in the form to ensure a form post isn't replayed.
  *
  * <a name="dynamic-forms"></a>
- * <h3>Dynamic Forms and bypassing validation</h3>
+ * <h3>Dynamic Forms and <em>not</em> validating a request</h3>
  *
  * A common use case for web applications is to create Form fields dynamically
  * based upon user selection. For example if a checkbox is ticked another Field
  * is added to the Form. A simple way to achieve this is using JavaScript
  * to submit the Form when the Field is changed or clicked.
  * <p/>
- * When submitting a Form using JavaScript, it is often undesirable to validate
- * the fields since the user is still filling out the form.
- * To cater for this use case, Form provides the ability to bypass the validation
- * step. A special hidden field called, {@link #BYPASS_VALIDATION}, is added to
- * the Form which controls whether validation should be bypassed or not.
- * <p/>
- * Form also provides a JavaScript function (part of the <tt>"/click/control.js"</tt>
- * resource) that will submit the Form and optionally bypasses validation. The
- * JavaScript function is:
- * <tt>"Click.submit(form, validate)"</tt> and can be used as follows:
+ * When submitting a Form using JavaScript, it is often desirable to <em>not</em>
+ * validate the fields since the user is still filling out the form.
+ * To cater for this use case, Form provides the {@link #setValidate(boolean)}
+ * to switch off form and field validation. For example:
+ *
  * <pre class="prettyprint">
- * Form form = new Form("myform");
+ * public void onInit() {
+ *     checkbox.setAttribute("onclick", "form.submit()");
  *
- * // The second argument to Click.submit is "false", meaning validation is bypassed
- * checkbox.setAttribute("onclick", "Click.submit(form, false)");
+ *     // Since onInit occurs before the onProcess event,
+ *     // we have to explicitly bind the submit button in the onInit event if we
+ *     // want to check if it was clicked.
+ *     // If the submit button wasn't clicked it means the Form was submitted
+ *     // using JavaScript and we don't want to validate yet
+ *     ClickUtils.bind(submit);
  *
- * // For a Select field use the "onchange" JavaScript event instead
- * select.setAttribute("onchange", "Click.submit(form, false)"); </pre>
+ *     // If submit was not clicked, don't validate
+ *     if(form.isFormSubmission() && !submit.isClicked()) {
+ *         form.setValidate(false);
+ *     }
+ * } </pre>
  *
  * <p>&nbsp;<p/>
  * See also the W3C HTML reference:
@@ -548,12 +551,6 @@ public class Form extends AbstractContainer implements Stateful {
      * The form name parameter for multiple forms: &nbsp; <tt>"form_name"</tt>.
      */
     public static final String FORM_NAME = "form_name";
-
-    /**
-     * The parameter name for bypassing form validation: &nbsp;
-     * <tt>"bypass_validation"</tt>.
-     */
-    public static final String BYPASS_VALIDATION = "bypass_validation";
 
     /** The HTTP content type header for multipart forms. */
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
@@ -669,9 +666,6 @@ public class Form extends AbstractContainer implements Stateful {
      * added by Form does not interfere with Controls added by users.
      */
     private int insertIndexOffset; // Ensures hiddenFields added by Form are always at the end of the controlList
-
-    /** Flag indicating whether validation is bypassed or not. */
-    private Boolean bypassValidation = null;
 
     // Constructors -----------------------------------------------------------
 
@@ -1299,26 +1293,6 @@ public class Form extends AbstractContainer implements Stateful {
     }
 
     /**
-     * Return whether or not validation is bypassed for this request. This flag
-     * is controlled by a request parameter called {@link #BYPASS_VALIDATION}.
-     * If this request parameter is "<tt>true</tt>", validation will be bypassed
-     * for this request.
-     * <p/>
-     * This feature is useful for dynamic forms where JavaScript events are
-     * registered on Controls which in turn submits the Form.
-     * <p/>
-     * For more details see
-     *
-     * @return true if validation should be bypassed, false otherwise
-     */
-    public boolean isBypassValidation() {
-        if (bypassValidation == null) {
-            bypassValidation = "true".equals(getContext().getRequestParameter(BYPASS_VALIDATION));
-        }
-        return bypassValidation;
-    }
-
-    /**
      * Set the name of the form.
      *
      * @see org.apache.click.Control#setName(String)
@@ -1332,15 +1306,6 @@ public class Form extends AbstractContainer implements Stateful {
             throw new IllegalArgumentException("Null name parameter");
         }
         this.name = name;
-
-        // TODO: Remove with stateful pages
-        HiddenField bypassValidationField = (HiddenField) getField(BYPASS_VALIDATION);
-        if (bypassValidationField == null) {
-            // Create a hidden field which name and value cannot be change
-            bypassValidationField = new ImmutableHiddenField(BYPASS_VALIDATION, Boolean.FALSE);
-            add(bypassValidationField);
-            insertIndexOffset++;
-        }
 
         // TODO: Remove with stateful pages
         HiddenField nameField = (HiddenField) getField(FORM_NAME);
@@ -1422,17 +1387,11 @@ public class Form extends AbstractContainer implements Stateful {
     /**
      * Return true if the Form fields should validate themselves when being
      * processed.
-     * <p/>
-     * If {@link #isBypassValidation()} returns true, Form fields will not be
-     * validated.
      *
      * @return true if the form fields should perform validation when being
      *  processed
      */
     public boolean getValidate() {
-        if (isBypassValidation()) {
-            return false;
-        }
         return validate;
     }
 
@@ -2028,7 +1987,6 @@ public class Form extends AbstractContainer implements Stateful {
     public void onDestroy() {
         super.onDestroy();
 
-        bypassValidation = null;
         formSubmission = null;
         setError(null);
     }
@@ -2495,19 +2453,16 @@ public class Form extends AbstractContainer implements Stateful {
      */
     protected void renderFields(HtmlStringBuffer buffer) {
 
-        // If Form contains only FORM_NAME and BYPASS_VALIDATION HiddenFields,
-        // exit early
-        if (getControls().size() == 2) {
+        // If Form contains only the FORM_NAME HiddenField, exit early
+        if (getControls().size() == 1) {
 
             // getControlMap is cheaper than getFieldMap, so check that first
-            if (getControlMap().containsKey(FORM_NAME)
-                && getControlMap().containsKey(BYPASS_VALIDATION)) {
+            if (getControlMap().containsKey(FORM_NAME)) {
                 return;
 
             } else {
                 Map<String, Field> fieldMap = ContainerUtils.getFieldMap(this);
-                if (fieldMap.containsKey(FORM_NAME)
-                    && fieldMap.containsKey(BYPASS_VALIDATION)) {
+                if (fieldMap.containsKey(FORM_NAME)) {
                     return;
                 }
             }
@@ -2820,9 +2775,6 @@ public class Form extends AbstractContainer implements Stateful {
             buffer.append("</td></tr>\n");
         }
 
-        // Reset bypass flag to ensure it does not influence the validate flag
-        bypassValidation = Boolean.FALSE;
-
         // Render JavaScript form validation code
         if (isJavaScriptValidation()) {
             buffer.append("<tr style=\"display:none\" id=\"");
@@ -2944,9 +2896,6 @@ public class Form extends AbstractContainer implements Stateful {
      * @param formFields the list of form fields
      */
     protected void renderValidationJavaScript(HtmlStringBuffer buffer, List<Field> formFields) {
-
-        // Reset bypass flag to ensure it does not influence the validate flag
-        bypassValidation = Boolean.FALSE;
 
         // Render JavaScript form validation code
         if (isJavaScriptValidation()) {

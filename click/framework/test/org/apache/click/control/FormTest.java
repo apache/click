@@ -178,10 +178,9 @@ public class FormTest extends TestCase {
         // Create form.
         testForm = new Form("form");
 
-        // Form automatically creates and adds two HiddenFields. One for storing
-        // the form anem between requests and one for tracking if form validation
-        // is bypassed. The form name field is at index 1 at the start
-        // of each test.
+        // Form automatically creates and adds one HiddenField for storing
+        // the form name between requests. The form name field is at index 1
+        // at the start of each test.
         // The tests below checks the trackField index position in the Form
         // for the lists Form#controls, Form#fieldList and Form#buttonList
         trackField = (HiddenField) testForm.getField(Form.FORM_NAME);
@@ -268,9 +267,9 @@ public class FormTest extends TestCase {
      * Form#buttonList should not.
      */
     public void testInsertOrderAfterInsertingButton() {
-        // Check that the fieldList includes only two hidden fields (FORM_NAME
-        // and BYPASS_VALIDATION) thus size is 2
-        assertTrue(testForm.getFieldList().size() == 2);
+        // Check that the fieldList includes only hidden field, FORM_NAME,
+        // thus size is 1
+        assertTrue(testForm.getFieldList().size() == 1);
 
         Button button = new Button("button1");
 
@@ -281,7 +280,7 @@ public class FormTest extends TestCase {
         // button index: #buttonList=0
         assertTrue(testForm.getButtonList().indexOf(button) == 0);
         // Check that button was not added to fieldList accidentally
-        assertTrue(testForm.getFieldList().size() == 2);
+        assertTrue(testForm.getFieldList().size() == 1);
     }
 
     /**
@@ -315,33 +314,36 @@ public class FormTest extends TestCase {
 
         testForm.insert(field, 0);
 
+        int expectedIndex = 0;
         // field index: #controls=0
-        assertTrue(testForm.getControls().indexOf(field) == 0);
+        assertEquals(expectedIndex, testForm.getControls().indexOf(field));
         // field index: #fieldList=0
-        assertTrue(testForm.getFieldList().indexOf(field) == 0);
+        assertEquals(expectedIndex, testForm.getFieldList().indexOf(field));
 
+        int expectedSize = 1;
         // trackField index: #controls=1
-        assertTrue(testForm.getControls().indexOf(trackField) == 1);
+        assertEquals(expectedSize, testForm.getControls().indexOf(trackField));
         // trackField index: #fieldList=1
-        assertTrue(testForm.getFieldList().indexOf(trackField) == 1);
+        assertEquals(expectedSize, testForm.getFieldList().indexOf(trackField));
 
-        int expectedSize = 3;
-        // Check the list sizes to be 3
-        assertTrue(testForm.getControls().size() == expectedSize);
-        assertTrue(testForm.getFieldList().size() == expectedSize);
+        expectedSize = 2;
+        // Check the list sizes to be 2
+        assertEquals(expectedSize, testForm.getControls().size());
+        assertEquals(expectedSize, testForm.getFieldList().size());
 
         // Removing field should shift up trackField index
         testForm.remove(field);
 
-        expectedSize = 2;
-        // Check the list sizes to be 2
-        assertTrue(testForm.getControls().size() == expectedSize);
-        assertTrue(testForm.getFieldList().size() == expectedSize);
+        expectedSize = 1;
+        // Check the list sizes to be 1
+        assertEquals(expectedSize, testForm.getControls().size());
+        assertEquals(expectedSize, testForm.getFieldList().size());
 
         // trackField index: #controls=0
-        assertTrue(testForm.getControls().indexOf(trackField) == 0);
+        expectedSize = 0;
+        assertEquals(expectedSize, testForm.getControls().indexOf(trackField));
         // trackField index: #fieldList=0
-        assertTrue(testForm.getFieldList().indexOf(trackField) == 0);
+        assertEquals(expectedSize, testForm.getFieldList().indexOf(trackField));
     }
 
     /**
@@ -756,14 +758,14 @@ public class FormTest extends TestCase {
     public void testReplaceFields() {
         Form form = new Form("form");
 
-        // Add two fields named child1 and child2
+        // Add two fields named child1 and child2 (form auto adds FORM_NAME HiddenField as well)
         Field child1 = new TextField("child1");
         Field child2 = new TextField("child2");
         form.add(child1);
         form.add(child2);
-        assertEquals(4, form.getControlMap().size());
-        assertEquals(4, form.getControls().size());
-        assertEquals(4, form.getFields().size());
+        assertEquals(3, form.getControlMap().size());
+        assertEquals(3, form.getControls().size());
+        assertEquals(3, form.getFields().size());
         assertSame(child1, form.getControls().get(0));
         assertSame(child2, form.getControls().get(1));
         assertSame(child1, form.getFieldList().get(0));
@@ -775,9 +777,9 @@ public class FormTest extends TestCase {
         child2 = new TextField("child2");
         form.add(child1);
         form.add(child2);
-        assertEquals(4, form.getControlMap().size());
-        assertEquals(4, form.getControls().size());
-        assertEquals(4, form.getFields().size());
+        assertEquals(3, form.getControlMap().size());
+        assertEquals(3, form.getControls().size());
+        assertEquals(3, form.getFields().size());
         assertSame(child1, form.getControls().get(0));
         assertSame(child2, form.getControls().get(1));
         assertSame(child1, form.getFieldList().get(0));
@@ -792,14 +794,14 @@ public class FormTest extends TestCase {
     public void testReplaceButtons() {
         Form form = new Form("form");
 
-        // Add two fields named child1 and child2
+        // Add two fields named child1 and child2 (form auto adds FORM_NAME HiddenField as well)
         Button child1 = new Button("child1");
         Button child2 = new Button("child2");
         form.add(child1);
         form.add(child2);
-        assertEquals(4, form.getControlMap().size());
-        assertEquals(4, form.getControls().size());
-        assertEquals(4, form.getFields().size());
+        assertEquals(3, form.getControlMap().size());
+        assertEquals(3, form.getControls().size());
+        assertEquals(3, form.getFields().size());
         assertSame(child1, form.getControls().get(0));
         assertSame(child2, form.getControls().get(1));
         assertSame(child1, form.getButtonList().get(0));
@@ -811,9 +813,9 @@ public class FormTest extends TestCase {
         child2 = new Button("child2");
         form.add(child1);
         form.add(child2);
-        assertEquals(4, form.getControlMap().size());
-        assertEquals(4, form.getControls().size());
-        assertEquals(4, form.getFields().size());
+        assertEquals(3, form.getControlMap().size());
+        assertEquals(3, form.getControls().size());
+        assertEquals(3, form.getFields().size());
         assertSame(child1, form.getControls().get(0));
         assertSame(child2, form.getControls().get(1));
         assertSame(child1, form.getButtonList().get(0));
