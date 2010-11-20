@@ -76,7 +76,7 @@ Action support and light-weight stateful controls to replace stateful pages.
 
 <dl>
   <dt><a name="2.3.0"></a>
-      <div class="release-header">Latest Development Release - Version 2.3.0 Milestone 1 - ?? October 2010</div>
+      <div class="release-header">Latest Development Release - Version 2.3.0 Milestone 1 - 28 November 2010</div>
   </dt>
   <dd>
       <div style="margin-left:-2em;margin-bottom:1em;">
@@ -134,6 +134,21 @@ Action support and light-weight stateful controls to replace stateful pages.
         <li class="change">
           Added an example FieldSeparator Control and example usage page
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-544">CLK-544</a>].
+        </li>
+      </ul>
+      <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+        <b>Removed:</b>
+      </div>
+      <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+        <li class="change">
+          Removed the ability to automatically <tt>bypass validation</tt> for
+          Forms through JavaScript. This ability was added in 2.2.0 but raised
+          concerns over security and was dropped for 2.3.0. If you used this
+          feature in existing applications, please see the
+          <a href="upgrade-path.html#removed-bypass-validation">Upgrade path</a>
+          for a safe alternative to <tt>bypass validation</tt>. We apologize for
+          the inconvenience.
+          <p/>
         </li>
       </ul>
       <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
