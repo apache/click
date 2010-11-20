@@ -20,6 +20,7 @@ package org.apache.click.extras.cayenne;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.cayenne.BaseContext;
 import org.apache.click.control.Checkbox;
@@ -467,6 +468,28 @@ public class CayenneForm extends Form {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Return the CayenneForm state.
+     *
+     * @see org.apache.click.control.Form
+     *
+     * @return the state of input Fields and FieldSets contained in the form
+     */
+    @Override
+    public Object getState() {
+        Map stateMap = (Map) super.getState();
+
+        if (stateMap == null || stateMap.isEmpty()) {
+            return null;
+        }
+
+        // Ensure the FO_CLASS HiddenField isn't stored as it's value does not change
+        // between requests
+        stateMap.remove(FO_CLASS);
+
+        return stateMap;
     }
 
     /**
