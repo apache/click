@@ -168,6 +168,10 @@ Action support and light-weight stateful controls to replace stateful pages.
           However the majority of use cases are catered for by the new stateful
           support in the controls: Table, Form, TabbedPanel, Field and AbstractLink.
         </li>
+        <li class="change">Deprecated <a href="click-api/org/apache/click/util/ActionListenerAdaptor.html">ActionListenerAdaptor</a>
+            since ActionListener only has a single method and no adaptor is necessary
+            [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-731">CLK-731</a>].
+        </li>
       </ul>
       <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
         <b>New features and issues resolved:</b>
@@ -271,16 +275,6 @@ Action support and light-weight stateful controls to replace stateful pages.
           <li class="change">
               Fixed race condition while initializing cached menus
               [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-713">CLK-713</a>].
-          </li>
-          <li class="change">
-            Fixed the JavaScript function <tt>Click.submit(form, validate)</tt> which incorrectly
-            stated that the first argument is the form name. The first argument
-            is in fact the form instance.
-            <p/>
-            For example:
-            <pre class="prettyprint">
-Select.setAttribute("onchange", "Click.submit(form, false)");
-</pre>
           </li>
           <li class="change">
               Fixed menu not rendering separator
