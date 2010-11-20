@@ -221,7 +221,14 @@ public abstract class AbstractControl implements Control {
      */
     public ActionListener getActionListener() {
         if (actionListener == null && listener != null && listenerMethod != null) {
-            actionListener = new ActionListenerAdaptor(listener, listenerMethod);
+            actionListener = new ActionListener() {
+
+                private static final long serialVersionUID = 1L;
+
+                public boolean onAction(Control source) {
+                    return ClickUtils.invokeListener(listener, listenerMethod);
+                }
+            };
         }
         return actionListener;
     }
