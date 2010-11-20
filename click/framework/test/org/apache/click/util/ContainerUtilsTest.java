@@ -64,9 +64,9 @@ public class ContainerUtilsTest extends TestCase {
         
         List<Field> fields = ContainerUtils.getInputFields(form);
         
-        // Total should be 4 consisting of the fields "hidden", "id" and the
-        // Forms internal HiddenFields "form_name" and "bypass_validation".
-        assertEquals(4, fields.size());
+        // Total should be 3 consisting of the fields "hidden", "id" and the
+        // Forms internal HiddenField, "form_name".
+        assertEquals(3, fields.size());
     }
 
     /**
