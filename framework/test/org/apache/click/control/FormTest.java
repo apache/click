@@ -859,6 +859,8 @@ public class FormTest extends TestCase {
      * CLK-715
      */
     public void testGetState() {
+        MockContext.initContext();
+
         // Setup Form and Fields
         Form form = new Form("form");
         Field nameField  = new TextField("name");
@@ -899,6 +901,8 @@ public class FormTest extends TestCase {
      * CLK-715
      */
     public void testSetState() {
+        MockContext.initContext();
+
         // Setup Form and Fields
         Form form = new Form("form");
         Field nameField  = new TextField("name");
