@@ -54,24 +54,16 @@ public class DynamicSelect extends BorderPage {
 
     public DynamicSelect() {
 
-        form.setActionListener(new ActionListener() {
-            private static final long serialVersionUID = 1L;
-
-            public boolean onAction(Control source) {
-                return onFormSubmit();
-            }
-        });
-
         form.add(nameField);
 
         select.add(Option.EMPTY_OPTION);
         select.addAll(INVESTMENTS);
         form.add(select);
 
-        // The Click script, '/click/control.js', provides the JavaScript
-        // function Click.submit(form, validate). To bypass validation
-        // specify 'false' as the second argument.
-        select.setAttribute("onchange", "Click.submit(form, false)");
+        // NB: when using form.submit() the submit button cannot be
+        // called 'submit'. If it is, the browser is likely to throw a JS exception.
+        // In this demo the submit button is called 'ok'.
+        select.setAttribute("onchange", "form.submit();");
 
         form.add(submit);
 
@@ -88,22 +80,23 @@ public class DynamicSelect extends BorderPage {
             address.add(new DoubleField("amount", true));
             form.add(address);
         }
-    }
 
-    // Event Handlers ---------------------------------------------------------
+        // When checkbox is checked and form is submitted, we don't want to validate
+        // the partially filled in form
+        if(form.isFormSubmission() && !submit.isClicked()) {
+            form.setValidate(false);
+            addModel("msg", "Validation is bypassed");
+        }
 
-    public boolean onFormSubmit() {
-        // onFormSubmit listens on Form itself and will be invoked whenever the
-        // form is submitted.
-        if (form.isValid()) {
+        submit.setActionListener(new ActionListener() {
+            private static final long serialVersionUID = 1L;
 
-            // Check isBypassValidation() flag whether the form validation occurred
-            if (form.isBypassValidation()) {
-                addModel("msg", "Validation bypassed");
-            } else {
+            public boolean onAction(Control source) {
+                if (form.isValid()) {
                 addModel("msg", "Form is valid after validation");
             }
-        }
-        return true;
+                return true;
+            }
+        });
     }
 }

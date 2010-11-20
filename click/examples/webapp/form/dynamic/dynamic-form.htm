@@ -1,9 +1,10 @@
 This example demonstrates how to dynamically add fields to a form.
 <ul>
     <li>
-        The JavaScript function <tt>Click.submit(form, validate)</tt> is set as
-        the checkbox <tt>onclick</tt> handler. Clicking the checkbox will submit
-        the form, but bypass form validation.
+        The form is submitted using the JavaScript statement, <tt>form.submit()</tt>,
+        which is set as the Checkbox <tt>onclick</tt> handler. Clicking the checkbox
+        will submit the form. On the server, Form
+        <tt>validation</tt> is switched off through, <tt>Form.setValidate(false)</tt>.
     </li>
     <li>
         The utility method <tt>ClickUtils.bind(Control)</tt> is used to bind

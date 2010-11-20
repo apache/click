@@ -64,19 +64,17 @@ public class DynamicFieldSet extends BorderPage {
         customerFS.add(ageField);
         customerFS.add(addressChk);
 
-        // The Click script, '/click/control.js', provides the JavaScript
-        // function Click.submit(form, validate). To bypass validation
-        // specify 'false' as the second argument.
-        addressChk.setAttribute("onclick", "Click.submit(form, false)");
+        // NB: when using form.submit() the submit button cannot be
+        // called 'submit'. If it is, the browser is likely to throw a JS exception.
+        addressChk.setAttribute("onclick", "form.submit();");
 
         form.add(submit);
 
         addControl(form);
 
-        // NB: Bind and validate form fields *before* the onProcess event,
-        // enabling us to inspect Field values in the onInit event or even
-        // the Page constructor
-        boolean valid = ClickUtils.bindAndValidate(form);
+        // NB: Bind form fields *before* the onProcess event,
+        // enabling us to inspect Field values in the onInit event (or the Page constructor)
+        ClickUtils.bind(form);
 
         // We can safely check whether the user checked the addressChk
         if (addressChk.isChecked()) {
@@ -85,27 +83,26 @@ public class DynamicFieldSet extends BorderPage {
             form.add(addressFS);
         }
 
-        form.setActionListener(new ActionListener() {
+        // NB: Bind submit. If it wasn't clicked it means the Form was submitted
+        // By JavaScript and we don't want to validate yet
+        ClickUtils.bind(submit);
+
+        // When checkbox is checked and form is submitted, we don't want to validate
+        // the partially filled form
+        if(form.isFormSubmission() && !submit.isClicked()) {
+            form.setValidate(false);
+            addModel("msg", "Validation is bypassed");
+        }
+
+        submit.setActionListener(new ActionListener() {
             private static final long serialVersionUID = 1L;
 
             public boolean onAction(Control source) {
-                return onFormSubmit();
-            }
-        });
-    }
-
-    public boolean onFormSubmit() {
-        // onFormSubmit listens on Form itself and will be invoked whenever the
-        // form is submitted.
-        if (form.isValid()) {
-
-            // Check isBypassValidation() flag whether the form validation occurred
-            if (form.isBypassValidation()) {
-                addModel("msg", "Validation bypassed");
-            } else {
+                if (form.isValid()) {
                 addModel("msg", "Form is valid after validation");
             }
-        }
-        return true;
+                return true;
+            }
+        });
     }
 }
