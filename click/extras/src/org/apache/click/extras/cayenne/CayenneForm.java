@@ -255,6 +255,7 @@ public class CayenneForm extends Form {
      *
      * @see org.apache.click.control.Form#clearValues()
      */
+    @Override
     public void clearValues() {
         List fields = ContainerUtils.getInputFields(this);
         Field field = null;
@@ -495,17 +496,17 @@ public class CayenneForm extends Form {
      */
     public boolean saveChanges() {
         // Load data object into data context
-        DataObject dataObject = getDataObject();
+        DataObject localDataObject = getDataObject();
 
-        if (!isPersistent(dataObject)) {
-            getDataContext().registerNewObject(dataObject);
+        if (!isPersistent(localDataObject)) {
+            getDataContext().registerNewObject(localDataObject);
         }
 
         try {
             getDataContext().commitChanges();
 
             // update oidField with new/generated primary key value
-            Object pk = DataObjectUtils.pkForObject(dataObject);
+            Object pk = DataObjectUtils.pkForObject(localDataObject);
             oidField.setValue(pk.toString());
 
             return true;
@@ -530,6 +531,7 @@ public class CayenneForm extends Form {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
         applyMetaData();
         return super.onProcess();
@@ -540,6 +542,7 @@ public class CayenneForm extends Form {
      *
      * @see Form#onDestroy()
      */
+    @Override
     public void onDestroy() {
         super.onDestroy();
         dataObject = null;
@@ -555,6 +558,7 @@ public class CayenneForm extends Form {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         applyMetaData();
 
