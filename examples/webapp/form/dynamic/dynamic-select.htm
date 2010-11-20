@@ -1,17 +1,19 @@
-This example demonstrates how to dynamically add fieldsets to a form.
+This example demonstrates how to dynamically add fields to a form through a
+select control.
 <ul>
     <li>
-        The JavaScript function <tt>Click.submit(form, validate)</tt> is set as
-        the Select <tt>onchange</tt> handler. Changing the select option will
-        submit the form, but bypass form validation.
+        The form is submitted using the JavaScript statement, <tt>form.submit()</tt>,
+        which is set as the Select <tt>onchange</tt> handler. Changing the select
+        option will submit the form. On the server, Form
+        <tt>validation</tt> is switched off through, <tt>Form.setValidate(false)</tt>.
     </li>
     <li>
         The utility method <tt>ClickUtils.bind(Form)</tt> is used to bind
         and inspect the Select value <tt>before</tt> the page onProcess event.
     </li>
     <li>
-        If the selected value is "Property" an address fieldset is added to the form.
-        If the selected value is "Stocks" an amount field is added to the form.
+        If the selected value is "Property", an address fieldset is added to the form.
+        If the selected value is "Stocks", an amount field is added to the form.
     </li>
 
 </ul>

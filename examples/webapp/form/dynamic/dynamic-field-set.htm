@@ -1,12 +1,13 @@
 This example demonstrates how to dynamically add fieldsets to a form.
 <ul>
     <li>
-        The JavaScript function <tt>Click.submit(form, validate)</tt> is set as
-        the checkbox <tt>onclick</tt> handler. Clicking the checkbox will submit
-        the form, but bypass form validation.
+        The form is submitted using the JavaScript statement, <tt>form.submit()</tt>,
+        which is set as the Checkbox <tt>onclick</tt> handler. Clicking the checkbox
+        will submit the form. On the server, Form
+        <tt>validation</tt> is switched off through, <tt>Form.setValidate(false)</tt>.
     </li>
     <li>
-        The utility method <tt>ClickUtils.bindAndValidate(Form)</tt> is used
+        The utility method <tt>ClickUtils.bind(Form)</tt> is used
         to bind and inspect the checkbox value <tt>before</tt> the page onProcess
         event.
     </li>
