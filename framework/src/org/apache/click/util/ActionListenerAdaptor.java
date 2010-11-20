@@ -25,6 +25,9 @@ import org.apache.click.Control;
 
 /**
  * Provides an ActionListener adaptor instance.
+ *
+ * @deprecated ActionListener only has a single method to implement, there is
+ * no need for an adaptor
  */
 public class ActionListenerAdaptor implements ActionListener, Serializable {
 
