@@ -2664,7 +2664,7 @@ public class ClickUtils {
         if (state == null) {
             // Set null state to see if it differs from previous state
             Object pop = pageMap.put(controlName, state);
-            if(pop != null) {
+            if (pop != null) {
                 // Previous state differs from current state, so set the
                 // session attribute to force session replication in a cluster
                 context.setSessionAttribute(resourcePath, pageMap);
