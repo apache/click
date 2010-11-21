@@ -41,7 +41,6 @@ import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.click.element.Element;
-import org.apache.click.util.ActionListenerAdaptor;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -215,7 +214,7 @@ public abstract class AbstractControl implements Control {
     /**
      * Return the control's action listener. If the control has a listener
      * target and listener method defined, this method will return an
-     * {@link ActionListenerAdaptor} instance.
+     * {@link org.apache.click.ActionListener} instance.
      *
      * @return the control's action listener
      */

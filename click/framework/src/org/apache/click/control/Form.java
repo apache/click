@@ -1220,7 +1220,8 @@ public class Form extends AbstractContainer implements Stateful {
     }
 
     /**
-     * Return the Form HTML HEAD elements for the following resources:
+     * Return the Form HEAD elements to be included in the page.
+     * The following resources are returned:
      *
      * <ul>
      * <li><tt>click/control.css</tt></li>
@@ -1879,9 +1880,9 @@ public class Form extends AbstractContainer implements Stateful {
         List<Field> fields = new ArrayList<Field>();
         addStatefulFields(this, fields);
         Map<String, Object> stateMap = new HashMap<String, Object>();
-        for(Field field : fields) {
+        for (Field field : fields) {
             Object state = field.getState();
-            if(state != null) {
+            if (state != null) {
                 stateMap.put(field.getName(), state);
             }
         }
@@ -1907,7 +1908,7 @@ public class Form extends AbstractContainer implements Stateful {
         List<Field> fields = new ArrayList<Field>();
         addStatefulFields(this, fields);
 
-        for(Field field : fields) {
+        for (Field field : fields) {
             String fieldName = field.getName();
             if (stateMap.containsKey(fieldName)) {
                 Object fieldState = stateMap.get(fieldName);

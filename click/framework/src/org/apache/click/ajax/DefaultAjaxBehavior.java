@@ -18,7 +18,6 @@
  */
 package org.apache.click.ajax;
 
-import org.apache.click.Behavior;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.ActionResult;
@@ -90,6 +89,11 @@ public class DefaultAjaxBehavior implements AjaxBehavior {
         headElementsProcessed = true;
     }
 
+    /**
+     * @see org.apache.click.Behavior#preDestroy(org.apache.click.Control)
+     *
+     * @param source the control the behavior is registered with
+     */
     public void preDestroy(Control source) {
         headElementsProcessed = false;
     }
