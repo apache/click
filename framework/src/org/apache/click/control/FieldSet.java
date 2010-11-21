@@ -894,9 +894,9 @@ public class FieldSet extends Field implements Container {
         List<Field> fields = new ArrayList<Field>();
         addStatefulFields(this, fields);
         Map<String, Object> stateMap = new HashMap<String, Object>();
-        for(Field field : fields) {
+        for (Field field : fields) {
             Object state = field.getState();
-            if(state != null) {
+            if (state != null) {
                 stateMap.put(field.getName(), state);
             }
         }
@@ -923,7 +923,7 @@ public class FieldSet extends Field implements Container {
         List<Field> fields = new ArrayList<Field>();
         addStatefulFields(this, fields);
 
-        for(Field field : fields) {
+        for (Field field : fields) {
             String fieldName = field.getName();
             if (stateMap.containsKey(fieldName)) {
                 Object fieldState = stateMap.get(fieldName);

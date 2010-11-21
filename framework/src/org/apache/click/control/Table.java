@@ -387,7 +387,7 @@ public class Table extends AbstractControl implements Stateful {
      */
     protected int bannerPosition = POSITION_BOTTOM;
 
-    /** The table HTML &lt;caption&gt; element */
+    /** The table HTML &lt;caption&gt; element. */
     protected String caption;
 
     /** The map of table columns keyed by column name. */
