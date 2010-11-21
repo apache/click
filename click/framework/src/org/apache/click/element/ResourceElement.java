@@ -260,7 +260,7 @@ public class ResourceElement extends Element {
      * Returns the element render {@link #getId() ID} attribute status, default
      * value is true.
      *
-     * @see {@link #setRenderId(boolean)}
+     * @see #setRenderId(boolean)
      *
      * @return the element render id attribute status, default value is true
      */
