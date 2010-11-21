@@ -1404,18 +1404,23 @@ public class ContainerUtils {
      * @param value the object to convert into a BigDecimal
      * @return the converted BigDecimal value
      */
-        private BigDecimal bigDecValue( Object value ) {
-            if (value == null)
+        private BigDecimal bigDecValue(Object value) {
+            if (value == null) {
                 return BigDecimal.valueOf(0L);
+            }
             Class<?> c = value.getClass();
-            if ( c == BigDecimal.class )
-                return (BigDecimal)value;
-            if ( c == BigInteger.class )
-                return new BigDecimal( (BigInteger)value );
-                  if ( c == Boolean.class )
-                return BigDecimal.valueOf(((Boolean)value).booleanValue()? 1 : 0 );
-            if ( c == Character.class )
-                return BigDecimal.valueOf(((Character)value).charValue() );
+            if (c == BigDecimal.class) {
+                return (BigDecimal) value;
+            }
+            if (c == BigInteger.class) {
+                return new BigDecimal((BigInteger) value);
+            }
+            if (c == Boolean.class) {
+                return BigDecimal.valueOf(((Boolean) value).booleanValue()? 1 : 0);
+            }
+            if (c == Character.class) {
+                return BigDecimal.valueOf(((Character) value).charValue());
+            }
             return new BigDecimal(value.toString().trim());
         }
     }

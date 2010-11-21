@@ -626,9 +626,8 @@ public class CheckList extends Field {
     }
 
     /**
-     * Return the CheckList HTML head imports statements for the following
-     * resources:
-     * <p/>
+     * Return the CheckList HEAD elements to be included in the page.
+     * The following resources are returned:
      * <ul>
      * <li><tt>click/checklist/checklist.css</tt></li>
      * <li><tt>click/checklist/checklist.js</tt></li>
