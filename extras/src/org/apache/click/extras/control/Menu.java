@@ -1032,9 +1032,9 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Return the Menu HTML HEAD elements for the following
-     * resources:
-     * <p/>
+     * Return the Menu HEAD elements to be included in the page.
+     * The following resources are returned:
+     *
      * <ul>
      * <li><tt>click/menu.css</tt></li>
      * <li><tt>click/control.js</tt></li>
