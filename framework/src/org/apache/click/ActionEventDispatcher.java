@@ -94,6 +94,11 @@ public class ActionEventDispatcher {
 
     // Constructors -----------------------------------------------------------
 
+    /**
+     * Construct the ActionEventDispatcher with the given ConfigService.
+     *
+     * @param configService the click application configuration service
+     */
     public ActionEventDispatcher(ConfigService configService) {
         this.logger = configService.getLogService();
     }
@@ -146,6 +151,9 @@ public class ActionEventDispatcher {
      * Unlike {@link #getThreadLocalDispatcher()} this method can safely be used
      * and will not throw an exception if an ActionEventDispatcher is not
      * available on the current thread.
+     *
+     * @return true if an ActionEventDispatcher instance is available on the
+     * current thread, false otherwise
      */
     public static boolean hasThreadLocalDispatcher() {
         DispatcherStack dispatcherStack = THREAD_LOCAL_DISPATCHER_STACK.get();

@@ -140,6 +140,9 @@ public class ControlRegistry {
      * Unlike {@link #getThreadLocalRegistry()} this method can safely be used
      * and will not throw an exception if a ControlRegistry is not available on
      * the current thread.
+     *
+     * @return true if an ControlRegistry instance is available on the
+     * current thread, false otherwise
      */
     public static boolean hasThreadLocalRegistry() {
         RegistryStack registryStack = THREAD_LOCAL_REGISTRY_STACK.get();
@@ -181,7 +184,7 @@ public class ControlRegistry {
      * {@link org.apache.click.Behavior#preResponse(org.apache.click.Control) preResponse(Control)} and
      * {@link org.apache.click.Behavior#preDestroy(org.apache.click.Control) preDestroy(Control)}.
      *
-     * @param source the interceptor source control
+     * @param control the interceptor source control
      * @param controlInterceptor the control interceptor to register
      */
     public static void registerInterceptor(Control control, Behavior controlInterceptor) {

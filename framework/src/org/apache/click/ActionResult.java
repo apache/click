@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.click.util.ClickUtils;
 
 /**
- * Provides an ActionResult that is returned by Page Actions and Ajax Behaviors.
+ * Provides an ActionResult that is returned by Page Actions and AjaxBehaviors.
  * ActionResults are often used to return a partial response to the browser
  * instead of the full page content.
  * <p/>
@@ -45,7 +45,7 @@ import org.apache.click.util.ClickUtils;
  * <h3>Ajax Behavior</h3>
  *
  * Ajax requests are handled by adding an {@link org.apache.click.ajax.AjaxBehavior Ajax Behavior}
- * to a control. The AjaxBehavior {@link org.apache.click.Behavior#onAction(org.apache.click.Control) onAction}
+ * to a control. The AjaxBehavior {@link org.apache.click.ajax.AjaxBehavior#onAction(org.apache.click.Control) onAction}
  * method will handle the request and return a ActionResult instance that contains
  * the response, thus bypassing the rendering of the Page template. For example:
  *

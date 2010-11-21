@@ -40,8 +40,20 @@ import org.apache.click.Control;
 public interface AjaxBehavior extends Behavior {
 
     /**
+     * This method can be implemented to handle and respond to an Ajax request.
+     * For example:
      *
-     * TODO: javadoc
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *     ActionLink link = new ActionLink("link");
+     *     link.addBehaior(new DefaultAjaxBehavior() {
+     *
+     *         public ActionResult onAction(Control source) {
+     *             ActionResult result = new ActionResult("&lt;h1&gt;Hello world&lt;/h1&gt;", ActionResult.HTML);
+     *             return result;
+     *         }
+     *     });
+     * } </pre>
      *
      * @param source the control the behavior is attached to
      * @return the action result instance

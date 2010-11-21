@@ -45,7 +45,7 @@ public class DefaultAjaxBehavior implements AjaxBehavior {
     // Behavior Methods -------------------------------------------------------
 
     /**
-     * @see org.apache.click.Behavior#onAction(org.apache.click.Control)
+     * @see org.apache.click.ajax.AjaxBehavior#onAction(org.apache.click.Control)
      *
      * @param source the control the behavior is registered with
      * @return the action result
