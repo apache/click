@@ -1416,7 +1416,7 @@ public class ContainerUtils {
                 return new BigDecimal((BigInteger) value);
             }
             if (c == Boolean.class) {
-                return BigDecimal.valueOf(((Boolean) value).booleanValue()? 1 : 0);
+                return BigDecimal.valueOf(((Boolean) value).booleanValue() ? 1 : 0);
             }
             if (c == Character.class) {
                 return BigDecimal.valueOf(((Character) value).charValue());
