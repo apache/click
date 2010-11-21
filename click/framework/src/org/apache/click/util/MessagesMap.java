@@ -277,7 +277,7 @@ public class MessagesMap implements Map<String, String> {
      * need to provide your own {@link org.apache.click.service.MessagesMapService}
      * or extend {@link org.apache.click.service.DefaultMessagesMapService}.
      * <p/>
-     * The method {@link org.apache.click.service.MessagesMapService#createMessagesMap(baseClass, globalBaseName, locale) createMessagesMap},
+     * The method {@link org.apache.click.service.MessagesMapService#createMessagesMap(java.lang.Class, java.lang.String, java.util.Locale)  createMessagesMap},
      * can be implemented to return your custom MessagesMap instances.
      *
      * @param resourceName the resource bundle name
