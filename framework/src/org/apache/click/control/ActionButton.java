@@ -358,7 +358,7 @@ public class ActionButton extends Button {
 
     /**
      * Defines a button parameter that will have its value bound to a matching
-     * request parameter. {@link #setParameter(java.lang.String, java.lang.Object) setParameter}
+     * request parameter. {@link #setParameter(java.lang.String, java.lang.String) setParameter}
      * implicitly defines a parameter as well.
      * <p/>
      * <b>Please note:</b> parameters need only be defined for Ajax requests.
