@@ -21,6 +21,7 @@ package org.apache.click.control;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import java.util.Map;
 import junit.framework.TestCase;
@@ -35,7 +36,7 @@ public class TableTest extends TestCase {
      * Check that Table prints message when no records are set.
      */
     public void testNoRows() {
-        MockContext.initContext();
+        MockContext.initContext(Locale.ENGLISH);
 
         Table table = new Table();
         Column column = new Column("Foo");
@@ -51,7 +52,7 @@ public class TableTest extends TestCase {
      * Check that Column id's are rendered properly.
      */
     public void testTdId() {
-        MockContext.initContext();
+        MockContext.initContext(Locale.ENGLISH);
         
         List<Foo> foos = new ArrayList<Foo>();
         foos.add(new Foo("foo1"));
@@ -76,7 +77,7 @@ public class TableTest extends TestCase {
      * Check Table paging shows correct page.
      */
     public void testPagingCurrentPage() {
-        MockContext.initContext();
+        MockContext.initContext(Locale.ENGLISH);
 
         List<Foo> foos = new ArrayList<Foo>();
         for (int i = 0; i < 1000; i++) {
@@ -105,7 +106,7 @@ public class TableTest extends TestCase {
      * Check that table row attributes are set.
      */
     public void testSetRowAttributes() {
-        MockContext.initContext();
+        MockContext.initContext(Locale.ENGLISH);
 
         List<Foo> foos = new ArrayList<Foo>();
         for (int i = 0; i < 3; i++) {
@@ -152,7 +153,7 @@ public class TableTest extends TestCase {
      * Test CLK-673 caption
      */
     public void testCaption() {
-        MockContext.initContext();
+        MockContext.initContext(Locale.ENGLISH);
 
         List<Foo> foos = new ArrayList<Foo>();
         foos.add(new Foo("foo1"));
@@ -239,7 +240,7 @@ public class TableTest extends TestCase {
      * when sortable=true.
      */
     public void testNoTitleOnLinkWhenSorting() {
-        MockContext.initContext("/mock.htm");
+        MockContext.initContext(Locale.ENGLISH, "/mock.htm");
 
         List<Foo> foos = new ArrayList<Foo>();
         foos.add(new Foo("foo1"));
