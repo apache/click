@@ -1027,7 +1027,14 @@ public class Menu extends AbstractControl {
                 // Guard against rendering "null" in the href
                 localPath = "";
             }
-            return context.getResponse().encodeURL(context.getRequest().getContextPath() + "/" + localPath);
+            StringBuilder sb = new StringBuilder();
+            String contextPath = context.getRequest().getContextPath();
+            sb.append(contextPath);
+            if (localPath.length() > 0 && localPath.charAt(0) != '/') {
+                sb.append('/');
+            }
+            sb.append(localPath);
+            return context.getResponse().encodeURL(sb.toString());
         }
     }
 
