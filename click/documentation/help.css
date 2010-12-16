@@ -334,3 +334,16 @@ ul.news-items li.news-item {
     margin-left: 0;
     padding-left: 25px;
 }
+#footer p{
+    color: #666;
+    font-size: 80%;
+    margin: 10px 0px;
+}
+
+#footer hr {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: 300px;
+    border: none;
+    border-top: 1px solid #999;
+}
