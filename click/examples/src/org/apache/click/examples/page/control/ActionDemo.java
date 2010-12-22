@@ -25,7 +25,6 @@ import org.apache.click.Control;
 import org.apache.click.control.ActionButton;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides an ActionLink and ActionButton demonstration Page.
@@ -38,17 +37,19 @@ public class ActionDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected ActionLink link = new ActionLink();
-    @Bindable protected ActionButton button = new ActionButton();
-    @Bindable protected String clicked;
+    private ActionLink link = new ActionLink("link");
+    private ActionButton button = new ActionButton("button");
 
     public ActionDemo() {
+        addControl(link);
+        addControl(button);
 
         link.setActionListener(new ActionListener() {
             private static final long serialVersionUID = 1L;
 
             public boolean onAction(Control source) {
-                clicked = source.getClass().getName() + ".onAction invoked at " + (new Date());
+                String msg = source.getClass().getName() + ".onAction invoked at " + (new Date());
+                addModel("msg", msg);
                 return true;
             }
         });
@@ -59,7 +60,8 @@ public class ActionDemo extends BorderPage {
     // --------------------------------------------------------- Event Handlers
 
     public boolean onButtonClick() {
-        clicked = getClass().getName() + ".onButtonClick invoked at " + (new Date());
+        String msg = getClass().getName() + ".onButtonClick invoked at " + (new Date());
+        addModel("msg", msg);
         return true;
     }
 }
