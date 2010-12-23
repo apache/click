@@ -29,7 +29,6 @@ import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.IntegerField;
 import org.apache.click.extras.control.PageSubmit;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides a Velocity Macro example.
@@ -38,9 +37,10 @@ public class VelocityMacro extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form();
+    private Form form = new Form("form");
 
     public VelocityMacro() {
+        addControl(form);
         TextField nameField = new TextField("name", true);
         nameField.setMinLength(5);
         nameField.setTitle("Customer full name");
