@@ -29,7 +29,6 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.EditCustomer;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -44,11 +43,9 @@ public class ActionTable extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected List<Customer> customers;
-    @Bindable protected Customer customerDetail;
-    @Bindable protected ActionLink viewLink = new ActionLink(this, "onViewClick");
-    @Bindable protected PageLink editLink = new PageLink(EditCustomer.class);
-    @Bindable protected ActionLink deleteLink = new ActionLink(this, "onDeleteClick");
+    private  ActionLink viewLink = new ActionLink("viewLink", this, "onViewClick");
+    private  PageLink editLink = new PageLink("editLink", EditCustomer.class);
+    private  ActionLink deleteLink = new ActionLink("deleteLink", this, "onDeleteClick");
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -57,13 +54,18 @@ public class ActionTable extends BorderPage {
     public void onInit() {
         super.onInit();
 
-        String path = getContext().getPagePath(getClass());
-        editLink.setParameter("referrer", path);
+        addControl(viewLink);
+        addControl(editLink);
+        addControl(deleteLink);
+
+        String pagePath = getContext().getPagePath(getClass());
+        editLink.setParameter("referrer", pagePath);
     }
 
     public boolean onViewClick() {
         Integer id = viewLink.getValueInteger();
-        customerDetail = customerService.getCustomerForID(id);
+        Customer customerDetail = customerService.getCustomerForID(id);
+        addModel("customerDetail", customerDetail);
 
         return true;
     }
@@ -83,7 +85,8 @@ public class ActionTable extends BorderPage {
      */
     @Override
     public void onRender() {
-        customers = customerService.getCustomersSortedByName(7);
+        List<Customer> customers = customerService.getCustomersSortedByName(7);
+        addModel("customers", customers);
         getFormat().setEmptyString("&nbsp;");
     }
 
