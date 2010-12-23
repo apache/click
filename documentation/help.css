@@ -347,3 +347,12 @@ ul.news-items li.news-item {
     border: none;
     border-top: 1px solid #999;
 }
+
+#asf-logo{
+    float: left;
+    border: none;
+    width: 200px;
+    height: 51px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
