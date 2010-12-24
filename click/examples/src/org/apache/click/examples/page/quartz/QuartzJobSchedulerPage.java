@@ -36,7 +36,6 @@ import org.apache.click.control.Table;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.quartz.JobAndSimpleTrigger;
 import org.apache.click.examples.quartz.SchedulerService;
-import org.apache.click.util.Bindable;
 import org.apache.click.util.HtmlStringBuffer;
 import org.quartz.Trigger;
 import org.quartz.ee.servlet.QuartzInitializerListener;
@@ -52,7 +51,7 @@ public class QuartzJobSchedulerPage extends BorderPage {
     private static final String DATE_FORMAT = "{0,date,hh:mm a d MMM yy }";
 
     /** The auto bound refresh button. */
-    @Bindable protected ActionButton refresh = new ActionButton("refresh");
+    private ActionButton refresh = new ActionButton("refresh");
 
     // Private Variables ------------------------------------------------------
 
@@ -70,6 +69,8 @@ public class QuartzJobSchedulerPage extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public QuartzJobSchedulerPage() {
+        // Add button
+        addControl(refresh);
 
         // Table
         addControl(table);
