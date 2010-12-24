@@ -41,18 +41,20 @@ public class PageLinkTreePage extends TreePage {
 
     private static final long serialVersionUID = 1L;
 
-    public static final String TREE_NODES_SESSION_KEY = "pageLinkTreeNodes";
+    public static final String LINK_TREE_NODES_SESSION_KEY = "pageLinkTreeNodes";
 
     // Protected Methods ------------------------------------------------------
 
     /**
      * Creates and return a new tree instance.
      */
+    @Override
     protected Tree createTree() {
         return new Tree("tree") {
 
             private static final long serialVersionUID = 1L;
 
+            @Override
             protected void renderValue(HtmlStringBuffer buffer, TreeNode treeNode) {
                 Object nodeValue = treeNode.getValue();
                 Class cls = null;
@@ -77,6 +79,7 @@ public class PageLinkTreePage extends TreePage {
      * Build the tree model and stores it in the session. This model represents
      * nodes which link to other example Pages.
      */
+    @Override
     protected TreeNode createNodes() {
 
         //Create a node representing the root directory with the specified
@@ -88,21 +91,24 @@ public class PageLinkTreePage extends TreePage {
 
         //Create a new directory, setting the root directory as its parent. Here
         //we do specify a id as the 2nd argument, so no id is generated.
-        TreeNode general = new TreeNode("Intro", "1", root);
+        TreeNode general = new TreeNode("Intro", "1");
+        root.add(general);
 
         boolean supportsChildNodes = false;
 
-        new TreeNode(HelloWorld.class, "1.1", general, supportsChildNodes);
-        new TreeNode(ControlListenerType1Page.class, "1.2", general, supportsChildNodes);
-        new TreeNode(ControlListenerType2Page.class, "1.3", general, supportsChildNodes);
+        general.add(new TreeNode(HelloWorld.class, "1.1", supportsChildNodes));
+        general.add(new TreeNode(ControlListenerType1Page.class, "1.2", supportsChildNodes));
+        general.add(new TreeNode(ControlListenerType2Page.class, "1.3", supportsChildNodes));
 
-        TreeNode forms = new TreeNode("Forms", "2", root);
-        new TreeNode(SimpleForm.class, "2.1", forms, supportsChildNodes);
-        new TreeNode(AdvancedForm.class, "2.2", forms, supportsChildNodes);
+        TreeNode forms = new TreeNode("Forms", "2");
+        root.add(forms);
+        forms.add(new TreeNode(SimpleForm.class, "2.1", supportsChildNodes));
+        forms.add(new TreeNode(AdvancedForm.class, "2.2", supportsChildNodes));
 
-        TreeNode tables = new TreeNode("Tables", "3", root);
-        new TreeNode(SimpleTable.class, "3.1", tables, supportsChildNodes);
-        new TreeNode(AdvancedTable.class, "3.2", tables, supportsChildNodes);
+        TreeNode tables = new TreeNode("Tables", "3");
+        root.add(tables);
+        tables.add(new TreeNode(SimpleTable.class, "3.1", supportsChildNodes));
+        tables.add(new TreeNode(AdvancedTable.class, "3.2",  supportsChildNodes));
 
         return root;
     }
@@ -112,8 +118,9 @@ public class PageLinkTreePage extends TreePage {
      *
      * @return the string under which the nodes are stored in the session
      */
+    @Override
     protected String getSessionKey() {
-        return TREE_NODES_SESSION_KEY;
+        return LINK_TREE_NODES_SESSION_KEY;
     }
 
 }

@@ -92,15 +92,15 @@ public class TreeTest extends TestCase {
         result = tree.getSelectedNodes(includeInvisibleNodes);
         assertEquals(3, result.size());
     }
-    
+
     /**
      * Test that getExpandedNodes return only visible nodes.
      */
     public void testGetExpandedNodes() {
         //ensure the testIds are expanded
-        String[] testIds = new String[] {"root", "three", "3.1", "3.1.1"};
-        for(int i = 0; i < testIds.length; i++) {
-            tree.expand(testIds[i]);
+        String[] testIdArray = new String[] {"root", "three", "3.1", "3.1.1"};
+        for(int i = 0; i < testIdArray.length; i++) {
+            tree.expand(testIdArray[i]);
         }
         tree.collapse("3.1");
         
@@ -133,22 +133,27 @@ public class TreeTest extends TestCase {
             return tree;
         }
         TreeNode node = new TreeNode("root", "root");
-        TreeNode node1 = new TreeNode("one", "one", node);
-        new TreeNode("1.1", "1.1", node1);
-        new TreeNode("1.2", "1.2", node1);
-        new TreeNode("2.1", "2.1", node1);
-        TreeNode node3 = new TreeNode("three","three", node);
-        TreeNode node4 = new TreeNode("four", "four", node);
-        TreeNode node31 = new TreeNode("3.1", "3.1", node3);
-        new TreeNode("3.2", "3.2", node3);
-        new TreeNode("3.3", "3.3", node3);
-        new TreeNode("3.1.1", "3.1.1", node31);
-        new TreeNode("3.1.2", "3.1.2", node31);
-        new TreeNode("3.1.3", "3.1.3", node31);
+        TreeNode node1 = new TreeNode("one", "one");
+        node.add(node1);
+        node1.add(new TreeNode("1.1", "1.1"));
+        node1.add(new TreeNode("1.2", "1.2"));
+        node1.add(new TreeNode("2.1", "2.1"));
+        TreeNode node3 = new TreeNode("three","three");
+        node.add(node3);
+        TreeNode node4 = new TreeNode("four", "four");
+        node.add(node4);
+        TreeNode node31 = new TreeNode("3.1", "3.1");
+        node3.add(node31);
+        node3.add(new TreeNode("3.2", "3.2"));
+        node3.add(new TreeNode("3.3", "3.3"));
+        node31.add(new TreeNode("3.1.1", "3.1.1"));
+         node31.add(new TreeNode("3.1.2", "3.1.2"));
+         node31.add(new TreeNode("3.1.3", "3.1.3"));
         
-        TreeNode node41 = new TreeNode("4.1", "4.1", node4);
-        new TreeNode("4.1.1", "4.1.1", node41);
-        new TreeNode("4.2.1", "4.2.1", node41);
+        TreeNode node41 = new TreeNode("4.1", "4.1");
+        node4.add(node41);
+        node41.add(new TreeNode("4.1.1", "4.1.1"));
+        node41.add(new TreeNode("4.2.1", "4.2.1"));
         
         tree.setRootNode(node);
         tree.expand(node);

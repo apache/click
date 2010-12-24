@@ -183,6 +183,12 @@ Action support and light-weight stateful controls to replace stateful pages.
           However the majority of use cases are catered for by the new stateful
           support in the controls: Table, Form, TabbedPanel, Field and AbstractLink.
         </li>
+        <li class="change">Deprecated <a href="extras-api/org/apache/click/extras/tree/TreeNode.html#TreeNode(java.lang.Object, java.lang.String, org.apache.click.extras.tree.TreeNode)">TreeNode constructors</a>
+            which accepts a parent node. Instead use
+            <a href="extras-api/org/apache/click/extras/tree/TreeNode.html#add(org.apache.click.extras.tree.TreeNode)">add</a>
+            to build the node hierarchy
+            [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-743">CLK-743</a>].
+        </li>
         <li class="change">Deprecated <a href="click-api/org/apache/click/util/ActionListenerAdaptor.html">ActionListenerAdaptor</a>
             since ActionListener only has a single method and no adaptor is necessary
             [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-731">CLK-731</a>].
