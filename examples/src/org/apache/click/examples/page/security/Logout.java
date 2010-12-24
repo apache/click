@@ -21,7 +21,6 @@ package org.apache.click.examples.page.security;
 import org.apache.click.Page;
 import org.apache.click.examples.domain.User;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides an user session logout Page.
