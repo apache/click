@@ -39,7 +39,6 @@ import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.LinkDecorator;
 import org.apache.click.extras.control.TableInlinePaginator;
-import org.apache.click.util.Bindable;
 import org.apache.click.dataprovider.DataProvider;
 
 /**
@@ -49,10 +48,10 @@ public class SearchTablePage extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form();
-    @Bindable protected Table table = new Table();
-    @Bindable protected PageLink editLink = new PageLink("Edit", EditCustomer.class);
-    @Bindable protected ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
+    private Form form = new Form("form");
+    private Table table = new Table("table");
+    private PageLink editLink = new PageLink("Edit", EditCustomer.class);
+    private ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
     private TextField nameField = new TextField(Customer.NAME_PROPERTY);
     private DateField dateField = new DateField(Customer.DATE_JOINED_PROPERTY, "Start Date");
@@ -67,6 +66,11 @@ public class SearchTablePage extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public SearchTablePage() {
+        addControl(form);
+        addControl(table);
+        addControl(editLink);
+        addControl(deleteLink);
+
         // Setup the search form
         form.setColumns(2);
         form.add(nameField);

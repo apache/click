@@ -27,7 +27,6 @@ import org.apache.click.control.Table;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.util.Bindable;
 import org.apache.click.dataprovider.PagingDataProvider;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +39,7 @@ public class LargeDatasetDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Table table;
+    private Table table = new Table("table");
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -48,7 +47,8 @@ public class LargeDatasetDemo extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public LargeDatasetDemo() {
-        table = new Table();
+        // Add table to page
+        addControl(table);
 
         // Setup customers table
         table.setClass(Table.CLASS_ITS);
