@@ -38,7 +38,6 @@ import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.LinkDecorator;
-import org.apache.click.util.Bindable;
 import org.apache.click.dataprovider.DataProvider;
 import org.springframework.stereotype.Component;
 
@@ -51,10 +50,10 @@ public class EditTable extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected CayenneForm form = new CayenneForm("form", Customer.class);
-    @Bindable protected Table table = new Table();
-    @Bindable protected ActionLink editLink = new ActionLink("edit", "Edit", this, "onEditClick");
-    @Bindable protected ActionLink deleteLink = new ActionLink("delete", "Delete", this, "onDeleteClick");
+    private CayenneForm form = new CayenneForm("form", Customer.class);
+    private Table table = new Table("table");
+    private ActionLink editLink = new ActionLink("edit", "Edit", this, "onEditClick");
+    private ActionLink deleteLink = new ActionLink("delete", "Delete", this, "onDeleteClick");
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -62,6 +61,11 @@ public class EditTable extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public EditTable() {
+        addControl(form);
+        addControl(table);
+        addControl(editLink);
+        addControl(deleteLink);
+
         // Setup customers form
         FieldSet fieldSet = new FieldSet("customer");
         fieldSet.add(new TextField("name"));

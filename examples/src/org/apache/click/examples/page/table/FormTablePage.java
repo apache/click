@@ -38,7 +38,6 @@ import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.FieldColumn;
 import org.apache.click.extras.control.FormTable;
 import org.apache.click.extras.control.NumberField;
-import org.apache.click.util.Bindable;
 import org.apache.click.dataprovider.DataProvider;
 import org.springframework.stereotype.Component;
 
@@ -52,7 +51,7 @@ public class FormTablePage extends BorderPage {
 
     private static final int NUM_ROWS = 20;
 
-    @Bindable protected FormTable table = new FormTable();
+    private FormTable table = new FormTable("table");
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -60,6 +59,8 @@ public class FormTablePage extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public FormTablePage() {
+        addControl(table);
+
         // Setup customers table
         table.setClass(Table.CLASS_SIMPLE);
         table.setWidth("700px");

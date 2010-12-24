@@ -32,7 +32,6 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.EditCustomer;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.util.Bindable;
 import org.apache.click.dataprovider.DataProvider;
 import org.springframework.stereotype.Component;
 
@@ -44,12 +43,11 @@ public class TableDecorator extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Table table = new Table();
-    @Bindable protected Customer customerDetail;
+    private Table table = new Table("table");
 
-    @Bindable protected ActionLink viewLink = new ActionLink("view", this, "onViewClick");
-    @Bindable protected PageLink editLink = new PageLink("edit", EditCustomer.class);
-    @Bindable protected ActionLink deleteLink = new ActionLink("delete", this, "onDeleteClick");
+    private ActionLink viewLink = new ActionLink("view", this, "onViewClick");
+    private PageLink editLink = new PageLink("edit", EditCustomer.class);
+    private ActionLink deleteLink = new ActionLink("delete", this, "onDeleteClick");
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -57,6 +55,12 @@ public class TableDecorator extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public TableDecorator() {
+        // Add controls to page
+        addControl(table);
+        addControl(viewLink);
+        addControl(editLink);
+        addControl(deleteLink);
+
         // Setup customers table
         table.setClass(Table.CLASS_SIMPLE);
 
@@ -118,7 +122,8 @@ public class TableDecorator extends BorderPage {
 
     public boolean onViewClick() {
         Integer id = viewLink.getValueInteger();
-        customerDetail = customerService.getCustomerForID(id);
+        Customer customerDetail = customerService.getCustomerForID(id);
+        addModel("customerDetail", customerDetail);
         return true;
     }
 
