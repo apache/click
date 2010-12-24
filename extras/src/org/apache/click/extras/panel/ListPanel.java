@@ -38,4 +38,42 @@ public class ListPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create a ListPanel with the given name.
+     *
+     * @param name the name of the panel
+     */
+    public ListPanel(String name) {
+        super(name);
+    }
+
+    /**
+     * Create a Panel with the given name and template path.
+     *
+     * @param name the name of the panel
+     * @param template the Velocity template
+     */
+    public ListPanel(String name, String template) {
+        super(name, template);
+    }
+
+    /**
+     * Create a ListPanel with the given name, id attribute and template path.
+     *
+     * @param name the name of the panel
+     * @param template the Velocity template path
+     * @param id the id HTML attribute value
+     */
+    public ListPanel(String name, String template, String id) {
+        super(name, template, id);
+    }
+
+    /**
+     * Create a ListPanel with no name or template defined.
+     * <p/>
+     * <b>Please note</b> the control's name must be defined before it is valid.
+     */
+    public ListPanel() {
+        super();
+    }
 }
