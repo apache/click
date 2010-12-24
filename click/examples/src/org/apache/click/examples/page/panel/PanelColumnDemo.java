@@ -31,6 +31,7 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.util.Bindable;
+import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -42,10 +43,11 @@ public class PanelColumnDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Panel panel = new Panel("panel", "/panel/customerDetailsPanel.htm");
-    @Bindable protected Form form = new Form();
     @Bindable protected String nameSearch;
-    @Bindable protected Table table = new Table("table");
+
+    private Panel panel = new Panel("panel", "/panel/customerDetailsPanel.htm");
+    private Form form = new Form("form");
+    private Table table;
 
     private TextField textName = new TextField("name", true);
 
@@ -55,7 +57,18 @@ public class PanelColumnDemo extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public PanelColumnDemo() {
-        form.setMethod("get");
+        addControl(panel);
+        addControl(form);
+
+        table = new Table("table") {
+            @Override
+            protected void renderHeaderRow(HtmlStringBuffer buffer) {
+                // We don't want to render table columns so we override #renderHeaderRow
+                // to do nothing
+            }
+        };
+        addControl(table);
+
         form.add(textName);
         textName.setFocus(true);
         form.add(new Submit("search", " Search ", this, "onSearch"));
@@ -82,11 +95,19 @@ public class PanelColumnDemo extends BorderPage {
         return false;
     }
 
-    /**
-     * @see org.apache.click.Page#onGet()
-     */
+    @Override
+    public void onPost() {
+        handleRequest();
+    }
+
     @Override
     public void onGet() {
+        handleRequest();
+    }
+
+    // Private Methods --------------------------------------------------------
+
+    private void handleRequest() {
         if (StringUtils.isNotEmpty(nameSearch)) {
 
             // Just fill the value so the user can see it
@@ -96,8 +117,6 @@ public class PanelColumnDemo extends BorderPage {
             processSearch(nameSearch);
         }
     }
-
-    // Private Methods --------------------------------------------------------
 
     /**
      * Search the Customer by name and create the Table control

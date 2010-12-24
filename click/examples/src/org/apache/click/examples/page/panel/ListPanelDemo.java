@@ -27,7 +27,6 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.panel.ListPanel;
-import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -41,13 +40,13 @@ public class ListPanelDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected ListPanel listPanel = new ListPanel();
-    @Bindable protected List<Customer> customers;
+    private ListPanel listPanel = new ListPanel("listPanel");
 
     @Resource(name="customerService")
     private CustomerService customerService;
 
     public ListPanelDemo() {
+        addControl(listPanel);
         listPanel.add(new Panel("panel1", "/panel/customersPanel1.htm"));
         listPanel.add(new Panel("panel2", "/panel/customersPanel2.htm"));
         listPanel.add(new Panel("panel3", "/panel/customersPanel3.htm"));
@@ -58,7 +57,8 @@ public class ListPanelDemo extends BorderPage {
      */
     @Override
     public void onRender() {
-        customers = customerService.getCustomersSortedByName(12);
+        List<Customer> customers = customerService.getCustomersSortedByName(12);
+        addModel("customers", customers);
     }
 
 }
