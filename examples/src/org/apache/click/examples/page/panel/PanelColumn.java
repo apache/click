@@ -44,6 +44,7 @@ public class PanelColumn extends Column {
     /**
      * @see Column#renderTableDataContent(Object, HtmlStringBuffer, Context, int)
      */
+    @Override
     protected void renderTableDataContent(Object row, HtmlStringBuffer buffer,
         Context context, int rowIndex) {
 

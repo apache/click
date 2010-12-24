@@ -29,7 +29,6 @@ import org.apache.click.examples.control.FilterPanel;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.util.Bindable;
 import org.apache.click.dataprovider.DataProvider;
 import org.springframework.stereotype.Component;
 
@@ -41,8 +40,8 @@ public class FilterPanelDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected FilterPanel filterPanel = new FilterPanel();
-    @Bindable protected Table table = new Table();
+    private FilterPanel filterPanel = new FilterPanel("filterPanel");
+    private Table table = new Table("table");
 
     @Resource(name="customerService")
     private CustomerService customerService;
@@ -50,6 +49,10 @@ public class FilterPanelDemo extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public FilterPanelDemo() {
+        // Add components
+        addControl(table);
+        addControl(filterPanel);
+
         // Setup customers table
         table.setClass("isi");
         table.setWidth("550px");
