@@ -133,6 +133,9 @@ public class TreeNode implements Serializable {
     }
 
     /**
+     * @deprecated use {@link #TreeNode(java.lang.Object, java.lang.String)}
+     * instead and add to parent node through {@link #add(org.apache.click.extras.tree.TreeNode)}.
+     *
      * Creates a node and sets the value, id and parent to the specified arguments.
      *
      * @param value the nodes value
@@ -146,6 +149,24 @@ public class TreeNode implements Serializable {
     }
 
     /**
+     * Creates a node and sets the value, id and childrenSupported to the
+     * specified arguments.
+     *
+     * @param value the nodes value
+     * @param id the nodes id
+     * @param childrenSupported indicates if the treeNode supports child nodes
+     * or not.
+     */
+    public TreeNode(Object value, String id, boolean childrenSupported) {
+        setValue(value);
+        setId(id);
+        setChildrenSupported(childrenSupported);
+    }
+
+    /**
+     * @deprecated use {@link #TreeNode(java.lang.Object, java.lang.String, boolean)}
+     * instead and add to parent node through {@link #add(org.apache.click.extras.tree.TreeNode)}.
+     *
      * Creates a node and sets the value, id and parent to the specified arguments.
      *
      * @param value the nodes value
@@ -206,7 +227,7 @@ public class TreeNode implements Serializable {
      * @return true if this node is a leaf node, false otherwise.
      */
     public boolean isLeaf() {
-        return getChildren().size() == 0;
+        return getChildren().isEmpty();
     }
 
     /**
@@ -512,8 +533,8 @@ public class TreeNode implements Serializable {
      */
     public int getLevel() {
         int level = 0;
-        TreeNode parent = this;
-        while ((parent = parent.getParent()) != null) {
+        TreeNode parentObj = this;
+        while ((parentObj = parentObj.getParent()) != null) {
             level++;
         }
         return level;
@@ -562,7 +583,7 @@ public class TreeNode implements Serializable {
      */
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append("TreeNode -> [");
         buffer.append("id=").append(getId()).append(", ");
         buffer.append("value=").append(getValue()).append(", ");

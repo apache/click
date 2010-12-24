@@ -132,41 +132,48 @@ public class TreePage extends BorderPage {
 
         //Create a new directory, setting the root directory as its parent. Here
         //we do specify a id as the 2nd argument, so no id is generated.
-        TreeNode dev = new TreeNode("dev","1", root);
+        TreeNode dev = new TreeNode("dev","1");
+        root.add(dev);
 
-        //The following 3 nodes represent files in the directory, setting the
-        //dev node as their parent. Note the false argument to the constructor.
-        //This means that the specific node does not support child nodes, and
-        //it will be rendered as a leaf icon. If children are supported (the
-        //default value) then even  if the node is a leaf, it will still be rendered
-        //as a collapsed icon. In the example a default leaf node will be
-        //rendered as a directory, and a node that does not support children is
-        //rendered as a file.
+        //The following 3 nodes represent files in the directory as children of
+        // the dev node. Note the false argument to the constructor.
+        // This means that the specific node does not support child nodes, and
+        // it will be rendered as a leaf icon. If children are supported (the
+        // default value) then even  if the node is a leaf, it will still be rendered
+        // as a collapsed icon. In the example a default leaf node will be
+        // rendered as a directory, and a node that does not support children is
+        // rendered as a file.
         // Also note the node with the long text, will cause the tree to overflow
         // and add scrollbars
-        new TreeNode("java.pdf", "1.1", dev, false);
-        new TreeNode("JEE 6 - the new fantastic approach to write better software (apparently)", "1.2", dev, false);
-        new TreeNode("ruby.pdf", "1.3", dev, false);
+        dev.add(new TreeNode("java.pdf", "1.1", false));
+        dev.add(new TreeNode("JEE 6 - the new fantastic approach to write better software (apparently)", "1.2", false));
+        dev.add(new TreeNode("ruby.pdf", "1.3", false));
 
         //We continue constructing the rest of the tree
-        TreeNode programFiles = new TreeNode("program files", "2", root);
-        new TreeNode("Adobe", "2.1", programFiles);
+        TreeNode programFiles = new TreeNode("program files", "2");
+        root.add(programFiles);
+        programFiles.add(new TreeNode("Adobe", "2.1"));
 
-        TreeNode download = new TreeNode("downloads","3", root);
+        TreeNode download = new TreeNode("downloads","3");
+        root.add(download);
 
-        TreeNode web = new TreeNode("web", "3.1", download);
-        new TreeNode("html.pdf", "3.1.1", web, false);
-        new TreeNode("css.html", "3.1.2", web, false);
+        TreeNode web = new TreeNode("web", "3.1");
+        download.add(web);
+        web.add(new TreeNode("html.pdf", "3.1.1", false));
+        web.add(new TreeNode("css.html", "3.1.2", false));
 
-        TreeNode databases = new TreeNode("databases", "3.2", download);
-        TreeNode relationalDb = new TreeNode("relational", "3.2.1", databases);
+        TreeNode databases = new TreeNode("databases", "3.2");
+        download.add(databases);
+        TreeNode relationalDb = new TreeNode("relational", "3.2.1");
+        databases.add(relationalDb);
 
-        new TreeNode("mysql.html", "3.2.1.1", relationalDb, false);
-        new TreeNode("oracle.pdf", "3.2.1.2", relationalDb, false);
-        new TreeNode("postgres", "3.2.1.3", relationalDb, false);
+        relationalDb.add(new TreeNode("mysql.html", "3.2.1.1", false));
+        relationalDb.add(new TreeNode("oracle.pdf", "3.2.1.2", false));
+        relationalDb.add(new TreeNode("postgres", "3.2.1.3", false));
 
-        TreeNode objectDb = new TreeNode("object", "3.2.2", databases);
-        new TreeNode("db4o.html", "3.2.2.1", objectDb, false);
+        TreeNode objectDb = new TreeNode("object", "3.2.2");
+        databases.add(objectDb);
+        objectDb.add(new TreeNode("db4o.html", "3.2.2.1", false));
 
         return root;
     }
