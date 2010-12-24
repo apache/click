@@ -48,6 +48,12 @@ public class FilterPanel extends Panel {
         add(filterForm);
     }
 
+    public FilterPanel(String name) {
+        this();
+        setName(name);
+
+    }
+
     public Date getEndDate() {
         return endDate.getDate();
     }
