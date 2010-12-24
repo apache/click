@@ -30,7 +30,6 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.examples.service.UserService;
 import org.apache.click.extras.control.PageSubmit;
-import org.apache.click.util.Bindable;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -41,8 +40,8 @@ import org.springframework.stereotype.Component;
 public class Login extends BorderPage {
 
     private static final long serialVersionUID = 1L;
-    @Bindable protected Form form = new Form();
-    @Bindable protected HiddenField redirectField = new HiddenField("redirect", String.class);
+    private Form form = new Form("form");
+    private HiddenField redirectField = new HiddenField("redirect", String.class);
 
     private TextField usernameField = new TextField("username", true);
     private PasswordField passwordField = new PasswordField("password", true);
@@ -53,6 +52,10 @@ public class Login extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public Login() {
+        // Add form to page
+        addControl(form);
+
+        // Setup form
         usernameField.setMaxLength(20);
         usernameField.setMinLength(5);
         usernameField.setFocus(true);
@@ -103,9 +106,9 @@ public class Login extends BorderPage {
                                        user.getUsername(),
                                        Integer.MAX_VALUE);
 
-                String redirect = redirectField.getValue();
-                if (StringUtils.isNotBlank(redirect)) {
-                    setRedirect(redirect);
+                String redirectValue = redirectField.getValue();
+                if (StringUtils.isNotBlank(redirectValue)) {
+                    setRedirect(redirectValue);
 
                 } else {
                     setRedirect(Secure.class);

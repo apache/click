@@ -30,8 +30,6 @@ public class Logout extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected User user;
-
     /**
      * @see Page#onInit()
      */
@@ -39,9 +37,10 @@ public class Logout extends BorderPage {
     public void onInit() {
         super.onInit();
 
-        user = (User) getContext().getSessionAttribute("user");
+        User user = (User) getContext().getSessionAttribute("user");
         if (user != null) {
             getContext().removeSessionAttribute("user");
+            addModel("user", user);
         }
     }
 
