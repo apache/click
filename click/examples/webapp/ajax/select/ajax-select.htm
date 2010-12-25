@@ -51,10 +51,8 @@ and a &lt;div id='<span class="st">customerDetails</span>'/&gt; element:
 </pre>
 
 <p/>
-When you click on the select, an HTTP request (e.g. <tt>GET ajax-customer.htm?customerId=4424</tt>)
-is made to the 
-<a href="$context/source-viewer.htm?filename=WEB-INF/classes/org/apache/click/examples/page/ajax/AjaxCustomer.java">AjaxCustomer</a>
-page to get the customers details. These details are returned as HTML with a content-type of 'text/html':
+When you click on the select, an HTTP request (e.g. <tt>GET ajax-select.htm?pageAction=onChangeCustomer&customerId=202</tt>)
+is made to the page to get the customers details. These details are returned as HTML with a content-type of 'text/html':
 <pre class="codeHtml">
 &lt;table border="0" cellspacing="2" cellpadding="2">
   &lt;tr>
@@ -101,9 +99,9 @@ target "<span class="red">customerDetails</span>" div:
 
         // Ajax.Updater requests the customer for the given customerId parameter
         // and replaces the inner HTML of customerDetails div
-        new <span class="maroon">Ajax.Updater</span>('<span class="red">customerDetails</span>', '<span class="blue">/click-examples/ajax/ajax-customer.htm</span>', {
-          <span class="green">method</span>: 'get',
-          <span class="green">parameters</span>: {customerId : select.value}
+        new <span class="maroon">Ajax.Updater</span>('<span class="red">customerDetails</span>', '<span class="blue">/click-examples/ajax/select/ajax-select.htm</span>', {
+          <span class="green">method</span>: <span class="blue">'get'</span>,
+          <span class="green">parameters</span>: {<span class="blue">'pageAction'</span> : 'onChangeCustomer', <span class="blue">'customerId'</span> : select.value}
         });
       });
     });
@@ -113,5 +111,5 @@ target "<span class="red">customerDetails</span>" div:
 </pre>
 
 The initialization code above is contained in the 
-<a href="$context/source-viewer.htm?filename=ajax/ajax-select.js">ajax-select.js</a>
+<a href="$context/source-viewer.htm?filename=ajax/select/ajax-select.js">ajax-select.js</a>
 template.

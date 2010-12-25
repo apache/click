@@ -25,9 +25,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.click.Context;
-import org.apache.click.Control;
 import org.apache.click.ActionResult;
-import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
 import org.apache.click.dataprovider.DataProvider;
@@ -38,7 +36,6 @@ import org.apache.click.examples.control.ajax.CustomerPanel;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.util.Bindable;
 import org.apache.click.util.ClickUtils;
 import org.springframework.stereotype.Component;
 
@@ -50,10 +47,16 @@ public class AjaxSelect extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Select customerSelect = new Select("customerSelect");
+    private Select customerSelect = new Select("customerSelect");
 
     @Resource(name="customerService")
     private CustomerService customerService;
+
+    // Constructors -----------------------------------------------------------
+
+    public AjaxSelect() {
+        addControl(customerSelect);
+    }
 
     // Event Handlers ---------------------------------------------------------
 
