@@ -27,7 +27,6 @@ import org.apache.click.control.Form;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.PostCodeService;
 import org.apache.click.extras.control.AutoCompleteTextField;
-import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -38,7 +37,7 @@ public class AutoCompletePage extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form();
+    private Form form = new Form("form");
 
     @Resource(name="postCodeService")
     private PostCodeService postCodeService;
@@ -46,6 +45,8 @@ public class AutoCompletePage extends BorderPage {
     // ------------------------------------------------------------ Constructor
 
     public AutoCompletePage() {
+        addControl(form);
+
         FieldSet fieldSet = new FieldSet("Enter a Suburb Location");
         fieldSet.setStyle("background-color", "");
         form.add(fieldSet);
