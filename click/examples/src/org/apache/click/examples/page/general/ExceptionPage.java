@@ -21,7 +21,6 @@ package org.apache.click.examples.page.general;
 import org.apache.click.Page;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides examples of the Click Exception handling.
@@ -30,14 +29,23 @@ public class ExceptionPage extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected ActionLink nullPointerLink = new ActionLink(this, "onNullPointerClick");
-    @Bindable protected ActionLink illegalArgumentLink = new ActionLink(this, "onIllegalArgumentExceptionClick");
-    @Bindable protected ActionLink missingMethodLink = new ActionLink(this, "onMissingMethodClick");
-    @Bindable protected ActionLink brokenRendererLink = new ActionLink(this, "onBrokenRendererClick");
-    @Bindable protected ActionLink brokenBorderLink = new ActionLink(this, "onBrokenBorderClick");
-    @Bindable protected ActionLink brokenContentLink = new ActionLink(this, "onBrokenContentClick");
+    private ActionLink nullPointerLink = new ActionLink("nullPointerLink", this, "onNullPointerClick");
+    private ActionLink illegalArgumentLink = new ActionLink("illegalArgumentLink", this, "onIllegalArgumentExceptionClick");
+    private ActionLink missingMethodLink = new ActionLink("missingMethodLink", this, "onMissingMethodClick");
+    private ActionLink brokenRendererLink = new ActionLink("brokenRendererLink", this, "onBrokenRendererClick");
+    private ActionLink brokenBorderLink = new ActionLink("brokenBorderLink", this, "onBrokenBorderClick");
+    private ActionLink brokenContentLink = new ActionLink("brokenContentLink", this, "onBrokenContentClick");
 
-    private String template;
+    private String templateValue;
+
+    public ExceptionPage() {
+        addControl(nullPointerLink);
+        addControl(illegalArgumentLink);
+        addControl(missingMethodLink);
+        addControl(brokenRendererLink);
+        addControl(brokenBorderLink);
+        addControl(brokenContentLink);
+    }
 
     // Event Handlers ---------------------------------------------------------
 
@@ -61,7 +69,7 @@ public class ExceptionPage extends BorderPage {
 
     public boolean onBrokenBorderClick() {
         setPath("broken-border.htm");
-        template = "/general/broken-border.htm";
+        templateValue = "/general/broken-border.htm";
         return true;
     }
 
@@ -79,7 +87,7 @@ public class ExceptionPage extends BorderPage {
      */
     @Override
     public String getTemplate() {
-        return (template != null) ? template : super.getTemplate();
+        return (templateValue != null) ? templateValue : super.getTemplate();
     }
 
     // Inner Classes ----------------------------------------------------------
@@ -96,6 +104,7 @@ public class ExceptionPage extends BorderPage {
          * @see Object#toString()
          */
         @SuppressWarnings("null")
+        @Override
         public String toString() {
             Object object = null;
             return object.toString();

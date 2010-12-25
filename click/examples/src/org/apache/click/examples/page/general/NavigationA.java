@@ -20,7 +20,6 @@ package org.apache.click.examples.page.general;
 
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides an navigation example Page demonstrating forward and redirect
@@ -30,10 +29,10 @@ public class NavigationA extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected ActionLink forwardLink = new ActionLink("forwardLink", this, "onForwardClick");
-    @Bindable protected ActionLink forwardParamLink = new ActionLink("forwardParamLink", this, "onForwardParamClick");
-    @Bindable protected ActionLink redirectLink = new ActionLink("redirectLink", this, "onRedirectClick");
-    @Bindable protected ActionLink redirectParamLink = new ActionLink("redirectParamLink", this, "onRedirectParamClick");
+    private ActionLink forwardLink = new ActionLink("forwardLink", this, "onForwardClick");
+    private ActionLink forwardParamLink = new ActionLink("forwardParamLink", this, "onForwardParamClick");
+    private ActionLink redirectLink = new ActionLink("redirectLink", this, "onRedirectClick");
+    private ActionLink redirectParamLink = new ActionLink("redirectParamLink", this, "onRedirectParamClick");
 
     // Event Handlers ---------------------------------------------------------
 
@@ -43,6 +42,11 @@ public class NavigationA extends BorderPage {
     @Override
     public void onInit() {
         super.onInit();
+
+        addControl(forwardLink);
+        addControl(forwardParamLink);
+        addControl(redirectLink);
+        addControl(redirectParamLink);
 
         // Initialise param ActionLink values from any parameters passed through
         // from other pages via forwards or redirects.
