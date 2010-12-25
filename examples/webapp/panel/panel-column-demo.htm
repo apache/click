@@ -25,7 +25,9 @@ Table. Note Table pagination is working as expected.
 <p/>
 
 $form.startTag()
- <b>Customer</b> ${form.fields.name}${form.fields.search}
+ Customer <span class="required">*</span> ${form.fields.name}${form.fields.search}
 $form.endTag()
+
+<p/>
 
 $table
