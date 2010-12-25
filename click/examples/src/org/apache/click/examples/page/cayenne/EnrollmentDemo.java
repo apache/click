@@ -54,6 +54,7 @@ public class EnrollmentDemo extends FormTablePage {
     /**
      * @see FormTablePage#onInit()
      */
+    @Override
     public void onInit() {
         form.add(new TextField("name")).setRequired(true);
 
@@ -71,6 +72,7 @@ public class EnrollmentDemo extends FormTablePage {
     /**
      * @see FormTablePage#onSaveClick()
      */
+    @Override
     public boolean onSaveClick() {
         if (form.isValid()) {
             Student student = (Student) form.getDataObject();
@@ -88,6 +90,7 @@ public class EnrollmentDemo extends FormTablePage {
     /**
      * @see FormTablePage#onEditClick()
      */
+    @Override
     public boolean onEditClick() {
         Student student = getSelectedStudent();
 

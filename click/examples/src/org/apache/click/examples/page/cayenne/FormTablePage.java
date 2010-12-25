@@ -30,7 +30,6 @@ import org.apache.click.control.Table;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.cayenne.CayenneForm;
 import org.apache.click.extras.control.LinkDecorator;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides an abstract CayenneForm and Table Page for creating and editing
@@ -47,10 +46,10 @@ public abstract class FormTablePage extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected CayenneForm form;
-    @Bindable protected Table table = new Table();
-    @Bindable protected ActionLink editLink = new ActionLink("edit", this, "onEditClick");
-    @Bindable protected ActionLink removeLink = new ActionLink("remove", this, "onRemoveClick");
+    protected CayenneForm form;
+    protected Table table = new Table("table");
+    protected ActionLink editLink = new ActionLink("edit", this, "onEditClick");
+    protected ActionLink removeLink = new ActionLink("remove", this, "onRemoveClick");
 
     // Constructor ------------------------------------------------------------
 
@@ -60,6 +59,12 @@ public abstract class FormTablePage extends BorderPage {
      */
     public FormTablePage() {
         form = createForm();
+        form.setName("form");
+        addControl(form);
+        addControl(table);
+        addControl(editLink);
+        addControl(removeLink);
+
         form.setDataObjectClass(getDataObjectClass());
         form.setErrorsPosition(Form.POSITION_TOP);
 
@@ -80,6 +85,7 @@ public abstract class FormTablePage extends BorderPage {
      *
      * @see org.apache.click.Page#onSecurityCheck()
      */
+    @Override
     public boolean onSecurityCheck() {
         String pagePath = getContext().getPagePath(getClass());
 
@@ -96,6 +102,7 @@ public abstract class FormTablePage extends BorderPage {
      *
      * @see org.apache.click.Page#onInit()
      */
+    @Override
     public void onInit() {
         super.onInit();
 
