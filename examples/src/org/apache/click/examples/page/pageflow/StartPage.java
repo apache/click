@@ -43,7 +43,6 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.DateField;
-import org.apache.click.util.Bindable;
 import org.apache.click.util.ClickUtils;
 import org.springframework.stereotype.Component;
 
@@ -55,7 +54,7 @@ public class StartPage extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form();
+    private Form form = new Form("form");
 
     private Select customerSelect;
     private DateField dateField;
@@ -70,6 +69,7 @@ public class StartPage extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public StartPage() {
+        addControl(form);
         form.setLabelsPosition("top");
 
         customerSelect = new Select("Customer");
