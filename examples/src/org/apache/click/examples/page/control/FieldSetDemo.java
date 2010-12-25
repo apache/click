@@ -34,7 +34,6 @@ import org.apache.click.extras.control.CreditCardField;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.IntegerField;
 import org.apache.click.extras.control.PageSubmit;
-import org.apache.click.util.Bindable;
 import org.apache.click.util.ContainerUtils;
 
 /**
@@ -44,7 +43,7 @@ public class FieldSetDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form();
+    private Form form = new Form("form");
 
     // Payment options
     private RadioGroup paymentGroup;
@@ -55,6 +54,8 @@ public class FieldSetDemo extends BorderPage {
     // Constructor -----------------------------------------------------------
 
     public FieldSetDemo() {
+        addControl(form);
+
         form.setLabelAlign(Form.ALIGN_RIGHT);
         form.setLabelStyle("width:11em;");
         form.setFieldStyle("width:22em;");
