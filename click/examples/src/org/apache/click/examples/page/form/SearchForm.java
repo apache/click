@@ -29,7 +29,6 @@ import org.apache.click.control.TextField;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.util.Bindable;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +41,7 @@ public class SearchForm extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form();
+    private Form form = new Form("form");
 
     private TextField textField;
     private Select typeSelect;
@@ -53,6 +52,8 @@ public class SearchForm extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public SearchForm() {
+        addControl(form);
+
         textField = new TextField("search");
         form.add(textField);
 

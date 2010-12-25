@@ -32,7 +32,6 @@ import org.apache.click.element.Element;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.control.TabbedForm;
-import org.apache.click.util.Bindable;
 import org.apache.click.util.ClickUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -48,7 +47,7 @@ public class PopulateOnSelect extends BorderPage {
     private static final String GAUTENG_PROVINCE = "GP";
     private static final String WESTERN_CAPE = "WC";
 
-    @Bindable protected TabbedForm form = new TabbedForm("form");
+    private TabbedForm form = new TabbedForm("form");
 
     private Select state = new Select("state", true);
     private Select city = new Select("city", true);
@@ -60,6 +59,8 @@ public class PopulateOnSelect extends BorderPage {
     @Override
     public void onInit() {
         super.onInit();
+
+        addControl(form);
 
         FieldSet fieldSet = new FieldSet("select");
         form.addTabSheet(fieldSet);

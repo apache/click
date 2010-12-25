@@ -47,7 +47,6 @@ import org.apache.click.extras.control.PageSubmit;
 import org.apache.click.extras.control.RegexField;
 import org.apache.click.extras.control.TelephoneField;
 import org.apache.click.extras.control.VirtualKeyboard;
-import org.apache.click.util.Bindable;
 import org.apache.click.util.ContainerUtils;
 import org.springframework.stereotype.Component;
 
@@ -66,8 +65,8 @@ public class ExtraControlsForm extends BorderPage {
         boolean javaScriptValidate = false;
     }
 
-    @Bindable protected Form form = new Form();
-    @Bindable protected Form optionsForm = new Form();
+    private Form form = new Form("form");
+    private Form optionsForm = new Form("optionsForm");
 
     private CheckList checkList = new CheckList("checkList");
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");
@@ -79,6 +78,9 @@ public class ExtraControlsForm extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public ExtraControlsForm() {
+        addControl(form);
+        addControl(optionsForm);
+
         form.setErrorsPosition(Form.POSITION_TOP);
         form.setColumns(2);
 
