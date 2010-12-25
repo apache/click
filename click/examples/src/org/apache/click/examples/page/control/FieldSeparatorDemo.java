@@ -6,7 +6,6 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.PageSubmit;
-import org.apache.click.util.Bindable;
 import org.apache.click.util.ContainerUtils;
 
 /**
@@ -18,8 +17,8 @@ import org.apache.click.util.ContainerUtils;
 public class FieldSeparatorDemo extends BorderPage {
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form newForm = new Form();
-    @Bindable protected Form classicForm = new Form();
+    private Form newForm = new Form("newForm");
+    private Form classicForm = new Form("classicForm");
 
     public FieldSeparatorDemo() {
         // a separator based form
@@ -30,6 +29,9 @@ public class FieldSeparatorDemo extends BorderPage {
     }
 
     private void makeSeparatorForm() {
+        addControl(newForm);
+        addControl(classicForm);
+
         newForm.setLabelAlign(Form.ALIGN_RIGHT);
         newForm.setButtonAlign(Form.ALIGN_RIGHT);
         FieldSeparator contactSeparator = new FieldSeparator("contactDetails");

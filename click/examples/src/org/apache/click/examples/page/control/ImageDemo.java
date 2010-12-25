@@ -22,7 +22,6 @@ import org.apache.click.control.Form;
 import org.apache.click.control.ImageSubmit;
 import org.apache.click.control.Label;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides an ImageSubmit control example.
@@ -33,12 +32,15 @@ public class ImageDemo extends BorderPage {
 
     private ImageSubmit colorSubmit;
 
-    @Bindable protected Form buttonsForm = new Form();
-    @Bindable protected Form form = new Form();
+    private Form buttonsForm = new Form("buttonsForm");
+    private Form form = new Form("form");
 
     // Constructor ------------------------------------------------------------
 
     public ImageDemo() {
+        addControl(form);
+        addControl(buttonsForm);
+
         // Buttons Form
         ImageSubmit editSubmit = new ImageSubmit("edit", "/assets/images/edit.gif");
         editSubmit.setListener(this, "onEditClick");

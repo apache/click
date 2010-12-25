@@ -24,7 +24,6 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.CheckList;
 import org.apache.click.extras.control.PageSubmit;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides CheckList control example.
@@ -50,7 +49,7 @@ public class CheckListDemo extends BorderPage{
         }
     }
 
-    @Bindable protected  Form form = new Form();
+    private Form form = new Form("form");
 
     private CheckList standardCheckList;
     private CheckList sortableCheckList;
@@ -58,6 +57,8 @@ public class CheckListDemo extends BorderPage{
     // Constructor ------------------------------------------------------------
 
     public CheckListDemo() {
+        addControl(form);
+
         form.setFieldStyle("width:20em;");
 
         standardCheckList = new CheckList("standardList", "Standard List ", true);
