@@ -21,19 +21,16 @@ package org.apache.click.examples.page.jsp;
 import java.util.Date;
 
 import org.apache.click.Page;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides HelloWorld world example Page. Possibly the simplest dynamic example
  * you can get.
- * <p/>
- * Note the public scope time Date field is automatically added to the page's
- * model as a value named "time".
  */
 public class HelloWorld extends Page {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Date time = new Date();
-
+    public HelloWorld() {
+        addModel("time", new Date());
+    }
 }

@@ -26,7 +26,6 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.EmailField;
-import org.apache.click.util.Bindable;
 
 /**
  * Demo a form submit using JSP as template.
@@ -35,11 +34,13 @@ public class EditCustomerPage extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form("form");
+    private Form form = new Form("form");
 
     // Constructor ------------------------------------------------------------
 
     public EditCustomerPage() {
+        addControl(form);
+
         // Setup customers form
         FieldSet fieldSet = new FieldSet("customer");
         fieldSet.add(new TextField("name", true));

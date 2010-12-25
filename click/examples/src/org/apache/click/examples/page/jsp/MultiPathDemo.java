@@ -21,7 +21,6 @@ package org.apache.click.examples.page.jsp;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.PageLink;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides a multiple JSP page path example class.
@@ -30,9 +29,14 @@ public class MultiPathDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected ActionLink changePath = new ActionLink("changePath", this, "changePath");
+    private ActionLink changePath = new ActionLink("changePath", this, "changePath");
 
-    @Bindable protected PageLink defaultPath = new PageLink("defaultPath", MultiPathDemo.class);
+    private PageLink defaultPath = new PageLink("defaultPath", MultiPathDemo.class);
+
+    public MultiPathDemo() {
+        addControl(changePath);
+        addControl(defaultPath);
+    }
 
     public boolean changePath() {
         setPath("/jsp/dummy.jsp");

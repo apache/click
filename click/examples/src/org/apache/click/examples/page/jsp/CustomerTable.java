@@ -25,7 +25,6 @@ import javax.annotation.Resource;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,8 +36,6 @@ public class CustomerTable extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected List<Customer> customers = null;
-
     @Resource(name="customerService")
     private CustomerService customerService;
 
@@ -49,7 +46,8 @@ public class CustomerTable extends BorderPage {
      */
     @Override
     public void onRender() {
-        customers = customerService.getCustomersSortedByName(10);
+        List<Customer> customers = customerService.getCustomersSortedByName(10);
+        addModel("customers", customers);
     }
 
     // Public Methods ---------------------------------------------------------
