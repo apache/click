@@ -25,7 +25,6 @@ import org.apache.click.control.Option;
 import org.apache.click.control.Submit;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.control.PickList;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides an Select example Page.
@@ -34,14 +33,15 @@ public class PickListDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form();
-    @Bindable protected List selectedValues;
+    private Form form = new Form("form");
 
     private PickList pickList = new PickList("languages");
 
     // Constructor ------------------------------------------------------------
 
     public PickListDemo() {
+        addControl(form);
+
         pickList.setHeaderLabel("Languages", "Selected");
 
         pickList.add(new Option("002", "C/C++"));
@@ -63,7 +63,8 @@ public class PickListDemo extends BorderPage {
     // Event Handlers ---------------------------------------------------------
 
     public boolean onOkClick() {
-        selectedValues = pickList.getSelectedValues();
+        List selectedValues = pickList.getSelectedValues();
+        addModel("selectedValues", selectedValues);
         return true;
     }
 

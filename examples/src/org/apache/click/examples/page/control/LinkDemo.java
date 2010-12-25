@@ -26,7 +26,6 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.ExternalLink;
 import org.apache.click.extras.control.PageButton;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides an ActionLink, ExternalLink and PageLink control examples Page.
@@ -35,26 +34,37 @@ public class LinkDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
-    @Bindable protected ActionLink disabledActionLink = new ActionLink("DisabledActionLink", this, "onLinkClick");
-    @Bindable protected ActionLink iconActionLink = new ActionLink("IconActionLink", this, "onLinkClick");
-    @Bindable protected ActionLink disabledIconActionLink = new ActionLink("DisabledIconActionLink", this, "onLinkClick");
+    private ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
+    private ActionLink disabledActionLink = new ActionLink("DisabledActionLink", this, "onLinkClick");
+    private ActionLink iconActionLink = new ActionLink("IconActionLink", this, "onLinkClick");
+    private ActionLink disabledIconActionLink = new ActionLink("DisabledIconActionLink", this, "onLinkClick");
 
-    @Bindable protected PageLink pageLink = new PageLink("PageLink", HomePage.class);
-    @Bindable protected PageLink disabledPageLink = new PageLink("DisabledPageLink", HomePage.class);
-    @Bindable protected PageLink iconPageLink = new PageLink("IconPageLink",HomePage.class);
-    @Bindable protected PageLink disabledIconPageLink = new PageLink("DisabledIconPageLink",HomePage.class);
+    private PageLink pageLink = new PageLink("PageLink", HomePage.class);
+    private PageLink disabledPageLink = new PageLink("DisabledPageLink", HomePage.class);
+    private PageLink iconPageLink = new PageLink("IconPageLink",HomePage.class);
+    private PageLink disabledIconPageLink = new PageLink("DisabledIconPageLink",HomePage.class);
 
-    @Bindable protected PageButton pageButton = new PageButton("PageButton", HomePage.class);
-    @Bindable protected PageButton disabledPageButton = new PageButton("DisabledPageButton", HomePage.class);
-    @Bindable protected ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
-    @Bindable protected ExternalLink disabledExternalLink = new ExternalLink("DisabledExternalLink", "http://www.google.com/search");
-
-    @Bindable protected String clicked;
+    private PageButton pageButton = new PageButton("PageButton", HomePage.class);
+    private PageButton disabledPageButton = new PageButton("DisabledPageButton", HomePage.class);
+    private ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
+    private ExternalLink disabledExternalLink = new ExternalLink("DisabledExternalLink", "http://www.google.com/search");
 
     // Constructor ------------------------------------------------------------
 
     public LinkDemo() {
+        addControl(actionLink);
+        addControl(disabledActionLink);
+        addControl(iconActionLink);
+        addControl(disabledIconActionLink);
+        addControl(pageLink);
+        addControl(disabledPageLink);
+        addControl(iconPageLink);
+        addControl(disabledIconPageLink);
+        addControl(pageButton);
+        addControl(disabledPageButton);
+        addControl(externalLink);
+        addControl(disabledExternalLink);
+
         iconActionLink.setRenderLabelAndImage(true);
         iconActionLink.addStyleClass("image-link");
         iconActionLink.setImageSrc("/assets/images/table-edit.png");
@@ -90,7 +100,8 @@ public class LinkDemo extends BorderPage {
     // Event Handlers ---------------------------------------------------------
 
     public boolean onLinkClick() {
-        clicked = getClass().getName() + ".onLinkClick invoked at " + (new Date());
+        String msg = getClass().getName() + ".onLinkClick invoked at " + (new Date());
+        addModel("msg", msg);
         return true;
     }
 

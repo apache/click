@@ -31,7 +31,6 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.CountrySelect;
 import org.apache.click.extras.control.PageSubmit;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides an Select example Page.
@@ -40,7 +39,7 @@ public class SelectDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form();
+    private Form form = new Form("form");
 
     private Select genderSelect;
     private Select investmentSelect;
@@ -51,6 +50,7 @@ public class SelectDemo extends BorderPage {
 
     @SuppressWarnings("unchecked")
     public SelectDemo() {
+        addControl(form);
         form.setErrorsPosition(Form.POSITION_TOP);
 
         // Gender Select - populated through a DataProvider

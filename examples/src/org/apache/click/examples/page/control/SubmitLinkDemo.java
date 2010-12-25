@@ -27,7 +27,6 @@ import org.apache.click.control.Form;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.extras.control.SubmitLink;
-import org.apache.click.util.Bindable;
 
 /**
  * This example demonstrates how to use a SubmitLink control together with the
@@ -36,14 +35,6 @@ import org.apache.click.util.Bindable;
 public class SubmitLinkDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
-
-    @Bindable protected String demo1Msg;
-
-    @Bindable protected String demo2Msg;
-
-    @Bindable protected String demo3Msg;
-
-    @Bindable protected String demo4Msg;
 
     // Constructor ------------------------------------------------------------
 
@@ -78,8 +69,9 @@ public class SubmitLinkDemo extends BorderPage {
         submitLink.setActionListener(new ActionListener() {
 
             public boolean onAction(Control source) {
-                demo1Msg = submitLink.getName() + ".onAction invoked at "
+                String demo1Msg = submitLink.getName() + ".onAction invoked at "
                     + (new Date());
+                addModel("demo1Msg", demo1Msg);
                 return true;
             }
         });
@@ -108,9 +100,10 @@ public class SubmitLinkDemo extends BorderPage {
         paramLink.setActionListener(new ActionListener() {
 
             public boolean onAction(Control source) {
-                demo2Msg = paramLink.getName() + ".onAction invoked at "
+                String demo2Msg = paramLink.getName() + ".onAction invoked at "
                     + (new Date());
                 demo2Msg += "<br>Parameters:" + paramLink.getParameters();
+                addModel("demo2Msg", demo2Msg);
                 return true;
             }
         });
@@ -127,8 +120,9 @@ public class SubmitLinkDemo extends BorderPage {
         standaloneLink.setActionListener(new ActionListener() {
 
             public boolean onAction(Control source) {
-                demo3Msg = source.getName() + ".onAction invoked at " +
+                String demo3Msg = source.getName() + ".onAction invoked at " +
                     (new Date());
+                addModel("demo3Msg", demo3Msg);
                 return true;
             }
         });
@@ -158,8 +152,9 @@ public class SubmitLinkDemo extends BorderPage {
         confirmationLink.setActionListener(new ActionListener() {
 
             public boolean onAction(Control source) {
-                demo4Msg = confirmationLink.getName() + ".onAction invoked at "
+                String demo4Msg = confirmationLink.getName() + ".onAction invoked at "
                     + (new Date());
+                addModel("demo4Msg", demo4Msg);
                 return true;
             }
         });
