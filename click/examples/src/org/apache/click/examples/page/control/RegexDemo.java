@@ -24,7 +24,6 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.PageSubmit;
 import org.apache.click.extras.control.RegexField;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides a form RegexField example.
@@ -33,9 +32,11 @@ public class RegexDemo extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form();
+    private Form form = new Form("form");
 
     public RegexDemo() {
+        addControl(form);
+
         RegexField versionField = new RegexField("version", "Version", 10);
         versionField.setPattern("[0-9]+\\.[0-9]+\\.[0-9]+");
         versionField.setRequired(true);
