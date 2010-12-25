@@ -46,7 +46,6 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.examples.util.ExampleUtils;
-import org.apache.click.util.Bindable;
 import org.apache.click.util.ContainerUtils;
 import org.apache.click.dataprovider.DataProvider;
 import org.springframework.stereotype.Component;
@@ -66,8 +65,8 @@ public class StandardControlsForm extends BorderPage {
         boolean javaScriptValidate = false;
     }
 
-    @Bindable protected Form form = new Form();
-    @Bindable protected Form optionsForm = new Form();
+    private Form form = new Form("form");
+    private Form optionsForm = new Form("optionsForm");
 
     private Select select = new Select("select");
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");
@@ -79,6 +78,9 @@ public class StandardControlsForm extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public StandardControlsForm() {
+        addControl(form);
+        addControl(optionsForm);
+
         form.setErrorsPosition(Form.POSITION_TOP);
 
         // Controls FieldSet
