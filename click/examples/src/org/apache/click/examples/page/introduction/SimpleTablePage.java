@@ -56,6 +56,8 @@ public class SimpleTablePage extends BorderPage {
         addControl(table);
     }
 
+    // Event Handlers ---------------------------------------------------------
+
     /**
      * @see org.apache.click.Page#onRender()
      */
