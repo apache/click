@@ -160,9 +160,15 @@ public HelloWorld extends Page {
     <programlisting language="java">public class ControlListenerType1Page extends Page {
 
     /* Set the listener to this object's "onLinkClick" method. */
-    @Bindable protected ActionLink myLink = new ActionLink(this, "onLinkClick"); <co id="co-bindable" linkends="ca-bindable"/>
+    private ActionLink myLink = new ActionLink("myLink", this, "onLinkClick")
 
-    @Bindable protected String msg;
+    private String msg;
+
+    // --------------------------------------------------------- Constructors
+
+    public ControlListenerType1Page() {
+        addControl(myLink); <co id="co-addcontrol" linkends="ca-addcontrol"/>
+    }
 
     // --------------------------------------------------------- Event Handlers
 
@@ -170,8 +176,9 @@ public HelloWorld extends Page {
      * Handle the ActionLink control click event.
      */
     public boolean onLinkClick() {
-        msg = "ControlListenerPage#" + hashCode()
+        String msg = "ControlListenerPage#" + hashCode()
             + " object method &lt;tt&gt;onLinkClick()&lt;/tt&gt; invoked.";
+        addModel("msg", msg);
 
         return true;
     }
@@ -179,12 +186,10 @@ public HelloWorld extends Page {
 }</programlisting>
 
     <calloutlist>
-      <callout arearefs="co-bindable" id="ca-bindable">
-        <para>Variables annotated with <literal>@Bindable</literal>
-        is a short-hand way of instructing Click to automatically bind request
-        parameters to Page variables. In addition these variables will
-        automatically be added to the Page model. For more information please see the
-        section <link linkend="request-param-auto-binding">Request Parameter Auto Binding</link>.
+      <callout arearefs="co-addcontrol" id="ca-addcontrol">
+        <para>Add the link to the page. The link will be made available to the
+        page template under the variable <varname>myLink</varname>, which
+        is the name of the control.
         </para>
       </callout>
     </calloutlist>
@@ -254,10 +259,7 @@ public HelloWorld extends Page {
 
     <programlisting language="java">public class ControlListenerType2Page extends Page {
 
-    /* Public scope controls are automatically added to the page. */
-    @Bindable protected ActionLink myLink = new ActionLink();
-
-    @Bindable protected String msg;
+    private ActionLink myLink = new ActionLink("myLink");
 
     // ------------------------------------------------------------ Constructor
 
@@ -265,22 +267,25 @@ public HelloWorld extends Page {
      * Create a new Page instance.
      */
     public ControlListenerType2Page() {
+        addControl(myLink);
+
         myLink.setActionListener(new ActionListener() {
             public boolean onAction(Control control) {
-                 msg = "ControlListenerPage#" + hashCode()
+                 String msg = "ControlListenerPage#" + hashCode()
                  + " object method &lt;tt&gt;onAction()&lt;/tt&gt; invoked.";
+                 addModel("msg", msg);
 
              return true;
             }
         });
     }
-    
+
 }</programlisting>
 
     <para>In the Page class we create an ActionLink called
     <varname>myLink</varname>. In the Page constructor we set the control's
-    action listener to an anonymous inner class which implements the 
-    <methodname>onAction()</methodname>. When a user clicks on
+    action listener to an anonymous inner class which implements the method
+    <methodname>onAction()</methodname>. When a user clicks on the
     <varname>myLink</varname> control it will invoke the action listener method
     <methodname>onAction()</methodname>.
     </para>

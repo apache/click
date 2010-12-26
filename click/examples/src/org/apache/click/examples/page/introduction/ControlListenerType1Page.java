@@ -20,7 +20,6 @@ package org.apache.click.examples.page.introduction;
 
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides a control listener example Page using the runtime binding of the
@@ -35,9 +34,13 @@ public class ControlListenerType1Page extends BorderPage {
     private static final long serialVersionUID = 1L;
 
     /* Set the listener to this object's "onLinkClick" method. */
-    @Bindable protected ActionLink myLink = new ActionLink(this, "onLinkClick");
+    private ActionLink myLink = new ActionLink("myLink", this, "onLinkClick");
 
-    @Bindable protected String msg;
+    // Constructors -----------------------------------------------------------
+
+    public ControlListenerType1Page() {
+        addControl(myLink);
+    }
 
     // Event Handlers ---------------------------------------------------------
 
@@ -45,8 +48,9 @@ public class ControlListenerType1Page extends BorderPage {
      * Handle the ActionLink control click event.
      */
     public boolean onLinkClick() {
-        msg = "ControlListenerPage#" + hashCode()
+        String msg = "ControlListenerPage#" + hashCode()
             + " object method <tt>onLinkClick()</tt> invoked.";
+        addModel("msg", msg);
 
         return true;
     }
