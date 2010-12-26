@@ -22,7 +22,6 @@ import org.apache.click.ActionListener;
 import org.apache.click.Control;
 import org.apache.click.control.ActionLink;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides a control listener example Page using the compile time binding of
@@ -36,9 +35,7 @@ public class ControlListenerType2Page extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected ActionLink myLink = new ActionLink();
-
-    @Bindable protected String msg;
+     private ActionLink myLink = new ActionLink("myLink");
 
     // Constructor ------------------------------------------------------------
 
@@ -46,12 +43,15 @@ public class ControlListenerType2Page extends BorderPage {
      * Create a new Page instance.
      */
     public ControlListenerType2Page() {
+        addControl(myLink);
+
         myLink.setActionListener(new ActionListener() {
             private static final long serialVersionUID = 1L;
 
             public boolean onAction(Control control) {
-                 msg = "ControlListenerPage#" + hashCode()
+                 String msg = "ControlListenerPage#" + hashCode()
                  + " object method <tt>onAction()</tt> invoked.";
+                 addModel("msg", msg);
 
              return true;
             }
