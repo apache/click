@@ -37,7 +37,6 @@ import org.apache.click.examples.page.HomePage;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.EmailField;
-import org.apache.click.util.Bindable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -48,8 +47,7 @@ public class AdvancedForm extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form();
-    @Bindable protected String msg;
+    private Form form = new Form("form");
 
     private Select investmentSelect = new Select("investments");
 
@@ -59,6 +57,8 @@ public class AdvancedForm extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public AdvancedForm() {
+        addControl(form);
+
         FieldSet fieldSet = new FieldSet("Customer");
         form.add(fieldSet);
 
@@ -114,7 +114,8 @@ public class AdvancedForm extends BorderPage {
 
             form.clearValues();
 
-            msg = "A new customer record has been created.";
+            String msg = "A new customer record has been created.";
+            addModel("msg", msg);
         }
         return true;
     }

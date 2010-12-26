@@ -22,7 +22,6 @@ import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.util.Bindable;
 
 /**
  * Provides a simple Form example Page.
@@ -38,12 +37,13 @@ public class SimpleForm extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Form form = new Form();
-    @Bindable protected String msg;
+    private Form form = new Form("form");
 
     // Constructor ------------------------------------------------------------
 
     public SimpleForm() {
+        addControl(form);
+
         form.add(new TextField("name", true));
         form.add(new Submit("OK"));
 
@@ -57,7 +57,8 @@ public class SimpleForm extends BorderPage {
      */
     public boolean onSubmit() {
         if (form.isValid()) {
-            msg = "Your name is " + form.getFieldValue("name");
+            String msg = "Your name is " + form.getFieldValue("name");
+            addModel("msg", msg);
         }
         return true;
     }
