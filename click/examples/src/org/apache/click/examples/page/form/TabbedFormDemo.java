@@ -18,6 +18,8 @@
  */
 package org.apache.click.examples.page.form;
 
+import java.io.Serializable;
+
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
@@ -31,6 +33,7 @@ import org.apache.click.examples.control.PackagingRadioGroup;
 import org.apache.click.examples.control.TitleSelect;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
+import org.apache.click.examples.util.ExampleUtils;
 import org.apache.click.extras.control.CreditCardField;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.EmailField;
@@ -55,6 +58,16 @@ public class TabbedFormDemo extends BorderPage {
     private CreditCardField cardNumber = new CreditCardField("cardNumber");
     private IntegerField expiry = new IntegerField("expiry");
 
+
+    protected Form optionsForm = new Form("optionsForm");
+
+    /** Form options holder. */
+    public static class Options implements Serializable {
+        static final long serialVersionUID = 1L;
+        boolean javaScriptValidate = false;
+    }
+
+    private Checkbox jsValidate = new Checkbox("jsValidate", "JavaScript Validate");
     // Constructor ------------------------------------------------------------
 
     public TabbedFormDemo() {
@@ -121,9 +134,36 @@ public class TabbedFormDemo extends BorderPage {
         form.add(new PageSubmit("cancel", HomePage.class));
 
         addControl(form);
+
+        // Settings Form
+        FieldSet fieldSet = new FieldSet("options", "Form Options");
+        jsValidate.setAttribute("onclick", "form.submit();");
+        fieldSet.add(jsValidate);
+        optionsForm.add(fieldSet);
+        optionsForm.setListener(this, "onOptionsSubmit");
+        addControl(optionsForm);
     }
 
     // Event Handlers ---------------------------------------------------------
+
+    /**
+     * @see org.apache.click.Page#onInit()
+     */
+    @Override
+    public void onInit() {
+        super.onInit();
+
+        applyOptions();
+    }
+
+    public boolean onOptionsSubmit() {
+        Options options = new Options();
+        options.javaScriptValidate = jsValidate.isChecked();
+        ExampleUtils.setSessionObject(options);
+        applyOptions();
+        return true;
+    }
+
 
     public boolean onOkClick() {
         if (isFormValid()) {
@@ -161,5 +201,12 @@ public class TabbedFormDemo extends BorderPage {
         for (Field field : ContainerUtils.getInputFields(form)) {
             System.out.println(field.getName() + "=" + field.getValue());
         }
+    }
+
+    private void applyOptions() {
+        Options options = (Options) ExampleUtils.getSessionObject(Options.class);
+
+        form.setJavaScriptValidation(options.javaScriptValidate);
+        jsValidate.setChecked(options.javaScriptValidate);
     }
 }
