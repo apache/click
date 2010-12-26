@@ -541,7 +541,16 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
         </para>
 
         <para>By default all pages have autobinding enabled in
-        <varname>default</varname> mode. With autobinding the ClickServlet will
+        <varname>default</varname> mode.
+        </para>
+
+        <para><emphasis role="bold">Please note:</emphasis> we recommend using
+        autobinding only for binding request parameters, not for Controls. It
+        generally leads to code that is difficult to maintain. In a future release
+        we will replace autobinding with a simpler implementation.
+        </para>
+
+        <para>With autobinding the ClickServlet will
         automatically:
         </para>
 
