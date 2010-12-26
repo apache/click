@@ -32,7 +32,6 @@ import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.EditCustomer;
 import org.apache.click.examples.service.CustomerService;
 import org.apache.click.extras.control.LinkDecorator;
-import org.apache.click.util.Bindable;
 import org.apache.click.dataprovider.DataProvider;
 
 /**
@@ -45,9 +44,9 @@ public class AdvancedTable extends BorderPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Bindable protected Table table = new Table();
-    @Bindable protected PageLink editLink = new PageLink("Edit", EditCustomer.class);
-    @Bindable protected ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
+    private Table table = new Table("table");
+    private PageLink editLink = new PageLink("Edit", EditCustomer.class);
+    private ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
     /**
      * Spring injected CustomerService bean. The service is marked as transient
@@ -59,6 +58,12 @@ public class AdvancedTable extends BorderPage {
     // Constructor ------------------------------------------------------------
 
     public AdvancedTable() {
+        // Add controls
+        addControl(table);
+        addControl(editLink);
+        addControl(deleteLink);
+
+        // Setup table
         table.setClass(Table.CLASS_ITS);
         table.setPageSize(10);
         table.setShowBanner(true);
@@ -98,22 +103,9 @@ public class AdvancedTable extends BorderPage {
                 return getCustomerService().getCustomers();
             }
         });
-    }
 
-    // Event Handlers ---------------------------------------------------------
-
-    public boolean onDeleteClick() {
-        Integer id = deleteLink.getValueInteger();
-        getCustomerService().deleteCustomer(id);
-        return true;
-    }
-
-    @Override
-    public void onInit() {
-        super.onInit();
-
-        // Restore the table sort and paging state from the session
-        table.restoreState(getContext());
+        // Below we setup the table to preserve it's state (sorting and paging)
+        // while editing customers
 
         table.getControlLink().setActionListener(new ActionListener() {
 
@@ -127,6 +119,17 @@ public class AdvancedTable extends BorderPage {
                 return true;
             }
         });
+
+        // Restore the table sort and paging state from the session between requests
+        table.restoreState(getContext());
+    }
+
+    // Event Handlers ---------------------------------------------------------
+
+    public boolean onDeleteClick() {
+        Integer id = deleteLink.getValueInteger();
+        getCustomerService().deleteCustomer(id);
+        return true;
     }
 
     // Public Methods ---------------------------------------------------------
