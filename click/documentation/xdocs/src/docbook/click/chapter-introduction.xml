@@ -164,13 +164,13 @@ public HelloWorld extends Page {
 
     private String msg;
 
-    // --------------------------------------------------------- Constructors
+    // Constructor ------------------------------------------------------------
 
     public ControlListenerType1Page() {
         addControl(myLink); <co id="co-addcontrol" linkends="ca-addcontrol"/>
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * Handle the ActionLink control click event.
@@ -261,7 +261,7 @@ public HelloWorld extends Page {
 
     private ActionLink myLink = new ActionLink("myLink");
 
-    // ------------------------------------------------------------ Constructor
+    // Constructor ------------------------------------------------------------
 
     /**
      * Create a new Page instance.
@@ -341,7 +341,7 @@ public HelloWorld extends Page {
 
     @Bindable protected Table table = new Table();
 
-    // -------------------------------------------------------- Constructor
+    // Constructor ------------------------------------------------------------
      
     public SimpleTablePage() {
         table.setClass(Table.CLASS_ITS);
@@ -352,7 +352,7 @@ public HelloWorld extends Page {
         table.addColumn(new Column("investments"));
     }
     
-    // ----------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
      
     /**
      * @see Page#onRender()
@@ -444,17 +444,19 @@ public HelloWorld extends Page {
 
     <programlisting language="java">public class CustomerPage extends Page {
 
-    @Bindable protected Table table = new Table();
-    @Bindable protected PageLink editLink = new PageLink("Edit", EditCustomer.class);
-    @Bindable protected ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
+    private Table table = new Table("table");
+    private PageLink editLink = new PageLink("Edit", EditCustomer.class);
+    private ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
-    // ------------------------------------- Constructor
+    // Constructor ------------------------------------------------------------
 
     public CustomersPage() {
-        // Setting Page to stateful to preserve Table sort and paging state while
-        // editing customers
-        setStateful(true); <co id="co-stateful-table" linkends="ca-stateful-table"/>
+        // Add controls
+        addControl(table);
+        addControl(editLink);
+        addControl(deleteLink);
 
+        // Setup table
         table.setClass(Table.CLASS_ITS);
         table.setPageSize(10);
         table.setShowBanner(true);
@@ -495,9 +497,28 @@ public HelloWorld extends Page {
                 return getCustomerService().getCustomers();
             }
         });
+
+        // Below we setup the table to preserve it's state (sorting and paging)
+        // while editing customers
+
+        table.getControlLink().setActionListener(new ActionListener() {
+
+            public boolean onAction(Control source) {
+                // Save Table sort and paging state between requests.
+                // NOTE: we set the listener on the table's Link control which is invoked
+                // when the Link is clicked, such as when paging or sorting.
+                // This ensures the table state is only saved when the state changes, and
+                // cuts down on unnecessary session replication in a cluster environment.
+                table.saveState(getContext()); <co id="co-save-table-state" linkends="ca-save-table-state"/>
+                return true;
+            }
+        });
+
+        // Restore the table sort and paging state from the session between requests
+        table.restoreState(getContext()); <co id="co-restore-table-state" linkends="ca-restore-table-state"/>
     }
     
-    // ---------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
          
     /**
      * Handle the delete row click event.
@@ -510,12 +531,17 @@ public HelloWorld extends Page {
 }</programlisting>
 
     <calloutlist>
-      <callout arearefs="co-stateful-table" id="ca-stateful-table">
-        <para>Setting Page to stateful instructs Click to store the Page in the
-        <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</ulink>.
-        This ensures the Table's sort and paging state is preserved while editing
-        customers. See the <link linkend="stateful-pages">Stateful Page</link>
-        section for more details.
+      <callout arearefs="co-save-table-state" id="ca-save-table-state">
+        <para>Table is a <ulink url="../../click-api/org/apache/click/Stateful.html">Stateful</ulink>
+        control and provides methods for saving and restoring it's state.
+        Here we save the Table state in the
+        <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</ulink>
+        which ensures sort and paging state is preserved while editing customers.
+        </para>
+      </callout>
+      <callout arearefs="co-restore-table-state" id="ca-restore-table-state">
+        <para>Restore the Table state that was previously saved in the
+        <classname>HttpSession</classname>.
         </para>
       </callout>
     </calloutlist>
@@ -595,19 +621,20 @@ public HelloWorld extends Page {
 
     <programlisting language="java">public class SimpleForm extends Page {
 
-    @Bindable protected Form form = new Form();
-    @Bindable protected String msg;
+    private Form form = new Form("form");
 
-    // -------------------------------------------------------- Constructor
+    // Constructor ------------------------------------------------------------
 
     public SimpleForm() {
+        addControl(form);
+
         form.add(new TextField("name", true));
         form.add(new Submit("OK"));
 
         form.setListener(this, "onSubmit");
     }
 
-    // ----------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * Handle the form submit event.
@@ -712,21 +739,17 @@ public HelloWorld extends Page {
     available.
     </para>
 
-    <para>Note in this example the page's public <varname>form</varname> field
-    is automatically added to its list of controls. The <varname>msg</varname>
-    field is added to the page's model.
-    </para>
-
     <programlisting language="java">public class AdvancedForm extends Page {
 
-    @Bindable protected Form form = new Form();
-    @Bindable protected String msg;
+    private Form form = new Form("form");
 
     private Select investmentSelect = new Select("investment");
 
-    // -------------------------------------------------------- Constructor
+    // Constructor ------------------------------------------------------------
 
     public AdvancedForm() {
+        addControl(form);
+
         FieldSet fieldSet = new FieldSet("Customer");
         form.add(fieldSet);
 
@@ -746,16 +769,26 @@ public HelloWorld extends Page {
         form.add(new Submit("cancel", this, "onCancelClicked"));
     }
 
-    // ----------------------------------------------------- Event Handlers
+    // Event Handlers ---------------------------------------------------------
 
     /**
      * @see Page#onInit()
      */
     @Override
     public void onInit() {
-        CustomerService customerService = getCustomerService();
-        investmentSelect.add(Option.EMPTY_OPTION);
-        investmentSelect.addAll(customerService.getInvestmentCategories());
+        super.onInit();
+
+        investmentSelect.setDefaultOption(Option.EMPTY_OPTION);
+        investmentSelect.setDataProvider(new DataProvider() {
+
+            public List&lt;Option&gt; getData() {
+                List&lt;Option&gt; options = new ArrayList&lt;Option&gt;();
+                for (String category : customerService.getInvestmentCategories()) {
+                    options.add(new Option(category));
+                }
+                return options;
+            }
+        });
     }
 
     /**
@@ -772,7 +805,8 @@ public HelloWorld extends Page {
 
             form.clearValues();
 
-            msg = "A new customer record has been created.";
+            String msg = "A new customer record has been created.";
+            addModel("msg", msg);
         }
         return true;
     }
