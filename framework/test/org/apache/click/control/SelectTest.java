@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
+import org.apache.click.dataprovider.DataProvider;
 
 /**
  * Test Select behavior.
@@ -148,5 +149,38 @@ public class SelectTest extends TestCase {
         // Make sure we can still add values to the Select after state is
         // restored
         select.getSelectedValues().add("male");
+    }
+
+    /**
+     *
+     */
+    public void testSetInitialValue() {
+        // Setup Select
+        Select select  = new Select("gender");
+        select.add(new Option("male"));
+        select.add(new Option("female"));
+
+        String expectedValue = "male";
+
+        // Test initial value
+        assertEquals(expectedValue, select.getValue());
+        select.setValue(null);
+        select.setOptionList(null);
+
+        select.setDataProvider(new DataProvider() {
+
+            public List getData() {
+                List list = new ArrayList();
+                list.add(new Option("male"));
+                list.add(new Option("female"));
+                return list;
+            }
+        });
+
+        // Trigger dataProvider
+        select.getOptionList();
+
+        // Test initial value
+        assertEquals(expectedValue, select.getValue());
     }
 }

@@ -871,6 +871,9 @@ public class Select extends Field {
      */
     public void setOptionList(List options) {
         optionList = options;
+        if (optionList != null) {
+            setInitialValue();
+        }
     }
 
     /**
