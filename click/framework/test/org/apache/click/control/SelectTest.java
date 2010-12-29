@@ -20,7 +20,9 @@ package org.apache.click.control;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import junit.framework.TestCase;
 import org.apache.click.MockContext;
 import org.apache.click.dataprovider.DataProvider;
@@ -182,5 +184,45 @@ public class SelectTest extends TestCase {
 
         // Test initial value
         assertEquals(expectedValue, select.getValue());
+    }
+
+    /**
+     * CLK-745
+     */
+    public void testDataProviderValues() {
+        // Setup Select
+        Select select  = new Select("gender");
+
+        select.setDataProvider(new DataProvider() {
+
+            public List getData() {
+                List list = new ArrayList();
+                list.add("male");
+                return list;
+            }
+        });
+
+        try {
+            // Trigger dataProvider
+            select.toString();
+            fail("Cannot pass String to dataProvider");
+        } catch (IllegalArgumentException expected) {
+        }
+
+        select.setDataProvider(new DataProvider() {
+
+            public Set getData() {
+                Set set = new LinkedHashSet();
+                set.add("male");
+                return set;
+            }
+        });
+
+        try {
+            // Trigger dataProvider
+            select.toString();
+            fail("Cannot pass String to dataProvider");
+        } catch (IllegalArgumentException expected) {
+        }
     }
 }

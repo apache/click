@@ -852,7 +852,13 @@ public class Select extends Field {
 
                         // Populate optionList from options
                         for (Object option : iterableData) {
-                            add(option);
+                            if (option instanceof Option || option instanceof OptionGroup) {
+                                optionList.add(option);
+                            } else {
+                                String msg = "Select option class not instance of Option"
+                                + " or OptionGroup: " + option.getClass().getName();
+                                throw new IllegalArgumentException(msg);
+                            }
                         }
                     }
                 }
