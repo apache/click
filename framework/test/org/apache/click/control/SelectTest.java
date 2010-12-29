@@ -152,7 +152,7 @@ public class SelectTest extends TestCase {
     }
 
     /**
-     *
+     * CLK-745
      */
     public void testSetInitialValue() {
         // Setup Select
