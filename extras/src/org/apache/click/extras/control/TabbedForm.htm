@@ -16,6 +16,34 @@
    specific language governing permissions and limitations
    under the License.*#
 -->
+#* Macro used for rendering field errors *#
+#macro(writeErrors $form)
+	#* Render javascript validation result *#
+	#if ($form.javaScriptValidation)
+	<tr style="display:none" id="${form.id}-errorsTr">
+		<td width='100%'>
+		<div class="errors" id="${form.id}-errorsDiv"></div>
+		</td>
+	</tr>
+	#end
+	
+	#if ($form.error)
+	<tr style="${form.errorsStyle}">
+    	<td class="tf_error"> $form.error </td>
+	</tr>
+	#end
+	
+	#* Render field errors *#
+	#foreach ($errorField in $form.errorFields)
+	<tr>
+    	<td style="${form.errorsStyle}" class="tf_error">
+    		<a class="error" href="#" 
+			  onclick="onShowTab($form.getTabSheetNumber($errorField.name));setFocus('$errorField.id');"
+			  > $errorField.error </a>
+    	</td>
+	</tr>
+	#end	
+#end
 
 <script type="text/javascript">
 function onShowTab(index) {
@@ -44,22 +72,7 @@ $form.startTag()
 <tbody>
 	#* Render form errors at the top position *#
 #if ($form.errorsPosition == "top")
-	#if ($form.error)
-	<tr style="${form.errorsStyle}">
-    	<td class="tf_error"> $form.error </td>
-	</tr>
-	#end
-	
-	#* Render field errors *#
-	#foreach ($errorField in $form.errorFields)
-	<tr>
-    	<td style="${form.errorsStyle}" class="tf_error">
-    		<a class="error" href="#" 
-			  onclick="onShowTab($form.getTabSheetNumber($errorField.name));setFocus('$errorField.id');"
-			  > $errorField.error </a>
-    	</td>
-	</tr>		
-	#end
+	#writeErrors($form)
 #end	
 	
 	<tr><td style="height:0.5em;">&#160;</td></tr>
@@ -110,22 +123,7 @@ $form.startTag()
 
 	#* Render form errors at the middle position *#
 #if ($form.errorsPosition == "middle")
-	#if ($form.error)
-	<tr style="${form.errorsStyle}">
-    	<td class="tf_error"> $form.error </td>
-	</tr>
-	#end
-	
-	#* Render field errors *#
-	#foreach ($errorField in $form.errorFields)
-	<tr>
-    	<td style="${form.errorsStyle}" class="tf_error">
-    		<a class="error" href="#" 
-			  onclick="onShowTab($form.getTabSheetNumber($errorField.name));setFocus('$errorField.id');"
-			  > $errorField.error </a>
-    	</td>
-	</tr>		
-	#end
+	#writeErrors($form)
 #end
 
 	<tr><td style="height:0.5em;">&#160;</td></tr>
@@ -144,22 +142,7 @@ $form.startTag()
 
 	<tr><td style="height:0.5em;">&#160;</td></tr>
 
-	#if ($form.error)
-	<tr style="${form.errorsStyle}">
-    	<td class="tf_error"> $form.error </td>
-	</tr>
-	#end
-	
-	#* Render field errors *#
-	#foreach ($errorField in $form.errorFields)
-	<tr>
-    	<td style="${form.errorsStyle}" class="tf_error">
-    		<a class="error" href="#" 
-			  onclick="onShowTab($form.getTabSheetNumber($errorField.name));setFocus('$errorField.id');"
-			  > $errorField.error </a>
-    	</td>
-	</tr>		
-	#end
+	#writeErrors($form)
 #end	
 </tbody>
 </table>
