@@ -22,12 +22,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import org.apache.click.Context;
 
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.Element;
+import org.apache.click.element.JsImport;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -170,9 +172,10 @@ public class TabbedCayenneForm extends CayenneForm {
     }
 
     /**
-     * Return the TabbedCayenneForm HTML HEAD elements for the following resource:
+     * Return the TabbedCayenneForm HTML HEAD elements for the following resources:
      *
      * <ul>
+     * <li><tt>click/extras-control.js</tt></li>
      * <li><tt>click/extras-control.css</tt></li>
      * </ul>
      *
@@ -192,6 +195,7 @@ public class TabbedCayenneForm extends CayenneForm {
             String versionIndicator = ClickUtils.getResourceVersionIndicator(context);
 
             headElements.add(new CssImport("/click/extras-control.css", versionIndicator));
+            headElements.add(new JsImport("/click/extras-control.js", versionIndicator));
         }
         return headElements;
     }
@@ -335,4 +339,60 @@ public class TabbedCayenneForm extends CayenneForm {
         buffer.append(getContext().renderTemplate(getTemplate(), model));
     }
 
+    @Override
+    protected void renderValidationJavaScript(HtmlStringBuffer buffer, List<Field> formFields) {
+
+        // Render JavaScript form validation code
+        if (isJavaScriptValidation()) {
+            List<String> functionNames = new ArrayList<String>();
+
+            buffer.append("<script type=\"text/javascript\"><!--\n");
+
+            // Render field validation functions & build list of function names
+            for (Field field : formFields) {
+                String fieldJS = field.getValidationJavaScript();
+                if (fieldJS != null) {
+                    buffer.append(fieldJS);
+
+                    StringTokenizer tokenizer = new StringTokenizer(fieldJS);
+                    tokenizer.nextToken();
+                    functionNames.add(tokenizer.nextToken());
+                }
+            }
+
+            if (!functionNames.isEmpty()) {
+                buffer.append("function on_");
+                buffer.append(getId());
+                buffer.append("_submit() {\n");
+                buffer.append("   var msgs = new Array(");
+                buffer.append(functionNames.size());
+                buffer.append(");\n");
+                for (int i = 0; i < functionNames.size(); i++) {
+                    buffer.append("   msgs[");
+                    buffer.append(i);
+                    buffer.append("] = ");
+                    buffer.append(functionNames.get(i).toString());
+                    buffer.append(";\n");
+                }
+                buffer.append("   return Click.validateTabbedForm(msgs, '");
+                buffer.append(getId());
+                buffer.append("', '");
+                buffer.append(getErrorsAlign());
+                buffer.append("', ");
+                if (getErrorsStyle() == null) {
+                    buffer.append("null");
+                } else {
+                    buffer.append("'" + getErrorsStyle() + "'");
+                }
+                buffer.append(");\n");
+                buffer.append("}\n");
+
+            } else {
+                buffer.append("function on_");
+                buffer.append(getId());
+                buffer.append("_submit() { return true; }\n");
+            }
+            buffer.append("//--></script>\n");
+        }
+    }
 }

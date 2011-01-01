@@ -306,4 +306,79 @@ Click.getUrlParams = function(url) {
     }
   }
   return params;
-};
+}
+
+/**
+ * Return the tab sheet number for the element with the given ID.
+ */
+Click.getTabSheetNumber=function(id) {
+    var node=document.getElementById(id);
+    if(!node) return 1;
+    var parent = node.parentNode;
+    while(parent && !Click.isTabSheet(parent)) {
+        parent = parent.parentNode;
+    }
+    if (parent) return parent.getAttribute("id").substr(10);
+    return 1;
+}
+
+/**
+ * Return true if the node is a tab sheet, false otherwise.
+ */
+Click.isTabSheet=function(node) {
+    if(!node) return false;
+    var id=node.getAttribute('id');
+    if(id){
+        if(id.indexOf('tab-sheet-')>=0) return true;
+    }
+    return false;
+}
+
+/**
+ * Validate a TabbedForm.
+ */
+Click.validateTabbedForm=function(msgs, id, align, style) {
+    var errorsHtml = '';
+    var focusFieldId = null;
+
+    for (i = 0; i < msgs.length; i++) {
+        var value = msgs[i];
+        if (value != null) {
+            var index = value.lastIndexOf('|');
+            var fieldMsg = value.substring(0, index);
+            var fieldId = value.substring(index + 1);
+
+            if (focusFieldId == null) {
+                focusFieldId = fieldId;
+            }
+
+            errorsHtml += '<tr class="errors"><td class="errors" align="';
+            errorsHtml += align;
+			if (style != null) {
+            	errorsHtml += '" style="';
+				errorsHtml += style;
+            }
+            errorsHtml += '">';
+            errorsHtml += '<a class="error" href="javascript:onShowTab(Click.getTabSheetNumber(\''
+                + fieldId + '\'));setFocus(\'';
+            errorsHtml += fieldId;
+            errorsHtml += '\');">';
+            errorsHtml += fieldMsg;
+            errorsHtml += '</a>';
+            errorsHtml += '</td></tr>';
+        }
+    }
+
+    if (errorsHtml.length > 0) {
+        errorsHtml = '<table class="errors">' + errorsHtml + '</table>';
+
+        document.getElementById(id + '-errorsDiv').innerHTML = errorsHtml;
+        document.getElementById(id + '-errorsTr').style.display = 'inline';
+
+        setFocus(focusFieldId);
+
+        return false;
+    } else {
+        return true;
+    }
+}
