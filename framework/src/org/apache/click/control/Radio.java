@@ -160,6 +160,9 @@ public class Radio extends Field {
             if (id.indexOf('>') != -1) {
                 id = id.replace('>', '_');
             }
+            if (id.indexOf('.') != -1) {
+                id = id.replace('.', '_');
+            }
 
             return id;
         }
