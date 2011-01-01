@@ -159,6 +159,11 @@ public void onInit() {
     } </pre>
       </li>
       <li class="change">
+        Control IDs now render underscores instead of periods. If you targeted
+        Controls through CSS or JavaScript where the ID had a period, you need
+        to change to underscores.
+      </li>
+      <li class="change">
         The DateField control now accepts month and day names spelled in the 
         locale of the browser or application (see 
         <a href="click-api/org/apache/click/Context.html#getLocale()">Context.getLocale()</a>).

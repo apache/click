@@ -536,6 +536,9 @@ public abstract class Field extends AbstractControl implements Stateful {
             if (id.indexOf('>') != -1) {
                 id = id.replace('>', '_');
             }
+            if (id.indexOf('.') != -1) {
+                id = id.replace('.', '_');
+            }
 
             return id;
         }
