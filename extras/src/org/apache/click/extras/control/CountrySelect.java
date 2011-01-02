@@ -214,11 +214,14 @@ public class CountrySelect extends Select {
 
         Set<Option> countryList = new TreeSet<Option>(new OptionLabelComparator(getLocale()));
 
-        Locale[] availableLocales = Locale.getAvailableLocales();
+        String[] isoCountries = Locale.getISOCountries();
 
-        for (int i = 0; i < availableLocales.length; i++) {
-            final String iso = availableLocales[i].getCountry();
-            final String country = availableLocales[i].getDisplayCountry(getLocale());
+        Locale userLocale = getLocale();
+
+        for (int i = 0; i < isoCountries.length; i++) {
+            Locale tmpLocale = new Locale("en", isoCountries[i]);
+            final String iso = tmpLocale.getCountry();
+            final String country = tmpLocale.getDisplayCountry(userLocale);
 
             if (StringUtils.isNotEmpty(iso) && StringUtils.isNotEmpty(country)) {
                 countryList.add(new Option(iso, country));
