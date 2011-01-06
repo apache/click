@@ -537,9 +537,6 @@ public class VelocityTemplateService implements TemplateService {
 
             template.merge(velocityContext, velocityWriter);
 
-        } catch (IOException ioe) {
-            throw ioe;
-
         } catch (ParseErrorException pee) {
             TemplateException te = new TemplateException(pee,
                                                          pee.getTemplateName(),
@@ -582,31 +579,6 @@ public class VelocityTemplateService implements TemplateService {
                                 Context.getThreadLocalContext().getRequest(),
                                 configService.getServletContext());
 
-
-            if (velocityWriter == null) {
-                velocityWriter =
-                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
-            }
-
-            velocityWriter.write(errorReport.toString());
-
-            throw te;
-
-        } catch (TemplateParseException tpe) {
-            TemplateException te = new TemplateException(tpe,
-                                                         tpe.getTemplateName(),
-                                                         tpe.getLineNumber(),
-                                                         tpe.getColumnNumber());
-
-            // Exception occurred merging template and model. It is possible
-            // that some output has already been written, so we will append the
-            // error report to the previous output.
-            ErrorReport errorReport =
-                new ErrorReport(te,
-                                ((page != null) ? page.getClass() : null),
-                                configService.isProductionMode(),
-                                Context.getThreadLocalContext().getRequest(),
-                                configService.getServletContext());
 
             if (velocityWriter == null) {
                 velocityWriter =
