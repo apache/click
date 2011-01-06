@@ -57,8 +57,8 @@ public class ExceptionPage extends BorderPage {
     }
 
     public boolean onIllegalArgumentExceptionClick() {
-        addModel("param-1", "First Parameter");
-        addModel("param-1", "Second Parameter");
+        // Null model value should throw IllegalArgumentException
+        addModel("param-1", null);
         return true;
     }
 
