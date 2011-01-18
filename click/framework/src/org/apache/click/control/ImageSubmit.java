@@ -186,7 +186,7 @@ public class ImageSubmit extends Submit {
 
         Context context = getContext();
 
-        //  Note IE does not submit name
+        // Note IE does not submit name
         String xValue = context.getRequestParameter(getName() + ".x");
 
         if (xValue != null) {
@@ -205,6 +205,38 @@ public class ImageSubmit extends Submit {
                 nfe.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Process the submit event and return true to continue event processing.
+     *
+     * @see org.apache.click.control.Submit#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
+     */
+    @Override
+    public boolean onProcess() {
+        if (isDisabled()) {
+            Context context = getContext();
+
+            // Switch off disabled property if control has incoming request
+            // parameter. Normally this means the field was enabled via JS
+            // Note IE does not submit name, so we check the X value
+            if (context.hasRequestParameter(getName() + ".x")) {
+                setDisabled(false);
+            } else {
+                // If field is disabled skip process event
+                return true;
+            }
+        }
+
+        bindRequestValue();
+
+        if (isClicked()) {
+            dispatchActionEvent();
+        }
+
+        return true;
     }
 
     /**
