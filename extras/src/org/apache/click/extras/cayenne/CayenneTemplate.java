@@ -65,10 +65,10 @@ public class CayenneTemplate {
      * Instantiates new object and registers it with itself. Object class must
      * have a default constructor.
      *
-     * @param dataObjectClass the data object class to create and register
-     * @return the new registered data object
+     * @param persistentClass the persistent object class to create and register
+     * @return the new registered persistent object
      */
-    protected DataObject newObject(Class<DataObject> dataObjectClass) {
+    protected <T> T newObject(Class<T> dataObjectClass) {
         return getDataContext().newObject(dataObjectClass);
     }
 
@@ -76,11 +76,13 @@ public class CayenneTemplate {
      * Instantiates new object and registers it with itself. Object class must
      * have a default constructor.
      *
-     * @param dataObjectClass the data object class to create and register
-     * @return the new registered data object
+     * @deprecated since 2.3.0, use {@link #newObject(java.lang.Class)} instead.
+     *
+     * @param persistentClass the persistent object class to create and register
+     * @return the new registered persistent object
      */
-    protected DataObject createAndRegisterNewObject(Class<DataObject> dataObjectClass) {
-        return getDataContext().newObject(dataObjectClass);
+    protected <T> T createAndRegisterNewObject(Class<T> persistentClass) {
+        return getDataContext().newObject(persistentClass);
     }
 
     /**
@@ -107,26 +109,27 @@ public class CayenneTemplate {
     }
 
     /**
-     * Find the data object for the specified class, property name and property
-     * value, or null if no data object was found.
+     * Find the persistent object for the specified class, property name and property
+     * value, or null if no persistent object was found.
      *
-     * @param dataObjectClass the data object class to find
+     * @param persistentClass the persistent object class to find
      * @param property the name of the property
      * @param value the value of the property
-     * @return the data object for the specified class, property name and property value
-     * @throws RuntimeException if more than one data object was identified for the
-     * given property name and value
+     * @return the persistent object for the specified class, property name and
+     * property value
+     * @throws RuntimeException if more than one persistent object was identified
+     * for the given property name and value
      */
-    protected DataObject findObject(Class dataObjectClass, String property,
+    protected <T> T findObject(Class<T> persistentClass, String property,
             Object value) {
 
-        List list = performQuery(dataObjectClass, property, value);
+        List list = performQuery(persistentClass, property, value);
 
         if (list.size() == 1) {
-            return (DataObject) list.get(0);
+            return (T) list.get(0);
 
         } else if (list.size() > 1) {
-            String msg = "SelectQuery for " + dataObjectClass.getName()
+            String msg = "SelectQuery for " + persistentClass.getName()
                     + " where " + property + " equals " + value + " returned "
                     + list.size() + " rows";
             throw new RuntimeException(msg);
@@ -174,37 +177,37 @@ public class CayenneTemplate {
      * class and the primary key. This method will perform a database query
      * and refresh the object cache.
      *
-     * @param doClass the data object class to retrieve
+     * @param persistentClass the persistent object class to retrieve
      * @param id the data object primary key
      * @return the data object for the given class and id
      */
-    protected DataObject getObjectForPK(Class doClass, Object id) {
-        return getObjectForPK(doClass, id, true);
+    protected <T> T getObjectForPK(Class<T> persistentClass, Object id) {
+        return getObjectForPK(persistentClass, id, true);
     }
 
     /**
-     * Perform a query returning the data object specified by the
+     * Perform a query returning the persistent object specified by the
      * class and the primary key value. If the refresh parameter is true a
      * database query will be performed, otherwise the a query against the
      * object cache will be performed first.
      *
-     * @param dataObjectClass the data object class to retrieve
-     * @param id the data object primary key
+     * @param persistentClass the persistent object class to retrieve
+     * @param id the persistent object primary key
      * @param refresh the refresh the object cache mode
-     * @return the data object for the given class and id
+     * @return the persistent object for the given class and id
      */
-    protected DataObject getObjectForPK(Class dataObjectClass, Object id, boolean refresh) {
-        Validate.notNull(dataObjectClass, "Null dataObjectClass parameter.");
+    protected <T> T getObjectForPK(Class<T> persistentClass, Object id, boolean refresh) {
+        Validate.notNull(persistentClass, "Null persistentClass parameter.");
 
         ObjEntity objEntity =
-            getDataContext().getEntityResolver().lookupObjEntity(dataObjectClass);
+            getDataContext().getEntityResolver().lookupObjEntity(persistentClass);
 
         if (objEntity == null) {
             throw new CayenneRuntimeException("Unmapped DataObject Class: "
-                    + dataObjectClass.getName());
+                    + persistentClass.getName());
         }
 
-        String pkName = getPkName(dataObjectClass);
+        String pkName = getPkName(persistentClass);
 
         ObjectId objectId = new ObjectId(objEntity.getName(), pkName, id);
 
@@ -212,24 +215,24 @@ public class CayenneTemplate {
 
         ObjectIdQuery objectIdQuery = new ObjectIdQuery(objectId, false, refreshMode);
 
-        return (DataObject) DataObjectUtils.objectForQuery(getDataContext(), objectIdQuery);
+        return (T) DataObjectUtils.objectForQuery(getDataContext(), objectIdQuery);
     }
 
     /**
      * Return the database primary key column name for the given data object.
      *
-     * @param dataObjectClass the class of the data object
+     * @param persistentClass the class of the persistent object
      * @return the primary key column name
      */
-    protected String getPkName(Class dataObjectClass) {
-        Validate.notNull(dataObjectClass, "Null dataObjectClass parameter.");
+    protected String getPkName(Class persistentClass) {
+        Validate.notNull(persistentClass, "Null persistentClass parameter.");
 
         ObjEntity objEntity =
-            getDataContext().getEntityResolver().lookupObjEntity(dataObjectClass);
+            getDataContext().getEntityResolver().lookupObjEntity(persistentClass);
 
         if (objEntity == null) {
             throw new CayenneRuntimeException("Unmapped DataObject Class: "
-                    + dataObjectClass.getName());
+                    + persistentClass.getName());
         }
 
         DbEntity dbEntity = objEntity.getDbEntity();
