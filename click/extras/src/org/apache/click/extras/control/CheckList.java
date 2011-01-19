@@ -1099,27 +1099,35 @@ public class CheckList extends Field {
                 }
 
                 // set checked status
+                boolean checked = false;
                 List<String> values = getSelectedValues();
                 for (int k = 0; k < values.size(); k++) {
                     if (String.valueOf(values.get(k)).equals(option.getValue())) {
-                        buffer.appendAttribute("checked", "checked");
+                        checked = true;
                     }
                 }
 
-                if (isDisabled()) {
+                if (checked) {
+                    buffer.appendAttribute("checked", "checked");
+                }
+                if (isReadonly() || isDisabled()) {
                     buffer.appendAttributeDisabled();
                 }
-                if (isReadonly()) {
-                    buffer.appendAttributeReadonly();
-                }
                 buffer.elementEnd();
-
                 buffer.appendEscaped(option.getLabel());
 
                 if (sortable) {
                     buffer.append("</div>");
                 } else {
                     buffer.append("</label>");
+                }
+
+                if (checked && (isReadonly() || isDisabled())) {
+                    buffer.elementStart("input");
+                    buffer.appendAttribute("type", "hidden");
+                    buffer.appendAttribute("name", getName());
+                    buffer.appendAttributeEscaped("value", option.getValue());
+                    buffer.elementEnd();
                 }
 
                 // hiddenfield if sortable

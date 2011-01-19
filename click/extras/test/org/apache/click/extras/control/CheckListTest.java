@@ -19,6 +19,7 @@
 package org.apache.click.extras.control;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.click.control.Option;
@@ -149,5 +150,24 @@ public class CheckListTest extends TestCase {
 
         // Perform test
         assertTrue(cl.isValid());
+    }
+
+    /**
+     * Check that a readonly CheckList uses diabled attribute instead of
+     * readonly attribute.
+     *
+     * CLK-751
+     */
+    public void testReadonly() {
+        MockContext context = MockContext.initContext();
+        CheckList cl = new CheckList("cl");
+        cl.setReadonly(true);
+        int[] in = {1,2,3,4,5,6};
+        List<Option> ol = createOptionsList(in);
+        cl.setOptionList(ol);
+        cl.setSelectedValues(Arrays.asList("1", "2"));
+        assertFalse(cl.toString().contains("readonly=\"readonly\""));
+        assertTrue(cl.toString().contains("disabled=\"disabled\""));
+        assertTrue(cl.toString().contains("<input type=\"hidden\" name=\"cl\" value=\"1\"/>"));
     }
 }
