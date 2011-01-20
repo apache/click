@@ -43,7 +43,7 @@ div.page {
   margin: 0 auto; /* Center align for other browsers,  */
   text-align: left;
 	background: #ffffff;
-	width: 990px;
+	width: 1010px;
   min-height: 100%; /* IE6 doesn't recognize min-height. */
 }
 
