@@ -21,7 +21,7 @@ package org.apache.click.examples.page.wizard;
 import org.apache.click.control.AbstractContainer;
 import org.apache.click.control.PageLink;
 import org.apache.click.control.TextField;
-import org.apache.click.examples.control.cayenne.CayenneIntegerField;
+import org.apache.click.examples.domain.Client;
 import org.apache.click.extras.cayenne.QuerySelect;
 import org.apache.click.extras.control.IntegerField;
 
@@ -39,6 +39,9 @@ public class Step2 extends Step {
 
     /** Reference to the state field. */
     private QuerySelect stateSelect;
+
+    /** The client domain object created through the wizard. */
+    private Client client;
 
     /**
      * Construct Step2 with the specified name, label, description and page.
@@ -63,18 +66,24 @@ public class Step2 extends Step {
 
         getForm().add(postCodeLookupWrapper);
 
-        getForm().add(new TextField("address.line1", "Line One"));
+        getForm().add(new TextField("address.line1", "Line One", true));
         getForm().add(new TextField("address.line2", "Line Two"));
-        getForm().add(new TextField("address.suburb", "Suburb"));
+        getForm().add(new TextField("address.suburb", "Suburb", true));
 
         stateSelect = new QuerySelect("address.state", "State", true);
 
         stateSelect.setQueryValueLabel("states", "value", "label");
         getForm().add(stateSelect);
-        postCodeField = new CayenneIntegerField("address.postCode", "Post Code");
+        postCodeField = new IntegerField("address.postCode", "Post Code");
+        postCodeField.setRequired(true);
         postCodeField.setMaxLength(5);
         postCodeField.setSize(5);
         getForm().add(postCodeField);
+
+        client = WizardUils.getClientFromSession();
+        if (client != null) {
+            getForm().copyFrom(client);
+        }
     }
 
     /**
@@ -109,9 +118,12 @@ public class Step2 extends Step {
     @Override
     public boolean onNext() {
         if (getForm().isValid()) {
+
+            getForm().copyTo(client);
+            WizardUils.saveClientInSession(client);
+
             // Pass client to next Step
             getWizardPage().next();
-            getWizardPage().getCurrentStep().setClient(getClient());
         }
         return true;
     }
@@ -126,6 +138,8 @@ public class Step2 extends Step {
     public boolean onPrevious() {
         getWizardPage().previous();
         getForm().clearErrors();
+        getForm().copyTo(client);
+        WizardUils.saveClientInSession(client);
         return false;
     }
 

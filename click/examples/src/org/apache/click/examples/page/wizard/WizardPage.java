@@ -18,8 +18,6 @@
  */
 package org.apache.click.examples.page.wizard;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.apache.click.element.CssImport;
 import org.apache.click.examples.page.BorderPage;
@@ -35,8 +33,20 @@ public class WizardPage extends BorderPage {
     /** Current step in the process. */
     private Step currentStep;
 
-    /** List of all steps. */
-    private List<Step> steps = new ArrayList<Step>();
+    public static final String STEP1_DESC = "Client";
+    public static final String STEP2_DESC = "Address";
+    public static final String STEP3_DESC = "Confirmation";
+
+    public static final String STEP1_LABEL = "Step 1";
+    public static final String STEP2_LABEL = "Step 2";
+    public static final String STEP3_LABEL = "Step 3";
+
+    public String[] stepDescriptions = {STEP1_DESC, STEP2_DESC, STEP3_DESC};
+    public String[] stepLabels = {STEP1_LABEL, STEP2_LABEL, STEP3_LABEL};
+
+    private int numberOfSteps = stepDescriptions.length;
+
+    private int currentStepIndex = 0;
 
     // Constructor ------------------------------------------------------------
 
@@ -44,19 +54,21 @@ public class WizardPage extends BorderPage {
      * Default constructor.
      */
     public WizardPage() {
-        steps.add(new Step1("step", "Client", "Step 1", this));
-        steps.add(new Step2("step", "Address", "Step 2", this));
-        steps.add(new Step3("step", "Confirmation", "Step 3", this));
+        // Lookup step ID; defaults to "0"
+        int stepId = WizardUils.restoreActiveStepIndex();
+        setCurrentStepIndex(stepId);
 
-        // Set first step as current
-        setCurrentStep(steps.get(0));
+        //setCurrentStep(steps.get(stepIndex));
 
         // Initialize all the steps
+        /*
         Iterator it = steps.iterator();
         while(it.hasNext()) {
             Step step = (Step) it.next();
             step.init();
         }
+         *
+         */
     }
 
     // Public Methods ---------------------------------------------------------
@@ -75,15 +87,29 @@ public class WizardPage extends BorderPage {
      *
      * @param step the new step to set
      */
-    public void setCurrentStep(Step step) {
-        if (this.currentStep != null) {
-            // Remove the current step from the page list of controls
-            removeControl(this.currentStep);
-            getModel().remove("heading");
+    public void setCurrentStepIndex(int stepIndex) {
+        // Store step index for subsequent requests
+        WizardUils.saveActiveStepIndex(stepIndex);
+        currentStepIndex = stepIndex;
+
+        if (currentStep != null) {
+            removeControl(currentStep);
         }
-        this.currentStep = step;
+        getModel().remove("heading");
+
+        if (stepIndex == 0) {
+            currentStep = new Step1("step", STEP1_LABEL, STEP1_DESC, this);
+
+        } else if (stepIndex == 1) {
+            currentStep = new Step2("step", STEP2_LABEL, STEP2_DESC, this);
+
+        } else if (stepIndex == 2) {
+            currentStep = new Step3("step", STEP3_LABEL, STEP3_DESC, this);
+        }
+        currentStep.init();
+
         // Add the new step to the page list of controls
-        addControl(step);
+        addControl(currentStep);
         addModel("heading", getHeading());
     }
 
@@ -93,8 +119,8 @@ public class WizardPage extends BorderPage {
      * @param step the step to check against
      * @return true if there is another step before the specified step
      */
-    public boolean hasPreviousStep(Step step) {
-        return steps.indexOf(step) > 0;
+    public boolean hasPreviousStep() {
+        return currentStepIndex > 0;
     }
 
     /**
@@ -103,8 +129,8 @@ public class WizardPage extends BorderPage {
      * @param step the step to check against
      * @return true if there is another step after the specified step
      */
-    public boolean hasNextStep(Step step) {
-        return !isLastStep(step);
+    public boolean hasNextStep() {
+        return !isLastStep();
     }
 
     /**
@@ -113,10 +139,7 @@ public class WizardPage extends BorderPage {
      * @param step the step to check against
      * @return true if the specified step is the last step in the process
      */
-    public boolean isLastStep(Step step) {
-        int numberOfSteps = steps.size();
-        int currentStepIndex = steps.indexOf(step);
-
+    public boolean isLastStep() {
         // currentStepIndex is a zero based index. Add 1 when comparing to
         // numberOfSteps
         return (numberOfSteps == currentStepIndex + 1);
@@ -126,9 +149,8 @@ public class WizardPage extends BorderPage {
      * Goto previous step.
      */
     public void previous() {
-        int currentIndex = steps.indexOf(getCurrentStep());
-        if (currentIndex > 0) {
-            setCurrentStep(steps.get(currentIndex - 1));
+        if (currentStepIndex > 0) {
+            setCurrentStepIndex(--currentStepIndex);
         }
     }
 
@@ -136,9 +158,8 @@ public class WizardPage extends BorderPage {
      * Goto next step.
      */
     public void next() {
-        int currentIndex = steps.indexOf(getCurrentStep());
-        if (currentIndex < steps.size() - 1) {
-            setCurrentStep(steps.get(currentIndex + 1));
+        if (currentStepIndex < numberOfSteps - 1) {
+            setCurrentStepIndex(++currentStepIndex);
         }
     }
 
@@ -166,16 +187,19 @@ public class WizardPage extends BorderPage {
     private String getHeading() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
         buffer.append("<ul id=\"steps\">");
-        for (Step step : steps) {
+        for (int i = 0; i < stepDescriptions.length; i++) {
+            String stepDescription = stepDescriptions[i];
+            String stepLabel = stepLabels[i];
+
             buffer.elementStart("li");
-            if (step == currentStep) {
+            if (stepDescription.equals(currentStep.getDescription())) {
                 buffer.appendAttribute("class", "current");
             }
             buffer.closeTag();
-            buffer.append(step.getDescription());
+            buffer.append(stepDescription);
             buffer.elementStart("span");
             buffer.closeTag();
-            buffer.append(step.getLabel());
+            buffer.append(stepLabel);
             buffer.elementEnd("span");
             buffer.elementEnd("li");
         }

@@ -24,10 +24,6 @@ import org.apache.click.Control;
 import org.apache.click.control.Button;
 import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
-import org.apache.click.examples.control.cayenne.NestedCayenneForm;
-import org.apache.click.examples.domain.Client;
-import org.apache.click.extras.cayenne.CayenneForm;
-import org.apache.commons.lang.ClassUtils;
 
 /**
  * Provides common functionality for each step in the wizard.
@@ -39,8 +35,7 @@ public abstract class Step extends SimplePanel {
     // Variables --------------------------------------------------------------
 
     /** Reference to the form. */
-    private CayenneForm form = new NestedCayenneForm("form"
-        + ClassUtils.getShortClassName(getClass()), Client.class);
+    private Form form = new Form("form");
 
     /** Reference to the wizard page. */
     private WizardPage wizardPage;
@@ -84,18 +79,10 @@ public abstract class Step extends SimplePanel {
      *
      * @return the Step form instance
      */
-    public CayenneForm getForm() {
+    public Form getForm() {
         return form;
     }
 
-    /**
-     * Set the form instance.
-     *
-     * @param form the form for this Step
-     */
-    public void setForm(CayenneForm form) {
-        this.form = form;
-    }
 
     /**
      * Return the Step WizardPage instance.
@@ -131,26 +118,6 @@ public abstract class Step extends SimplePanel {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * Return the Client instance.
-     *
-     * @return the Client instance
-     */
-    public Client getClient() {
-        // form.getDataObject ensures that latest field values are copied to
-        // domain object
-        return (Client) getForm().getDataObject();
-    }
-
-    /**
-     * Set the Client instance.
-     *
-     * @param client the client for this Step
-     */
-    public void setClient(Client client) {
-        getForm().setDataObject(client);
     }
 
     /**
@@ -234,7 +201,6 @@ public abstract class Step extends SimplePanel {
 
         // Set page state to stateless which removes the page from
         // the session
-        getWizardPage().setStateful(false);
         getWizardPage().setRedirect(WizardPage.class);
         return false;
     }
@@ -245,8 +211,9 @@ public abstract class Step extends SimplePanel {
      */
     @SuppressWarnings("serial")
     public final void init() {
-        getForm().setButtonAlign(Form.ALIGN_RIGHT);
-        getForm().setErrorsPosition(Form.POSITION_MIDDLE);
+        Form localForm = getForm();
+        localForm.setButtonAlign(Form.ALIGN_RIGHT);
+        localForm.setErrorsPosition(Form.POSITION_MIDDLE);
 
         previous = new Submit("previous");
         previous.setLabel("< Previous");
@@ -255,8 +222,8 @@ public abstract class Step extends SimplePanel {
                 return onPrevious();
             }
         });
-        form.add(previous);
-        if (!getWizardPage().hasPreviousStep(this)) {
+        localForm.add(previous);
+        if (!getWizardPage().hasPreviousStep()) {
             previous.setDisabled(true);
         }
 
@@ -267,8 +234,8 @@ public abstract class Step extends SimplePanel {
                 return onNext();
             }
         });
-        form.add(next);
-        if (!getWizardPage().hasNextStep(this)) {
+        localForm.add(next);
+        if (!getWizardPage().hasNextStep()) {
             next.setDisabled(true);
         }
 
@@ -278,8 +245,8 @@ public abstract class Step extends SimplePanel {
                 return onFinish();
             }
         });
-        form.add(finish);
-        if (!getWizardPage().isLastStep(this)) {
+        localForm.add(finish);
+        if (!getWizardPage().isLastStep()) {
             finish.setDisabled(true);
         }
 
@@ -289,8 +256,8 @@ public abstract class Step extends SimplePanel {
                 return onCancel();
             }
         });
-        form.add(cancel);
+        localForm.add(cancel);
 
-        add(form);
+        add(localForm);
     }
 }

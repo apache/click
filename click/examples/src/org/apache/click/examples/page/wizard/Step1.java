@@ -18,8 +18,16 @@
  */
 package org.apache.click.examples.page.wizard;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.click.control.Option;
+import org.apache.click.control.Select;
 import org.apache.click.control.TextField;
-import org.apache.click.extras.cayenne.QuerySelect;
+import org.apache.click.dataprovider.DataProvider;
+import org.apache.click.examples.domain.Address;
+import org.apache.click.examples.domain.Client;
+import org.apache.click.examples.domain.SystemCode;
+import org.apache.click.examples.service.ClientService;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.EmailField;
 
@@ -32,6 +40,11 @@ public class Step1 extends Step {
 
     private static final long serialVersionUID = 1L;
 
+    /** The client domain object created through the wizard. */
+    private Client client;
+
+    private ClientService clientService;
+
     /**
      * Construct Step1 with the specified name, label, description and page.
      *
@@ -43,14 +56,18 @@ public class Step1 extends Step {
     public Step1(String name, String label, String description, WizardPage page) {
         super(name, label, description, page);
 
-        QuerySelect querySelect = new QuerySelect("title", true);
-        querySelect.setQueryValueLabel("titles", "value", "label");
-        getForm().add(querySelect);
+        Select titleSelect = createTitleSelect();
+        getForm().add(titleSelect);
 
-        getForm().add(new TextField("firstName"));
-        getForm().add(new TextField("lastName"));
-        getForm().add(new DateField("dateJoined"));
+        getForm().add(new TextField("firstName", true));
+        getForm().add(new TextField("lastName", true));
+        getForm().add(new DateField("dateJoined", true));
         getForm().add(new EmailField("email"));
+
+        client = WizardUils.getClientFromSession();
+        if (client != null) {
+            getForm().copyFrom(client);
+        }
     }
 
     /**
@@ -62,15 +79,49 @@ public class Step1 extends Step {
      */
     @Override
     public boolean onNext() {
-        // Set the page to stateful so the same Page is available throughout the
-        // Wizard steps
-        getWizardPage().setStateful(true);
-
         if (getForm().isValid()) {
-            // Pass the client to Panel2
+
+            // Only create client if no client was loaded from the session in this
+            // Step's constructor. This allows the user to freely navigate backwards
+            // and forwards through the wizard without overwriting a previous Client
+            // instance
+            if (client == null) {
+                ClientService service = getClientService();
+                client = service.createNewClient();
+                Address address = service.createNewAddress();
+                client.setAddress(address);
+            }
+            getForm().copyTo(client);
+            WizardUils.saveClientInSession(client);
+
             getWizardPage().next();
-            getWizardPage().getCurrentStep().setClient(getClient());
         }
         return true;
+    }
+
+    public ClientService getClientService() {
+        if (clientService == null) {
+            clientService = new ClientService();
+        }
+        return clientService;
+    }
+
+    private Select createTitleSelect() {
+        Select titleSelect = new Select("title", true);
+
+        titleSelect.setDefaultOption(Option.EMPTY_OPTION);
+
+        titleSelect.setDataProvider(new DataProvider() {
+
+            public List<Option> getData() {
+                List<Option> options = new ArrayList<Option>();
+                List<SystemCode> titles = getClientService().getTitles();
+                for (SystemCode title : titles) {
+                    options.add(new Option(title.getValue(), title.getLabel()));
+                }
+                return options;
+            }
+        });
+        return titleSelect;
     }
 }
