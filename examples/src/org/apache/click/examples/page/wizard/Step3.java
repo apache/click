@@ -18,6 +18,9 @@
  */
 package org.apache.click.examples.page.wizard;
 
+import org.apache.click.examples.domain.Client;
+import org.apache.click.examples.service.ClientService;
+
 /**
  * This step asks for confirmation on the client information added through the
  * wizard. If user confirms, the new client is inserted into the database,
@@ -31,6 +34,9 @@ public class Step3 extends Step {
 
     private static final long serialVersionUID = 1L;
 
+    /** The client domain object created through the wizard. */
+    private Client client;
+
     /**
      * Construct Step3 with the specified name, label, description and page.
      *
@@ -41,6 +47,7 @@ public class Step3 extends Step {
      */
     public Step3(String name, String label, String description, WizardPage page) {
         super(name, label, description, page);
+        client = WizardUils.getClientFromSession();
     }
 
     /**
@@ -55,15 +62,18 @@ public class Step3 extends Step {
         if (getForm().isValid()) {
 
             // Store client and associated address in the database
-            getForm().saveChanges();
+            ClientService service = new ClientService();
+            service.saveClient(client);
 
             // Set a flash success message
             getContext().setFlashAttribute("message", "The client "
-                + getClient().getName() + " was successfully created.");
+                + client.getName() + " was successfully created.");
 
-            // Set page state to stateless which removes the page from
-            // the session
-            getWizardPage().setStateful(false);
+            // Remove client from session
+            WizardUils.removeClientFromSession();
+
+            // Set Step index back to 0
+            getWizardPage().setCurrentStepIndex(0);
 
             // Redirect to wizard page to start another process
             getWizardPage().setRedirect(WizardPage.class);
@@ -94,8 +104,6 @@ public class Step3 extends Step {
         super.onRender();
 
         // Add client to model for displaying confirmation message
-        if (!getModel().containsKey("client")) {
-            addModel("client", getClient());
-        }
+        addModel("client", client);
     }
 }

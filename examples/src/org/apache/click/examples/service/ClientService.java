@@ -18,12 +18,16 @@
  */
 package org.apache.click.examples.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.click.examples.domain.Client;
 import org.apache.click.extras.cayenne.CayenneTemplate;
 
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.cayenne.query.SortOrder;
+import org.apache.click.examples.domain.Address;
+import org.apache.click.examples.domain.SystemCode;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,7 +41,7 @@ public class ClientService extends CayenneTemplate {
     @SuppressWarnings("unchecked")
     public List<Client> getClients() {
         SelectQuery query = new SelectQuery(Client.class);
-        query.addOrdering("db:id", true);
+        query.addOrdering("db:id", SortOrder.ASCENDING);
         return (List<Client>) performQuery(query);
     }
 
@@ -52,9 +56,17 @@ public class ClientService extends CayenneTemplate {
         commitChanges();
     }
 
-    @SuppressWarnings("deprecation")
-    public Client createClientInNestedContext() {
-        return (Client) getDataContext().createChildDataContext().
-            createAndRegisterNewObject(Client.class);
+    public Client createNewClient() {
+            Client client = newObject(Client.class);
+        return client;
+    }
+
+    public Address createNewAddress() {
+            Address address = newObject(Address.class);
+        return address;
+    }
+
+    public List<SystemCode> getTitles() {
+        return (List<SystemCode>) performQuery("titles", false);
     }
 }
