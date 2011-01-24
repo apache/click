@@ -85,7 +85,7 @@ public class WizardPage extends BorderPage {
     /**
      * Sets the current Step to the specified Step.
      *
-     * @param step the new step to set
+     * @param stepIndex the current step index to set
      */
     public void setCurrentStepIndex(int stepIndex) {
         // Store step index for subsequent requests
@@ -116,7 +116,6 @@ public class WizardPage extends BorderPage {
     /**
      * Return true if there is another step before the specified step.
      *
-     * @param step the step to check against
      * @return true if there is another step before the specified step
      */
     public boolean hasPreviousStep() {
@@ -126,7 +125,6 @@ public class WizardPage extends BorderPage {
     /**
      * Return true if there is another step after the specified step.
      *
-     * @param step the step to check against
      * @return true if there is another step after the specified step
      */
     public boolean hasNextStep() {
@@ -136,7 +134,6 @@ public class WizardPage extends BorderPage {
     /**
      * Return true if the specified step is the last step in the process.
      *
-     * @param step the step to check against
      * @return true if the specified step is the last step in the process
      */
     public boolean isLastStep() {
