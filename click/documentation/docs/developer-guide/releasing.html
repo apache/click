@@ -76,7 +76,7 @@
                     </li>
                     <li>
                         Ensure third-party library versions are correct. Check the following
-                        files: build/build.xml, examples/build.xml, documentation/docs/building.html.
+                        files: build/build.xml, examples/build.xml, documentation/docs/developer-guide/building.html.
                     </li>
                     <li>
                         Add upgraded libraries to documentation/docs/roadmap-changes.html
@@ -97,9 +97,6 @@
                     </li>
                     <li>
                         Update <tt>downloads.html</tt> and ensure the release date is correct.
-                    </li>
-                    <li>
-                        Update the DOAP file (<tt>/documentation/doap/click.rdf</tt> and ensure the new release is added.
                     </li>
                 </ul>
             </li>
@@ -408,6 +405,11 @@ cd /www/click.apache.org/
 find . -type d | xargs chmod 775
 find . -type f | xargs chmod 664
 chgrp -R click *</pre>
+            </li>
+            <li>
+                Update the DOAP file (<tt>/documentation/doap/click.rdf</tt>) and
+                ensure the new release is added. Commit the changes to ensure the
+                DOAP file is picked up by Apache processes.
             </li>
             <li>
                 Email release announcement to the <tt>user</tt> and <tt>dev</tt>
