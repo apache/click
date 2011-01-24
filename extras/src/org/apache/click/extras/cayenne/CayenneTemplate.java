@@ -62,14 +62,14 @@ public class CayenneTemplate {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Instantiates new object and registers it with itself. Object class must
+     * Instantiate and register a new persistent object. Object class must
      * have a default constructor.
      *
      * @param persistentClass the persistent object class to create and register
      * @return the new registered persistent object
      */
-    protected <T> T newObject(Class<T> dataObjectClass) {
-        return getDataContext().newObject(dataObjectClass);
+    protected <T> T newObject(Class<T> persistentClass) {
+        return getDataContext().newObject(persistentClass);
     }
 
     /**
