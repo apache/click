@@ -40,10 +40,15 @@ public class Step1 extends Step {
 
     private static final long serialVersionUID = 1L;
 
+    // Variables --------------------------------------------------------------
+
     /** The client domain object created through the wizard. */
     private Client client;
 
+    /** The client service. */
     private ClientService clientService;
+
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct Step1 with the specified name, label, description and page.
@@ -56,7 +61,8 @@ public class Step1 extends Step {
     public Step1(String name, String label, String description, WizardPage page) {
         super(name, label, description, page);
 
-        Select titleSelect = createTitleSelect();
+        Select titleSelect = new Select("title", true);
+        setupTitleSelect(titleSelect);
         getForm().add(titleSelect);
 
         getForm().add(new TextField("firstName", true));
@@ -69,6 +75,8 @@ public class Step1 extends Step {
             getForm().copyFrom(client);
         }
     }
+
+    // Public methods ---------------------------------------------------------
 
     /**
      * The onNext action of Step1 sets the Page to stateful, checks if the form
@@ -106,12 +114,12 @@ public class Step1 extends Step {
         return clientService;
     }
 
-    private Select createTitleSelect() {
-        Select titleSelect = new Select("title", true);
+    // Private methods --------------------------------------------------------
 
-        titleSelect.setDefaultOption(Option.EMPTY_OPTION);
+    private void setupTitleSelect(Select select) {
+        select.setDefaultOption(Option.EMPTY_OPTION);
 
-        titleSelect.setDataProvider(new DataProvider() {
+        select.setDataProvider(new DataProvider() {
 
             public List<Option> getData() {
                 List<Option> options = new ArrayList<Option>();
@@ -122,6 +130,5 @@ public class Step1 extends Step {
                 return options;
             }
         });
-        return titleSelect;
     }
 }
