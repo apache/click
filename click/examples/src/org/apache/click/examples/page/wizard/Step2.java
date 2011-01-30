@@ -18,11 +18,17 @@
  */
 package org.apache.click.examples.page.wizard;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.click.control.AbstractContainer;
+import org.apache.click.control.Option;
 import org.apache.click.control.PageLink;
+import org.apache.click.control.Select;
 import org.apache.click.control.TextField;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.examples.domain.Client;
-import org.apache.click.extras.cayenne.QuerySelect;
+import org.apache.click.examples.domain.SystemCode;
+import org.apache.click.examples.service.ClientService;
 import org.apache.click.extras.control.IntegerField;
 
 /**
@@ -34,14 +40,21 @@ public class Step2 extends Step {
 
     private static final long serialVersionUID = 1L;
 
+    // Variables --------------------------------------------------------------
+
     /** Reference to the postCode field. */
     private IntegerField postCodeField;
 
     /** Reference to the state field. */
-    private QuerySelect stateSelect;
+    private Select stateSelect;
 
     /** The client domain object created through the wizard. */
     private Client client;
+
+    /** The client service. */
+    private ClientService clientService;
+
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct Step2 with the specified name, label, description and page.
@@ -70,9 +83,9 @@ public class Step2 extends Step {
         getForm().add(new TextField("address.line2", "Line Two"));
         getForm().add(new TextField("address.suburb", "Suburb", true));
 
-        stateSelect = new QuerySelect("address.state", "State", true);
+        stateSelect = new Select("address.state", "State", true);
+        setupStateSelect(stateSelect);
 
-        stateSelect.setQueryValueLabel("states", "value", "label");
         getForm().add(stateSelect);
         postCodeField = new IntegerField("address.postCode", "Post Code");
         postCodeField.setRequired(true);
@@ -85,6 +98,8 @@ public class Step2 extends Step {
             getForm().copyFrom(client);
         }
     }
+
+    // Public methods ---------------------------------------------------------
 
     /**
      * Step2 links to a lookup table for populating the post code and state values.
@@ -142,6 +157,33 @@ public class Step2 extends Step {
         WizardUils.saveClientInSession(client);
         return false;
     }
+
+    public ClientService getClientService() {
+        if (clientService == null) {
+            clientService = new ClientService();
+        }
+        return clientService;
+    }
+
+    // Private methods --------------------------------------------------------
+
+    private void setupStateSelect(Select select) {
+        select.setDefaultOption(Option.EMPTY_OPTION);
+
+        select.setDataProvider(new DataProvider() {
+
+            public List<Option> getData() {
+                List<Option> options = new ArrayList<Option>();
+                List<SystemCode> states = getClientService().getStates();
+                for (SystemCode state : states) {
+                    options.add(new Option(state.getValue(), state.getLabel()));
+                }
+                return options;
+            }
+        });
+    }
+
+    // Inner classes ----------------------------------------------------------
 
     /**
      * Represents a Div HTML element.

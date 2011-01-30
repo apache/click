@@ -34,8 +34,12 @@ public class Step3 extends Step {
 
     private static final long serialVersionUID = 1L;
 
+    // Variables --------------------------------------------------------------
+
     /** The client domain object created through the wizard. */
     private Client client;
+
+    // Constructors -----------------------------------------------------------
 
     /**
      * Construct Step3 with the specified name, label, description and page.
@@ -49,6 +53,8 @@ public class Step3 extends Step {
         super(name, label, description, page);
         client = WizardUils.getClientFromSession();
     }
+
+    // Public methods ---------------------------------------------------------
 
     /**
      * The onFinish action of Step3 checks if the form is valid, saves the
