@@ -69,4 +69,8 @@ public class ClientService extends CayenneTemplate {
     public List<SystemCode> getTitles() {
         return (List<SystemCode>) performQuery("titles", false);
     }
+
+    public List<SystemCode> getStates() {
+        return (List<SystemCode>) performQuery("states", false);
+    }
 }
