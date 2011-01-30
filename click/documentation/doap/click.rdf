@@ -49,8 +49,8 @@
     <release>
       <Version>
         <name>Development</name>
-        <created>2010-11-28</created>
-        <revision>2.3.0-M1</revision>
+        <created>2011-01-30</created>
+        <revision>2.3.0-RC1</revision>
       </Version>
     </release>
     <repository>
