@@ -25,7 +25,9 @@ import javax.annotation.Resource;
 import org.apache.cayenne.BaseContext;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Column;
+import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
+import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.Submit;
 import org.apache.click.control.Table;
@@ -33,12 +35,12 @@ import org.apache.click.control.TextField;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.extras.cayenne.CayenneForm;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.LinkDecorator;
 import org.apache.click.dataprovider.DataProvider;
+import org.apache.click.util.ContainerUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -48,9 +50,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class EditTable extends BorderPage {
 
+    public static final String OBJECT_ID = "id";
+
     private static final long serialVersionUID = 1L;
 
-    private CayenneForm form = new CayenneForm("form", Customer.class);
+    private Form form = new Form("form");
     private Table table = new Table("table");
     private ActionLink editLink = new ActionLink("edit", "Edit", this, "onEditClick");
     private ActionLink deleteLink = new ActionLink("delete", "Delete", this, "onDeleteClick");
@@ -75,6 +79,7 @@ public class EditTable extends BorderPage {
         form.add(fieldSet);
         form.add(new Submit("save", this, "onSaveClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
+        form.add(new HiddenField(OBJECT_ID, Integer.class));
         form.add(new HiddenField(Table.PAGE, String.class));
         form.add(new HiddenField(Table.COLUMN, String.class));
 
@@ -124,7 +129,7 @@ public class EditTable extends BorderPage {
         Integer id = editLink.getValueInteger();
         Customer customer = customerService.getCustomerForID(id);
         if (customer != null) {
-            form.setDataObject(customer);
+            form.copyFrom(customer);
         }
         return true;
     }
@@ -137,18 +142,18 @@ public class EditTable extends BorderPage {
 
     public boolean onSaveClick() {
         if (form.isValid()) {
-            // Please note with Cayenne ORM this will persist any changes
-            // to data objects submitted by the form.
-            form.getDataObject();
+            String id = form.getFieldValue(OBJECT_ID);
+            Customer customer = customerService.getCustomerForID(id);
+            form.copyTo(customer);
             BaseContext.getThreadObjectContext().commitChanges();
-            form.setDataObject(null);
+            clearNonHiddenFieldValues(form);
         }
         return true;
     }
 
     public boolean onCancelClick() {
         BaseContext.getThreadObjectContext().rollbackChanges();
-        form.setDataObject(null);
+        clearNonHiddenFieldValues(form);
         form.clearErrors();
         return true;
     }
@@ -172,4 +177,12 @@ public class EditTable extends BorderPage {
         table.setSortedColumn(form.getField(Table.COLUMN).getValue());
     }
 
+    private void clearNonHiddenFieldValues(Form form) {
+        List<Field> fields = ContainerUtils.getInputFields(form);
+            for (Field field : fields) {
+                if (!(field instanceof HiddenField)) {
+                    field.setValue("");
+                }
+            }
+    }
 }
