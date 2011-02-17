@@ -25,8 +25,8 @@ import java.lang.annotation.Target;
 
 /**
  * Provides a Page field auto binding annotation. Please see the user guide
- * sections on <a href="../../../../../user-guide/html/ch04s02.html#application-autobinding">Autobinding</a>
- * and <a href="../../../../../user-guide/html/ch04s02.html#application-autobinding-annotation">Autobinding Using Annotations</a>
+ * sections on <a href="../../../../../user-guide/html/ch05s02.html#application-autobinding">Autobinding</a>
+ * and <a href="../../../../../user-guide/html/ch05s02.html#application-autobinding-annotation">Autobinding Using Annotations</a>
  * for a detailed description of Page field binding.
  * <p/>
  * Bindable can bind private, protected and public Page fields.
