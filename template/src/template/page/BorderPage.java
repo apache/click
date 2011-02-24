@@ -19,7 +19,7 @@ public class BorderPage extends BasePage {
      * @see #getTemplate()
      */
     public String getTemplate() {
-        return "border-template.htm";
+        return "/border-template.htm";
     }
 
 }
