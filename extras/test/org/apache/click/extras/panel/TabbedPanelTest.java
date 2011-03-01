@@ -64,17 +64,41 @@ public class TabbedPanelTest extends TestCase {
         assertEquals("panel2", activePanelName);
     }
 
+
+    /**
+     * Test that the request parameter <tt>tabPanelIndex-<TabbedPanelName></tt>
+     * sets the new active panel correctly.
+     */
+    public void testTabPanelIndexWithNameParameter() {
+        MockContext context = MockContext.initContext();
+
+        TabbedPanel tabbedPanel = new TabbedPanel("tabbedPanel");
+
+        // Since tabbedPanel is zero index based, setting tabPanelIndex to 1
+        // should set the active panel to panel2
+        context.getMockRequest().setParameter("tabPanelIndex-" + tabbedPanel.getName(), "1");
+
+        tabbedPanel.add(new Panel("panel1"));
+        tabbedPanel.add(new Panel("panel2"));
+        tabbedPanel.onInit();
+        String activePanelName = tabbedPanel.getActivePanel().getName();
+
+        // By default panel2 should be the active panel
+        assertEquals("panel2", activePanelName);
+    }
+
     /**
      * Test that if user selects panel2, panel2 becomes the active panel.
      */
     public void testTabLinkClicked() {
         MockContext context = MockContext.initContext();
 
+        TabbedPanel tabbedPanel = new TabbedPanel("tabbedPanel");
+
         // Simulate user selecting panel2
-        context.getMockRequest().setParameter(ActionLink.ACTION_LINK, "tabLink");
+        context.getMockRequest().setParameter(ActionLink.ACTION_LINK, "tabLink-" + tabbedPanel.getName());
         context.getMockRequest().setParameter(ActionLink.VALUE, "panel2");
 
-        TabbedPanel tabbedPanel = new TabbedPanel("tabbedPanel");
         tabbedPanel.add(new Panel("panel1"));
         tabbedPanel.add(new Panel("panel2"));
         tabbedPanel.onInit();
@@ -92,11 +116,12 @@ public class TabbedPanelTest extends TestCase {
     public void testTabListenerFired() {
         MockContext context = MockContext.initContext();
 
+        TabbedPanel tabbedPanel = new TabbedPanel("tabbedPanel");
+
         // Simulate user selecting panel2
-        context.getMockRequest().setParameter(ActionLink.ACTION_LINK, "tabLink");
+        context.getMockRequest().setParameter(ActionLink.ACTION_LINK, "tabLink-" + tabbedPanel.getName());
         context.getMockRequest().setParameter(ActionLink.VALUE, "panel2");
 
-        TabbedPanel tabbedPanel = new TabbedPanel("tabbedPanel");
         tabbedPanel.add(new Panel("panel1"));
         tabbedPanel.add(new Panel("panel2"));
 
