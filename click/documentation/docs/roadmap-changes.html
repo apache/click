@@ -199,6 +199,12 @@ Action support and light-weight stateful controls to replace stateful pages.
       </div>
       <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
           <li class="change">
+              Added support for multiple TabbedPanels on a page. To programmatically
+              activate a specific TabbedPanel use the <tt>tabPanelIndex-&lt;panel-name&gt;</tt>
+              request parameter, for example <tt>tabPanelIndex-myTabbedPanel</tt>
+              [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-753">CLK-753</a>].
+          </li>
+          <li class="change">
               Improve fields to only be processed if they have an incoming request
               parameter. This improvement streamlines dynamic forms since fields
               added at runtime during s POST request won't bind their values and
