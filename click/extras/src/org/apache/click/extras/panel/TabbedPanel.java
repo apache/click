@@ -323,7 +323,7 @@ public class TabbedPanel extends Panel implements Stateful {
     public void setName(String name) {
         super.setName(name);
         ActionLink localTabLink = getTabLink();
-        localTabLink.setName(getName() + "-tabLink");
+        localTabLink.setName("tabLink-" + getName());
         add(localTabLink);
     }
 
