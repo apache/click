@@ -147,7 +147,7 @@ public class TabbedPanel extends Panel implements Stateful {
     protected Panel activePanel;
 
     /** The tab switch action link. */
-    protected ActionLink tabLink = new ActionLink("tabLink");
+    protected ActionLink tabLink;
 
     // ----------------------------------------------------------- Constructors
 
@@ -158,7 +158,6 @@ public class TabbedPanel extends Panel implements Stateful {
      */
     public TabbedPanel(String name) {
         super(name);
-        add(tabLink);
     }
 
     /**
@@ -169,7 +168,6 @@ public class TabbedPanel extends Panel implements Stateful {
      */
     public TabbedPanel(String name, String template) {
         super(name, template);
-        add(tabLink);
     }
 
     /**
@@ -181,7 +179,6 @@ public class TabbedPanel extends Panel implements Stateful {
      */
     public TabbedPanel(String name, String template, String id) {
         super(name, template, id);
-        add(tabLink);
     }
 
     /**
@@ -191,7 +188,6 @@ public class TabbedPanel extends Panel implements Stateful {
      */
     public TabbedPanel() {
         super();
-        add(tabLink);
     }
 
     // --------------------------------------------------------- Public Methods
@@ -317,6 +313,20 @@ public class TabbedPanel extends Panel implements Stateful {
         setTabListener(listener, listenerMethod);
     }
 
+     /**
+     * @see Control#setName(String)
+     *
+     * @param name of the control
+     * @throws IllegalArgumentException if the name is null
+     */
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+        ActionLink localTabLink = getTabLink();
+        localTabLink.setName(getName() + "-tabLink");
+        add(localTabLink);
+    }
+
     /**
      * @see #setTabListener(ActionListener)
      *
@@ -431,6 +441,9 @@ public class TabbedPanel extends Panel implements Stateful {
      * @return the tab switching action link
      */
     public ActionLink getTabLink() {
+        if (tabLink == null) {
+            tabLink = new ActionLink();
+        }
         return tabLink;
     }
 
@@ -465,6 +478,9 @@ public class TabbedPanel extends Panel implements Stateful {
      * <p/>
      * If <tt>tabPanelIndex</tt> request parameter is present, this value will be
      * used to specify the active panel. The panel index is a zero based integer.
+     * <p/>
+     * If multiple TabbedPanels are present on a form, use <tt>tabPanelIndex-&lt;panel-name&gt;</tt>
+     * to target a specific panel, for example: <tt>tabPanelIndex-myTabbedPanel</tt>.
      *
      * @see org.apache.click.Control#onInit()
      */
@@ -589,6 +605,9 @@ public class TabbedPanel extends Panel implements Stateful {
      *     If <tt>tabPanelIndex</tt> request parameter is present, this value
      *     will be used to specify the active panel. The panel index is a zero
      *     based integer.
+     *     <p/>
+     *     If multiple TabbedPanels are present on a form, use <tt>tabPanelIndex-&lt;panel-name&gt;</tt>
+     *     to target a specific panel, for example: <tt>tabPanelIndex-myTabbedPanel</tt>.
      *   </li>
      *   <li>
      *     If a specific tab panel is selected by the user, that panel will
@@ -598,7 +617,11 @@ public class TabbedPanel extends Panel implements Stateful {
      */
     protected void initActivePanel() {
         // Select panel specified by tabPanelIndex if defined
-        String tabPanelIndex = getContext().getRequestParameter("tabPanelIndex");
+        Context context = getContext();
+        String tabPanelIndex = context.getRequestParameter("tabPanelIndex-" + getName());
+        if (tabPanelIndex == null) {
+            tabPanelIndex = context.getRequestParameter("tabPanelIndex");
+        }
         if (NumberUtils.isNumber(tabPanelIndex)) {
             int tabIndex = Integer.parseInt(tabPanelIndex);
             if (tabIndex >= 0 && tabIndex < getPanels().size()) {
