@@ -135,7 +135,7 @@ import ognl.OgnlRuntime;
  *
  * <h3>Page Automapping</h3>
  * GAE does not always adhere to the Servlet specification. One of the areas that affects
- * Click directly is the <a href="../../../../../../user-guide/html/ch04s02.html#application-automapping">automatic mapping</a>
+ * Click directly is the <a href="../../../../../../user-guide/html/ch05s02.html#application-automapping">automatic mapping</a>
  * of Page templates to page classes. GAE does not implement the ServletContext
  * method <tt>getResourcePaths("/")</tt>. Instead of returning the resources under
  * the web-app root, it returns an empty set. Click needs these resources to map
@@ -208,7 +208,7 @@ import ognl.OgnlRuntime;
  * automatically deploy its resources.
  * <p/>
  * Please see the user-guide section,
- * <a href="../../../../../../user-guide/html/ch04s03.html#deploying-restricted-env">Deploying resources in a restricted environment</a>,
+ * <a href="../../../../../../user-guide/html/ch05s03.html#deploying-restricted-env">Deploying resources in a restricted environment</a>,
  * for various solutions.
  */
 public class GoogleAppEngineListener implements ServletContextListener {
