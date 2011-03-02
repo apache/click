@@ -82,7 +82,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * startup time Click will scan this folder for resources and deploy them to the
  * web application. This deployment strategy is the same approach taken by the
  * Servlet 3.0 specification. Please see the section
- * <a href="../../../../user-guide/html/ch04s03.html#deploying-custom-resources">Deploying Custom Resources</a>
+ * <a href="../../../../user-guide/html/ch05s03.html#deploying-custom-resources">Deploying Custom Resources</a>
  * for more details.
  * <p/>
  * An alternative approach to deploying static resources on startup is provided
@@ -311,7 +311,7 @@ public interface Control extends Serializable {
      * Click also supports an alternative deployment strategy which relies on
      * packaging resource (stylesheets, JavaScript, images etc.) following a
      * specific convention. See the section
-     * <a href="../../../../user-guide/html/ch04s03.html#deploying-custom-resources">Deploying Custom Resources</a>
+     * <a href="../../../../user-guide/html/ch05s03.html#deploying-custom-resources">Deploying Custom Resources</a>
      * for further details.
      *
      * @param servletContext the servlet context

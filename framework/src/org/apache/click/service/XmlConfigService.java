@@ -1352,7 +1352,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
 
             buffer.append("To resolve this issue please see the Click user-guide:");
-            buffer.append(" http://click.apache.org/docs/user-guide/html/ch04s03.html#deploying-restricted-env");
+            buffer.append(" http://click.apache.org/docs/user-guide/html/ch05s03.html#deploying-restricted-env");
             buffer.append(" \nIgnore this warning once you have settled on a");
             buffer.append(" deployment strategy");
             getLogService().warn(buffer.toString());
