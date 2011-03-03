@@ -2580,7 +2580,7 @@ public class ClickUtils {
         }
         if (controlName == null) {
             throw new IllegalStateException(ClassUtils.getShortClassName(control.getClass())
-                + " name has not been set. State cannot be restored until the name is set");
+                + " name has not been set. State cannot be emoved until the name is set");
         }
         if (context == null) {
             throw new IllegalStateException("Context cannot be null.");
