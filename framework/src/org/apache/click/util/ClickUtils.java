@@ -2570,8 +2570,8 @@ public class ClickUtils {
      * Remove the control state from the session for the given stateful control,
      * control name and request context.
      *
-     * @param control the stateful control which state to restore
-     * @param controlName the name of the control which state to restore
+     * @param control the stateful control which state to remove
+     * @param controlName the name of the control which state to remove
      * @param context the request context
      */
     public static void removeState(Stateful control, String controlName, Context context) {
