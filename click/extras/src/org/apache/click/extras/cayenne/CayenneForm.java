@@ -23,12 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.cayenne.BaseContext;
-import org.apache.click.control.Checkbox;
 import org.apache.click.control.Field;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
-import org.apache.click.control.TextArea;
-import org.apache.click.control.TextField;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ContainerUtils;
 import org.apache.click.util.HtmlStringBuffer;
@@ -37,8 +34,6 @@ import org.apache.cayenne.DataObject;
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.PersistenceState;
 import org.apache.cayenne.access.DataContext;
-import org.apache.cayenne.map.DbAttribute;
-import org.apache.cayenne.map.ObjAttribute;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.map.ObjRelationship;
 import org.apache.cayenne.validation.ValidationException;
@@ -615,21 +610,9 @@ public class CayenneForm extends Form {
 
         try {
             Class dataClass = ClickUtils.classForName(classField.getValue());
+            CayenneUtils.applyMetaData(this, dataClass);
 
-            ObjEntity objEntity =
-                getDataContext().getEntityResolver().lookupObjEntity(dataClass);
-
-            setObjEntityFieldConstrains(null, objEntity);
-
-            for (ObjRelationship objRelationship : objEntity.getRelationships()) {
-                String relName = objRelationship.getName();
-                ObjEntity relObjEntity =
-                        (ObjEntity) objRelationship.getTargetEntity();
-
-                setObjEntityFieldConstrains(relName, relObjEntity);
-            }
-
-        } catch (Exception e) {
+} catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
@@ -646,50 +629,4 @@ public class CayenneForm extends Form {
         return dataObject.getPersistenceState() != PersistenceState.TRANSIENT
                 && dataObject.getPersistenceState() != PersistenceState.NEW;
     }
-
-    /**
-     * Set the <tt>ObjEntity</tt> meta data constraints on the form fields.
-     *
-     * @param relationshipName the object relationship name, null if the
-     *      ObjEntity of the CayenneForm
-     * @param objEntity the ObjEntity to lookup meta data from
-     */
-    protected void setObjEntityFieldConstrains(String relationshipName,
-            ObjEntity objEntity) {
-
-        for (ObjAttribute objAttribute : objEntity.getAttributes()) {
-            DbAttribute dbAttribute = objAttribute.getDbAttribute();
-
-            String fieldName = objAttribute.getName();
-            if (relationshipName != null) {
-                fieldName = relationshipName + "." + fieldName;
-            }
-
-            Field field = getField(fieldName);
-
-            if (field != null) {
-                if (!field.isRequired() && dbAttribute.isMandatory()) {
-                    if (!(field instanceof Checkbox)) {
-                        field.setRequired(true);
-                    }
-                }
-
-                int maxlength = dbAttribute.getMaxLength();
-                if (maxlength != -1) {
-                    if (field instanceof TextField) {
-                        TextField textField = (TextField) field;
-                        if (textField.getMaxLength() == 0) {
-                            textField.setMaxLength(maxlength);
-                        }
-                    } else if (field instanceof TextArea) {
-                        TextArea textArea = (TextArea) field;
-                        if (textArea.getMaxLength() == 0) {
-                            textArea.setMaxLength(maxlength);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 }

@@ -20,6 +20,7 @@ package org.apache.click.extras.cayenne;
 
 import java.util.Collection;
 import java.util.List;
+import org.apache.cayenne.BaseContext;
 
 import org.apache.click.util.ClickUtils;
 
@@ -30,9 +31,16 @@ import org.apache.cayenne.ObjectId;
 import org.apache.cayenne.dba.TypesMapping;
 import org.apache.cayenne.map.DbAttribute;
 import org.apache.cayenne.map.DbEntity;
+import org.apache.cayenne.map.ObjAttribute;
 import org.apache.cayenne.map.ObjEntity;
+import org.apache.cayenne.map.ObjRelationship;
 import org.apache.cayenne.query.ObjectIdQuery;
 import org.apache.cayenne.query.Query;
+import org.apache.click.control.Checkbox;
+import org.apache.click.control.Field;
+import org.apache.click.control.Form;
+import org.apache.click.control.TextArea;
+import org.apache.click.control.TextField;
 import org.apache.commons.lang.Validate;
 
 /**
@@ -42,6 +50,43 @@ import org.apache.commons.lang.Validate;
  * This class was derived from the Cayenne <tt>DataObjectUtils</tt> class.
  */
 public final class CayenneUtils {
+
+
+    /**
+     * Applies the <tt>DataObject class</tt> validation database meta data to the
+     * form fields.
+     * <p/>
+     * The field validation attributes include:
+     * <ul>
+     * <li>required - is a mandatory field and cannot be null</li>
+     * <li>maxLength - the maximum length of the field</li>
+     * </ul>
+     *
+     * @param form the form which fields to apply metadata to
+     * @param dataObjectClass the dataObject class which metadata to apply
+     */
+    public static void applyMetaData(Form form, Class<?> dataObjectClass) {
+        Validate.notNull(dataObjectClass, "Null dataObjectClass parameter");
+
+        try {
+            ObjectContext oc = BaseContext.getThreadObjectContext();
+            ObjEntity objEntity =
+                oc.getEntityResolver().lookupObjEntity(dataObjectClass);
+
+            setObjEntityFieldConstraints(form, null, objEntity);
+
+            for (ObjRelationship objRelationship : objEntity.getRelationships()) {
+                String relName = objRelationship.getName();
+                ObjEntity relObjEntity =
+                        (ObjEntity) objRelationship.getTargetEntity();
+
+                setObjEntityFieldConstraints(form, relName, relObjEntity);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Create a new ObjectId for the given ObjectContext, data object class and
@@ -107,7 +152,7 @@ public final class CayenneUtils {
 
         List objects = objectContext.performQuery(query);
 
-        if (objects.size() == 0) {
+        if (objects.isEmpty()) {
             return null;
 
         } else if (objects.size() > 1) {
@@ -203,4 +248,48 @@ public final class CayenneUtils {
         return attr.getName();
     }
 
+    /**
+     * Set the <tt>ObjEntity</tt> meta data constraints on the form fields.
+     *
+     * @param form the form on which to set the field constraints
+     * @param relationshipName the object relationship name, null if the
+     *      ObjEntity of the CayenneForm
+     * @param objEntity the ObjEntity to lookup meta data from
+     */
+    private static void setObjEntityFieldConstraints(Form form, String relationshipName, ObjEntity objEntity) {
+
+        for (ObjAttribute objAttribute : objEntity.getAttributes()) {
+            DbAttribute dbAttribute = objAttribute.getDbAttribute();
+
+            String fieldName = objAttribute.getName();
+            if (relationshipName != null) {
+                fieldName = relationshipName + "." + fieldName;
+            }
+
+            Field field = form.getField(fieldName);
+
+            if (field != null) {
+                if (!field.isRequired() && dbAttribute.isMandatory()) {
+                    if (!(field instanceof Checkbox)) {
+                        field.setRequired(true);
+                    }
+                }
+
+                int maxlength = dbAttribute.getMaxLength();
+                if (maxlength != -1) {
+                    if (field instanceof TextField) {
+                        TextField textField = (TextField) field;
+                        if (textField.getMaxLength() == 0) {
+                            textField.setMaxLength(maxlength);
+                        }
+                    } else if (field instanceof TextArea) {
+                        TextArea textArea = (TextArea) field;
+                        if (textArea.getMaxLength() == 0) {
+                            textArea.setMaxLength(maxlength);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
