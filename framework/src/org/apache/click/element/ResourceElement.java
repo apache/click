@@ -197,6 +197,12 @@ public class ResourceElement extends Element {
      */
     public static final String IF_LESS_THAN_OR_EQUAL_TO_IE7 = "[if lte IE 7]";
 
+        /**
+     * A predefined conditional comment to test if browser is less than IE9.
+     * Value: <tt>[if lt IE 9]</tt>.
+     */
+    public static final String IF_LESS_THAN_IE9 = "[if lt IE 9]";
+
     // Variables --------------------------------------------------------------
 
     /**
