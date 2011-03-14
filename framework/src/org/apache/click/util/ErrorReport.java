@@ -414,10 +414,13 @@ public class ErrorReport {
         if (isParseError()) {
             String message = error.getMessage();
 
+            String parseMsg = message;
             int startIndex = message.indexOf('\n');
             int endIndex = message.lastIndexOf("...");
 
-            String parseMsg = message.substring(startIndex + 1, endIndex);
+            if (startIndex != -1 && endIndex > startIndex) {
+                parseMsg = message.substring(startIndex + 1, endIndex);
+            }
 
             parseMsg = ClickUtils.escapeHtml(parseMsg);
 
