@@ -1197,7 +1197,7 @@ public class Page implements Serializable {
 
             Iterator<? extends Map.Entry<String, ?>> i = params.entrySet().iterator();
             while (i.hasNext()) {
-                Map.Entry<String, ?> entry = i.next(); 
+                Map.Entry<String, ?> entry = i.next();
                 String paramName = entry.getKey();
                 Object paramValue = entry.getValue();
 

@@ -678,7 +678,7 @@ public class MockRequest implements HttpServletRequest {
                     final String name = iterator.next();
                     final Object value = parameters.get(name);
                     if (value instanceof String[]) {
-                        String[] aValue = (String[]) value; 
+                        String[] aValue = (String[]) value;
                         for (int i = 0; i < aValue.length; i++) {
                             buf.append(URLEncoder.encode(name, "UTF-8"));
                             buf.append('=');

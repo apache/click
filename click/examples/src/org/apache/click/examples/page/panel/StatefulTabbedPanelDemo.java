@@ -78,7 +78,7 @@ public class StatefulTabbedPanelDemo extends BorderPage {
         });
 
         form.add(submit);
-        
+
         panel2.setLabel("The Second Panel");
         tabbedPanel.add(panel2);
 
