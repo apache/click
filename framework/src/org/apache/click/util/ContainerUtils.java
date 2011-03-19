@@ -177,7 +177,7 @@ public class ContainerUtils {
             }
         }
     }
-    
+
     /**
      * Populate the given object attributes from the Containers field values.
      *
@@ -1381,10 +1381,10 @@ public class ContainerUtils {
 
         ClickUtils.getLogService().warn(message);
     }
-    
+
     /**
-     * This class fix an error in ognl's conversion of double->BigDecimal. The 
-     * default conversion uses BigDecimal(double), the fix is to use 
+     * This class fix an error in ognl's conversion of double->BigDecimal. The
+     * default conversion uses BigDecimal(double), the fix is to use
      * BigDecimal.valueOf(double)
      *
      */

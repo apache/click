@@ -888,7 +888,7 @@ public class PickList extends Field {
         if (hasAttributes()) {
             Map<String, String> localAttributes = getAttributes();
             for (Map.Entry<String, String> entry : localAttributes.entrySet()) {
-                String attrName = entry.getKey(); 
+                String attrName = entry.getKey();
                 if (!attrName.equals("id") && !attrName.equals("class")) {
                     attributesBuffer.appendAttributeEscaped(attrName, entry.getValue());
                 }

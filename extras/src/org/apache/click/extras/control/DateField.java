@@ -157,8 +157,8 @@ import org.apache.commons.lang.StringUtils;
  *   <li><tt>calendar-today</tt> - the label on the "Today" button.</li>
  *   <li><tt>calendar-clear</tt> - the label on the "Clear" button.</li>
  * </ul>
- * The buttons are only shown when DateField popup also contains time: 
- * <tt>field.setShowTime(true);</tt> 
+ * The buttons are only shown when DateField popup also contains time:
+ * <tt>field.setShowTime(true);</tt>
  * <p/>
  * See also W3C HTML reference
  * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"

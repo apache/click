@@ -368,7 +368,7 @@ public class SpringClickServlet extends ClickServlet {
     protected ApplicationContext applicationContext;
 
     /** The list of page injectable Spring beans, keyed on page class name. */
-    protected Map<Class<? extends Page>, List<BeanNameAndMethod>> pageSetterBeansMap = 
+    protected Map<Class<? extends Page>, List<BeanNameAndMethod>> pageSetterBeansMap =
         new HashMap<Class<? extends Page>, List<BeanNameAndMethod>>();
 
     // Public Methods ----------------------------------------------------------
