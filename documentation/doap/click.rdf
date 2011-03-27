@@ -42,15 +42,15 @@
     <release>
       <Version>
         <name>Stable</name>
-        <created>2010-05-22</created>
-        <revision>2.2.0</revision>
+        <created>2011-03-27</created>
+        <revision>2.3.0</revision>
       </Version>
     </release>
     <release>
       <Version>
-        <name>Development</name>
-        <created>2011-01-30</created>
-        <revision>2.3.0-RC1</revision>
+        <name>Stable</name>
+        <created>2010-05-22</created>
+        <revision>2.2.0</revision>
       </Version>
     </release>
     <repository>
