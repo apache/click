@@ -308,16 +308,18 @@ public class NewClickPageWizardPage extends WizardPage {
 		sourceFolder = new Text(sourceField, SWT.BORDER);
 		sourceField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		sourceFolder.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		IJavaProject project = ClickUtils.getJavaProject(selection);
 		IPackageFragmentRoot root = ClickUtils.getSourceFolder(selection);
-		if(root!=null){
-			sourceFolder.setText(root.getElementName());
-		} else if(selection!=null){
+
+		if(root != null){
+			sourceFolder.setText(root.getPath().makeRelativeTo(project.getPath()).toString());
+		} else if(selection != null){
 			try {
-				IJavaProject project = ClickUtils.getJavaProject(selection);
 				if(project!=null){
 					IPackageFragmentRoot[] roots = project.getPackageFragmentRoots();
 					if(roots.length >= 1){
-						sourceFolder.setText(roots[0].getElementName());
+						sourceFolder.setText(roots[0].getPath().makeRelativeTo(project.getPath()).toString());
 					}
 				}
 			} catch(Exception ex){
@@ -779,7 +781,8 @@ public class NewClickPageWizardPage extends WizardPage {
 			dialog.addFilter(filter);
 			dialog.setInitialSelection(init);
 			if (dialog.open() == FolderSelectionDialog.OK) {
-				sourceFolder.setText(((IPackageFragmentRoot)dialog.getFirstResult()).getElementName());
+				IPackageFragmentRoot root = (IPackageFragmentRoot) dialog.getFirstResult();
+				sourceFolder.setText(root.getPath().makeRelativeTo(project.getPath()).toString());
 			}
 
 		} catch (Throwable t) {
