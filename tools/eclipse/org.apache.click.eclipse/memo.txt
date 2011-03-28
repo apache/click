@@ -1,6 +1,0 @@
-ClickIDE Development Memo
---
-2.1.0.0
-
- * Supports Apache Click 2.1.0 / Eclipse 3.5
- * Toggle Comment action (CTRL + /) in the Template Editor.
