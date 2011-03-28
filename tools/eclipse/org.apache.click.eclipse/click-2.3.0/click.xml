@@ -19,7 +19,7 @@
 -->
 <!DOCTYPE click-app PUBLIC
   "-//Apache Software Foundation//DTD Click Configuration 2.2//EN"
-  "http://click.apache.org/dtds/click-2.2.dtd">
+  "http://click.apache.org/dtds/click-2.3.dtd">
 
 <click-app charset="UTF-8">
 

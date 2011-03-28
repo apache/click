@@ -27,11 +27,11 @@
 
      <!DOCTYPE click-app PUBLIC
        "-//Apache Software Foundation//DTD Click Configuration 2.2//EN"
-       "http://click.apache.org/dtds/click-2.2.dtd">
+       "http://click.apache.org/dtds/click-2.3.dtd">
 -->
 
 <!-- The Click Application (click.xml) Document Type Definition. -->
-<!ELEMENT click-app (pages*, headers?, format?, mode?, controls?, file-upload-service?, log-service?, template-service?, page-interceptor*)>
+<!ELEMENT click-app (pages*, headers?, format?, mode?, controls?, file-upload-service?, log-service?, messages-map-service?, resource-service?, template-service?, page-interceptor*)>
   <!ATTLIST click-app charset CDATA #IMPLIED>
   <!ATTLIST click-app locale CDATA #IMPLIED>
 
@@ -45,14 +45,14 @@
     <!ELEMENT page (header*)>
       <!ATTLIST page path CDATA #REQUIRED>
       <!ATTLIST page classname CDATA #REQUIRED>
-      
+
     <!-- Excludes definition. -->
     <!ELEMENT excludes (#PCDATA)>
       <!ATTLIST excludes pattern CDATA #REQUIRED>
 
   <!-- Application default page headers. -->
   <!ELEMENT headers (header*)>
-  
+
     <!-- Header definition. -->
     <!ELEMENT header (#PCDATA)>
       <!ATTLIST header name CDATA #REQUIRED>
@@ -62,40 +62,48 @@
   <!-- Page template formatter class. An new format object added to
        the Velocity context under the key: "format". -->
   <!ELEMENT format (#PCDATA)>
-   <!ATTLIST format classname CDATA #FIXED "org.apache.click.util.Format">
- 
+   <!ATTLIST format classname CDATA "org.apache.click.util.Format">
+
   <!-- Application mode, which configures logging and caching. -->
   <!ELEMENT mode (#PCDATA)>
    <!ATTLIST mode value (production|profile|development|debug|trace) "development">
 
   <!-- Application control objects. -->
   <!ELEMENT controls (control*, control-set*)>
-  
+
     <!-- Deployable control class. -->
     <!ELEMENT control (#PCDATA)>
       <!ATTLIST control classname CDATA #REQUIRED>
-   
+
     <!-- Deployable Third Party Set of Controls -->
     <!ELEMENT control-set (#PCDATA)>
       <!ATTLIST control-set name CDATA #REQUIRED>
-  
+
   <!-- File Upload Service. -->
   <!ELEMENT file-upload-service (property*)>
-   <!ATTLIST file-upload-service classname CDATA #FIXED "org.apache.click.service.FileUploadService">
-   
+   <!ATTLIST file-upload-service classname CDATA "org.apache.click.service.FileUploadService">
+
     <!-- Property definition. -->
     <!ELEMENT property (#PCDATA)>
       <!ATTLIST property name CDATA #REQUIRED>
       <!ATTLIST property value CDATA #REQUIRED>
-  
+
   <!-- Log Service. -->
   <!ELEMENT log-service (property*)>
-   <!ATTLIST log-service classname CDATA #FIXED "org.apache.click.service.ConsoleLogService">
-  
+   <!ATTLIST log-service classname CDATA "org.apache.click.service.ConsoleLogService">
+
+  <!-- Messages Map Service class. -->
+  <!ELEMENT messages-map-service (property*)>
+   <!ATTLIST messages-map-service classname CDATA "org.apache.click.service.DefaultMessagesMapService">
+
+  <!-- Resource Service class. -->
+  <!ELEMENT resource-service (property*)>
+   <!ATTLIST resource-service classname CDATA "org.apache.click.service.ClickResourceService">
+
   <!-- Template Service class. -->
   <!ELEMENT template-service (property*)>
-   <!ATTLIST template-service classname CDATA #FIXED "org.apache.click.service.VelocityTemplateService">
-  
+   <!ATTLIST template-service classname CDATA "org.apache.click.service.VelocityTemplateService">
+
   <!-- Application page interceptors. -->
   <!ELEMENT page-interceptor (property*)>
     <!ATTLIST page-interceptor classname CDATA #REQUIRED>
