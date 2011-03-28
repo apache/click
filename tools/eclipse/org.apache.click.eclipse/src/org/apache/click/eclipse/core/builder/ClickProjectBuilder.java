@@ -33,7 +33,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * The incremental builder for the Click project.
- * 
+ *
  * @author Naoki Takezoe
  * @see ClickProjectNature
  */
@@ -41,10 +41,10 @@ public class ClickProjectBuilder extends IncrementalProjectBuilder {
 
 	/** The id of this builder. */
 	public static final String BUILDER_ID = "org.apache.click.eclipse.ClickProjectBuilder";
-	
+
 	private ClickXMLValidator validator = new ClickXMLValidator();
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
 		if (kind == FULL_BUILD) {
 			fullBuild(monitor);
@@ -58,7 +58,7 @@ public class ClickProjectBuilder extends IncrementalProjectBuilder {
 		}
 		return null;
 	}
-	
+
 	protected void fullBuild(final IProgressMonitor monitor) throws CoreException {
 		IFile file = ClickUtils.getClickConfigFile(getProject());
 		if(file != null){
@@ -66,19 +66,19 @@ public class ClickProjectBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	protected void incrementalBuild(IResourceDelta delta, 
+	protected void incrementalBuild(IResourceDelta delta,
 			IProgressMonitor monitor) throws CoreException {
 		delta.accept(new ClickDeltaVisitor(monitor));
 	}
-	
+
 	private class ClickDeltaVisitor implements IResourceDeltaVisitor {
-		
+
 		private IProgressMonitor monitor;
-		
+
 		public ClickDeltaVisitor(IProgressMonitor monitor){
 			this.monitor = monitor;
 		}
-		
+
 		public boolean visit(IResourceDelta delta) throws CoreException {
 			IResource resource = delta.getResource();
 			if(resource instanceof IFile){
