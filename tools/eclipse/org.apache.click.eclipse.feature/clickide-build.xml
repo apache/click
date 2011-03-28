@@ -20,7 +20,7 @@
 <project default="feature_export" name="build">
 
 	<property name="dest.dir" value="dest" />
-	<property name="version" value="2.2.0.0" />
+	<property name="version" value="2.3.0.0" />
 	<property name="click.plugin" value="../org.apache.click.eclipse" />
 	<property name="cayenne.plugin" value="../org.apache.click.eclipse.cayenne" />
 
