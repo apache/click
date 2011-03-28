@@ -38,29 +38,29 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
  * Uninstalls the click facet.
- * 
+ *
  * @author Naoki Takezoe
  */
 public class ClickFacetUninstallDelegate implements IDelegate {
 
-	public void execute(IProject project, IProjectFacetVersion fv, 
+	public void execute(IProject project, IProjectFacetVersion fv,
 			Object config, IProgressMonitor monitor) throws CoreException {
-		
+
 		IDataModel dataModel = (IDataModel) config;
-		
+
 		if (monitor != null) {
 			monitor.beginTask("", 3); //$NON-NLS-1$
 		}
-		
+
 		removeClickFiles(project, dataModel, monitor);
 		monitor.worked(1);
-		
+
 		// Removes the nature
 		ClickProjectNature.removeNature(project);
 		if (monitor != null) {
 			monitor.worked(1);
 		}
-		
+
 		try {
 			// Removes the facet
 			uninstallClickReferencesFromWebApp(project, dataModel, monitor);
@@ -72,12 +72,12 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 			if (monitor != null) {
 				monitor.done();
 			}
-		}	
+		}
 	}
-	
+
 	protected void removeClickFiles(IProject project, IDataModel config, IProgressMonitor monitor) {
 		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
-		
+
 		File webInf = destPath.append("WEB-INF").toFile();
 		// remove Click files
 		for(int i=0;i<ClickFacetUtil.COPY_FILES.length;i++){
@@ -86,7 +86,7 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 				file.delete();
 			}
 		}
-		
+
 		// remove Spring files
 		for(int i=0;i<ClickFacetUtil.SPRING_LIBS.length;i++){
 			File file = new File(webInf, ClickFacetUtil.SPRING_LIBS[i]);
@@ -94,7 +94,7 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 				file.delete();
 			}
 		}
-		
+
 		// remove Cayenne files
 		for(int i=0;i<ClickFacetUtil.CAYENNE_LIBS.length;i++){
 			File file = new File(webInf, ClickFacetUtil.CAYENNE_LIBS[i]);
@@ -103,8 +103,8 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 			}
 		}
 	}
-	
-	private void uninstallClickReferencesFromWebApp(IProject project, 
+
+	private void uninstallClickReferencesFromWebApp(IProject project,
 			IDataModel config, IProgressMonitor monitor) {
 		WebArtifactEdit artifactEdit = ClickUtils.getWebArtifactEditForWrite(project);
 		WebApp webApp = artifactEdit.getWebApp();
@@ -119,10 +119,10 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 			}
 			// remove faces url mappings
 			removeClickURLMappings(webApp, servlet);
-			
+
 			// remove Cayenne filter
 			removeCayenneFilter(webApp);
-			
+
 			// remove servlet
 			removeClickServlet(webApp, servlet);
 
@@ -133,11 +133,11 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 			}
 		}
 	}
-	
+
 	private void removeCayenneFilter(WebApp webApp){
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("rawtypes")
 		List filters = webApp.getFilters();
-		
+
 		Filter cayenneFilter = null;
 		for(int i=0;i<filters.size();i++){
 			Filter filter = (Filter) filters.get(i);
@@ -152,17 +152,17 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 						webApp.getFilterMapping(cayenneFilter));
 			}
 		}
-		
+
 		webApp.getFilters().remove(cayenneFilter);
 	}
-	
+
 	private void removeClickURLMappings(WebApp webApp, Servlet servlet) {
 		while (webApp.getServletMapping(servlet) != null) {
 			webApp.getServletMappings().remove(
 					webApp.getServletMapping(servlet));
 		}
 	}
-	
+
 	private void removeClickServlet(WebApp webApp, Servlet servlet) {
 		webApp.getServlets().remove(servlet);
 	}

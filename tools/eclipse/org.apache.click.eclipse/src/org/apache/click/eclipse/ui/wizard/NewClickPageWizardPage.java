@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
-
 import org.apache.click.eclipse.ClickPlugin;
 import org.apache.click.eclipse.ClickUtils;
 import org.apache.click.eclipse.preferences.Template;
@@ -92,12 +91,12 @@ import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
  * <ul>
  *   <li>TODO Reload initial values when the project is selected.</li>
  * </ul>
- * 
+ *
  * @author Naoki Takezoe
  */
 public class NewClickPageWizardPage extends WizardPage {
-	
-	private List templates = Template.loadFromPreference();
+
+	private List<Template> templates = Template.loadFromPreference();
 	private Combo template;
 	private Text project;
 	private Button browseProject;
@@ -114,31 +113,31 @@ public class NewClickPageWizardPage extends WizardPage {
 	private Button browsePackage;
 	private Button browseSuperClass;
 	private Button addToClickXML;
-	
+
 	private Object selection;
 	private String initialClassName;
 	private String initialPageName;
 	private boolean insertClassName = true;
 	private TypeNameContentProposalProvider typeAssistProvider = null;
 	private PackageNameContentProposalProvider packageAssistProvider = null;
-	
-	public NewClickPageWizardPage(String pageName, Object selection, 
+
+	public NewClickPageWizardPage(String pageName, Object selection,
 			String initialClassName, String initialPageName) {
 		super(pageName);
-		
+
 		this.selection = selection;
 		this.initialClassName = initialClassName;
 		this.initialPageName = initialPageName;
-		
+
 		setTitle(ClickPlugin.getString("wizard.newPage.title"));
 		setDescription(ClickPlugin.getString("wizard.newPage.description"));
 	}
-	
+
 	public void createControl(Composite parent) {
-		IDialogSettings settings = 
+		IDialogSettings settings =
 			ClickPlugin.getDefault().getDialogSettings().getSection(
 					NewClickPageWizard.SECTION_NEW_CLICK_PAGE);
-		
+
 		String initClassName = this.initialClassName;
 		String initPackage = "";
 		if(this.initialClassName != null){
@@ -148,23 +147,23 @@ public class NewClickPageWizardPage extends WizardPage {
 				initClassName = this.initialClassName.substring(index + 1);
 			}
 		}
-		
+
 		Composite composite = new Composite(parent, SWT.NULL);
-		
+
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite.setLayout(new GridLayout(1, false));
-		
+
 		Composite projectPanel = new Composite(composite, SWT.NULL);
 		GridLayout layout = new GridLayout(3, false);
 		projectPanel.setLayout(layout);
 		projectPanel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ClickUtils.createLabel(projectPanel, ClickPlugin.getString("wizard.newPage.project"));
-		
+
 		project = new Text(projectPanel, SWT.BORDER);
 		project.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		IJavaProject initProject = null;
-		
+
 		if(selection!=null){
 			initProject = ClickUtils.getJavaProject(selection);
 			try {
@@ -186,10 +185,10 @@ public class NewClickPageWizardPage extends WizardPage {
 				validate();
 			}
 		});
-		
+
 		packageAssistProvider = new PackageNameContentProposalProvider(initProject);
 		typeAssistProvider = new TypeNameContentProposalProvider(initProject);
-		
+
 		ClickUtils.createLabel(projectPanel, ClickPlugin.getString("preferences.template") + ":");
 		template = new Combo(projectPanel, SWT.READ_ONLY);
 		for(int i=0;i<templates.size();i++){
@@ -198,12 +197,12 @@ public class NewClickPageWizardPage extends WizardPage {
 				template.setText(((Template)templates.get(i)).getName());
 			}
 		}
-		
+
 		Group htmlGroup = new Group(composite, SWT.NULL);
 		htmlGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		htmlGroup.setLayout(new GridLayout(3, false));
 		htmlGroup.setText(ClickPlugin.getString("wizard.newPage.templateGroup"));
-		
+
 		createPageHTML = new Button(htmlGroup, SWT.CHECK);
 		createPageHTML.setText(ClickPlugin.getString("wizard.newPage.templateGroup.checkbox"));
 		createPageHTML.setLayoutData(createGridData(3));
@@ -214,7 +213,7 @@ public class NewClickPageWizardPage extends WizardPage {
 				validate();
 			}
 		});
-		
+
 		String initFolder = "";
 		String initPageName = this.initialPageName;
 		if(initPageName!=null){
@@ -227,7 +226,7 @@ public class NewClickPageWizardPage extends WizardPage {
 				}
 			}
 		}
-		
+
 		ClickUtils.createLabel(htmlGroup, ClickPlugin.getString("wizard.newPage.templateGroup.parentFolder"));
 		parentFolder = new Text(htmlGroup, SWT.BORDER);
 		parentFolder.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -244,7 +243,7 @@ public class NewClickPageWizardPage extends WizardPage {
 				validate();
 			}
 		});
-		
+
 		browseParent = new Button(htmlGroup, SWT.PUSH);
 		browseParent.setText(ClickPlugin.getString("action.browse"));
 		browseParent.addSelectionListener(new SelectionAdapter(){
@@ -252,7 +251,7 @@ public class NewClickPageWizardPage extends WizardPage {
 				selectFolder();
 			}
 		});
-		
+
 		ClickUtils.createLabel(htmlGroup, ClickPlugin.getString("wizard.newPage.templateGroup.filename"));
 		pageName = new Text(htmlGroup, SWT.BORDER);
 		pageName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -287,12 +286,12 @@ public class NewClickPageWizardPage extends WizardPage {
 				insertClassName = className.getText().length()==0;
 			}
 		});
-		
+
 		Group classGroup = new Group(composite, SWT.NULL);
 		classGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		classGroup.setLayout(new GridLayout(3, false));
 		classGroup.setText(ClickPlugin.getString("wizard.newPage.pageClassGroup"));
-		
+
 		createPageClass = new Button(classGroup, SWT.CHECK);
 		createPageClass.setText(ClickPlugin.getString("wizard.newPage.pageClassGroup.checkbox"));
 		createPageClass.setLayoutData(createGridData(3));
@@ -303,7 +302,7 @@ public class NewClickPageWizardPage extends WizardPage {
 				validate();
 			}
 		});
-		
+
 		ClickUtils.createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.sourceFolder"));
 		Composite sourceField = FieldAssistUtils.createNullDecoratedPanel(classGroup, false);
 		sourceFolder = new Text(sourceField, SWT.BORDER);
@@ -330,7 +329,7 @@ public class NewClickPageWizardPage extends WizardPage {
 				validate();
 			}
 		});
-		
+
 		browseSource = new Button(classGroup, SWT.PUSH);
 		browseSource.setText(ClickPlugin.getString("action.browse"));
 		browseSource.addSelectionListener(new SelectionAdapter(){
@@ -338,14 +337,14 @@ public class NewClickPageWizardPage extends WizardPage {
 				selectSourceFolder();
 			}
 		});
-		
+
 		ClickUtils.createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.package"));
 		ContentAssistField packageField = new ContentAssistField(classGroup, SWT.BORDER,
 				new TextControlCreator(), new TextContentAdapter(), packageAssistProvider,
 				ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS, new char[0]);
 		packageName = (Text)packageField.getControl();
 		packageField.getLayoutControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		if(selection instanceof IPackageFragment){
 			packageName.setText(((IPackageFragment)selection).getElementName());
 		} else if(initPackage!=null && initPackage.length()!=0){
@@ -361,24 +360,24 @@ public class NewClickPageWizardPage extends WizardPage {
 				validate();
 			}
 		});
-		
+
 		browsePackage = new Button(classGroup, SWT.PUSH);
 		browsePackage.setText(ClickPlugin.getString("action.browse"));
 		browsePackage.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent evt){
 				IRunnableContext context= new BusyIndicatorRunnableContext();
-				int style = PackageSelectionDialog.F_REMOVE_DUPLICATES | 
-				            PackageSelectionDialog.F_SHOW_PARENTS | 
+				int style = PackageSelectionDialog.F_REMOVE_DUPLICATES |
+				            PackageSelectionDialog.F_SHOW_PARENTS |
 				            PackageSelectionDialog.F_HIDE_DEFAULT_PACKAGE;
-				
+
 				JavaSearchScope scope = new JavaSearchScope();
 				try {
 					IJavaProject project = JavaCore.create(getProject());
-					scope.add((JavaProject)project, JavaSearchScope.SOURCES, new HashSet(2, 1));
+					scope.add((JavaProject)project, JavaSearchScope.SOURCES, new HashSet<Integer>(2, 1));
 				} catch(Exception ex){
 					ClickPlugin.log(ex);
 				}
-				
+
 				PackageSelectionDialog dialog = new PackageSelectionDialog(getShell(), context, style, scope);
 				dialog.setMultipleSelection(false);
 				if(dialog.open()==PackageSelectionDialog.OK){
@@ -390,7 +389,7 @@ public class NewClickPageWizardPage extends WizardPage {
 				}
 			}
 		});
-		
+
 		ClickUtils.createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.classname"));
 		Composite classField = FieldAssistUtils.createNullDecoratedPanel(classGroup, false);
 		className = new Text(classField, SWT.BORDER);
@@ -404,9 +403,9 @@ public class NewClickPageWizardPage extends WizardPage {
 				validate();
 			}
 		});
-		
+
 		ClickUtils.createLabel(classGroup, "");
-		
+
 		ClickUtils.createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.superclass"));
 		ContentAssistField superClassField = new ContentAssistField(classGroup, SWT.BORDER,
 				new TextControlCreator(), new TextContentAdapter(), typeAssistProvider,
@@ -426,12 +425,12 @@ public class NewClickPageWizardPage extends WizardPage {
 				Shell shell = getShell();
 				try {
 					IJavaProject project = JavaCore.create(getProject());
-					
+
 					SelectionDialog dialog = JavaUI.createTypeDialog(
 							shell, new ProgressMonitorDialog(shell),
 							SearchEngine.createJavaSearchScope(new IJavaElement[]{project}),
 							IJavaElementSearchConstants.CONSIDER_CLASSES,false);
-					
+
 					if(dialog.open()==SelectionDialog.OK){
 						Object[] result = dialog.getResult();
 						superClass.setText(((IType)result[0]).getFullyQualifiedName());
@@ -441,28 +440,28 @@ public class NewClickPageWizardPage extends WizardPage {
 				}
 			}
 		});
-		
+
 		ClickUtils.createLabel(composite, "");
-		
+
 		addToClickXML = new Button(composite, SWT.CHECK);
 		addToClickXML.setText(ClickPlugin.getString("wizard.newPage.addMapping"));
 		addToClickXML.setSelection(settings.getBoolean(NewClickPageWizard.SHOULD_ADD_TO_CLICK_XML));
 		if(getProject()!=null && ClickUtils.getAutoMapping(getProject())){
 			addToClickXML.setSelection(false);
 		}
-		
+
 		updateHTMLGroup();
 		updateClassGroup();
 		validate();
 		setControl(composite);
 	}
-	
+
 	private void updateHTMLGroup(){
 		parentFolder.setEnabled(createPageHTML.getSelection());
 		browseParent.setEnabled(createPageHTML.getSelection());
 		pageName.setEnabled(createPageHTML.getSelection());
 	}
-	
+
 	private void updateClassGroup(){
 		sourceFolder.setEnabled(createPageClass.getSelection());
 		browseSource.setEnabled(createPageClass.getSelection());
@@ -472,7 +471,7 @@ public class NewClickPageWizardPage extends WizardPage {
 		superClass.setEnabled(createPageClass.getSelection());
 		browseSuperClass.setEnabled(createPageClass.getSelection());
 	}
-	
+
 	private void validate(){
 		IProject project = getProject();
 		if(project!=null){
@@ -487,8 +486,7 @@ public class NewClickPageWizardPage extends WizardPage {
 			return;
 		} else if(!ClickUtils.isClickProject(getProject())){
 			setMessage(MessageFormat.format(
-					ClickPlugin.getString("wizard.newPage.error.notClickProject"), 
-					new String[]{ getProject().getName() }), ERROR);
+					ClickPlugin.getString("wizard.newPage.error.notClickProject"), getProject().getName()), ERROR);
 			setPageComplete(false);
 			browsePackage.setEnabled(false);
 			browseParent.setEnabled(false);
@@ -499,7 +497,7 @@ public class NewClickPageWizardPage extends WizardPage {
 			browseParent.setEnabled(createPageClass.getSelection());
 			browseSource.setEnabled(createPageHTML.getSelection());
 		}
-		
+
 		if(createPageHTML.getSelection() || createPageClass.getSelection()){
 			if(template.getText().length()==0){
 				setMessage(ClickPlugin.getString("wizard.newPage.error.noTemplate"), ERROR);
@@ -507,13 +505,12 @@ public class NewClickPageWizardPage extends WizardPage {
 				return;
 			}
 		}
-		
+
 		// for the HTML file part
 		if(createPageHTML.getSelection()){
 			if(!existsFolder(parentFolder.getText())){
 				setMessage(MessageFormat.format(
-						ClickPlugin.getString("wizard.newPage.error.folderDoesNotExist"),
-						new String[]{ parentFolder.getText() }), ERROR);
+						ClickPlugin.getString("wizard.newPage.error.folderDoesNotExist"), parentFolder.getText()), ERROR);
 				setPageComplete(false);
 				return;
 			} else if(pageName.getText().equals("")){
@@ -526,19 +523,17 @@ public class NewClickPageWizardPage extends WizardPage {
 				return;
 			}
 		}
-		
+
 		// for the page class part
 		if(createPageClass.getSelection()){
 			if(!existsFolder(sourceFolder.getText())){
 				setMessage(MessageFormat.format(
-						ClickPlugin.getString("wizard.newPage.error.folderDoesNotExist"),
-						new String[]{ sourceFolder.getText() }), ERROR);
+						ClickPlugin.getString("wizard.newPage.error.folderDoesNotExist"), sourceFolder.getText()), ERROR);
 				setPageComplete(false);
 				return;
 			} else if(!isValidPackageName(packageName.getText())){
 				setMessage(MessageFormat.format(
-						ClickPlugin.getString("wizard.newPage.error.packageIsInvalid1"), 
-						new Object[]{ packageName.getText() }), ERROR);
+						ClickPlugin.getString("wizard.newPage.error.packageIsInvalid1"), packageName.getText()), ERROR);
 				setPageComplete(false);
 				return;
 			} else if(packageName.getText().endsWith(".")){
@@ -551,7 +546,7 @@ public class NewClickPageWizardPage extends WizardPage {
 				return;
 			} else if(!isValidTypeName(className.getText())){
 				setMessage(MessageFormat.format(
-						ClickPlugin.getString("wizard.newPage.error.typeIsInvalid"), 
+						ClickPlugin.getString("wizard.newPage.error.typeIsInvalid"),
 						new Object[]{ className.getText() }), ERROR);
 				setPageComplete(false);
 				return;
@@ -565,12 +560,12 @@ public class NewClickPageWizardPage extends WizardPage {
 				return;
 			}
 		}
-		
+
 		// all valid
 		setMessage(null);
 		setPageComplete(true);
 	}
-	
+
 	private boolean isValidPackageName(String packageName){
 		for(int i=0;i<packageName.length();i++){
 			char c = packageName.charAt(i);
@@ -588,7 +583,7 @@ public class NewClickPageWizardPage extends WizardPage {
 		}
 		return true;
 	}
-	
+
 	private boolean isValidTypeName(String className){
 		for(int i=0;i<className.length();i++){
 			char c = className.charAt(i);
@@ -604,16 +599,16 @@ public class NewClickPageWizardPage extends WizardPage {
 		}
 		return true;
 	}
-	
+
 	private boolean existsFolder(String folder){
 		if(folder.equals("")){
 			return true; // TODO ??
 		}
-		
+
 		IProject project = getProject();
 		return project.getFolder(folder).exists();
 	}
-	
+
 	private boolean existsFile(String parentFolder, String fileName){
 		IProject project = getProject();
 		IFile file = null;
@@ -624,7 +619,7 @@ public class NewClickPageWizardPage extends WizardPage {
 		}
 		return file.exists();
 	}
-	
+
 	private boolean existsClass(String sourceFolder, String packageName, String className){
 		try {
 			IProject project = getProject();
@@ -632,37 +627,37 @@ public class NewClickPageWizardPage extends WizardPage {
 			if(!sourceFolder.equals("")){
 				resource = project.getFolder(sourceFolder);
 			}
-			
+
 			IJavaProject javaProject = JavaCore.create(project);
 			IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(resource);
 			IPackageFragment fragment = root.getPackageFragment(packageName);
 			if(!fragment.exists()){
 				return false;
 			}
-			
+
 			ICompilationUnit unit = fragment.getCompilationUnit(className + ".java");
 			return unit.exists();
-			
+
 		} catch(Exception ex){
 			ex.printStackTrace();
 			return false;
 		}
 	}
-	
+
 	private GridData createGridData(int colspan){
 		GridData gd = new GridData();
 		gd.horizontalSpan = colspan;
 		return gd;
 	}
-	
+
 	private void selectProject(){
 		IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();
-		
+
 		// required validator
 		ISelectionStatusValidator validator = new ISelectionStatusValidator(){
 			private IStatus fgErrorStatus= new StatusInfo(IStatus.ERROR, ""); //$NON-NLS-1$
 			private IStatus fgOKStatus= new StatusInfo();
-			
+
 			public IStatus validate(Object[] selection){
 				if(selection==null || selection.length != 1){
 					return fgErrorStatus;
@@ -670,7 +665,7 @@ public class NewClickPageWizardPage extends WizardPage {
 				return fgOKStatus;
 			}
 		};
-		
+
 		// select only IJavaProject
 		ViewerFilter filter = new ViewerFilter(){
 		    public boolean select(Viewer viewer, Object parentElement, Object element){
@@ -684,12 +679,12 @@ public class NewClickPageWizardPage extends WizardPage {
 		    	return false;
 		    }
 		};
-		
+
 		FolderSelectionDialog dialog = new FolderSelectionDialog(
 				getShell(), new WorkbenchLabelProvider(), new WorkbenchContentProvider());
-		
+
 		dialog.setTitle(ClickPlugin.getString("wizard.newPage.dialog.selectProject"));
-		
+
 		dialog.setInput(wsroot);
 		dialog.setValidator(validator);
 		dialog.addFilter(filter);
@@ -698,7 +693,7 @@ public class NewClickPageWizardPage extends WizardPage {
 			project.setText(((IProject)dialog.getFirstResult()).getName());
 		}
 	}
-	
+
 	private void selectFolder() {
 		try {
 			IProject currProject = getProject();
@@ -710,23 +705,23 @@ public class NewClickPageWizardPage extends WizardPage {
 					init = null;
 				}
 			}
-			Class[] acceptedClasses = new Class[] { IProject.class, IFolder.class };
+			Class<?>[] acceptedClasses = new Class<?>[] { IProject.class, IFolder.class };
 			ISelectionStatusValidator validator = new TypedElementSelectionValidator(acceptedClasses, false);
 			IProject[] allProjects = wsroot.getProjects();
-			ArrayList rejectedElements = new ArrayList(allProjects.length);
+			List<IProject> rejectedElements = new ArrayList<IProject>(allProjects.length);
 			for (int i = 0; i < allProjects.length; i++) {
 				if (!allProjects[i].equals(currProject)) {
 					rejectedElements.add(allProjects[i]);
 				}
 			}
 			ViewerFilter filter = new TypedViewerFilter(acceptedClasses, rejectedElements.toArray());
-			
+
 			FolderSelectionDialog dialog = new FolderSelectionDialog(
 					getShell(), new WorkbenchLabelProvider(), new WorkbenchContentProvider());
-			
+
 			dialog.setTitle(ClickPlugin.getString("wizard.newPage.dialog.selectFolder"));
 			//dialog.setMessage(HTMLPlugin.getResourceString("HTMLProjectPropertyPage.WebRoot"));
-			
+
 			dialog.setInput(wsroot);
 			dialog.setValidator(validator);
 			dialog.addFilter(filter);
@@ -734,22 +729,22 @@ public class NewClickPageWizardPage extends WizardPage {
 			if (dialog.open() == FolderSelectionDialog.OK) {
 				parentFolder.setText(((IFolder)dialog.getFirstResult()).getProjectRelativePath().toString());
 			}
-			
+
 		} catch (Throwable t) {
 			ClickPlugin.log(t);
 		}
 	}
-	
+
 	private void selectSourceFolder() {
 		try {
-			Class[] acceptedClasses = new Class[] { IJavaModel.class, IJavaProject.class, IPackageFragmentRoot.class };
+			Class<?>[] acceptedClasses = new Class<?>[] { IJavaModel.class, IJavaProject.class, IPackageFragmentRoot.class };
 			ISelectionStatusValidator validator = new TypedElementSelectionValidator(acceptedClasses, false);
-			
+
 			IPackageFragmentRoot init = null;
 			IJavaProject project = JavaCore.create(getProject());
-			
+
 			IPackageFragmentRoot[] roots = project.getPackageFragmentRoots();
-			ArrayList rejectedElements = new ArrayList();
+			List<IJavaElement> rejectedElements = new ArrayList<IJavaElement>();
 			for (int i = 0; i < roots.length; i++) {
 				if (roots[i] instanceof JarPackageFragmentRoot) {
 					rejectedElements.add(roots[i]);
@@ -770,15 +765,15 @@ public class NewClickPageWizardPage extends WizardPage {
 					rejectedElements.add(projects[i]);
 				}
 			}
-			
+
 			ViewerFilter filter = new TypedViewerFilter(acceptedClasses, rejectedElements.toArray());
-			
+
 			FolderSelectionDialog dialog = new FolderSelectionDialog(
 					getShell(), new WorkbenchLabelProvider(), new WorkbenchContentProvider());
-			
+
 			dialog.setTitle(ClickPlugin.getString("wizard.newPage.dialog.selectSourceFolder"));
 			//dialog.setMessage(HTMLPlugin.getResourceString("HTMLProjectPropertyPage.WebRoot"));
-			
+
 			dialog.setInput(model);
 			dialog.setValidator(validator);
 			dialog.addFilter(filter);
@@ -786,12 +781,12 @@ public class NewClickPageWizardPage extends WizardPage {
 			if (dialog.open() == FolderSelectionDialog.OK) {
 				sourceFolder.setText(((IPackageFragmentRoot)dialog.getFirstResult()).getElementName());
 			}
-			
+
 		} catch (Throwable t) {
 			ClickPlugin.log(t);
 		}
 	}
-	
+
 	/**
 	 * Returns the wizard should create a HTML file or not.
 	 * @return
@@ -799,7 +794,7 @@ public class NewClickPageWizardPage extends WizardPage {
 	public boolean shouldCreateHTML(){
 		return createPageHTML.getSelection();
 	}
-	
+
 	/**
 	 * Returns the project relative path of the parent folder of the HTML file.
 	 * @return the project relative path of the parent folder
@@ -807,7 +802,7 @@ public class NewClickPageWizardPage extends WizardPage {
 	public String getParentFolder(){
 		return parentFolder.getText();
 	}
-	
+
 	/**
 	 * Returns the HTML filename.
 	 * @return the HTML filename
@@ -815,11 +810,11 @@ public class NewClickPageWizardPage extends WizardPage {
 	public String getFilename(){
 		return pageName.getText();
 	}
-	
+
 	public boolean shouldCreateClass(){
 		return createPageClass.getSelection();
 	}
-	
+
 	/**
 	 * Returns the project relative path of the source folder of the page class.
 	 * @return the project relative path of the source folder
@@ -827,7 +822,7 @@ public class NewClickPageWizardPage extends WizardPage {
 	public String getSourceFolder(){
 		return sourceFolder.getText();
 	}
-	
+
 	/**
 	 * Returns the package name of the page class.
 	 * @return the package name
@@ -835,7 +830,7 @@ public class NewClickPageWizardPage extends WizardPage {
 	public String getPackageName(){
 		return packageName.getText();
 	}
-	
+
 	/**
 	 * Returns the class name of the page class.
 	 * @return the class name
@@ -843,7 +838,7 @@ public class NewClickPageWizardPage extends WizardPage {
 	public String getClassName(){
 		return className.getText();
 	}
-	
+
 	/**
 	 * Returns the wizard should add the page mapping to click.xml or not.
 	 * @return
@@ -851,15 +846,15 @@ public class NewClickPageWizardPage extends WizardPage {
 	public boolean shouldAddToClickXML(){
 		return addToClickXML.getSelection();
 	}
-	
+
 	public String getSuperClass(){
 		return superClass.getText();
 	}
-	
+
 	public Template getTemplate(){
 		return (Template)templates.get(template.getSelectionIndex());
 	}
-	
+
 	public IProject getProject(){
 		try {
 			IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();

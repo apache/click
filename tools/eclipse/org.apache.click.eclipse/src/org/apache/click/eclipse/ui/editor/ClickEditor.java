@@ -180,7 +180,7 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 		setActivePage(0);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Class key) {
 		if (key.equals(IContentOutlinePage.class)) {
 			return sourceEditor.getAdapter(IContentOutlinePage.class);

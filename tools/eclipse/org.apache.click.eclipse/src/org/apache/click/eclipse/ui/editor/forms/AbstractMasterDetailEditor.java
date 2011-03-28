@@ -51,50 +51,50 @@ public abstract class AbstractMasterDetailEditor extends AbstractFormEditor {
 	protected SashForm sash;
 	protected TreeViewer viewer;
 	protected Composite currentEditor;
-	
+
 	protected MenuManager menu;
 	protected MenuManager newMenu;
 	protected ElementRemoveAction deleteAction = new ElementRemoveAction();
-	
+
 	protected abstract String[] getAcceptElementNames();
-	
+
 	protected abstract IAttributeEditor getAttributeEditor(String elementName);
-	
+
 	protected abstract void createMenu(IDOMElement element);
-	
+
 	public void initModel(IStructuredModel model) {
 		sash = new SashForm(form.getBody(), SWT.HORIZONTAL);
 		sash.setLayoutData(new GridData(GridData.FILL_BOTH));
 		sash.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
+
 		final Composite left = toolkit.createComposite(sash);
 		left.setLayoutData(new GridData(GridData.FILL_BOTH));
 		left.setLayout(new FillLayout());
-		
+
 		Section headerSection = toolkit.createSection(left, Section.TITLE_BAR);
 		headerSection.setText(ClickPlugin.getString("editor.clickXML.outline"));
-		
+
 		Composite detailComposite = toolkit.createComposite(sash);
 		detailComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		detailComposite.setLayout(new FillLayout());
-		
+
 		Section detailSection = toolkit.createSection(detailComposite, Section.TITLE_BAR);
 		detailSection.setText(ClickPlugin.getString("editor.clickXML.details"));
-		
+
 		final Composite right = toolkit.createComposite(detailSection);
 		right.setLayout(new FillLayout());
 		detailSection.setClient(right);
-		
+
 		Tree tree = toolkit.createTree(headerSection, SWT.NULL);
 		tree.setLayoutData(new GridData(GridData.FILL_BOTH));
 		headerSection.setClient(tree);
-		
+
 		List<String> acceptElements = new ArrayList<String>();
 		String[] acceptElementNames = getAcceptElementNames();
 		for(int i=0;i<acceptElementNames.length;i++){
 			acceptElements.add(acceptElementNames[i]);
 		}
-		
+
 		viewer = new TreeViewer(tree);
 		viewer.setContentProvider(new ClickTreeContentProvider(acceptElements));
 		viewer.setLabelProvider(new ClickTreeLabelProvider());
@@ -116,10 +116,10 @@ public abstract class AbstractMasterDetailEditor extends AbstractFormEditor {
 				right.layout();
 			}
 		});
-		
+
 		viewer.setInput(model);
 		viewer.expandAll();
-		
+
 		menu = new MenuManager();
 		newMenu = new MenuManager(ClickPlugin.getString("action.new"));
 		menu.add(newMenu);
@@ -138,26 +138,26 @@ public abstract class AbstractMasterDetailEditor extends AbstractFormEditor {
 				}
 			}
 		});
-		
+
 		toolkit.paintBordersFor(left);
 	}
-	
+
 	public void updateMenu(){
 		newMenu.removeAll();
-		
+
 		IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
 		Object obj = selection.getFirstElement();
-		
+
 		if(obj instanceof IDOMElement){
 			IDOMElement element = (IDOMElement)obj;
-			
+
 			if(element.getNodeName().equals(ClickPlugin.TAG_CLICK_APP)){
 				deleteAction.setEnabled(false);
 			} else {
 				deleteAction.setEnabled(true);
 				deleteAction.setElement(element);
 			}
-			
+
 			createMenu(element);
 		}
 	}
@@ -166,12 +166,12 @@ public abstract class AbstractMasterDetailEditor extends AbstractFormEditor {
 		viewer.setSelection(null);
 		viewer.refresh();
 	}
-	
+
 	public void setFocus() {
 		form.setFocus();
 	}
-	
-	@SuppressWarnings("unchecked")
+
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Class adapter) {
 		if(adapter.equals(TreeViewer.class)){
 			return this.viewer;

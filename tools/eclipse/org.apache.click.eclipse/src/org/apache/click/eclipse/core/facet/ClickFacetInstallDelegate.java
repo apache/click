@@ -114,7 +114,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				ProjectConfiguration projectConfig
 					= ConfigurationManager.getManager().getProjectConfiguration(project);
 				ValidatorMetaData[] meta = projectConfig.getValidators();
-				List enables = new ArrayList();
+				List<ValidatorMetaData> enables = new ArrayList<ValidatorMetaData>();
 				for(int i=0;i<meta.length;i++){
 					if(!meta[i].getValidatorUniqueName().equals(HTMLValidator.class.getName())){
 						enables.add(meta[i]);
@@ -183,18 +183,18 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			if(!file.exists()){
 				file.createNewFile();
 			}
-			
+
 			URL url = ClickPlugin.getDefault().getBundle().getEntry(
 					ClickFacetUtil.SPRING_DIR + "/spring-beans.xml");
-			
+
 			// Replaces ${rootPackage} by the input package name.
 			String contents = ClickUtils.readStream(url.openStream());
-			contents = contents.replace("${rootPackage}", 
+			contents = contents.replace("${rootPackage}",
 					config.getStringProperty(ClickFacetInstallDataModelProvider.ROOT_PACKAGE));
-			
-			ClickUtils.copyStream(new ByteArrayInputStream(contents.getBytes("UTF-8")), 
+
+			ClickUtils.copyStream(new ByteArrayInputStream(contents.getBytes("UTF-8")),
 					new FileOutputStream(file));
-			
+
 		} catch(Exception ex){
 			ClickPlugin.log(ex);
 		}
@@ -253,12 +253,12 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				if(file.getName().equals("click.xml")){
 					// Replaces ${rootPackage} by the input package name.
 					String contents = ClickUtils.readStream(url.openStream());
-					contents = contents.replace("${rootPackage}", 
+					contents = contents.replace("${rootPackage}",
 							config.getStringProperty(ClickFacetInstallDataModelProvider.ROOT_PACKAGE));
-					
-					ClickUtils.copyStream(new ByteArrayInputStream(contents.getBytes("UTF-8")), 
+
+					ClickUtils.copyStream(new ByteArrayInputStream(contents.getBytes("UTF-8")),
 							new FileOutputStream(file));
-					
+
 				} else {
 					ClickUtils.copyStream(url.openStream(), new FileOutputStream(file));
 				}
@@ -291,7 +291,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 	}
 
 	private void createServletAndModifyWebXML(
-			IProject project, final IDataModel config,IProgressMonitor monitor, 
+			IProject project, final IDataModel config,IProgressMonitor monitor,
 			boolean useSpring, boolean useCayenne, boolean usePerformanceFilter) {
 
 		WebApp webApp = null;
@@ -308,24 +308,24 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			}
 
 			servlet = ClickUtils.createOrUpdateServletRef(webApp, config, servlet, useSpring);
-			
+
 			if(useSpring){
 				ParamValue contextParam = CommonFactory.eINSTANCE.createParamValue();
 				contextParam.setName("contextConfigLocation");
 				contextParam.setValue("WEB-INF/spring-beans.xml");
 				webApp.getContextParams().add(contextParam);
-				
+
 				Listener listener = CommonFactory.eINSTANCE.createListener();
 				listener.setListenerClassName("org.springframework.web.context.ContextLoaderListener");
 				webApp.getListeners().add(listener);
 			}
-			
+
 			// Add PerformanceFilter
 			if(usePerformanceFilter){
 				Filter filter = WebapplicationFactory.eINSTANCE.createFilter();
 				filter.setName("PerformanceFilter");
 				filter.setFilterClassName("org.apache.click.extras.filter.PerformanceFilter");
-				
+
 				if (webApp.getJ2EEVersionID() >= J2EEVersionConstants.J2EE_1_4_ID) {
 					// J2EE 1.4
 					ParamValue initParam = CommonFactory.eINSTANCE.createParamValue();
@@ -339,14 +339,14 @@ public class ClickFacetInstallDelegate implements IDelegate {
 					initParam.setParamValue("/assets/*");
 					filter.getInitParams().add(initParam);
 				}
-				
+
 				webApp.getFilters().add(filter);
 
 				FilterMapping mapping = WebapplicationFactory.eINSTANCE.createFilterMapping();
 				mapping.setServletName(servlet.getServletName());
 				mapping.setFilter(filter);
 				webApp.getFilterMappings().add(mapping);
-				
+
 				String[] filterPatterns = {"*.css", "*.js", "*.gif", "*.png"};
 				for(String pattern: filterPatterns){
 					mapping = WebapplicationFactory.eINSTANCE.createFilterMapping();
@@ -355,7 +355,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 					webApp.getFilterMappings().add(mapping);
 				}
 			}
-			
+
 			// init mappings
 			String[] listOfMappings = {"*.htm"};
 			ClickUtils.setUpURLMappings(webApp, listOfMappings, servlet);

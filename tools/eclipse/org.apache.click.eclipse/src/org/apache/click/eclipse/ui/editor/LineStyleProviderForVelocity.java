@@ -38,13 +38,13 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
  * The <code>LineStyleProvider</code> implementation for the Velocity template.
  * <p>
  * TODO multi-line comment (#* ... *#)
- * 
+ *
  * @author Naoki Takezoe
  */
 public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public boolean prepareRegions(ITypedRegion currentRegion, int start, int length, Collection styleRanges) {
 		List<Object> results = new ArrayList<Object>();
 		boolean result = super.prepareRegions(currentRegion, start, length, results);
@@ -55,10 +55,10 @@ public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
     	Color colorComment   = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_CMT);
 
         IStructuredDocument document = getDocument();
-        
+
         for(Iterator ite = results.iterator(); ite.hasNext();){
             StyleRange styleRange = (StyleRange)ite.next();
-            
+
             IStructuredDocumentRegion region = document.getRegionAtCharacterOffset(styleRange.start);
             String text = region.getText();
             int mStart = styleRange.start - region.getStartOffset();
@@ -85,9 +85,9 @@ public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
             Matcher m = p.matcher(text);
             int pos = 0;
             while(m.find()) {
-            	Color color = m.group().startsWith("##") ? colorComment : 
+            	Color color = m.group().startsWith("##") ? colorComment :
             		          m.group().startsWith("#") ? colorDirective : colorVariable;
-            	
+
                 if(m.start() < mStart){
                     if(m.end() < mStart){
                         continue;
@@ -145,5 +145,5 @@ public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
 
         return result;
 	}
-	
+
 }
