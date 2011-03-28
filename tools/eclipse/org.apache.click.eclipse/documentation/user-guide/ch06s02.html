@@ -1,0 +1,107 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>6.2.&nbsp;Packages and Classes</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Best Practices"><link rel="prev" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Best Practices"><link rel="next" href="ch06s03.html" title="6.3.&nbsp;Page Auto Mapping"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.2.&nbsp;Packages and Classes</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;6.&nbsp;Best Practices</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06s03.html">Next</a></td></tr></table><hr></div><div class="sect1" title="6.2.&nbsp;Packages and Classes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages-classes"></a>6.2.&nbsp;Packages and Classes</h2></div></div></div><p> An excellent way to design your project package structure is to
+    classify packages initially by technology. So in a Click application all
+    of our pages would be contained under a <span class="package">page</span> package.
+    This also works very well with the Page automapping feature.
+    </p><p>
+    All the projects domain entity classes would be contained under a
+    <span class="package">entity</span> package, and service classes would be contained
+    under a <span class="package">service</span> directory. Note alternative names for the
+    <span class="package">entity</span> package include domain or model. We also typically
+    have a <span class="package">util</span> package for any stray classes which don't quite
+    fit into the other packages.
+    </p><p>In Java, package names are singular by convention, so we have a util
+    package rather than a utils package.
+    </p><p>An example project structure for a MyCorp web application is illustrated
+    below:
+    </p><div class="figure"><a name="example-project-structure"></a><div class="figure-contents"><span class="inlinemediaobject"><img src="images/best-practices/packages-classes.png" alt="Example project structure"></span></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;6.1.&nbsp;Example project structure</i></p></div><br class="figure-break"><p>In this example application we use declarative role and path based security.
+    All the pages in the <span class="package">admin</span> package and directory require the
+    <code class="literal">"admin"</code> role to be access, while all the pages in the
+    <span class="package">user</span> package and directory require the <code class="literal">"user"</code>
+    role to be accessed.
+    </p><div class="sect2" title="6.2.1.&nbsp;Page Classes"><div class="titlepage"><div><div><h3 class="title"><a name="page-classes"></a>6.2.1.&nbsp;Page Classes</h3></div></div></div><p>A best practice when developing application Page classes is to
+      place common methods in a base page class. This is typically used for
+      providing access methods to application services and logger objects.
+      </p><p>For example the BasePage below provides access to Spring configured
+      service objects and a Log4J logger object:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> BasePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">implements</span> ApplicationContextAware {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/** The Spring application context. */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">protected</span> ApplicationContext applicationContext;
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/** The page Logger instance. */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">protected</span> Logger logger;
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * Return the Spring configured Customer service.
+     *
+     * @return the Spring configured Customer service
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> CustomerService getCustomerService() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> (CustomerService) getBean(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"customerService"</span>);
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * Return the Spring configured User service.
+     *
+     * @return the Spring configured User service
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> UserService getUserService() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> (UserService) getBean(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"userService"</span>);
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * Return the page Logger instance.
+     *
+     * @return the page Logger instance
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> Logger getLogger() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (logger == null) {
+            logger = Logger.getLogger(getClass());
+        }
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> logger;
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * @see ApplicationContextAware#setApplicationContext(ApplicationContext)
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> setApplicationContext(ApplicationContext applicationContext)  {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">this</span>.applicationContext = applicationContext;
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * Return the configured Spring Bean for the given name.
+     *
+     * @param beanName the configured name of the Java Bean
+     * @return the configured Spring Bean for the given name
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> Object getBean(String beanName) {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> applicationContext.getBean(beanName);
+    }
+
+}</pre><p>Applications typically use a border template and have a
+      <code class="classname">BorderPage</code> which extends <code class="classname">BasePage</code>
+      and defines the template. For example:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> BorderPage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> BasePage {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/** The root Menu item. */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> Menu rootMenu = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Menu();
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * @see Page#getTemplate()
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> String getTemplate() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"/border-template.htm"</span>;
+    }
+}</pre><p>Most application pages subclass <code class="classname">BorderPage</code>, except
+      AJAX pages which have no need for a HTML border template and typically extend
+      <code class="classname">BasePage</code>. The <code class="classname">BorderPage</code> class
+      should not include common logic, other than that required for rendering the
+      border template. Common page logic should be defined in the
+      <code class="classname">BasePage</code> class.
+      </p><p>To prevent these base Page classes being auto mapped, and becoming
+      directly acessible web pages, ensure that there are no page templates which
+      could match their class name. For example the <code class="classname">BorderPage</code>
+      class above will not be auto mapped to <code class="filename">border-template.htm</code>.
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch06.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch06s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;6.&nbsp;Best Practices&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;6.3.&nbsp;Page Auto Mapping</td></tr></table></div></body></html>

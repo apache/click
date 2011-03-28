@@ -1,0 +1,136 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>1.7.&nbsp;Advanced Form Example</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction to Apache Click"><link rel="prev" href="ch01s06.html" title="1.6.&nbsp;Simple Form Example"><link rel="next" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Pages"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">1.7.&nbsp;Advanced Form Example</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01s06.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;1.&nbsp;Introduction to Apache Click</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td></tr></table><hr></div><div class="sect1" title="1.7.&nbsp;Advanced Form Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="advanced-form"></a>1.7.&nbsp;Advanced Form Example</h2></div></div></div><p>The <code class="classname">AdvancedForm</code> page below provides a more
+    advanced demonstration of using Form, Field and FieldSet controls.
+    </p><p>First we have an <code class="classname">AdvancedForm</code> class which
+    setups up a <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Form.html" target="_blank">Form</a>
+    in its constructor. The form's investment
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Select.html" target="_blank">Select</a>
+    list is populated in the page's <code class="methodname">onInit()</code> method. At
+    this point any page dependencies such as the CustomerService should be
+    available.
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> AdvancedForm <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> Form form = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Form(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"form"</span>);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> Select investmentSelect = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Select(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"investment"</span>);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Constructor ------------------------------------------------------------</span>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> AdvancedForm() {
+        addControl(form);
+
+        FieldSet fieldSet = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> FieldSet(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Customer"</span>);
+        form.add(fieldSet);
+
+        TextField nameField = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> TextField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"name"</span>, true);
+        nameField.setMinLength(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="lit">5</span>);
+        nameField.setFocus(true);
+        fieldSet.add(nameField);
+
+        fieldSet.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> EmailField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"email"</span>, true));
+
+        fieldSet.add(investmentSelect);
+
+        fieldSet.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> DateField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"dateJoined"</span>, true));
+        fieldSet.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Checkbox(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"active"</span>));
+
+        form.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Submit(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"ok"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">" OK "</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">this</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"onOkClicked"</span>));
+        form.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Submit(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"cancel"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">this</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"onCancelClicked"</span>));
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Event Handlers ---------------------------------------------------------</span>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * @see Page#onInit()
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pun">@Override</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> onInit() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">super</span>.onInit();
+
+        investmentSelect.setDefaultOption(Option.EMPTY_OPTION);
+        investmentSelect.setDataProvider(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> DataProvider() {
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> List&lt;Option&gt; getData() {
+                List&lt;Option&gt; options = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ArrayList&lt;Option&gt;();
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">for</span> (String category : customerService.getInvestmentCategories()) {
+                    options.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Option(category));
+                }
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> options;
+            }
+        });
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * Handle the OK button click event.
+     *
+     * @return true
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onOkClicked() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (form.isValid()) {
+            Customer customer = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Customer();
+            form.copyTo(customer);
+
+            getCustomerService().saveCustomer(customer);
+
+            form.clearValues();
+
+            String msg = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"A new customer record has been created."</span>;
+            addModel(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"msg"</span>, msg);
+        }
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> true;
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * Handle the Cancel button click event.
+     *
+     * @return false
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onCancelClicked() {
+        setRedirect(HomePage.<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span>);
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+    }
+}</pre><p>Next we have the AdvancedForm template
+    <code class="filename">advanced-form.htm</code>. The Click application automatically
+    associates the <code class="filename">advanced-form.htm</code> template with the
+    <code class="classname">AdvancedForm</code> class.
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;html&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;head&gt;</span>
+    <code class="varname">$headElements</code>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/head&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;body&gt;</span>
+
+    <span class="command"><strong>#if</strong></span> (<code class="varname">$msg</code>)
+      <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;div</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"msgDiv"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span> <code class="varname">$msg</code> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/div&gt;</span>
+    <span class="command"><strong>#end</strong></span>
+
+    <code class="varname">$form</code>
+
+    <code class="varname">$headElements</code>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/body&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/html&gt;</span></pre><p>When the AdvancedForm page is first requested the
+    <code class="varname">$form</code> object will automatically render itself as:
+    </p><div class="figure"><a name="advanced-form-image"></a><div class="figure-contents"><div class="mediaobject"><img src="images/introduction/advanced-form.png" alt="Advanced Form"></div></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;1.7.&nbsp;Advanced Form</i></p></div><br class="figure-break"><p>In this example when the OK button is clicked the
+    <code class="methodname">onOkClicked()</code> method is invoked. If the form is
+    valid a new customer object is created and the forms field values are copied
+    to the new object using the Form
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Form.html#copyTo(java.lang.Object)" target="_blank">copyTo()</a>
+    method. The customer object is then saved, the form's field values are
+    cleared and an info message is presented to the user.
+    </p><p>If the user clicks on the Cancel button the request is redirected to
+    the applications HomePage.
+    </p><div class="sect2" title="1.7.1.&nbsp;Form Layout"><div class="titlepage"><div><div><h3 class="title"><a name="form-layout"></a>1.7.1.&nbsp;Form Layout</h3></div></div></div><p>In the example above the Form control automatically renders the form
+      and the fields HTML markup. This is a great feature for quickly building
+      screens, and the form control provides a number of layout options. See the
+      Click Examples for an interactive
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://click.avoka.com/click-examples/form/form-properties.htm" target="_blank">Form Properties demo</a>.
+      </p><p>For fine grained page design you can specifically layout form and
+      fields in your page template. See the
+      <a class="link" href="ch03s07.html#template-layout" title="3.7.1.&nbsp;Template layout">Template Layout</a> section and
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Form.html#form-layout" target="_blank">Form</a>
+      Javadoc for more details.
+      </p><p>An alternative to page template design is using a programmatic
+      approach. See <a class="link" href="ch03s07.html#programmatic-layout" title="3.7.2.&nbsp;Programmatic layout">Programmatic Layout</a>
+      for more details.
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01s06.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch01.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">1.6.&nbsp;Simple Form Example&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;Pages</td></tr></table></div></body></html>

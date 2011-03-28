@@ -1,0 +1,72 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>1.2.&nbsp;Control Listener Type 1 Example</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction to Apache Click"><link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction to Apache Click"><link rel="next" href="ch01s03.html" title="1.3.&nbsp;Control Listener Type 2 Example"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">1.2.&nbsp;Control Listener Type 1 Example</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;1.&nbsp;Introduction to Apache Click</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch01s03.html">Next</a></td></tr></table><hr></div><div class="sect1" title="1.2.&nbsp;Control Listener Type 1 Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="control-listener-type-1"></a>1.2.&nbsp;Control Listener Type 1 Example</h2></div></div></div><p>Click includes a library of <a class="link" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Controls">Controls</a>
+    which provide user interface functionality.
+    </p><p>One of the commonly used controls is the
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/ActionLink.html" target="_blank">ActionLink</a>,
+    which you can use to have an HTML link call a method on a Page object.
+    For example:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> ControlListenerType1Page <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/* Set the listener to this object's "onLinkClick" method. */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> ActionLink myLink = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ActionLink(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"myLink"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">this</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"onLinkClick"</span>)
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> String msg;
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Constructor ------------------------------------------------------------</span>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> ControlListenerType1Page() {
+        addControl(myLink); <a class="co" name="co-addcontrol" href="ch01s02.html#ca-addcontrol"><img src="images/callouts/1.gif" alt="1" border="0"></a>
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Event Handlers ---------------------------------------------------------</span>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * Handle the ActionLink control click event.
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onLinkClick() {
+        String msg = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"ControlListenerPage#"</span> + hashCode()
+            + <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">" object method &lt;tt&gt;onLinkClick()&lt;/tt&gt; invoked."</span>;
+        addModel(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"msg"</span>, msg);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> true;
+    }
+
+}</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-addcontrol"></a><a href="#co-addcontrol"><img src="images/callouts/1.gif" alt="1" border="0"></a> </td><td valign="top" align="left"><p>Add the link to the page. The link will be made available to the
+        page template under the variable <code class="varname">myLink</code>, which
+        is the name of the control.
+        </p></td></tr></table></div><p>In the Page class we create an ActionLink called
+    <code class="varname">myLink</code> and define the control's listener to be the page
+    method <code class="methodname">onLinkClick()</code>. When a user clicks on
+    <code class="varname">myLink</code> control it will invoke the listener method
+    <code class="methodname">onLinkClick()</code>.
+    </p><p>In Click a control listener method can have any name but it must
+    return a boolean value. The boolean return value specifies whether
+    processing of page events should continue. This control listener pattern
+    provides a short hand way for wiring up action listener methods without
+    having to define anonymous inner classes.
+    </p><p>The advantage of this style of control listener binding is that you
+    have to write fewer lines of code. The disadvantage of this type of control
+    listener binding is that no compile time safety is provided, and you miss
+    out on the compiler refactoring capabilities provided with modern IDEs.
+    </p><p>Back to our example, in the page template we define an HTML link and
+    have the <code class="varname">myLink</code> control render the link's href attribute:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;html&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;head&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;link</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"text/css"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">rel</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"stylesheet"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">href</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"style.css"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/link&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/head&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;body&gt;</span>
+  
+  Click myLink control <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;a</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">href</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"</span><code class="varname">$myLink.href</code>"&gt;here<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/a&gt;</span>.
+
+  <span class="command"><strong>#if</strong></span> (<code class="varname">$msg</code>)
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;div</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"msgDiv"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span> <code class="varname">$msg</code> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/div&gt;</span>
+  <span class="command"><strong>#end</strong></span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/body&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/html&gt;</span></pre><p>At runtime this page would be rendered as:</p><div class="literallayout"><p>Click&nbsp;myLink&nbsp;control&nbsp;<code class="varname">here</code>.</p></div><p>When a user clicks on the link the <code class="methodname">onLinkClick()</code>
+    method is invoked. This method then creates the <code class="varname">msg</code> model
+    value, which is rendered in the page as:
+    </p><div class="literallayout"><p>Click&nbsp;myLink&nbsp;control&nbsp;<code class="varname">here</code>.<br>
+<br>
+<code class="computeroutput">ControlListenerPage#12767107&nbsp;object&nbsp;method&nbsp;onLinkClick()&nbsp;invoked.</code></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch01.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch01s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Introduction to Apache Click&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;1.3.&nbsp;Control Listener Type 2 Example</td></tr></table></div></body></html>

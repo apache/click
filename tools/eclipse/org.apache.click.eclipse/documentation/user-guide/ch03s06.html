@@ -1,0 +1,93 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.6.&nbsp;Container</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Controls"><link rel="prev" href="ch03s05.html" title="3.5.&nbsp;Control HEAD Elements"><link rel="next" href="ch03s07.html" title="3.7.&nbsp;Layouts"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.6.&nbsp;Container</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s05.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;3.&nbsp;Controls</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s07.html">Next</a></td></tr></table><hr></div><div class="sect1" title="3.6.&nbsp;Container"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="container"></a>3.6.&nbsp;Container</h2></div></div></div><p><a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Container.html" target="_blank">Container</a>
+    is a Control that can contain other Controls, thus forming a hierarchy
+    of components. Container enables components to add, remove and retrieve other
+    controls. Listed below are example Containers:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Form.html" target="_blank">Form</a>
+          - an HTML form which provides default layout of fields and error feedback.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Panel.html" target="_blank">Panel</a>
+          - similar to
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Page.html" target="_blank">Page</a>, this
+          Container provides its own template and model.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/FieldSet.html" target="_blank">FieldSet</a>
+          - draws a legend (border) around its child Controls.
+        </p></li></ul></div><p>These Containers are depicted in the figure below.
+    </p><div class="figure"><a name="container-package-class-diagram"></a><div class="figure-contents"><span class="inlinemediaobject"><img src="images/controls/container-package-class-diagram.png" alt="Container Class Diagram"></span></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;3.4.&nbsp;Container Class Diagram</i></p></div><br class="figure-break"><p>The following classes provides convenient extension points for creating
+    custom Containers:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/AbstractContainer.html" target="_blank">AbstractContainer</a>
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/control/AbstractContainerField.html" target="_blank">AbstractContainerField</a>
+        </p></li></ul></div><p>Lets cover each of them here.
+    </p><div class="sect2" title="3.6.1.&nbsp;AbstractContainer"><div class="titlepage"><div><div><h3 class="title"><a name="abstractcontainer"></a>3.6.1.&nbsp;AbstractContainer</h3></div></div></div><p>Enables easy creation of custom Containers, for example an html
+      <span class="emphasis"><em>div</em></span> or <span class="emphasis"><em>span</em></span> element:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> Div <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> AbstractContainer {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> Div(String name) {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">super</span>(name);
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> String getTag() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Return the control's HTML tag.</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"div"</span>;
+    }
+}</pre><p>Lets try out the newly created <code class="classname">Container</code>
+      above: (note the <code class="classname">MockContext</code> used in this test is
+      described in the <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../mock-api/overview-summary.html" target="_blank">Mock Test Support</a>
+      documentation)
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> Test {
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">static</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> main (String args[]) {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create mock context in which to test the container.</span>
+        MockContext.initContext();
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create a div instance called "mydiv"</span>
+        String containerName = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"mydiv"</span>;
+        Div mydiv = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Div(containerName);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add a control to the container</span>
+        mydiv.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> TextField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"myfield"</span>));
+
+        System.out.println(mydiv);
+    }
+}</pre><p>Executing the above example results in the following output:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;div</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"mydiv"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"mydiv"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;input</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"text"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"myfield"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"myfield"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">""</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">size</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"20"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag"> /&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/div&gt;</span></pre></div><div class="sect2" title="3.6.2.&nbsp;AbstractContainerField"><div class="titlepage"><div><div><h3 class="title"><a name="abstractcontainerfield"></a>3.6.2.&nbsp;AbstractContainerField</h3></div></div></div><p>AbstractContainerField extends Field and implements the Container
+      interface. This provides a convenient base class in case you run into
+      a situation where you need both a Field and Container.
+      </p><p>Below is an example of how AbstractContainerField might be used:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> FieldAndContainer <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> AbstractContainerField {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> FieldAndContainer(String name) {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">super</span>(name);
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Return the html tag to render</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> String getTag() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"div"</span>;
+    }
+}</pre><p>To test the new class we use the following snippet:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> Test {
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">static</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> main (String args[]) {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create mock context in which to test the container.</span>
+        MockContext.initContext();
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create a FieldContainer instance called "field_container"</span>
+        String containerName = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"field_container"</span>;
+        FieldAndContainer fieldAndContainer = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> FieldAndContainer(containerName);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add a couple of fields to the container</span>
+        fieldAndContainer.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> TextField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"myfield"</span>));
+        fieldAndContainer.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> TextArea(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"myarea"</span>));
+
+        System.out.println(fieldAndContainer);
+    }
+}</pre><p>Executing the snippet produces the output:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;div</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"field_container"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"field_container"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;input</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"text"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"myfield"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"myfield"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">""</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">size</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"20"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;textarea</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"myarea"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"myarea"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">rows</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"3"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">cols</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"20"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/textarea&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/div&gt;</span></pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s05.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.5.&nbsp;Control HEAD Elements&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.7.&nbsp;Layouts</td></tr></table></div></body></html>

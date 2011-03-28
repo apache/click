@@ -1,0 +1,32 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.10.&nbsp;Error Handling</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Pages"><link rel="prev" href="ch02s09.html" title="2.9.&nbsp;Stateful Pages"><link rel="next" href="ch02s11.html" title="2.11.&nbsp;Page Not Found"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.10.&nbsp;Error Handling</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s09.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;2.&nbsp;Pages</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s11.html">Next</a></td></tr></table><hr></div><div class="sect1" title="2.10.&nbsp;Error Handling"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="page-error-handling"></a>2.10.&nbsp;Error Handling</h2></div></div></div><p>If an Exception occurs processing a Page object or rendering a
+    template the error is delegated to the registered handler. The default
+    Click error handler is the
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/util/ErrorPage.html" target="_blank">ErrorPage</a>,
+    which is automatically configured as:
+    </p><div class="literallayout"><p>&lt;page&nbsp;path="<code class="varname">click/error.htm</code>"&nbsp;classname="<span class="symbol">org.apache.click.util.ErrorPage</span>"/&gt;</p></div><p>To register an alternative error handler you must subclass ErrorPage
+    and define your page using the path <code class="varname">"click/error.htm"</code>.
+    For example:
+    </p><div class="literallayout"><p>&lt;page&nbsp;path="<code class="varname">click/error.htm</code>"&nbsp;classname="<span class="symbol">com.mycorp.page.ErrorPage</span>"/&gt;</p></div><p>When the ClickServlet starts up it checks to see whether the
+    <code class="varname">error.htm</code> template exists in the <code class="varname">click</code>
+    web sub directory. If it cannot find the page the ClickServlet will
+    automatically deploy one. You can tailor the <code class="varname">click/error.htm</code>
+    template to suite you own tastes, and the ClickServlet will
+    not overwrite it.
+    </p><p>The default error template will display extensive debug information
+    when the application is in <code class="literal">development</code> or
+    <code class="literal">debug</code> mode. Example error page displays include:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../error-npe.html" target="_blank">NullPointerException</a> - in a page
+          method
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../error-parsing.html" target="_blank">ParseErrorException</a> - in a
+          page template
+        </p></li></ul></div><p>When the application is in <code class="literal">production</code> mode only
+    a simple error message is displayed. See
+    <a class="link" href="ch05s02.html#application-mode" title="5.2.6.&nbsp;Mode">Configuration</a> for details on how to
+    set the application mode.
+    </p><p>Please also see the <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../examples.html" target="_blank">Examples</a> web
+    app Exception Demo for demonstrations of Clicks error handling.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s09.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s11.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.9.&nbsp;Stateful Pages&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.11.&nbsp;Page Not Found</td></tr></table></div></body></html>

@@ -1,0 +1,222 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>4.4.&nbsp;First Ajax Example</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Ajax"><link rel="prev" href="ch04s03.html" title="4.3.&nbsp;AjaxBehavior Execution"><link rel="next" href="ch04s05.html" title="4.5.&nbsp;Ajax Page Action"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.4.&nbsp;First Ajax Example</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s03.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;4.&nbsp;Ajax</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04s05.html">Next</a></td></tr></table><hr></div><div class="sect1" title="4.4.&nbsp;First Ajax Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="first-ajax-example"></a>4.4.&nbsp;First Ajax Example</h2></div></div></div><p>In this first example we demonstrate how to handle Ajax requests with a
+    <span class="symbol">DefaultAjaxBehavior</span>. DefaultAjaxBehavior is the default
+    implementation of the <code class="classname">AjaxBehavior</code> interface. Below is
+    the Page class, <code class="classname">AjaxBehaviorPage.java</code>, showing a
+    <span class="symbol">DefaultAjaxBehavior</span> added to an ActionLink, called
+    <span class="emphasis"><em>link</em></span> with an HTML ID of <code class="varname">link-id</code>.
+    The <span class="symbol">DefaultAjaxBehavior</span> <code class="varname">onAction</code>
+    method will be invoked to handle the Ajax request. The <code class="varname">onAction</code>
+    method returns an <span class="token">ActionResult</span> that is rendered to the browser.
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> AjaxBehaviorPage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> BorderPage {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">static</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">final</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">long</span> serialVersionUID = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="lit">1L</span>;
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> ActionLink link = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ActionLink(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"link"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"here"</span>);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> AjaxBehaviorPage() {
+        link.setId(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"link-id"</span>); <a class="co" name="co-link-id" href="ch04s04.html#ca-link-id"><img src="images/callouts/1.gif" alt="1" border="0"></a>
+
+        addControl(link);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add a DefaultAjaxBehavior to the link. The DefaultAjaxBehavior will be invoked when the</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// link is clicked.</span>
+        link.addBehavior(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> <span class="symbol">DefaultAjaxBehavior()</span> { <a class="co" name="co-ajax-behavior" href="ch04s04.html#ca-ajax-behavior"><img src="images/callouts/2.gif" alt="2" border="0"></a>
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pun">@Override</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span class="token">ActionResult</span> <code class="varname">onAction</code>(Control source) { <a class="co" name="co-ajax-behavior-method" href="ch04s04.html#ca-ajax-behavior-method"><img src="images/callouts/3.gif" alt="3" border="0"></a>
+
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Formatted date instance that will be added to the</span>
+                String now = format.currentDate(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"MMM, yyyy dd HH:MM:ss"</span>);
+
+                String msg = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"AjaxBehavior &lt;tt&gt;onAction()&lt;/tt&gt; method invoked at: "</span> + now;
+
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Return an action result containing the message</span>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> <span class="token">ActionResult</span>(msg, ActionResult.HTML); <a class="co" name="co-ajax-action-result" href="ch04s04.html#ca-ajax-action-result"><img src="images/callouts/4.gif" alt="4" border="0"></a>
+            }
+        });
+    }
+} </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-link-id"></a><a href="#co-link-id"><img src="images/callouts/1.gif" alt="1" border="0"></a> </td><td valign="top" align="left"><p>We assign to ActionLink the HTML ID: <code class="varname">link-id</code>.
+        The ID will be used to identify the ActionLink as the
+        <code class="literal">Ajax target control</code>. The client-side JavaScript code
+        is expected to send this ID as an Ajax request parameter.
+        </p></td></tr><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-ajax-behavior"></a><a href="#co-ajax-behavior"><img src="images/callouts/2.gif" alt="2" border="0"></a> </td><td valign="top" align="left"><p>Next we add the <span class="symbol">DefaultAjaxBehavior</span> to the ActionLink.
+        Adding a Behavior to a control will also register that control with the
+        <a class="external" href="../../click-api/org/apache/click/ControlRegistry.html" target="_blank">ControlRegistry</a>
+        as a potential <code class="literal">Ajax target control</code>.
+        </p></td></tr><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-ajax-behavior-method"></a><a href="#co-ajax-behavior-method"><img src="images/callouts/3.gif" alt="3" border="0"></a> </td><td valign="top" align="left"><p>We also implement the <span class="symbol">DefaultAjaxBehavior</span>
+        <code class="varname">onAction</code> method in order to handle the Ajax request.
+        </p></td></tr><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-ajax-action-result"></a><a href="#co-ajax-action-result"><img src="images/callouts/4.gif" alt="4" border="0"></a> </td><td valign="top" align="left"><p>Finally we return an <span class="token">ActionResult</span> containing some
+        HTML content that is rendered to the browser.
+        </p></td></tr></table></div><p>Below we show the Page template <code class="literal">ajax-behavior.htm</code>,
+    containing the client-side JavaScript code that will initiate the Ajax request.
+    </p><p><span class="bold"><strong>Note:</strong></span> the example below uses the
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://www.jquery.com" target="_blank">jQuery</a> library, but any other
+    library can be used. Also see the online Click examples for more Ajax demos.
+    </p><pre class="programlisting">&lt;!-- <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// $link is a Velocity reference that will render an ActionLink at runtime. --&gt;</span>
+Click $link to make an Ajax request to the server.
+
+&lt;div id=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"result"</span>&gt;
+    &lt;!-- <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Ajax response will be set here --&gt;</span>
+&lt;/div&gt;
+
+&lt;!-- <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// JavaScript code below --&gt;</span>
+
+&lt;!-- <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Import the jQuery library --&gt;</span>
+&lt;script type=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"text/javascript"</span> src=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"$context/js/jquery.js"</span>&gt;&lt;/script&gt;
+
+&lt;!-- <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// The client-side JavaScript for initiating an Ajax request --&gt;</span>
+&lt;script type=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"text/javascript"</span>&gt;
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// This example uses jQuery for making Ajax requests:</span>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Register a function that is invoked as soon as the entire DOM has been loaded</span>
+    jQuery(document).ready(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">function</span>() { <a class="co" name="co-ajax-jq-function" href="ch04s04.html#ca-ajax-jq-function"><img src="images/callouts/1.gif" alt="1" border="0"></a>
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Register a 'click' handler that makes an Ajax request</span>
+        jQuery(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"#link-id"</span>).click(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">function</span>(event){
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Make ajax request</span>
+            makeRequest();
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Prevent the default browser behavior of navigating to the link</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+        })
+    })
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">function</span> makeRequest() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Get a reference to the link</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">var</span> link = jQuery(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">'#link-id'</span>);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// In order for Click to identify the Ajax target, we pass the link ID</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// attribute as request parameters</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">var</span> extraData = link.attr(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">'id'</span>) + <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">'=1'</span>; <a class="co" name="co-ajax-link-id" href="ch04s04.html#ca-ajax-link-id"><img src="images/callouts/2.gif" alt="2" border="0"></a>
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// The Ajax URL is set to the link 'href' URL which contains all the link default parameters,</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// including it's name/value pair: 'actionLink=link'</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">var</span> url = link.attr(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">'href'</span>); <a class="co" name="co-ajax-jq-href" href="ch04s04.html#ca-ajax-jq-href"><img src="images/callouts/3.gif" alt="3" border="0"></a>
+
+        jQuery.get(url, extraData, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">function</span>(data) {
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// 'data' is the response returned by the server</span>
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Find the div element with the id "result", and set its content to the server response</span>
+            jQuery(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"#result"</span>).html(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"&lt;p&gt;"</span> + data + <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"&lt;/p&gt;"</span>); <a class="co" name="co-ajax-jq-response" href="ch04s04.html#ca-ajax-jq-response"><img src="images/callouts/4.gif" alt="4" border="0"></a>
+        });
+    }
+&lt;/script&gt; </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-ajax-jq-function"></a><a href="#co-ajax-jq-function"><img src="images/callouts/1.gif" alt="1" border="0"></a> </td><td valign="top" align="left"><p>We start off with a jQuery <a class="external" href="http://api.jquery.com/ready/" target="_blank">ready</a>
+        function that is executed as soon as the browser DOM has been loaded.
+        This ensures that the function body is executed <code class="literal">before</code>
+        the page images are downloaded, which results in a more responsive UI.
+        </p></td></tr><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-ajax-link-id"></a><a href="#co-ajax-link-id"><img src="images/callouts/2.gif" alt="2" border="0"></a> </td><td valign="top" align="left"><p>This is an important step. We need to pass the link's <code class="varname">HTML ID</code>
+        attribute as request parameters in order for the server to identify <code class="literal">which</code>
+        server-side control is the <code class="literal">Ajax target</code>. We use the jQuery
+        <code class="literal">attr</code> function to lookup the link's <code class="varname">HTML ID</code>
+        attribute. Click doesn't actually use the <code class="literal">value</code> of the
+        parameter, it is enough that the <code class="literal">name</code> is present.
+        In this example we pass a value of <code class="varname">1</code>, but any
+        other value could be used, or even left out.
+        </p></td></tr><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-ajax-jq-href"></a><a href="#co-ajax-jq-href"><img src="images/callouts/3.gif" alt="3" border="0"></a> </td><td valign="top" align="left"><p>This is another important step. In addition to the ActionLink HTML ID
+        pararameter, we also need to send the link's <code class="varname">href</code>
+        parameters, otherwise the  ActionLink <code class="methodname">onProcess</code>
+        method won't fire the <code class="classname">AjaxBehavior</code>
+        <code class="methodname">onAction</code> event. An easy way to achieve this to
+        set the Ajax <code class="varname">URL</code> to the ActionLink
+        <code class="varname">href</code> value.
+        </p></td></tr><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-ajax-jq-response"></a><a href="#co-ajax-jq-response"><img src="images/callouts/4.gif" alt="4" border="0"></a> </td><td valign="top" align="left"><p>Finally we the jQuery
+        <a class="external" href="http://api.jquery.com/html/#html2" target="_blank">html</a> function
+        to update the <span class="emphasis"><em>div</em></span> content with the server response.
+        </p></td></tr></table></div><div class="sect2" title="4.4.1.&nbsp;Ajax Trace Log"><div class="titlepage"><div><div><h3 class="title"><a name="ajax-trace-log"></a>4.4.1.&nbsp;Ajax Trace Log</h3></div></div></div><p>Looking at the output log we see the following trace:
+      </p><div class="literallayout"><p>[Click]&nbsp;[debug]&nbsp;GET&nbsp;http://localhost:8080/mycorp/ajax/ajax-behavior.htm<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;<span class="symbol">is&nbsp;Ajax&nbsp;request</span>:&nbsp;<code class="varname">true</code><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;param:&nbsp;<code class="varname">actionLink=link</code><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;param:&nbsp;<code class="varname">link-id=1</code><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.&lt;&lt;init&gt;&gt;<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.onSecurityCheck()&nbsp;:&nbsp;true<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.onInit()<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;'link'&nbsp;ActionLink.onInit()<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;<span class="token">the&nbsp;following&nbsp;controls&nbsp;have&nbsp;been&nbsp;registered&nbsp;as&nbsp;potential&nbsp;Ajax&nbsp;targets:</span><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ActionLink:&nbsp;name='link'<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;'link'&nbsp;ActionLink.<span class="symbol">isAjaxTarget()</span>&nbsp;:&nbsp;<code class="varname">true</code>&nbsp;(Ajax&nbsp;target&nbsp;control&nbsp;found)<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;'link'&nbsp;ActionLink.<span class="symbol">onProcess()</span>&nbsp;:&nbsp;<code class="varname">true</code><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;<span class="token">processing&nbsp;AjaxBehaviors&nbsp;for&nbsp;control:&nbsp;'link'&nbsp;ActionLink</span><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.1.<span class="symbol">isRequestTarget()</span>&nbsp;:&nbsp;<code class="varname">true</code><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.1.<span class="symbol">onAction()</span>&nbsp;:&nbsp;<code class="varname">ActionResult</code>&nbsp;(ActionResult&nbsp;will&nbsp;be&nbsp;rendered)<br>
+[Click]&nbsp;[info&nbsp;]&nbsp;&nbsp;&nbsp;&nbsp;<span class="token">renderActionResult</span>&nbsp;(text/html)&nbsp;-&nbsp;1&nbsp;ms<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;'link'&nbsp;ActionLink.onDestroy()<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.onDestroy()<br>
+[Click]&nbsp;[info&nbsp;]&nbsp;handleRequest:&nbsp;&nbsp;/ajax/ajax-behavior.htm&nbsp;-&nbsp;25&nbsp;ms</p></div><p>First thing we notice is that the request is recognized as an
+      <span class="symbol">Ajax request</span>.
+      </p><p>We can also see from the log that the Ajax request passed the parameters,
+      <code class="varname">link-id=1</code> and <code class="varname">actionLink=link</code> to the server.
+      <code class="varname">link-id</code> is the ActionLink HTML ID attribute that will be used
+      to identify the Control as the <code class="literal">Ajax request target</code>.
+      </p><p>Next, the log prints which controls have been registered as <code class="literal">potential
+      Ajax targets</code>. In our example we added an AjaxBehavior to the ActionLink
+      so the ActionLink is registered as an Ajax target.
+      </p><p>Next, the ActionLink#<span class="symbol">isAjaxTarget</span> was invoked and because
+      it returned <code class="varname">true</code>, ActionLink will be used as the
+      <code class="literal">Ajax target control.</code>
+      </p><p>Having found the <code class="literal">Ajax target</code>, the ActionLink
+      <span class="symbol">onProcess</span> is called.
+      </p><p>Next, the log shows it found the <code class="literal">target AjaxBehavior</code>
+      by invoking the AjaxBehavior#<span class="symbol">isRequestTarget</span> method, which
+      returned <code class="varname">true</code>.
+      </p><p>The AjaxBehavior#<span class="symbol">onAction</span> is invoked which returns an
+      <code class="varname">ActionResult</code>.
+      </p><p>Finally, the <code class="varname">ActionResult</code> is rendered to the browser.
+      </p></div><div class="sect2" title="4.4.2.&nbsp;Ajax Trace Log - No Ajax Target Control Found"><div class="titlepage"><div><div><h3 class="title"><a name="ajax-trace-log-no-target-control"></a>4.4.2.&nbsp;Ajax Trace Log - No Ajax Target Control Found</h3></div></div></div><p>Below we show a log trace where no <code class="literal">Ajax target control</code>
+      is found. The most common reason this can occur is if the JavaScript code
+      that initiates the Ajax request does not send the necessary request parameters
+      to identify the <code class="literal">Ajax target control</code>. Another problem is
+      if no Control is registered ith the <code class="classname">ControlRegistry</code>,
+      thus there is no potential <code class="literal">Ajax target control</code>. This can
+      occur if no Behavior is added to a Control.
+      </p><div class="literallayout"><p>[Click]&nbsp;[debug]&nbsp;GET&nbsp;http://localhost:8080/mycorp/ajax/ajax-behavior.htm<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;<span class="symbol">is&nbsp;Ajax&nbsp;request</span>:&nbsp;<code class="varname">true</code><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;param:&nbsp;<code class="varname">actionLink=link</code><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.&lt;&lt;init&gt;&gt;<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.onSecurityCheck()&nbsp;:&nbsp;true<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.onInit()<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;'link'&nbsp;ActionLink.onInit()<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;<span class="token">the&nbsp;following&nbsp;controls&nbsp;have&nbsp;been&nbsp;registered&nbsp;as&nbsp;potential&nbsp;Ajax&nbsp;targets:</span><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ActionLink:&nbsp;name='link'<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;<span class="symbol">*no*</span>&nbsp;target&nbsp;control&nbsp;was&nbsp;found&nbsp;for&nbsp;the&nbsp;Ajax&nbsp;request<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;'link'&nbsp;ActionLink.onDestroy()<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.onDestroy()<br>
+[Click]&nbsp;[info&nbsp;]&nbsp;handleRequest:&nbsp;&nbsp;/ajax/ajax-behavior.htm&nbsp;-&nbsp;87&nbsp;ms</p></div><p>Notice from the log that the only request parameters sent is
+      <code class="varname">actionLink=link</code>.
+      </p><p>Next, the log prints which controls have been registered as <code class="literal">potential
+      Ajax targets</code>. In our example we added an AjaxBehavior to the
+      ActionLink so the ActionLink is registered as an Ajax target.
+      </p><p>Finally, we see that <span class="symbol">*no*</span> Ajax target control was found.
+      This is because the ActionLink ID attribute, <code class="varname">link-id</code>,
+      does not match the incoming request parameter, <code class="varname">actionLink=link</code>,
+      hence the ActionLink was not identified as the <code class="literal">Ajax request target</code>
+      and no response is rendered.
+      </p></div><div class="sect2" title="4.4.3.&nbsp;Ajax Trace Log - No Target AjaxBehavior Found"><div class="titlepage"><div><div><h3 class="title"><a name="ajax-trace-log-no-target-ajax-behavior"></a>4.4.3.&nbsp;Ajax Trace Log - No Target AjaxBehavior Found</h3></div></div></div><p>Below we show a log trace where no <code class="literal">target AjaxBehavior</code>
+      is found. This can occur if no <code class="classname">AjaxBehavior's</code>
+      <span class="symbol">isRequestTarget</span> returns true.
+      </p><div class="literallayout"><p>[Click]&nbsp;[debug]&nbsp;GET&nbsp;http://localhost:9999/mycorp/ajax/ajax-behavior.htm<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;<span class="symbol">is&nbsp;Ajax&nbsp;request</span>:&nbsp;<code class="varname">true</code><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;param:&nbsp;<code class="varname">actionLink=link</code><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;param:&nbsp;<code class="varname">link-id=1</code><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.&lt;&lt;init&gt;&gt;<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.onSecurityCheck()&nbsp;:&nbsp;true<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.onInit()<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;'link'&nbsp;ActionLink.onInit()<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;following&nbsp;controls&nbsp;have&nbsp;been&nbsp;registered&nbsp;as&nbsp;potential&nbsp;Ajax&nbsp;targets:<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ActionLink:&nbsp;name='link'<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;'link'&nbsp;ActionLink.isAjaxTarget()&nbsp;:&nbsp;true&nbsp;(Ajax&nbsp;target&nbsp;control&nbsp;found)<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;'link'&nbsp;ActionLink.onProcess()&nbsp;:&nbsp;true<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;<span class="token">processing&nbsp;AjaxBehaviors&nbsp;for&nbsp;control:&nbsp;'link'&nbsp;ActionLink</span><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.1.<span class="symbol">isRequestTarget()</span>&nbsp;:&nbsp;<code class="varname">false</code><br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;<span class="symbol">*no*</span>&nbsp;target&nbsp;AjaxBehavior&nbsp;found&nbsp;for&nbsp;<code class="varname">'link'&nbsp;ActionLink</code>&nbsp;-&nbsp;invoking&nbsp;AjaxBehavior.isRequestTarget()&nbsp;returned&nbsp;false&nbsp;for&nbsp;all&nbsp;AjaxBehaviors<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;'link'&nbsp;ActionLink.onDestroy()<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;AjaxBehaviorPage.onDestroy()<br>
+[Click]&nbsp;[info&nbsp;]&nbsp;handleRequest:&nbsp;&nbsp;/ajax/ajax-behavior.htm&nbsp;-&nbsp;80&nbsp;ms<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></div><p>We can see from the log that the Ajax request sent the parameters,
+      <code class="varname">link-id=1</code> and <code class="varname">actionLink=link</code> to the server.
+      </p><p>Next we notice that the AjaxBehavior <span class="symbol">isRequestTarget()</span>
+      returned <code class="varname">false</code>.
+      </p><p>Finally we see that <span class="symbol">*no*</span> target AjaxBehavior was found
+      for the <code class="literal">Ajax target control</code>, <code class="varname">'link' ActionLink</code>.
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s03.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch04s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.3.&nbsp;AjaxBehavior Execution&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;4.5.&nbsp;Ajax Page Action</td></tr></table></div></body></html>

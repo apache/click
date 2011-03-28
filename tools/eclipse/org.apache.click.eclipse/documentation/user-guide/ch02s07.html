@@ -1,0 +1,136 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.7.&nbsp;Page Actions</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Pages"><link rel="prev" href="ch02s06.html" title="2.6.&nbsp;Page Templating"><link rel="next" href="ch02s08.html" title="2.8.&nbsp;Direct Rendering"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.7.&nbsp;Page Actions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s06.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;2.&nbsp;Pages</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s08.html">Next</a></td></tr></table><hr></div><div class="sect1" title="2.7.&nbsp;Page Actions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="page-actions"></a>2.7.&nbsp;Page Actions</h2></div></div></div><p>Page Action is a feature to directly invoke a <code class="literal">Page method</code>
+    from the browser. The Page Action method returns an
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ActionResult.html" target="_blank">ActionResult</a>
+    object that is rendered directly to the browser. In other words the Page template will
+    not be rendered.
+    </p><p>To invoke a Page Action, specify the parameter <code class="varname">"pageAction"</code>
+    and the name of the page method, for example: <span class="symbol">"onRenderImage"</span>.
+    </p><p>Let's take a quick look at how a Page Action can be leveraged to retrieve
+    an image. In this example we'll create an HTML <code class="literal">&lt;img&gt;</code>
+    element which <code class="literal">src</code> attribute specifies the Page Action
+    that will return the image data.
+    </p><p>First we create our template:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;img</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">src</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"$context/mycorp/image.htm?</span><code class="varname">pageAction</code>=<span class="symbol">onRenderImage</span>"/&gt;
+</pre><p>Next we create our ImagePage with a Page Action method called
+    <span class="symbol">onRenderImage</span> that returns an <span class="token">ActionResult</span>
+    instance:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> ImagePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span class="token">ActionResult</span> <span class="symbol">onRenderImage()</span> {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">byte</span>[] imageData = getImageAsBytes();
+        String contentType = ClickUtils.getMimeType(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"png"</span>);
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> <span class="token">ActionResult</span>(imageData, contentType);
+    }
+} </pre><p>A Page Action is a normal Page method with the following signature:
+    a <span class="symbol">public no-arg</span> method returning an <span class="token">ActionResult</span>
+    instance:
+    </p><pre class="programlisting">
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// The Page Action method is public, doesn't accept any arguments and returns an ActionResult</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span class="token">ActionResult</span> <span class="symbol">onRenderImage()</span> {
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">byte</span>[] imageData = getImageAsBytes();
+    String contentType = ClickUtils.getMimeType(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"png"</span>);
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> <span class="token">ActionResult</span>(imageData, contentType);
+} </pre><p>The <span class="token">ActionResult</span> contains the data that is rendered to
+    the client browser. In the example above, the result will the Image byte array
+    with a Content-Type of: <code class="literal">"images/png"</code>.
+    </p><div class="sect2" title="2.7.1.&nbsp;Page Action Execution"><div class="titlepage"><div><div><h3 class="title"><a name="page-action-execution"></a>2.7.1.&nbsp;Page Action Execution</h3></div></div></div><p>Page Actions are page methods that handle the processing of a user
+        request and render a result to the browser. The execution sequence for a
+        Page Action being processed and rendered is illustrated in the figure below.
+        </p><div class="figure"><a name="page-action-sequence-diagram"></a><div class="figure-contents"><span class="inlinemediaobject"><img src="images/pages/page-action-sequence-diagram.png" alt="Page Action Request Sequence Diagram"></span></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;2.5.&nbsp;Page Action Request Sequence Diagram
+          </i></p></div><br class="figure-break"><p>Stepping through this Page Action request sequence, a new Page instance
+        is created and the attributes for the Page are set (format, headers). Next,
+        request parameter values are bound to matching Page fields.
+        </p><p>Then the <code class="methodname">onSecurityCheck()</code> handler is executed.
+        This method can be used to ensure the user is authorized to access the Page Action,
+        and if necessary abort any further processing. If
+        <code class="methodname">onSecurityCheck()</code> return false, no response is
+        sent back to the client. Note, if you want to send a specific response to
+        the client you have to do that from the
+        <code class="methodname">onSecurityCheck()</code> event, since other Page events
+        are not executed. Please see
+        <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://click.avoka.com/click-examples/ajax/ajax-secure.htm" target="_blank">this</a>
+        example for some strategies on implementing
+        <code class="methodname">onSecurityCheck</code>  to handle ajax requests.
+            </p><p>Next the target <code class="methodname">page method</code> is invoked
+        which returns an <code class="classname">ActionResult</code> that is rendered to
+        the client.</p><p>If the page method returns <code class="literal">null</code> no response is
+        rendered to the browser.
+        </p></div><div class="sect2" title="2.7.2.&nbsp;ActionResult"><div class="titlepage"><div><div><h3 class="title"><a name="page-action-result"></a>2.7.2.&nbsp;ActionResult</h3></div></div></div><p>An ActionResult represents the content returned by a Page Action
+        which is then rendered to the client browser. ActionResults normally
+        contains HTML or image data that is rendered to the browser. When a Page
+        Action is invoked the Page template rendering is bypassed and only the
+        ActionResult content is rendered to the browser. This allows a Page Action
+        to return a "partial" response, as opposed to a "full" response, because
+        the Page template (which can be viewed as a "full" response) is bypassed
+        when invoking a Page Action.
+        </p></div><div class="sect2" title="2.7.3.&nbsp;Page Action Example"><div class="titlepage"><div><div><h3 class="title"><a name="page-action-example"></a>2.7.3.&nbsp;Page Action Example</h3></div></div></div><p>Let's step through a Page Action example. First we create an ImagePage
+        class with the method "getImageData" which is the Page Action we want to invoke:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> ImagePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> ActionResult getImageData() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">byte</span>[] imageData = loadImageData();
+        String contentType = ClickUtils.getContentType(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"png"</span>);
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ActionResult(imageData, contentType);
+    }
+} </pre><p>Next we have the page template image.htm:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;html&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;body&gt;</span>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;img</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">src</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"/mycorp/image.htm?</span><code class="varname">pageAction</code>=<span class="symbol">getImageData</span>"/&gt;
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/body&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/html&gt;</span> </pre><p>The browser renders the <code class="literal">&lt;img&gt;</code> element and
+      requests the image src url. Click invokes the page method <span class="symbol">getImageData</span>
+      and renders the result to the browser.
+      </p><p>Looking at the output log we see the following trace:
+      </p><div class="literallayout"><p>[Click]&nbsp;[info&nbsp;]&nbsp;handleRequest:&nbsp;&nbsp;/image.htm&nbsp;-&nbsp;84&nbsp;ms<br>
+[Click]&nbsp;[debug]&nbsp;GET&nbsp;http://localhost:8080/mycorp/image.htm<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;Ajax&nbsp;request:&nbsp;false<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;param:&nbsp;pageAction=getImageData<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;ImagePage.&lt;&lt;init&gt;&gt;<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;ImagePage.onSecurityCheck()&nbsp;:&nbsp;true<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;ImagePage.getImageData()&nbsp;:&nbsp;ActionResult<br>
+[Click]&nbsp;[info&nbsp;]&nbsp;&nbsp;&nbsp;&nbsp;renderActionResult&nbsp;(image/png)&nbsp;-&nbsp;0&nbsp;ms<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;ImagePage.onDestroy()<br>
+[Click]&nbsp;[info&nbsp;]&nbsp;handleRequest:&nbsp;&nbsp;/image.htm&nbsp;-&nbsp;98&nbsp;ms</p></div></div><div class="sect2" title="2.7.4.&nbsp;Accessing Request Parameters"><div class="titlepage"><div><div><h3 class="title"><a name="page-action-accessing-request-parameters"></a>2.7.4.&nbsp;Accessing Request Parameters</h3></div></div></div><p>Request parameters can be accessed through the <code class="classname">Context</code>
+        as shown below:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> ImagePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> ActionResult getImageData() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Retrieve a request parameter through the Context</span>
+        Context context = getContext();
+        String imageName = context.getRequestParameter(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"imageName"</span>);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">byte</span>[] imageData = loadImageData(imageName);
+        String contentType = ClickUtils.getContentType(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"png"</span>);
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ActionResult(imageData, contentType);
+    }
+} </pre></div><div class="sect2" title="2.7.5.&nbsp;Set response headers and status code"><div class="titlepage"><div><div><h3 class="title"><a name="page-action-set-response-headers"></a>2.7.5.&nbsp;Set response headers and status code</h3></div></div></div><p>When handling a Page Action you might need to set the HTTP response
+      headers or status code. You do this through the Servlet API's,
+      <code class="classname">HttpServetlResponse</code> which can be accessed
+      through the <code class="classname">Context</code>.
+      </p><p>For example:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">package</span> examples.page;
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">import</span> java.util.Date;
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">import</span> org.apache.click.Page;
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> ImagePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> ActionResult getImageData() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Headers and Status code are set on the HttpServletResponse</span>
+        HttpServletResponse response = getContext().getResponse();
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// The headers can be set as follows:</span>
+        response.setHeader(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Content-Disposition"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"attachment; filename=\"report.xls\""</span>);
+
+        ...
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// The response status can be set as follows:</span>
+        response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+
+        ...
+    }
+} </pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s06.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.6.&nbsp;Page Templating&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.8.&nbsp;Direct Rendering</td></tr></table></div></body></html>

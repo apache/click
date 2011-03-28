@@ -1,0 +1,74 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;1.&nbsp;Introduction to Apache Click</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="index.html" title="Apache Click"><link rel="prev" href="index.html" title="Apache Click"><link rel="next" href="ch01s02.html" title="1.2.&nbsp;Control Listener Type 1 Example"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Introduction to Apache Click</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch01s02.html">Next</a></td></tr></table><hr></div><div class="chapter" title="Chapter&nbsp;1.&nbsp;Introduction to Apache Click"><div class="titlepage"><div><div><h2 class="title"><a name="chapter-introduction"></a>Chapter&nbsp;1.&nbsp;Introduction to Apache Click</h2></div></div></div><div class="toc"><dl><dt><span class="sect1"><a href="ch01.html#hello-world">1.1. Hello World Example</a></span></dt><dt><span class="sect1"><a href="ch01s02.html">1.2. Control Listener Type 1 Example</a></span></dt><dt><span class="sect1"><a href="ch01s03.html">1.3. Control Listener Type 2 Example</a></span></dt><dt><span class="sect1"><a href="ch01s04.html">1.4. Simple Table Example</a></span></dt><dt><span class="sect1"><a href="ch01s05.html">1.5. Advanced Table Example</a></span></dt><dt><span class="sect1"><a href="ch01s06.html">1.6. Simple Form Example</a></span></dt><dt><span class="sect1"><a href="ch01s07.html">1.7. Advanced Form Example</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch01s07.html#form-layout">1.7.1. Form Layout</a></span></dt></dl></dd></dl></div><p>Apache Click is a simple JEE web application framework for commercial
+  Java developers.
+  </p><p>Apache Click is an open source project, licensed under the
+  <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../LICENSE.txt" target="_blank"><em class="citetitle">Apache license</em>
+  </a>.
+  </p><p>Click uses an event based programming model for processing Servlet
+  requests and <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../velocity/velocity.html" target="_blank">Velocity</a> for
+  rendering the response. (Note other template engines such as
+  <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://java.sun.com/products/jsp/" target="_blank">JSP</a> and
+  <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://freemarker.sourceforge.net/" target="_blank">Freemarker</a> are also
+  supported)
+  </p><p>This framework uses a single servlet, called
+  <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ClickServlet.html" target="_blank">ClickServlet</a>,
+  to act as a request dispatcher. When a request arrives ClickServlet creates
+  a <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Page.html" target="_blank">Page</a>
+  object to process the request and then uses the page's Velocity template to
+  render the results.
+  </p><p>Pages provide a simple thread safe programming environment, with a new
+  page instance created for each servlet request.
+  </p><p>Possibly the best way to see how Click works is to dive right in and
+  look at some examples. (The examples are also available online at
+  <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://click.avoka.com/click-examples/" target="_blank">http://click.avoka.com/click-examples/</a>
+  under the menu "Intro Examples".)
+  </p><div class="sect1" title="1.1.&nbsp;Hello World Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="hello-world"></a>1.1.&nbsp;Hello World Example</h2></div></div></div><p>A Hello World example in Click would look something like this.
+    </p><p>First we create a <code class="classname">HelloWorld</code> page class:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">package</span> <span class="symbol">examples.page</span>;
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">import</span> java.util.Date;
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">import</span> org.apache.click.Page;
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> HelloWorld <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> Date time = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Date(); <a class="co" name="co-hello-world-date" href="ch01.html#ca-hello-world-date"><img src="images/callouts/1.gif" alt="1" border="0"></a>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> HelloWorld() {
+        addModel(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"time"</span>, time); <a class="co" name="co-hello-world-addmodel" href="ch01.html#ca-hello-world-addmodel"><img src="images/callouts/2.gif" alt="2" border="0"></a>
+    }
+
+}</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-hello-world-date"></a><a href="#co-hello-world-date"><img src="images/callouts/1.gif" alt="1" border="0"></a> </td><td valign="top" align="left"><p>Assign a new Date instance to the <code class="literal">time</code> variable.
+        </p></td></tr><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-hello-world-addmodel"></a><a href="#co-hello-world-addmodel"><img src="images/callouts/2.gif" alt="2" border="0"></a> </td><td valign="top" align="left"><p>Add the <code class="literal">time</code> variable to the Page model under
+        the name <code class="varname">"time"</code>. Click ensures all objects added
+        to the Page model is automatically available in the Page template.
+        </p></td></tr></table></div><p>Next we have a page template <code class="varname">hello-world.htm</code>,
+    <a class="indexterm" name="d0e101"></a>
+    where we can access the Page's <code class="literal">time</code> variable using the
+    reference <code class="varname">$time</code>:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;html&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;body&gt;</span>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;h2&gt;</span>Hello World<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/h2&gt;</span>
+
+    Hello world from Click at <code class="varname">$time</code>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/body&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/html&gt;</span></pre><p>Click is smart enough to figure out that the <code class="classname">HelloWorld</code>
+    page class maps to the template <code class="varname">hello-world.htm</code>. We only
+    have to inform Click of the <span class="package">package</span> of the HelloWorld
+    class, in this case <span class="symbol">examples.page</span>. We do that through the
+    <a class="link" href="ch05s02.html" title="5.2.&nbsp;Application Configuration">click.xml</a> configuration
+    file which allows Click to map <code class="varname">hello-world.htm</code> requests
+    to the <code class="classname">examples.page.HelloWorld</code> page class.
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"</span><span class="symbol">examples.page</span>"/&gt;
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre><p>At runtime the following sequence of events occur. The ClickSerlvet
+    maps a GET <code class="varname">hello-world.htm</code> request to our page class
+    <code class="classname">example.page.HelloWorld</code> and creates a new instance.
+    The HelloWorld page creates a new private <span class="emphasis"><em>Date</em></span> object,
+    which is added to the page's model under the name <code class="varname">time</code>.
+    </p><p>The page model is then merged with the template which substitutes
+    the <code class="varname">$time</code> reference with the <span class="emphasis"><em>Date</em></span>
+    object. Velocity then renders the merged template as:
+    </p><div class="figure"><a name="hello-world-screenshot"></a><div class="figure-contents"><span class="inlinemediaobject"><img src="images/introduction/hello-world-screenshot.png" alt="Hello World Screenshot"></span></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;1.1.&nbsp;Hello World Screenshot</i></p></div><br class="figure-break"></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch01s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Apache Click&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;1.2.&nbsp;Control Listener Type 1 Example</td></tr></table></div></body></html>

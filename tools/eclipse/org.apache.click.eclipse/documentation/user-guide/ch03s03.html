@@ -1,0 +1,34 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.3.&nbsp;Control Classes</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Controls"><link rel="prev" href="ch03s02.html" title="3.2.&nbsp;Control Listener"><link rel="next" href="ch03s04.html" title="3.4.&nbsp;Message Properties"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.3.&nbsp;Control Classes</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;3.&nbsp;Controls</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr></div><div class="sect1" title="3.3.&nbsp;Control Classes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="control-class"></a>3.3.&nbsp;Control Classes</h2></div></div></div><p>Core control classes are defined in the package
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/package-summary.html" target="_blank">org.apache.click.control</a>.
+    This package includes controls for the essential HTML elements.
+    </p><p>Extended control classes are provided in the Click Extras package
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/control/package-summary.html" target="_blank">org.apache.click.extras.control</a>.
+    Click Extras classes can contain dependencies to 3rd party frameworks.
+    </p><p>A subset of these control classes are depicted in the figure below.
+    </p><div class="figure"><a name="control-package-class-diagram"></a><div class="figure-contents"><span class="inlinemediaobject"><img src="images/controls/control-package-class-diagram.png" alt="Package Class Diagram"></span></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;3.3.&nbsp;Package Class Diagram
+      </i></p></div><br class="figure-break"><p>The key control classes include:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/ActionLink.html" target="_blank">ActionLink</a>
+          - provides an anchor link that can invoke action listeners.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Field.html" target="_blank">Field</a>
+          - provides the abstract form field control.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Form.html" target="_blank">Form</a>
+          - provides a form control for processing, validation and rendering.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Submit.html" target="_blank">Submit</a>
+          - provides an input type submit control that can invoke action listeners.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/TextField.html" target="_blank">TextField</a>
+          - provides an input type text control that can invoke action listeners.
+        </p></li></ul></div><p>The control classes are designed to support subclassing for customized
+    behaviour. All control fields have protected visibility and have public
+    accessor methods.
+    </p><p>You can also aggregate controls to build more complex controls. For
+    example the <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/control/CreditCardField.html" target="_blank">CreditCardField</a>
+    uses a <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Select.html" target="_blank">Select</a>
+    control to render the different credit card types.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.2.&nbsp;Control Listener&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.4.&nbsp;Message Properties</td></tr></table></div></body></html>
