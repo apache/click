@@ -52,10 +52,10 @@ import org.eclipse.jst.j2ee.webapplication.WebapplicationFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IDelegate;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.eclipse.wst.html.internal.validation.HTMLValidator;
-import org.eclipse.wst.validation.internal.ConfigurationManager;
-import org.eclipse.wst.validation.internal.ProjectConfiguration;
-import org.eclipse.wst.validation.internal.ValidatorMetaData;
+import org.eclipse.wst.validation.IMutableValidator;
+import org.eclipse.wst.validation.MutableProjectSettings;
+import org.eclipse.wst.validation.MutableWorkspaceSettings;
+import org.eclipse.wst.validation.ValidationFramework;
 
 /**
  * Installs the click facet.
@@ -111,21 +111,22 @@ public class ClickFacetInstallDelegate implements IDelegate {
 
 			// Disable HTML validator
 			try {
-				ProjectConfiguration projectConfig
-					= ConfigurationManager.getManager().getProjectConfiguration(project);
-				ValidatorMetaData[] meta = projectConfig.getValidators();
-				List<ValidatorMetaData> enables = new ArrayList<ValidatorMetaData>();
-				for(int i=0;i<meta.length;i++){
-					if(!meta[i].getValidatorUniqueName().equals(HTMLValidator.class.getName())){
-						enables.add(meta[i]);
-					}
-				}
-				projectConfig.setDoesProjectOverride(true);
+				MutableWorkspaceSettings globalSettings = ValidationFramework.getDefault().getWorkspaceSettings();
 
-				projectConfig.setEnabledManualValidators(
-						(ValidatorMetaData[])enables.toArray(new ValidatorMetaData[enables.size()]));
-				projectConfig.setEnabledBuildValidators(
-						(ValidatorMetaData[])enables.toArray(new ValidatorMetaData[enables.size()]));
+				List<IMutableValidator> mvs = new ArrayList<IMutableValidator>();
+				for(IMutableValidator mv: globalSettings.getValidators()){
+					if(mv.getId().equals("org.eclipse.wst.html.ui.HTMLValidator")){
+						mv.setBuildValidation(false);
+						mv.setManualValidation(false);
+					}
+					mvs.add(mv);
+				}
+
+				MutableProjectSettings projectSettings = new MutableProjectSettings(
+						project, mvs.toArray(new IMutableValidator[mvs.size()]));
+				projectSettings.setOverride(true);
+
+				ValidationFramework.getDefault().applyChanges(projectSettings, true);
 
 			} catch(Exception ex){
 				//ex.printStackTrace();
