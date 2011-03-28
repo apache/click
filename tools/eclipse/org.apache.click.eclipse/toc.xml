@@ -18,11 +18,12 @@
 -->
 <toc label="Apache Click">
   <topic label="Click User Guide" href="documentation/user-guide/index.html">
-    <topic label="Introduction to Click" href="documentation/user-guide/ch01.html"/>
+    <topic label="Introduction to Apache Click" href="documentation/user-guide/ch01.html"/>
     <topic label="Pages" href="documentation/user-guide/ch02.html"/>
     <topic label="Controls" href="documentation/user-guide/ch03.html"/>
-    <topic label="Configuration" href="documentation/user-guide/ch04.html"/>
-    <topic label="Best Practices" href="documentation/user-guide/ch05.html"/>
+    <topic label="Ajax" href="documentation/user-guide/ch04.html"/>
+    <topic label="Configuration" href="documentation/user-guide/ch05.html"/>
+    <topic label="Best Practices" href="documentation/user-guide/ch06.html"/>
   </topic>
   <topic label="Javadoc" href="documentation/javadoc.html">
     <topic label="Click API" href="http://click.apache.org/docs/click-api/overview-summary.html"/>
