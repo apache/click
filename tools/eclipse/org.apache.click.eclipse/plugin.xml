@@ -33,7 +33,7 @@
       <description>Click Description</description>
     </project-facet>
 
-    <project-facet-version facet="click" version="2.2.0">
+    <project-facet-version facet="click" version="2.3.0">
        <constraint>
         <and>
           <requires facet="jst.web" version="[2.3"/>
@@ -45,7 +45,7 @@
           facet="click"
           id="click.install"
           type="install"
-          version="2.2.0">
+          version="2.3.0">
       <delegate class="org.apache.click.eclipse.core.facet.ClickFacetInstallDelegate"/>
       <config-factory class="org.apache.click.eclipse.core.facet.ClickFacetInstallDataModelProvider"/>
       <!--
@@ -57,7 +57,7 @@
        facet="click"
        id="click.uninstall"
        type="uninstall"
-       version="2.2.0">
+       version="2.3.0">
       <delegate class="org.apache.click.eclipse.core.facet.ClickFacetUninstallDelegate"/>
  	</action>
   </extension>
@@ -65,7 +65,7 @@
   <extension point="org.eclipse.wst.common.project.facet.core.runtimes">
     <supported>
       <runtime-component any="true"/>
-      <facet id="click" version="2.2.0"/>
+      <facet id="click" version="2.3.0"/>
     </supported>
   </extension>
 
@@ -78,11 +78,11 @@
 
   <extension
         point="org.eclipse.wst.common.project.facet.core.presets">
-     <static-preset id="preset.click.2_1_0">
+     <static-preset id="preset.click.2_3_0">
 	    <label>%preset.name</label>
 	    <facet id="jst.java" version="5.0" />
 	    <facet id="jst.web" version="2.4"/>
-	    <facet id="click" version="2.2.0" />
+	    <facet id="click" version="2.3.0" />
      <description>%preset.description</description>
      </static-preset>
   </extension>
@@ -368,8 +368,8 @@
      <catalogContribution>
         <public
               publicId="-//Apache Software Foundation//DTD Click Configuration 2.2//EN"
-              uri="click-2.2.0/click.dtd"
-              webURL="http://click.apache.org/dtds/click-2.2.dtd">
+              uri="click-2.3.0/click.dtd"
+              webURL="http://click.apache.org/dtds/click-2.3.dtd">
         </public>
      </catalogContribution>
   </extension>

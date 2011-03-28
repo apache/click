@@ -20,7 +20,7 @@
 <feature
       id="org.apache.click.eclipse.feature"
       label="%feature.name"
-      version="2.2.0.0"
+      version="2.3.0.0"
       provider-name="%feature.provider">
 
    <description url="http://www.sunvolt.com/confluence/display/CLKT/ClickIDE">
@@ -242,14 +242,14 @@
          id="org.apache.click.eclipse"
          download-size="0"
          install-size="0"
-         version="2.2.0.0"
+         version="2.3.0.0"
          unpack="false"/>
 
    <plugin
          id="org.apache.click.eclipse.cayenne"
          download-size="0"
          install-size="0"
-         version="2.2.0.0"
+         version="2.3.0.0"
          unpack="false"/>
 
 </feature>
