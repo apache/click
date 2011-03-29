@@ -1,0 +1,7 @@
+org.apache.click
+org.apache.click.ajax
+org.apache.click.control
+org.apache.click.dataprovider
+org.apache.click.element
+org.apache.click.service
+org.apache.click.util

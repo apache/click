@@ -1,0 +1,179 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>5.3.&nbsp;Auto Deployed Files</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Configuration"><link rel="prev" href="ch05s02.html" title="5.2.&nbsp;Application Configuration"><link rel="next" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Best Practices"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5.3.&nbsp;Auto Deployed Files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch05s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;5.&nbsp;Configuration</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td></tr></table><hr></div><div class="sect1" title="5.3.&nbsp;Auto Deployed Files"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="auto-deployed-files"></a>5.3.&nbsp;Auto Deployed Files</h2></div></div></div><p>To make pre-configured resources (templates, stylesheets, etc.)
+    available to web applications, Click automatically deploys configured
+    classpath resources to the <code class="varname">/click</code> directory at startup
+    (if not already present).
+    </p><p>You can modify these support files and Click will
+    <span class="bold"><strong>not</strong></span> overwrite them. These files include:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p> click/error.htm &nbsp; - &nbsp; the Page
+          <a class="link" href="ch02s10.html" title="2.10.&nbsp;Error Handling">Error Handling</a> template
+        </p></li><li class="listitem"><p> click/control.css &nbsp; - &nbsp; the Controls cascading stylesheet</p></li><li class="listitem"><p> click/control.js &nbsp; - &nbsp; the Controls JavaScript library</p></li><li class="listitem"><p> click/not-found.htm &nbsp; - &nbsp; the
+          <a class="link" href="ch02s11.html" title="2.11.&nbsp;Page Not Found">Page Not Found</a> template
+        </p></li></ul></div><p>For example to customize the control styles you can place a customized
+    copy (or even a brand new version) of <code class="filename">control.css</code> under
+    the <code class="varname">/click</code> folder in your web project:
+    </p><div class="literallayout"><p>/webapp/click/control.css</p></div><p>When Click starts up it will <span class="bold"><strong>not</strong></span>
+    override your copy of <code class="filename">control.css</code> with its own default
+    version.
+    </p><p>Different controls might deploy different stylesheet, javascript or image
+    files, however the above principle still applies. By placing a customized copy
+    of the stylesheet, javascript or image under the <code class="varname">/click</code> folder,
+    you will override the default resource.
+    </p><p>Be aware that some of the more complex controls (checklist, colorpicker,
+    tree), deploys resources to subfolders under <code class="varname">/click</code>, for
+    example <code class="literal">/click/checklist/*</code>.
+    </p><p>A control's Javadoc will normally indicate what resources are deployed
+    for that control.
+    </p><div class="sect2" title="5.3.1.&nbsp;Deploying resources in a restricted environment"><div class="titlepage"><div><div><h3 class="title"><a name="deploying-restricted-env"></a>5.3.1.&nbsp;Deploying resources in a restricted environment</h3></div></div></div><p>Some environments place restrictions on the file system and
+      Click won't be able to deploy its resources. WebLogic and
+      Google App Engine are examples of such environments. (Note that WebLogic has
+      a property to allow access to the file system. From the Admin Console go
+      to the <span class="emphasis"><em>Server node &gt; Web Applications</em></span>
+      tab and check the <span class="emphasis"><em>Archived Real Path Enabled</em></span> parameter.)
+      </p><p>If Click cannot deploy its resources because of limited file system
+      access or permissions, warning messages will be logged.
+      </p><p><span class="bold"><strong>Note: </strong></span>if your application is
+      running on a <span class="emphasis"><em>Servlet 3.0</em></span> compliant server, there is
+      no need to deploy resources. Servlet 3.0 specifies that if the server
+      cannot find a resource in the root directory of the webapp, it will look
+      for the resource under <span class="emphasis"><em>'META-INF/resources'</em></span>, and if
+      found, serve it up. Click is Servlet 3.0 compliant and packages its
+      resources under <span class="emphasis"><em>'META-INF/resources'</em></span>.
+      </p><p>Click provides a number of options to make resources available
+      in restricted environments which is covered below:
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>The first option (which will work in all environments) is to deploy
+          the resources at build time. Click ships with an Ant Task
+          called DeployTask that deploys Click static resources to a web
+          application. With this option Click's static resources can be copied
+          to the root directory of your webapp, where you can customize the
+          resources further if needed. The DeployTask can easily be incorporated
+          into your build script.
+          </p><p>Currently the DeployTask is part of the <code class="filename">click-dev-tools-xxx.jar</code>
+          that can be found in your Click distribution under the <span class="emphasis"><em>lib</em></span>
+          folder.
+          </p><p>Here is a basic example:
+          </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;target</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"deploy"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">description</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Deploy static resources"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;taskdef</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"deploy"</span>
+             <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"org.apache.click.tools.deploy.DeployTask"</span>
+             <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classpath</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"&lt;click-distribution&gt;/lib/click-dev-tasks-1.1.jar"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span> <a class="co" name="co-click-distribution" href="ch05s03.html#ca-click-distribution"><img src="images/callouts/1.gif" alt="1" border="0"></a>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;deploy</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">dir</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"&lt;webapp-root&gt;/WEB-INF"</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">todir</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"&lt;webapp-root&gt;"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span> <a class="co" name="co-webapp-root" href="ch05s03.html#ca-webapp-root"><img src="images/callouts/2.gif" alt="2" border="0"></a>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/target&gt;</span> </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-click-distribution"></a><a href="#co-click-distribution"><img src="images/callouts/1.gif" alt="1" border="0"></a> </td><td valign="top" align="left"><p><code class="literal">&lt;click-distribution&gt;</code> is the location
+              where Click is installed on your machine, for example:
+              <code class="literal">C:\software\click-2.1.0\</code>.
+              </p></td></tr><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-webapp-root"></a><a href="#co-webapp-root"><img src="images/callouts/2.gif" alt="2" border="0"></a> </td><td valign="top" align="left"><p><code class="literal">&lt;webapp-root&gt;</code> is the root directory
+              of your webapp, for example: <code class="literal">C:\dev\my-webapp\</code>.
+              </p></td></tr></table></div><p>We use the <span class="emphasis"><em>&lt;deploy&gt;</em></span> Ant Task and specify
+          the attributes <code class="varname">dir</code> and <code class="varname">todir</code>.
+          </p><p><code class="varname">dir</code> specifies the <span class="emphasis"><em>source</em></span>
+          directory to scan for JARs and folders containing static resources,
+          while <code class="varname">todir</code> specifies the <span class="emphasis"><em>target</em></span>
+          directory where the resources should be copied to.
+          </p><p><code class="varname">dir</code> should point to your web application's
+          <span class="emphasis"><em>WEB-INF</em></span> folder, since that is where Click's JARs
+          will be located. <code class="varname">todir</code> should point to your web
+          application's root directory, since that is where Click's resources
+          will be served from.
+          </p><p>The DeployTask also supports nested
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://ant.apache.org/manual/CoreTypes/fileset.html" target="_blank">FileSets</a>
+          if you need to deploy resources from multiple source locations. For
+          example:</p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;target</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"deploy"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">description</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Deploy static resources"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;taskdef</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"deploy"</span>
+             <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"org.apache.click.tools.deploy.DeployTask"</span>
+             <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classpath</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"&lt;click-distribution&gt;/lib/click-dev-tasks-1.1.jar"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;deploy</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">todir</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"${dir.webapp}"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;fileset</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">dir</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"&lt;webapp-root&gt;/WEB-INF"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;include</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"**/classes"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;include</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"**/*.jar"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/fileset&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;fileset</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">dir</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"/some/folder/with/jars"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;include</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"lib-with-resources.jar"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;include</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"another-lib-with-resources.jar"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/fileset&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/deploy&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/target&gt;</span> </pre><p>The DeployTask also generates an HTML report in the same folder
+          where the build script is executed from. The report will indicate
+          which resources was deployed successfully and which resources
+          in your webapp root directory is outdated. (An outdated resource means
+          that the resource in the <span class="emphasis"><em>click-xxx.jar</em></span> differs
+          from the resource currently present in your webapp root directory.
+          This can happen when upgrading to a new version of Click)
+          </p></li><li class="listitem"><p>Another option is to add a mapping in <span class="emphasis"><em>web.xml</em></span>
+          to inform ClickServlet to serve static resources. This feature is made
+          available through the
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/service/ResourceService.html" target="_blank">ResourceService</a>
+          interface and its default implementation,
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/service/ClickResourceService.html" target="_blank">ClickResourceService</a>.
+          Below is an example:
+          </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-name&gt;</span>ClickServlet<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-name&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-class&gt;</span>org.apache.click.ClickServlet<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-class&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;load-on-startup&gt;</span>0<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/load-on-startup&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet&gt;</span>
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-mapping&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-name&gt;</span>ClickServlet<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-name&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;url-pattern&gt;</span>*.htm<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/url-pattern&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-mapping&gt;</span>
+
+ <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">&lt;!-- Inform ClickServlet to serve static resources contained under the /click/*
+       directory directly from Click's JAR files. --&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-mapping&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-name&gt;</span>ClickServlet<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-name&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;url-pattern&gt;</span>/click/*<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/url-pattern&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-mapping&gt;</span></pre><p>With this setup, ClickServlet will serve all static
+          <code class="varname">/click/*</code> resources directly from Click's JAR files.
+          </p><p>One restriction of ClickResourceService is it only serves
+          resources from the <span class="emphasis"><em>/click/*</em></span> folder. So if you use
+          third-party Click libraries that serve their resources from a different
+          folder e.g. <span class="emphasis"><em>/clickclick/*</em></span>, this option won't work
+          out-of-the-box.
+          </p><p>Also note that with this option Click's resources are served
+          directly from the JAR files, you won't be able to customize the resources,
+          if for example you want change the default styling through CSS.
+          </p></li><li class="listitem"><p>Another option is to manually deploy the resources. Click
+          resources are packaged in JARs under the directory
+          <span class="emphasis"><em>META-INF/resources</em></span>. You can use your IDE
+          to navigate into the JARs and copy all the resources from
+          <span class="emphasis"><em>META-INF/resources</em></span> to your webapp root directory.
+          </p><p>For example, to deploy the resources from
+          <span class="emphasis"><em>click-core.jar</em></span>, copy the <span class="emphasis"><em>/click</em></span>
+          folder and its contents to your web application root folder.
+          </p></li><li class="listitem"><p>And finally you can access Click's resources by deploying your
+          application on a development machine where there are no file system
+          restrictions and the WAR/EAR can be unpacked. You can then copy the
+          deployed resources to your webapp root directory.
+          </p></li></ul></div></div><div class="sect2" title="5.3.2.&nbsp;Deploying Custom Resources"><div class="titlepage"><div><div><h3 class="title"><a name="deploying-custom-resources"></a>5.3.2.&nbsp;Deploying Custom Resources</h3></div></div></div><p> Click supports two ways of deploying pre-configured resources
+      (templates, stylesheets, JavaScript etc.) from a Jar to a web application.
+      (This assumes that the environment Click is running in supports having
+      write access to the file system and that the WAR is unpacked.)
+      </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p> Through a Control's
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#onDeploy(javax.servlet.ServletContext)" target="_blank">onDeploy()</a>
+          event handler. See the <a class="link" href="ch05s02.html#application-controls" title="5.2.7.&nbsp;Controls">Controls</a>
+          section above.
+          </p></li><li class="listitem"><p>By packaging the resources (stylesheets, JavaScript, Images etc.)
+          into a special folder called <span class="emphasis"><em>'META-INF/resources'</em></span>.
+          </p></li></ol></div><p>As option #1 was already discussed above in section
+      <a class="link" href="ch05s02.html#application-controls" title="5.2.7.&nbsp;Controls">Controls</a>, lets look at option #2.
+      </p><p>When Click starts up, it scans each Jar and folder on the classpath
+      for specially marked entries starting with 'META-INF/resources/'. (Please
+      note that even though Click will scan the entire classpath it is strongly
+      recommended to host your Jar files under your WAR lib folder e.g. WEB-INF/lib.
+      Sharing Jars on the classpath can lead to class loading issues.)
+      </p><p>Click will then copy all files found under 'META-INF/resources/' to
+      the root directory of the webapp.
+      </p><p>
+      For example, given a Jar file with the following entries:
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>META-INF/resources/mycorp/edit_customer.js</p></li><li class="listitem"><p>META-INF/resources/mycorp/edit_customer.css</p></li><li class="listitem"><p>mycorp/pages/EditCustomerPage.class</p></li></ul></div><p>Click will copy the files <span class="emphasis"><em>'/mycorp/edit_customer.js'</em></span>
+      and <span class="emphasis"><em>'/mycorp/edit_customer.css'</em></span> to the web application
+      folder.
+      </p><p>Thus if the web application is called 'webapp', the files will be
+      deployed as <span class="emphasis"><em>'webapp/mycorp/edit_customer.js'</em></span> and
+      <span class="emphasis"><em>'webapp/mycorp/edit_customer.css'</em></span>.
+      </p><p>Option #2 is the recommended approach for deploying your own
+      resources since it makes the managing and maintenance of resources much
+      easier.
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch05s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch05.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">5.2.&nbsp;Application Configuration&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;6.&nbsp;Best Practices</td></tr></table></div></body></html>

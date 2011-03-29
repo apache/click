@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<plugin>
+   <extension-point id="configurationProvider" name="configurationProvider" schema="schema/configurationProvider.exsd"/>
+  <!--===============================================-->
+  <!-- Project Facet -->
+  <!--===============================================-->
+  <extension
+        id="org.apache.click.eclipse.core.facet"
+        name="Click"
+        point="org.eclipse.wst.common.project.facet.core.facets">
+
+    <project-facet id="click">
+      <label>Click</label>
+      <description>Click Description</description>
+    </project-facet>
+
+    <project-facet-version facet="click" version="2.3.0">
+       <constraint>
+        <and>
+          <requires facet="jst.web" version="[2.3"/>
+        </and>
+      </constraint>
+    </project-facet-version>
+
+    <action
+          facet="click"
+          id="click.install"
+          type="install"
+          version="2.3.0">
+      <delegate class="org.apache.click.eclipse.core.facet.ClickFacetInstallDelegate"/>
+      <config-factory class="org.apache.click.eclipse.core.facet.ClickFacetInstallDataModelProvider"/>
+      <!--
+      <config-factory class="net.sf.clickide.core.facet.ClickFacetInstallConfig$Factory"/>
+      -->
+    </action>
+
+	<action
+       facet="click"
+       id="click.uninstall"
+       type="uninstall"
+       version="2.3.0">
+      <delegate class="org.apache.click.eclipse.core.facet.ClickFacetUninstallDelegate"/>
+ 	</action>
+  </extension>
+
+  <extension point="org.eclipse.wst.common.project.facet.core.runtimes">
+    <supported>
+      <runtime-component any="true"/>
+      <facet id="click" version="2.3.0"/>
+    </supported>
+  </extension>
+
+  <extension
+        point="org.eclipse.wst.common.project.facet.ui.wizardPages">
+     <wizard-pages action="click.install">
+        <page class="org.apache.click.eclipse.ui.wizard.ClickFacetWizardPage"/>
+     </wizard-pages>
+  </extension>
+
+  <extension
+        point="org.eclipse.wst.common.project.facet.core.presets">
+     <static-preset id="preset.click.2_3_0">
+	    <label>%preset.name</label>
+	    <facet id="jst.java" version="5.0" />
+	    <facet id="jst.web" version="2.4"/>
+	    <facet id="click" version="2.3.0" />
+     <description>%preset.description</description>
+     </static-preset>
+  </extension>
+
+  <!--===============================================-->
+  <!-- Wizards -->
+  <!--===============================================-->
+  <extension point="org.eclipse.ui.newWizards">
+     <wizard
+           category="org.apache.click.eclipse.category"
+           class="org.apache.click.eclipse.ui.wizard.NewClickPageWizard"
+           icon="icons/click-icon-16x16.png"
+           id="org.apache.click.eclipse.ui.wizard.NewClickPageWizard"
+           name="%wizard.newPage"/>
+     <category
+           id="org.apache.click.eclipse.category"
+           name="%wizard.category"/>
+  </extension>
+
+  <!--===============================================-->
+  <!-- Editors -->
+  <!--===============================================-->
+  <extension point = "org.eclipse.ui.editors">
+    <editor
+          class="org.apache.click.eclipse.ui.editor.ClickEditor"
+          contributorClass="org.apache.click.eclipse.ui.editor.ClickActionBarContributor"
+          default="true"
+          filenames="click.xml"
+          icon="icons/click.gif"
+          id="org.apache.click.eclipse.ui.editor.ClickEditor"
+          name="%editor.clickXML">
+    </editor>
+    <editor
+          class="org.apache.click.eclipse.ui.editor.TemplateEditor"
+          contributorClass="org.apache.click.eclipse.ui.editor.TemplateEditorActionContributor"
+          default="true"
+          extensions="htm"
+          icon="icons/velocity.gif"
+          id="org.apache.click.eclipse.ui.editor.TemplateEditor"
+          name="%editor.template">
+    </editor>
+  </extension>
+
+  <extension point="org.eclipse.core.runtime.contentTypes">
+    <content-type
+      base-type="org.eclipse.core.runtime.xml"
+      default-charset="UTF-8"
+      file-names="click.xml"
+      id="click"
+      name="%contentType.clickXML"
+      priority="high">
+    </content-type>
+    <!--
+    <content-type
+          base-type="org.eclipse.wst.html.core.htmlsource"
+          default-charset="UTF-8"
+          file-extensions="htm"
+          id="template"
+          name="%contentType.template"
+          priority="high"/>
+    -->
+  </extension>
+
+  <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
+    <sourceViewerConfiguration
+      class="org.apache.click.eclipse.ui.editor.ClickXMLTextViewerConfiguration"
+      target="org.apache.click.eclipse.click" />
+    <!--
+    <contentOutlineConfiguration
+      class="org.springframework.ide.eclipse.beans.ui.editor.outline.BeansContentOutlineConfiguration"
+      target="org.apache.click.eclipse.click"/>
+    -->
+    <!--
+    <sourceViewerConfiguration
+      class="org.apache.click.eclipse.ui.editor.TemplateEditorConfiguration"
+      target="org.apache.click.eclipse.template"/>
+    -->
+  </extension>
+  <extension
+      id="clickTemplateValidator"
+      name="Click Template Validator"
+      point="org.eclipse.wst.validation.validator">
+    <validator>
+      <projectNature id="org.eclipse.wst.common.modulecore.ModuleCoreNature"/>
+      <projectNature id="org.eclipse.jdt.core.javanature"/>
+      <filter
+            nameFilter="*.htm"
+            objectClass="org.eclipse.core.resources.IFile"/>
+      <helper
+            class="org.eclipse.wst.validation.internal.operations.WorkbenchContext">
+      </helper>
+      <run
+            enabled="true"
+            class="org.apache.click.eclipse.core.validator.TemplateValidator">
+      </run>
+    </validator>
+  </extension>
+  <extension
+        point="org.eclipse.help.toc">
+     <toc
+           file="toc.xml"
+           primary="true"/>
+  </extension>
+  <extension
+        point="org.eclipse.ui.actionSets">
+     <actionSet
+           id="org.apache.click.eclipse.ui.actionSet"
+           label="Click Action Set"
+           >
+        <menu
+              id="clickMenu"
+              label="Click">
+           <separator name="clickGroup"/>
+        </menu>
+        <action
+              class="org.apache.click.eclipse.ui.actions.NewClickPageAction"
+              icon="icons/click-icon-16x16.png"
+              id="org.apache.click.eclipse.ui.actions.NewClickPageAction"
+              label="%action.newClickPage"
+              toolbarPath="clickGroup"
+              tooltip="New Click page"
+              menubarPath="clickMenu/clickGroup"/>
+     </actionSet>
+  </extension>
+  <extension
+        point="org.eclipse.ui.preferencePages">
+     <page
+           class="org.apache.click.eclipse.preferences.ClickPreferencePage"
+           id="org.apache.click.eclipse.preferences.ClickPreferencePage"
+           name="Click"/>
+     <page
+           class="org.apache.click.eclipse.preferences.ClickTemplatePreferencePage"
+           id="org.apache.click.eclipse.preferences.ClickTemplatePreferencePage"
+           name="%preference.wizardTemplate"
+           category="org.apache.click.eclipse.preferences.ClickPreferencePage"/>
+     <page
+           category="org.apache.click.eclipse.preferences.ClickPreferencePage"
+           class="org.apache.click.eclipse.preferences.TemplateEditorPreferencePage"
+           id="org.apache.click.eclipse.preferences.TemplateEditorPreferencePage"
+           name="%preference.templateEditor"/>
+  </extension>
+  <extension
+        point="org.eclipse.core.runtime.preferences">
+     <initializer class="org.apache.click.eclipse.preferences.ClickPreferenceInitializer"/>
+  </extension>
+
+  <!--===============================================-->
+  <!-- Editor Actions -->
+  <!--===============================================-->
+  <extension
+        point="org.eclipse.ui.editorActions">
+     <editorContribution
+           id="org.apache.click.eclipse.editorContribution1"
+           targetID="org.eclipse.jdt.ui.CompilationUnitEditor">
+        <menu
+              id="clickMenu"
+              label="Click">
+           <separator name="clickGroup"/>
+        </menu>
+        <action
+              class="org.apache.click.eclipse.ui.actions.SwitchToHTMLAction"
+              definitionId="org.apache.click.eclipse.ui.actions.SwitchToHTMLAction"
+              icon="icons/switch.gif"
+              id="org.apache.click.eclipse.ui.actions.SwitchToHTMLAction"
+              label="%action.switchToHTML"
+              menubarPath="clickMenu/clickGroup"
+              style="push"/>
+     </editorContribution>
+     <editorContribution
+           id="org.apache.click.eclipse.editorContribution2"
+           targetID="org.eclipse.wst.html.core.htmlsource.source">
+        <menu
+              id="clickMenu"
+              label="Click">
+           <separator name="clickGroup"/>
+        </menu>
+        <action
+              class="org.apache.click.eclipse.ui.actions.SwitchToClassAction"
+              definitionId="org.apache.click.eclipse.ui.actions.SwitchToClassAction"
+              icon="icons/switch.gif"
+              id="org.apache.click.eclipse.ui.actions.SwitchToClassAction"
+              label="%action.switchToClass"
+              menubarPath="clickMenu/clickGroup"
+              style="push"/>
+     </editorContribution>
+     <editorContribution
+           id="org.apache.click.eclipse.editorContribution3"
+           targetID="org.apache.click.eclipse.ui.editor.TemplateEditor">
+        <menu
+              id="clickMenu"
+              label="Click">
+           <separator name="clickGroup"/>
+        </menu>
+        <action
+              class="org.apache.click.eclipse.ui.actions.SwitchToClassAction"
+              definitionId="org.apache.click.eclipse.ui.actions.SwitchToClassAction"
+              icon="icons/switch.gif"
+              id="org.apache.click.eclipse.ui.actions.SwitchToClassAction"
+              label="%action.switchToClass"
+              menubarPath="clickMenu/clickGroup"
+              style="push"/>
+     </editorContribution>
+  </extension>
+  <extension
+        point="org.eclipse.ui.commands">
+     <command
+           categoryId="org.apache.click.eclipse.category"
+           id="org.apache.click.eclipse.ui.actions.SwitchToHTMLAction"
+           name="%action.switchToHTML"/>
+     <command
+           categoryId="org.apache.click.eclipse.category"
+           id="org.apache.click.eclipse.ui.actions.SwitchToClassAction"
+           name="%action.switchToClass"/>
+     <category
+           id="org.apache.click.eclipse.category"
+           name="Click"/>
+  </extension>
+  <extension
+        point="org.eclipse.ui.bindings">
+     <key
+           commandId="org.apache.click.eclipse.ui.actions.SwitchToHTMLAction"
+           contextId="org.eclipse.jdt.ui.javaEditorScope"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="Ctrl+Alt+S"/>
+     <key
+           commandId="org.apache.click.eclipse.ui.actions.SwitchToClassAction"
+           contextId="org.eclipse.wst.sse.ui.structuredTextEditorScope"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="Ctrl+Alt+S"/>
+  </extension>
+  <!--===============================================-->
+  <!-- Nature and Builders -->
+  <!--===============================================-->
+  <extension
+        id="ClickProjectNature"
+        name="ClickProjectNature"
+        point="org.eclipse.core.resources.natures">
+     <requires-nature id="org.eclipse.jdt.core.javanature"/>
+     <requires-nature id="org.eclipse.wst.common.project.facet.core.nature"/>
+     <requires-nature id="org.eclipse.wst.common.modulecore.ModuleCoreNature"/>
+     <requires-nature id="org.eclipse.jem.workbench.JavaEMFNature"/>
+     <runtime>
+        <run class="org.apache.click.eclipse.core.builder.ClickProjectNature"/>
+     </runtime>
+     <builder id="org.apache.click.eclipse.ClickProjectBuilder"/>
+  </extension>
+  <extension
+        id="ClickProjectBuilder"
+        name="%validator.clickXML"
+        point="org.eclipse.core.resources.builders">
+     <builder hasNature="true">
+        <run class="org.apache.click.eclipse.core.builder.ClickProjectBuilder"/>
+     </builder>
+  </extension>
+  <extension
+        point="org.eclipse.ui.perspectiveExtensions">
+     <perspectiveExtension targetID="org.eclipse.jst.j2ee.J2EEPerspective">
+        <actionSet id="org.apache.click.eclipse.ui.actionSet"/>
+     </perspectiveExtension>
+  </extension>
+  <!--===============================================-->
+  <!-- Property Pages -->
+  <!--===============================================-->
+  <extension
+        point="org.eclipse.ui.propertyPages">
+      <page
+            class="org.apache.click.eclipse.preferences.ClickProjectPropertyPage"
+            id="org.apache.click.eclipse.preferences.ClickProjectPropertyPage"
+            name="Click">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+            </adapt>
+         </enabledWhen>
+         <filter
+               name="nature"
+               value="org.apache.click.eclipse.ClickProjectNature">
+         </filter>
+      </page>
+  </extension>
+  <extension
+        point="org.eclipse.wst.xml.core.catalogContributions">
+     <catalogContribution>
+        <public
+              publicId="-//Apache Software Foundation//DTD Click Configuration 2.2//EN"
+              uri="click-2.3.0/click.dtd"
+              webURL="http://click.apache.org/dtds/click-2.3.dtd">
+        </public>
+     </catalogContribution>
+  </extension>
+
+</plugin>

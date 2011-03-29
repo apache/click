@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<project default="feature_export" name="build">
+
+	<property name="dest.dir" value="dest" />
+	<property name="version" value="2.3.0.0" />
+	<property name="click.plugin" value="../org.apache.click.eclipse" />
+	<property name="cayenne.plugin" value="../org.apache.click.eclipse.cayenne" />
+
+	<!-- Macro for creating a SHA1 checksum -->
+	<macrodef name="digestMacro">
+		<attribute name="file"/>
+	    <sequential>
+	        <checksum file="@{file}" forceOverwrite="true" fileext=".md5"/>
+	        <checksum file="@{file}" forceOverwrite="true" algorithm="SHA1" fileext=".sha1"/>
+	    </sequential>
+	</macrodef>
+
+	<target name="feature_export">
+		<mkdir dir="${dest.dir}"/>
+
+		<!-- Copy LICENSE and NOTICE to each plugin META-INF folder -->
+		<copy file="LICENSE.txt" todir="${click.plugin}/META-INF" />
+		<copy file="NOTICE.txt" todir="${click.plugin}/META-INF" />
+		<copy file="LICENSE.txt" todir="${cayenne.plugin}/META-INF" />
+		<copy file="NOTICE.txt" todir="${cayenne.plugin}/META-INF" />
+
+		<!-- Copy clickide sources to dest folder -->
+		<copy todir="${dest.dir}/clickide-${version}/src/org.apache.click.eclipse" overwrite="true">
+		    <fileset dir="${click.plugin}/src/">
+		        <exclude name="**/package.html"/>
+	    	</fileset>
+        </copy>
+
+		<!-- Copy clickide cayenne sources to dest folder -->
+		<copy todir="${dest.dir}/clickide-${version}/src/org.apache.click.eclipse.cayenne"  overwrite="true">
+		    <fileset dir="${cayenne.plugin}/src/">
+		        <exclude name="**/package.html"/>
+	    	</fileset>
+        </copy>
+
+		<pde.exportFeatures destination="${dest.dir}/clickide-${version}" exportSource="false"
+			exportType="directory" features="org.apache.click.eclipse.feature" useJARFormat="false"/>
+
+	</target>
+
+	<target name="append_files">
+		<copy file="LICENSE.txt" todir="${dest.dir}/clickide-${version}" />
+		<copy file="NOTICE.txt" todir="${dest.dir}/clickide-${version}" />
+		<copy file="README.txt" todir="${dest.dir}/clickide-${version}" />
+	</target>
+
+	<target name="create_zip">
+		<zip basedir="${dest.dir}/clickide-${version}" destfile="${dest.dir}/clickide-${version}.zip" />
+		<digestMacro file="${dest.dir}/clickide-${version}.zip"/>
+	</target>
+
+	<target name="clean">
+		<delete dir="${dest.dir}" />
+		<delete file="compile.org.apache.click.eclipse.feature.xml" />
+
+		<!-- Remove LICENSE and NOTICE from each plugin META-INF folder -->
+		<delete file="${click.plugin}/META-INF/LICENSE.txt" />
+		<delete file="${click.plugin}/META-INF/NOTICE.txt" />
+		<delete file="${cayenne.plugin}/META-INF/LICENSE.txt" />
+		<delete file="${cayenne.plugin}/META-INF/NOTICE.txt" />
+	</target>
+
+</project>

@@ -1,0 +1,23 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.12.&nbsp;Page Message Properties</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Pages"><link rel="prev" href="ch02s11.html" title="2.11.&nbsp;Page Not Found"><link rel="next" href="ch02s13.html" title="2.13.&nbsp;Page HEAD Elements"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.12.&nbsp;Page Message Properties</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s11.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;2.&nbsp;Pages</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s13.html">Next</a></td></tr></table><hr></div><div class="sect1" title="2.12.&nbsp;Page Message Properties"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="page-message-properties"></a>2.12.&nbsp;Page Message Properties</h2></div></div></div><p>The Page class provides a
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Page.html#messages" target="_blank">messages</a>
+    property which is a
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/util/MessagesMap.html" target="_blank">MessagesMap</a>
+    of localized messages for the page. These messages are made available in the
+    VelocityContext when the page is rendered under the key
+    <code class="literal">messages</code>. So for example if you had a page title message
+    you would access it in your page template as:
+    </p><div class="literallayout"><p>&lt;h1&gt;&nbsp;<span class="symbol">$</span><code class="varname">messages.title</code>&nbsp;&lt;/h1&gt;</p></div><p>This messages map is loaded from the page class property bundle. For
+    example if you had a page class <code class="classname">com.mycorp.page.CustomerList</code>
+    you could have an associated property file containing the pages localized
+    messages:
+    </p><div class="literallayout"><p>/com/mycorp/page/CustomerList.properties</p></div><p>You can also defined a application global page messages properties file:
+    </p><div class="literallayout"><p>/click-page.properties</p></div><p>Messages defined in this file will be available to all pages throughout
+    your application. Note messages defined in your page class properties file
+    will override any messages defined in the application global page properties
+    file.
+    </p><p>Page messages can also be used to override Control messages, see the
+    Controls <a class="link" href="ch03s04.html" title="3.4.&nbsp;Message Properties">Message Properties</a>
+    topic for more details.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s11.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s13.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.11.&nbsp;Page Not Found&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.13.&nbsp;Page HEAD Elements</td></tr></table></div></body></html>

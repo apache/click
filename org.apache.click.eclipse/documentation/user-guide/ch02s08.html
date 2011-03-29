@@ -1,0 +1,47 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.8.&nbsp;Direct Rendering</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Pages"><link rel="prev" href="ch02s07.html" title="2.7.&nbsp;Page Actions"><link rel="next" href="ch02s09.html" title="2.9.&nbsp;Stateful Pages"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.8.&nbsp;Direct Rendering</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s07.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;2.&nbsp;Pages</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s09.html">Next</a></td></tr></table><hr></div><div class="sect1" title="2.8.&nbsp;Direct Rendering"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="page-direct-rendering"></a>2.8.&nbsp;Direct Rendering</h2></div></div></div><p>Pages support a direct rendering mode where you can render directly
+    to the servlet response and bypass the page template rendering. This is
+    useful for scenarios where you want to render non HTML content to the
+    response, such as a PDF or Excel document. To do this:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p> get the servlet response object</p></li><li class="listitem"><p> set the content type on the response</p></li><li class="listitem"><p> get the response output stream</p></li><li class="listitem"><p> write to the output stream</p></li><li class="listitem"><p> close the output stream</p></li><li class="listitem"><p> set the page path to null to inform the ClickServlet that
+        rendering has been completed</p></li></ul></div><p>A direct rendering example is provided below.
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+ * Render the Java source file as "text/plain".
+ *
+ * @see Page#onGet()
+ */</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> onGet() {
+    String filename = ..
+
+    HttpServletResponse response = getContext().getResponse();
+
+    response.setContentType(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"text/plain"</span>);
+    response.setHeader(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Pragma"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"no-cache"</span>);
+
+    ServletContext context = getContext().getServletContext();
+
+    InputStream inputStream = null;
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">try</span> {
+        inputStream = context.getResourceAsStream(filename);
+
+        PrintWriter writer = response.getWriter();
+
+        BufferedReader reader = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> BufferedReader(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> InputStreamReader(inputStream));
+
+        String line = reader.readLine();
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">while</span> (line != null) {
+            writer.println(line);
+            line = reader.readLine();
+        }
+
+        setPath(null);
+
+    } <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">catch</span> (IOException ioe) {
+        ioe.printStackTrace();
+
+    } <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">finally</span> {
+        ClickUtils.close(inputStream);
+    }
+}</pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s07.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s09.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.7.&nbsp;Page Actions&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.9.&nbsp;Stateful Pages</td></tr></table></div></body></html>

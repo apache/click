@@ -1,0 +1,128 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>1.5.&nbsp;Advanced Table Example</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction to Apache Click"><link rel="prev" href="ch01s04.html" title="1.4.&nbsp;Simple Table Example"><link rel="next" href="ch01s06.html" title="1.6.&nbsp;Simple Form Example"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">1.5.&nbsp;Advanced Table Example</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01s04.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;1.&nbsp;Introduction to Apache Click</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch01s06.html">Next</a></td></tr></table><hr></div><div class="sect1" title="1.5.&nbsp;Advanced Table Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="advanced-table"></a>1.5.&nbsp;Advanced Table Example</h2></div></div></div><p>The Table control also provides support for:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>automatic rendering</p></li><li class="listitem"><p>column formatting and custom rendering</p></li><li class="listitem"><p>automatic pagination</p></li><li class="listitem"><p>link control support</p></li></ul></div><p>A more advanced Table example is provided below:</p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> CustomerPage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> Table table = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Table(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"table"</span>);
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> PageLink editLink = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> PageLink(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Edit"</span>, EditCustomer.<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span>);
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> ActionLink deleteLink = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ActionLink(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Delete"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">this</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"onDeleteClick"</span>);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Constructor ------------------------------------------------------------</span>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> CustomersPage() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add controls</span>
+        addControl(table);
+        addControl(editLink);
+        addControl(deleteLink);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Setup table</span>
+        table.setClass(Table.CLASS_ITS);
+        table.setPageSize(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="lit">10</span>);
+        table.setShowBanner(true);
+        table.setSortable(true);
+
+        table.addColumn(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Column(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"id"</span>));
+
+        table.addColumn(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Column(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"name"</span>));
+        
+        Column column = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Column(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"email"</span>);
+        column.setAutolink(true);
+        column.setTitleProperty(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"name"</span>);
+        table.addColumn(column);
+        
+        table.addColumn(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Column(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"investments"</span>));
+        
+        editLink.setImageSrc(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"/images/table-edit.png"</span>);
+        editLink.setTitle(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Edit customer details"</span>);
+        editLink.setParameter(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"referrer"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"/introduction/advanced-table.htm"</span>);
+        
+        deleteLink.setImageSrc(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"/images/table-delete.png"</span>);
+        deleteLink.setTitle(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Delete customer record"</span>);
+        deleteLink.setAttribute(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"onclick"</span>,
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"return window.confirm('Are you sure you want to delete this record?');"</span>);
+
+        column = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Column(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Action"</span>);
+        column.setTextAlign(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"center"</span>);
+        AbstractLink[] links = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> AbstractLink[] { editLink, deleteLink };
+        column.setDecorator(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> LinkDecorator(table, links, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"id"</span>));
+        column.setSortable(false);
+        table.addColumn(column);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Table rowList will be populated through a DataProvider which loads</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// data on demand.</span>
+        table.setDataProvider(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> DataProvider() {
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> List getData() {
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> getCustomerService().getCustomers();
+            }
+        });
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Below we setup the table to preserve it's state (sorting and paging)</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// while editing customers</span>
+
+        table.getControlLink().setActionListener(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ActionListener() {
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onAction(Control source) {
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Save Table sort and paging state between requests.</span>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// NOTE: we set the listener on the table's Link control which is invoked</span>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// when the Link is clicked, such as when paging or sorting.</span>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// This ensures the table state is only saved when the state changes, and</span>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// cuts down on unnecessary session replication in a cluster environment.</span>
+                table.saveState(getContext()); <a class="co" name="co-save-table-state" href="ch01s05.html#ca-save-table-state"><img src="images/callouts/1.gif" alt="1" border="0"></a>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> true;
+            }
+        });
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Restore the table sort and paging state from the session between requests</span>
+        table.restoreState(getContext()); <a class="co" name="co-restore-table-state" href="ch01s05.html#ca-restore-table-state"><img src="images/callouts/2.gif" alt="2" border="0"></a>
+    }
+    
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Event Handlers ---------------------------------------------------------</span>
+         
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * Handle the delete row click event.
+     */</span>    
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onDeleteClick() {
+        Integer id = deleteLink.getValueInteger();
+        getCustomerService().deleteCustomer(id);
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> true;
+    }
+}</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-save-table-state"></a><a href="#co-save-table-state"><img src="images/callouts/1.gif" alt="1" border="0"></a> </td><td valign="top" align="left"><p>Table is a <a class="external" href="../../click-api/org/apache/click/Stateful.html" target="_blank">Stateful</a>
+        control and provides methods for saving and restoring it's state.
+        Here we save the Table state in the
+        <a class="external" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html" target="_blank">HttpSession</a>
+        which ensures sort and paging state is preserved while editing customers.
+        </p></td></tr><tr xmlns:fo="http://www.w3.org/1999/XSL/Format"><td valign="top" align="left"><a name="ca-restore-table-state"></a><a href="#co-restore-table-state"><img src="images/callouts/2.gif" alt="2" border="0"></a> </td><td valign="top" align="left"><p>Restore the Table state that was previously saved in the
+        <code class="classname">HttpSession</code>.
+        </p></td></tr></table></div><p>In this Page code example a Table control is declared and a number of
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Column.html" target="_blank">Column</a>
+    objects are added. We set the Table's
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/dataprovider/DataProvider.html" target="_blank">DataProvider</a>
+    instance which provides data on demand to the table. Data retrieved from the
+    dataProvider will be used to populate the Table rowList before it is rendered.
+    An editLink <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/PageLink.html" target="_blank">PageLink</a>
+    control is used as decorator for the "Action" column. This control navigates
+    to the <code class="classname">EditCustomer</code> page. A deleteLink
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/ActionLink.html" target="_blank">ActionLink</a>
+    control is also used as a decorator for the "Action" column. This control will
+    invoke the Page <code class="methodname">onDeleteClick()</code> method when it is
+    clicked.
+    </p><p>In our Page template we simply reference the <code class="varname">$table</code>
+    object which is rendered when its <code class="methodname">toString()</code> method
+    is called.
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;html&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;head&gt;</span>
+    <code class="varname">$headElements</code>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/head&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;body&gt;</span>
+
+    <code class="varname">$table</code>
+
+    <code class="varname">$jsElements</code>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/body&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/html&gt;</span></pre><p>At runtime the Table would be rendered in the page as:</p><div class="figure"><a name="advanced-table-image"></a><div class="figure-contents"><div class="mediaobject"><img src="images/introduction/advanced-table.png" alt="Advanced Table"></div></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;1.3.&nbsp;Advanced Table</i></p></div><br class="figure-break"><p>In this example, clicking on the Edit link will navigate the user to
+    the <code class="classname">EditCustomer</code> page where the selected customer
+    can be edited. When the user click on the Delete link, the
+    <code class="methodname">onDeleteClick()</code> method will be called on the Page
+    deleting the customer record.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01s04.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch01.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch01s06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">1.4.&nbsp;Simple Table Example&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;1.6.&nbsp;Simple Form Example</td></tr></table></div></body></html>

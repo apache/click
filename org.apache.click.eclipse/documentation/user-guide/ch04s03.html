@@ -1,0 +1,77 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>4.3.&nbsp;AjaxBehavior Execution</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Ajax"><link rel="prev" href="ch04s02.html" title="4.2.&nbsp;AjaxBehavior"><link rel="next" href="ch04s04.html" title="4.4.&nbsp;First Ajax Example"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.3.&nbsp;AjaxBehavior Execution</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;4.&nbsp;Ajax</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04s04.html">Next</a></td></tr></table><hr></div><div class="sect1" title="4.3.&nbsp;AjaxBehavior Execution"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajax-behavior-execution"></a>4.3.&nbsp;AjaxBehavior Execution</h2></div></div></div><p>The execution sequence for an <code class="classname">AjaxBehavior</code>
+    being processed and rendered is illustrated in the figure below. Note
+    that it is similar to a normal HTTP request flow. The main differences are that
+    Ajax requests do not have an onGet or onRender event and that only the
+    <code class="literal">Ajax target Control</code> is processed.
+    </p><div class="figure"><a name="ajax-behavior-sequence-diagram"></a><div class="figure-contents"><span class="inlinemediaobject"><img src="images/ajax/ajax-request-sequence-diagram.png" alt="AjaxBehavior Sequence Diagram"></span></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;4.2.&nbsp;AjaxBehavior Sequence Diagram</i></p></div><br class="figure-break"><p>Stepping through this Ajax GET request sequence, first a new Page
+    instance is created.
+    </p><p>Then the <code class="methodname">onSecurityCheck()</code> handler is executed
+    to authorize access to the page, and if necessary abort further processing.
+    If the request is aborted for an Ajax request, no response is rendered to
+    the browser. If you want to render a response you need to write to the
+    <code class="classname">HttpServletResponse</code> directly or create and
+    render an <code class="classname">ActionResult</code> yourself.
+    </p><p>The next method invoked is <code class="methodname">onInit()</code> to initialize,
+    create and setup controls and <code class="classname">Behaviors</code>.
+    <code class="methodname">onInit</code> is an ideal place to add <code class="classname">Behaviors</code>
+    to <code class="classname">Controls</code>. When a Behavior is added to a Control that
+    Control is automatically registered with the
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ControlRegistry.html" target="_blank">ControlRegistry</a>
+    as a potential
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ControlRegistry.html#registerAjaxTarget(org.apache.click.Control)" target="_blank">Ajax target control</a>.
+    </p><p>The next step is to find and process the <code class="literal">Ajax target control</code>.
+    First the ClickServlet needs to determine which Control is the Ajax target.
+    To resolve the target Control the ClickServlet iterates over all the Controls
+    registered with the ControlsRegistry and invokes each Control's
+    <code class="methodname">isAjaxTarget</code> method. The first control which
+    <code class="methodname">isAjaxTarget</code> method returns <span class="emphasis"><em>true</em></span>,
+    will be the Ajax target.
+    </p><p>The simplest <code class="methodname">isAjaxTarget</code> implementation is
+    to return <span class="emphasis"><em>true</em></span> if the Control ID is passed as a request
+    parameter. The client-side JavaScript code that initiate the Ajax request,
+    must ensure the Control ID is sent as part of the Ajax request. Note, if the
+    ClickServlet cannot find a target control, no response is rendered.
+    </p><p>If an Ajax target control is found, the ClickServlet will invoke
+    that control's <code class="methodname">onProcess</code> method. Other controls are not
+    processed.
+    </p><p>
+    <span class="bold"><strong>Please note:</strong></span> since Click is a stateless framework,
+    processing a control for an Ajax request has the same requirements as processing
+    a control for a non-Ajax request. In other words, in addition to the Control
+    ID (or other identifier), the Ajax request must include all the parameters
+    normally expected by the target Control and its children. For example, a
+    Field expects it's <code class="literal">name/value</code> parameter while an ActionLink
+    expects its <code class="literal">actionLink/name</code> parameter.
+    Putting it another way, if for example an ActionLink is clicked and
+    we only pass the link's HTML ID parameter, Click will identify the link
+    as the Ajax target control and invoke the link's
+    <code class="methodname">onProcess</code> method. The
+    <code class="methodname">onProcess</code> method is where the link's values are
+    bound and if it was clicked it's action event (AjaxBehavior) will be fired.
+    An ActionLink is "clicked" if the <code class="literal">actionLink</code> parameter
+    has a value matching the link's name. If no <code class="literal">actionLink</code>
+    parameter is present, the server doesn't know that the link was clicked
+     and won't fire the AjaxBehavior's <code class="methodname">onAction</code> event.
+    So for an Ajax request it is still necessary to pass all the parameters
+    normally expected by the ActionLink <code class="methodname">onProcess</code> method.
+    For ActionLink that means the Ajax request must include it's
+    <code class="literal">href</code> parameters while a Form would require all it's
+    Field <code class="literal">name/value</code> pairs.
+    </p><p>Next, the target control <code class="classname">AjaxBehaviors</code> are
+    fired. The ClickServlet iterates over the control AjaxBehaviors and for each
+    AjaxBehavior invoke the method: <code class="methodname">isAjaxTarget</code>.
+    Each AjaxBehavior which <code class="methodname">isAjaxTarget</code> method returns
+    <span class="emphasis"><em>true</em></span>, will have their <code class="methodname">onAction</code>
+    method invoked to handle the Ajax request. The AjaxBehavior's
+    <code class="methodname">onAction</code> method returns an
+    <code class="classname">ActionResult</code> that is rendered to the browser.
+    </p><p>Please note: multiple AjaxBehaviors can handle the same Ajax request,
+    however only the first <code class="classname">ActionResult</code> returned will be
+    rendered to the browser. If an <code class="methodname">onAction</code> method
+    returns <code class="literal">null</code>, the <code class="classname">ActionResult</code>
+    returned by the next AjaxBehavior's onAction method will be used. If all
+    onAction methods returns null, no response is rendered.
+    </p><p>Next the ActionResult is rendered to the browser.</p><p>The final step in this sequence is invoking each control's onDestroy()
+    method and lastly invoke the Page onDestroy() method.</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch04s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.2.&nbsp;AjaxBehavior&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;4.4.&nbsp;First Ajax Example</td></tr></table></div></body></html>

@@ -1,0 +1,91 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.3.&nbsp;Request Parameter Auto Binding</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Pages"><link rel="prev" href="ch02s02.html" title="2.2.&nbsp;Execution"><link rel="next" href="ch02s04.html" title="2.4.&nbsp;Security"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.3.&nbsp;Request Parameter Auto Binding</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;2.&nbsp;Pages</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s04.html">Next</a></td></tr></table><hr></div><div class="sect1" title="2.3.&nbsp;Request Parameter Auto Binding"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="request-param-auto-binding"></a>2.3.&nbsp;Request Parameter Auto Binding</h2></div></div></div><p>Click will automatically bind any request parameter values to public
+    Page variable with the same name. You can also use the
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/util/Bindable.html" target="_blank">Bindable</a>
+    annotation to bind private and protected Page variables. When binding these
+    values Click will also attempt to convert them to the correct type.
+    </p><p>The best way to understand this is to walk through an example. Our
+    application receives a GET request:
+    </p><div class="literallayout"><p>http://localhost:8080/mycorp/customer-details.htm?<code class="varname">customerId</code>=<span class="symbol">7203</span></p></div><p>This request is automatically handled by our
+    <code class="classname">CustomerDetails</code> page:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">package</span> com.mycorp.page;
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> CustomerDetails <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pun">@Bindable</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">protected</span> Integer <code class="varname">customerId</code>;
+}</pre><p>After the CustomerDetails page has been created the
+    "<code class="varname">customerId</code>" request parameter value "<span class="symbol">7023</span>"
+    will be converted into an Integer and assigned to the public page variable
+    <code class="varname">customerId</code>.
+    </p><p>Another feature of Click is that any public Page variables are
+    automatically added to the page's model before it is rendered. This will
+    make these values available in the page template for display. In our example
+    the public <code class="varname">customerId</code> variable will be added to the Page
+    model and will be available for rendering in the page template.
+    </p><p>Our customer-details.htm page template contains:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;html&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;body&gt;</span>
+
+  Customer ID: <span class="symbol">$</span><code class="varname">customerId</code>
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/body&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/html&gt;</span></pre><p>After processing the request our page would be rendered as:
+    </p><div class="literallayout"><p>Customer&nbsp;ID:&nbsp;7203</p></div><div class="sect2" title="2.3.1.&nbsp;Customizing Auto Binding"><div class="titlepage"><div><div><h3 class="title"><a name="customizing-auto-binding"></a>2.3.1.&nbsp;Customizing Auto Binding</h3></div></div></div><p>Auto binding supports the conversion of request string parameters
+      into the Java classes: Integer, Double, Boolean, Byte, Character, Short,
+      Long, Float, BigInteger, BigDecimal, String and the various Date classes.
+      </p><p>By default type conversion is performed by the
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/util/RequestTypeConverter.html" target="_blank">RequestTypeConverter</a>
+      class which is used by the ClickServlet method
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ClickServlet.html#getTypeConverter()" target="_blank">getTypeConverter()</a>.
+      </p><p>If you need to add support for additional types, you would write your
+      own type converter class and specify it as a ClickServlet init parameter.
+      </p><p>For example if you wanted to automatically load a
+      <code class="classname">Customer</code> object from the database when a customer
+      id request parameter is specified, you could write your own type converter:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> CustomTypeConverter <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> RequestTypeConverter {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> CustomerService customerService = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> CustomerService();
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * @see RequestTypeConverter#convertValue(Object, Class)
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">protected</span> Object convertValue(Object value, Class toType) {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (toType == Customer.<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span>) {
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> customerService.getCustomerForId(value);
+
+        } <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">else</span> {
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">super</span>.convertValue(value, toType);
+        }
+    }
+}</pre><p>This type converter would handle the following request:
+      </p><div class="literallayout"><p>http://localhost:8080/mycorp/customer-details.htm?<code class="varname">customer</code>=<span class="symbol">7203</span></p></div><p>This request will load the <code class="varname">customer</code> object from
+      the database using "<span class="symbol">7203</span>" as the customer id value. The
+      ClickServlet would then assign this <code class="varname">customer</code> object to
+      the matching page variable:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">package</span> com.mycorp.page;
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> CustomerDetails <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pun">@Bindable</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">protected</span> Customer <code class="varname">customer</code>;
+
+}</pre><p>To make your custom type converter available you will need to
+      add an init parameter to ClickServlet in <code class="filename">web.xml</code>. For example:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;web-app&gt;</span>
+  ...
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-name&gt;</span>ClickServlet<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-name&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-class&gt;</span>org.apache.click.ClickServlet<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-class&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;init-param&gt;</span>
+       <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;param-name&gt;</span>type-converter-class<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/param-name&gt;</span>
+       <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;param-value&gt;</span>com.mycorp.util.CustomTypeConverter<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/param-value&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/init-param&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;load-on-startup&gt;</span>0<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/load-on-startup&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet&gt;</span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-mapping&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-name&gt;</span>ClickServlet<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-name&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;url-pattern&gt;</span>*.htm<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/url-pattern&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-mapping&gt;</span>
+  ...
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/web-app&gt;</span></pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.2.&nbsp;Execution&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.4.&nbsp;Security</td></tr></table></div></body></html>

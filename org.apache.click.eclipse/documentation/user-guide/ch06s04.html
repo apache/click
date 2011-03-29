@@ -1,0 +1,52 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>6.4.&nbsp;Navigation</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Best Practices"><link rel="prev" href="ch06s03.html" title="6.3.&nbsp;Page Auto Mapping"><link rel="next" href="ch06s05.html" title="6.5.&nbsp;Templating"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.4.&nbsp;Navigation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06s03.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;6.&nbsp;Best Practices</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06s05.html">Next</a></td></tr></table><hr></div><div class="sect1" title="6.4.&nbsp;Navigation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="navigation"></a>6.4.&nbsp;Navigation</h2></div></div></div><p> When navigating between Pages using forwards and redirects, you should
+    refer to the target page using the Page class rather than using path. This
+    provides you compile time checking and will save you from having to update
+    path strings in Java code if you move pages about.
+    </p><p>To forward to another page using the Page class:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> CustomerListPage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> ActionLink customerLink = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ActionLink(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">this</span>,<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"onCustomerClick"</span>);
+
+    ..
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onCustomerClick() {
+        Integer id = customerLink.getValueInteger();
+        Customer customer = getCustomerService().getCustomer(id);
+
+        CustomerDetailPage customerDetailPage = (CustomerDetailPage)
+            getContext().createPage(CustomerDetailPage.<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span>);
+
+        customerDetailPage.setCustomer(customer);
+        setForward(customerDetailPage);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+    }
+}</pre><p>To redirect to another page using the Page class you can obtain the pages
+    path from the <code class="classname">Context</code>. In the example below we are passing
+    through the customer id as a request parameter to the target page.
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> CustomerListPage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> ActionLink customerLink = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ActionLink(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">this</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"onCustomerClick"</span>);
+
+    ..
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onCustomerClick() {
+        String id = customerLink.getValueInteger();
+
+        String path = getContext().getPagePath(CustomerDetailPage.<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span>);
+        setRedirect(path + <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"?id="</span> + id);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+    }
+}</pre><p>A quick way of redirecting to another page is to simply refer to the target
+    class. The example below logs a user out, by invalidating their session, and
+    then redirects them to the application home page.
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onLogoutClick() {
+    getContext().getSession().invalidate();
+
+    setRedirect(HomePage.<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span>);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+}</pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06s03.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch06.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch06s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">6.3.&nbsp;Page Auto Mapping&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;6.5.&nbsp;Templating</td></tr></table></div></body></html>

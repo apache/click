@@ -1,0 +1,39 @@
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<toc label="Apache Click">
+  <topic label="Click User Guide" href="documentation/user-guide/index.html">
+    <topic label="Introduction to Apache Click" href="documentation/user-guide/ch01.html"/>
+    <topic label="Pages" href="documentation/user-guide/ch02.html"/>
+    <topic label="Controls" href="documentation/user-guide/ch03.html"/>
+    <topic label="Ajax" href="documentation/user-guide/ch04.html"/>
+    <topic label="Configuration" href="documentation/user-guide/ch05.html"/>
+    <topic label="Best Practices" href="documentation/user-guide/ch06.html"/>
+  </topic>
+  <topic label="Javadoc" href="documentation/javadoc.html">
+    <topic label="Click API" href="http://click.apache.org/docs/click-api/overview-summary.html"/>
+    <topic label="Control API" href="http://click.apache.org/docs/click-api/org/apache/click/control/package-summary.html"/>
+    <topic label="Extras API" href="http://click.apache.org/docs/extras-api/overview-summary.html"/>
+    <topic label="Mock API" href="http://click.apache.org/docs/mock-api/overview-summary.html"/>
+  </topic>
+  <topic label="Velocity" href="documentation/velocity/velocity.html">
+    <topic label="Users Guide" href="documentation/velocity/user-guide.html"/>
+    <topic label="Developers Guide" href="documentation/velocity/developer-guide.html"/>
+    <topic label="VTL Reference" href="documentation/velocity/vtl-reference-guide.html"/>
+  </topic>
+</toc>

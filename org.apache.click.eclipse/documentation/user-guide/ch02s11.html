@@ -1,0 +1,16 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.11.&nbsp;Page Not Found</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Pages"><link rel="prev" href="ch02s10.html" title="2.10.&nbsp;Error Handling"><link rel="next" href="ch02s12.html" title="2.12.&nbsp;Page Message Properties"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.11.&nbsp;Page Not Found</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s10.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;2.&nbsp;Pages</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s12.html">Next</a></td></tr></table><hr></div><div class="sect1" title="2.11.&nbsp;Page Not Found"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="page-not-found"></a>2.11.&nbsp;Page Not Found</h2></div></div></div><p>If the ClickServlet cannot find a requested page in the
+    <code class="literal">click.xml</code> config file it will use the registered
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../not-found.html" target="_blank">not-found.htm</a> page.
+    </p><p>The Click <code class="literal">not found page</code> is automatically configured
+    as:
+    </p><div class="literallayout"><p>&lt;page&nbsp;path="<code class="varname">click/not-found.htm</code>"&nbsp;classname="<span class="symbol">org.apache.click.Page</span>"/&gt;</p></div><p>You can override the default configuration and specify your own class,
+    but you cannot change the path.
+    </p><p>When the ClickServlet starts up it checks to see whether the
+    <code class="varname">not-found.htm</code> template exists in the <code class="varname">click</code>
+    web sub directory. If it cannot find the page the ClickServlet will
+    automatically deploy one.
+    </p><p>You can tailor the <code class="varname">click/not-found.htm</code> template to
+    suite you own needs. This page template has access to the usual Click objects.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s10.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s12.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.10.&nbsp;Error Handling&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.12.&nbsp;Page Message Properties</td></tr></table></div></body></html>
