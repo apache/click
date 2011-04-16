@@ -26,7 +26,6 @@ import java.util.Map.Entry;
 import org.apache.click.Behavior;
 import org.apache.click.Context;
 import org.apache.click.Control;
-import org.apache.click.Page;
 import org.apache.click.ActionResult;
 import org.apache.click.ajax.AjaxBehavior;
 import org.apache.click.ajax.DefaultAjaxBehavior;
@@ -338,18 +337,19 @@ public abstract class AutoCompleteTextField extends TextField {
             String id  = getId();
 
             // Include the field id as a parameter
-            buffer.append(",{parameters: '").append(id).append("=1'");
+            buffer.append(",{parameters: '").append(id).append("=1");
 
             if (hasParameters()) {
 
                 for (Entry<String, Object> entry : getParameters().entrySet()) {
                     // Add additional parameters
-                    buffer.append("&amp;");
+                    buffer.append("&");
                     buffer.append(entry.getKey());
                     buffer.append("=");
                     buffer.append(entry.getValue());
                 }
             }
+            buffer.append("'");
 
             if (StringUtils.isNotEmpty(getAutoCompleteOptions())) {
                 buffer.append(",").append(getAutoCompleteOptions());
