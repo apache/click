@@ -300,15 +300,6 @@ public abstract class AutoCompleteTextField extends TextField {
                 + " getHeadElements().");
         }
 
-        Page page = getPage();
-        if (page == null) {
-            throw new IllegalStateException("The AutoCompleteTextField, '"
-                + fieldName + "', is not attached to the Page. Add"
-                + " AutoCompleteTextField to a parent form or container and"
-                + " attach the parent to the Page before calling"
-                + " getHeadElements().");
-        }
-
         Context context = getContext();
 
         if (headElements == null) {
@@ -337,12 +328,12 @@ public abstract class AutoCompleteTextField extends TextField {
             // Script must be executed as soon as browser dom is ready
             script.setExecuteOnDomReady(true);
 
-            String contextPath = context.getRequest().getContextPath();
             HtmlStringBuffer buffer = new HtmlStringBuffer(150);
             buffer.append("new Ajax.Autocompleter(");
             buffer.append("'").append(fieldId).append("'");
             buffer.append(",'").append(fieldId).append("-auto-complete-div'");
-            buffer.append(",'").append(contextPath).append(page.getPath()).append("'");
+            String path = ClickUtils.getRequestURI(context.getRequest());
+            buffer.append(",'").append(path).append("'");
 
             String id  = getId();
 
