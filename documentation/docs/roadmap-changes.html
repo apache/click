@@ -66,8 +66,35 @@
 <h1>Road Map and Changes</h1>
 
 <dl>
+  <dt><a name="2.3.1"></a>
+      <div class="release-header">Latest Stable Release - Version 2.3.1 - ??? 2011</div>
+  </dt>
+  <dd>
+    <div style="margin-left:-2em;margin-bottom:1em;">
+      <b>IMPORTANT:</b> be sure to read the <a href="upgrade-path.html#2.3.1">upgrade path</a>
+      when upgrading from previous releases.
+    </div>
+      <div style="margin-left: -2em; margin-top: 1.5em; margin-bottom: 1em;">
+        <b>New features and issues resolved:</b>
+      </div>
+      <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+          <li class="change">
+              Removed AutoCompleteTextField dependency on Page. The Ajax callback
+              URL is instead looked up from the request itself. This change removes
+              the restriction that AutoCompleteTextField must be attached to the
+              Page
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-761">CLK-761</a>].
+          </li>
+          <li class="change">
+              Fixed AutoCompleteTextField to add extra parameters correctly
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-759">CLK-759</a>].
+          </li>
+      </ul>
+  </dd>
+
+  <dt><div class="release-header">Archives</div></dt>
   <dt><a name="2.3.0"></a>
-      <div class="release-header">Latest Stable Release - Version 2.3.0 - 27 March 2011</div>
+      <div>Version 2.3.0 - 27 March 2011</div>
   </dt>
   <dd>
       <div style="margin-left:-2em;margin-bottom:1em;">
@@ -394,7 +421,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
           </li>
       </ul>
   </dd>
-  <dt><div class="release-header">Archives</div></dt>
+
   <dt><a name="2.3.0-RC1"></a>Version 2.3.0 Release Candidate 1 - 30 January 2011</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
