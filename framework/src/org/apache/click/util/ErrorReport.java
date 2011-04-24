@@ -286,7 +286,8 @@ public class ErrorReport {
         buffer.append("</td></tr>");
 
         buffer.append("<tr><td width='12%'><b>Query</b></td><td>");
-        buffer.append(request.getQueryString());
+        String escapedQueryString = ClickUtils.escape(request.getQueryString());
+        buffer.append(escapedQueryString);
         buffer.append("</td></tr>");
 
         buffer.append("<tr><td width='12%'><b>Method</b></td><td>");
