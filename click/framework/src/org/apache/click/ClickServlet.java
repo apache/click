@@ -939,6 +939,8 @@ public class ClickServlet extends HttpServlet {
 
         response.setContentType(page.getContentType());
 
+        response.setCharacterEncoding(page.getCharacterEncoding());
+
         Writer writer = getWriter(response);
 
         if (page.hasHeaders()) {
