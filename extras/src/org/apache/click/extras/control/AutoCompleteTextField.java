@@ -448,8 +448,8 @@ public abstract class AutoCompleteTextField extends TextField {
             public ActionResult onAction(Control source) {
                 ActionResult actionResult = new ActionResult();
 
-                String contentType = getPage().getContentType();
-                actionResult.setContentType(contentType);
+                actionResult.setContentType(getPage().getContentType());
+                actionResult.setCharacterEncoding(getPage().getCharacterEncoding());
 
                 List<?> autocompleteList = getAutoCompleteList(getValue());
                 if (autocompleteList != null) {
