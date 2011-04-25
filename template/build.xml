@@ -12,7 +12,7 @@
     -->
    
    <path id="classpath">
-   	  <pathelement location="lib/servlet-api-2.3.jar"/>
+   	  <pathelement location="lib/servlet-api-2.4.jar"/>
       <fileset dir="WebContent/WEB-INF/lib">
          <include name="*.jar"/>
       </fileset>

@@ -362,7 +362,7 @@
       <para>When the Click application starts up it will check all the page
       definitions. If there is a critical configuration error the ClickSerlvet
       will log an <literal>ERROR</literal> message and throw an
-      <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/UnavailableException.html">UnavailableException</ulink>.
+      <ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/UnavailableException.html">UnavailableException</ulink>.
       If this occurs the click application will be permanently unavailable until
       the error is fixed and the web app is restarted.
       </para>
@@ -725,7 +725,7 @@ change-password.htm  =&gt;  <token>ChangePasswordPage</token></literallayout>
 
       <para>The <symbol>header</symbol> element defines header name and value
       pairs which are applied to the
-      <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</ulink>.
+      <ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</ulink>.
       </para>
 
       <literallayout>&lt;!ELEMENT <symbol>header</symbol> (#PCDATA)&gt;

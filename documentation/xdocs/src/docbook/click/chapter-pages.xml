@@ -239,13 +239,13 @@
       </listitem>
       <listitem>
         <para>request &nbsp;-&nbsp; the pages
-        <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</ulink>
+        <ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</ulink>
         object
         </para>
       </listitem>
       <listitem>
         <para>response &nbsp;-&nbsp; the pages
-        <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</ulink>
+        <ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</ulink>
         object
         </para>
       </listitem>
@@ -253,7 +253,7 @@
         <para>session &nbsp;-&nbsp; the
         <ulink url="../../click-api/org/apache/click/util/SessionMap.html">SessionMap</ulink>
         adaptor for the users
-        <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</ulink>
+        <ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/HttpSession.html">HttpSession</ulink>
         </para>
       </listitem>
     </itemizedlist>
@@ -494,7 +494,7 @@ public class CustomerDetails extends Page {
      */
     public boolean onSecurityCheck() {
 
-        if (getContext().getRequest().<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html#getRemoteUser()"><varname>getRemoteUser</varname></ulink>() != null) {
+        if (getContext().getRequest().<ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/HttpServletRequest.html#getRemoteUser()"><varname>getRemoteUser</varname></ulink>() != null) {
             return true;
 
         } else {
@@ -523,7 +523,7 @@ public class CustomerDetails extends Page {
      */
     public boolean onSecurityCheck() {
 
-        if (getContext().getRequest().<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)"><varname>isUserInRole</varname></ulink>("admin")) {
+        if (getContext().getRequest().<ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)"><varname>isUserInRole</varname></ulink>("admin")) {
             return true;
 
         } else {
@@ -548,7 +548,7 @@ public class CustomerDetails extends Page {
      * @see Page#onInit()
      */
     public void onInit() {
-        getContext().getSession().<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html#invalidate()"><varname>invalidate</varname></ulink>();
+        getContext().getSession().<ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/HttpSession.html#invalidate()"><varname>invalidate</varname></ulink>();
     }
 }</programlisting>
 
@@ -566,7 +566,7 @@ public class CustomerDetails extends Page {
       <title>Forward</title>
 
       <para> To forward to another page using the servlet
-      <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/RequestDispatcher.html">RequestDispatcher</ulink>,
+      <ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/RequestDispatcher.html">RequestDispatcher</ulink>,
       set the Page's forward property. For example to forward to a page with a
       path <varname>index.htm</varname>:
       </para>
@@ -729,7 +729,7 @@ public void onPost() {
 
       <para>Redirects are another very useful way to navigate between pages.
       See HttpServletResponse.
-      <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html#sendRedirect(java.lang.String)">sendRedirect</ulink>
+      <ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/HttpServletResponse.html#sendRedirect(java.lang.String)">sendRedirect</ulink>
       (location) for details.
       </para>
 
@@ -786,7 +786,7 @@ public void onPost() {
 
         <para>You can pass information between redirected pages using URL
         request parameters. The ClickServlet will encode the URL for you using
-        HttpServletResponse.<ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html#encodeRedirectURL(java.lang.String)">encodeRedirectURL</ulink>
+        HttpServletResponse.<ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/HttpServletResponse.html#encodeRedirectURL(java.lang.String)">encodeRedirectURL</ulink>
         (url).
         </para>
 
@@ -1330,7 +1330,7 @@ public class SearchPage extends Page implements Serializable {
 }</programlisting>
 
     <para>Stateful page instances are stored in the user's
-    <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</ulink>
+    <ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/HttpSession.html">HttpSession</ulink>
     using the pages class name as the key. In the example above the page would
     be stored in the users session using the class name:
     <classname>com.mycorp.page.SearchPage</classname>

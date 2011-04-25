@@ -22,7 +22,7 @@
 
   <pages package="org.apache.click.examples.page" autobinding="annotation"/>
 
-  <mode value="profile"/>
+  <mode value="trace"/>
 
   <page-interceptor classname="org.apache.click.examples.interceptor.ProfilingInterceptor"/>
 
