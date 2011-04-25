@@ -135,6 +135,7 @@ import org.apache.commons.lang.StringUtils;
  * <li>{@link #model} to populate the Velocity Context</li>
  * <li>{@link #format} to add to the Velocity Context</li>
  * <li>{@link #getContentType()} to set as the HttpServletResponse content type</li>
+ * <li>{@link #getContentType()} to set as the HttpServletResponse content type</li>
  * <li>{@link #headers} to set as the HttpServletResponse headers</li>
  * </ul>
  *
@@ -449,12 +450,22 @@ public class Page implements Serializable {
     }
 
     /**
+     * Return the HTTP response character encoding. By default this method returns
+     * the request character encoding via
+     * {@link javax.servlet.ServletRequest#getCharacterEncoding()}
+     * <p/>
+     * The ClickServlet uses the pages character encoding for setting the
+     * HttpServletResponse character encoding.
+     *
+     * @return the HTTP response content type
+     */
+    public String getCharacterEncoding() {
+        return getContext().getRequest().getCharacterEncoding();
+    }
+
+    /**
      * Return the HTTP response content type. By default this method returns
      * <tt>"text/html"</tt>.
-     * <p/>
-     * If the request specifies a character encoding via
-     * If {@link javax.servlet.ServletRequest#getCharacterEncoding()}
-     * then this method will return <tt>"text/html; charset=encoding"</tt>.
      * <p/>
      * The ClickServlet uses the pages content type for setting the
      * HttpServletResponse content type.
@@ -462,14 +473,7 @@ public class Page implements Serializable {
      * @return the HTTP response content type
      */
     public String getContentType() {
-        String charset = getContext().getRequest().getCharacterEncoding();
-
-        if (charset == null) {
-            return "text/html";
-
-        } else {
-            return "text/html; charset=" + charset;
-        }
+        return "text/html";
     }
 
     /**
