@@ -1024,7 +1024,9 @@ public class Table extends AbstractControl implements Stateful {
         super.setName(name);
         ActionLink localControlLink = getControlLink();
         localControlLink.setName(getName() + "-controlLink");
-        localControlLink.setParent(this);
+        if ((localControlLink.getParent()) == null) {
+            localControlLink.setParent(this);
+        }
     }
 
     /**
