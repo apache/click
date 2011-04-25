@@ -560,20 +560,14 @@ public class ActionResult {
             response.setDateHeader("Expires", new Date(1L).getTime());
         }
 
-        String localContentType = getContentType();
+        response.setContentType(getContentType());
 
-        if (getCharacterEncoding() == null) {
+        String localCharacterEncoding = getCharacterEncoding();
+        if (localCharacterEncoding == null) {
 
             // Fallback to request character encoding
-            if (context.getRequest().getCharacterEncoding() != null) {
-                response.setContentType(localContentType + "; charset="
-                    + context.getRequest().getCharacterEncoding());
-            } else {
-                response.setContentType(localContentType);
-            }
-
-        } else {
-            response.setContentType(localContentType + "; charset=" + getCharacterEncoding());
+            localCharacterEncoding = context.getRequest().getCharacterEncoding();
         }
+        response.setCharacterEncoding(localCharacterEncoding);
     }
 }
