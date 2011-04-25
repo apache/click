@@ -83,6 +83,18 @@
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-763">CLK-763</a>].
           </li>
           <li class="change">
+              Added Page method getCharacterEncoding. The response character encoding
+              can be overridden through this method. getCharacterEncoding should be
+              used instead of returning the <tt>charset</tt> through the getContentType
+              method
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-764">CLK-764</a>].
+          </li>
+          <li class="change">
+              Fixed AutoCompleteTextField to not send duplicate content type in
+              response
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-757">CLK-757</a>].
+          </li>
+          <li class="change">
               Removed AutoCompleteTextField dependency on Page. The Ajax callback
               URL is instead looked up from the request itself. This change removes
               the restriction that AutoCompleteTextField must be attached to the
