@@ -958,7 +958,7 @@ Please ensure you have configured build.properties</echo>
       	file="lib/${jar.log4j}"/>
       <copy 
       	todir="../${project-name}/lib"
-      	file="lib/servlet-api-2.3.jar"/>
+      	file="lib/servlet-api-2.4.jar"/>
       <copy 
       	todir="../${project-name}" 
       	file="template/build.xml"/>

@@ -535,7 +535,7 @@ public HelloWorld extends Page {
         <para>Table is a <ulink url="../../click-api/org/apache/click/Stateful.html">Stateful</ulink>
         control and provides methods for saving and restoring it's state.
         Here we save the Table state in the
-        <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html">HttpSession</ulink>
+        <ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/HttpSession.html">HttpSession</ulink>
         which ensures sort and paging state is preserved while editing customers.
         </para>
       </callout>

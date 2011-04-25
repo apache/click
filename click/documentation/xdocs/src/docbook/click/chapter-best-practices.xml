@@ -760,7 +760,7 @@
 
     <para>Generally applications handle transactional errors using service layer code
     or via a servlet
-    <ulink url="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/Filter.html">Filter</ulink>
+    <ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/Filter.html">Filter</ulink>
     and would not need to include error handling logic in an error page.
     </para>
 
