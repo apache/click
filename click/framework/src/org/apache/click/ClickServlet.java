@@ -886,10 +886,13 @@ public class ClickServlet extends HttpServlet {
             renderActionResult(actionResult, page, context);
 
         } else if (page.getPath() != null) {
+
+            boolean errorOccurred = page instanceof ErrorPage;
+
             // Render template unless the request was a page action. This check
             // guards against the scenario where the page action returns null
             // instead of a action result
-            if (context.getRequestParameter(Page.PAGE_ACTION) == null) {
+            if (errorOccurred || context.getRequestParameter(Page.PAGE_ACTION) == null) {
                 String pagePath = page.getPath();
 
                 // Check if request is a JSP page
