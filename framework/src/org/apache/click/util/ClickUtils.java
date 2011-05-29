@@ -1177,7 +1177,7 @@ public class ClickUtils {
 
         } else {
             String msg =
-                "could not find ConfigService in the SerlvetContext under the"
+                "could not find ConfigService in the ServletContext under the"
                 + " name '" + ConfigService.CONTEXT_NAME + "'.\nThis can occur"
                 + " if ClickUtils.getConfigService() is called before"
                 + " ClickServlet is initialized by the servlet container.\n"
