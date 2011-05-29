@@ -121,7 +121,7 @@ public HelloWorld extends Page {
   &lt;pages package="<symbol>examples.page</symbol>"/&gt;
 &lt;/click-app&gt;</programlisting>
 
-    <para>At runtime the following sequence of events occur. The ClickSerlvet
+    <para>At runtime the following sequence of events occur. The ClickServlet
     maps a GET <varname>hello-world.htm</varname> request to our page class
     <classname>example.page.HelloWorld</classname> and creates a new instance.
     The HelloWorld page creates a new private <emphasis>Date</emphasis> object,

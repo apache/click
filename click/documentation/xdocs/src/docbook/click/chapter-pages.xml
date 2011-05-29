@@ -484,7 +484,7 @@ public class CustomerDetails extends Page {
 
       <para>Alternatively you can also use the security services provided by
       the JEE Servlet Container. For instance to ensure users have been
-      authenticated by the Serlvet Container you could use a Secure page of:
+      authenticated by the Servlet Container you could use a Secure page of:
       </para>
 
       <programlisting language="java">public class Secure extends Page {

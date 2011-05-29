@@ -360,7 +360,7 @@
       </para>
 
       <para>When the Click application starts up it will check all the page
-      definitions. If there is a critical configuration error the ClickSerlvet
+      definitions. If there is a critical configuration error the ClickServlet
       will log an <literal>ERROR</literal> message and throw an
       <ulink url="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/UnavailableException.html">UnavailableException</ulink>.
       If this occurs the click application will be permanently unavailable until
