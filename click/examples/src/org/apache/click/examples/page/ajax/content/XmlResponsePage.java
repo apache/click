@@ -46,7 +46,7 @@ public class XmlResponsePage extends BorderPage {
             @Override
             public ActionResult onAction(Control source) {
                 // Formatted date instance that will be added to the
-                String now = format.currentDate("MMM, yyyy dd HH:MM:ss");
+                String now = format.currentDate("MMM, yyyy dd HH:mm:ss");
 
                 String msg = "<payload>"
                     + "<msg>XML returned at: </msg>"
