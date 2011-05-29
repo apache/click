@@ -46,7 +46,7 @@ public class AjaxFallbackPage extends BorderPage {
             @Override
             public ActionResult onAction(Control source) {
                 // Formatted date instance that will be added to the
-                String now = format.currentDate("MMM, yyyy dd HH:MM:ss");
+                String now = format.currentDate("MMM, yyyy dd HH:mm:ss");
 
                 String msg = "AjaxBehavior <tt>onAction()</tt> method invoked at: " + now;
                 // Return an action result containing the message
@@ -59,7 +59,7 @@ public class AjaxFallbackPage extends BorderPage {
 
             public boolean onAction(Control source) {
                 // Formatted date instance that will be added to the
-                String now = format.currentDate("MMM, yyyy dd HH:MM:ss");
+                String now = format.currentDate("MMM, yyyy dd HH:mm:ss");
 
                 String msg = "ActionListener <tt>onAction()</tt> method invoked at: " + now;
                 // Return an action result containing the message

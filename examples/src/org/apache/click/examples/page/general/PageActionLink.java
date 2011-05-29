@@ -44,6 +44,6 @@ public class PageActionLink extends BorderPage {
      * This method will be invoked when the link is clicked.
      */
     public ActionResult getDate() {
-        return new ActionResult(format.currentDate("MMM dd, yyyy HH:MM:ss"));
+        return new ActionResult(format.currentDate("MMM dd, yyyy HH:mm:ss"));
     }
 }

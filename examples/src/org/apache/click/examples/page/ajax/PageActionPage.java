@@ -49,7 +49,7 @@ public class PageActionPage extends BorderPage {
     // Note the pageAction method signature: a no-arg method returning an ActionResult
     public ActionResult onLinkClicked() {
         // Formatted date instance that will be returned to the browser
-        String now = format.currentDate("MMM, yyyy dd HH:MM:ss");
+        String now = format.currentDate("MMM, yyyy dd HH:mm:ss");
 
         String msg = "PageAction method <tt>onLinkClicked()</tt> invoked at: " + now;
 
