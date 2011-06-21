@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
  "http://www.w3.org/TR/html4/loose.dtd">
 <!--
    Licensed to the Apache Software Foundation (ASF) under one
@@ -88,6 +88,11 @@
               used instead of returning the <tt>charset</tt> through the getContentType
               method
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-764">CLK-764</a>].
+          </li>
+          <li class="change">
+              Added SessionMap methods getCreationTime, getId, getLastAccessedTime and getMaxInactiveInterval
+              to expose underlying read only HttpSession properties.
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-773">CLK-773</a>].
           </li>
           <li class="change">
               Fixed AutoCompleteTextField to not send duplicate content type in
@@ -416,7 +421,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
               [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-750">CLK-750</a>].
           </li>
           <li class="change">
-              Fixed readonly CheckList to use <tt>disabled</tt> attribute, 
+              Fixed readonly CheckList to use <tt>disabled</tt> attribute,
               same as Checkbox does [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-751">CLK-751</a>].
           </li>
           <li class="change">
@@ -941,23 +946,23 @@ Fixed table headers that used incorrect title attribute when table is sortable.
           [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-528">528</a>].
       </li>
       <li class="change">
-          Added TypeConverter configuration option to ClickServlet. 
+          Added TypeConverter configuration option to ClickServlet.
           See <a href="click-api/org/apache/click/ClickServlet.html#getTypeConverter()">getTypeConverter()</a>
           method for details. This issue was raised Joseph Schmidt and fixed by Adrian A.
           [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-539">539</a>].
       </li>
       <li class="change">
           Added <a href="extras-api/org/apache/click/extras/service/Slf4jLogService.html">Slf4jLogService</a>
-          for supporting multiple application servers. 
+          for supporting multiple application servers.
           This issue was raised Oliver Burn
           [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-555">555</a>].
       </li>
       <li class="change">
-          Added <a href="click-api/org/apache/click/util/Bindable.html">@Bindable</a> 
+          Added <a href="click-api/org/apache/click/util/Bindable.html">@Bindable</a>
           annotation support for page field autobinding. @Bindable supports public,
           protected and private Page variables
-          [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-556">556</a>, 
-           <a target='_blank' href="https://issues.apache.org/jira/browse/CLK-599">599</a> 
+          [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-556">556</a>,
+           <a target='_blank' href="https://issues.apache.org/jira/browse/CLK-599">599</a>
           ].
       </li>
       <li class="change">
@@ -1038,7 +1043,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
           Improved CompressionServletResponseWrapper and CompressionResponseStream classes to have
           public visibility to enable use in custom servlet Filters
           [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-547">547</a>].
-      </li>      
+      </li>
       <li class="change">
           Improved Menu control to render attribute class="selected" when the menu item
           is selected. This issue was raised and fixed by Frederic Daoud
@@ -1054,7 +1059,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
           [<a target='_blank' href="https://issues.apache.org/click/browse/CLK-552">552</a>].
       </li>
       <li class="change">
-          Improved Cayenne DataContextFilter, including adding support for LifecycleListener 
+          Improved Cayenne DataContextFilter, including adding support for LifecycleListener
           registration
           [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-559">559</a>].
       </li>
@@ -1180,7 +1185,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
       Please note that this release is provided outside of the ASF and is not
       endorsed or approved by the Apache Software Foundation.
     </div>
-    <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;"> 
+    <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;">
       The following issues were resolved since 1.5:
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
@@ -1244,7 +1249,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
     <div style="margin-left:-2em;margin-bottom:1em;">
       IMPORTANT be sure to read the <a href="upgrade-path.html#1.5">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
-    <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;"> 
+    <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;">
       The following issues were resolved since 1.5 RC3:
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
@@ -1319,7 +1324,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
         containing all <tt>click.xml</tt> <a href="click-dtd.html">DTD</a> elements and attributes.
       </li>
     </ul>
-    <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;"> 
+    <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;">
       The following issues were resolved:
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
@@ -1363,7 +1368,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
   </dd>
   <dt><a name="1.5-RC2"></a>Development Release - Version 1.5 RC2 - 29 September 2008</dt>
   <dd>
-    <div style="margin-left:-2em;margin-bottom:1em;"> 
+    <div style="margin-left:-2em;margin-bottom:1em;">
       IMPORTANT be sure to read the <a href="upgrade-path.html#1.5">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
     <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
@@ -1385,7 +1390,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
   </dd>
   <dt><a name="1.5-RC1"></a>Development Release - Version 1.5 RC1 - 28 September 2008</dt>
   <dd>
-    <div style="margin-left:-2em;margin-bottom:1em;"> 
+    <div style="margin-left:-2em;margin-bottom:1em;">
       IMPORTANT be sure to read the <a href="upgrade-path.html#1.5">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
     <ul style="padding: 0em; margin-left:0em;">
@@ -1403,7 +1408,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-446">446</a>].
       </li>
       <li class="change">
-        Add Table Row attribute support through new method 
+        Add Table Row attribute support through new method
         <a href="click-api/org/apache/click/control/Table.html#addRowAttributes(java.util.Map, java.lang.Object, int)">addRowAttributes</a>.
         This issue was raised by Hans Poo
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-431">431</a>].
@@ -1484,7 +1489,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
   </dd>
   <dt><a name="1.5-M3"></a>Development Release - Version 1.5 M3 - 17 August 2008</dt>
   <dd>
-    <div style="margin-left:-2em;margin-bottom:1em;"> 
+    <div style="margin-left:-2em;margin-bottom:1em;">
      IMPORTANT be sure to read the <a href="upgrade-path.html#1.5">upgrade path</a> when upgrading from Click 1.4 or earlier.
     </div>
     <ul style="padding: 0em; margin-left:0em;">
@@ -1522,7 +1527,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
         Improved Table rendering performance in the order of 25-45%.
       </li>
       <li class="change">
-        Improved rendering performance by caching the ClickUtils 
+        Improved rendering performance by caching the ClickUtils
         <a href="click-api/org/apache/click/util/ClickUtils.html#getResourceVersionIndicator(org.apache.click.Context)">resource version indicator</a>
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-412">412</a>].
       </li>
@@ -1532,7 +1537,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-363">363</a>].
       </li>
       <li class="change">
-        Fixed issue where Select validation can throw ClassCastException 
+        Fixed issue where Select validation can throw ClassCastException
         when option list contains an OptionGroup. This issue was identifier by Christophe Foiret
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-374">374</a>].
       </li>
@@ -1559,7 +1564,7 @@ Fixed table headers that used incorrect title attribute when table is sortable.
   </dd>
   <dt><a name="1.5-M2"></a>Development Release - Version 1.5 M2 - 20 July 2008</dt>
   <dd>
-    <div style="margin-left:-2em;margin-bottom:1em;"> 
+    <div style="margin-left:-2em;margin-bottom:1em;">
     IMPORTANT be sure to read the <a href="upgrade-path.html#1.5">upgrade path</a> when upgrading from Click 1.4 or earlier.
     <p/>
     Click 1.5 M2 introduced major enhancements to Control listener support.
@@ -1568,13 +1573,13 @@ Fixed table headers that used incorrect title attribute when table is sortable.
       <li class="change">
         New Control listener support through the <a href="click-api/org/apache/click/ActionListener.html">ActionListener</a> interface.
         This control listener style provides compile time safety and supports code refactoring tools.
-        
+
       <pre class="prettyprint">
 public class MyPage extends Page {
 
     public void onInit() {
         Submit submit = new Submit("submit");
-        
+
         submit.setActionListener(new ActionListener() {
             public boolean onAction(Control source) {
                 // Perform submit action and return true to continue processing
@@ -1583,7 +1588,7 @@ public class MyPage extends Page {
         });
     }
 } </pre>
-      Note that the source Control is passed in as an argument to the onAction method. 
+      Note that the source Control is passed in as an argument to the onAction method.
       For very complex scenarios it is useful to know which Control triggered the event
       [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-369">369</a>].
       </li>
@@ -1601,8 +1606,8 @@ public class MyPage extends Page {
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-401">401</a>].
       </li>
      </ul>
-    <div style="margin-left:-2em;margin-bottom:1em;"> 
-    The following is a list of enhancements and bugs fixes: 
+    <div style="margin-left:-2em;margin-bottom:1em;">
+    The following is a list of enhancements and bugs fixes:
     </div>
 	<ul style="padding: 0em; margin-left:0em;">
       <li class="change">
@@ -1642,13 +1647,13 @@ public class MyPage extends Page {
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-382">382</a>].
       </li>
       <li class="change">
-        Add ClickUtils autoPostRedirect() method to support 
+        Add ClickUtils autoPostRedirect() method to support
         <a class="external" target="_blank" href="http://en.wikipedia.org/wiki/SAML">SAML</a>
         integration
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-398">398</a>].
       </li>
       <li class="change">
-		Updated Container renaming method Container.add(int, Control) to Container.insert(Control, int) 
+		Updated Container renaming method Container.add(int, Control) to Container.insert(Control, int)
 		to better reflect the intention
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-381">381</a>].
       </li>
@@ -1657,12 +1662,12 @@ public class MyPage extends Page {
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-383">383</a>].
       </li>
       <li class="change">
-        Update HtmlStringBuffer to support method chaining. 
+        Update HtmlStringBuffer to support method chaining.
         This issue was raised by Demetrios Kyriakis
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-396">396</a>].
       </li>
       <li class="change">
-        Updated Menu so that it is now only cached in production or profile modes. 
+        Updated Menu so that it is now only cached in production or profile modes.
         In other development modes, changes to menu.xml is seen immediately.
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-408">408</a>].
       </li>
@@ -1699,7 +1704,7 @@ public class MyPage extends Page {
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-378">378</a>].
       </li>
       <li class="change">
-		Fixed FieldSet restoring FieldSet ability to set number of table columns 
+		Fixed FieldSet restoring FieldSet ability to set number of table columns
 		the FieldSet is rendered with
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-379">379</a>].
       </li>
@@ -1773,15 +1778,15 @@ public class MyPage extends Page {
   <p/>
   <div style="margin-left:-2em;margin-top:1.5em;margin-bottom:1em;">
    A new <a href="click-online.html#powered">Powered by Click</a> section was added.
-   If you want to enlist your site, please send a mail to one of our 
+   If you want to enlist your site, please send a mail to one of our
    <a href="click-online.html#mailing-lists">Mailing Lists</a> or directly to "sabob1 at gmail.com".
    <p/>
    The following is a list of enhancements and bugs fixes:
   </div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-	    Added <a class="external" target="_blank" href="http://www.freemarker.org">Freemarker</a> support as an 
-	    alternative templating engine to Velocity, with new 
+	    Added <a class="external" target="_blank" href="http://www.freemarker.org">Freemarker</a> support as an
+	    alternative templating engine to Velocity, with new
 	    <a href="extras-api/org/apache/click/extras/service/FreemarkerTemplateService.html">FreemarkerTemplateService</a>.
       </li>
       <li class="change">
@@ -1789,17 +1794,17 @@ public class MyPage extends Page {
 	    control based on the JDK's own built in Country/Locale support.
       </li>
       <li class="change">
-	    Added a <a href="extras-api/org/apache/click/extras/control/VirtualKeyboard.html">Virtual Keyboard</a> 
+	    Added a <a href="extras-api/org/apache/click/extras/control/VirtualKeyboard.html">Virtual Keyboard</a>
 	    control using <a href="http://www.greywyvern.com/code/js/keyboard.html">GreyWyvern</a> JavaScript library.
       </li>
 	  <li class="change">
-	    Added support for setting Form  
-	    <a href="click-api/org/apache/click/control/Form.html#getActionURL()">action</a> 
+	    Added support for setting Form
+	    <a href="click-api/org/apache/click/control/Form.html#getActionURL()">action</a>
 	    URL attribute. This issue was raised by Erdem Gunay
 	    [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-319">319</a>].
 	  </li>
 	  <li class="change">
-	    Added support for Page HTML	imports with a new <tt>getHtmlImports()</tt> 
+	    Added support for Page HTML	imports with a new <tt>getHtmlImports()</tt>
 	    method. This enables Pages to programmatically define HTML imports which
 	    will be included in a border template using the PageImports object.
 	    This issue was raised by David Frizelle
@@ -1808,7 +1813,7 @@ public class MyPage extends Page {
       <li class="change">
         Add Page <a href="click-api/org/apache/click/Page.html#setTemplate(java.lang.String)">setTemplate(String)</a>
         method to enable dynamic changing of a page border template. This issue
-        was raised by Huy Do 
+        was raised by Huy Do
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-353">353</a>].
 	  </li>
       <li class="change">
@@ -1832,7 +1837,7 @@ public class MyPage extends Page {
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-317">317</a>].
 	  </li>
       <li class="change">
-        Fixed Cayenne 3.0M3 DataObjectUtils issue in CayenneForm when using JDK 1.5. 
+        Fixed Cayenne 3.0M3 DataObjectUtils issue in CayenneForm when using JDK 1.5.
         Added <a href="extras-api/org/apache/click/extras/cayenne/CayenneUtils.html">CayenneUtils</a> helper class
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-342">342</a>].
 	  </li>
@@ -1917,16 +1922,16 @@ public class MyPage extends Page {
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-333">333</a>].
 	  </li>
 	  <li class="change">
-		Fixed Form and FieldSet column layout bug 
+		Fixed Form and FieldSet column layout bug
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-331">331</a>].
 	  </li>
       <li class="change">
-        Fixed Table column sorting issue with string values. 
+        Fixed Table column sorting issue with string values.
         This issue was raised by Ben Young
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-344">344</a>].
 	  </li>
       <li class="change">
-        Fixed Table style issues with sorted columns 
+        Fixed Table style issues with sorted columns
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-345">345</a>].
 	  </li>
   	</ul>
@@ -1983,7 +1988,7 @@ public class MyPage extends Page {
 		This issue was raised by Ricardo Lecheta and Bob Schellink
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-323">323</a>].
 	  </li>
-      <li class="change">Updated documentation and examples.</li> 	  
+      <li class="change">Updated documentation and examples.</li>
 	</ul>
   </dd>
   <p/>
@@ -1991,11 +1996,11 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
 	  <li class="change">
-		Added <a href="extras-api/org/apache/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a> 
+		Added <a href="extras-api/org/apache/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a>
 		to significantly improve the performance of Click applications
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-284">284</a>, <a target='_blank' href="https://issues.apache.org/jira/browse/CLK-290">290</a>].
 		<p/>
-		Click Framework now supports 
+		Click Framework now supports
 		<a href="http://developer.yahoo.com/performance/rules.html">Exceptional Performance</a>
         best practices for speeding up your web site.
 		This filter combined with framework changes enable Click applications to get
@@ -2027,7 +2032,7 @@ public class MyPage extends Page {
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-283">283</a>].
       </li>
       <li class="change">
-        Updated <tt>Controls</tt> to use the new API 
+        Updated <tt>Controls</tt> to use the new API
         <a href="click-api/org/apache/click/control/AbstractControl.html#addStyleClass(java.lang.String)">addStyleClass(String)</a> and
         <a href="click-api/org/apache/click/control/AbstractControl.html#setStyle(java.lang.String, java.lang.String)">setStyle(String, String)</a>
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-286">286</a>].
@@ -2083,14 +2088,14 @@ public class MyPage extends Page {
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-305">305</a>].
       </li>
       <li class="change">
-        Updated Cayenne library to version 2.0.4, which fixes a memory leak in 
-        version 2.03. This issue was raised by Bob Schellink 
+        Updated Cayenne library to version 2.0.4, which fixes a memory leak in
+        version 2.03. This issue was raised by Bob Schellink
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-281">281</a>].
       </li>
       <li class="change">
         Updated the JavaScript Prototype library to version 1.5.0 and 'script.aculo.us' to version 1.7.0.
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -2120,7 +2125,7 @@ public class MyPage extends Page {
       </li>
 	  <li class="change">
 		Updated ExternalLink control renaming method <tt>setPageClass</tt> to <tt>setTargetPath</tt>.
-		This issue was raised by Itou Akihiro 
+		This issue was raised by Itou Akihiro
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-244">244</a>].
       </li>
 	  <li class="change">
@@ -2130,23 +2135,23 @@ public class MyPage extends Page {
       </li>
 	  <li class="change">
 		Updated MessageMap to improve cache key.
-		This issue was raised and fixed by Bob Schellink 
+		This issue was raised and fixed by Bob Schellink
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-274">274</a>].
       </li>
 	  <li class="change">
-		Fixed bug where double "class" attributes are rendered in HTML for Field 
+		Fixed bug where double "class" attributes are rendered in HTML for Field
 		controls if validation is failed.
-		This issue was raised Shuo Geng and fixed by Bob Schellink 
+		This issue was raised Shuo Geng and fixed by Bob Schellink
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-233">233</a>].
       </li>
 	  <li class="change">
 		Fixed translation errors for French properties.
-		This issue was raised and fixed by Patrick Talbot 
+		This issue was raised and fixed by Patrick Talbot
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-238">238</a>].
       </li>
 	  <li class="change">
 		Fixed ClickUtils <tt>copyFormToObject()</tt> method <tt>Map</tt> support.
-		This issue was raised by Harry Wissiak and fixed by Bob Schellink 
+		This issue was raised by Harry Wissiak and fixed by Bob Schellink
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-239">239</a>].
       </li>
       <li class="change">
@@ -2190,7 +2195,7 @@ public class MyPage extends Page {
 		This issue was raised by Ben Warner
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-276">CLK-276</a>].
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -2203,63 +2208,63 @@ public class MyPage extends Page {
 		added to support persistence.
       </li>
       <li class="change">
-		Important Change 
+		Important Change
 		the <a href="click-api/org/apache/click/Context.html">Context</a> object
 		is now available in Page and Control constructors.
       </li>
       <li class="change">
-		Important Change 
-		added Control <a href="click-api/org/apache/click/Control.html#onInit()">onInit()</a> 
+		Important Change
+		added Control <a href="click-api/org/apache/click/Control.html#onInit()">onInit()</a>
 		initialization event handler.
 		As the <tt>setContext()</tt> method has been
 		removed any control initialization code contained in this method should be
 		migrated to the new control <tt>onInit()</tt> method.
       </li>
       <li class="change">
-		Important Change 
-		the XML configured root Menu item is obtained via the static method 
+		Important Change
+		the XML configured root Menu item is obtained via the static method
         <a href="extras-api/org/apache/click/extras/control/Menu.html#getRootMenu()">getRootMenu()</a>.
       </li>
       <li class="change">
-		Important Change 
+		Important Change
 		multipart file upload requests are now processed using a globally configured Commons FileUpload
-		class. Please see the 
+		class. Please see the
 		<a href="click-api/org/apache/click/service/CommonsFileUploadService.html">CommonsFileUploadService</a>
 		for more details. This change enables for request parameter auto binding
 		on multipart file upload requests.
       </li>
       <li class="change">
-		Important Change 
-		Click Extras now supports Apache Cayenne 2.x rather than Objectstyle Cayenne 1.2.x 
+		Important Change
+		Click Extras now supports Apache Cayenne 2.x rather than Objectstyle Cayenne 1.2.x
 		by default. Note backward compatibility Cayenne 1.2.x JARS are provide in the dist directory.
       </li>
       <li class="change">
-		Added Control <a href="click-api/org/apache/click/Control.html#onRender()">onRender()</a> 
+		Added Control <a href="click-api/org/apache/click/Control.html#onRender()">onRender()</a>
 		render event handler. This method is useful for Panel controls populating tables.
       </li>
       <li class="change">
-		Added Control <a href="click-api/org/apache/click/Control.html#onDestroy()">onDestroy()</a> 
+		Added Control <a href="click-api/org/apache/click/Control.html#onDestroy()">onDestroy()</a>
 		destroy event handler. This method is useful for controls to free resources, when the controls
 		are contained in stateful pages.
       </li>
       <li class="change">
-      	Added <a href="extras-api/org/apache/click/extras/control/ExternalLink.html">ExternalLink</a> control. 
+      	Added <a href="extras-api/org/apache/click/extras/control/ExternalLink.html">ExternalLink</a> control.
       </li>
       <li class="change">
-      	Added AbstractControl <a href="click-api/org/apache/click/control/AbstractControl.html#getPage()">getPage()</a> method. 
+      	Added AbstractControl <a href="click-api/org/apache/click/control/AbstractControl.html#getPage()">getPage()</a> method.
       </li>
       <li class="change">
-      	Added Context <a href="click-api/org/apache/click/Context.html#getRequestParameterValues()">getRequestParameterValues()</a> method. 
+      	Added Context <a href="click-api/org/apache/click/Context.html#getRequestParameterValues()">getRequestParameterValues()</a> method.
       </li>
       <li class="change">
-      	Added Context <a href="click-api/org/apache/click/Context.html#isGet()">isGet()</a> method. 
+      	Added Context <a href="click-api/org/apache/click/Context.html#isGet()">isGet()</a> method.
       </li>
       <li class="change">
-      	Added Field <a href="click-api/org/apache/click/control/Field.html#help">help</a> property 
+      	Added Field <a href="click-api/org/apache/click/control/Field.html#help">help</a> property
       	to render help text to the right hand side of fields.
       </li>
       <li class="change">
-      	Added Menu <a href="extras-api/org/apache/click/extras/control/Menu.html#imageSrc">imageSrc</a> property 
+      	Added Menu <a href="extras-api/org/apache/click/extras/control/Menu.html#imageSrc">imageSrc</a> property
       	to support for rendering img icons in menus.
       </li>
       <li class="change">
@@ -2276,10 +2281,10 @@ public class MyPage extends Page {
       	[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-221">226</a>].
       </li>
       <li class="change">
-      	Removed Page and Control <tt>setContext()</tt> methods. 
+      	Removed Page and Control <tt>setContext()</tt> methods.
       </li>
       <li class="change">
-      	Removed FileField <tt>fileUpload</tt> property. 
+      	Removed FileField <tt>fileUpload</tt> property.
       </li>
       <li class="change">
 		Fixed Page control autobinding bug.
@@ -2307,7 +2312,7 @@ public class MyPage extends Page {
       <li class="change">
         Updated Cayenne library to version 2.0.3.
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -2315,12 +2320,12 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-        Updated <a href="extras-api/org/apache/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
+        Updated <a href="extras-api/org/apache/click/extras/cayenne/CayenneForm.html">CayenneForm</a>
         to handle non integer primary key values. This issue was raised by Tore Halset
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-211">211</a>].
       </li>
       <li class="change">
-        Fixed RadioGroup is still active when set it to disabled bug. 
+        Fixed RadioGroup is still active when set it to disabled bug.
         This issue was raised by Christophe FOIRET
       	[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-218">218</a>].
       </li>
@@ -2329,7 +2334,7 @@ public class MyPage extends Page {
       	[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-220">220</a>].
       </li>
       <li class="change">
-        Updated Commons FileUpload library to version 1.2. Fixes bug where file 
+        Updated Commons FileUpload library to version 1.2. Fixes bug where file
         names are being converted into lowercase.
       </li>
       <li class="change">
@@ -2348,74 +2353,74 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-		Important Change 
+		Important Change
 		the <a href="user-guide/html/ch02s02.html#activity-diagram">Pages</a> event execution order
-		has changed with the <tt>onSecurityCheck()</tt> method now invoked before 
-		the <tt>onInit()</tt> method. The benefit of this is that the <tt>onInit()</tt> 
+		has changed with the <tt>onSecurityCheck()</tt> method now invoked before
+		the <tt>onInit()</tt> method. The benefit of this is that the <tt>onInit()</tt>
 		is only invoked if the request has passed the <tt>onSecurityCheck()</tt>.
       </li>
       <li class="change">
-      	Added 
+      	Added
       	<a href="extras-api/org/apache/click/extras/control/PickList.html">PickList</a> control.
-      	This control was created by Naoki Takezoe 
+      	This control was created by Naoki Takezoe
       	[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-194">194</a>].
       </li>
       <li class="change">
-		Added <a href="extras-api/org/apache/click/extras/tree/Tree.html">Tree</a> control client side javascript functionality. 
-		This was provided by Bob Schellink 
+		Added <a href="extras-api/org/apache/click/extras/tree/Tree.html">Tree</a> control client side javascript functionality.
+		This was provided by Bob Schellink
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-186">186</a>].
       </li>
       <li class="change">
       	Added <a href="user-guide/html/ch04s02.html#application-autobinding">autobinding</a> configuration option.
-      	This issue was raised by Ahmed Mohombe 
+      	This issue was raised by Ahmed Mohombe
       	[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-199">199</a>].
       </li>
       <li class="change">
-		Added <tt>tabindex</tt> support to 
-		<a href="click-api/org/apache/click/control/AbstractLink.html">AbstractLink</a> and 
+		Added <tt>tabindex</tt> support to
+		<a href="click-api/org/apache/click/control/AbstractLink.html">AbstractLink</a> and
 		<a href="click-api/org/apache/click/control/Field.html">Field</a> controls.
       </li>
       <li class="change">
-		Added Form  
+		Added Form
 		<a href="click-api/org/apache/click/control/Form.html#defaultFieldSize">defaultFieldSize</a> property.
       </li>
       <li class="change">
-		Improved <tt>trace</tt> level logging to detail <a href="click-api/org/apache/click/Page.html">Page</a> event execution order. 
+		Improved <tt>trace</tt> level logging to detail <a href="click-api/org/apache/click/Page.html">Page</a> event execution order.
       </li>
       <li class="change">
-		Improved <a href="extras-api/org/apache/click/extras/control/EmailField.html">EmailField</a> validation. 
+		Improved <a href="extras-api/org/apache/click/extras/control/EmailField.html">EmailField</a> validation.
       </li>
       <li class="change">
-		Changed default <a href="click-api/org/apache/click/control/Form.html">Form</a> errorPostion from <tt>"middle"</tt> to <tt>"top"</tt>. 
+		Changed default <a href="click-api/org/apache/click/control/Form.html">Form</a> errorPostion from <tt>"middle"</tt> to <tt>"top"</tt>.
       </li>
       <li class="change">
-		Fixed <a href="extras-api/org/apache/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
-		handling of new objects bug. This issue was raised by Andrus Adamchik 
+		Fixed <a href="extras-api/org/apache/click/extras/cayenne/CayenneForm.html">CayenneForm</a>
+		handling of new objects bug. This issue was raised by Andrus Adamchik
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-73">73</a>].
       </li>
       <li class="change">
-		Fixed <a href="click-api/org/apache/click/control/FileField.html">FileField</a> 
+		Fixed <a href="click-api/org/apache/click/control/FileField.html">FileField</a>
 		configurations not be applied in certain scenarios.
-		This issue was raised and fixed by Sadanori Ito 
+		This issue was raised and fixed by Sadanori Ito
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-179">179</a>].
       </li>
       <li class="change">
 		Fixed Page with two <a href="click-api/org/apache/click/control/Table.html">Table</a>
-	    controls produces unneeded css style text bug. 
-		This issue was raised by J.F. Zarama  
+	    controls produces unneeded css style text bug.
+		This issue was raised by J.F. Zarama
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-197">197</a>].
       </li>
       <li class="change">
-		Fixed <a href="extras-api/org/apache/click/extras/control/LinkDecorator.html">LinkDecorator</a> table sorting support. 
-		This issue was raised by Louis Martin and fixed by Bob Schellink 
+		Fixed <a href="extras-api/org/apache/click/extras/control/LinkDecorator.html">LinkDecorator</a> table sorting support.
+		This issue was raised by Louis Martin and fixed by Bob Schellink
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-207">207</a>].
       </li>
       <li class="change">
-		Fixed <a href="click-api/org/apache/click/control/Table.html">Table</a> column sorting bug. 
-		This issue was raised by Louis Martin and fixed by Naoki Takezoe  
+		Fixed <a href="click-api/org/apache/click/control/Table.html">Table</a> column sorting bug.
+		This issue was raised by Louis Martin and fixed by Naoki Takezoe
 		[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-208">208</a>].
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -2423,10 +2428,10 @@ public class MyPage extends Page {
   <dd>
     <div style="margin-left:-2em;margin-bottom:0.5em;"> New developer
     <a target="blank" href="http://sourceforge.net/users/sabob/">Bob Schellink</a>
-    joins the Click project.</div>  
+    joins the Click project.</div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-      	Added controls 
+      	Added controls
       	<a href="extras-api/org/apache/click/extras/tree/Tree.html">Tree</a> and
       	<a href="extras-api/org/apache/click/extras/tree/CheckboxTree.html">CheckboxTree</a>.
       	These controls were created by Bob Schellink
@@ -2443,7 +2448,7 @@ public class MyPage extends Page {
       	Added Field convenience methods for setting style, text-align and width HTML attributes.
       </li>
       <li class="change">
-        Added support for multiple ActionButton parameters, see 
+        Added support for multiple ActionButton parameters, see
         <a href="click-api/org/apache/click/control/ActionButton.html#setParameter(java.lang.String, java.lang.String)">setParameter()</a>
         for details.
       </li>
@@ -2493,21 +2498,21 @@ public class MyPage extends Page {
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-177">177</a>].
       </li>
       <li class="change">
-        Added <a href="click-api/org/apache/click/util/ClickUtils.html">ClickUtils</a> 
+        Added <a href="click-api/org/apache/click/util/ClickUtils.html">ClickUtils</a>
         cookie handling methods, and convenience methods in the Context class.
-      	These methods were derived from the Atlassian 
+      	These methods were derived from the Atlassian
       	<a target="blank" class="external" href="http://opensource.atlassian.com/seraph/apidocs/com/atlassian/seraph/util/CookieUtils.html">CookieUtils</a>
       	class.
       </li>
       <li class="change">
         Added <a href="extras-api/org/apache/click/extras/control/Menu.html">Menu</a> properties
-        external and target, and changed <tt>toString()</tt> method to render an HTML anchor tag. 
+        external and target, and changed <tt>toString()</tt> method to render an HTML anchor tag.
         These changes simplify menu Velocity macros.
         Please note the <tt>isUserInRoles()</tt> method now returns false if there are no roles
         defined for the menu item.
       </li>
       <li class="change">
-      	Added <a href="extras-api/org/apache/click/extras/cayenne/DataContextFilter.html">DataContextFilter</a> support for 
+      	Added <a href="extras-api/org/apache/click/extras/cayenne/DataContextFilter.html">DataContextFilter</a> support for
       	session or request scope DataContext objects, and controlling the use of the Cayenne shared cache.
       </li>
       <li class="change">
@@ -2518,11 +2523,11 @@ public class MyPage extends Page {
       	Added automapping support for /click/error.htm pages.
       </li>
       <li class="change">
-        Added ClickServlet <a href="click-api/org/apache/click/ClickServlet.html#createClickLogger()">createClickLogger()</a> 
+        Added ClickServlet <a href="click-api/org/apache/click/ClickServlet.html#createClickLogger()">createClickLogger()</a>
         method to support customizing Click runtime engine logging. This issue was raised by Bob Schellink.
       </li>
       <li class="change">
-        Added Column <a href="click-api/org/apache/click/control/Column.html#titleProperty">titleProperty</a> 
+        Added Column <a href="click-api/org/apache/click/control/Column.html#titleProperty">titleProperty</a>
         attribute to support rendering &lt;td&gt; title attributes. This issue was raised by David Frizelle.
       </li>
       <li class="change">
@@ -2540,33 +2545,33 @@ public class MyPage extends Page {
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-159">159</a>].
       </li>
       <li class="change">
-      	Improved <a href="click-api/org/apache/click/control/ImageSubmit.html#src">ImageSubmit</a> 
+      	Improved <a href="click-api/org/apache/click/control/ImageSubmit.html#src">ImageSubmit</a>
       	src rendering by prefixing context path
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-165">165</a>].
       </li>
       <li class="change">
-      	Improved <a href="click-api/org/apache/click/control/Column.html#getHeaderTitle()">Column</a> 
+      	Improved <a href="click-api/org/apache/click/control/Column.html#getHeaderTitle()">Column</a>
       	i18n support for header titles. This issue was raised by Ricardo Lecheta
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-176">176</a>].
-      
+
       </li>
       <li class="change">
-      	Improved Form 
-      	<a href="click-api/org/apache/click/control/Form.html#endTag()">endTag()</a> 
+      	Improved Form
+      	<a href="click-api/org/apache/click/control/Form.html#endTag()">endTag()</a>
       	rendering to include JavaScript focus and validation code.
-      </li> 
+      </li>
       <li class="change">
       	Improved Table column sorting.
-      </li> 
+      </li>
       <li class="change">
       	Improved error reporting for IllegalArgumentExceptions.
-      </li> 
+      </li>
       <li class="change">
       	Improved AbstractLink rendering of disabled links, now render as a span element.
-      </li> 
+      </li>
       <li class="change">
-      	Refactored DoubleField, IntegerField and LongField to subclass 
-      	<a href="extras-api/org/apache/click/extras/control/NumberField.html">NumberField</a>. 
+      	Refactored DoubleField, IntegerField and LongField to subclass
+      	<a href="extras-api/org/apache/click/extras/control/NumberField.html">NumberField</a>.
       	This issue was raised by Ahmed Mohombe
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-120">120</a>].
       </li>
@@ -2574,7 +2579,7 @@ public class MyPage extends Page {
       	Removed support for logging to Servlet log.
       </li>
       <li class="change">
-      	Fixed ActionLink setValueObject() not setting null values. 
+      	Fixed ActionLink setValueObject() not setting null values.
       	This issue was raised by David Frizelle
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-150">150</a>].
       </li>
@@ -2585,34 +2590,34 @@ public class MyPage extends Page {
       <li class="change">
       	Fixed readonly support in <a href="click-api/org/apache/click/control/Checkbox.html">Checkbox</a>,
       	<a href="click-api/org/apache/click/control/Radio.html">Radio</a> and
-      	<a href="click-api/org/apache/click/control/Select.html">Select</a> controls. 
+      	<a href="click-api/org/apache/click/control/Select.html">Select</a> controls.
       	These issues were raised by Lorenzo Orselli and David Frizelle
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-155">155</a>,
          <a target='_blank' href="https://issues.apache.org/jira/browse/CLK-164">164</a>].
       </li>
       <li class="change">
-      	Fixed error position support in <a href="extras-api/org/apache/click/extras/control/TabbedForm.html">TabbedForm</a> control. 
+      	Fixed error position support in <a href="extras-api/org/apache/click/extras/control/TabbedForm.html">TabbedForm</a> control.
       	This issue was raised by Lorenzo Orselli
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-157">157</a>].
       </li>
       <li class="change">
-      	Fixed differences of Java/JavaScript error message. 
+      	Fixed differences of Java/JavaScript error message.
       	This issue was raised and fixed by Sadanori Ito
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-161">161</a>].
       </li>
       <li class="change">
-      	Fixed first day of week bug in <a href="extras-api/org/apache/click/extras/control/DateField.html">DateField</a> control. 
+      	Fixed first day of week bug in <a href="extras-api/org/apache/click/extras/control/DateField.html">DateField</a> control.
       	This issue was raised and fixed by Sadanori Ito
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-170">170</a>].
       </li>
       <li class="change">
       	Fixed Form
-      	<a href="click-api/org/apache/click/control/Form.html#copyTo(java.lang.Object)">copyTo</a> 
+      	<a href="click-api/org/apache/click/control/Form.html#copyTo(java.lang.Object)">copyTo</a>
       	Map support. This issue was raised by Louis Martin
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-172">172</a>].
       </li>
       <li class="change">
-      	Fixed FileField JavaScript validation bug. This issue was raised and fixed 
+      	Fixed FileField JavaScript validation bug. This issue was raised and fixed
       	by Sadanori Ito
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-178">178</a>].
       </li>
@@ -2630,58 +2635,58 @@ public class MyPage extends Page {
       <li class="change">
         Updated Cayenne library to version 1.2.2.
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
-  
+
   <dt>Version 1.1 - 22 November 2006</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:0.5em;"> New developer
     <a target="blank" href="http://sourceforge.net/users/shaberman/">Stephen Haberman</a>
-    joins the Click project.</div>  
+    joins the Click project.</div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-      	Added Form field width grid layout rendering option. See the Form 
+      	Added Form field width grid layout rendering option. See the Form
       	<a href="click-api/org/apache/click/control/Form.html#add(org.apache.click.control.Field, int)">add(field, width)</a> method.
       </li>
       <li class="change">
-      	Added Table Column sorting support. See the Column 
+      	Added Table Column sorting support. See the Column
       	<a href="click-api/org/apache/click/control/Column.html#sortable">sortable</a> property.
       </li>
       <li class="change">
-      	Added Column convenience methods for setting width, text-align, 
+      	Added Column convenience methods for setting width, text-align,
       	vertical-align attributes, and setting data and header styles.
       </li>
       <li class="change">
-      	Added auto binding of request values to public Page fields. See the ClickServlet method 
+      	Added auto binding of request values to public Page fields. See the ClickServlet method
         <a href="click-api/org/apache/click/ClickServlet.html#processPageRequestParams(org.apache.click.Page, javax.servlet.http.HttpServletRequest)">processPageRequestParams()</a>
-        for details. This addition was raised by Stephen Haberman. 
+        for details. This addition was raised by Stephen Haberman.
       </li>
       <li class="change">
         Added Form
-        <a href="click-api/org/apache/click/control/Form.html#clearValues()">clearValues()</a> 
+        <a href="click-api/org/apache/click/control/Form.html#clearValues()">clearValues()</a>
         method.
       </li>
       <li class="change">
-        Added ClickUtils 
-        <a href="click-api/org/apache/click/util/ClickUtils.html#getMimeType(java.lang.String)">getMimeType()</a> 
+        Added ClickUtils
+        <a href="click-api/org/apache/click/util/ClickUtils.html#getMimeType(java.lang.String)">getMimeType()</a>
         method.
       </li>
       <li class="change">
-        Added support for overriding Click Application mode by defining a System property <tt>click.mode</tt>. 
+        Added support for overriding Click Application mode by defining a System property <tt>click.mode</tt>.
         For example: <tt>-Dclick.mode=trace</tt>
       </li>
       <li class="change">
       	Improved Table paging across very large lists.
-      </li>     
+      </li>
       <li class="change">
       	Improved Table rendering performance.
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-136">136</a>].
-      </li>      
+      </li>
       <li class="change">
       	Improved OGNL form binding performance.
-      </li>    
+      </li>
       <li class="change">
         Improved Click configuration defaults:
         <ul style="margin-top:0.5em;">
@@ -2690,23 +2695,23 @@ public class MyPage extends Page {
         </ul>
       </li>
       <li class="change">
-      	Updated ClickServlet to use response Writer to support the 
+      	Updated ClickServlet to use response Writer to support the
       	<a href="http://messadmin.sourceforge.net/">MessAdmin</a> session monitoring tool.
       	This issue was identified by Sven Herschel and a patch was provided by
       	Bob Schellink
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-146">146</a>].
-      </li>    
+      </li>
       <li class="change">
       	Fixed NPE in PropertySelect when label is null. This issue was raised by David Frizelle
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-132">132</a>].
       </li>
       <li class="change">
-      	Fixed OgnlException in Column when evaluating null property paths. 
+      	Fixed OgnlException in Column when evaluating null property paths.
       	This issue was raised by David Frizelle
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-133">133</a>].
       </li>
       <li class="change">
-      	Fixed Ognl Null property evaluation bug when handling Date properties. 
+      	Fixed Ognl Null property evaluation bug when handling Date properties.
       	This issue was raised by David Frizelle
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-137">137</a>].
       </li>
@@ -2715,12 +2720,12 @@ public class MyPage extends Page {
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-142">142</a>].
       </li>
       <li class="change">
-      	Fixed HibernateForm not working for CGLib proxies. This issue was identified 
-      	and fixed by Caroline Briffa 
+      	Fixed HibernateForm not working for CGLib proxies. This issue was identified
+      	and fixed by Caroline Briffa
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-144">144</a>].
       </li>
       <li class="change">
-      	Fixed CayenneForm bug where FOID was not being updated for recently committed DataObject. 
+      	Fixed CayenneForm bug where FOID was not being updated for recently committed DataObject.
       	This issue was raised by David Frizelle
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-145">145</a>].
       </li>
@@ -2734,9 +2739,9 @@ public class MyPage extends Page {
         Updated OGNL library to version 2.6.9.
       </li>
       <li class="change">
-        Updated documentation and examples. Click Quickstart has also been added 
+        Updated documentation and examples. Click Quickstart has also been added
         as an example application.
-      </li> 
+      </li>
     </ul>
   </dd>
   <p/>
@@ -2784,7 +2789,7 @@ public class MyPage extends Page {
       <li class="change">
         Updated Cayenne library to version 1.2.1.
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -2793,17 +2798,17 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
         Added <a href="click-api/org/apache/click/util/FlashAttribute.html">FlashAttribute</a>
-        class providing flash scope session attributes. Once a flash attribute 
-        has been accessed from the session it is removed. 
+        class providing flash scope session attributes. Once a flash attribute
+        has been accessed from the session it is removed.
       </li>
       <li class="change">
         Added <a href="extras-api/org/apache/click/extras/control/LinkDecorator.html">LinkDecorator</a>
-        class for rendering action links in column tables. This class was inspired 
+        class for rendering action links in column tables. This class was inspired
         by Richardo Lecheta's <tt>ViewDecorator</tt> pattern.
       </li>
       <li class="change">
-        Added paging support to 
-        <a href="extras-api/org/apache/click/extras/control/FormTable.html">FormTable</a> 
+        Added paging support to
+        <a href="extras-api/org/apache/click/extras/control/FormTable.html">FormTable</a>
         control.
       </li>
       <li class="change">
@@ -2812,11 +2817,11 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Added Form
-        <a href="click-api/org/apache/click/control/Form.html#clearErrors()">clearErrors()</a> 
+        <a href="click-api/org/apache/click/control/Form.html#clearErrors()">clearErrors()</a>
         method.
       </li>
       <li class="change">
-        Added Page templating support for JSP pages. This issue was raise by Huy Do. 
+        Added Page templating support for JSP pages. This issue was raise by Huy Do.
       </li>
       <li class="change">
         Added Taiwan properties file provided by Huang.
@@ -2830,18 +2835,18 @@ public class MyPage extends Page {
       </li>
       <li class="change">
       	Updated <a href="click-api/org/apache/click/control/Column.html">Column</a>
-        class to escape HTML characters by default. This issue was raised by 
-        Glen Stampoultzis 
+        class to escape HTML characters by default. This issue was raised by
+        Glen Stampoultzis
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-118">118</a>].
-      </li> 
+      </li>
       <li class="change">
-        Updated 
+        Updated
         <a href="click-api/org/apache/click/util/HtmlStringBuffer.html">HtmlStringBuffer</a>
         to improve HTML character escaping performance, removing Apache Commons Lang's use.
       </li>
       <li class="change">
-        Updated <a target="blank" href="http://fisheye3.cenqua.com/browse/click/">FishEye</a> project view 
-        provided by <a target="blank" href="http://www.cenqua.com">Cenqua</a>.      
+        Updated <a target="blank" href="http://fisheye3.cenqua.com/browse/click/">FishEye</a> project view
+        provided by <a target="blank" href="http://www.cenqua.com">Cenqua</a>.
       </li>
       <li class="change">
         Updated Cayenne library to version 1.2.
@@ -2851,15 +2856,15 @@ public class MyPage extends Page {
       </li>
       <li class="change">
       	Fixed <a href="extras-api/org/apache/click/extras/filter/CompressionFilter.html">CompressionFilter</a>
-        to compress response by default and to automatically set any configured Click charset. 
+        to compress response by default and to automatically set any configured Click charset.
         These issues were raised by Ricardo Lecheta and Naoki Takezoe
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-119">119</a>].
-      </li> 
+      </li>
       <li class="change">
       	Fixed NPE in DateField when setting value to null. This issue was raised by Geoff Hopson
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-121">121</a>].
-      </li> 
-      <li class="change">Updated documentation and examples.</li> 
+      </li>
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -2869,7 +2874,7 @@ public class MyPage extends Page {
       <li class="change">
         Added
         <a href="extras-api/org/apache/click/extras/control/FormTable.html">FormTable</a>
-        data grid control and associated 
+        data grid control and associated
         <a href="extras-api/org/apache/click/extras/control/FieldColumn.html">FieldColumn</a>
         class.
       </li>
@@ -2881,80 +2886,80 @@ public class MyPage extends Page {
       <li class="change">
        Added Page
        <a href="click-api/org/apache/click/Page.html#setForward(java.lang.Class)">setForward(Class)</a> method.
-      </li> 
+      </li>
       <li class="change">
-       Added 
+       Added
        <a href="quick-start.html">Quick Start</a> topic to Click documentation.
-      </li> 
+      </li>
       <li class="change">
         Modified Form
         <a href="click-api/org/apache/click/control/Form.html#isFormSubmission()">isFormSubmission()</a>
         method to only return true if the submission is from this form.
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
   <dt>Version 0.21 - 19th July 2006</dt>
   <dd>
-    <div style="margin-left:-2em;margin-bottom:0.5em;"> 
+    <div style="margin-left:-2em;margin-bottom:0.5em;">
     Final new features release for Click 1.0.</div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-       Added Page 
+       Added Page
        <a href="click-api/org/apache/click/Page.html#onRender()">onRender()</a>
        method. This addition was raised by Stephen Haberman
        [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-105">105</a>].
-      </li>        
+      </li>
       <li class="change">
-       Auto add public Page fields to the model. 
+       Auto add public Page fields to the model.
        See the ClickServlet methods
        <a href="click-api/org/apache/click/ClickServlet.html#initPage(java.lang.String, java.lang.Class, javax.servlet.http.HttpServletRequest)">initPage()</a>
-       and 
+       and
        <a href="click-api/org/apache/click/ClickServlet.html#createVelocityContext(org.apache.click.Page)">createVelocityContext()</a>
        for details. This addition was raised by Stephen Haberman
        [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-109">109</a>,
        <a target='_blank' href="https://issues.apache.org/jira/browse/CLK-112">112</a>].
-      </li>        
+      </li>
       <li class="change">
-       Refactored panel package with BasicPanel renamed 
+       Refactored panel package with BasicPanel renamed
        <a href="click-api/org/apache/click/control/Panel.html">Panel</a> and moved
        into the core control package, and removing the Panel interface.
-       The 
+       The
        <a href="extras-api/org/apache/click/extras/panel/ListPanel.html">ListPanel</a>
-       and  
+       and
        <a href="extras-api/org/apache/click/extras/panel/TabbedPanel.html">TabbedPanel</a>
        classes have been revised to take advantage of the new Panel capabilities.
        <p/>
-       Panels are now rendered as <tt>$panel</tt> rather than <tt>#parse($panel)</tt> 
-       <p/>       
+       Panels are now rendered as <tt>$panel</tt> rather than <tt>#parse($panel)</tt>
+       <p/>
        Panels can now define Velocity templates on the classpath as well as the web file system.
-      </li>        
+      </li>
       <li class="change">
-       Added 
+       Added
        <a href="click-api/org/apache/click/control/PageLink.html">PageLink</a>
        control. This addition was raised by Stephen Haberman
        [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-106">106</a>].
-      </li>        
+      </li>
       <li class="change">
        Added OGNL support for rendering <a href="click-api/org/apache/click/control/Column.html">Column</a>
        values.
-      </li>        
+      </li>
       <li class="change">
-       Added support for multiple ActionLink parameters, see 
+       Added support for multiple ActionLink parameters, see
        <a href="click-api/org/apache/click/control/AbstractLink.html#setParameter(java.lang.String, java.lang.String)">setParameter()</a>
        for details.
-      </li>        
+      </li>
       <li class="change">
-       Added Menu 
+       Added Menu
        <a href="extras-api/org/apache/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>
        method.
-      </li>        
+      </li>
       <li class="change">
-       Added 
+       Added
        <a href="user-guide/html/ch05.html">Best Practices</a> topic to Click
        documentation.
-      </li>        
+      </li>
       <li class="change">
        Fixed Tomcat deployment issue where Tomcat ClassLoader was locking Click
        JARs preventing application redeployment. Due locking on URL streams,
@@ -2981,14 +2986,14 @@ public class MyPage extends Page {
       <li class="change">
        Fixed DoubleField validation bug with "0" value. This issue was identified by David Frizelle
        [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-111">111</a>].
-      </li>      
+      </li>
       <li class="change">
        Moved ActionButton control from Click Extras to core controls package.
       </li>
       <li class="change">
        Removed depreciated Context sessionObject methods.
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -2999,7 +3004,7 @@ public class MyPage extends Page {
        Added client side JavaScript
        <a href="click-api/org/apache/click/control/Form.html#form-validation">Form Validation</a>
        [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-16">16</a>].
-      </li>        
+      </li>
       <li class="change">
        Added new Click extras controls
        <a href="extras-api/org/apache/click/extras/control/CheckList.html">CheckList</a> and
@@ -3008,29 +3013,29 @@ public class MyPage extends Page {
        [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-81">81</a>].
       </li>
       <li clas="change">
-       Added support for a global page message bundle, see Page 
+       Added support for a global page message bundle, see Page
        <a href="click-api/org/apache/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
-       for details. This issue raised by Claudio Rossetto 
+       for details. This issue raised by Claudio Rossetto
        [<a href="https://issues.apache.org/jira/browse/CLK-72">72</a>].
       <li class="change">
        Added <a href="click-api/org/apache/click/Control.html">Control</a>
-       <tt>parent</tt> property 
+       <tt>parent</tt> property
        [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-88">88</a>].
       </li>
       <li class="change">
        Added support table Column support for <tt>java.util.Map</tt> row objects.
-       This issue raised by J.F. Zarama  
+       This issue raised by J.F. Zarama
        [<a href="https://issues.apache.org/jira/browse/CLK-91">91</a>].
       </li>
       <li class="change">
-       Added option to place Table banner on top. 
+       Added option to place Table banner on top.
        See Table
        <a href="click-api/org/apache/click/control/Table.html#bannerPosition">bannerPosition</a>
-       Javadoc for details. This issue raised by J.F. Zarama  
+       Javadoc for details. This issue raised by J.F. Zarama
        [<a href="https://issues.apache.org/jira/browse/CLK-92">92</a>].
       </li>
       <li class="change">
-       Add configurable application Locale. See 
+       Add configurable application Locale. See
        <a href="user-guide/html/ch04s02.html#click-app">Click App</a> for
        details [<a href="https://issues.apache.org/jira/browse/CLK-96">96</a>].
       </li>
@@ -3048,12 +3053,12 @@ public class MyPage extends Page {
        methods.
       </li>
       <li class="change">
-       Added request parameter to ClickServlet   
+       Added request parameter to ClickServlet
        <a href="click-api/org/apache/click/ClickServlet.html#newPageInstance(java.lang.String, java.lang.Class, javax.servlet.http.HttpServletRequest)">newPageInstance()</a>
        method.
       </li>
       <li class="change">
-       Added Brazilian properties files provided by 
+       Added Brazilian properties files provided by
        Ricardo Lecheta [<a href="https://issues.apache.org/jira/browse/CLK-86">86</a>].
       </li>
       <li class="change">
@@ -3062,17 +3067,17 @@ public class MyPage extends Page {
       </li>
       <li class="change">
        Added <a target="blank" class="external" href="http://www.springsource.org/">Spring</a>
-       integration example to Examples and improved 
+       integration example to Examples and improved
        <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
        documentation.
       </li>
       <li class="change">
-       Improved Velocity rendering performance. This issue was identified and 
-       fixed by Stephen Haberman 
+       Improved Velocity rendering performance. This issue was identified and
+       fixed by Stephen Haberman
        [<a target='_blank' href='http://issues.apache.org/jira/browse/VELOCITY-438'>VELOCITY-438</a>].
       </li>
       <li class="change">
-       Improved    
+       Improved
        <a href="click-api/org/apache/click/util/HtmlStringBuffer.html">HtmlStringBuffer</a>
        performance with unsynchronized append methods.
       </li>
@@ -3103,11 +3108,11 @@ public class MyPage extends Page {
        patch VELOCITY-438 applied.
       </li>
       <li class="change">
-       Updated packaging: <tt>click-documentation.war</tt> replaced by 
+       Updated packaging: <tt>click-documentation.war</tt> replaced by
         <tt>documentation</tt> directory and <tt>webapps/click-examples</tt>
         moved to <tt>examples</tt> directory.
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -3118,11 +3123,11 @@ public class MyPage extends Page {
     joins the Click project.</div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-       New <a href="http://www.sunvolt.com/confluence/display/CLKT/ClickIDE">ClickIDE</a> 
+       New <a href="http://www.sunvolt.com/confluence/display/CLKT/ClickIDE">ClickIDE</a>
        Eclipse WTP plug-in released by Naoki Takezoe.
       </li>
       <li class="change">
-       Added new Click Extras controls 
+       Added new Click Extras controls
        <a href="click-api/org/apache/click/control/ActionButton.html">ActionButton</a>,
        <a href="extras-api/org/apache/click/extras/control/LongField.html">LongField</a>,
        <a href="extras-api/org/apache/click/extras/control/NumberField.html">NumberField</a>,
@@ -3130,23 +3135,23 @@ public class MyPage extends Page {
        <a href="extras-api/org/apache/click/extras/control/TelephoneField.html">TelephoneField</a>.
       </li>
       <li class="change">
-       Added new Click Extras Cayenne controls 
+       Added new Click Extras Cayenne controls
        <a href="extras-api/org/apache/click/extras/cayenne/PropertySelect.html">PropertySelect</a>,
        <a href="extras-api/org/apache/click/extras/cayenne/QuerySelect.html">QuerySelect</a> and
        <a href="extras-api/org/apache/click/extras/cayenne/TabbedCayenneForm.html">TabbedCayenneForm</a>.
-       Also added web 
+       Also added web
        <a href="extras-api/org/apache/click/extras/cayenne/DataContextFilter.html">DataContextFilter</a>.
       </li>
       <li class="change">
-        Added Context page path lookup method 
+        Added Context page path lookup method
         <a href="click-api/org/apache/click/Context.html#getPagePath(java.lang.Class)">getPagePath()</a>.
         This feature was suggested by Christian Essl
         [<a href="https://issues.apache.org/jira/browse/CLK-68">68</a>].
       </li>
       <li class="change">
-        Added support for 
+        Added support for
         <a href="click-api/org/apache/click/control/Form.html#data-binding">data binding</a>
-        of nested objects in form fields using 
+        of nested objects in form fields using
         <a target="blank" href="http://www.ognl.org">OGNL</a> library.
       </li>
       <li class="change">
@@ -3157,7 +3162,7 @@ public class MyPage extends Page {
       <li class="change">
         Added support for Control Velocity templates using new Context
         <a href="click-api/org/apache/click/Context.html#renderTemplate(java.lang.Class, java.util.Map)">renderTemplate()</a>
-        methods. See Click Examples 'Rich Text Area' and 'Tabbed Form' for 
+        methods. See Click Examples 'Rich Text Area' and 'Tabbed Form' for
         demonstrations.
       </li>
       <li class="change">
@@ -3172,20 +3177,20 @@ public class MyPage extends Page {
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-57">57</a>].
       </li>
       <li clas="change">
-       Added French and Italian properties files provided by 
+       Added French and Italian properties files provided by
        Lorenzo Orselli [<a href="https://issues.apache.org/jira/browse/CLK-65">65</a>,
        <a href="https://issues.apache.org/jira/browse/CLK-66">66</a>].
       </li>
       <li class="change">
-        Improved 
+        Improved
         <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
         configuration options and documentation.
       </li>
       <li class="change">
-        Improved <a href="click-api/org/apache/click/util/Format.html">Format</a> 
-        class now uses request context Locale. 
+        Improved <a href="click-api/org/apache/click/util/Format.html">Format</a>
+        class now uses request context Locale.
         Please note this change requires modification to Format subclass
-        constructors.        
+        constructors.
         This issue was raised by Christian Essl
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-79">79</a>].
       </li>
@@ -3196,12 +3201,12 @@ public class MyPage extends Page {
         Updated Cayenne library to version 1.2B1.
        </li>
       <li class="change">
-        Fixed <a href="extras-api/org/apache/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
+        Fixed <a href="extras-api/org/apache/click/extras/cayenne/CayenneForm.html">CayenneForm</a>
         duplicate insert bug. This issue was identified by
         Bob Schellink [<a href="https://issues.apache.org/jira/browse/CLK-63">63</a>].
       </li>
       <li clas="change">
-        Fixed DateField internationalization bug. Issue identified by 
+        Fixed DateField internationalization bug. Issue identified by
         Lorenzo Orselli and fix provided by  Naoki Takezoe
         [<a href="https://issues.apache.org/jira/browse/CLK-60">60</a>].
       </li>
@@ -3217,10 +3222,10 @@ public class MyPage extends Page {
       </li>
       <li class="change">
         Removed example <tt>click-blank</tt> and <tt>click-cayenne</tt> applications
-        from main distribution. These examples will be released as separate 
+        from main distribution. These examples will be released as separate
         packages under sourceforge.
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -3231,7 +3236,7 @@ public class MyPage extends Page {
     joins the Click project.</div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-        Created new package 
+        Created new package
         <a href="extras-api/org/apache/click/extras/control/package-summary.html">org.apache.click.extras.control</a>
         for extended HTML controls. The following controls have been moved
         into this package: CreditCardField, DateField, DoubleField, EmailField,
@@ -3239,17 +3244,17 @@ public class MyPage extends Page {
         <p/>
         Table control promoted to core <a href="click-api/org/apache/click/control/package-summary.html">org.apache.click.control</a>.
         <p/>
-        Added Control methods 
+        Added Control methods
         <a href="click-api/org/apache/click/Control.html#getHtmlImports()">getHtmlImports()</a> and
         <a href="click-api/org/apache/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>.
       </li>
       <li class="change">
-        Added 
+        Added
         <a href="click-api/org/apache/click/util/PageImports.html">PageImports</a>
         object to automatically render control HTML header imports.
       </li>
       <li class="change">
-        Added form back button support. See Form 
+        Added form back button support. See Form
         <a href="click-api/org/apache/click/control/Form.html#onSubmitCheck(org.apache.click.Page, java.lang.String)">onSubmitCheck()</a>
         API for details.
       </li>
@@ -3258,13 +3263,13 @@ public class MyPage extends Page {
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-24">24</a>].
       </li>
       <li class="change">
-        Added 
-        <a href="extras-api/org/apache/click/extras/control/RegexField.html">RegexField</a> 
+        Added
+        <a href="extras-api/org/apache/click/extras/control/RegexField.html">RegexField</a>
         provided by Naoki Takezoe
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-46">46</a>].
       </li>
       <li class="change">
-        Added 
+        Added
         <a href="extras-api/org/apache/click/extras/cayenne/PropertySelect.html">PropertySelect</a>
         provided by Ahmed Mohombe. Please see Click Cayenne web application for
         a demonstration.
@@ -3278,15 +3283,15 @@ public class MyPage extends Page {
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-55">55</a>].
       </li>
       <li class="change">
-        Added click-examples Table with Form fields demonstration provided by 
+        Added click-examples Table with Form fields demonstration provided by
         Christian Essl.
       </li>
       <li class="change">
-        Improved UTF-8 charset handling provided by Naoki Takezoe 
+        Improved UTF-8 charset handling provided by Naoki Takezoe
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-56">56</a>].
       </li>
       <li class="change">
-        Improved Form &lt;-&gt; DAO  auto-loading to handle primitive types. 
+        Improved Form &lt;-&gt; DAO  auto-loading to handle primitive types.
         Provided by Christian Essl
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-53">53</a>].
       </li>
@@ -3316,7 +3321,7 @@ public class MyPage extends Page {
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-48">48</a>].
       </li>
       <li class="change">
-        Fixed session rewrite bug when using absolute redirects. 
+        Fixed session rewrite bug when using absolute redirects.
         This issue was identified by Maik Jablonski
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-51">51</a>].
       </li>
@@ -3325,10 +3330,10 @@ public class MyPage extends Page {
         [<a target='_blank' href="http://issues.apache.org/jira/browse/VELOCITY-424">VELOCITY-424</a>].
       </li>
       <li class="change">
-        Fixed Velocity 1.5-dev and Cayenne 1.2 interoperability bug 
+        Fixed Velocity 1.5-dev and Cayenne 1.2 interoperability bug
         [<a target='_blank' href="http://issues.apache.org/jira/browse/VELOCITY-426">VELOCITY-426</a>].
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -3336,21 +3341,21 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-        Modified <a href="click-api/org/apache/click/ClickServlet.html">ClickServlet</a> 
-        to enable direct ServletResponse handling by 
+        Modified <a href="click-api/org/apache/click/ClickServlet.html">ClickServlet</a>
+        to enable direct ServletResponse handling by
         Pages. See Click Examples Direct Page for a demonstration.
       </li>
       <li class="change">
         Modified <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
-        to set Spring ApplicationContext in pages implementing 
+        to set Spring ApplicationContext in pages implementing
         <tt>ApplicationContextAware</tt> interface.
       </li>
       <li class="change">
-        Fixed Click 0.16 integration issues with Velocity 1.5-dev snapshot and 
+        Fixed Click 0.16 integration issues with Velocity 1.5-dev snapshot and
         Cayenne 1.2.
       </li>
       <li class="change">
-        Registered Click JARs with  
+        Registered Click JARs with
         <a target="blank" href="http://www.ibiblio.org/maven/net.sf.click/jars/">Ibiblio Maven</a> Repository.
       </li>
     </ul>
@@ -3360,13 +3365,13 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-        Improved control localization support, please see 
+        Improved control localization support, please see
         <a href="click-api/org/apache/click/control/Field.html#getLabel()">Field</a>
         Javadoc and <a href="faq.html#localization">FAQ</a> for details.
         <p/>
         This feature based on a concept developed by Ahmed Mohombe,
         and replaces the <tt>"msg:"</tt> prefix localization functionality
-        introduced in release 0.13. 
+        introduced in release 0.13.
       </li>
       <li class="change">
         Added Hibernate data aware Form control
@@ -3374,11 +3379,11 @@ public class MyPage extends Page {
         and supporting
         <a href="extras-api/org/apache/click/extras/hibernate/SessionContext.html">SessionContext</a> and
         <a href="extras-api/org/apache/click/extras/hibernate/SessionFilter.html">SessionFilter</a> classes.
-      </li> 
+      </li>
       <li class="change">
-        Added Menu 
+        Added Menu
         <a href="extras-api/org/apache/click/extras/control/Menu.html#pages">pages</a>
-        property for selecting menu items. This feature was provided by 
+        property for selecting menu items. This feature was provided by
         Geoff Hopson
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-39">39</a>].
         <p/>
@@ -3389,10 +3394,10 @@ public class MyPage extends Page {
         Improved Form rendering flexibility with new properties
         <a href="click-api/org/apache/click/control/Form.html#getLabelRequiredPrefix()">labelRequiredPrefix</a>
         and
-        <a href="click-api/org/apache/click/control/Form.html#getLabelRequiredSuffix()">labelRequiredSuffix</a>.        
+        <a href="click-api/org/apache/click/control/Form.html#getLabelRequiredSuffix()">labelRequiredSuffix</a>.
       </li>
       <li class="change">
-        Added 
+        Added
         <a href="click-api/org/apache/click/control/Select.html#setMultipleValues(java.util.List)">Select</a>
         <tt>setMultipleValues()</tt> method. This issue was identified by
         Geoff Hopson
@@ -3403,9 +3408,9 @@ public class MyPage extends Page {
         <a href="click-api/org/apache/click/Context.html#createPage(java.lang.Class)">createPage()</a>
         method enabling you to specify the target page by class.
       </li>
-      <li class="change">Added custom rich text area control demonstration 
+      <li class="change">Added custom rich text area control demonstration
         in Click Examples Email Form page.
-      </li> 
+      </li>
       <li class="change">
         Fixed Column null value handling bug. This issue was identified by
         Geoff Hopson
@@ -3417,21 +3422,21 @@ public class MyPage extends Page {
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-33">33</a>].
       </li>
       <li class="change">
-        Fixed DateField I18N issue and improved rendering. These issues were 
+        Fixed DateField I18N issue and improved rendering. These issues were
         identified by Antoni Aloy and Ahmed Mohombe
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-36">36</a>,
          <a target='_blank' href="https://issues.apache.org/jira/browse/CLK-27">27</a>].
       </li>
       <li class="change">
-        Modified Format 
+        Modified Format
         <a href="click-api/org/apache/click/util/Format.html#getEmptyString()">getEmptyString()</a>
-        to return "" strings to better support AJAX rendering. 
+        to return "" strings to better support AJAX rendering.
         This issue was identified by Andrus Adamchik.
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
-  <p/> 
+  <p/>
   <dt>Version 0.15 - 25th October 2005</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
@@ -3439,28 +3444,28 @@ public class MyPage extends Page {
         Fixed escaping quote characters in controls. This issue was identified by
         Mike Organek
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-31">31</a>].<br/>
-        Added new 
+        Added new
         <a href="click-api/org/apache/click/util/HtmlStringBuffer.html">HtmlStringBuffer</a>
         class for control rendering.
       </li>
       <li class="change">
-        Added click-cayenne <a href="examples.html">example</a> web application. 
+        Added click-cayenne <a href="examples.html">example</a> web application.
         This application was contributed by Andrus Adamchik.
-      </li> 
+      </li>
       <li class="change">
-        Refactored <a href="click-api/org/apache/click/control/Form.html">Form</a> 
+        Refactored <a href="click-api/org/apache/click/control/Form.html">Form</a>
         align and position constants to remove ambiguity.
-      </li> 
+      </li>
       <li class="change">
         Fixed ClickApp NPE when initializing
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-30">30</a>],
-        related Velocity Engine patches applied 
+        related Velocity Engine patches applied
         [<a target='_blank' href="http://issues.apache.org/jira/browse/VELOCITY-412">412</a>].
-      </li> 
+      </li>
       <li class="change">
         Refactored Ant build system.
-      </li> 
-      <li class="change">Updated documentation and examples.</li> 
+      </li>
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <dt>Version 0.14 - 17th October 2005</dt>
@@ -3472,18 +3477,18 @@ public class MyPage extends Page {
       <li class="change">
         Fixed FieldSet Form processing bug. The bug was identified by by Paul Rule
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-25">25</a>].
-      </li> 
+      </li>
       <li class="change">
         Removed JDOM dependency.
-      </li> 
+      </li>
       <li class="change">
-        Velocity Engine error reporting patches applied 
+        Velocity Engine error reporting patches applied
         [<a target='_blank' href="http://issues.apache.org/jira/browse/VELOCITY-373">373</a>].
-      </li> 
+      </li>
       <li class="change">
-        Modified Ant build script to download JAR dependencies from 
+        Modified Ant build script to download JAR dependencies from
         <a href="http://www.ibiblio.org/maven/">Ibiblio</a> Maven repository.
-      </li>    
+      </li>
     </ul>
   </dd>
   <dt>Version 0.13 - 13th October 2005</dt>
@@ -3492,49 +3497,49 @@ public class MyPage extends Page {
       <li class="change">
         Added Spring integration servlet
         <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>.
-      </li> 
+      </li>
       <li class="change">
         Added Cayenne data aware Form control
         <a href="extras-api/org/apache/click/extras/cayenne/CayenneForm.html">CayenneForm</a>.
-      </li> 
+      </li>
       <li class="change">
-        Improved JSP support. See 
+        Improved JSP support. See
         <a href="faq.html#jsp-support">FAQ</a>
         for details and Click Examples for a demonstration.
       </li>
       <li class="change">
-        Improved 
+        Improved
 	<a href="click-api/org/apache/click/control/Field.html#setLabel(java.lang.String)">Field</a>
 	localization support, see <a href="faq.html#localization">FAQ</a> for details.
 	Based on a concept by Iain Shigeoka.
       </li>
       <li class="change">
-        Fixed FieldSet Form &lt;-&gt; DAO auto-loading bug. The fix was provided 
+        Fixed FieldSet Form &lt;-&gt; DAO auto-loading bug. The fix was provided
         by Paul Rule
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-20">23</a>].
-      </li> 
+      </li>
       <li class="change">
         Fixed WebSphere's bundled JDOM 0.7 compatibility issue. This issue was
         identified by Oliver Burn
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-20">25</a>].
-      </li> 
+      </li>
       <li class="change">
         Updated Jakarta Commons JARs to latest versions to support Hibernate
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-19">19</a>].
-      </li> 
+      </li>
       <li class="change">
         Removed Commons Logging dependency in Click Extras to avoid WebSphere
         class loading issues
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-20">20</a>].
-      </li> 
+      </li>
       <li class="change">
         Updated Velocity 1.5 dev build to use recent snapshot
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-21">21</a>].
-      </li> 
+      </li>
       <li class="change">
         Fixed NPE bug in ErrorReport. This fix was provided by Steve Cowx.
-      </li> 
-      <li class="change">Updated documentation and examples.</li> 
+      </li>
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -3542,12 +3547,12 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-      	Added <a href="click-api/org/apache/click/control/FieldSet.html">FieldSet</a> 
-        control. See Javadoc for details and Click Examples for a demonstration 
+      	Added <a href="click-api/org/apache/click/control/FieldSet.html">FieldSet</a>
+        control. See Javadoc for details and Click Examples for a demonstration
       	[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-4">CLK-4</a>].
-      </li> 
+      </li>
       <li class="change">
-        Add Field <tt>"name"</tt> and <tt>"label"</tt> constructors added to 
+        Add Field <tt>"name"</tt> and <tt>"label"</tt> constructors added to
         make Form &lt;-&gt; DAO auto-loading easier to use.
       </li>
       <li class="change">
@@ -3556,15 +3561,15 @@ public class MyPage extends Page {
         HTML
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-3">CLK-3</a>].
         <div style="margin-top:0.5em;">
-        For example the TextField HTML &nbsp; <tt>&lt;input type='text' disabled&gt;</tt> 
+        For example the TextField HTML &nbsp; <tt>&lt;input type='text' disabled&gt;</tt>
         &nbsp; now renders as <br/> <tt>&lt;input type='text' disabled='disabled'/&gt;</tt> </div>
       </li>
       <li class="change">
-        Fixed bug where multipart form parameters not available during 
-        <tt>Page.onInit()</tt> 
+        Fixed bug where multipart form parameters not available during
+        <tt>Page.onInit()</tt>
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-1">CLK-1</a>].
       </li>
-      <li class="change">Updated documentation and examples.</li> 
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -3573,67 +3578,67 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
       	Added <a href="extras-api/org/apache/click/extras/control/Menu.html">Menu</a> component.
-      	See Javadoc for details and Click Examples for a demonstration 
+      	See Javadoc for details and Click Examples for a demonstration
       	[<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-12">CLK-12</a>].
-      </li> 
+      </li>
       <li class="change">
       	Added runtime <a href="user-guide/html/ch04s02.html#page-auto-loading">Page Auto Loading</a>
         when the application is in
         <tt>"development"</tt>, <tt>"debug"</tt> or <tt>"trace"</tt> mode
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-18">CLK-18</a>].
-      </li> 
+      </li>
       <li class="change">
       	Added Form &lt;-&gt; DAO auto-loading feature.
         See <a href="click-api/org/apache/click/control/Form.html#copyFrom(java.lang.Object)">Form</a>
         Javadoc for details [<a target="blank" href="https://issues.apache.org/jira/browse/CLK-2">CLK-2</a>].
       </li>
       <li class="change">
-        Fixed blank page gzip compression bug. The Click embedded gzip compression 
+        Fixed blank page gzip compression bug. The Click embedded gzip compression
         functionality has been replaced with a
         <a href="extras-api/org/apache/click/extras/filter/CompressionFilter.html">CompressionFilter</a>
         derived from Jarkata Tomcat
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-5">CLK-5</a>].
-      </li> 
+      </li>
       <li class="change">
         Added <tt>email()</tt> and <tt>link()</tt> formatter methods and
         <tt>getEmptyString()</tt> method to
         <a href="click-api/org/apache/click/util/Format.html#email(java.lang.String)">Format</a> class
         [<a target='_blank' href="https://issues.apache.org/jira/browse/CLK-15">CLK-15</a>].
-      </li> 
+      </li>
       <li class="change">
         Modified <a href="click-api/org/apache/click/control/Form.html">Form</a>
-        control to render a class error attribute &lt;label class="error"&gt; 
+        control to render a class error attribute &lt;label class="error"&gt;
         in the labels of invalid fields. You can now override the <tt>control.css</tt>
         style <tt>label.error</tt> to modify the display of field error labels.
-      </li> 
+      </li>
       <li class="change">
         Modified <a href="click-api/org/apache/click/control/Form.html#Form(java.lang.String)">Form</a>
         constructor to only require form name parameter. The context can be
         set later. Note this will require modifications to exiting code.
-      </li> 
-      <li class="change">Updated documentation and examples.</li> 
+      </li>
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
   <dt>Version 0.10 - 1st September 2005</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:0.5em;"> New developer
-    <a target="blank" href="http://sourceforge.net/users/pbarnes/">Phil Barnes</a> 
+    <a target="blank" href="http://sourceforge.net/users/pbarnes/">Phil Barnes</a>
     joins the Click project.</div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-      	Added <a href="extras-api/org/apache/click/extras/panel/package-summary.html">Panel</a> 
+      	Added <a href="extras-api/org/apache/click/extras/panel/package-summary.html">Panel</a>
         components by Phil Barnes. See Javadoc for details and Click Examples for a demonstration.
-      </li> 
+      </li>
       <li class="change">
       	Added <a href="click-api/org/apache/click/control/Table.html">Table</a> control.
-      	See Javadoc for details and Click Examples for a demonstration 
+      	See Javadoc for details and Click Examples for a demonstration
       	[<a target='_blank' href="http://sourceforge.net/tracker/index.php?func=detail&aid=1243243&group_id=82095&atid=565027">1243243</a>].
-      </li> 
+      </li>
       <li class="change">
-      	Added <a href="click-api/org/apache/click/control/ImageSubmit.html">ImageSubmit</a> 
+      	Added <a href="click-api/org/apache/click/control/ImageSubmit.html">ImageSubmit</a>
         control by Phil Barnes. See Javadoc for details and Click Examples for a demonstration.
-      </li> 
+      </li>
       <li class="change">
         Localization/I18N changes include:
         <div style="margin-top:0.5em;">
@@ -3645,20 +3650,20 @@ public class MyPage extends Page {
       	Added new <a href="click-api/org/apache/click/Context.html#getLocale()">getLocale()</a>
         and <a href="click-api/org/apache/click/Context.html#setLocale(java.util.Locale)">setLocale()</a>
         methods to Context class to enable overriding the default request Locale. </div>
-      </li>  
+      </li>
       <li class="change">
       	New <a href="extras-api/overview-summary.html">Click Extras</a> module and JAR provided for
         contributions and non-core framework components.
-      </li>   
+      </li>
       <li class="change">
       	New Rico inspired AJAX Live Grid example provided by Phil Barnes.
-      </li> 
+      </li>
       <li class="change">
-      	Click Examples, Confluence WIKI and JIRA applications are now available online. 
+      	Click Examples, Confluence WIKI and JIRA applications are now available online.
         <div style="margin-top:0.5em;">
         Special thanks to Phil Barns for hosting these applications. </div>
-      </li> 
-      <li class="change">Updated documentation and examples.</li> 
+      </li>
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -3668,14 +3673,14 @@ public class MyPage extends Page {
       <li class="change">
       	Added application reloading feature to reload "click.xml" without
       	restarting the web application.
-      	See 
+      	See
       	<a href="click-api/org/apache/click/ClickServlet.html#app-reloading">ClickServlet</a>
-      	Javadoc for details and the Click Examples for a demonstration 
+      	Javadoc for details and the Click Examples for a demonstration
       	[<a target='_blank' href="http://sourceforge.net/tracker/index.php?func=detail&aid=1250978&group_id=82095&atid=565027">1237942</a>].
         <div style="margin-top:0.5em;">
         This concept was defined by <a target="blank" href="http://sourceforge.net/users/hansbaeckerm/">Hans Baecker-Mayer</a>. </div>
-      </li>    
-      <li class="change">Updated documentation and examples.</li> 
+      </li>
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -3684,33 +3689,33 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
       	Added <a href="click-api/org/apache/click/service/LogService.html">LogService</a>
-      	which logs to the console by default. 
+      	which logs to the console by default.
       	See the Click and  Velocity <a href="user-guide/html/ch04s02.html#click-logging">Logging</a>
       	topic.
-      </li>    
-      <li class="change">Updated documentation and examples.</li> 
+      </li>
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
   <dt>Version 0.7 - 28th July 2005</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
-      <li class="change">Added 
+      <li class="change">Added
          <a href="click-api/org/apache/click/control/FileField.html">FileField</a>
-         control for uploading files and modified Form control to support 
-         "multipart/form-data" requests. See the Click Examples 
+         control for uploading files and modified Form control to support
+         "multipart/form-data" requests. See the Click Examples
          File Upload page for a demonstration [<a href="http://sourceforge.net/tracker/index.php?func=detail&aid=1237942&group_id=82095&atid=565027">1237942</a>].
       </li>
       <li class="changes">
         Added pages <a href="user-guide/html/ch04s02.html#application-automapping">Auto Mapping</a>
         configuration option. This feature can automatically map HTML page
         templates to Page classes so you don't have to declare them manually in
-        the click.xml configuration file. 
+        the click.xml configuration file.
         <div style="margin-top:0.5em;">
         This concept was defined by <a target="blank" href="http://sourceforge.net/users/amohombe/">Ahmed Mohombe</a>. </div>
       </li>
       <li class="changes">
-        Added 
+        Added
         <a href="user-guide/html/ch02s05.html#page-forwarding">Page Forwarding</a>
         enabling you to configure the Page to forward the request to.
         This provides similar functionality as Tapestry's <tt>cycle.getPage()</tt>
@@ -3718,31 +3723,31 @@ public class MyPage extends Page {
         Flow for a demonstration.
       </li>
       <li class="changes">
-        Added 
+        Added
         ClickServlet <a href="click-api/org/apache/click/ClickServlet.html#newPageInstance(java.lang.Class, javax.servlet.http.HttpServletRequest)">newPageInstance()</a>
-        method to support IoC applications. See the 
+        method to support IoC applications. See the
         <a href="faq.html#spring-integration">Spring Integration</a> FAQ topic for more details.
         <div style="margin-top:0.5em;">
         This concept was defined by <a target="blank" href="http://sourceforge.net/users/pbarnes/">Phil Barnes</a>. </div>
       </li>
       <li class="changes">
-        Form rendering improved to include CSS classes "fields", "errors" and "buttons" 
+        Form rendering improved to include CSS classes "fields", "errors" and "buttons"
         in the respective table &lt;tr&gt; and &lt;td&gt; elements. This enables greater
         control of Form display using CSS styles.
       </li>
       <li class="change">
         Added "trace" application mode to provide more detailed logging.
         See the Configuration <a href="user-guide/html/ch04s02.html#application-mode">Mode</a> topic.
-      </li> 
+      </li>
       <li class="change">
-        Added 
+        Added
         <a href="click-api/org/apache/click/util/Format.html#limitLength(java.lang.String, int)">limitLength()</a>
         methods to the Format class.
       </li>
       <li class="change">
         Improved Submit controls processing of HTML characters.
-      </li> 
-      <li class="change">Updated documentation and examples.</li> 
+      </li>
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -3751,21 +3756,21 @@ public class MyPage extends Page {
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">Added AJAX Dynamic HTML and XML request example using
          the using Rico Ajax library. See the Click Examples AJAX page for a demonstration.
-      </li> 
+      </li>
       <li class="change">
-         <a href="click-api/org/apache/click/control/Option.html">Option</a> and 
-         <a href="click-api/org/apache/click/control/OptionGroup.html">OptionGroup</a> 
+         <a href="click-api/org/apache/click/control/Option.html">Option</a> and
+         <a href="click-api/org/apache/click/control/OptionGroup.html">OptionGroup</a>
           refactored into standalone classes.
-      </li> 
+      </li>
       <li class="change">
-         Added Page 
+         Added Page
          <a href="click-api/org/apache/click/Page.html#setHeader(java.lang.String, java.lang.Object)">setHeader()</a>
          method.
       </li>
       <li class="change">Fixed NPE when Fields, with no parent Form, are processed
          and rendered.
-      </li> 
-      <li class="change">Added FAQ, and updated documentation and examples.</li>   
+      </li>
+      <li class="change">Added FAQ, and updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -3775,21 +3780,21 @@ public class MyPage extends Page {
       <li class="change">Form control encodes the form <tt>"action"</tt> URL attribute using
          <a class="external" target="_blank" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html#encodeURL(java.lang.String)">encodeURL(String)</a>
          to ensure session ID is set.
-      </li> 
-      <li class="change">Added optional Form validation. A 
+      </li>
+      <li class="change">Added optional Form validation. A
          <a href="click-api/org/apache/click/control/Form.html#validate">validate</a>
          property has beed added to Form and a <a href="click-api/org/apache/click/control/Field.html#validate()">validate()</a>
          method to Field. Field subclasses have been modified to support optional
          validation.  See the Click Examples Form Properties page for a demonstration.
-      </li> 
-      <li class="change">Added Session Object utility methods to Context, see 
+      </li>
+      <li class="change">Added Session Object utility methods to Context, see
          <a href="click-api/org/apache/click/Context.html#getSessionObject(java.lang.Class)">getSessionObject</a>.
-      </li> 
+      </li>
       <li class="change">Added error message block horizontal alignment property
          <a href="click-api/org/apache/click/control/Form.html#errorsAlign">errorsAlign</a>
          to Form.
-      </li>  
-      <li class="change">Updated documentation and examples.</li>   
+      </li>
+      <li class="change">Updated documentation and examples.</li>
     </ul>
   </dd>
   <p/>
@@ -3797,27 +3802,27 @@ public class MyPage extends Page {
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">Implemented <a href="user-guide/html/ch02s06.html#page-templating">Page Templating</a>
-         capability. Enabling you to create a standardized look and feel for your web 
+         capability. Enabling you to create a standardized look and feel for your web
          application and greatly reducing the amount of HTML you need to maintain.
       </li>
       <li class="change">Improved Error handling. Application exceptions render
          error source line when Java source available. For example a
-         <a href="error-npe.html">NullPointerException</a>.    
+         <a href="error-npe.html">NullPointerException</a>.
       </li>
       <li class="change">Integrated the DHTML Calendar widget by <a href="http://www.dynarch.com/">Dyna.com</a>
          into <a href="extras-api/org/apache/click/extras/control/DateField.html">DateField</a> control.
       </li>
-      <li class="change">Added Form and Field <a href="click-api/org/apache/click/control/Field.html#readonly">readonly</a> 
+      <li class="change">Added Form and Field <a href="click-api/org/apache/click/control/Field.html#readonly">readonly</a>
          property. Modified Field subclasses to render their HTML readonly attribute. If the Form is set to
          readonly all its fields will also be readonly.
       </li>
-      <li class="change">Added Control <a href="click-api/org/apache/click/Control.html#getId()">getId()</a> 
+      <li class="change">Added Control <a href="click-api/org/apache/click/Control.html#getId()">getId()</a>
          method. Modified control classes to render their HTML id attribute.
       </li>
-      <li class="change">Added Form <a href="click-api/org/apache/click/control/Form.html#columns">columns</a> 
-         property to render forms in multi column table layout.    
+      <li class="change">Added Form <a href="click-api/org/apache/click/control/Form.html#columns">columns</a>
+         property to render forms in multi column table layout.
       </li>
-      <li class="change">Added page <a href="click-api/org/apache/click/Page.html#path">path</a> 
+      <li class="change">Added page <a href="click-api/org/apache/click/Page.html#path">path</a>
          property to Velocity context.
       </li>
       <li class="change">Fixed SourceViewer missing resource bug which occurred on Orion server.</li>

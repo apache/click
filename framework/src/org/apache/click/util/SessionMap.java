@@ -65,6 +65,73 @@ public class SessionMap implements Map<String, Object> {
     }
 
     /**
+     * Returns the time when this session was created, measured in milliseconds
+     * since midnight January 1, 1970 GMT.
+     *
+     * @see javax.servlet.http.HttpSession#getCreationTime()
+     *
+     * @return the session creation time, or -1 if no session is available
+     */
+    public long getCreationTime() {
+        if (session != null) {
+            return session.getCreationTime();
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * Returns a string containing the unique identifier assigned to this
+     * session. The identifier is assigned by the servlet container and is
+     * implementation dependent.
+     *
+     * @see javax.servlet.http.HttpSession#getId()
+     *
+     * @return the session id, or null if no session is available
+     */
+    public String getId() {
+        if (session != null) {
+            return session.getId();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the last time the client sent a request associated with this
+     * session, as the number of milliseconds since midnight January 1, 1970 GMT,
+     * and marked by the time the container received the request.
+     *
+     * @see javax.servlet.http.HttpSession#getLastAccessedTime()
+     *
+     * @return the session last accessed time, or -1 if no session is available
+     */
+    public long getLastAccessedTime() {
+        if (session != null) {
+            return session.getLastAccessedTime();
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * Specifies the time, in seconds, between client requests before the servlet
+     * container will invalidate this session. A negative time indicates the
+     * session should never timeout.
+     *
+     * @see javax.servlet.http.HttpSession#getMaxInactiveInterval()
+     *
+     * @return the session max inactive interval in seconds, or -1 if no session is available
+     */
+    public int getMaxInactiveInterval()  {
+        if (session != null) {
+            return session.getMaxInactiveInterval();
+        } else {
+            return -1;
+        }
+    }
+
+    /**
      * @see java.util.Map#size()
      */
     public int size() {
