@@ -32,7 +32,7 @@ jQuery(document).ready(function() {
     // Register a 'click' handler on the clear button
     jQuery("#form_clear").click(function(event){
 
-    	jQuery("#form_name").value = '';
+    	jQuery("#form_name").val('');
 
     	// Post form to server
     	postForm(event);
