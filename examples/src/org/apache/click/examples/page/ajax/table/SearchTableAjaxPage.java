@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.click.ActionListener;
 import org.apache.click.ActionResult;
 import org.apache.click.Control;
 import org.apache.click.ControlRegistry;
@@ -42,20 +41,12 @@ public class SearchTableAjaxPage extends BorderPage {
 
     public SearchTableAjaxPage() {
         // Setup search form
-        addFormFields(form);
+        setupForm(form);
 
         addControl(form);
 
-        ControlRegistry.registerAjaxTarget(form);
-
         // Setup results table
-        addTableColumns(table);
-
-        table.setClass(Table.CLASS_ITS);
-        table.setPageSize(15);
-        table.setShowBanner(true);
-        table.setPaginator(new TableInlinePaginator(table));
-        table.setPaginatorAttachment(Table.PAGINATOR_INLINE);
+        setupTable(table);
 
         table.setDataProvider(new DataProvider<Customer>() {
             public List<Customer> getData() {
@@ -73,6 +64,7 @@ public class SearchTableAjaxPage extends BorderPage {
         if (headElements == null) {
             headElements = super.getHeadElements();
             headElements.add(new JsImport("/assets/js/jquery-1.4.2.js"));
+            headElements.add(new JsImport("/assets/js/jquery.blockUI-2.39.js"));
             headElements.add(new JsScript("/ajax/table/search-table-ajax.js", new HashMap()));
         }
         return headElements;
@@ -80,7 +72,10 @@ public class SearchTableAjaxPage extends BorderPage {
 
     // Private Methods --------------------------------------------------------
 
-    private void addFormFields(final Form form) {
+    private void setupForm(final Form form) {
+
+        ControlRegistry.registerAjaxTarget(form);
+
         form.add(nameField);
 
         Submit searchButton = new Submit("search");
@@ -99,7 +94,13 @@ public class SearchTableAjaxPage extends BorderPage {
         });
     }
 
-    private void addTableColumns(Table table) {
+    private void setupTable(final Table table) {
+        table.setClass(Table.CLASS_ITS);
+        table.setPageSize(10);
+        table.setShowBanner(true);
+        table.setPaginator(new TableInlinePaginator(table));
+        table.setPaginatorAttachment(Table.PAGINATOR_INLINE);
+
         Column column = new Column(Customer.NAME_PROPERTY);
         column.setWidth("140px;");
         table.addColumn(column);
@@ -119,6 +120,16 @@ public class SearchTableAjaxPage extends BorderPage {
         column.setTextAlign("right");
         column.setWidth("100px;");
         table.addColumn(column);
+
+        table.getControlLink().addBehavior(new DefaultAjaxBehavior() {
+            @Override
+            public ActionResult onAction(Control source) {
+                // NOTE: Ajax requests only process the target Control. Here we
+                // process the table in order to update paging and sorting state
+                table.onProcess();
+                return new ActionResult(table.toString(), ActionResult.HTML);
+            }
+        });
     }
 
 }

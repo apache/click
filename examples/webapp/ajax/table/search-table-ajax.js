@@ -22,6 +22,17 @@ jQuery(document).ready(function() {
 
     // Register a 'click' handler on the submit button
     jQuery("#form_search").click(function(event){
+        $.blockUI({ css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: '#000',
+            '-webkit-border-radius': '10px',
+            '-moz-border-radius': '10px',
+            opacity: .5,
+            color: '#fff',
+            width: '300px'
+        } });
+
         // Post form to server
         postForm(event);
 
@@ -34,6 +45,17 @@ jQuery(document).ready(function() {
 
     	jQuery("#form_name").val('');
 
+        $.blockUI({ css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: '#000',
+            '-webkit-border-radius': '10px',
+            '-moz-border-radius': '10px',
+            opacity: .5,
+            color: '#fff',
+            width: '300px'
+        } });
+
     	// Post form to server
     	postForm(event);
 
@@ -43,12 +65,45 @@ jQuery(document).ready(function() {
 
 	// Register a 'click' handler on the form
 	jQuery("#form").submit(function(event){
+        $.blockUI({ css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: '#000',
+            '-webkit-border-radius': '10px',
+            '-moz-border-radius': '10px',
+            opacity: .5,
+            color: '#fff',
+            width: '300px'
+        } });
+
 		// Post form to server
 		postForm(event);
 
 		// Prevent the default browser behavior of navigating to the link
 		return false;
 	});
+
+    // Register a 'live' click handler on the table paging links on the <div> banner.
+    // Note: the 'live' binding is a jQuery function that keeps the event bound even if the Table DOM is replaced
+    // http://api.jquery.com/live/
+    jQuery(".paging-inline a").live('click', function(event){
+        $.blockUI({ css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: '#000',
+            '-webkit-border-radius': '10px',
+            '-moz-border-radius': '10px',
+            opacity: .5,
+            color: '#fff',
+            width: '300px'
+        } });
+
+        // Make ajax request
+        tablePaging(event);
+
+        // Prevent the default browser behavior of navigating to the link
+        return false;
+    });
 })
 
 function postForm(event) {
@@ -71,8 +126,22 @@ function postForm(event) {
     formData+='&'+submit.attr('name')+'='+submit.attr('value');
 
     jQuery.post(url, formData, function(data) {
+        $.unblockUI();
+
         // Update the target div with the server response and style the div by adding a CSS class
         var div = jQuery('#tableContainer');
         div.html(data);
     });
 }
+
+function tablePaging(event) {
+    var link = jQuery(event.currentTarget);
+    var url = link.attr('href');
+    jQuery.get(url, function(data) {
+        $.unblockUI();
+
+        // Update the table container with the new table
+        jQuery("#tableContainer").html(data);
+    });
+}
+
