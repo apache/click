@@ -10,16 +10,13 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/junit-3.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/servlet-api-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/ognl-2.6.9.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.5.jar"/>
 	<classpathentry kind="lib" path="lib/freemarker-2.3.16.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-3.2.6.ga.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/spring-2.5.6.jar"/>
-	<classpathentry kind="lib" path="lib/velocity-1.6.4.jar"/>
 	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/geronimo-annotation_1.0_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/quartz-all-1.6.3.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.5.6.jar"/>
@@ -28,5 +25,8 @@
 	<classpathentry kind="lib" path="lib/cayenne-server-3.0.jar"/>
 	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/spring-2.5.6.jar"/>
 	<classpathentry kind="lib" path="examples/webapp/WEB-INF/lib/spring-security-core-2.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/velocity-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api-2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
