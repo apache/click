@@ -239,7 +239,7 @@ public class ControlRegistry {
      * Register the source control and associated interceptor.
      *
      * @param source the interceptor source control
-     * @param interceptor the control interceptor to register
+     * @param controlInterceptor the control interceptor to register
      */
     void internalRegisterInterceptor(Control source, Behavior controlInterceptor) {
         Validate.notNull(source, "Null source parameter");

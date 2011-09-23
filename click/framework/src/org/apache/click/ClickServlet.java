@@ -1834,7 +1834,7 @@ public class ClickServlet extends HttpServlet {
             // check isForward?
             if (controlRegistry.hasAjaxTargetControls() && !context.isForward()) {
 
-                // Perform onProcess for regsitered Ajax target controls
+                // Perform onProcess for registered Ajax target controls
                 processAjaxTargetControls(context, eventDispatcher, controlRegistry);
 
                 // Fire AjaxBehaviors registered during the onProcess event

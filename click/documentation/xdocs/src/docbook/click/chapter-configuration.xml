@@ -420,7 +420,7 @@ security/change-password.htm  =&gt; <token>com.mycorp.page.security.ChangePasswo
         template to a page class, Click converts the template path to the Page
         classname. In the example above, Click will convert the template
         <token>search.htm</token> to the class <token>Search</token> by
-        capitilizing the template name and removing the <literal>.htm</literal>
+        capitalizing the template name and removing the <literal>.htm</literal>
         extension. Of course this is not enough to map the template to the class.
         what is missing is the class package, <token>com.mycorp.page</token>.
         To help Click map the page, you can set the base <literal>package</literal>

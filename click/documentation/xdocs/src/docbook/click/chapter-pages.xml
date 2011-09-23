@@ -1162,7 +1162,7 @@ public <token>ActionResult</token> <symbol>onRenderImage()</symbol> {
 
       <para>When handling a Page Action you might need to set the HTTP response
       headers or status code. You do this through the Servlet API's,
-      <classname>HttpServetlResponse</classname> which can be accessed
+      <classname>HttpServletResponse</classname> which can be accessed
       through the <classname>Context</classname>.
       </para>
 
