@@ -54,7 +54,7 @@ and return a result without reloading the whole page.
   logic necessary to make the Ajax request, process the server response
   and handle errors. This is easier than it sounds though as there is a wide
   range of free JavaScript libraries and plugins available to help develop
-  rich HTML front-ened. Since Click is a stateless framework and Page URLs
+  rich HTML front-ends. Since Click is a stateless framework and Page URLs
   are bookmarkable, it is easy to integrate Click with existing JavaScript
   technologies such as:
 
@@ -166,7 +166,7 @@ and return a result without reloading the whole page.
           - determines whether the AjaxBehavior is the request target or not. Click
           will only invoke the AjaxBehavior <methodname>onAction</methodname> method
           if <methodname>isAjaxTarget</methodname> returns true. This
-          allows for fine grained control over the exection of the <methodname>onAction</methodname>
+          allows for fine grained control over the execution of the <methodname>onAction</methodname>
           method.
         </para>
       </listitem>

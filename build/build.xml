@@ -853,7 +853,7 @@ Please ensure you have configured build.properties</echo>
                charset="UTF-8"
                excludepackagenames="@{excludes}">
             <classpath refid="@{classpath}"/>
-            <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+            <link href="http://download.oracle.com/javase/1,5.0/docs/api/"/>
             <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
             <link href="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
             <link href="http://click.apache.org/docs/click-api/"/>
