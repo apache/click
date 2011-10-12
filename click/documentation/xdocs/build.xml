@@ -29,6 +29,7 @@ script.
 
     <!-- Load the properties -->
     <property file="project.properties"/>
+    <property file="../../build/build.properties"/>
 
     <target name="all" description="Build all documentation" depends="prepare">
         <ant antfile="build-docbook.xml" target="all"/>
@@ -58,6 +59,11 @@ script.
  	       dest="${dbf.path}"
  	       verbose="true"
  	       usetimestamp="true"/>
+    </target>
+
+    <target name="get-deps-proxy" description="download JAR dependencies">
+       <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
+       <antcall target="get-deps"/>
     </target>
 
     <target name="pdf" description="Generates a single PDF file" depends="prepare">
