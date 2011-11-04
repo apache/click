@@ -18,10 +18,7 @@
  */
 package org.apache.click.extras.control;
 
-import java.util.HashMap;
 import java.util.Map;
-
-import ognl.OgnlException;
 
 import org.apache.click.Context;
 import org.apache.click.control.Column;
@@ -67,9 +64,6 @@ public class FieldColumn extends Column {
 
     /** The columns field to process and render. */
     protected Field field;
-
-    /** The ognl context map. */
-    private transient Map<?, ?> ognlContext;
 
     // ----------------------------------------------------------- Constructors
 
@@ -181,19 +175,7 @@ public class FieldColumn extends Column {
             }
 
         } else {
-            if (ognlContext == null) {
-                ognlContext = new HashMap<Object, Object>();
-            }
-
-            try {
-                PropertyUtils.setValueOgnl(row,
-                                           propertyName,
-                                           value,
-                                           ognlContext);
-
-            } catch (OgnlException oe) {
-                throw new RuntimeException(oe);
-            }
+            PropertyUtils.setValue(row, propertyName, value);
         }
     }
 

@@ -18,12 +18,13 @@
  */
 package org.apache.click.util;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ognl.Ognl;
-import ognl.OgnlException;
+import org.mvel2.MVEL;
 
 /**
  * Provide property getter and setter utility methods.
@@ -31,11 +32,13 @@ import ognl.OgnlException;
 @SuppressWarnings("unchecked")
 public class PropertyUtils {
 
-    /** Provides a synchronized cache of OGNL expressions. */
-    private static final Map<String, Object> OGNL_EXPRESSION_CACHE = new ConcurrentHashMap<String, Object>();
-
     /** Provides a synchronized cache of get value reflection methods. */
-    private static final Map<String, Object> GET_METHOD_CACHE = new ConcurrentHashMap<String, Object>();
+    private static final Map<String, Object> GET_METHOD_CACHE
+        = new ConcurrentHashMap<String, Object>();
+
+    /** Provides a synchronized cache of MVEL expressions. */
+    private static final Map<String, Serializable> MVEL_EXPRESSION_CACHE
+        = new ConcurrentHashMap<String, Serializable>();
 
     // -------------------------------------------------------- Public Methods
 
@@ -121,56 +124,28 @@ public class PropertyUtils {
     }
 
     /**
-     * Return the property value for the given object and property name using
-     * the OGNL library.
-     * <p/>
-     * This method is thread-safe, and caches parsed OGNL expressions in an
-     * internal synchronized cache.
-     *
-     * @param source the source object
-     * @param name the name of the property
-     * @param context the OGNL context, do NOT modify this object
-     * @return the property value for the given source object and property name
-     * @throws OgnlException if an OGN error occurs
-     */
-    public static Object getValueOgnl(Object source, String name, Map context)
-        throws OgnlException {
-
-        Object expression = OGNL_EXPRESSION_CACHE.get(name);
-        if (expression == null) {
-            expression = Ognl.parseExpression(name);
-            OGNL_EXPRESSION_CACHE.put(name, expression);
-        }
-
-        return Ognl.getValue(expression, context, source);
-    }
-
-    /**
-     * Return the property value for the given object and property name using
-     * the OGNL library.
-     * <p/>
-     * This method is thread-safe, and caches parsed OGNL expressions in an
-     * internal synchronized cache.
+     * Return the property value for the given object and property name using the MVEL library.
      *
      * @param target the target object to set the property of
      * @param name the name of the property to set
      * @param value the property value to set
-     * @param context the OGNL context, do NOT modify this object
-     * @throws OgnlException if an OGN error occurs
      */
-    public static void setValueOgnl(Object target, String name, Object value, Map context)
-        throws OgnlException {
+    public static void setValue(Object target, String name, Object value) {
 
-        Object expression = OGNL_EXPRESSION_CACHE.get(name);
-        if (expression == null) {
-            expression = Ognl.parseExpression(name);
-            OGNL_EXPRESSION_CACHE.put(name, expression);
+        String expression = target.getClass().getSimpleName() + "." + name + " = value";
+
+        Serializable compiledExpression = MVEL_EXPRESSION_CACHE.get(expression);
+
+        if (compiledExpression == null) {
+            compiledExpression = MVEL.compileExpression(expression);
+            MVEL_EXPRESSION_CACHE.put(expression, compiledExpression);
         }
 
-        Ognl.setValue(expression,
-                      context,
-                      target,
-                      value);
+        Map vars = new HashMap();
+        vars.put(target.getClass().getSimpleName(), target);
+        vars.put("value", value);
+
+        MVEL.executeExpression(compiledExpression, vars);
     }
 
     // -------------------------------------------------------- Private Methods

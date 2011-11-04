@@ -39,24 +39,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import ognl.DefaultMemberAccess;
-import ognl.MemberAccess;
-import ognl.Ognl;
-import ognl.OgnlException;
-import ognl.TypeConverter;
-
 import org.apache.click.service.ConfigService;
+import org.apache.click.service.ConfigService.AutoBinding;
 import org.apache.click.service.LogService;
 import org.apache.click.service.ResourceService;
 import org.apache.click.service.TemplateException;
 import org.apache.click.service.XmlConfigService;
-import org.apache.click.service.ConfigService.AutoBinding;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ErrorPage;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PageImports;
 import org.apache.click.util.PropertyUtils;
-import org.apache.click.util.RequestTypeConverter;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
@@ -141,12 +134,6 @@ public class ClickServlet extends HttpServlet {
     protected final static String CONFIG_SERVICE_CLASS = "config-service-class";
 
     /**
-     * The custom TypeConverter classname as an init parameter name:
-     * &nbps; "<tt>type-converter-class</tt>".
-     */
-    protected final static String TYPE_CONVERTER_CLASS = "type-converter-class";
-
-    /**
      * The forwarded request marker attribute: &nbsp; "<tt>click-forward</tt>".
      */
     protected final static String CLICK_FORWARD = "click-forward";
@@ -164,14 +151,8 @@ public class ClickServlet extends HttpServlet {
     /** The application log service. */
     protected LogService logger;
 
-    /** The OGNL member access handler. */
-    protected MemberAccess memberAccess;
-
     /** The application resource service. */
     protected ResourceService resourceService;
-
-    /** The request parameters OGNL type converter. */
-    protected TypeConverter typeConverter;
 
     /** The thread local page listeners. */
     private static final ThreadLocal<List<PageInterceptor>>
@@ -1332,18 +1313,12 @@ public class ClickServlet extends HttpServlet {
      * returned by the {@link #getTypeConverter()} method.
      *
      * @param page the page whose fields are to be processed
-     * @throws OgnlException if an error occurs
      */
-    protected void processPageRequestParams(Page page) throws OgnlException {
+    protected void processPageRequestParams(Page page) {
 
         if (configService.getPageFields(page.getClass()).isEmpty()) {
             return;
         }
-
-        Map<?, ?> ognlContext = null;
-
-        boolean customConverter =
-            ! getTypeConverter().getClass().equals(RequestTypeConverter.class);
 
         HttpServletRequest request = page.getContext().getRequest();
 
@@ -1358,18 +1333,12 @@ public class ClickServlet extends HttpServlet {
                 if (field != null) {
                     Class<?> type = field.getType();
 
-                    if (customConverter
-                        || (type.isPrimitive()
-                            || String.class.isAssignableFrom(type)
-                            || Number.class.isAssignableFrom(type)
-                            || Boolean.class.isAssignableFrom(type))) {
+                    if (type.isPrimitive()
+                        || String.class.isAssignableFrom(type)
+                        || Number.class.isAssignableFrom(type)
+                        || Boolean.class.isAssignableFrom(type)) {
 
-                        if (ognlContext == null) {
-                            ognlContext = Ognl.createDefaultContext(
-                                page, null, getTypeConverter(), getMemberAccess());
-                        }
-
-                        PropertyUtils.setValueOgnl(page, name, value, ognlContext);
+                        PropertyUtils.setValue(page, name, value);
 
                         if (logger.isTraceEnabled()) {
                             logger.trace("   auto bound variable: " + name + "=" + value);
@@ -1616,37 +1585,6 @@ public class ClickServlet extends HttpServlet {
 
         PageImports pageImports = page.getPageImports();
         pageImports.populateRequest(request, model);
-    }
-
-    /**
-     * Return the request parameters OGNL <tt>TypeConverter</tt>. This method
-     * performs a lazy load of the TypeConverter object, using the classname
-     * defined in the Servlet init parameter <tt>type-converter-class</tt>,
-     * if this parameter is not defined this method will return a
-     * {@link RequestTypeConverter} instance.
-     *
-     * @return the request parameters OGNL <tt>TypeConverter</tt>
-     * @throws RuntimeException if the TypeConverter instance could not be created
-     */
-    @SuppressWarnings("unchecked")
-    protected TypeConverter getTypeConverter() throws RuntimeException {
-        if (typeConverter == null) {
-            Class<? extends TypeConverter> converter = RequestTypeConverter.class;
-
-            try {
-                String classname = getInitParameter(TYPE_CONVERTER_CLASS);
-                if (StringUtils.isNotBlank(classname)) {
-                    converter = ClickUtils.classForName(classname);
-                }
-
-                typeConverter = converter.newInstance();
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        return typeConverter;
     }
 
     /**
@@ -1998,25 +1936,12 @@ public class ClickServlet extends HttpServlet {
     // ------------------------------------------------ Package Private Methods
 
     /**
-     * Return the OGNL <tt>MemberAccess</tt>. This method performs a lazy load
-     * of the MemberAccess object, using a {@link DefaultMemberAccess} instance.
+     * Create a Click application ConfigService instance.
      *
-     * @return the OGNL <tt>MemberAccess</tt>
+     * @param servletContext the Servlet Context
+     * @return a new application ConfigService instance
+     * @throws Exception if an initialization error occurs
      */
-    MemberAccess getMemberAccess() {
-        if (memberAccess == null) {
-            memberAccess = new DefaultMemberAccess(true);
-        }
-        return memberAccess;
-    }
-
-   /**
-    * Create a Click application ConfigService instance.
-    *
-    * @param servletContext the Servlet Context
-    * @return a new application ConfigService instance
-    * @throws Exception if an initialization error occurs
-    */
     @SuppressWarnings("unchecked")
     ConfigService createConfigService(ServletContext servletContext)
         throws Exception {
