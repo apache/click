@@ -60,7 +60,7 @@ package org.apache.click;
  * <p/>
  * Page interceptors can have multiple properties configured with their XML
  * definition which are set after the constructor has been called. Properties
- * are set using OGNL via {@link org.apache.click.util.PropertyUtils}.
+ * are set using MVEL via {@link org.apache.click.util.PropertyUtils}.
  * <p/>
  * An example configuration is provided below:
  *

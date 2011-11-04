@@ -150,7 +150,7 @@ public class FieldColumn extends Column {
      * Set a row value based on the given property name and value. The given row
      * can either be a Java Object or a Map instance.
      * <p/>
-     * If the row is a Java Object this method uses OGNL to set the value of the
+     * If the row is a Java Object this method uses MVEL to set the value of the
      * row based on the property name. Property names can be specified using a
      * path expression e.g: "person.address.city".
      * <p/>
