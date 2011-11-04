@@ -18,6 +18,8 @@
  */
 package org.apache.click.extras.control;
 
+import java.util.Map;
+
 import org.apache.click.Page;
 import org.apache.click.control.Submit;
 import org.apache.click.util.ClickUtils;
@@ -58,6 +60,9 @@ public class PageSubmit extends Submit {
     /** The target page to redirect to. */
     protected Class<? extends Page> pageClass;
 
+    /** The map of URL request parameters. */
+    protected Map<String, ?> params;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -97,6 +102,21 @@ public class PageSubmit extends Submit {
     }
 
     /**
+     * Create a PageSubmit button with the given name, target pageClass and request parameters.
+     *
+     * @param name the button name
+     * @param pageClass the target page class
+     * @param params the URL redirect parameters
+     */
+    public PageSubmit(String name, Class<? extends Page> pageClass, Map<String, ?> params) {
+        super(name);
+
+        setPageClass(pageClass);
+        setListener(this, "onClick");
+        this.params = params;
+    }
+
+    /**
      * Create a PageSubmit button with the given name, label and target
      * pageClass.
      *
@@ -109,6 +129,23 @@ public class PageSubmit extends Submit {
 
         setPageClass(pageClass);
         setListener(this, "onClick");
+    }
+
+    /**
+     * Create a PageSubmit button with the given name, label, target and request parameters.
+     * pageClass.
+     *
+     * @param name the button name
+     * @param label the button display label
+     * @param pageClass the target page class
+     * @param params the URL redirect request parameters
+     */
+    public PageSubmit(String name, String label, Class<? extends Page> pageClass, Map<String, ?> params) {
+        super(name, label);
+
+        setPageClass(pageClass);
+        setListener(this, "onClick");
+        this.params = params;
     }
 
     /**
@@ -162,7 +199,11 @@ public class PageSubmit extends Submit {
         if (pageClass == null) {
             throw  new RuntimeException("target pageClass is not defined");
         }
-        page.setRedirect(pageClass);
+        if (params != null) {
+            page.setRedirect(pageClass, params);
+        } else {
+            page.setRedirect(pageClass);
+        }
         return false;
     }
 
