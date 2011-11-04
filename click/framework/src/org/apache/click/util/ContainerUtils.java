@@ -20,18 +20,12 @@ package org.apache.click.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import ognl.DefaultTypeConverter;
-import ognl.Ognl;
-import ognl.OgnlOps;
 
 import org.apache.click.Control;
 import org.apache.click.Page;
@@ -135,8 +129,6 @@ public class ContainerUtils {
         LogService logService = ClickUtils.getLogService();
 
         Set<String> properties = getObjectPropertyNames(object);
-        Map<?, ?> ognlContext = Ognl.createDefaultContext(
-                object, null, new FixBigDecimalTypeConverter(), null);
 
         for (Field field : fieldList) {
 
@@ -155,7 +147,7 @@ public class ContainerUtils {
             ensureObjectPathNotNull(object, fieldName);
 
             try {
-                PropertyUtils.setValueOgnl(object, fieldName, field.getValueObject(), ognlContext);
+                PropertyUtils.setValue(object, fieldName, field.getValueObject());
 
                 if (logService.isDebugEnabled()) {
                     String containerClassName =
@@ -1382,46 +1374,4 @@ public class ContainerUtils {
         ClickUtils.getLogService().warn(message);
     }
 
-    /**
-     * This class fix an error in ognl's conversion of double->BigDecimal. The
-     * default conversion uses BigDecimal(double), the fix is to use
-     * BigDecimal.valueOf(double)
-     *
-     */
-    private static class FixBigDecimalTypeConverter extends DefaultTypeConverter {
-        @SuppressWarnings("unchecked")
-        @Override
-        public Object convertValue(Map context, Object value, Class toType) {
-            if (value != null && toType == BigDecimal.class) {
-                return bigDecValue(value);
-            }
-            return OgnlOps.convertValue(value, toType);
-        }
-
-        /**
-     * Convert the given value into a BigDecimal.
-     *
-     * @param value the object to convert into a BigDecimal
-     * @return the converted BigDecimal value
-     */
-        private BigDecimal bigDecValue(Object value) {
-            if (value == null) {
-                return BigDecimal.valueOf(0L);
-            }
-            Class<?> c = value.getClass();
-            if (c == BigDecimal.class) {
-                return (BigDecimal) value;
-            }
-            if (c == BigInteger.class) {
-                return new BigDecimal((BigInteger) value);
-            }
-            if (c == Boolean.class) {
-                return BigDecimal.valueOf(((Boolean) value).booleanValue() ? 1 : 0);
-            }
-            if (c == Character.class) {
-                return BigDecimal.valueOf(((Character) value).charValue());
-            }
-            return new BigDecimal(value.toString().trim());
-        }
-    }
 }

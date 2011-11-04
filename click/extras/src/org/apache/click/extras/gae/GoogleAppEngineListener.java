@@ -21,8 +21,6 @@ package org.apache.click.extras.gae;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import ognl.OgnlRuntime;
-
 /**
  * Provides <a href="http://code.google.com/appengine/docs/java/overview.html" class="external" target="_blank">Google App Engine</a>
  * (GAE) support for Click applications. GAE is a free Java hosting service
@@ -230,8 +228,7 @@ public class GoogleAppEngineListener implements ServletContextListener {
 
     /**
      * Sets the Ognl Runtime SecurityManager to <tt>null</tt> so as not to
-     * interfere with Google App Engine (GAE). GAE provides its own strict
-     * SecurityManager which clashes with Ognl security checks.
+     * interfere with Google App Engine (GAE).
      *
      * <pre class="prettyprint">
      * OgnlRuntime.setSecurityManager(null); </pre>
@@ -240,6 +237,5 @@ public class GoogleAppEngineListener implements ServletContextListener {
      * changes to the servlet context
      */
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        OgnlRuntime.setSecurityManager(null);
     }
 }

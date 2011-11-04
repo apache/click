@@ -39,8 +39,6 @@ import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
 
-import ognl.Ognl;
-
 import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.click.PageInterceptor;
@@ -1543,7 +1541,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 String name = i.next().toString();
                 String value = propertyMap.get(name).toString();
 
-                Ognl.setValue(name, fileUploadService, value);
+                PropertyUtils.setValue(fileUploadService, name, value);
             }
 
         } else {
@@ -1579,7 +1577,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 String name = i.next().toString();
                 String value = propertyMap.get(name).toString();
 
-                Ognl.setValue(name, logService, value);
+                PropertyUtils.setValue(logService, name, value);
             }
         } else {
             logService = new ConsoleLogService();
@@ -1608,7 +1606,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 String name = i.next().toString();
                 String value = propertyMap.get(name).toString();
 
-                Ognl.setValue(name, messagesMapService, value);
+                PropertyUtils.setValue(messagesMapService, name, value);
             }
         }
 
@@ -1671,7 +1669,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 String name = i.next().toString();
                 String value = propertyMap.get(name).toString();
 
-                Ognl.setValue(name, resourceService, value);
+                PropertyUtils.setValue(resourceService, name, value);
             }
 
         } else {
@@ -1707,7 +1705,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 String name = i.next().toString();
                 String value = propertyMap.get(name).toString();
 
-                Ognl.setValue(name, templateService, value);
+                PropertyUtils.setValue(templateService, name, value);
             }
 
         } else {
@@ -2176,13 +2174,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 try {
                     listener = interceptorClass.newInstance();
 
-                    Map ognlContext = new HashMap();
-
                     for (Property property : properties) {
-                        PropertyUtils.setValueOgnl(listener,
-                                                   property.getName(),
-                                                   property.getValue(),
-                                                   ognlContext);
+                        PropertyUtils.setValue(listener,
+                                               property.getName(),
+                                               property.getValue());
                     }
 
                 } catch (Exception e) {
