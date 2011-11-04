@@ -227,11 +227,7 @@ public class GoogleAppEngineListener implements ServletContextListener {
     }
 
     /**
-     * Sets the Ognl Runtime SecurityManager to <tt>null</tt> so as not to
-     * interfere with Google App Engine (GAE).
-     *
-     * <pre class="prettyprint">
-     * OgnlRuntime.setSecurityManager(null); </pre>
+     * This method does nothing.
      *
      * @param servletContextEvent the event class for notifications about
      * changes to the servlet context

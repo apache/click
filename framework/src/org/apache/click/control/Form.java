@@ -137,7 +137,7 @@ import org.apache.commons.lang.StringUtils;
  * "<tt>debug</tt>" or use the debug copy methods.
  * <p/>
  * Binding of nested data objects is supported using the
- * <a target="blank" href="http://www.ognl.org">OGNL</a> library. To use
+ * <a target="blank" href="http://mvel.codehaus.org/">MVEL</a> library. To use
  * nested objects in your form, simply specify the object path as the Field
  * name. Note in the object path you exclude the root object, so the path
  * <tt>customer.address.state</tt> is specified as <tt>address.state</tt>.

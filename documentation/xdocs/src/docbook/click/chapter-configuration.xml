@@ -118,7 +118,7 @@
     <sect2 id="type-converter-class" remap="h3">
       <title>Type Converter Class</title>
 
-      <para>The ClickServlet uses the OGNL library for type coercion when binding
+      <para>The ClickServlet uses the MVEL library for type coercion when binding
       request parameters to bindable variables. The default type converter class
       used is <ulink url="click-api/org/apache/click/util/RequestTypeConverter.html">RequestTypeConverter</ulink>.
       To specify your own type converter configure a <literal>type-converter-class</literal>
