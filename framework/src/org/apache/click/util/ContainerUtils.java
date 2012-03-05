@@ -217,7 +217,7 @@ public class ContainerUtils {
             throw new IllegalArgumentException("Null container parameter");
         }
 
-        if (container == null) {
+        if (fieldList == null) {
             throw new IllegalArgumentException("Null fieldList parameter");
         }
 
