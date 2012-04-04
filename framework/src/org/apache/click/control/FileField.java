@@ -220,6 +220,18 @@ public class FileField extends Field {
     }
 
     /**
+     * Return the <tt>org.apache.commons.fileupload.FileItem</tt>, or null.
+     *
+     * @see Field#getValueObject()
+     *
+     * @return the object representation of the Field value
+     */
+    @Override
+    public Object getValueObject() {
+        return this.fileItem;
+    }
+
+    /**
      * Return the FileField JavaScript client side validation function.
      *
      * @return the field JavaScript client side validation function
