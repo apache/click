@@ -31,77 +31,62 @@ import org.apache.commons.fileupload.FileItem;
  */
 public class MockFileItem implements FileItem {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public void delete() {
-	}
+    public void delete() {
+    }
 
-	@Override
-	public byte[] get() {
-		return null;
-	}
+    public byte[] get() {
+        return null;
+    }
 
-	@Override
-	public String getContentType() {
-		return null;
-	}
+    public String getContentType() {
+        return null;
+    }
 
-	@Override
-	public String getFieldName() {
-		return null;
-	}
+    public String getFieldName() {
+        return null;
+    }
 
-	@Override
-	public InputStream getInputStream() throws IOException {
-		return null;
-	}
+    public InputStream getInputStream() throws IOException {
+        return null;
+    }
 
-	@Override
-	public String getName() {
-		return null;
-	}
+    public String getName() {
+        return null;
+    }
 
-	@Override
-	public OutputStream getOutputStream() throws IOException {
-		return null;
-	}
+    public OutputStream getOutputStream() throws IOException {
+        return null;
+    }
 
-	@Override
-	public long getSize() {
-		return 0;
-	}
+    public long getSize() {
+        return 0;
+    }
 
-	@Override
-	public String getString() {
-		return null;
-	}
+    public String getString() {
+        return null;
+    }
 
-	@Override
-	public String getString(String arg0) throws UnsupportedEncodingException {
-		return null;
-	}
+    public String getString(String arg0) throws UnsupportedEncodingException {
+        return null;
+    }
 
-	@Override
-	public boolean isFormField() {
-		return false;
-	}
+    public boolean isFormField() {
+        return false;
+    }
 
-	@Override
-	public boolean isInMemory() {
-		return false;
-	}
+    public boolean isInMemory() {
+        return false;
+    }
 
-	@Override
-	public void setFieldName(String arg0) {
-	}
+    public void setFieldName(String arg0) {
+    }
 
-	@Override
-	public void setFormField(boolean arg0) {
-	}
+    public void setFormField(boolean arg0) {
+    }
 
-	@Override
-	public void write(File arg0) throws Exception {
-	}
+    public void write(File arg0) throws Exception {
+    }
 
 }
