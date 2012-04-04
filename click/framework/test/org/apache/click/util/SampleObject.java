@@ -18,6 +18,8 @@
  */
 package org.apache.click.util;
 
+import org.apache.commons.fileupload.FileItem;
+
 public class SampleObject {
     private Integer id;
     private String name;
@@ -27,6 +29,7 @@ public class SampleObject {
     private double _double;
     private String telephone;
     private boolean active;
+    private FileItem file;
 
     public Integer getId() {
         return id;
@@ -51,35 +54,35 @@ public class SampleObject {
     public void setDateOfBirth(java.util.Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
-    
+
     public boolean isBoolean() {
         return _boolean;
     }
-    
+
     public void setBoolean(boolean b) {
         _boolean = b;
     }
-    
+
     public double getDouble() {
         return _double;
     }
-    
+
     public void setDouble(double d) {
         _double = d;
     }
-    
+
     public int getInt() {
         return _int;
     }
-    
+
     public void setInt(int i) {
         _int = i;
     }
-    
+
     public String getTelephone() {
         return telephone;
     }
-    
+
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
@@ -90,6 +93,14 @@ public class SampleObject {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public void setFile(FileItem file){
+    	this.file = file;
+    }
+
+    public FileItem getFile(){
+    	return this.file;
     }
 
 }

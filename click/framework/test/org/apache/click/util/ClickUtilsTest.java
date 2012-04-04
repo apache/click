@@ -26,16 +26,20 @@ import java.util.Locale;
 import java.util.Map;
 
 import junit.framework.TestCase;
+
 import org.apache.click.Context;
 import org.apache.click.MockContext;
 import org.apache.click.Page;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
+import org.apache.click.control.FileField;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.TextField;
+import org.apache.click.fileupload.MockFileItem;
 import org.apache.click.servlet.MockRequest;
+import org.apache.commons.fileupload.FileItem;
 
 /**
  * Tests for ClickUtils.
@@ -52,7 +56,8 @@ public class ClickUtilsTest extends TestCase {
     private static final boolean BOOLEAN = true;
     private static final double DOUBLE = -87.23;
     private static final String TELEPHONE = "9877262";
-    
+    private static final FileItem FILEITEM = new MockFileItem();
+
     static {
         Calendar calendar = new GregorianCalendar(2000, 01, 02);
         DATE_OF_BIRTH = calendar.getTime();
@@ -73,7 +78,7 @@ public class ClickUtilsTest extends TestCase {
 
     	// set up the form
         Form form = new Form("sample");
-        
+
         TextField idField = new TextField("id");
         form.add(idField);
 
@@ -85,22 +90,25 @@ public class ClickUtilsTest extends TestCase {
 
         TextField dateField = new TextField("dateOfBirth");
         fieldset.add(dateField);
-        
+
         TextField intField = new TextField("int");
         form.add(intField);
 
         TextField doubleField = new TextField("double");
         form.add(doubleField);
-               
+
         Checkbox checkBox = new Checkbox("boolean");
-        form.add(checkBox);  
-        
+        form.add(checkBox);
+
         TextField telephoneField = new TextField("telephone");
         form.add(telephoneField);
-        
+
         HiddenField hidden = new HiddenField("hidden", String.class);
         form.add(hidden);
-        
+
+        FileField fileField = new FileField("file");
+        form.add(fileField);
+
         // Populate fields
         idField.setValueObject(ID);
         nameField.setValue(NAME);
@@ -109,6 +117,7 @@ public class ClickUtilsTest extends TestCase {
         doubleField.setValue(String.valueOf(DOUBLE));
         checkBox.setChecked(BOOLEAN);
         telephoneField.setValue(TELEPHONE);
+        fileField.setValueObject(FILEITEM);
 
         // copy form to object
         SampleObject sampleObject = new SampleObject();
@@ -117,22 +126,23 @@ public class ClickUtilsTest extends TestCase {
         // has the object been configured correctly?
         assertEquals(new Integer(idField.getValue()), sampleObject.getId());
         assertEquals(nameField.getValue(), sampleObject.getName());
-        
+
         //NOTE the dateField was NOT copied to the sampleObject's Date property.
-        //Use org.apache.click.extras.control.DateField in the extras project, to 
+        //Use org.apache.click.extras.control.DateField in the extras project, to
         //copy a Date property.
         assertEquals(null, sampleObject.getDateOfBirth());
         assertEquals(telephoneField.getValueObject().toString(), sampleObject.getTelephone());
-        assertTrue(sampleObject.getInt() == new Integer(intField.getValue()).intValue());
-        assertTrue(sampleObject.getDouble() == new Double(doubleField.getValue()).doubleValue());
-        assertTrue(sampleObject.isBoolean() == checkBox.isChecked());
-        
+        assertEquals(new Integer(intField.getValue()).intValue(), sampleObject.getInt());
+        assertEquals(new Double(doubleField.getValue()).doubleValue(), sampleObject.getDouble());
+        assertEquals(checkBox.isChecked(), sampleObject.isBoolean());
+        assertSame(fileField.getFileItem(), sampleObject.getFile());
+
         // Test object path copying
-        
+
         User user = new User();
         user.setAddress(new Address());
         user.getAddress().setState(new State());
-        
+
         form = new Form();
         TextField codeField = new TextField("address.state.code");
         codeField.setValue("NSW");
@@ -147,7 +157,7 @@ public class ClickUtilsTest extends TestCase {
     public void testCopyObjectToForm() {
         // set up the form
         Form form = new Form("sample");
-        
+
         TextField idField = new TextField("id");
         form.add(idField);
 
@@ -156,22 +166,25 @@ public class ClickUtilsTest extends TestCase {
 
         TextField nameField = new TextField("name");
         fieldset.add(nameField);
-        
+
         TextField dateField = new TextField("dateOfBirth");
-        fieldset.add(dateField); 
-        
+        fieldset.add(dateField);
+
         TextField intField = new TextField("int");
         form.add(intField);
-                
+
         TextField doubleField = new TextField("double");
         form.add(doubleField);
-               
+
         Checkbox checkBox = new Checkbox("boolean");
         form.add(checkBox);
-        
+
         HiddenField hidden = new HiddenField("hidden", String.class);
         form.add(hidden);
-        
+
+        FileField fileField = new FileField("file");
+        form.add(fileField);
+
         // Populate object
         SampleObject sampleObject = new SampleObject();
         sampleObject.setId(ID);
@@ -180,6 +193,7 @@ public class ClickUtilsTest extends TestCase {
         sampleObject.setInt(INT);
         sampleObject.setDouble(DOUBLE);
         sampleObject.setBoolean(BOOLEAN);
+        sampleObject.setFile(FILEITEM);
 
         // copy object to form
         ClickUtils.copyObjectToForm(sampleObject, form, true);
@@ -188,9 +202,10 @@ public class ClickUtilsTest extends TestCase {
         assertEquals(sampleObject.getId(), new Integer(idField.getValue()));
         assertEquals(sampleObject.getName(), nameField.getValue());
         assertEquals(sampleObject.getDateOfBirth().toString(), dateField.getValue());
-        assertTrue(sampleObject.getInt() == new Integer(intField.getValue()).intValue());
-        assertTrue(sampleObject.getDouble() == new Double(doubleField.getValue()).doubleValue());
-        assertTrue(sampleObject.isBoolean() == checkBox.isChecked());
+        assertEquals(new Integer(intField.getValue()).intValue(), sampleObject.getInt());
+        assertEquals(new Double(doubleField.getValue()).doubleValue(), sampleObject.getDouble());
+        assertEquals(checkBox.isChecked(), sampleObject.isBoolean());
+        assertNull(fileField.getValueObject());
 
         // Test object path copying
 
@@ -198,13 +213,13 @@ public class ClickUtilsTest extends TestCase {
         user.setAddress(new Address());
         user.getAddress().setState(new State());
         user.getAddress().getState().setCode("NSW");
-        
+
         form = new Form();
         TextField codeField = new TextField("address.state.code");
         form.add(codeField);
         form.copyFrom(user, true);
         assertEquals("NSW", codeField.getValueObject());
-        
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("name", "malcolm");
         form = new Form();
@@ -226,7 +241,7 @@ public class ClickUtilsTest extends TestCase {
         Integer age = new Integer(61);
         String stateCode = "NSW";
         String street = "12 Short street";
-        
+
         // Setup the map
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", id);
@@ -270,7 +285,7 @@ public class ClickUtilsTest extends TestCase {
      * CLK-239.
      */
     public void testCopyFormToMap() {
-        
+
         Integer id = new Integer(9876);
         String name = "Rocky Balboa";
         Integer age = new Integer(61);
@@ -290,16 +305,16 @@ public class ClickUtilsTest extends TestCase {
         TextField idField = new TextField("id");
         idField.setValue(id.toString());
         form.add(idField);
-        
+
         // Create fieldset
         FieldSet fieldset = new FieldSet("fieldset");
         form.add(fieldset);
         TextField nameField = new TextField("name");
         nameField.setValue(name);
         fieldset.add(nameField);
-        
+
         TextField ageField = new TextField("age");
-        ageField.setValue(age.toString());        
+        ageField.setValue(age.toString());
         form.add(ageField);
         TextField streetField = new TextField("address.street");
         streetField.setValue(street);
@@ -329,9 +344,9 @@ public class ClickUtilsTest extends TestCase {
         final String code = "NSW";
         final boolean active = false;
         final Boolean registered = Boolean.TRUE;
-        
+
         Form form = new Form();
-        
+
         TextField idField = new TextField("address.id");
         form.add(idField);
         TextField lineOneField = new TextField("address.lineOne");
@@ -346,15 +361,15 @@ public class ClickUtilsTest extends TestCase {
         TextField codeField = new TextField("address.state.code");
         codeField.setValue(code);
         form.add(codeField);
-        
-        User user = new User();        
+
+        User user = new User();
         form.copyTo(user, true);
-        
+
         assertNull(user.getAddress().getId());
-        assertEquals(lineOne, user.getAddress().getLineOne());        
-        assertEquals(active, user.getAddress().isActive()); 
+        assertEquals(lineOne, user.getAddress().getLineOne());
+        assertEquals(active, user.getAddress().isActive());
         assertEquals(registered, user.getAddress().isRegistered());
-        assertEquals(code, user.getAddress().getState().getCode());        
+        assertEquals(code, user.getAddress().getState().getCode());
     }
 
     /**
@@ -365,39 +380,39 @@ public class ClickUtilsTest extends TestCase {
         assertEquals("Customer Number", ClickUtils.toLabel("customerNumber"));
         assertEquals("Card PIN", ClickUtils.toLabel("cardPIN"));
     }
-    
+
     /**
      * Sanity checks for ClickUtils.toMD5Hash.
      */
     public void testToMD5Hash() {
-        assertEquals("5f4dcc3b5aa765d61d8327deb882cf99", 
+        assertEquals("5f4dcc3b5aa765d61d8327deb882cf99",
                      ClickUtils.toMD5Hash("password"));
     }
-    
+
     /**
      * Sanity checks for ClickUtils.getParentMessages.
      */
     public void testGetParentMessages() {
         TextField textField = new TextField("test");
-        
+
         Map<String, String> map = ClickUtils.getParentMessages(textField);
         assertNotNull(map);
         assertTrue(map.isEmpty());
         assertTrue(map == Collections.EMPTY_MAP);
-        
+
         Page page = new Page();
         page.addControl(textField);
-        
+
         Map<String, String> map2 = ClickUtils.getParentMessages(textField);
         assertNotNull(map2);
         assertEquals(1, map2.size());
         assertFalse(map2 == Collections.EMPTY_MAP);
-        
+
         Page page2 = new Page();
-        
+
         Form form = new Form("form");
         page2.addControl(form);
-        
+
         TextField textField2 = new TextField("test");
         form.add(textField2);
 
@@ -499,7 +514,7 @@ public class ClickUtilsTest extends TestCase {
         String value4 = ClickUtils.escapeHtml(value3);
         assertEquals(value3, value4);
         assertTrue(value3 == value4);
-        
+
         assertEquals("&quot;", ClickUtils.escapeHtml("\""));
         assertEquals("&amp;", ClickUtils.escapeHtml("&"));
         assertEquals("&lt;", ClickUtils.escapeHtml("<"));
@@ -533,23 +548,23 @@ public class ClickUtilsTest extends TestCase {
         	assertTrue(false);
         }
     }
-    
+
     /**
      * Sanity checks for encoding and decoding a password in a cookie.
      */
     public void testCookiePassword() {
         String username = "username";
         String password = "password";
-        
+
         String cookie = ClickUtils.encodePasswordCookie(username, password, 12);
-        
+
         String[] result = ClickUtils.decodePasswordCookie(cookie, 12);
-        
+
         assertEquals(username, result[0]);
         assertEquals(password, result[1]);
-        
+
         result = ClickUtils.decodePasswordCookie(cookie, 21);
-        
+
         assertFalse(username.equals(result[0]));
         assertFalse(password.equals(result[1]));
     }
