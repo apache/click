@@ -39,17 +39,37 @@ public class ParentObject {
     public ParentObject() {
     }
     
+    public void setName(String name) {
+		this.name = name;
+	}
+    
     public String getName() {
-        return name;
+    	return name;
     }
-    
-    public Date getDate() {
-    	return date;
-    }
-    
-    public Object getValue() {
-        return value;
-    }
+
+	public void setValue(Object value) {
+		this.value = value;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+	
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
+	public Boolean getValid() {
+		return valid;
+	}
+
+	public Object getValue() {
+		return value;
+	}
+
+	public void setValid(Boolean valid) {
+		this.valid = valid;
+	}
     
     public ChildObject getChild() {
     	return child;
@@ -57,10 +77,6 @@ public class ParentObject {
     
     public void setChild(ChildObject child) {
     	this.child = child;
-    }
-    
-    public Boolean getValid() {
-    	return valid;
     }
 }
 

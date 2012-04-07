@@ -29,9 +29,9 @@ import org.apache.click.util.Bindable;
 public class RequestBindingPage extends Page {
     private static final long serialVersionUID = 1L;
 
-    @Bindable private BigDecimal bigDecimal = BigDecimal.ZERO;
+    @Bindable public BigDecimal bigDecimal = BigDecimal.ZERO;
     public String string = "";
-    @Bindable private boolean bool = false;
+    @Bindable public boolean bool = false;
 
     public RequestBindingPage() {
     }

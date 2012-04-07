@@ -191,6 +191,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /** The ServletContext instance. */
     private ServletContext servletContext;
 
+    /** The application PropertyService. */
+    private PropertyService propertyService;
+
     /** The application ResourceService. */
     private ResourceService resourceService;
 
@@ -265,6 +268,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             // Load the locale
             loadLocale(rootElm);
 
+            // Load the Property service
+            loadPropertyService(rootElm);
+
             // Load the File Upload service
             loadFileUploadService(rootElm);
 
@@ -291,6 +297,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     public void onDestroy() {
         if (getFileUploadService() != null) {
             getFileUploadService().onDestroy();
+        }
+        if (getPropertyService() != null) {
+            getPropertyService().onDestroy();
         }
         if (getTemplateService() != null) {
             getTemplateService().onDestroy();
@@ -343,6 +352,16 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     public LogService getLogService() {
         return logService;
+    }
+
+    /**
+     * @see ConfigService#getProperyService()
+     *
+     * @return the application property service.
+     */
+    public PropertyService getPropertyService() {
+        // TODO
+        return new OGNLPropertyService();
     }
 
     /**
@@ -640,8 +659,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      *
      * @return the list of configured page classes
      */
-    public List getPageClassList() {
-        List classList = new ArrayList(pageByClassMap.size());
+    public List<Class<? extends Page>> getPageClassList() {
+        List<Class<? extends Page>> classList =
+            new ArrayList<Class<? extends Page>>(pageByClassMap.size());
 
         Iterator i = pageByClassMap.keySet().iterator();
         while (i.hasNext()) {
@@ -854,7 +874,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         String path = pagePath.substring(0, pagePath.lastIndexOf("."));
 
         // If page is excluded return the excluded class
-        Class excludePageClass = getExcludesPageClass(path);
+        Class<? extends  Page> excludePageClass = getExcludesPageClass(path);
         if (excludePageClass != null) {
             return excludePageClass;
         }
@@ -972,7 +992,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * not be found on the classpath
      */
     void loadPages(Element rootElm) throws ClassNotFoundException {
-        List pagesList = ClickUtils.getChildren(rootElm, "pages");
+        List<Element> pagesList = ClickUtils.getChildren(rootElm, "pages");
 
         if (pagesList.isEmpty()) {
             String msg = "required configuration 'pages' element missing.";
@@ -981,9 +1001,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
         List templates = getTemplateFiles();
 
-        for (int i = 0; i < pagesList.size(); i++) {
-
-            Element pagesElm = (Element) pagesList.get(i);
+        for (Element pagesElm : pagesList) {
 
             // Determine whether to use automapping
             boolean automap = true;
@@ -1194,13 +1212,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @param parentElm the element to load the headers from
      * @return the map of Page headers
      */
-    static Map loadHeadersMap(Element parentElm) {
-        Map headersMap = new HashMap();
+    static Map<String, Object> loadHeadersMap(Element parentElm) {
+        Map<String, Object> headersMap = new HashMap<String, Object>();
 
-        List headerList = ClickUtils.getChildren(parentElm, "header");
-
-        for (int i = 0, size = headerList.size(); i < size; i++) {
-            Element header = (Element) headerList.get(i);
+        for (Element header : ClickUtils.getChildren(parentElm, "header")) {
 
             String name = header.getAttribute("name");
             String type = header.getAttribute("type");
@@ -1264,10 +1279,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             return;
         }
 
-        List deployableList = ClickUtils.getChildren(controlsElm, "control");
-
-        for (int i = 0; i < deployableList.size(); i++) {
-            Element deployableElm = (Element) deployableList.get(i);
+        for (Element deployableElm : ClickUtils.getChildren(controlsElm, "control")) {
 
             String classname = deployableElm.getAttribute("classname");
             if (StringUtils.isBlank(classname)) {
@@ -1294,10 +1306,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             return;
         }
 
-        List controlSets = ClickUtils.getChildren(controlsElm, "control-set");
+        for (Element controlSet : ClickUtils.getChildren(controlsElm, "control-set")) {
 
-        for (int i = 0; i < controlSets.size(); i++) {
-            Element controlSet = (Element) controlSets.get(i);
             String name = controlSet.getAttribute("name");
             if (StringUtils.isBlank(name)) {
                 String msg =
@@ -1535,13 +1545,12 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             fileUploadService = (FileUploadService) fileUploadServiceClass.newInstance();
 
-            Map propertyMap = loadPropertyMap(fileUploadServiceElm);
+            Map<String, String> propertyMap = loadPropertyMap(fileUploadServiceElm);
 
-            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
-                String name = i.next().toString();
+            for (String name : propertyMap.keySet()) {
                 String value = propertyMap.get(name).toString();
 
-                PropertyUtils.setValue(fileUploadService, name, value);
+                getPropertyService().setValue(fileUploadService, name, value);
             }
 
         } else {
@@ -1571,13 +1580,12 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             logService = (LogService) logServiceClass.newInstance();
 
-            Map propertyMap = loadPropertyMap(logServiceElm);
+            Map<String, String> propertyMap = loadPropertyMap(logServiceElm);
 
-            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
-                String name = i.next().toString();
+            for (String name : propertyMap.keySet()) {
                 String value = propertyMap.get(name).toString();
 
-                PropertyUtils.setValue(logService, name, value);
+                getPropertyService().setValue(logService, name, value);
             }
         } else {
             logService = new ConsoleLogService();
@@ -1600,13 +1608,12 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             messagesMapService = (MessagesMapService) messagesMapServiceClass.newInstance();
 
-            Map propertyMap = loadPropertyMap(messagesMapServiceElm);
+            Map<String, String> propertyMap = loadPropertyMap(messagesMapServiceElm);
 
-            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
-                String name = i.next().toString();
+            for (String name : propertyMap.keySet()) {
                 String value = propertyMap.get(name).toString();
 
-                PropertyUtils.setValue(messagesMapService, name, value);
+                getPropertyService().setValue(messagesMapService, name, value);
             }
         }
 
@@ -1631,11 +1638,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             Class interceptorClass = ClickUtils.classForName(classname);
 
-            Map propertyMap = loadPropertyMap(interceptorElm);
+            Map<String, String> propertyMap = loadPropertyMap(interceptorElm);
             List<Property> propertyList = new ArrayList<Property>();
 
-            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
-                String name = i.next().toString();
+            for (String name : propertyMap.keySet()) {
                 String value = propertyMap.get(name).toString();
 
                 propertyList.add(new Property(name, value));
@@ -1663,13 +1669,12 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             resourceService = (ResourceService) resourceServiceClass.newInstance();
 
-            Map propertyMap = loadPropertyMap(resourceServiceElm);
+            Map<String, String> propertyMap = loadPropertyMap(resourceServiceElm);
 
-            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
-                String name = i.next().toString();
+            for (String name : propertyMap.keySet()) {
                 String value = propertyMap.get(name).toString();
 
-                PropertyUtils.setValue(resourceService, name, value);
+                getPropertyService().setValue(resourceService, name, value);
             }
 
         } else {
@@ -1683,6 +1688,33 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
 
         resourceService.onInit(servletContext);
+    }
+
+    private void loadPropertyService(Element rootElm) throws Exception {
+        Element propertyServiceElm = ClickUtils.getChild(rootElm, "property-service");
+
+        if (propertyServiceElm != null) {
+            Class propertyServiceClass = OGNLPropertyService.class;
+
+            String classname = propertyServiceElm.getAttribute("classname");
+
+            if (StringUtils.isNotBlank(classname)) {
+                propertyServiceClass = ClickUtils.classForName(classname);
+            }
+
+            propertyService = (PropertyService) propertyServiceClass.newInstance();
+
+        } else {
+            propertyService = new OGNLPropertyService();
+        }
+
+        if (getLogService().isDebugEnabled()) {
+            String msg = "initializing PropertyService: "
+                + propertyService.getClass().getName();
+            getLogService().debug(msg);
+        }
+
+        propertyService.onInit(servletContext);
     }
 
     private void loadTemplateService(Element rootElm) throws Exception {
@@ -1699,13 +1731,12 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             templateService = (TemplateService) templateServiceClass.newInstance();
 
-            Map propertyMap = loadPropertyMap(templateServiceElm);
+            Map<String, String> propertyMap = loadPropertyMap(templateServiceElm);
 
-            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
-                String name = i.next().toString();
+            for (String name : propertyMap.keySet()) {
                 String value = propertyMap.get(name).toString();
 
-                PropertyUtils.setValue(templateService, name, value);
+                getPropertyService().setValue(templateService, name, value);
             }
 
         } else {
@@ -1721,14 +1752,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         templateService.onInit(servletContext);
     }
 
-    private static Map loadPropertyMap(Element parentElm) {
-        Map propertyMap = new HashMap();
+    private static Map<String, String> loadPropertyMap(Element parentElm) {
+        Map<String, String> propertyMap = new HashMap<String, String>();
 
-        List propertyList = ClickUtils.getChildren(parentElm, "property");
-
-        for (int i = 0, size = propertyList.size(); i < size; i++) {
-            Element property = (Element) propertyList.get(i);
-
+        for (Element property : ClickUtils.getChildren(parentElm, "property")) {
             String name = property.getAttribute("name");
             String value = property.getAttribute("value");
 
