@@ -34,6 +34,7 @@
     <suppress checks="JavadocMethod" files="MessagesMap.java"/>
     <suppress checks="JavadocMethod" files="PaginatingList.java"/>
     <suppress checks="JavadocMethod" files="SessionMap.java"/>
+    <suppress checks="JavadocMethod" files="MockFileItem.java"/>
 
     <!-- Javadoc Style -->
     <suppress checks="JavadocStyle" files="Form.java"            lines="1225"/>
