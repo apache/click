@@ -18,27 +18,26 @@
  */
 package org.apache.click.util;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.mvel2.MVEL;
+import javax.servlet.ServletContext;
+
+import org.apache.click.Context;
+import org.apache.click.service.ConfigService;
+import org.apache.click.service.PropertyService;
+
 
 /**
- * Provide property getter and setter utility methods.
+ * Provide property getter and setter utility methods. This class is provided
+ * for backward compatibility.
  */
-@SuppressWarnings("unchecked")
 public class PropertyUtils {
 
     /** Provides a synchronized cache of get value reflection methods. */
     private static final Map<String, Object> GET_METHOD_CACHE
         = new ConcurrentHashMap<String, Object>();
-
-    /** Provides a synchronized cache of MVEL expressions. */
-    private static final Map<String, Serializable> MVEL_EXPRESSION_CACHE
-        = new ConcurrentHashMap<String, Serializable>();
 
     // -------------------------------------------------------- Public Methods
 
@@ -131,24 +130,10 @@ public class PropertyUtils {
      * @param value the property value to set
      */
     public static void setValue(Object target, String name, Object value) {
-
-        String expression = target.getClass().getSimpleName() + "." + name + " = value";
-
-        Serializable compiledExpression = MVEL_EXPRESSION_CACHE.get(expression);
-
-        if (compiledExpression == null) {
-            compiledExpression = MVEL.compileExpression(expression);
-            MVEL_EXPRESSION_CACHE.put(expression, compiledExpression);
-        }
-
-        Map vars = new HashMap();
-        vars.put(target.getClass().getSimpleName(), target);
-        vars.put("value", value);
-
-        MVEL.executeExpression(compiledExpression, vars);
+        getPropertyService().setValue(target, name, value);
     }
 
-    // -------------------------------------------------------- Private Methods
+    // Private Methods --------------------------------------------------------
 
     /**
      * Return the property value for the given object and property name. This
@@ -160,7 +145,7 @@ public class PropertyUtils {
      * @return the property value for the given source object and property name
      */
     private static Object getObjectPropertyValue(Object source, String name, Map cache) {
-        PropertyUtils.CacheKey methodNameKey = new PropertyUtils.CacheKey(source, name);
+        CacheKey methodNameKey = new CacheKey(source, name);
 
         Method method = null;
         try {
@@ -212,14 +197,23 @@ public class PropertyUtils {
         }
     }
 
-    // ---------------------------------------------------------- Inner Classes
+    private static PropertyService getPropertyService() {
+        ServletContext servletContext =
+            Context.getThreadLocalContext().getServletContext();
+
+        ConfigService configService = ClickUtils.getConfigService(servletContext);
+
+        return configService.getPropertyService();
+    }
+
+    // Inner Classes ----------------------------------------------------------
 
     /**
      * See DRY Performance article by Kirk Pepperdine.
      * <p/>
      * http://www.javaspecialists.eu/archive/Issue134.html
      */
-    private static class CacheKey {
+    public static class CacheKey {
 
         /** Class to encapsulate in cache key. */
         private final Class sourceClass;

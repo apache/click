@@ -41,6 +41,7 @@
    <property name="jar.lang" value="commons-lang-${commons-lang.version}.jar"/>
    <property name="jar.log4j" value="log4j-${log4j.version}.jar"/>
    <property name="jar.mvel2" value="mvel2-${mvel2.version}.jar"/>
+   <property name="jar.ognl" value="ognl-${ognl.version}.jar"/>
    <property name="jar.servlet" value="servlet-api-${servlet-api.version}.jar"/>
    <property name="jar.slf4j" value="slf4j-api-${slf4j.version}.jar"/>
    <property name="jar.spring" value="spring-${spring.version}.jar"/>
@@ -110,6 +111,7 @@
       <pathelement location="lib/${jar.io}"/>
       <pathelement location="lib/${jar.lang}"/>
    	  <pathelement location="lib/${jar.mvel2}"/>
+   	  <pathelement location="lib/${jar.ognl}"/>
       <pathelement location="lib/${jar.servlet}"/>
       <pathelement location="lib/${jar.upload}"/>
       <pathelement location="lib/${jar.velocity}"/>
@@ -133,6 +135,7 @@
       <pathelement location="lib/${jar.collections}"/>
       <pathelement location="lib/${jar.io}"/>
       <pathelement location="lib/${jar.lang}"/>
+      <pathelement location="lib/${jar.ognl}"/>
       <pathelement location="lib/${jar.servlet}"/>
       <pathelement location="lib/${jar.upload}"/>
       <pathelement location="lib/${jar.velocity}"/>
@@ -192,6 +195,7 @@
             <exclude name="lib/${jar.log4j}"/>
             <exclude name="lib/${jar.junit}"/>
          	<exclude name="lib/${jar.mvel2}"/>
+         	<exclude name="lib/${jar.ognl}"/>
             <exclude name="lib/${jar.servlet}"/>
             <exclude name="lib/${jar.slf4j}"/>
             <exclude name="lib/${jar.velocity}"/>
@@ -325,6 +329,7 @@
       <unzip src="lib/${jar.io}" dest="temp"/>
       <unzip src="lib/${jar.lang}" dest="temp"/> 
       <unzip src="lib/${jar.mvel2}" dest="temp"/> 
+      <unzip src="lib/${jar.ognl}" dest="temp"/> 
       <unzip src="lib/${jar.upload}" dest="temp"/>
       <unzip src="lib/${jar.velocity}" dest="temp"/> 
       <copy todir="${dir.classes}">
@@ -540,6 +545,7 @@
       <downloadMacro name="${jar.lang}" path="commons-lang/commons-lang/${commons-lang.version}"/>
       <downloadMacro name="${jar.log4j}" path="log4j/log4j/${log4j.version}"/>
    	  <downloadMacro name="${jar.mvel2}" path="org/mvel/mvel2/${mvel2.version}"/>
+   	  <downloadMacro name="${jar.ognl}" path="ognl/ognl/${ognl.version}"/>
       <downloadMacro name="${jar.upload}" path="commons-fileupload/commons-fileupload/${commons-fileupload.version}"/>
       <downloadMacro name="${jar.junit}" path="junit/junit/${junit.version}"/>
       <downloadMacro name="${jar.servlet}" path="javax/servlet/servlet-api/${servlet-api.version}"/>

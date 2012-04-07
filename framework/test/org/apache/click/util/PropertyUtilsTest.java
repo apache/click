@@ -93,4 +93,5 @@ public class PropertyUtilsTest extends TestCase {
 
         assertEquals("malcolm", PropertyUtils.getValue(map, "name"));
     }
+    
 }

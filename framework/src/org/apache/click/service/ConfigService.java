@@ -162,6 +162,13 @@ public interface ConfigService {
     public LogService getLogService();
 
     /**
+     * Return the application property service.
+     *
+     * @return the application property service
+     */
+    public PropertyService getPropertyService();
+
+    /**
      * Return the application resource service.
      *
      * @return the application resource service.
