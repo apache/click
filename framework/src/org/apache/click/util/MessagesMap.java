@@ -31,12 +31,13 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
-import org.apache.commons.lang.Validate;
 
 import org.apache.click.Context;
 import org.apache.click.service.ConfigService;
+import org.apache.commons.lang.Validate;
 
 /**
  * Provides a localized read only messages Map for Page and Control classes.
@@ -68,13 +69,19 @@ import org.apache.click.service.ConfigService;
  */
 public class MessagesMap implements Map<String, String> {
 
-    /** Cache of resource bundle and locales which were not found. */
-    protected static final Set<String> NOT_FOUND_CACHE =
-        Collections.synchronizedSet(new HashSet<String>());
+    /**
+     * Cache of resource bundle and locales which were not found, with support
+     * for multiple class loaders.
+     */
+    protected static final Map<ClassLoader, Set<String>> NOT_FOUND_CLASSLOADER_CACHE
+        = Collections.synchronizedMap(new HashMap<ClassLoader, Set<String>>());
 
-    /** Cache of messages keyed by bundleName + Locale name. */
-    protected static final Map<Object, Map<String, String>> MESSAGES_CACHE =
-        new HashMap<Object, Map<String, String>>();
+    /**
+     * Provides a synchronized cache of get value reflection methods, with
+     * support for multiple class loaders.
+     */
+    protected static final Map<ClassLoader, Map<CacheKey, Map<String, String>>> MESSAGES_CLASSLOADER_CACHE
+        = Collections.synchronizedMap(new HashMap<ClassLoader, Map<CacheKey, Map<String, String>>>());
 
     /** The cache key set load lock. */
     protected static final Object CACHE_LOAD_LOCK = new Object();
@@ -302,7 +309,7 @@ public class MessagesMap implements Map<String, String> {
             CacheKey resourceKey = new CacheKey(globalBaseName,
                 baseClass.getName(), locale.toString());
 
-            messages = MESSAGES_CACHE.get(resourceKey);
+            messages = getMessagesCache().get(resourceKey);
 
             if (messages != null) {
                 return;
@@ -335,7 +342,7 @@ public class MessagesMap implements Map<String, String> {
                 ServletContext servletContext = Context.getThreadLocalContext().getServletContext();
                 ConfigService configService = ClickUtils.getConfigService(servletContext);
                 if (configService.isProductionMode() || configService.isProfileMode()) {
-                    MESSAGES_CACHE.put(resourceKey, messages);
+                    getMessagesCache().put(resourceKey, messages);
                 }
             }
         }
@@ -354,7 +361,7 @@ public class MessagesMap implements Map<String, String> {
 
         String resourceKey = resourceBundleName + locale.toString();
 
-        if (!NOT_FOUND_CACHE.contains(resourceKey)) {
+        if (!getNotFoundCache().contains(resourceKey)) {
             try {
                 ResourceBundle resources = createResourceBundle(resourceBundleName, locale);
 
@@ -366,12 +373,36 @@ public class MessagesMap implements Map<String, String> {
                 }
 
             } catch (MissingResourceException mre) {
-                NOT_FOUND_CACHE.add(resourceKey);
+                getNotFoundCache().add(resourceKey);
             }
         }
     }
 
     // Private Methods --------------------------------------------------------
+
+    protected static Set<String> getNotFoundCache() {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+
+        Set<String> notFoundCache = NOT_FOUND_CLASSLOADER_CACHE.get(cl);
+        if (notFoundCache == null) {
+            notFoundCache = new HashSet<String>();
+            NOT_FOUND_CLASSLOADER_CACHE.put(cl, notFoundCache);
+        }
+
+        return notFoundCache;
+    }
+
+    protected static Map<CacheKey, Map<String, String>> getMessagesCache() {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+
+        Map<CacheKey, Map<String, String>> messagesCache = MESSAGES_CLASSLOADER_CACHE.get(cl);
+        if (messagesCache == null) {
+            messagesCache = new ConcurrentHashMap<CacheKey, Map<String, String>>();
+            MESSAGES_CLASSLOADER_CACHE.put(cl, messagesCache);
+        }
+
+        return messagesCache;
+    }
 
     /**
      * See DRY Performance article by Kirk Pepperdine.
