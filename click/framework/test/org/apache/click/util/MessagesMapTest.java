@@ -252,7 +252,7 @@ public class MessagesMapTest extends TestCase {
         }
 
         public void clearCache() {
-            MESSAGES_CACHE.clear();
+        	MESSAGES_CLASSLOADER_CACHE.clear();
             clearResourceBundleCache();
         }
 

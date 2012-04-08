@@ -19,6 +19,8 @@
 package org.apache.click.util;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,6 +40,13 @@ public class PropertyUtils {
     /** Provides a synchronized cache of get value reflection methods. */
     private static final Map<String, Object> GET_METHOD_CACHE
         = new ConcurrentHashMap<String, Object>();
+
+    /**
+     * Provides a synchronized cache of get value reflection methods, with
+     * support for multiple class loaders.
+     */
+    private static final Map<ClassLoader, Map<CacheKey, Method>> GET_METHOD_CLASSLOADER_CACHE
+        = Collections.synchronizedMap(new HashMap<ClassLoader, Map<CacheKey, Method>>());
 
     // -------------------------------------------------------- Public Methods
 
@@ -69,13 +78,13 @@ public class PropertyUtils {
             remainingPart = name.substring(baseIndex + 1);
         }
 
-        Object value = getObjectPropertyValue(source, basePart, GET_METHOD_CACHE);
+        Object value = getObjectPropertyValue(source, basePart, getGetMethodCache());
 
         if (remainingPart == null || value == null) {
             return value;
 
         } else {
-            return getValue(value, remainingPart, GET_METHOD_CACHE);
+            return getValue(value, remainingPart, getGetMethodCache());
         }
     }
 
@@ -204,6 +213,18 @@ public class PropertyUtils {
         ConfigService configService = ClickUtils.getConfigService(servletContext);
 
         return configService.getPropertyService();
+    }
+
+    private static Map<CacheKey, Method> getGetMethodCache() {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+
+        Map<CacheKey, Method> getMethodCache = GET_METHOD_CLASSLOADER_CACHE.get(cl);
+        if (getMethodCache == null) {
+            getMethodCache = new ConcurrentHashMap<CacheKey, Method>();
+            GET_METHOD_CLASSLOADER_CACHE.put(cl, getMethodCache);
+        }
+
+        return getMethodCache;
     }
 
     // Inner Classes ----------------------------------------------------------
