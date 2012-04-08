@@ -67,7 +67,7 @@
 
 <dl>
   <dt><a name="2.3.1"></a>
-      <div class="release-header">Latest Stable Release - Version 2.3.1 - ??? 2011</div>
+      <div class="release-header">Latest Stable Release - Version 2.3.1 - ?? April 2012</div>
   </dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;">
@@ -79,37 +79,26 @@
       </div>
       <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
           <li class="change">
-              Upgraded to Servlet API 2.4
-          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-763">CLK-763</a>].
-          </li>
-          <li class="change">
               Added Page method getCharacterEncoding. The response character encoding
               can be overridden through this method. getCharacterEncoding should be
               used instead of returning the <tt>charset</tt> through the getContentType
               method
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-764">CLK-764</a>].
           </li>
-          <li class="change">
-              Added SessionMap methods getCreationTime, getId, getLastAccessedTime and getMaxInactiveInterval
-              to expose underlying read only HttpSession properties.
-          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-773">CLK-773</a>].
-          </li>
-          <li class="change">
-              Added URL request params options to the PageSubmit class.
-          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-779">CLK-779</a>].
-          </li>
-          <li class="change">
-              Replaced OGNL expression library with MVEl.
+          <li>
+              Added PropertyService interface with OGNL and MVEL property service implementations.
+              The default property service is OGNLPropertyService principally for
+              backward compatibility
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-306">CLK-306</a>].
           </li>
           <li class="change">
-              Fixed AutoCompleteTextField to not send duplicate content type in
-              response
-          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-757">CLK-757</a>].
+              Added SessionMap methods getCreationTime, getId, getLastAccessedTime and getMaxInactiveInterval
+              to expose underlying read only HttpSession properties
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-773">CLK-773</a>].
           </li>
           <li class="change">
-              Fixed page actions to show error page if error occurs
-          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-767">CLK-767</a>].
+              Added URL request params options to the PageSubmit class
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-779">CLK-779</a>].
           </li>
           <li class="change">
               Removed AutoCompleteTextField dependency on Page. The Ajax callback
@@ -119,13 +108,28 @@
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-761">CLK-761</a>].
           </li>
           <li class="change">
-              Fixed AutoCompleteTextField to add extra parameters correctly
+              Fixed AutoCompleteTextField to not send duplicate content type in
+              response
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-757">CLK-757</a>].
+          </li>
+          <li class="change">
+              Fixed page actions to show error page if error occurs.
+              This issue was raised by Tim Christensen
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-767">CLK-767</a>].
+          </li>
+          <li class="change">
+              Fixed AutoCompleteTextField to add extra parameters correctly.
+              This issue was raised by Jose Luis Vázquez González
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-759">CLK-759</a>].
           </li>
           <li class="change">
               Fixed ErrorReport to escape the request query string.
               This issue has been raised by Tsuyoshi Yamamoto
           [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-762">CLK-762</a>].
+          </li>
+          <li class="change">
+              Upgraded to Servlet API 2.4
+          [<a target="_blank" href="https://issues.apache.org/jira/browse/CLK-763">CLK-763</a>].
           </li>
       </ul>
   </dd>

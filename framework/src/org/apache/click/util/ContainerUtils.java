@@ -27,6 +27,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.servlet.ServletContext;
+
+import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
 import org.apache.click.control.Button;
@@ -35,7 +38,9 @@ import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.Label;
+import org.apache.click.service.ConfigService;
 import org.apache.click.service.LogService;
+import org.apache.click.service.PropertyService;
 import org.apache.commons.lang.ClassUtils;
 
 /**
@@ -146,8 +151,11 @@ public class ContainerUtils {
 
             ensureObjectPathNotNull(object, fieldName);
 
+            ConfigService configService = ClickUtils.getConfigService();
+            PropertyService propertyService = configService.getPropertyService();
+
             try {
-                PropertyUtils.setValue(object, fieldName, field.getValueObject());
+                propertyService.setValue(object, fieldName, field.getValueObject());
 
                 if (logService.isDebugEnabled()) {
                     String containerClassName =
@@ -258,7 +266,7 @@ public class ContainerUtils {
 
             String fieldName = field.getName();
             try {
-                Object result = PropertyUtils.getValue(object, fieldName);
+                Object result = getPropertyService().getValue(object, fieldName);
 
                 field.setValueObject(result);
 
@@ -1372,6 +1380,12 @@ public class ContainerUtils {
         }
 
         ClickUtils.getLogService().warn(message);
+    }
+
+    private static PropertyService getPropertyService() {
+        ServletContext sc = Context.getThreadLocalContext().getServletContext();
+        ConfigService configService = ClickUtils.getConfigService(sc);
+        return configService.getPropertyService();
     }
 
 }

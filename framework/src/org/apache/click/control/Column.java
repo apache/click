@@ -27,10 +27,10 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.click.Context;
+import org.apache.click.service.ConfigService;
+import org.apache.click.service.PropertyService;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PropertyUtils;
-
 import org.apache.commons.lang.math.NumberUtils;
 
 /**
@@ -262,6 +262,9 @@ public class Column implements Serializable {
 
     /** The column sortable status. The default value is false. */
     protected Boolean sortable;
+
+    /** The column property service. */
+    protected PropertyService propertyService;
 
     /** The parent Table. */
     protected Table table;
@@ -1328,7 +1331,12 @@ public class Column implements Serializable {
                 methodCache = new HashMap<Object, Object>();
             }
 
-            return PropertyUtils.getValue(row, name, methodCache);
+            if (propertyService == null) {
+                ConfigService configService = ClickUtils.getConfigService();
+                propertyService = configService.getPropertyService();
+            }
+
+            return propertyService.getValue(row, name, methodCache);
         }
     }
 

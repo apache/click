@@ -23,17 +23,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.click.control.Decorator;
-import org.apache.click.control.Option;
-import org.apache.click.control.Select;
-import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PropertyUtils;
-
 import org.apache.cayenne.DataRow;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.query.NamedQuery;
 import org.apache.cayenne.query.SelectQuery;
 import org.apache.click.Context;
+import org.apache.click.control.Decorator;
+import org.apache.click.control.Option;
+import org.apache.click.control.Select;
+import org.apache.click.service.ConfigService;
+import org.apache.click.service.PropertyService;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * Provides a Cayenne Query Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
@@ -451,6 +452,8 @@ public class QuerySelect extends Select {
         }
 
         Context context = getContext();
+        ConfigService configService = ClickUtils.getConfigService();
+        PropertyService propertyService = configService.getPropertyService();
         Map cache = new HashMap();
 
         for (int i = 0; i < list.size(); i++) {
@@ -490,10 +493,10 @@ public class QuerySelect extends Select {
 
                 try {
 
-                    value = PropertyUtils.getValue(row, getOptionValue(), cache);
+                    value = propertyService.getValue(row, getOptionValue(), cache);
 
                     if (getOptionLabel() != null) {
-                        label = PropertyUtils.getValue(row, getOptionLabel(), cache);
+                        label = propertyService.getValue(row, getOptionLabel(), cache);
 
                     } else {
                         label = getDecorator().render(row, context);

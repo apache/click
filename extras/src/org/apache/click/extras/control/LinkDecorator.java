@@ -31,9 +31,10 @@ import org.apache.click.control.ActionLink;
 import org.apache.click.control.Decorator;
 import org.apache.click.control.PageLink;
 import org.apache.click.control.Table;
+import org.apache.click.service.ConfigService;
+import org.apache.click.service.PropertyService;
+import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PropertyUtils;
-
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -536,7 +537,9 @@ public class LinkDecorator implements Decorator, Serializable {
             methodCache = new HashMap<Object, Object>();
         }
 
-        Object value = PropertyUtils.getValue(row, idProperty, methodCache);
+        ConfigService configService = ClickUtils.getConfigService();
+        PropertyService propertyService = configService.getPropertyService();
+        Object value = propertyService.getValue(row, idProperty, methodCache);
 
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
@@ -584,7 +587,9 @@ public class LinkDecorator implements Decorator, Serializable {
             methodCache = new HashMap<Object, Object>();
         }
 
-        Object value = PropertyUtils.getValue(row, idProperty, methodCache);
+        ConfigService configService = ClickUtils.getConfigService();
+        PropertyService propertyService = configService.getPropertyService();
+        Object value = propertyService.getValue(row, idProperty, methodCache);
 
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 

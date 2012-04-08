@@ -56,6 +56,17 @@ public class OGNLPropertyService implements PropertyService {
     }
 
     /**
+     * Return the property value for the given object and property name.
+     * <p/>
+     * For performance and backward compatibility reasons this method uses
+     * reflection internally to get the property value.
+     * <p/>
+     * This method is thread-safe, and caches reflected accessor methods in an
+     * internal synchronized cache
+     * <p/>
+     * If the given source object is a <tt>Map</tt> this method will simply
+     * return the value for the given key name.
+     *
      * @see PropertyService#getValue(Object, String)
      *
      * @param source the source object
@@ -67,6 +78,22 @@ public class OGNLPropertyService implements PropertyService {
     }
 
     /**
+     * Return the property value for the given object and property name.
+     * <p/>
+     * For performance and backward compatibility reasons this method uses
+     * reflection internally to get the property value.
+     * <p/>
+     * This method uses reflection internally to get the property value.
+     * <p/>
+     * This method caches the reflected property methods in the given Map cache.
+     * You must NOT modify the cache. Also note cache is ONLY valid for the
+     * current thread, as access to the cache is not synchronized. If you need
+     * multi-threaded access to shared cache use a thread-safe Map object, such
+     * as <tt>Collections.synchronizedMap(new HashMap())</tt>.
+     * <p/>
+     * If the given source object is a <tt>Map</tt> this method will simply
+     * return the value for the given key name.
+     *
      * @see PropertyService#getValue(Object, String, Map)
      *
      * @param source the source object
@@ -80,6 +107,8 @@ public class OGNLPropertyService implements PropertyService {
     }
 
     /**
+     * Set the named property value on the target object using the OGNL library.
+     *
      * @see PropertyService#setValue(Object, String, Object)
      *
      * @param target the target object to set the property of

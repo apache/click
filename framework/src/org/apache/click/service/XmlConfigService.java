@@ -46,7 +46,6 @@ import org.apache.click.util.Bindable;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.w3c.dom.Document;
@@ -2201,10 +2200,13 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 try {
                     listener = interceptorClass.newInstance();
 
+                    ConfigService configService = ClickUtils.getConfigService();
+                    PropertyService propertyService = configService.getPropertyService();
+
                     for (Property property : properties) {
-                        PropertyUtils.setValue(listener,
-                                               property.getName(),
-                                               property.getValue());
+                        propertyService.setValue(listener,
+                                                 property.getName(),
+                                                 property.getValue());
                     }
 
                 } catch (Exception e) {
