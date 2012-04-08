@@ -42,6 +42,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.click.service.ConfigService;
 import org.apache.click.service.ConfigService.AutoBinding;
 import org.apache.click.service.LogService;
+import org.apache.click.service.PropertyService;
 import org.apache.click.service.ResourceService;
 import org.apache.click.service.TemplateException;
 import org.apache.click.service.XmlConfigService;
@@ -49,7 +50,6 @@ import org.apache.click.util.ClickUtils;
 import org.apache.click.util.ErrorPage;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.click.util.PageImports;
-import org.apache.click.util.PropertyUtils;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
@@ -1320,6 +1320,8 @@ public class ClickServlet extends HttpServlet {
             return;
         }
 
+        ConfigService configService = ClickUtils.getConfigService();
+        PropertyService propertyService = configService.getPropertyService();
         HttpServletRequest request = page.getContext().getRequest();
 
         for (Enumeration<?> e = request.getParameterNames(); e.hasMoreElements();) {
@@ -1338,7 +1340,7 @@ public class ClickServlet extends HttpServlet {
                         || Number.class.isAssignableFrom(type)
                         || Boolean.class.isAssignableFrom(type)) {
 
-                        PropertyUtils.setValue(page, name, value);
+                        propertyService.setValue(page, name, value);
 
                         if (logger.isTraceEnabled()) {
                             logger.trace("   auto bound variable: " + name + "=" + value);

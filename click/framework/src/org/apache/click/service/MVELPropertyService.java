@@ -80,6 +80,8 @@ public class MVELPropertyService implements PropertyService {
     }
 
     /**
+     * Set the named property value on the target object using the MVEL library.
+     *
      * @see PropertyService#setValue(Object, String, Object)
      *
      * @param target the target object to set the property of

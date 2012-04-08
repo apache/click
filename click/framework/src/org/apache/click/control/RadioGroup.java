@@ -24,11 +24,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.click.Context;
-import org.apache.click.util.ClickUtils;
 
+import org.apache.click.Context;
+import org.apache.click.service.ConfigService;
+import org.apache.click.service.PropertyService;
+import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PropertyUtils;
 
 /**
  * Provides a RadioGroup control.
@@ -277,10 +278,13 @@ public class RadioGroup extends Field {
 
         Map<?, ?> cache = new HashMap<Object, Object>();
 
+        ConfigService configService = ClickUtils.getConfigService();
+        PropertyService propertyService = configService.getPropertyService();
+
         for (Object object : objects) {
             try {
-                Object valueResult = PropertyUtils.getValue(object, value, cache);
-                Object labelResult = PropertyUtils.getValue(object, label, cache);
+                Object valueResult = propertyService.getValue(object, value, cache);
+                Object labelResult = propertyService.getValue(object, label, cache);
 
                 Radio radio = null;
 

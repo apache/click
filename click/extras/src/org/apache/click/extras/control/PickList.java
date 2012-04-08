@@ -24,17 +24,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.click.Context;
 
+import org.apache.click.Context;
 import org.apache.click.control.Field;
 import org.apache.click.control.Option;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
+import org.apache.click.service.ConfigService;
+import org.apache.click.service.PropertyService;
 import org.apache.click.util.ClickUtils;
-import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.util.Format;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PropertyUtils;
 
 /**
  * Provides a twin multiple Select box control to select items.
@@ -410,12 +411,16 @@ public class PickList extends Field {
             return;
         }
 
+        ConfigService configService = ClickUtils.getConfigService();
+        PropertyService propertyService = configService.getPropertyService();
         Map<?, ?> methodCache = new HashMap<Object, Object>();
 
         for (Object object : objects) {
             try {
-                Object valueResult = PropertyUtils.getValue(object,
-                    optionValueProperty, methodCache);
+                Object valueResult =
+                    propertyService.getValue(object,
+                                             optionValueProperty,
+                                             methodCache);
 
                 // Default labelResult to valueResult
                 Object labelResult = valueResult;
@@ -423,8 +428,10 @@ public class PickList extends Field {
                 // If optionLabelProperty is specified, lookup the labelResult
                 // from the object
                 if (optionLabelProperty != null) {
-                    labelResult = PropertyUtils.getValue(object,
-                        optionLabelProperty, methodCache);
+                    labelResult =
+                        propertyService.getValue(object,
+                                                 optionLabelProperty,
+                                                 methodCache);
                 }
 
                 Option option = null;
@@ -620,11 +627,14 @@ public class PickList extends Field {
             return;
         }
 
+        ConfigService configService = ClickUtils.getConfigService();
+        PropertyService propertyService = configService.getPropertyService();
         Map<?, ?> cache = new HashMap<Object, Object>();
 
         for (Object object : objects) {
             try {
-                Object valueResult = PropertyUtils.getValue(object, value, cache);
+                Object valueResult =
+                    propertyService.getValue(object, value, cache);
 
                 if (valueResult != null) {
                     addSelectedValue(valueResult.toString());

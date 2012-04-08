@@ -25,6 +25,24 @@ import javax.servlet.ServletContext;
 
 /**
  * Provide a property service with property get and set utility methods.
+ *
+ * <h3>Configuration</h3>
+ * The default {@link PropertyService} implementation is {@link OGNLPropertyService} for
+ * backward compatibility reasons. Please note {@link MVELPropertyService} provides
+ * better property write performance than the OGNL property service.
+ * <p/>
+ * You can instruct Click to use a different implementation by adding
+ * the following element to your <tt>click.xml</tt> configuration file.
+ *
+ * <pre class="codeConfig">
+ * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+ * &lt;click-app charset="UTF-8"&gt;
+ *
+ *     &lt;pages package="org.apache.click.examples.page"/&gt;
+ *
+ *     &lt;<span class="red">property-service</span> classname="<span class="blue">org.apache.click.service.MVELPropertyService</span>"/&gt;
+ *
+ * &lt;/click-app&gt; </pre>
  */
 public interface PropertyService {
 
@@ -45,14 +63,7 @@ public interface PropertyService {
     public void onDestroy();
 
     /**
-     * Return the property value for the given object and property name. This
-     * method uses reflection internally to get the property value.
-     * <p/>
-     * This method is thread-safe, and caches reflected accessor methods in an
-     * internal synchronized cache.
-     * <p/>
-     * If the given source object is a <tt>Map</tt> this method will simply
-     * return the value for the given key name.
+     * Return the property value for the given object and property name.
      *
      * @param source the source object
      * @param name the name of the property
@@ -61,17 +72,9 @@ public interface PropertyService {
     public Object getValue(Object source, String name);
 
     /**
-     * Return the property value for the given object and property name. This
-     * method uses reflection internally to get the property value.
-     * <p/>
-     * This method caches the reflected property methods in the given Map cache.
-     * You must NOT modify the cache. Also note cache is ONLY valid for the
-     * current thread, as access to the cache is not synchronized. If you need
-     * multi-threaded access to shared cache use a thread-safe Map object, such
-     * as <tt>Collections.synchronizedMap(new HashMap())</tt>.
-     * <p/>
-     * If the given source object is a <tt>Map</tt> this method will simply
-     * return the value for the given key name.
+     * Return the property value for the given object and property name. The
+     * cache parameter may be used by the implementing service to provide
+     * improved performance.
      *
      * @param source the source object
      * @param name the name of the property
@@ -82,7 +85,7 @@ public interface PropertyService {
     public Object getValue(Object source, String name, Map<?, ?> cache);
 
     /**
-     * Return the property value for the given object and property name using the MVEL library.
+     * Set the named property value on the target object.
      *
      * @param target the target object to set the property of
      * @param name the name of the property to set

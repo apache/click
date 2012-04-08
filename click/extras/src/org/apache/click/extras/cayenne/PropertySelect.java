@@ -23,13 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.click.control.Decorator;
-import org.apache.click.control.Option;
-import org.apache.click.control.Select;
-import org.apache.click.util.ClickUtils;
-import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PropertyUtils;
-
 import org.apache.cayenne.DataObject;
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.access.DataContext;
@@ -37,6 +30,13 @@ import org.apache.cayenne.query.NamedQuery;
 import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.SelectQuery;
 import org.apache.click.Context;
+import org.apache.click.control.Decorator;
+import org.apache.click.control.Option;
+import org.apache.click.control.Select;
+import org.apache.click.service.ConfigService;
+import org.apache.click.service.PropertyService;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -633,8 +633,10 @@ public class PropertySelect extends Select {
                 optionList.add(Option.EMPTY_OPTION);
             }
 
-            Context context = getContext();
             Map cache = new HashMap();
+            Context context = getContext();
+            ConfigService configService = ClickUtils.getConfigService();
+            PropertyService propertyService = configService.getPropertyService();
 
             for (int i = 0; i < list.size(); i++) {
                 DataObject dataObject = (DataObject) list.get(i);
@@ -651,7 +653,8 @@ public class PropertySelect extends Select {
                             "optionLabel not defined for PropertySelect: " + getName();
                         throw new IllegalStateException(msg);
                     }
-                    label = PropertyUtils.getValue(dataObject, getOptionLabel(), cache);
+
+                    label = propertyService.getValue(dataObject, getOptionLabel(), cache);
                 }
 
                 Option option = null;

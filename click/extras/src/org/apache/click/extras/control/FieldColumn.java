@@ -24,8 +24,10 @@ import org.apache.click.Context;
 import org.apache.click.control.Column;
 import org.apache.click.control.Field;
 import org.apache.click.control.Form;
+import org.apache.click.service.ConfigService;
+import org.apache.click.service.PropertyService;
+import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PropertyUtils;
 
 /**
  * Provides a FieldColumn for rendering table data cells.
@@ -175,7 +177,9 @@ public class FieldColumn extends Column {
             }
 
         } else {
-            PropertyUtils.setValue(row, propertyName, value);
+            ConfigService configService = ClickUtils.getConfigService();
+            PropertyService propertyService = configService.getPropertyService();
+            propertyService.setValue(row, propertyName, value);
         }
     }
 

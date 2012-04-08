@@ -29,16 +29,16 @@ import java.util.Map;
 import org.apache.click.Context;
 import org.apache.click.control.Field;
 import org.apache.click.control.Option;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
+import org.apache.click.service.ConfigService;
+import org.apache.click.service.PropertyService;
 import org.apache.click.util.ClickUtils;
-import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PropertyUtils;
 import org.apache.commons.lang.StringEscapeUtils;
-
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -455,12 +455,16 @@ public class CheckList extends Field {
             return;
         }
 
+        ConfigService configService = ClickUtils.getConfigService();
+        PropertyService propertyService = configService.getPropertyService();
         Map<?, ?> methodCache = new HashMap<Object, Object>();
 
         for (Object object : objects) {
             try {
-                Object valueResult = PropertyUtils.getValue(object,
-                    optionValueProperty, methodCache);
+                Object valueResult =
+                    propertyService.getValue(object,
+                                             optionValueProperty,
+                                             methodCache);
 
                 // Default labelResult to valueResult
                 Object labelResult = valueResult;
@@ -468,8 +472,10 @@ public class CheckList extends Field {
                 // If optionLabelProperty is specified, lookup the labelResult
                 // from the object
                 if (optionLabelProperty != null) {
-                    labelResult = PropertyUtils.getValue(object,
-                        optionLabelProperty, methodCache);
+                    labelResult =
+                        propertyService.getValue(object,
+                                                 optionLabelProperty,
+                                                 methodCache);
                 }
 
                 Option option = null;

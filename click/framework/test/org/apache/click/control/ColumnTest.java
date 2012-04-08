@@ -19,12 +19,18 @@
 package org.apache.click.control;
 
 import junit.framework.TestCase;
+
+import org.apache.click.MockContext;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * Test Column behavior.
  */
 public class ColumnTest extends TestCase {
+	
+	public void setUp() {
+		 MockContext.initContext();
+	}
 
     /**
      * Sanity checks for Column.

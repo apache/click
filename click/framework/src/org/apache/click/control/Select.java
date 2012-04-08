@@ -26,11 +26,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.apache.click.util.ClickUtils;
-import org.apache.click.dataprovider.DataProvider;
 
+import javax.servlet.ServletContext;
+
+import org.apache.click.dataprovider.DataProvider;
+import org.apache.click.service.ConfigService;
+import org.apache.click.service.PropertyService;
+import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PropertyUtils;
 
 /**
  * Provides a Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
@@ -334,6 +337,9 @@ public class Select extends Field {
      */
     protected Option defaultOption;
 
+    /** The column property service. */
+    protected PropertyService propertyService;
+
     // Constructors -----------------------------------------------------------
 
     /**
@@ -603,10 +609,18 @@ public class Select extends Field {
 
         Map methodCache = new HashMap();
 
+        if (propertyService == null) {
+            ServletContext sc = getContext().getServletContext();
+            ConfigService configService = ClickUtils.getConfigService(sc);
+            propertyService = configService.getPropertyService();
+        }
+
         for (Object object : objects) {
             try {
-                Object valueResult = PropertyUtils.getValue(object,
-                    optionValueProperty, methodCache);
+                Object valueResult =
+                    propertyService.getValue(object,
+                                             optionValueProperty,
+                                             methodCache);
 
                 // Default labelResult to valueResult
                 Object labelResult = valueResult;
@@ -614,8 +628,10 @@ public class Select extends Field {
                 // If optionLabelProperty is specified, lookup the labelResult
                 // from the object
                 if (optionLabelProperty != null) {
-                    labelResult = PropertyUtils.getValue(object,
-                        optionLabelProperty, methodCache);
+                    labelResult =
+                        propertyService.getValue(object,
+                                                 optionLabelProperty,
+                                                 methodCache);
                 }
 
                 Option option = null;

@@ -26,4 +26,6 @@
 
   <page-interceptor classname="org.apache.click.examples.interceptor.ProfilingInterceptor"/>
 
+  <property-service classname="org.apache.click.service.MVELPropertyService"/>
+
 </click-app>
