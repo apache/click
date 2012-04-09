@@ -103,7 +103,7 @@ public class OGNLPropertyService implements PropertyService {
      * @return the property value for the given source object and property name
      */
     public Object getValue(Object source, String name, Map<?, ?> cache) {
-        return PropertyUtils.getValue(source, name);
+        return PropertyUtils.getValue(source, name, cache);
     }
 
     /**
