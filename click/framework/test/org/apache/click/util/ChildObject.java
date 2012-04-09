@@ -39,7 +39,8 @@ public class ChildObject {
 		this.name = name;
 	}
     
-    public String email() {
+    public String getEmail() {
         return email;
     }
+
 }

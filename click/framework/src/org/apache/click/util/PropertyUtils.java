@@ -29,6 +29,7 @@ import javax.servlet.ServletContext;
 import org.apache.click.Context;
 import org.apache.click.service.ConfigService;
 import org.apache.click.service.PropertyService;
+import org.apache.commons.lang.Validate;
 
 
 /**
@@ -108,6 +109,8 @@ public class PropertyUtils {
      * @return the property value for the given source object and property name
      */
     public static Object getValue(Object source, String name, Map cache) {
+        Validate.notNull(cache, "Null cache paramenter");
+
         String basePart = name;
         String remainingPart = null;
 
