@@ -40,7 +40,6 @@ public class PropertyServicePerformanceTest extends TestCase {
 		Thread.sleep(10000);
 	}
 	
-	
 	public class TestRunner implements Runnable {
 		
 		PropertyService propertyService;
@@ -51,7 +50,6 @@ public class PropertyServicePerformanceTest extends TestCase {
 			this.print = print;
 		}
 		
-		@Override
 		public void run() {
 			long read = readDuration.addAndGet(testPropertyServiceRead(propertyService));
 			long write = writeDuration.addAndGet(testPropertyServiceWrite(propertyService));
