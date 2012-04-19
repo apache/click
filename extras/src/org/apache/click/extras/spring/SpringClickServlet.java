@@ -18,6 +18,7 @@
  */
 package org.apache.click.extras.spring;
 
+import java.beans.Introspector;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.click.ClickServlet;
 import org.apache.click.Page;
 import org.apache.click.util.HtmlStringBuffer;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -518,9 +518,7 @@ public class SpringClickServlet extends ClickServlet {
      * @return the class bean name
      */
     protected String toBeanName(Class<?> aClass) {
-        String className = aClass.getName();
-        String beanName = className.substring(className.lastIndexOf(".") + 1);
-        return Character.toLowerCase(beanName.charAt(0)) + beanName.substring(1);
+        return Introspector.decapitalize(aClass.getSimpleName());
     }
 
     // Package Private Inner Classes ------------------------------------------
