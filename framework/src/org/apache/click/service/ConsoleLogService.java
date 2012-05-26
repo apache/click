@@ -68,7 +68,7 @@ public class ConsoleLogService implements LogService {
      * @see LogService#onInit(ServletContext)
      *
      * @param servletContext the application servlet context
-     * @throws Exception if an error occurs initializing the LogService
+     * @throws Exception if an error occurs while initializing the LogService
      */
     public void onInit(ServletContext servletContext) throws Exception {
     }
