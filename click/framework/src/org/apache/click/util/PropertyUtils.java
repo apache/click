@@ -19,8 +19,6 @@
 package org.apache.click.util;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,16 +36,12 @@ import org.apache.commons.lang.Validate;
  */
 public class PropertyUtils {
 
-    /** Provides a synchronized cache of get value reflection methods. */
-    private static final Map<String, Object> GET_METHOD_CACHE
-        = new ConcurrentHashMap<String, Object>();
-
     /**
      * Provides a synchronized cache of get value reflection methods, with
      * support for multiple class loaders.
      */
-    private static final Map<ClassLoader, Map<CacheKey, Method>> GET_METHOD_CLASSLOADER_CACHE
-        = Collections.synchronizedMap(new HashMap<ClassLoader, Map<CacheKey, Method>>());
+    private static final ClassLoaderCache<Map<CacheKey, Method>> GET_METHOD_CLASSLOADER_CACHE
+        = new ClassLoaderCache<Map<CacheKey, Method>>();
 
     // -------------------------------------------------------- Public Methods
 
@@ -219,12 +213,10 @@ public class PropertyUtils {
     }
 
     private static Map<CacheKey, Method> getGetMethodCache() {
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-
-        Map<CacheKey, Method> getMethodCache = GET_METHOD_CLASSLOADER_CACHE.get(cl);
+        Map<CacheKey, Method> getMethodCache = GET_METHOD_CLASSLOADER_CACHE.get();
         if (getMethodCache == null) {
             getMethodCache = new ConcurrentHashMap<CacheKey, Method>();
-            GET_METHOD_CLASSLOADER_CACHE.put(cl, getMethodCache);
+            GET_METHOD_CLASSLOADER_CACHE.put(getMethodCache);
         }
 
         return getMethodCache;
