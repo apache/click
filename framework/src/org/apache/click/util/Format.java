@@ -28,8 +28,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.click.Context;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.click.Context;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -534,6 +535,31 @@ public class Format implements Serializable {
     }
 
     /**
+     * Encode the given URL using the servlet response to ensure session ID
+     * is available if required.
+     *
+     * @param value the URL value to encode
+     * @return the response encoded URL value
+     */
+    public String encodeURL(String value) {
+        if (value != null) {
+            Context context = Context.getThreadLocalContext();
+            HttpServletResponse response = context.getResponse();
+
+            // If starts with $context, the substitute context path
+            if (value.startsWith("$context")) {
+                value =
+                    context.getRequest().getContextPath()
+                    + value.substring("$context".length());
+            }
+
+            return response.encodeURL(value);
+        } else {
+            return getEmptyString();
+        }
+    }
+
+    /**
      * Escape the given object value as a string. The following
      * characters are escaped: &lt;, &gt;, &quot;, &#039;, &amp;.
      * <p/>
@@ -807,4 +833,5 @@ public class Format implements Serializable {
     public String url(Object object) {
         return ClickUtils.encodeUrl(object, Context.getThreadLocalContext());
     }
+
 }
