@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -2355,10 +2356,10 @@ public class Form extends AbstractContainer implements Stateful {
             && request.getMethod().equalsIgnoreCase(getMethod())
             && getName().equals(formName)) {
 
-            Long sessionTime =
-                (Long) context.getSessionAttribute(submitTokenName);
+            String submitToken =
+                (String) context.getSessionAttribute(submitTokenName);
 
-            if (sessionTime != null) {
+            if (submitToken != null) {
                 String value = context.getRequestParameter(submitTokenName);
                 if (value == null || value.length() == 0) {
                     // CLK-289. If a session attribute exists for the
@@ -2373,8 +2374,7 @@ public class Form extends AbstractContainer implements Stateful {
                         + "Form.onSubmitCheck() will return false.");
                     isValidSubmit = false;
                 } else {
-                    Long formTime = Long.valueOf(value);
-                    isValidSubmit = formTime.equals(sessionTime);
+                    isValidSubmit = submitToken.equals(value);
                 }
             }
         }
@@ -2382,16 +2382,16 @@ public class Form extends AbstractContainer implements Stateful {
         // CLK-267: check against adding a duplicate field
         HiddenField field = (HiddenField) getField(submitTokenName);
         if (field == null) {
-            field = new NonProcessedHiddenField(submitTokenName, Long.class);
+            field = new NonProcessedHiddenField(submitTokenName, String.class);
             add(field);
             insertIndexOffset++;
         }
 
         // Save state info to form and session
-        final Long time = System.currentTimeMillis();
-        field.setValueObject(time);
+        final String submitToken = UUID.randomUUID().toString();
+        field.setValueObject(submitToken);
 
-        context.setSessionAttribute(submitTokenName, time);
+        context.setSessionAttribute(submitTokenName, submitToken);
 
         if (isValidSubmit) {
             return true;
