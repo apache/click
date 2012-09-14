@@ -741,7 +741,7 @@ public class Select extends Field {
      *
      * @return the list of selected values
      */
-    public List getMultipleValues() {
+    public List<String> getMultipleValues() {
         return getSelectedValues();
     }
 
@@ -750,7 +750,7 @@ public class Select extends Field {
      *
      * @return the list of selected values
      */
-    public List getSelectedValues() {
+    public List<String> getSelectedValues() {
         if (selectedValues != null) {
             return selectedValues;
 
