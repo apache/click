@@ -24,9 +24,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 
+import ognl.DefaultMemberAccess;
+import ognl.MemberAccess;
 import ognl.Ognl;
 import ognl.OgnlException;
+import ognl.TypeConverter;
 
+import org.apache.click.util.ClassLoaderCache;
 import org.apache.click.util.PropertyUtils;
 
 /**
@@ -34,9 +38,17 @@ import org.apache.click.util.PropertyUtils;
  */
 public class OGNLPropertyService implements PropertyService {
 
-    /** Provides a synchronized cache of OGNL expressions. */
-    private static final Map<String, Object> OGNL_EXPRESSION_CACHE
-        = new ConcurrentHashMap<String, Object>();
+    // OGNL Expression cache with support for multiple classloader caching
+    private static final ClassLoaderCache<Map<String, Object>>
+        EXPRESSION_CL_CACHE = new ClassLoaderCache<Map<String, Object>>();
+
+    // Protected Variables ---------------------------------------------------
+
+    /** The OGNL object member accessor. */
+    protected MemberAccess memberAccess;
+
+    /** The OGNL data marshalling type converter. */
+    protected TypeConverter typeConverter;
 
     //Public Methods  --------------------------------------------------------
 
@@ -116,16 +128,17 @@ public class OGNLPropertyService implements PropertyService {
      * @param value the property value to set
      */
     public void setValue(Object target, String name, Object value) {
-        OGNLTypeConverter typeConverter = new OGNLTypeConverter();
 
-        Map<?, ?> ognlContext =
-            Ognl.createDefaultContext(target, null, typeConverter);
+        Map<?, ?> ognlContext = Ognl.createDefaultContext(target,
+                                                          null,
+                                                          getTypeConverter(),
+                                                          getMemberAccess());
 
         try {
-            Object expression = OGNL_EXPRESSION_CACHE.get(name);
+            Object expression = getExpressionCache().get(name);
             if (expression == null) {
                 expression = Ognl.parseExpression(name);
-                OGNL_EXPRESSION_CACHE.put(name, expression);
+                getExpressionCache().put(name, expression);
             }
 
             Ognl.setValue(expression, ognlContext, target, value);
@@ -134,6 +147,46 @@ public class OGNLPropertyService implements PropertyService {
         } catch (OgnlException oe) {
             throw new RuntimeException(oe.toString(), oe);
         }
+    }
+
+    // Protected Methods ------------------------------------------------------
+
+    /**
+     * Return the OGNL object MemberAccess instance.
+     *
+     * @return the OGNL object MemberAccess instance
+     */
+    protected MemberAccess getMemberAccess() {
+        if (memberAccess == null) {
+            memberAccess = new DefaultMemberAccess(true);
+        }
+
+        return memberAccess;
+    }
+
+    /**
+     * Return the OGNL data marshalling TypeConverter instance.
+     *
+     * @return the OGNL data marshalling TypeConverter instance
+     */
+    protected TypeConverter getTypeConverter() {
+        if (typeConverter == null) {
+            typeConverter = new OGNLTypeConverter();
+        }
+
+        return typeConverter;
+    }
+
+    // Private Methods --------------------------------------------------------
+
+    private static Map<String, Object> getExpressionCache() {
+        Map<String, Object> expressionCache = EXPRESSION_CL_CACHE.get();
+        if (expressionCache == null) {
+            expressionCache = new ConcurrentHashMap<String, Object>();
+            EXPRESSION_CL_CACHE.put(expressionCache);
+        }
+
+        return expressionCache;
     }
 
 }

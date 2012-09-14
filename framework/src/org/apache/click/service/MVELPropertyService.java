@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 
+import org.apache.click.util.ClassLoaderCache;
 import org.apache.click.util.PropertyUtils;
 import org.mvel2.MVEL;
 
@@ -34,9 +35,9 @@ import org.mvel2.MVEL;
  */
 public class MVELPropertyService implements PropertyService {
 
-    /** Provides a synchronized cache of MVEL expressions. */
-    private static final Map<String, Serializable> MVEL_EXPRESSION_CACHE
-        = new ConcurrentHashMap<String, Serializable>();
+    // Expression cache with support for multiple classloader caching
+    private static final ClassLoaderCache<Map<String, Serializable>>
+        EXPRESSION_CL_CACHE = new ClassLoaderCache<Map<String, Serializable>>();
 
     // Public Methods --------------------------------------------------------
 
@@ -92,11 +93,11 @@ public class MVELPropertyService implements PropertyService {
 
         String expression = target.getClass().getSimpleName() + "." + name + " = value";
 
-        Serializable compiledExpression = MVEL_EXPRESSION_CACHE.get(expression);
+        Serializable compiledExpression = getExpressionCache().get(expression);
 
         if (compiledExpression == null) {
             compiledExpression = MVEL.compileExpression(expression);
-            MVEL_EXPRESSION_CACHE.put(expression, compiledExpression);
+            getExpressionCache().put(expression, compiledExpression);
         }
 
         Map<String, Object> vars = new HashMap<String, Object>();
@@ -104,6 +105,18 @@ public class MVELPropertyService implements PropertyService {
         vars.put("value", value);
 
         MVEL.executeExpression(compiledExpression, vars);
+    }
+
+    // Private Methods --------------------------------------------------------
+
+    private static Map<String, Serializable> getExpressionCache() {
+        Map<String, Serializable> expressionCache = EXPRESSION_CL_CACHE.get();
+        if (expressionCache == null) {
+            expressionCache = new ConcurrentHashMap<String, Serializable>();
+            EXPRESSION_CL_CACHE.put(expressionCache);
+        }
+
+        return expressionCache;
     }
 
 }
