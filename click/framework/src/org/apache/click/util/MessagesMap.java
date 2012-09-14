@@ -69,19 +69,13 @@ import org.apache.commons.lang.Validate;
  */
 public class MessagesMap implements Map<String, String> {
 
-    /**
-     * Cache of resource bundle and locales which were not found, with support
-     * for multiple class loaders.
-     */
-    protected static final Map<ClassLoader, Set<String>> NOT_FOUND_CLASSLOADER_CACHE
-        = Collections.synchronizedMap(new HashMap<ClassLoader, Set<String>>());
+    /** Cache of resource bundle and locales which were not found, with support for multiple class loaders. */
+    private static final ClassLoaderCache<Set<String>> NOT_FOUND_CLASSLOADER_CACHE
+        = new ClassLoaderCache<Set<String>>();
 
-    /**
-     * Provides a synchronized cache of get value reflection methods, with
-     * support for multiple class loaders.
-     */
-    protected static final Map<ClassLoader, Map<CacheKey, Map<String, String>>> MESSAGES_CLASSLOADER_CACHE
-        = Collections.synchronizedMap(new HashMap<ClassLoader, Map<CacheKey, Map<String, String>>>());
+    /** Provides a synchronized cache of get value reflection methods, with support for multiple class loaders. */
+    protected static final ClassLoaderCache<Map<CacheKey, Map<String, String>>> MESSAGES_CLASSLOADER_CACHE
+        = new ClassLoaderCache<Map<CacheKey, Map<String, String>>>();
 
     /** The cache key set load lock. */
     protected static final Object CACHE_LOAD_LOCK = new Object();
@@ -381,24 +375,20 @@ public class MessagesMap implements Map<String, String> {
     // Private Methods --------------------------------------------------------
 
     protected static Set<String> getNotFoundCache() {
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-
-        Set<String> notFoundCache = NOT_FOUND_CLASSLOADER_CACHE.get(cl);
+        Set<String> notFoundCache = NOT_FOUND_CLASSLOADER_CACHE.get();
         if (notFoundCache == null) {
             notFoundCache = new HashSet<String>();
-            NOT_FOUND_CLASSLOADER_CACHE.put(cl, notFoundCache);
+            NOT_FOUND_CLASSLOADER_CACHE.put(notFoundCache);
         }
 
         return notFoundCache;
     }
 
     protected static Map<CacheKey, Map<String, String>> getMessagesCache() {
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-
-        Map<CacheKey, Map<String, String>> messagesCache = MESSAGES_CLASSLOADER_CACHE.get(cl);
+        Map<CacheKey, Map<String, String>> messagesCache = MESSAGES_CLASSLOADER_CACHE.get();
         if (messagesCache == null) {
             messagesCache = new ConcurrentHashMap<CacheKey, Map<String, String>>();
-            MESSAGES_CLASSLOADER_CACHE.put(cl, messagesCache);
+            MESSAGES_CLASSLOADER_CACHE.put(messagesCache);
         }
 
         return messagesCache;
