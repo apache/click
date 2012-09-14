@@ -495,10 +495,16 @@ public class PerformanceFilter implements Filter {
                 String path = paths[i].trim();
 
                 if (path.endsWith("*")) {
-                    includeDirs.add(path.substring(0, path.length() - 1));
+                    String value = path.substring(0, path.length() - 1);
+                    if (!includeDirs.contains(value)) {
+                        includeDirs.add(value);
+                    }
 
                 } else if (path.startsWith("*")) {
-                    includeFiles.add(path.substring(1));
+                    String value = path.substring(1);
+                    if (!includeFiles.contains(value)) {
+                        includeFiles.add(value);
+                    }
 
                 } else {
                     String message = "cacheable-path '" + path + "' ignored, "
@@ -517,10 +523,16 @@ public class PerformanceFilter implements Filter {
                 String path = paths[i].trim();
 
                 if (path.endsWith("*")) {
-                    includeDirs.add(path.substring(0, path.length() - 1));
+                    String value = path.substring(0, path.length() - 1);
+                    if (!includeDirs.contains(value)) {
+                        includeDirs.add(value);
+                    }
 
                 } else if (path.startsWith("*")) {
-                    includeFiles.add(path.substring(1));
+                    String value = path.substring(1);
+                    if (!includeFiles.contains(value)) {
+                        includeFiles.add(value);
+                    }
 
                 } else {
                     String message = "cachable-path '" + path + "' ignored, "
