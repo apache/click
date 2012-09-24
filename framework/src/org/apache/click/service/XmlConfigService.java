@@ -2023,10 +2023,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             String classnameFound = null;
 
             try {
-
-                    // First, lookup classname as provided
-                    tmpPageClass = ClickUtils.classForName(classname);
-                    classnameFound = classname;
+                // First, lookup classname as provided
+                tmpPageClass = ClickUtils.classForName(classname);
+                classnameFound = classname;
 
             } catch (ClassNotFoundException cnfe) {
 
@@ -2048,6 +2047,11 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                             + classname + "'.";
                         throw new RuntimeException(msg, cnfe);
                     }
+
+                } else {
+                    String msg = "No class was found for the Page classname: '"
+                        + classname + "'.";
+                    throw new RuntimeException(msg, cnfe);
                 }
             }
 
@@ -2058,7 +2062,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                              + "' is not a subclass of org.apache.click.Page";
                 throw new RuntimeException(msg);
             }
-
 
             fieldArray = XmlConfigService.getBindablePageFields(pageClass, autobinding);
 
