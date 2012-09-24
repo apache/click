@@ -98,6 +98,9 @@ public class TextArea extends Field {
      */
     protected int minLength = 0;
 
+    /** The field HTML5 placeholder attribute. */
+    protected String placeholder;
+
     /** The number of text area rows. The default number of rows is three. */
     protected int rows = 3;
 
@@ -283,6 +286,36 @@ public class TextArea extends Field {
     }
 
     /**
+     * Return the textarea field HTML5 placeholder attribute.
+     * <p/>
+     * If the placeholder value is null, this method will attempt to find a
+     * localized placeholder message in the parent messages using the key:
+     * <blockquote>
+     * <tt>getName() + ".placeholder"</tt>
+     * </blockquote>
+     * If not found then the message will be looked up in the
+     * <tt>/click-control.properties</tt> file using the same key. If still
+     * not found the placeholder will be left as null and will not be rendered.
+     *
+     * @return the textarea field HTML5 placeholder attribute
+     */
+    public String getPlaceholder() {
+        if (placeholder == null) {
+            placeholder = getMessage(getName() + ".placeholder");
+        }
+        return placeholder;
+    }
+
+    /**
+     * Set the textarea field HTML5 placeholder attribute.
+     *
+     * @param value the textarea field HTML5 placeholder attribute.
+     */
+    public void setPlaceholder(String value) {
+        this.placeholder = value;
+    }
+
+    /**
      * Return the number of text area rows.
      *
      * @return the number of text area rows
@@ -342,8 +375,20 @@ public class TextArea extends Field {
         if (getTabIndex() > 0) {
             buffer.appendAttribute("tabindex", getTabIndex());
         }
+        if (getMaxLength() > 0) {
+            buffer.appendAttribute("maxlength", getMaxLength());
+        }
+        if (getFocus()) {
+            buffer.appendAttribute("autofocus", "autofocus");
+        }
 
         appendAttributes(buffer);
+
+        if (!hasAttribute("placeholder")) {
+            if (getPlaceholder() != null) {
+                buffer.appendAttribute("placeholder", getPlaceholder());
+            }
+        }
 
         if (isDisabled()) {
             buffer.appendAttributeDisabled();
