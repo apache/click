@@ -2655,9 +2655,9 @@ public class ClickUtils {
         }
 
         String resourcePath = context.getResourcePath();
-            Map pageMap = ClickUtils.getPageState(resourcePath, context);
-            if (pageMap != null) {
-                control.setState(pageMap.get(controlName));
+        Map pageMap = ClickUtils.getPageState(resourcePath, context);
+        if (pageMap != null) {
+            control.setState(pageMap.get(controlName));
         }
     }
 
