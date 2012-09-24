@@ -1059,6 +1059,9 @@ public class Select extends Field {
         if (isMultiple()) {
             buffer.appendAttribute("multiple", "multiple");
         }
+        if (getFocus()) {
+            buffer.appendAttribute("autofocus", "autofocus");
+        }
 
         appendAttributes(buffer);
 
