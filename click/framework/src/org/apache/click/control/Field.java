@@ -272,6 +272,24 @@ public abstract class Field extends AbstractControl implements Stateful {
     // Public Attributes ------------------------------------------------------
 
     /**
+     * Return the field HTML5 autofocus attribute.
+     *
+     * @return the field HTML5 autofocus attribute
+     */
+    public boolean isAutofocus() {
+        return getFocus();
+    }
+
+    /**
+     * Set the field HTML5 autofocus attribute.
+     *
+     * @param autofocus the field HTML5 autofocus attribute
+     */
+    public void setAutofocus(boolean autofocus) {
+        setFocus(autofocus);
+    }
+
+    /**
      * Set the parent of the Field.
      *
      * @see org.apache.click.Control#setParent(Object)
