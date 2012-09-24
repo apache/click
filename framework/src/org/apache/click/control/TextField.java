@@ -103,6 +103,9 @@ public class TextField extends Field {
      */
     protected int minLength = 0;
 
+    /** The field HTML5 placeholder attribute. */
+    protected String placeholder;
+
     /** The text field size attribute. The default size is 20. */
     protected int size = 20;
 
@@ -189,7 +192,34 @@ public class TextField extends Field {
     public TextField() {
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // Public Attributes ------------------------------------------------------
+
+    /**
+     * Return true if input field HTML5 autocomplete enabled.
+     *
+     * @return true if input field HTML5 autocomplete enabled.
+     */
+    public boolean isAutocomplete() {
+        String value = getAttribute("autocomplete");
+        if (value != null) {
+            return "on".equals(value);
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Set the input field HTML5 autocomplete status.
+     *
+     * @return true if input field HTML5 autocomplete enabled.
+     */
+    public void setAutocomplete(boolean autocomplete) {
+        if (autocomplete) {
+            setAttribute("autocomplete", "on");
+        } else{
+            setAttribute("autocomplete", "off");
+        }
+    }
 
     /**
      * Return the textfield's html tag: <tt>input</tt>.
@@ -251,6 +281,36 @@ public class TextField extends Field {
      */
     public void setMinLength(int minLength) {
         this.minLength = minLength;
+    }
+
+    /**
+     * Return the input field HTML5 placeholder attribute.
+     * <p/>
+     * If the placeholder value is null, this method will attempt to find a
+     * localized placeholder message in the parent messages using the key:
+     * <blockquote>
+     * <tt>getName() + ".placeholder"</tt>
+     * </blockquote>
+     * If not found then the message will be looked up in the
+     * <tt>/click-control.properties</tt> file using the same key. If still
+     * not found the placeholder will be left as null and will not be rendered.
+     *
+     * @return the input field HTML5 placeholder attribute
+     */
+    public String getPlaceholder() {
+        if (placeholder == null) {
+            placeholder = getMessage(getName() + ".placeholder");
+        }
+        return placeholder;
+    }
+
+    /**
+     * Set the input field HTML5 placeholder attribute.
+     *
+     * @param value the input field HTML5 placeholder attribute.
+     */
+    public void setPlaceholder(String value) {
+        this.placeholder = value;
     }
 
     /**
@@ -316,6 +376,9 @@ public class TextField extends Field {
         if (getMaxLength() > 0) {
             buffer.appendAttribute("maxlength", getMaxLength());
         }
+        if (getFocus()) {
+            buffer.appendAttribute("autofocus", "autofocus");
+        }
 
         if (isValid()) {
             removeStyleClass("error");
@@ -329,6 +392,12 @@ public class TextField extends Field {
         }
 
         appendAttributes(buffer);
+
+        if (!hasAttribute("placeholder")) {
+            if (getPlaceholder() != null) {
+                buffer.appendAttribute("placeholder", getPlaceholder());
+            }
+        }
 
         if (isDisabled()) {
             buffer.appendAttributeDisabled();
