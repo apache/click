@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="Author" content="Malcolm Edgar" />
+<meta name="description" lang="en" content="Apache Click Java web application framework"/>
+<meta name="keywords" lang="en" content="Apache Click, Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
+<title>Apache Click</title>
+<link rel="stylesheet" type="text/css" href="../help.css" />
+<style type="text/css">
+img {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	margin-left: 2em;
+}
+</style>
+</head>
+<body>
+
+<h1>ClickIDE</h1>
+
+ClickIDE is an Eclipse plug-in for the developing Click web
+applications.
+<p/>
+The section discusses the ClickIDE and includes the following topics:
+<ul>
+	<li><a href="#installing">Installing</a></li>
+	<li><a href="#features">Features</a></li>
+</ul>
+
+<p>&nbsp;</p>
+
+<a name="installing" class="heading"></a>
+<h2>Installing</h2>
+
+<p>
+  ClickIDE 2.1.0.x requires <a href="http://www.eclipse.org/">Eclipse</a> 3.5.x
+  and <a href="http://www.eclipse.org/webtools/">WTP</a> 3.1.x.
+</p>
+<p>
+  The easiest way to use ClickIDE is installing 
+  <a href="http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/galileo/SR1/eclipse-jee-galileo-SR1-win32.zip">Eclipse IDE for Java EE Developers</a>
+  and get a copy of ClickIDE from the
+  <a href="click-ide-downloads.html">downloads page</a>.
+  Unzip clickide-x.x.x.x.zip and put 2 folders (plugins/ and features/) into
+  your ECLIPSE_HOME.
+</p>
+
+
+<a name="features" class="heading"></a>
+<h2>Features</h2>
+
+ClickIDE is based on Eclipse and the Eclipse Web Tools Project (WTP),
+and provides extended features for developing web applications using
+Click.
+
+<ul>
+	<li>Fast switching between Page classes and templates (Ctrl+Alt+S)</li>
+	<li>Project creation wizard</li>
+	<li>Click page creation wizard</li>
+	<li>Visual editor for the Click configuration file</li>
+	<li>Velocity template editor</li>
+	<li>Spring Framework and Apache Cayenne Integration</li>
+	<li>Integrated Click documentation</li>
+</ul>
+
+<h4>Create Dynamic Web Project</h4>
+
+<p>Create <strong>"Dynamic Web Project"</strong> in the J2EE perspective and 
+select <strong>"Click"</strong> as Project Facet. The project creation wizard 
+will add Click JARs, web.xml and template of click.xml into your project.</p>
+
+<p><img src="../images/clickide_create_project_1.png" align="absmiddle" border="0"
+	alt="Create Project" /></p>
+
+<p>You can also add Spring and Cayenne support to your project in this wizard.
+If Spring or Cayenne option are checked, the project creation wizard adds 
+required JAR files to WEB-INF/lib and configures web.xml as well.</p>
+
+<p><img src="../images/clickide_create_project_2.png" align="absmiddle" border="0"
+	alt="Create Project" /></p>
+
+<h4>Configuration Editor</h4>
+
+<p>ClickIDE provides the visual editor for the Click configuration
+file (click.xml). It has some tabs. You can edit click.xml using this
+editor easily.</p>
+
+<p><img src="../images/clickide_config_editor_1.png" align="absmiddle" border="0"
+	alt="Graphical Editor for the click.xml" /></p>
+
+<p>In the <strong>"Source"</strong> tab of the configuration file editor, 
+you can edit click.xml directly and you can jump to the source code of 
+the page class and the page template by <strong>CTRL+CLICK</strong>. 
+ClickIDE also provides the validation for click.xml. Error markers are 
+displayed in the editor and <strong>"Problems"</strong> view.</p>
+
+<p><img src="../images/clickide_config_editor_2.png" align="absmiddle" border="0"
+	alt="Direct Editing for the click.xml" /></p>
+
+<h4>Page Creation Wizard</h4>
+
+<p>You can create the page class and the page template file using
+the page creation wizard. In the wizard, you can choose template for the
+page class and the html file. These template can be configured at the
+preference dialog (<strong>"Window" &gt; "Preferences" &gt; "Click"</strong>).</p>
+
+<p><img src="../images/clickide_page_wizard.png" align="absmiddle" border="0"
+	alt="New Page Creation Wizard" /></p>
+
+<h4>Velocity Template Editor</h4>
+
+<p>ClickIDE also provides the Velocity template editor. This editor
+provides code-completion, highlighting and validation as velocity
+syntax. You can also configure highlighting colors in the preference
+dialog.</p>
+
+<p><img src="../images/clickide_velocity_editor.png" align="absmiddle" border="0"
+	alt="Template Editor" /></p>
+
+<h4>Fast switch between Page classes and templates</h4>
+
+<p>In the JDT's Java editor and the Velocity template editor, you can switch 
+between the page class and the html file by <strong>CTRL+ALT+S</strong>
+or from menubar <strong>"Click" &gt; "Switch to Class (HTML)"</strong></p>
+
+<p><img src="../images/clickide_switch_file.png" align="absmiddle" border="0"
+	alt="Switch from menubar" /></p>
+
+<h4>User definition variables</h4>
+
+<p>You can register your own variables that would be used in the Velocity 
+templates in the project property page. Registered variables are available 
+in the code-completion.</p>
+
+<p><img src="../images/clickide_user_variables.png" align="absmiddle" border="0"
+	alt="Integrated Click Documentation" /></p>
+
+<h4>Online Help</h4>
+
+<p>Click documentation is integrated with the Eclipse help system.</p>
+
+<p><img src="../images/clickide_help.png" align="absmiddle" border="0"
+	alt="Integrated Click Documentation" /></p>
+
+<h4>Cayenne Integration (since ClickIDE 2.0.0)</h4>
+
+<p>ClickIDE also support <a href="http://cayenne.apache.org/">Apache Cayenne</a>
+ since ClickIDE 2.0.0.</p>
+ 
+<p>You can create new Cayenne mapping project using the 
+<strong>New Cayenne Mapping Project</strong> wizard.</p>
+
+<p><img src="../images/clickide_create_cayenne.png" align="absmiddle" border="0"
+	alt="Cayenne Mapping Project Creation Wizard" /></p>
+
+<p>This wizard generates an empty cayenne.xml and open it by Cayenne Modeler.
+If you have an existing cayenne.xml, you can open it by Cayenne Modeler 
+from the context menu. See below:</p>
+
+<p><img src="../images/clickide_cayenne_modeler.png" align="absmiddle" border="0"
+	alt="Open cayenne.xml with Cayenne Modeler" /></p>
+
+
+<p>ClickIDE also provides classpath variables <strong>"CAYENNE_LIB"</strong> 
+and <strong>"CAYENNE_NODEPS_LIB"</strong>. You can add cayenne.jar or 
+cayenne-nodeps.jar to your project classpath using these variables at 
+the project build path settings. </p>
+
+<p><strong>Note:</strong> If your project is WTP dynamic web project, 
+you should add these variables at the J2EE Module Dependencies page 
+in your project properties dialog because this setting is applied to 
+deploying and exporting as a war file.</p>
+
+    <!-- FOOTER -->
+    <div id="footer">
+        <hr/>
+        <p>
+        <a target='_blank' href='http://www.apache.org' title='Apache Software Foundation'>
+            <img id="asf-logo" src="http://www.apache.org/images/asf-logo.gif" alt="Apache Software Foundation"/>
+        </a>
+        Copyright &copy; 2001-2010 Apache Software Foundation. Apache Click,
+        Click, Apache, the Apache feather logo, and the Apache Click project logo are
+        trademarks of The Apache Software Foundation.
+        <a href="http://cayenne.apache.org/privacy-policy.html">Privacy policy.</a>
+        </p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <meta name="description" lang="en" content="Apache Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Apache Click, Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
+ <title>Apache Click</title>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <link rel="stylesheet" type="text/css" href="../syntax-highlighter.css"/>
+</head>
+<script type="text/javascript" src="../syntax-highlighter.js"></script>
+<!--Activate syntax highlighting-->
+ <body onload="prettyPrint();">
+
+<h1>Click DTD Example</h1>
+
+Provides an example of all <a href="click-dtd.html">DTD</a> ELEMENTS and ATTRIBUTES:
+
+<pre class="prettyprint">
+&lt;!-- A complete Click Application (click.xml) Example. --&gt;
+&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;click-app charset="UTF-8" locale="en"&gt;
+
+  &lt;!-- An automatically mapped Page package. Note: the automapping value is "true" by default and autobinding is "default" by default --&gt;
+  &lt;pages package="com.mycorp.banking.page" automapping="true" autobinding="default"&gt;
+      &lt;!-- A custom mapped Page --&gt;
+      &lt;page path="index.htm" classname="com.mycorp.page.Home"/&gt;
+    
+      &lt;!-- Another mapped Page with custom headers --&gt;
+      &lt;page path="login.htm" classname="com.mycorp.page.Login"&gt;
+          &lt;!-- Specify headers to cache the page for 1 hour, after which it should be reloaded --&gt;
+          &lt;header name="Pragma" value="no-cache"/&gt;
+          &lt;header name="Expires" value="1" type="Date"/&gt;
+      &lt;/page&gt;
+
+  &lt;/pages&gt;
+
+  &lt;!-- Another automatically mapped Page package --&gt;
+  &lt;pages package="com.mycorp.common.page"/&gt;
+
+  &lt;page-interceptor classname="com.mycorp.PageSecurityInterceptor" scope="application"&gt;
+     &lt;property name="notAuthenticatedPath" value="/not-authenticated.htm"/&gt;
+     &lt;property name="notAuthorizedPath" value="/not-authorized.htm"/&gt;
+  &lt;/page-interceptor&gt;
+
+  &lt;!-- Setup global headers. The headers shown below is the default used by Click --&gt;
+  &lt;headers&gt;
+      &lt;header name="Pragma" value="no-cache"/&gt;
+      &lt;header name="Cache-Control" 
+          value="no-store, no-cache, must-revalidate, post-check=0, pre-check=0"/&gt;
+      &lt;header name="Expires" value="1" type="Date"/&gt;
+  &lt;/headers&gt;
+
+  &lt;!-- Setup alternative Format. Default Format is org.apache.click.util.Format --&gt;
+  &lt;format classname="com.mycorp.util.Format"/&gt;
+
+  &lt;!-- Mode values include: [production], [profile], [development], [debug], [trace] --&gt;
+  &lt;mode value="production"/&gt;
+
+  &lt;!-- Set Click internal Logger to Log4J instead of the default ConsoleLogService --&gt;
+  &lt;log-service classname="org.apache.click.extras.service.Log4JLogService"/&gt;
+
+  &lt;!-- Set a custom messages map service --&gt;
+  &lt;messages-map-service classname="com.mycorp.services.CustomMessagesMapService"/&gt;
+
+  &lt;!-- Set a custom resource service --&gt;
+  &lt;resource-service classname="com.mycorp.services.CustomResourceService"/&gt;
+
+  &lt;!-- Set the template engine to use Freemarker instead of Velocity --&gt;
+  &lt;template-service classname="org.apache.click.extras.service.FreemarkerTemplateService"/&gt;
+
+  &lt;!-- Set the org.apache.click.service.CommonsFileUploadService properties: sizeMax and fileSizeMax. --&gt;
+  &lt;file-upload-service&gt;
+      &lt;!-- Set the total request maximum size to 10mb (10 x 1024 x 1024 = 10485760). The default request upload size is unlimited. --&gt;
+      &lt;property name="sizeMax" value="10485760"/&gt;
+ 
+      &lt;!-- Set the maximum individual file size to 2mb (2 x 1024 x 1024 = 2097152). The default file upload size is unlimited. --&gt;
+      &lt;property name="fileSizeMax" value="2097152"/&gt;
+  &lt;/file-upload-service&gt;
+  &lt;!-- 
+      The commented section below shows how to use the 'classname' attribute to specify
+      a custom org.apache.click.service.FileUploadService implementation.
+  --&gt;
+  &lt;!--
+  &lt;file-upload-service classname="com.mycorp.service.CustomFileUploadService"&gt;
+      &lt;property name="sizeMax" value="10485760"/&gt;
+      &lt;property name="fileSizeMax" value="2097152"/&gt;
+  &lt;/file-upload-service&gt;
+  --&gt;
+
+  &lt;!-- List controls which will deploy their resources on application startup --&gt;
+  &lt;controls&gt;
+      &lt;control classname="org.apache.click.examples.control.FilterPanel"/&gt;
+      
+      &lt;!-- A control-set which refers to a third-party xml file specifying the list of controls to deploy --&gt;
+      &lt;control-set name="mycorp-third-party-controls.xml"/&gt;
+      
+      &lt;!-- Example mycorp-third-party-controls.xml file --&gt;
+      &lt;!--
+      &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+      &lt;click-app&gt;
+          &lt;controls&gt;
+              &lt;control classname="com.mycorp.control.MyCorpTable"/&gt;
+              &lt;control classname="com.mycorp.control.MyCorpForm"/&gt;
+          &lt;/controls&gt;
+      &lt;/click-app&gt;
+      --&gt;
+
+  &lt;/controls&gt;
+
+&lt;/click-app&gt;
+
+</pre>
+
+    <!-- FOOTER -->
+    <div id="footer">
+        <hr/>
+        <p>
+        <a target='_blank' href='http://www.apache.org' title='Apache Software Foundation'>
+            <img id="asf-logo" src="http://www.apache.org/images/asf-logo.gif" alt="Apache Software Foundation"/>
+        </a>
+        Copyright &copy; 2001-2010 Apache Software Foundation. Apache Click,
+        Click, Apache, the Apache feather logo, and the Apache Click project logo are
+        trademarks of The Apache Software Foundation.
+        <a href="http://cayenne.apache.org/privacy-policy.html">Privacy policy.</a>
+        </p>
+    </div>
+
+</body>
+</html>

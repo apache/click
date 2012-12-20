@@ -1,0 +1,23 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>6.3.&nbsp;Page Auto Mapping</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Best Practices"><link rel="prev" href="ch06s02.html" title="6.2.&nbsp;Packages and Classes"><link rel="next" href="ch06s04.html" title="6.4.&nbsp;Navigation"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.3.&nbsp;Page Auto Mapping</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;6.&nbsp;Best Practices</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06s04.html">Next</a></td></tr></table><hr></div><div class="sect1" title="6.3.&nbsp;Page Auto Mapping"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="automapping"></a>6.3.&nbsp;Page Auto Mapping</h2></div></div></div><p>You should use the Click page automapping configuration feature.
+    See the <a class="link" href="ch05s02.html#application-automapping" title="5.2.3.1.&nbsp;Page Automapping">Page Automapping</a>
+    topic for details.
+    </p><p>Automapping will save you from having to manually configure URL path to
+    Page class mappings in your <code class="filename">click.xml</code> file. If you follow
+    this convention it is very easy to maintain and refactor applications.
+    </p><p>You can also quickly determine what the corresponding Page class is for a
+    page HTML template and visa versa, and if you use the ClickIDE Eclipse plugin
+    you can switch between a page's class and template by pressing Ctrl+Alt+S.
+    </p><p>An example <code class="filename">click.xml</code> automapping configuration is
+    provided below (automapping is enabled by default):
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.dashboard.page"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre><p>To see how the page templates are mapped to Page classes set the application
+    <a class="link" href="ch05s02.html#application-mode" title="5.2.6.&nbsp;Mode">mode</a> to
+    <code class="literal">debug</code> and at startup the mappings will be listed out. An
+    example Click startup listing is provided below:
+    </p><div class="literallayout"><p>[Click]&nbsp;[debug]&nbsp;automapped&nbsp;pages:<br>
+[Click]&nbsp;[debug]&nbsp;/category-tree.htm&nbsp;-&gt;&nbsp;com.mycorp.dashboard.page.CategoryTree<br>
+[Click]&nbsp;[debug]&nbsp;/process-list.htm&nbsp;-&gt;&nbsp;com.mycorp.dashboard.page.ProcessList<br>
+[Click]&nbsp;[debug]&nbsp;/user-list.htm&nbsp;-&gt;&nbsp;com.mycorp.dashboard.page.UserList</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch06.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch06s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">6.2.&nbsp;Packages and Classes&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;6.4.&nbsp;Navigation</td></tr></table></div></body></html>

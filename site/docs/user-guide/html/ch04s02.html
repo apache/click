@@ -1,0 +1,74 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>4.2.&nbsp;AjaxBehavior</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Ajax"><link rel="prev" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Ajax"><link rel="next" href="ch04s03.html" title="4.3.&nbsp;AjaxBehavior Execution"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.2.&nbsp;AjaxBehavior</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;4.&nbsp;Ajax</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04s03.html">Next</a></td></tr></table><hr></div><div class="sect1" title="4.2.&nbsp;AjaxBehavior"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajax-behavior"></a>4.2.&nbsp;AjaxBehavior</h2></div></div></div><p><a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="ajax-behavior" target="_blank">AjaxBehavior</a> is an interface that
+    extends Behavior (covered <a class="link" href="ch03s08.html" title="3.8.&nbsp;Behavior">earlier</a>) and
+    adds the ability to handle and process incoming Ajax requests.
+    </p><p>Click also provides a default AjaxBehavior implementation,
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ajax/DefaultAjaxBehavior.html" target="_blank">DefaultAjaxBehavior</a>.
+    Using this class you only need to implement the methods you are interested in.
+    </p><p>AjaxBehaviors, like Behaviors, are added to controls
+    through the <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/AbstractControl.html#addBehavior(org.apache.click.Behavior)" target="_blank">AbstractControl.addBehavior()</a>
+    method.
+    </p><p>AjaxBehaviors provides an
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ajax/AjaxBehavior.html#onAction(org.apache.click.Control)" target="_blank">onAction</a>
+    method (similar to <code class="classname">ActionListener</code>) that is invoked to
+    handle Ajax requests. The <code class="methodname">onAction</code>
+    method returns an <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ActionResult.html" target="_blank">ActionResult</a>
+    containing the data to be rendered to the browser.
+    </p><p>The <code class="classname">Control</code>, <code class="classname">Behavior</code>,
+    <code class="classname">AjaxBehavior</code> and <code class="classname">ActionResult</code>
+    classes are depicted in the figure below.
+    </p><div class="figure"><a name="ajax-behavior-class-diagram"></a><div class="figure-contents"><span class="inlinemediaobject"><img src="images/ajax/ajax-class-diagram.png" alt="Ajax Behavior Class Diagram"></span></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;4.1.&nbsp;Ajax Behavior Class Diagram</i></p></div><br class="figure-break"><p>The following method is exposed by Control in order to handle Ajax
+    requests:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#isAjaxTarget(org.apache.click.Context)" target="_blank">isAjaxTarget(Context)</a>
+          - Returns true if the control is the Ajax request <code class="literal">target</code>,
+          false otherwise. The <code class="literal">Ajax target control</code> is the Control
+          which <code class="methodname">onProcess</code> method will be invoked. Other
+          controls won't be processed. The most common way to target a specific
+          server side control is to give it an
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/AbstractControl.html#setId(java.lang.String)" target="_blank">HTML ID</a>
+          attribute, which is then passed as an Ajax request parameter to the server.
+          More on this later.
+        </p></li></ul></div><p>The Behavior interface has been covered <a class="link" href="ch03s08.html#behavior-class-diagram" title="Figure&nbsp;3.5.&nbsp;Behavior Class Diagram">already</a>
+    so we'll look at AjaxBehavior next:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Behavior.html#isAjaxTarget(org.apache.click.Context)" target="_blank">isAjaxTarget(Context)</a>
+          - determines whether the AjaxBehavior is the request target or not. Click
+          will only invoke the AjaxBehavior <code class="methodname">onAction</code> method
+          if <code class="methodname">isAjaxTarget</code> returns true. This
+          allows for fine grained control over the exection of the <code class="methodname">onAction</code>
+          method.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ajax/AjaxBehavior.html#onAction(org.apache.click.Control)" target="_blank">onAction(Control)</a>
+          - the AjaxBehavior action method for handling Ajax requests.
+        </p></li></ul></div><p>The <code class="methodname">onAction</code> method returns an
+    <code class="classname">ActionResult</code> instance, containing the data to be
+    rendered to the browser. ActionResult can return any type of response: String,
+    byte array or a Velocity (Freemarker) template.
+    </p><p>The <code class="methodname">isAjaxTarget</code> method controls whether or
+    not the <code class="methodname">onAction</code> method should be invoked.
+    <code class="methodname">isAjaxTarget()</code> is typically used to target the
+    AjaxBehavior for specific JavaScript events. For example an AjaxBehavior might
+    only handle <code class="literal">click</code> or <code class="literal">blur</code> JavaScript events.
+    Of course the client-side code initiating the Ajax request should pass
+    the JavaScript event to the server.
+    </p><p>Lastly the <code class="classname">ActionResult</code> methods are shown below:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ActionResult.html#setContent(java.lang.String)" target="_blank">setContent(String)</a>
+          - set the String content to render to the browser
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ActionResult.html#setBytes(byte[])" target="_blank">setBytes(byte[])</a>
+          - set the byte array to render to the browser
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ActionResult.html#setBytes(byte[])" target="_blank">setTemplate(String)</a>
+          - set the name of the Velocity (or Freemarker) template to render to
+          the browser
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ActionResult.html#setModel(java.util.Map)" target="_blank">setModel(Map)</a>
+          - set the Velocity (or Freemarker) template model
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ActionResult.html#setContentType(java.lang.String)" target="_blank">setContentType(String)</a>
+          - set the ActionResult content type, for example: <code class="literal">text/html</code>,
+          <code class="literal">text/xml</code>, <code class="literal">application/json</code> etc.
+        </p></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch04s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;4.&nbsp;Ajax&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;4.3.&nbsp;AjaxBehavior Execution</td></tr></table></div></body></html>

@@ -1,0 +1,265 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.7.&nbsp;Layouts</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Controls"><link rel="prev" href="ch03s06.html" title="3.6.&nbsp;Container"><link rel="next" href="ch03s08.html" title="3.8.&nbsp;Behavior"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.7.&nbsp;Layouts</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s06.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;3.&nbsp;Controls</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s08.html">Next</a></td></tr></table><hr></div><div class="sect1" title="3.7.&nbsp;Layouts"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="layout"></a>3.7.&nbsp;Layouts</h2></div></div></div><p>Controls such as <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Form.html" target="_blank">Form</a>
+    takes care of layout and error reporting automatically, and for many use
+    cases the auto-layout approach is good enough. It is certainly very productive.
+    </p><p>However for custom or complex layouts, auto-layout is not always the best
+    choice. There are two approaches for creating custom layouts.
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Template approach - use a template engine such as Velocity,
+        Freemarker or JSP to declare the layout as HTML markup.
+        </p></li><li class="listitem"><p> Programmatic approach - build custom layout components using Java.
+        This option is very similar to building components using Swing.
+        </p></li></ul></div><div class="sect2" title="3.7.1.&nbsp;Template layout"><div class="titlepage"><div><div><h3 class="title"><a name="template-layout"></a>3.7.1.&nbsp;Template layout</h3></div></div></div><p>The <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Form.html#manual-layout" target="_blank">Template</a>
+      approach separates the Page and layout logic. The Page is used to implement
+      the presentation logic such as creating controls, registering listeners
+      and copying data to domain objects, while the template is used to layout
+      the Page controls.
+      </p><p>Lets walk through an example using the template approach. Below
+      we create an EmployeePage which contains a Form and a bunch of fields
+      and submit button.
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// EmployeePage.java</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> EmployeePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> Form form;
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> onInit() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create form</span>
+        Form form = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Form(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"form"</span>);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add a couple of fields to the form</span>
+        form.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> TextField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"firstname"</span>));
+        form.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> TextField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"lastname"</span>));
+        form.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> IntegerField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"age"</span>));
+        form.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> DoubleField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"salary"</span>));
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add a submit button to form</span>
+        form.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Submit(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"add"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Add Employee"</span>));
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add form the page</span>
+        addControl(form);
+    }
+}</pre><p>Lets imagine we want to create a layout using the HTML tags,
+      &lt;div&gt; and &lt;ol&gt;.
+      </p><p>We would then provide the markup for the <code class="varname">employee.htm</code>
+      template as shown below, using a template engine such as Velocity:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">&lt;!-- employee.htm --&gt;</span>
+${form.startTag()}
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;div</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">style</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"margin: 1em;"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;ol&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;li&gt;</span>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;label</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">for</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"firstname"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>Firstname:<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/label&gt;</span>
+                ${form.fields.firstname}
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/li&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;li&gt;</span>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;label</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">for</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"lastname"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>Lastname:<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/label&gt;</span>
+                ${form.fields.lastname}
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/li&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;li&gt;</span>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;label</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">for</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"age"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>Age:<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/label&gt;</span>
+                ${form.fields.age}
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/li&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;li&gt;</span>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;label</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">for</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"salary"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>Salary:<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/label&gt;</span>
+                ${form.fields.salary}
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/li&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/ol&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/div&gt;</span>
+    ${form.fields.submit}
+${form.endTag()}</pre><p>Using CSS the markup above can further be styled and transformed
+      into a nice looking form.
+      </p><p>There are pros and cons to using the template approach.
+      </p><p>One of the advantages is that the layout is explicit and one can
+      easily tweak it if needed. For example instead of using divs and ordered
+      lists, one can change the template to leverage a table layout.
+      </p><p>A disadvantage is added redundancy. In the example above we created
+      the fields in Java, and laid them out using markup in the template. If the
+      requirements should change to add a new field for example, one will have to
+      add the field in the Page as well as the template.
+      </p><p>However it is possible to "generify" the layout using template
+      engines such as Velocity, Freemarker and JSP.
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Form.html#velocity-macros" target="_blank">Macro.vm</a>
+      is an example of a generic and reuable form layout using Velocity.
+      </p><p>
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/Panel.html" target="_blank">Panels</a>
+      provide another good way to build generic and reusable template based layouts.
+      </p><p>Once your generic templates are in place, they can easily be reused
+      in your project or even shared across multiple projects.
+      </p></div><div class="sect2" title="3.7.2.&nbsp;Programmatic layout"><div class="titlepage"><div><div><h3 class="title"><a name="programmatic-layout"></a>3.7.2.&nbsp;Programmatic layout</h3></div></div></div><p>To combat the redundancy introduced by the Template approach, you can
+      take a programmatic approach and use normal Java and some Click classes to
+      build custom layouts.
+      </p><p>Click extras provides two useful classes in this situation namely,
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/control/HtmlForm.html" target="_blank">HtmlForm</a>
+      and <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/control/HtmlFieldSet.html" target="_blank">HtmlFieldSet</a>.
+      </p><p>Unlike Form and FieldSet which renders its controls using a Table
+      layout, HtmlForm and HtmlFieldSet renders its controls in the order they
+      were added and does not add any extra markup. HtmlForm will be used in the
+      examples below.
+      </p><p>To make it easy to compare the two layout approaches we will recreate
+      the example from the template layout section, but using the programmatic
+      approach.
+      </p><p>When creating custom layouts, the HTML construct List &lt;ul&gt; is
+      pretty useful. Since Click does not provide this component, we will create
+      it as shown below. First we create the HTML list element &lt;ol&gt;, to
+      which list item elements &lt;li&gt; can be added:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// HtmlList.java</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> HtmlList <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> AbstractContainer {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> String getTag() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"ol"</span>;
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Can only add ListItems: &lt;li&gt; tags</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> Control add(Control control) {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (!(control <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">instanceof</span> ListItem)) {
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">throw</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> IllegalArgumentException(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Only list items can be added."</span>);
+        }
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">super</span>.add(control);
+    }
+}</pre><p>Next we create the HTML list item element &lt;li&gt;:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// ListItem.java</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> ListItem <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> AbstractContainer {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> String getTag() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"li"</span>;
+    }
+}</pre><p>Another component that will be used in the example is a FieldLabel
+      which renders an HTML label element for a target Field.
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// FieldLabel.java</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> FieldLabel <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> AbstractControl {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> Field target;
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> String label;
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> FieldLabel(Field target, String label) {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">this</span>.target = target;
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">this</span>.label = label;
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> String getTag() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"label"</span>;
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Override render to produce an html label for the specified field.</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> render(HtmlStringBuffer buffer) {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Open tag: &lt;label</span>
+        buffer.elementStart(getTag());
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Set attribute to target field's id</span>
+        setAttribute(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"for"</span>, target.getId());
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Render the labels attributes</span>
+        appendAttributes(buffer);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Close tag: &lt;label for="firstname"&gt;</span>
+        buffer.closeTag();
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add label text: &lt;label for="firstname"&gt;Firstname:</span>
+        buffer.append(label);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Close tag: &lt;label for="firstname"&gt;Firstname:&lt;/label&gt;</span>
+        buffer.elementEnd(getTag());
+    }
+
+}</pre><p>Now the form can be assembled. Continuing with the employee example
+      from the <a class="link" href="ch03s07.html#template-layout" title="3.7.1.&nbsp;Template layout">template approach</a>, we again
+      create an <code class="classname">EmployeePage</code>, but this time an
+      <code class="classname">HtmlForm</code> and <code class="classname">HtmlList</code> is used
+      to create the custom layout:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// EmployeePage.java</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> EmployeePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// A form instance variable</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> HtmlForm form;
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Build the form when the page is initialized</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> onInit() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create an HtmlForm which is ideal for composing manual layouts</span>
+        form = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> HtmlForm(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"form"</span>);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create a list and add it to the form.</span>
+        HtmlList list = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> HtmlList();
+        form.add(list);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add firstname field and pass in its name, label and the list to add the field to</span>
+        addTextField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"firstname"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Firstname:"</span>, list);
+        addTextField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"lastname"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Lastname:"</span>, list);
+        addTextField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"age"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Age:"</span>, list);
+        addTextField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"salary"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Salary:"</span>, list);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add a submit button to form</span>
+        form.add(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Submit(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"add"</span>, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Add Employee"</span>));
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add the form to the page</span>
+        addControl(form);
+    }
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Provide a helper method to add fields to the form</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> addTextField(String nameStr, String labelStr, List list) {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create a new ListItem &lt;li&gt; and add it to the List</span>
+        ListItem item = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ListItem();
+        list.add(item);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create a textfield with the specified name</span>
+        Field field = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> TextField(nameStr);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create a field label, which associates the label with the field id.</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// label.toString would output: &lt;label for="firstname"&gt;Firstname:&lt;/name&gt;</span>
+        FieldLabel label = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> FieldLabel(field, labelStr);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Next add the label and field to the list item.</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// item.toString would then produce:</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// &lt;li&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">//   &lt;label for="firstname"&gt;Firstname:&lt;/name&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">//   &lt;input type="text" name="firstname" id="form_firstname" value="" size="20"/&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// &lt;/li&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">//</span>
+        item.add(label);
+        item.add(field);
+    }
+}</pre><p>And lastly the <code class="filename">employee.htm</code> template would only
+      need to specify the name of the top level component, in this case
+      <code class="varname">form</code>.
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">&lt;!--employee.htm--&gt;</span>
+<code class="varname">${form}</code></pre><p>which produces the following markup:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;form</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">method</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"post"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"form"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">action</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"/myapp/employee.htm"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;input</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"hidden"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"form_name"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"form_form_name"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"form"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;ol&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;li&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;label</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">for</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"firstname"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>Firstname:<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/label&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;input</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"text"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"firstname"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"form_firstname"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">""</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">size</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"20"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/li&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;li&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;label</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">for</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"lastname"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>Lastname:<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/label&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;input</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"text"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"lastname"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"form_lastname"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">""</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">size</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"20"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/li&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;li&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;label</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">for</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"age"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>Age:<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/label&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;input</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"text"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"age"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"form_age"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">""</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">size</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"20"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/li&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;li&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;label</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">for</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"salary"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>Salary:<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/label&gt;</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;input</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"text"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"salary"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"form_salary"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">""</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">size</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"20"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/li&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/ol&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;input</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"submit"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"add"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">id</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"form_add"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Add Employee"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/form&gt;</span></pre><p>Again using a CSS stylesheet, the markup above can be styled and
+      transformed into a fancy looking form.
+      </p><p>There is a <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://click.avoka.com/click-examples/form/contact-details.htm" target="_blank">live demo</a>
+      showing the programmatic approach.
+      </p><p>The advantage of the programmatic approach is that there is no
+      redundancy. Each Field is created and added using normal Java. There is no
+      need to specify where the Field must reside in the markup.
+      </p><p>If new requirements arrive and more fields added, only the Page needs
+      to change. There is no need to change the template as the layout is taken
+      care of by CSS and the markup produced by the components.
+      </p><p>Disadvantages are that more upfront work is needed to write the
+      components and it is more difficult to
+      <span class="emphasis"><em>visualize</em></span> what output would be rendered by the
+      components.
+      </p><p>However once your custom layout components are in place, they can
+      easily be reused in your project or even shared across multiple projects.
+      </p><p>Whether you use the <a class="link" href="ch03s07.html#template-layout" title="3.7.1.&nbsp;Template layout">template</a>
+      or <a class="link" href="ch03s07.html#programmatic-layout" title="3.7.2.&nbsp;Programmatic layout">programmatic</a> layout approach,
+      is up to you. Both work well and have advantages and disadvantages over the
+      other.
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s06.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.6.&nbsp;Container&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.8.&nbsp;Behavior</td></tr></table></div></body></html>

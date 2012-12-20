@@ -1,0 +1,533 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>5.2.&nbsp;Application Configuration</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Configuration"><link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Configuration"><link rel="next" href="ch05s03.html" title="5.3.&nbsp;Auto Deployed Files"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5.2.&nbsp;Application Configuration</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;5.&nbsp;Configuration</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05s03.html">Next</a></td></tr></table><hr></div><div class="sect1" title="5.2.&nbsp;Application Configuration"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="application-configuration"></a>5.2.&nbsp;Application Configuration</h2></div></div></div><p> The heart of a Click application is the <code class="filename">click.xml</code>
+    configuration file. This file specifies the application pages, headers, the
+    format object and the applications mode.
+    </p><p>By default the ClickServlet will attempt to load the application
+    configuration file using the path: &nbsp; <code class="filename">/WEB-INF/click.xml</code>
+    </p><p>If this file is not found under the <code class="literal">WEB-INF</code> directory,
+    then ClickServlet will attempt to load it from the classpath as
+    <code class="filename">/click.xml</code>.
+    </p><p>See <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-dtd.html" target="_blank">Click DTD</a> for the click-app
+    XML definition.
+    </p><p>A complete Click configuration example is available
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-dtd-example.html" target="_blank">here</a> which can be used as a quick
+    reference when configuring Click.
+    </p><p>A basic Click app config file is provided below:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">&lt;!-- Specify the Java package where Page classes can be found --&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.page"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;mode</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"profile"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre><p>An advanced config file would look like this:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">charset</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"UTF-8"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">locale</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"de"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">&lt;!-- To aid Click's automapping, specify the Java package where Page classes can be found --&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.banking.page"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">&lt;!-- We have to manually define the mapping between the Home page class and index.htm template
+  because this page doesn't follow the automatic mapping convention of naming the page class and
+  template the same--&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;page</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">path</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"index.htm"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.banking.page.Home"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/pages&gt;</span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">&lt;!-- Specify a second Java package where Page classes can be found --&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.common.page"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;format</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.util.Format"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;mode</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"profile"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;log-service</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"org.apache.click.extras.service.Log4JLogService"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre><p>The take away point is that there is not much to configure, even for
+    advanced uses.
+    </p><div class="sect2" title="5.2.1.&nbsp;Click App"><div class="titlepage"><div><div><h3 class="title"><a name="click-app"></a>5.2.1.&nbsp;Click App</h3></div></div></div><p>The root <span class="symbol">click-app</span> element defines two application
+      localization attributes <code class="varname">charset</code> and <code class="varname">locale</code>.
+      </p><div class="literallayout"><p>&lt;!ELEMENT&nbsp;<span class="symbol">click-app</span>&nbsp;(pages*,&nbsp;headers?,&nbsp;format?,&nbsp;mode?,&nbsp;controls?,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file-upload-service?,&nbsp;log-service?,&nbsp;messages-map-service?,&nbsp;resource-service?,&nbsp;template-service?,&nbsp;page-interceptor*)&gt;<br>
+&nbsp;&nbsp;&lt;!ATTLIST&nbsp;click-app&nbsp;<code class="varname">charset</code>&nbsp;CDATA&nbsp;#IMPLIED&gt;<br>
+&nbsp;&nbsp;&lt;!ATTLIST&nbsp;click-app&nbsp;<code class="varname">locale</code>&nbsp;CDATA&nbsp;#IMPLIED&gt;</p></div><p>The <code class="varname">charset</code> attribute defines the character encoding
+      set for:
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Velocity templates</p></li><li class="listitem"><p>HttpServletRequest character encoding</p></li><li class="listitem"><p>Page Content-Type charset, see Page
+            <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Page.html#getContentType()" target="_blank">getContentType()</a>
+          </p></li></ul></div><p>The <code class="varname">locale</code> attribute defines the default application
+      Locale. If this value is defined it will override Locale returned by the request.
+      Please see the Context
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Context.html#getLocale()" target="_blank">getLocale()</a>
+      for details. For example the following configuration sets the application
+      character set to UTF-8 and the default Locale as German (de):
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">charset</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"UTF-8"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">locale</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"de"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+  ..
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre></div><div class="sect2" title="5.2.2.&nbsp;Pages"><div class="titlepage"><div><div><h3 class="title"><a name="application-pages"></a>5.2.2.&nbsp;Pages</h3></div></div></div><p>The first child element of the click-app is the mandatory
+      <code class="literal">pages</code> element which defines the list of Click pages.
+      </p><div class="literallayout"><p>&lt;!ELEMENT&nbsp;<code class="varname">pages</code>&nbsp;(<span class="symbol">page</span>*)&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST&nbsp;pages&nbsp;<code class="varname">package</code>&nbsp;CDATA&nbsp;#IMPLIED&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST&nbsp;pages&nbsp;<code class="varname">automapping</code>&nbsp;(true|false)&nbsp;"true"&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST&nbsp;pages&nbsp;<code class="varname">autobinding</code>&nbsp;(default|annotation|none)&nbsp;"default"&gt;</p></div><p>The pages element can specify a base <code class="varname">package</code>
+      that Click should use for mapping page templates to page classes.
+      </p><p>The pages element also defines the <code class="varname">automapping</code> and
+      <code class="varname">autobinding</code> attributes which is discussed in the
+      <a class="link" href="ch05s02.html#application-automapping" title="5.2.3.1.&nbsp;Page Automapping">Page Automapping</a> and
+      <a class="link" href="ch05s02.html#application-autobinding" title="5.2.3.3.&nbsp;Page Autobinding">Page Autobinding</a> sections
+      respectively.
+      </p><div class="sect3" title="5.2.2.1.&nbsp;Multiple Pages Packages"><div class="titlepage"><div><div><h4 class="title"><a name="application-multiple-packages"></a>5.2.2.1.&nbsp;Multiple Pages Packages</h4></div></div></div><p>Click can support multiple pages elements to enable the automapping
+        of multiple packages.
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.banking.page"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.common.page"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre><p>With multiple pages elements, pages are loaded in the order of the page
+            elements, with manual page elements being loaded before automapped pages.
+            Once a page template has been mapped to a Page class it will not be replaced
+            by a subsequent potential match. So pages elements at the top take priority
+            over lower pages elements.
+        </p></div></div><div class="sect2" title="5.2.3.&nbsp;Page"><div class="titlepage"><div><div><h3 class="title"><a name="application-page"></a>5.2.3.&nbsp;Page</h3></div></div></div><p>The page element defines the Click application pages.
+      </p><div class="literallayout"><p>&lt;!ELEMENT&nbsp;<span class="symbol">page</span>(<code class="varname">header</code>*)&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST&nbsp;page&nbsp;<code class="varname">path</code>&nbsp;CDATA&nbsp;#REQUIRED&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST&nbsp;page&nbsp;<code class="varname">classname</code>&nbsp;CDATA&nbsp;#REQUIRED&gt;</p></div><p>Each page <code class="varname">path</code> must be unique, as the Click
+      application maps HTTP requests to the page paths.
+      </p><p>The Click application will create a new Page instance for
+      the given request using the configured page <code class="varname">classname</code>.
+      All pages must subclass
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Page.html" target="_blank">Page</a> and provide
+      a public no arguments constructor, so they can be instantiated.
+      </p><p>Pages can also define <code class="varname">header</code> values which are
+      discussed in the next topic.
+      </p><p>When the Click application starts up it will check all the page
+      definitions. If there is a critical configuration error the ClickSerlvet
+      will log an <code class="literal">ERROR</code> message and throw an
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/UnavailableException.html" target="_blank">UnavailableException</a>.
+      If this occurs the click application will be permanently unavailable until
+      the error is fixed and the web app is restarted.
+      </p><div class="sect3" title="5.2.3.1.&nbsp;Page Automapping"><div class="titlepage"><div><div><h4 class="title"><a name="application-automapping"></a>5.2.3.1.&nbsp;Page Automapping</h4></div></div></div><p> Page automapping will automatically configure application pages
+        using a simple set of rules. This enables you to greatly streamline your
+        configuration file as you only need to define pages which don't fit
+        the automapping rules.
+        </p><p>Automapping will attempt to associate each page template (*.htm)
+        and JSP file in the web application (excluding those under WEB-INF) to a
+        Page class. Automapped pages are loaded after the manually defined pages
+        are loaded, and manually defined pages takes preference.
+        When automapping is enabled the page mappings will be logged if Click is
+        running in debug or trace mode.
+        </p><p>For example, given the following page path to class mapping:
+        </p><div class="literallayout"><p>index.htm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;<span class="token">com.mycorp.page.Home</span><br>
+search.htm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;<span class="token">com.mycorp.page.Search</span><br>
+contacts/contacts.htm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;<span class="token">com.mycorp.page.contacts.Contacts</span><br>
+security/login.htm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;<span class="token">com.mycorp.page.security.Login</span><br>
+security/logout.htm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;<span class="token">com.mycorp.page.security.Logout</span><br>
+security/change-password.htm&nbsp;&nbsp;=&gt;&nbsp;<span class="token">com.mycorp.page.security.ChangePassword</span></p></div><p>The above mapping could be configured manually by setting the
+        <span class="symbol">automapping</span> attribute to <code class="literal">false</code>,
+        for example:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">automapping</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"false"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;page</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">path</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"index.htm"</span>                    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"</span><span class="token">com.mycorp.page.Home</span>"/&gt;
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;page</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">path</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"search.htm"</span>                   <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"</span><span class="token">com.mycorp.page.Search</span>"/&gt;
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;page</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">path</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"contacts/contacts.htm"</span>        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"</span><span class="token">com.mycorp.page.contacts.Contacts</span>"/&gt;
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;page</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">path</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"security/login.htm"</span>           <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"</span><span class="token">com.mycorp.page.security.Login</span>"/&gt;
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;page</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">path</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"security/logout.htm"</span>          <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"</span><span class="token">com.mycorp.page.security.Logout</span>"/&gt;
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;page</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">path</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"security/change-password.htm"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"</span><span class="token">com.mycorp.page.security.ChangePassword</span>"/&gt;
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/pages&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre><p>For an application with many pages, it is cumbersome to manually map
+        each page template to its associated class. This is where
+        <span class="symbol">automapping</span> comes in.
+        </p><p>By setting <span class="symbol">automapping</span> to <code class="literal">true</code>,
+        Click will automatically map page templates to page classes. To map a
+        template to a page class, Click converts the template path to the Page
+        classname. In the example above, Click will convert the template
+        <span class="token">search.htm</span> to the class <span class="token">Search</span> by
+        capitilizing the template name and removing the <code class="literal">.htm</code>
+        extension. Of course this is not enough to map the template to the class.
+        what is missing is the class package, <span class="token">com.mycorp.page</span>.
+        To help Click map the page, you can set the base <code class="literal">package</code>
+        attribute as shown in the next example.
+        </p><p>Below is the full configuration to automatically map the templates
+        to pages (except for index.htm which doesn't automatically map to Home
+        page and has to be mapped manually):
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"</span><span class="token">com.mycorp.page</span>" <span class="symbol">automapping</span>="true"&gt;
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;page</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">path</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"index.htm"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.page.Home"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/pages&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre><p>Note: <span class="symbol">automapping</span> is <code class="literal">true</code> by
+        default, so it could be omitted.
+        </p><p>If a page template is placed in a <code class="literal">sub folder</code>
+        of the root web folder, it's associated page class must be placed in an
+        equivalently named <code class="literal">sub package</code> of the base package in
+        order for the page to be mapped automatically. In the mapping above the
+        page template <span class="token">security/change-password.htm</span> is located in
+        the <span class="token">security</span> folder under the web root. In order for Click
+        to correctly map the page template to it's class, the class must be
+        located in the <span class="token">security</span> package of the
+        base package <span class="token">com.mycorp.page</span>. The absolute page classname
+        is thus: <span class="token">com.mycorp.page.security.ChangePassword</span>.
+        </p><p>The page template name to classname convention is:
+        </p><div class="literallayout"><p>change-password.htm&nbsp;&nbsp;=&gt;&nbsp;&nbsp;<span class="token">ChangePassword</span><br>
+change_password.htm&nbsp;&nbsp;=&gt;&nbsp;&nbsp;<span class="token">ChangePassword</span><br>
+changePassword.htm&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;<span class="token">ChangePassword</span><br>
+ChangePassword.htm&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;<span class="token">ChangePassword</span></p></div><p>During automapping, if a page class cannot be found, Click will
+        add the 'Page' suffix to the classname (if not already present) and
+        attempt to map the page template to this modified classname. For example:
+        </p><div class="literallayout"><p>customer.htm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;&nbsp;<span class="token">CustomerPage</span><br>
+change-password.htm&nbsp;&nbsp;=&gt;&nbsp;&nbsp;<span class="token">ChangePasswordPage</span></p></div></div><div class="sect3" title="5.2.3.2.&nbsp;Automapping Excludes"><div class="titlepage"><div><div><h4 class="title"><a name="application-excludes"></a>5.2.3.2.&nbsp;Automapping Excludes</h4></div></div></div><p>With Page automapping there can be resources where you don't want
+        automapping applied. For example when using a JavaScript library with lots
+        of <code class="literal">.htm</code> files, you don't want automapping to try and
+        find Page class for each of these files. In these situations you can use
+        the pages <span class="symbol">excludes</span> element.
+        </p><div class="literallayout"><p>&lt;!ELEMENT&nbsp;<span class="symbol">excludes</span>&nbsp;(#PCDATA)&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST&nbsp;excludes&nbsp;<code class="varname">pattern</code>&nbsp;CDATA&nbsp;#REQUIRED&gt;</p></div><p>For example if our application uses the TinyMCE JavaScript library
+        we could configure our pages automapping to exclude all <code class="literal">.htm</code>
+        files under the <code class="literal">/tiny_mce</code> directory.
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.page"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+    <span class="symbol">&lt;excludes</span> pattern="<code class="varname">/tiny_mce/*</code>"/&gt;
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/pages&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre><p>The excludes pattern can specify multiple directories or files using a
+          comma separated notation. For example:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.page"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+    <span class="symbol">&lt;excludes</span> pattern="<code class="varname">/dhtml/*, /tiny_mce/*, banner.htm, about.htm</code>"/&gt;
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/pages&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre><p>HTM files excluded from Page automapping are handled by an internal
+        Page class with caching headers enabled.
+        </p></div><div class="sect3" title="5.2.3.3.&nbsp;Page Autobinding"><div class="titlepage"><div><div><h4 class="title"><a name="application-autobinding"></a>5.2.3.3.&nbsp;Page Autobinding</h4></div></div></div><p>Autobinding is a feature that allows certain page variables to be
+        handled in a special way by the ClickServlet. The autobinding attribute
+        can be configured with one of the following values:
+        </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p> <code class="varname">default</code>: <code class="literal">bindable</code>
+            variables include both <code class="varname">public</code> page variables
+            and variables annotated with the
+            <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/util/Bindable.html" target="_blank">@Bindable</a>
+            annotation
+            </p></li><li class="listitem"><p> <code class="varname">annotation</code>: <code class="literal">bindable</code>
+            variables are variables annotated with the
+            <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/util/Bindable.html" target="_blank">@Bindable</a>
+            annotation
+            </p></li><li class="listitem"><p> <code class="varname">none</code>: disables the autobinding feature
+            </p></li></ul></div><p>
+        </p><p>By default all pages have autobinding enabled in
+        <code class="varname">default</code> mode.
+        </p><p><span class="bold"><strong>Please note:</strong></span> we recommend using
+        autobinding only for binding request parameters, not for Controls. It
+        generally leads to code that is difficult to maintain. In a future release
+        we will replace autobinding with a simpler implementation.
+        </p><p>With autobinding the ClickServlet will
+        automatically:
+        </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p> add all <code class="literal">bindable</code> controls to the page,
+            after the page constructor has been invoked
+            </p></li><li class="listitem"><p> if a <code class="literal">bindable</code> control name is not defined,
+            the control name will be set to the value of its variable name (note,
+            if the control name is already defined its name will not be changed)
+            </p></li><li class="listitem"><p> bind all request parameters to <code class="literal">bindable</code>
+            page variables, after the page constructor has been invoked. See
+            <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ClickServlet.html#processPageRequestParams(org.apache.click.Page)" target="_blank">ClickServlet.processPageRequestParams(Page)</a>
+            for more details
+            </p></li><li class="listitem"><p> add all <code class="literal">bindable</code> page variables to the page
+            model (this step occurs just before the page is rendered)</p></li></ul></div><p>For example:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> EmployeePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> String employeeDescription;
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Form does not have a name defined</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> Form employeeForm = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Form();
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Table defines its own name</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> Table employeeTable = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Table(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"table"</span>);
+
+}</pre><p>Note in the example above that the <code class="varname">employeeDescription</code>
+        variable and the <code class="varname">employeeForm</code> and <code class="varname">employeeTable</code>
+        controls are not added to the page. Also note that Form name is not
+        defined.
+        </p><p>When autobinding is enabled, ClickServlet will create a new Page
+        and add the bindable variables and controls to the page. Following the
+        example above the <code class="varname">employeeDescription</code>,
+        <code class="varname">employeeForm</code> and <code class="varname">employeeTable</code> will
+        be added to the page, which is equivalent to the following statements:
+        <code class="methodname">addModel("employeeDescription", employeeDescription)</code>,
+        <code class="methodname">addControl(employeeForm)</code> and
+        <code class="methodname">addControl(employeeTable)</code>.
+        </p><p>Furthermore, controls that do not have a name defined will
+        have their name set to their instance variable name. In this
+        case the Form name will be set to <code class="varname">employeeForm</code> while
+        the Table name won't be altered since it already has a name defined.
+        </p><p>The above example is a shorthand way of writing the following:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> EmployeePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> String employeeDescription;
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> Form employeeForm = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Form();
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> Table employeeTable = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Table(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"table"</span>);
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> onInit() {
+        employeeForm.setName(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"employeeForm"</span>);
+        addControl(employeeForm);
+
+        addControl(myTable);
+    }
+}</pre><p>Note that we did not show where employeeDescription is added
+        to the page model. The reason for that is because autobinding handles non
+        controls slightly differently. Non control variables are added to the
+        model just before the page response is written. This allows the value of
+        the variable to be set anywhere in the page. For example:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> EmployeePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> String employeeDescription;
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> Form employeeForm = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Form();
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> Table employeeTable = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Table(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"table"</span>);
+
+    ...
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onSaveClick {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (employeeForm.isValid()) {
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// employeeDescription is added to the page model just before the</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// response is written</span>
+            employeeDescription = employee.getDescription();
+        }
+    }
+} </pre><p><code class="varname">employeeDescription</code> will be added to the page
+        model and can be referenced in the page template as
+        <span class="symbol">$employeeDescription</span>.
+        </p><p>Autobinding can be turned off by setting the <span class="symbol">autobinding</span>
+        attribute to <code class="varname">none</code> as shown below:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.page"</span> <span class="symbol">autobinding</span>="<code class="varname">none</code>"/&gt;
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre></div><div class="sect3" title="5.2.3.4.&nbsp;Page Autobinding - Using Annotations"><div class="titlepage"><div><div><h4 class="title"><a name="application-autobinding-annotation"></a>5.2.3.4.&nbsp;Page Autobinding - Using Annotations</h4></div></div></div><p>Click provides the
+        <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/util/Bindable.html" target="_blank">Bindable</a>
+        annotation which enables autobinding of Page variables The Bindable
+        annotation can bind <code class="varname">private</code>, <code class="varname">protected</code>
+        and <code class="varname">public</code> Page variables.
+        </p><p>By default, Click's autobinding feature operates on both
+        <span class="symbol">public</span> and <span class="symbol">@Bindable</span> variables.
+        To instruct Click to operate only on <span class="symbol">@Bindable</span>
+        annotated variables, you can set the <span class="symbol">autobinding</span>
+        attribute to <code class="varname">annotation</code>, for example:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.page"</span> <span class="symbol">autobinding</span>="<code class="varname">annotation</code>"/&gt;
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre><p>Click won't autobind <code class="literal">public</code> variables anymore.
+        </p><p>Below is an example using the <span class="symbol">@Bindable</span>
+        annotation:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> EmployeePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span class="symbol">@Bindable</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">protected</span> Form employeeForm = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Form();
+
+    <span class="symbol">@Bindable</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">protected</span> Table myTable = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Table();
+
+}</pre></div></div><div class="sect2" title="5.2.4.&nbsp;Headers"><div class="titlepage"><div><div><h3 class="title"><a name="application-headers"></a>5.2.4.&nbsp;Headers</h3></div></div></div><p>The optional <code class="literal">headers</code> element defines a list of
+      <code class="literal">header</code> elements which are applied to all pages.
+      </p><div class="literallayout"><p>&lt;!ELEMENT&nbsp;<code class="varname">headers</code>&nbsp;(<span class="symbol">header</span>*)&gt;</p></div><p>The <span class="symbol">header</span> element defines header name and value
+      pairs which are applied to the
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletResponse.html" target="_blank">HttpServletResponse</a>.
+      </p><div class="literallayout"><p>&lt;!ELEMENT&nbsp;<span class="symbol">header</span>&nbsp;(#PCDATA)&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST&nbsp;header&nbsp;<code class="varname">name</code>&nbsp;CDATA&nbsp;#REQUIRED&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST&nbsp;header&nbsp;<code class="varname">value</code>&nbsp;CDATA&nbsp;#REQUIRED&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST&nbsp;header&nbsp;<code class="varname">type</code>&nbsp;(String|Integer|Date)&nbsp;"String"&gt;</p></div><p>Page headers are set after the Page has been constructed and before
+      <code class="methodname">onInit()</code> is called. Pages can then modify their
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Page.html#headers" target="_blank">headers</a>
+      property using the
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Page.html#setHeader(java.lang.String,%20java.lang.Object)" target="_blank">setHeader()</a>
+      method.
+      </p><div class="sect3" title="5.2.4.1.&nbsp;Browser Caching"><div class="titlepage"><div><div><h4 class="title"><a name="browser-caching"></a>5.2.4.1.&nbsp;Browser Caching</h4></div></div></div><p>Headers are typically used to switch off browser caching. By
+        default Click will use the following no caching header values if you don't
+        define a <code class="literal">headers</code> element in your application:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages&gt;</span>
+     ..
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/pages&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;headers&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;header</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Pragma"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"no-cache"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;header</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Cache-Control"</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"no-store, no-cache, must-revalidate, post-check=0, pre-check=0"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;header</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Expires"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"1"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Date"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/headers&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre><p>Alternatively you can define your headers individually in pages or
+        for all application pages by setting header values. For example, to
+        switch off caching in the <code class="literal">Login</code> page, set the
+        following page cache control headers:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.page"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;page</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">path</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"login.htm"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.page.Login"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;header</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Pragma"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"no-cache"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;header</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Expires"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"1"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Date"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/page&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/pages&gt;</span></pre><p>Note: the value for a Date type should be a long number value.
+        </p><p>If you wanted to enable caching for a particular page you could set
+        the following page cache control header. This will mark the page as cachable
+        for a period of 1 hour after which it should be reloaded.
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">package</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.page"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;page</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">path</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"home.htm"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">classname</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"com.mycorp.page.Home"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;header</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Cache-Control"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"max-age=3600, public, must-revalidate"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/page&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/pages&gt;</span></pre><p>To apply header values globally define header values in the headers
+        element. For example:
+        </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;pages&gt;</span>
+     ..
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/pages&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;headers&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;header</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Pragma"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"no-cache"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;header</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Cache-Control"</span>
+               <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"no-store, no-cache, must-revalidate, post-check=0, pre-check=0"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;header</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">name</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Expires"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">value</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"1"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Date"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/headers&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre></div></div><div class="sect2" title="5.2.5.&nbsp;Format"><div class="titlepage"><div><div><h3 class="title"><a name="application-format"></a>5.2.5.&nbsp;Format</h3></div></div></div><p>The optional <code class="literal">format</code> element defines the Format
+      object classname which is applied to all pages.
+      </p><div class="literallayout"><p>&lt;!ELEMENT&nbsp;<span class="symbol">format</span>&nbsp;(#PCDATA)&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;ATTLIST&nbsp;format&nbsp;<code class="varname">classname</code>&nbsp;CDATA&nbsp;"org.apache.click.util.Format"&gt;</p></div><p>By default all Click pages are configured with a
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/util/Format.html" target="_blank">org.apache.click.util.Format</a>
+      object. The format object is made available in the Velocity page templates
+      using the name <code class="varname">$format</code>.
+      </p><p>To specify a custom format class configure a <code class="literal">format</code>
+      element in the click-app descriptor. For example:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+  ..
+  <span class="symbol">&lt;format</span> classname="<code class="varname">com.mycorp.util.CustomFormat</code>"/&gt;
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre></div><div class="sect2" title="5.2.6.&nbsp;Mode"><div class="titlepage"><div><div><h3 class="title"><a name="application-mode"></a>5.2.6.&nbsp;Mode</h3></div></div></div><p>The optional <code class="literal">mode</code> element defines the application
+      logging and caching mode.
+      </p><div class="literallayout"><p>&lt;!ELEMENT&nbsp;<span class="symbol">mode</span>&nbsp;(#PCDATA)&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;ATTLIST&nbsp;mode&nbsp;value&nbsp;(<code class="varname">production|profile|development|debug|trace</code>)&nbsp;"development"&gt;</p></div><p>By default Click applications run in <code class="literal">development</code> mode,
+      which switches off page template caching, and the logging level is set to
+      <code class="literal">INFO</code>.
+      </p><p>To change the default application mode configure a mode element in the
+      click-app descriptor. For example to specify <code class="literal">production</code>
+      mode you would add the following mode element:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+  ..
+  <span class="symbol">&lt;mode</span> value="<code class="varname">production</code>"&gt;
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre><p>The application mode configuration can be overridden by setting the
+      system property <code class="literal">"click.mode"</code>. This can be use in the scenario
+      of debugging a problem on a production system, where you change the mode to
+      <code class="literal">trace</code> by setting the following system property and
+      restarting the application.
+      </p><div class="literallayout"><p>-Dclick.mode=trace</p></div><p>The Click Application modes and their settings for Page auto loading,
+      template caching and logging levels are:
+      </p><div class="informaltable"><table style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col><col><col><col><col></colgroup><thead><tr><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; ">
+                <p>
+                  Application mode
+                </p>
+              </th><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; ">
+                <p>
+                  Page auto loading
+                </p>
+              </th><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; ">
+                <p>
+                  Template caching
+                </p>
+              </th><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; ">
+                <p>
+                  Click log level
+                </p>
+              </th><th style="border-bottom: 0.5pt solid ; ">
+                <p>
+                  Velocity log level
+                </p>
+              </th></tr></thead><tbody><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>
+                  <span class="bold"><strong>production</strong></span>
+                </p>
+              </td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>No</p>
+              </td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>Yes</p>
+              </td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>WARN</p>
+              </td><td style="border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>ERROR</p>
+              </td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>
+                  <span class="bold"><strong>profile</strong></span>
+                </p>
+              </td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>No</p>
+              </td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>Yes</p>
+              </td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>INFO</p>
+              </td><td style="border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>ERROR</p>
+              </td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>
+                  <span class="bold"><strong>development</strong></span>
+                </p>
+              </td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>Yes</p>
+              </td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>No</p>
+              </td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>INFO</p>
+              </td><td style="border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>ERROR</p>
+              </td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>
+                  <span class="bold"><strong>debug</strong></span>
+                </p>
+              </td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>Yes</p>
+              </td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>No</p>
+              </td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>DEBUG</p>
+              </td><td style="border-bottom: 0.5pt solid ; " align="center" valign="middle">
+                <p>ERROR</p>
+              </td></tr><tr><td style="border-right: 0.5pt solid ; " align="center" valign="middle">
+                <p>
+                  <span class="bold"><strong>trace</strong></span>
+                </p>
+              </td><td style="border-right: 0.5pt solid ; " align="center" valign="middle">
+                <p>Yes</p>
+              </td><td style="border-right: 0.5pt solid ; " align="center" valign="middle">
+                <p>No</p>
+              </td><td style="border-right: 0.5pt solid ; " align="center" valign="middle">
+                <p>TRACE</p>
+              </td><td style="" align="center" valign="middle">
+                <p>WARN</p>
+              </td></tr></tbody></table></div><div class="sect3" title="5.2.6.1.&nbsp;Page Auto Loading"><div class="titlepage"><div><div><h4 class="title"><a name="page-auto-loading"></a>5.2.6.1.&nbsp;Page Auto Loading</h4></div></div></div><p>When Page Auto Loading is enabled any new page templates and classes
+        will be automatically loaded at runtime. These pages are loaded using the
+        <a class="link" href="ch05s02.html#application-automapping" title="5.2.3.1.&nbsp;Page Automapping">Page Automapping</a> rules.
+        </p><p>Page auto loading is a very handy feature for rapid development as
+        you do not have to restart you application server to pick up new pages.
+        </p></div><div class="sect3" title="5.2.6.2.&nbsp;Click and Velocity Logging"><div class="titlepage"><div><div><h4 class="title"><a name="click-logging"></a>5.2.6.2.&nbsp;Click and Velocity Logging</h4></div></div></div><p>The Click and Velocity runtimes use
+        <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/service/LogService.html" target="_blank">LogService</a>
+        for logging messages. The default LogService implementation is
+        <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/service/ConsoleLogService.html" target="_blank">ConsoleLogService</a>
+        which will send messages to the console [System.out]. For example the
+        following logging output is for a HomePage request when the application
+        mode is <code class="literal">trace</code>:
+        </p><div class="literallayout"><p>[Click]&nbsp;[debug]&nbsp;GET&nbsp;http://localhost:8080/quickstart/home.htm<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;HomePage.&lt;&lt;init&gt;&gt;<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;HomePage.onSecurityCheck()&nbsp;:&nbsp;true<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;HomePage.onInit()<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;HomePage.onGet()<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;HomePage.onRender()<br>
+[Click]&nbsp;[info&nbsp;]&nbsp;&nbsp;&nbsp;&nbsp;renderTemplate:&nbsp;/home.htm&nbsp;-&nbsp;6&nbsp;ms<br>
+[Click]&nbsp;[trace]&nbsp;&nbsp;&nbsp;&nbsp;invoked:&nbsp;HomePage.onDestroy()<br>
+[Click]&nbsp;[info&nbsp;]&nbsp;handleRequest:&nbsp;&nbsp;/home.htm&nbsp;-&nbsp;24&nbsp;ms</p></div><p>Any unhandled <code class="literal">Throwable</code> errors are logged by the
+        ClickServlet.
+        </p><p>Note that Click Extras also provide log adaptors for
+        <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/service/Log4JLogService.html" target="_blank">Log4J</a>
+        and the <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/service/JdkLogService.html" target="_blank">JDK Logging API</a>.
+        </p><p>When an application is not in <code class="literal">production</code> mode the
+        error page displays detailed debugging information. When the application
+        mode is <code class="literal">production</code> no debug information is displayed to
+        prevent sensitive information being revealed. This behaviour can be changed
+        by modifying the deployed <code class="filename">click/error.htm</code> page template.
+        </p></div></div><div class="sect2" title="5.2.7.&nbsp;Controls"><div class="titlepage"><div><div><h3 class="title"><a name="application-controls"></a>5.2.7.&nbsp;Controls</h3></div></div></div><p>The optional <code class="literal">controls</code> element defines a list of
+      <code class="literal">control</code> elements which will be deployed on application
+      startup.
+      </p><div class="literallayout"><p>&lt;!ELEMENT&nbsp;<code class="varname">controls</code>&nbsp;(<span class="symbol">control</span>*)&gt;</p></div><p>The <span class="symbol">control</span> registers
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html" target="_blank">Control</a> classes
+      which will have their <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#onDeploy(javax.servlet.ServletContext)" target="_blank">onDeploy()</a>
+      method invoked when the click application starts.
+      </p><div class="literallayout"><p>&lt;!ELEMENT&nbsp;<span class="symbol">control</span>&nbsp;(#PCDATA)&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;!ATTLIST&nbsp;control&nbsp;<code class="varname">classname</code>&nbsp;CDATA&nbsp;#REQUIRED&gt;</p></div><p>For example to have a <code class="classname">CustomField</code> control
+      deploy its resources on application startup, you would add the following
+      elements to your <code class="filename">click.xml</code> file:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;click-app&gt;</span>
+   ..
+
+   <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;controls&gt;</span>
+     <span class="symbol">&lt;control</span> classname="<code class="varname">com.mycorp.control.CustomField</code>"/&gt;
+   <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/controls&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/click-app&gt;</span></pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch05.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch05s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Configuration&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;5.3.&nbsp;Auto Deployed Files</td></tr></table></div></body></html>

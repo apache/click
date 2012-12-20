@@ -1,0 +1,51 @@
+/*
+ * Copyright (C) 2009 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.str{color:#2A00FF;}
+.kwd{color:#7F0055;
+    font-weight:bold;}
+.com{color:#3F7F5F;}
+.typ{color:#000;}
+.lit{color:#066;}
+.pun{color:#660;}
+.pln{color:#000;}
+.tag{color:#000099;
+    font-weight:bold;}
+.atn{color:#009900;}
+.atv{color:#000;}
+.dec{color:#606;}
+
+pre.prettyprint{
+    padding:1em;
+    border:1px solid #888;
+    overflow:auto;
+}
+
+@media print{
+    .str{color:#2A00FF;}
+    .kwd{color:#7F0055;
+        font-weight:bold;}
+    .com{color:#3F7F5F;
+        font-style:italic;}
+    .typ{color:#000;
+        font-weight:bold;}
+    .lit{color:#044;}
+    .pun{color:#440;}
+    .pln{color:#000;}
+    .tag{color:#000099;
+        font-weight:bold;}
+    .atn{color:#009900;}
+    .atv{color:#000;}
+}

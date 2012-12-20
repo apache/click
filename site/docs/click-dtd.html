@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <meta name="description" lang="en" content="Apache Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Apache Click, Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
+ <title>Apache Click</title>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+</head>
+<body>
+
+<h1>Click DTD</h1>
+
+Click application XML descriptor Documentation Type Definition (DTD) :
+(A full example is available <a href="click-dtd-example.html">here</a>)
+
+<pre class="codeDtd">
+&lt;!--
+     DTD for the Click Application Configuration File, Version 2.2
+
+     To support validation of your configuration file, include the following
+     DOCTYPE element at the beginning (after the "xml" declaration):
+
+     &lt;!DOCTYPE click-app PUBLIC
+       "-//Apache Software Foundation//DTD Click Configuration 2.2//EN"
+       "http://click.apache.org/dtds/click-2.2.dtd"&gt;
+--&gt;
+
+&lt;!-- The Click Application (click.xml) Document Type Definition. --&gt;
+&lt;!ELEMENT <span class="red">click-app</span> (<span class="blue">pages</span>*, <span class="blue">headers</span>?, <span class="blue">format</span>?, <span class="blue">mode</span>?, <span class="blue">controls</span>?, 
+                     <span class="blue">file-upload-service</span>?, <span class="blue">log-service</span>?, <span class="blue">messages-map-service</span>?, <span class="blue">resource-service</span>?, <span class="blue">template-service</span>?, <span class="blue">page-interceptor</span>*)&gt;
+  &lt;!ATTLIST <span class="red">click-app</span> <span class="blue">charset</span> CDATA #IMPLIED&gt;
+  &lt;!ATTLIST <span class="red">click-app</span> <span class="blue">locale</span> CDATA #IMPLIED&gt;
+
+  &lt;!-- Application pages. --&gt;
+  &lt;!ELEMENT <span class="red">pages</span> (<span class="blue">page</span>*, <span class="blue">excludes</span>*)&gt;
+    &lt;!ATTLIST <span class="red">pages</span> <span class="blue">package</span> CDATA #IMPLIED&gt;
+    &lt;!ATTLIST <span class="red">pages</span> <span class="blue">automapping</span> (true|false) "<span class="green">true</span>"&gt;
+    &lt;!ATTLIST <span class="red">pages</span> <span class="blue">autobinding</span> (default|annotation|none) "<span class="green">default</span>"&gt;
+
+    &lt;!-- Page definition. --&gt;
+    &lt;!ELEMENT <span class="red">page</span> (<span class="blue">header</span>*)&gt;
+      &lt;!ATTLIST <span class="red">page</span> <span class="blue">path</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST <span class="red">page</span> <span class="blue">classname</span> CDATA #REQUIRED&gt;
+
+    &lt;!-- Excludes definition. --&gt;
+    &lt;!ELEMENT <span class="red">excludes</span> (#PCDATA)&gt;
+      &lt;!ATTLIST <span class="red">excludes</span> <span class="blue">pattern</span> CDATA #REQUIRED&gt;
+
+  &lt;!-- Application default page headers. --&gt;
+  &lt;!ELEMENT <span class="red">headers</span> (<span class="blue">header</span>*)&gt;
+  
+    &lt;!-- Header definition. --&gt;
+    &lt;!ELEMENT <span class="red">header</span> (#PCDATA)&gt;
+      &lt;!ATTLIST <span class="red">header</span> <span class="blue">name</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST <span class="red">header</span> <span class="blue">value</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST <span class="red">header</span> <span class="blue">type</span> (String|Integer|Date) "<span class="green">String</span>"&gt;
+
+  &lt;!-- Page template formatter class. An new format object added to
+       the Velocity context under the key: "format". --&gt;
+  &lt;!ELEMENT <span class="red">format</span> (#PCDATA)&gt;
+    &lt;!ATTLIST <span class="red">format</span> <span class="blue">classname</span> CDATA "<span class="green">org.apache.click.util.Format</span>"&gt;
+ 
+  &lt;!-- Application mode, which configures logging and caching. --&gt;
+  &lt;!ELEMENT <span class="red">mode</span> (#PCDATA)&gt;
+     &lt;!ATTLIST <span class="red">mode</span> <span class="blue">value</span> (production|profile|development|debug|trace) "<span class="green">development</span>"&gt;
+
+  &lt;!-- Application deployable controls. --&gt;
+  &lt;!ELEMENT <span class="red">controls</span> (<span class="blue">control</span>*, <span class="blue">control-set</span>*)&gt;
+  
+    &lt;!-- Deployable control class. --&gt;
+    &lt;!ELEMENT <span class="red">control</span> (#PCDATA)&gt;
+      &lt;!ATTLIST <span class="red">control</span> <span class="blue">classname</span> CDATA #REQUIRED&gt;
+
+    &lt;!-- Deployable Third Party Set of Controls. --&gt;
+    &lt;!ELEMENT <span class="red">control-set</span> (#PCDATA)&gt;
+      &lt;!ATTLIST <span class="red">control-set</span> <span class="blue">name</span> CDATA #REQUIRED&gt;
+
+  &lt;!-- File Upload Service. --&gt;
+  &lt;!ELEMENT <span class="red">file-upload-service</span> (property*)&gt;
+    &lt;!ATTLIST <span class="red">file-upload-service</span> <span class="blue">classname</span> CDATA  "<span class="green">org.apache.click.service.FileUploadService</span>"&gt;
+ 
+    &lt;!-- Property definition. --&gt;
+    &lt;!ELEMENT <span class="red">property</span> (#PCDATA)&gt;
+      &lt;!ATTLIST <span class="red">property</span> <span class="blue">name</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST <span class="red">property</span> <span class="blue">value</span> CDATA #REQUIRED&gt;
+
+  &lt;!-- Log Service. --&gt;
+  &lt;!ELEMENT <span class="red">log-service</span> (property*)&gt;
+    &lt;!ATTLIST <span class="red">log-service</span> <span class="blue">classname</span> CDATA "<span class="green">org.apache.click.service.ConsoleLogService</span>"&gt;
+
+  &lt;!-- Messages Map Service. --&gt;
+  &lt;!ELEMENT <span class="red">messages-map-service</span> (property*)&gt;
+    &lt;!ATTLIST <span class="red">messages-map-service</span> <span class="blue">classname</span> CDATA "<span class="green">org.apache.click.service.DefaultMessagesMapService</span>"&gt;
+
+  &lt;!-- Resource Service. --&gt;
+  &lt;!ELEMENT <span class="red">resource-service</span> (property*)&gt;
+    &lt;!ATTLIST <span class="red">resource-service</span> <span class="blue">classname</span> CDATA "<span class="green">org.apache.click.service.ClickResourceService</span>"&gt;
+
+  &lt;!-- Template Service. --&gt;
+  &lt;!ELEMENT <span class="red">template-service</span> (property*)&gt;
+    &lt;!ATTLIST <span class="red">template-service</span> <span class="blue">classname</span> CDATA "<span class="green">org.apache.click.service.VelocityTemplateService</span>"&gt;
+
+  &lt;!-- Application page interceptors. --&gt;
+  &lt;!ELEMENT page-interceptor (property*)&gt;
+    &lt;!ATTLIST page-interceptor classname CDATA #REQUIRED&gt;
+    &lt;!ATTLIST <span class="red">page-interceptor</span> <span class="blue">scope</span> (application|request) "<span class="green">request</span>"&gt;
+ 
+</pre>
+
+    <!-- FOOTER -->
+    <div id="footer">
+        <hr/>
+        <p>
+        <a target='_blank' href='http://www.apache.org' title='Apache Software Foundation'>
+            <img id="asf-logo" src="http://www.apache.org/images/asf-logo.gif" alt="Apache Software Foundation"/>
+        </a>
+        Copyright &copy; 2001-2010 Apache Software Foundation. Apache Click,
+        Click, Apache, the Apache feather logo, and the Apache Click project logo are
+        trademarks of The Apache Software Foundation.
+       <a href="http://cayenne.apache.org/privacy-policy.html">Privacy policy.</a>
+        </p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+        <meta name="Author" content="Malcolm Edgar"/>
+        <meta name="description" lang="en" content="Apache Click Java web application framework"/>
+        <meta name="keywords" lang="en" content="Apache Click, Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
+        <title>Apache Click Contribute</title>
+        <link rel="stylesheet" type="text/css" href="../../help.css"/>
+        <style type="text/css">
+            th { text-align: left; }
+            td { vertical-align: top; white-space: nowrap; }
+        </style>
+    </head>
+    <body>
+
+        <h1>Contributing</h1>
+
+        There are various ways to contribute:
+
+        <ul>
+            <li>
+                Join the <a href="../click-online.html#mailing-lists">mailing lists</a> and answer
+                questions raised by users.
+            </li>
+            <li>
+                Participate in discussions around new features, bugs and documentation.
+            </li>
+            <li>
+                Report bugs and features on <a href="https://issues.apache.org/jira/browse/CLK">JIRA</a>.
+            </li>
+            <li>
+                Contribute new controls, features and patches to <a href="https://issues.apache.org/jira/browse/CLK">JIRA</a>.
+            </li>
+        </ul>
+
+        <h3>Click Extras</h3>
+        Click Extras provides a place for people to contribute their own code to the
+        Click project and have it package with the standard distribution. Contributed
+        code will be subject to review and may require modifications before it is
+        included in the Click distribution.
+        <p/>
+
+        <h3>Design</h3>
+        One of the overriding design principles with Click is to keep it simple, this
+        makes the code easier to understand and more reliable.
+        <p/>
+        Another guiding principle is YAGNI (You Ain't Going to Need It), or don't build
+        it until you really really need it. Click is trying to provide an 80/20 rule framework
+        where 80% of peoples needs are meet by a framework which is only 20% in size.
+        <p/>
+        When developing Click Extras contributions please follow these principles.
+
+        <h3>Auto File Deployment</h3>
+        To make preconfigured resources (templates, stylesheets, etc.) available to web applications
+        Click automatically deploys configured classpath resources to the <tt class="blue">/click</tt>
+        directory at startup (existing files will not be overwritten).
+        <p/>
+        To enable your controls to deploy resources on startup place the resources
+        in the Click Extras JAR directory 'META-INF/resources/'. See the section
+        <a href="../user-guide/html/ch04s03.html#deploying-custom-resources">Deploying Custom Resources</a>
+        for more information on resource deployment.
+
+        <h3>Coding Style and Practices</h3>
+
+        Click follows the Sun conversions for Java code style. Other style conventions
+        and practices include:
+        <ul style="margin-top:0.75em;margin-bottom:0.75em;">
+            <li>indents are 4 spaces wide and no tabs are used</li>
+            <li>public and protected visibility members require Javadoc</li>
+            <li>private and package visibility members do not require Javadoc</li>
+            <li>favour the use of unchecked <tt>RuntimeException</tt> and avoid creating new Exception classes</li>
+            <li>check method parameters and throw <tt>IllegalArgumentException</tt> if parameters are null or invalid</li>
+            <li>avoid creating any more classes than you need to get the job done</li>
+            <li>localize control messages in the classes <tt>properties</tt> files</li>
+            <li>use the <tt>Context.getLocale()</tt> method to obtain a users locale</li>
+            <li>before checking in code run the Ant task: <tt>ant format-java</tt>
+        </ul>
+
+    <!-- FOOTER -->
+    <div id="footer">
+        <hr/>
+        <p>
+        <a target='_blank' href='http://www.apache.org' title='Apache Software Foundation'>
+            <img id="asf-logo" src="http://www.apache.org/images/asf-logo.gif" alt="Apache Software Foundation"/>
+        </a>
+        Copyright &copy; 2001-2010 Apache Software Foundation. Apache Click,
+        Click, Apache, the Apache feather logo, and the Apache Click project logo are
+        trademarks of The Apache Software Foundation.
+        <a href="http://cayenne.apache.org/privacy-policy.html">Privacy policy.</a>
+        </p>
+    </div>
+
+    </body>
+</html>
+

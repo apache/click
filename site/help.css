@@ -1,0 +1,358 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+#clickLink {
+	margin-top: 0px;
+	position: absolute;
+	top: 3px;
+	left: 7px;
+}
+#title {
+	color: #000080;
+	font-weight: bold;
+	font-size: 20pt;
+  letter-spacing: 0.2em;
+  text-shadow: #ddd 2px 2px 0.5px;
+	position: absolute;
+	top: 8px;
+	left: 60px;
+}
+#version a {
+  color:white;
+}
+#version {
+	color: white; 
+	font-size: 8pt;
+	text-decoration: none;
+	position: absolute;
+	top: 26px;
+	right: 15px;
+}
+.image {
+    border: 0 none;
+}
+#header {
+	background: #4A70BC url(images/banner.gif) top left no-repeat;
+	height: 50px;
+	position: relative;
+	width: 100%;
+	border-bottom: 2px solid #1000B0;
+}
+
+a {
+  text-decoration: underline;
+}
+
+.heading {
+	text-decoration: none;
+}
+
+a {
+  color: blue;
+}
+
+a:visited {
+  color: blue;
+}
+
+a.external {
+  background: url(images/external.png) center right no-repeat;
+  padding-right: 14px;
+}
+
+body, table, td, p	{
+  font-family: verdana, arial, helvetica, lucida-sans, sans-serif; 
+  font-size: 12px;
+}
+
+body {
+  background-color: white;
+}
+
+h1  { 
+  font-size: 24px;
+  font-weight: bold;
+}
+
+h2  { 
+  font-size: 18px; 
+  font-weight: bold;
+}
+
+h3  { 
+  font-size: 16px;
+  font-weight: bold;
+}
+
+h4  { 
+  font-size: 12px;
+  font-weight: bold;
+}
+
+li {
+  margin-bottom: 1em;
+}
+
+p.diagram {
+  margin-top: 0em;
+  margin-bottom: 2em;
+}
+
+a.navLinkSection {
+  background: url(images/book.gif) center left no-repeat;
+  color: #000080;
+  text-decoration: none;
+  padding-left: 22px;
+  padding-bottom: 1px;
+}
+
+a.navLinkSection:visited {
+  color: #000080;
+}
+
+a.navLinkTopic {
+  background: url(images/page.gif) center left no-repeat; 
+  color: #000080;
+  margin-left: 22px;
+  text-decoration: none;
+  padding-left: 24px;
+  padding-bottom: 1px;
+}
+
+a.navLinkTopic:visited {
+  color: #000080;
+}
+
+.code, .codeConfig, .codeDtd, .codeJava, .codeHtml, .codeLog {
+	font-family: Courier New, courier;
+	font-size: 10pt;
+	border: 1px solid #AAAAAA;
+	background-color: #FAFAFA;
+	padding: 1em;
+	margin-top: 1em;
+	margin-bottom: 1.5em;
+	margin-left: 0em;
+	margin-right: 1.5em;
+	white-space: pre;
+}
+
+.codeConfig 
+{
+  overflow: auto;
+}
+
+.codeDtd 
+{
+	border: 1px solid #8f8ecf;
+	background-color: #fffcf7;
+}
+
+.codeJava 
+{
+	background-color: white;
+}
+
+.codeHtml 
+{
+	border: 1px solid #97A9FF;
+	background-color: white;
+}
+
+.codeLog {
+	color:white;
+	background-color: #808080;
+	border: 1px solid black;
+}
+
+.htmlExample 
+{
+	border: 1px solid gray;
+	border-spacing: 1em;
+	margin-top: 1em;
+	margin-bottom: 1.5em;
+	margin-left: 0em;
+}
+
+
+/* Java keyword. */
+.kw {
+    color: #7f0055;
+    font-weight: bold;
+}
+
+/* Javadoc */
+.jd {
+    color: #3f5fbf;
+}
+
+/* Java comment */
+.cm {
+    color: #3f7f5f;
+}
+
+/* Java String literal */
+.st {
+    color: #2a00ff;
+}
+
+/* Web resource */
+.wr {
+    font-family: Courier New, courier;
+	color: navy;
+}
+
+.red { color: red; }
+
+.green { color: green; }
+
+.blue { color: blue; }
+
+.maroon { color: maroon; }
+
+.navy { color: navy; }
+
+.yellow { color: yellow; }
+
+.html {
+	color: blue;
+	font-family: CourierNew, courier;
+}
+
+div.msgDiv {
+	background-color: #f0f0f0;
+	border: thin solid navy;
+	margin: 1em;
+	margin-left: 0em;
+	margin-right: 2em;
+	padding: 1em;
+}
+
+/* form.css */
+
+a.error {
+	color: red;
+	text-decoration: underline;
+}
+a:visited.error {
+	color: red;
+}
+input.disabled {
+	background: lightgray;
+}
+input.error {
+	background: #FFFF80;
+}
+label.error {
+    /* color: red; */
+}
+select.error {
+	background: #FFFF80;
+}
+span.error {
+	color: red;
+}
+span.required {
+	color: red;
+}
+table.fields {
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+}
+table.errors {
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+}
+table.buttons {
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+	margin-top: 1em;
+}
+.tag {
+    color: #000099;
+    font-weight: bold;
+}
+.click-table {
+    border: 1px solid black;
+}
+.click-table th {
+    background-color: navy;
+    color: white;
+}
+ul.items {
+    margin-top:1em;
+    margin-left: 0px;
+    padding-left: 15px;
+}
+ul.items li.item {
+    background: url(images/tick.png) no-repeat;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 25px;
+}
+div.news {
+    margin-top:20px;
+    padding-top:8px;
+    padding-left:8px;
+    border : 1px solid #99A4DF;
+    background-color: #EFEFF7;
+}
+div.news-header {
+    font-weight: bold;
+    font-size: 110%;
+    color: navy;
+}
+div.news-item {
+    margin-left: 10px;
+    padding: 10px;
+    font-weight: normal;
+}
+
+ul.news-items {
+    padding-left:15px;
+}
+ul.news-items li.news-item {
+    background: url(images/news-tick.png) no-repeat;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 25px;
+}
+#footer p{
+    color: #666;
+    font-size: 80%;
+    margin: 10px 0px;
+}
+
+#footer hr {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: 300px;
+    border: none;
+    border-top: 1px solid #999;
+}
+
+#asf-logo{
+    float: left;
+    border: none;
+    width: 200px;
+    height: 51px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}

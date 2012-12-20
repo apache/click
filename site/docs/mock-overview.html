@@ -1,0 +1,202 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+<body>
+
+	<p>
+    Click Mock provides a full <a href="org/apache/click/package-summary.html">Mock</a> stack which
+    allows you to test Controls and Pages without the need for a Servlet container such as Tomcat or Jetty.
+    </p>
+    <p/>
+    The mock package is distributed as a separate jar and is available in the Click distribution you downloaded.
+    Look under the <em>dist</em> folder for a jar called <em>click-mock-&lt;version&gt;.jar</em>.
+    <p/>
+    For testing purposes there are two classes of interest: <a href="org/apache/click/MockContainer.html" >MockContainer</a>
+    and <a href="org/apache/click/MockContext.html" >MockContext</a>.
+    <p/><br>
+    
+    <b>MockContainer</b>
+    
+    <p/>
+    If you want to test your pages (functional tests) use <a href="org/apache/click/MockContainer.html" >MockContainer</a> 
+    which simulates a servlet container such as Tomcat or Jetty. With the
+    container you can mock page requests, form submissions, file uploads,
+    navigation etc.
+    <p/>
+    In order to use MockContainer you need to specify a web directory
+    where the container can find resources such as javascript, stylesheets
+    and images. The easiest way to achieve this is to point the container 
+    to your project's <em>web</em> directory.
+    <p/>
+    For example if your project available in the directory <em>c:\dev\myproject</em>,
+    and web resources are available under <em>c:\dev\myproject\web</em>,
+    then simply point MockContainer to the directory <em>c:\dev\myproject\web</em>.
+    <p/>
+    For example: (JUnit is used in these examples)
+    <pre class="prettyprint">
+public class IntegrationTest extends TestCase {  
+    public void testFirstPage() {  
+        // Specify the project web directory for example: 'c:/dev/myproject/web'
+        MockContainer container = new MockContainer("c:/dev/myproject/web");
+        ...
+    }
+} </pre>
+    Internally MockContainer creates an instance of <a href="org/apache/click/MockContext.html">MockContext</a>
+    and a number of Servlet stubs. Below is the list of stubs created:
+    <ul style="margin-top:0.5em;">
+     <li class="item"><a href="org/apache/click/servlet/MockRequest.html">MockRequest</a></li>
+     <li class="item"><a href="org/apache/click/servlet/MockResponse.html">MockResponse</a></li>
+     <li class="item"><a href="org/apache/click/servlet/MockServletContext.html">MockServletContext</a></li>
+     <li class="item"><a href="org/apache/click/servlet/MockServletConfig.html">MockServletConfig</a></li>
+     <li class="item"><a href="org/apache/click/servlet/MockSession.html">MockSession</a></li>
+    </ul>
+    <br>
+    MockContainer provides various getters to for accessing the Servlet stubs.
+    <p/>
+    It is also possible to set your own stub instances on MockContainer through
+    setter methods. If you set your own stubs, MockContainer will use
+    those instead of creating its own default instances.
+    <p/>
+    Once created you need to manage the container life cycle through
+    the methods <a href="org/apache/click/MockContainer.html#start()">start</a> and
+    <a href="org/apache/click/MockContainer.html#stop()">stop</a>.
+    <pre class="prettyprint">
+public class IntegrationTest extends TestCase {
+    public void testFirstPage() {
+        // Specify the project web directory for example: 'c:/dev/myproject/web'
+        MockContainer container = new MockContainer("c:/dev/myproject/web");
+
+        // Bootstrap the container  
+        container.start();  
+
+        ...
+
+        container.stop();
+    }
+} </pre>
+    <p/>
+    Http request parameters can be set through <a href="org/apache/click/servlet/MockRequest.html">MockRequest</a>.
+    <p/>
+    MockContainer also provides a number of convenience methods for this very purpose namely 
+    <a href="org/apache/click/MockContainer.html#setParameter(java.lang.String, java.lang.String)">MockContainer.setParameter(String, String)</a> and
+    <a href="org/apache/click/MockContainer.html#setParameter(java.lang.String, java.io.File, java.lang.String)">MockContainer.setParameter(String, File, String)</a>.
+    <p/>
+    To set request attributes use <a href="org/apache/click/MockContainer.html#setAttribute(java.lang.String, java.lang.Object)">MockContainer.setAttribute(String, Object)</a>.
+    <p/>
+    The example below shows a complete test:
+    <pre class="prettyprint">
+public class IntegrationTest extends TestCase {
+    public void testFirstPage() {
+        // Specify the project web directory for example: 'c:/dev/myproject/web'
+        MockContainer container = new MockContainer("c:/dev/myproject/web");
+
+        // Bootstrap the container  
+        container.start();  
+
+        // Set the form name to ensure a Form submission occurs
+        container.setParameter(Form.FORM_NAME, "form");
+
+        // Set the field value as a request parameter  
+        container.setParameter("myfield", "one");
+
+        // Simulate a user requesting the page, FirstPage. FirstPage will forward to SecondPage.  
+        FirstPage page = (FirstPage) container.testPage(FirstPage.class);  
+
+        // Assert that FirstPage does indeed forward to SecondPage
+        Assert.assertTrue(SecondPage.class, container.getForwardPageClass());
+
+        // Assert that the Field named "myfield", was bound to request parameter "myfield"
+        Assert.assertTrue("one", page.getForm().getFieldValue("myfield"));
+
+        container.stop();
+    }
+} </pre>
+    This example shows how to set a value to the field, called "myfield". Also note that
+    the Form.FORM_NAME parameter is set otherwise Click will not process the form.
+    Form.FORM_NAME must be set to the Form's name, called "form" in this example.
+    <p/>
+    The Page output is available through
+    <a href="org/apache/click/MockContainer.html#getHtml()">MockContainer.getHtml()</a>.
+    <p/><br>
+    
+    <b>MockContext</b>
+    
+    <p/>
+    <a href="org/apache/click/MockContext.html" >MockContext</a> 
+    is useful for testing custom controls (components).
+    <p/>
+    <b>Note</b> that it is not necessary to specify a web directory when using MockContext.
+    <p/>
+    For example:
+    <pre class="prettyprint">
+public class ValidationFieldTest extends TestCase {
+     
+    public void testValidationField() {
+      
+        // Initialize the context.
+        MockContext context = MockContext.initContext();
+        
+        ...
+} </pre>
+    
+    MockContext provides a number of <em>initContext</em> that prepares and initializes the
+    context:
+    <ul style="margin-top:0.5em;">
+     <li class="item"><a href="org/apache/click/MockContext.html#initContext()">initContext()</a></li>
+     <li class="item"><a href="org/apache/click/MockContext.html#initContext(java.lang.String)">initContext(String servletPath)</a></li>
+     <li class="item"><a href="org/apache/click/MockContext.html#initContext(java.util.Locale)">initContext(Locale locale)</a></li>
+     <li class="item"><a href="org/apache/click/MockContext.html#initContext(java.util.Locale,%20java.lang.String)">initContext(Locale locale, String servletPath)</a></li>
+     <li class="item"><a href="org/apache/click/MockContext.html#initContext(org.apache.click.servlet.MockServletConfig,%20org.apache.click.servlet.MockRequest,%20org.apache.click.servlet.MockResponse,%20org.apache.click.ClickServlet)">initContext(MockServletConfig servletConfig, MockRequest request, MockResponse response, ClickServlet clickServlet)</a></li>
+    </ul>
+    
+    <br>
+    The MockContext.initContext methods creates a number of Servlet stubs. Below is the list of stubs created:
+    <ul style="margin-top:0.5em;">
+     <li class="item"><a href="org/apache/click/servlet/MockRequest.html">MockRequest</a></li>
+     <li class="item"><a href="org/apache/click/servlet/MockResponse.html">MockResponse</a></li>
+     <li class="item"><a href="org/apache/click/servlet/MockServletContext.html">MockServletContext</a></li>
+     <li class="item"><a href="org/apache/click/servlet/MockServletConfig.html">MockServletConfig</a></li>
+     <li class="item"><a href="org/apache/click/servlet/MockSession.html">MockSession</a></li>
+    </ul>
+    <br>
+    The example below shows how MockContext can be used to test a custom Control called ValidationField:
+    <pre class="prettyprint">
+public class ValidationFieldTest extends TestCase {
+     
+    public void testValidationField() {
+      
+        // Initialize the context.
+        MockContext context = MockContext.initContext();  
+         
+        int maxLength = 10;  
+        String fieldName = "name";  
+        ValidationField field = new ValidationField(fieldName, maxLength);  
+   
+        // Retrieve the request and set field request parameter.  
+        MockRequest request = context.getMockRequest();  
+        request.setParameter(fieldName, "value");  
+   
+        // onProcess binds the request attribute and field value  
+        assertTrue(textField.onProcess());  
+         
+        // Assert that the field is still valid.  
+        assertTrue(textField.isValid());  
+    }
+} </pre>
+
+ </body>

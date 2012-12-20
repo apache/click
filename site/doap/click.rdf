@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"?>
+<rdf:RDF xml:lang="en"
+         xmlns="http://usefulinc.com/ns/doap#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:asfext="http://projects.apache.org/ns/asfext#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+<!--
+  =======================================================================
+
+   Copyright (c) 2007 The Apache Software Foundation.
+   All rights reserved.
+
+  =======================================================================
+-->
+  <Project rdf:about="http://click.apache.org">
+    <created>2009-11-20</created>
+    <license rdf:resource="http://usefulinc.com/doap/licenses/asl20" />
+    <name>Apache Click</name>
+    <homepage rdf:resource="http://click.apache.org" />
+    <asfext:pmc rdf:resource="http://click.apache.org" />
+    <shortdesc>Simple and easy-to-use Java Web Framework</shortdesc>
+    <description>Apache Click is a modern Java web application framework, providing
+    a natural rich client style programming model. Click provides a page and
+    component oriented design with a event based programming model. Leveraging
+    a stateless architecture Click encourages loosely coupled pages for
+    easier maintenance. Click is designed to be very easy to learn and use, with
+    developers getting up and running within a day. Support is provided for Velocity,
+    JSP or FreeMarker page rendering. Click also provides exceptional performance
+    for high volume web sites.
+    </description>
+    <bug-database rdf:resource="http://issues.apache.org/jira/browse/CLK" />
+    <mailing-list rdf:resource="http://click.apache.org/docs/click-online.html#mailing-lists" />
+    <download-page rdf:resource="http://click.apache.org/docs/downloads.html" />
+    <programming-language>Java</programming-language>
+	<category rdf:resource="http://projects.apache.org/category/library" />
+	<category rdf:resource="http://projects.apache.org/category/network-server" />
+	<category rdf:resource="http://projects.apache.org/category/network-client" />
+	<category rdf:resource="http://projects.apache.org/category/xml" />
+	<category rdf:resource="http://projects.apache.org/category/web-framework" />
+    <release>
+      <Version>
+        <name>Stable</name>
+        <created>2011-03-27</created>
+        <revision>2.3.0</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Stable</name>
+        <created>2010-05-22</created>
+        <revision>2.2.0</revision>
+      </Version>
+    </release>
+    <repository>
+      <SVNRepository>
+        <location rdf:resource="https://svn.apache.org/repos/asf/click/"/>
+        <browse rdf:resource="http://svn.apache.org/viewvc/click/"/>
+      </SVNRepository>
+    </repository>
+    <maintainer>
+      <foaf:Person>
+        <foaf:name>Apache Click PMC</foaf:name>
+          <foaf:mbox rdf:resource="mailto:private@click.apache.org"/>
+      </foaf:Person>
+    </maintainer>
+  </Project>
+</rdf:RDF>

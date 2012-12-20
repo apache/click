@@ -1,0 +1,25 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>6.6.&nbsp;Menus</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Best Practices"><link rel="prev" href="ch06s05.html" title="6.5.&nbsp;Templating"><link rel="next" href="ch06s07.html" title="6.7.&nbsp;Logging"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.6.&nbsp;Menus</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06s05.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;6.&nbsp;Best Practices</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06s07.html">Next</a></td></tr></table><hr></div><div class="sect1" title="6.6.&nbsp;Menus"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="menus"></a>6.6.&nbsp;Menus</h2></div></div></div><p> For many applications using the
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/control/Menu.html" target="_blank">Menu</a>
+    control to centralize application navigation is very useful. Menus are
+    defined in a <code class="filename">WEB-INF/menu.xml</code> file which is very easy to
+    change.
+    </p><p>A menu is typically defined in the a page border template so they are
+    available through out the application. The Menu control does not support HTML
+    rendering, so you need to define a Velocity macro to programmatically render
+    the menu. You would call the macro in your border template with code like this:
+    </p><div class="literallayout"><p><span class="symbol">#</span><code class="varname">writeMenu</code>(<span class="symbol">$</span>rootMenu)</p></div><p>An advantage of using a macro to render your menu is that you can reuse
+    the code across different applications, and to modify an applications menu you
+    simply need to edit the <code class="filename">WEB-INF/menu.xml</code> file. A good
+    place to define your macros is in the webroot <code class="filename">/macro.vm</code>
+    file as it is automatically included by Click.
+    </p><p>Using macros you can create dynamic menu behaviour such as only rendering
+    menu items a user is authorized to access with
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/control/Menu.html#isUserInRoles()" target="_blank">isUserInRoles()</a>.
+    </p><div class="literallayout"><p><span class="command"><strong>#if</strong></span>&nbsp;(<span class="symbol">$</span>menu.isUserInRoles())<br>
+&nbsp;&nbsp;&nbsp;..<br>
+<span class="command"><strong>#end</strong></span></p></div><p>You can also use JavaScript to add dynamic behaviour such as drop down menus,
+      for example see the Menu page in Click
+      <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../examples.html" target="_blank">Examples</a>.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06s05.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch06.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch06s07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">6.5.&nbsp;Templating&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;6.7.&nbsp;Logging</td></tr></table></div></body></html>

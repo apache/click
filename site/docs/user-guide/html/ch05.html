@@ -1,0 +1,86 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;5.&nbsp;Configuration</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="index.html" title="Apache Click"><link rel="prev" href="ch04s07.html" title="4.7.&nbsp;Ajax Error Handling"><link rel="next" href="ch05s02.html" title="5.2.&nbsp;Application Configuration"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;5.&nbsp;Configuration</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s07.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05s02.html">Next</a></td></tr></table><hr></div><div class="chapter" title="Chapter&nbsp;5.&nbsp;Configuration"><div class="titlepage"><div><div><h2 class="title"><a name="chapter-configuration"></a>Chapter&nbsp;5.&nbsp;Configuration</h2></div></div></div><div class="toc"><dl><dt><span class="sect1"><a href="ch05.html#servlet-configuration">5.1. Servlet Configuration</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch05.html#servlet-mapping">5.1.1. Servlet Mapping</a></span></dt><dt><span class="sect2"><a href="ch05.html#load-on-startup">5.1.2. Load On Startup</a></span></dt><dt><span class="sect2"><a href="ch05.html#type-converter-class">5.1.3. Type Converter Class</a></span></dt><dt><span class="sect2"><a href="ch05.html#config-service-class">5.1.4. Config Service Class</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch05s02.html">5.2. Application Configuration</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch05s02.html#click-app">5.2.1. Click App</a></span></dt><dt><span class="sect2"><a href="ch05s02.html#application-pages">5.2.2. Pages</a></span></dt><dd><dl><dt><span class="sect3"><a href="ch05s02.html#application-multiple-packages">5.2.2.1. Multiple Pages Packages</a></span></dt></dl></dd><dt><span class="sect2"><a href="ch05s02.html#application-page">5.2.3. Page</a></span></dt><dd><dl><dt><span class="sect3"><a href="ch05s02.html#application-automapping">5.2.3.1. Page Automapping</a></span></dt><dt><span class="sect3"><a href="ch05s02.html#application-excludes">5.2.3.2. Automapping Excludes</a></span></dt><dt><span class="sect3"><a href="ch05s02.html#application-autobinding">5.2.3.3. Page Autobinding</a></span></dt><dt><span class="sect3"><a href="ch05s02.html#application-autobinding-annotation">5.2.3.4. Page Autobinding - Using Annotations</a></span></dt></dl></dd><dt><span class="sect2"><a href="ch05s02.html#application-headers">5.2.4. Headers</a></span></dt><dd><dl><dt><span class="sect3"><a href="ch05s02.html#browser-caching">5.2.4.1. Browser Caching</a></span></dt></dl></dd><dt><span class="sect2"><a href="ch05s02.html#application-format">5.2.5. Format</a></span></dt><dt><span class="sect2"><a href="ch05s02.html#application-mode">5.2.6. Mode</a></span></dt><dd><dl><dt><span class="sect3"><a href="ch05s02.html#page-auto-loading">5.2.6.1. Page Auto Loading</a></span></dt><dt><span class="sect3"><a href="ch05s02.html#click-logging">5.2.6.2. Click and Velocity Logging</a></span></dt></dl></dd><dt><span class="sect2"><a href="ch05s02.html#application-controls">5.2.7. Controls</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch05s03.html">5.3. Auto Deployed Files</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch05s03.html#deploying-restricted-env">5.3.1. Deploying resources in a restricted environment</a></span></dt><dt><span class="sect2"><a href="ch05s03.html#deploying-custom-resources">5.3.2. Deploying Custom Resources</a></span></dt></dl></dd></dl></div><p>This section discusses how to setup and configure an Apache Click web
+  application.
+  </p><p>The Click configuration files include:
+  </p><div class="informaltable"><table style="border: none;"><colgroup><col><col></colgroup><tbody><tr><td style="border-right: 0.5pt solid ; ">
+            <span class="inlinemediaobject"><img src="images/configuration/config-files.png"></span>
+          </td><td style="">
+            <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p> WEB-INF/
+                  <a class="link" href="ch05s02.html" title="5.2.&nbsp;Application Configuration">click.xml</a>
+                    &nbsp; - &nbsp; Application Configuration (
+                  <span class="bold"><strong>required</strong></span>)
+                </p></li><li class="listitem"><p> WEB-INF/
+                  <a class="link" href="ch05.html#servlet-configuration" title="5.1.&nbsp;Servlet Configuration">web.xml</a>
+                    &nbsp; - &nbsp; Servlet Configuration (
+                  <span class="bold"><strong>required</strong></span>)
+                </p></li></ul></div>
+          </td></tr></tbody></table></div><div class="sect1" title="5.1.&nbsp;Servlet Configuration"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="servlet-configuration"></a>5.1.&nbsp;Servlet Configuration</h2></div></div></div><p>For a Click web application to function the
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ClickServlet.html" target="_blank">ClickServlet</a>
+    must be configured in the web application's <code class="filename">/WEB-INF/web.xml</code>
+    file. A basic web application which maps all <code class="literal">*.htm</code> requests
+    to a ClickServlet is provided below.
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;web-app&gt;</span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-name&gt;</span>ClickServlet<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-name&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-class&gt;</span>org.apache.click.ClickServlet<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-class&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;load-on-startup&gt;</span>0<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/load-on-startup&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet&gt;</span>
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-mapping&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-name&gt;</span>ClickServlet<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-name&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;url-pattern&gt;</span>*.htm<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/url-pattern&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-mapping&gt;</span>
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/web-app&gt;</span></pre><div class="sect2" title="5.1.1.&nbsp;Servlet Mapping"><div class="titlepage"><div><div><h3 class="title"><a name="servlet-mapping"></a>5.1.1.&nbsp;Servlet Mapping</h3></div></div></div><p>By convention all Click page templates should have an .htm extension,
+      and the ClickServlet should be mapped to process all *.htm URL requests.
+      With this convention you have all the static HTML pages use an .html extension
+      and they will not be processed as Click pages.
+      </p></div><div class="sect2" title="5.1.2.&nbsp;Load On Startup"><div class="titlepage"><div><div><h3 class="title"><a name="load-on-startup"></a>5.1.2.&nbsp;Load On Startup</h3></div></div></div><p>Note you should always set <code class="literal">load-on-startup</code> element
+      to be 0 so the servlet is initialized when the server is started. This will
+      prevent any delay for the first client which uses the application.
+      </p><p>The <code class="classname">ClickServlet</code> performs as much work as possible
+      at startup to improve performance later on. The Click start up and caching
+      strategy is configured with the Click application mode element in the
+      "<code class="filename">click.xml</code>" config file, covered next.
+      </p></div><div class="sect2" title="5.1.3.&nbsp;Type Converter Class"><div class="titlepage"><div><div><h3 class="title"><a name="type-converter-class"></a>5.1.3.&nbsp;Type Converter Class</h3></div></div></div><p>The ClickServlet uses the OGNL library for type coercion when binding
+      request parameters to bindable variables. The default type converter class
+      used is <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="click-api/org/apache/click/util/RequestTypeConverter.html" target="_blank">RequestTypeConverter</a>.
+      To specify your own type converter configure a <code class="literal">type-converter-class</code>
+      init parameter with the ClickServlet. For example:
+      </p><pre class="programlisting">
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-name&gt;</span>ClickServlet<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-name&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;servlet-class&gt;</span>org.apache.click.ClickServlet<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet-class&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;load-on-startup&gt;</span>0<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/load-on-startup&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;init-param&gt;</span>
+	    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;param-name&gt;</span>type-converter-class<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/param-name&gt;</span>
+	    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;param-value&gt;</span>com.mycorp.util.CustomTypeConverter<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/param-value&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/init-param&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/servlet&gt;</span></pre></div><div class="sect2" title="5.1.4.&nbsp;Config Service Class"><div class="titlepage"><div><div><h3 class="title"><a name="config-service-class"></a>5.1.4.&nbsp;Config Service Class</h3></div></div></div><p>Click uses a single application configuration service which is
+      instantiated by the ClickServlet at startup. This service defines the
+      application configuration and is used by the ClickServlet to map requests
+      to pages amongst other things.
+      </p><p>Once the ConfigService has been initialized it is stored in the
+      ServletContext using the key  <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="click-api/org/apache/click/service/ConfigService.html" target="_blank">ConfigService</a>
+      The default ConfigService is <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="click-api/org/apache/click/service/XmlConfigService.html" target="_blank">XmlConfigService</a>,
+      which configuration is discussed in detail in the next section.
+ 	    </p><p>To use an alternative configuration service specify a
+      <code class="literal">config-service-class</code> context parameter. For example:
+ 	    </p><pre class="programlisting">
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;web-app</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">xmlns</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"http://java.sun.com/xml/ns/j2ee"</span>
+   <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">xmlns:xsi</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"http://www.w3.org/2001/XMLSchema-instance"</span>
+   <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">xsi:schemaLocation</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span>
+   <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">version</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"2.4"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>
+
+ ...
+
+     <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;context-param&gt;</span>
+         <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;param-name&gt;</span>config-service-class<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/param-name&gt;</span>
+          <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;param-value&gt;</span>com.mycorp.service.CustomConfigSerivce<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/param-value&gt;</span>
+      <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/context-param&gt;</span>
+
+  ...
+
+ <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/web-app&gt;</span></pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s07.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch05s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.7.&nbsp;Ajax Error Handling&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;5.2.&nbsp;Application Configuration</td></tr></table></div></body></html>

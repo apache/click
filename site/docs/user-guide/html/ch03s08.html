@@ -1,0 +1,116 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.8.&nbsp;Behavior</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Controls"><link rel="prev" href="ch03s07.html" title="3.7.&nbsp;Layouts"><link rel="next" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Ajax"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.8.&nbsp;Behavior</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s07.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;3.&nbsp;Controls</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td></tr></table><hr></div><div class="sect1" title="3.8.&nbsp;Behavior"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="behavior"></a>3.8.&nbsp;Behavior</h2></div></div></div>
+Behaviors provide the ability to change how Controls behave at runtime.
+<p><a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Behavior.html" target="_blank">Behavior</a>
+is an interface that provides <span class="emphasis"><em>interceptor methods</em></span> for certain
+<code class="classname">Control</code> life cycle events. These
+<span class="emphasis"><em>interceptor methods</em></span> can be implemented to decorate and
+enhance the control and its children. This allows for making changes to Controls
+such as adding/removing JavaScript and CSS Elements, adding/removing attributes,
+etc.
+</p><p>Behaviors are added to Controls through the
+<a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/AbstractControl.html#addBehavior(org.apache.click.Behavior)" target="_blank">AbstractControl.addBehavior(Behavior)</a>
+method, and the same Behavior can be shared by multiple Controls.
+</p><p>The <code class="classname">Control</code>, <code class="classname">AbstractControl</code>
+    and <code class="classname">Behavior</code>, classes are shown in the figure below.
+    </p><div class="figure"><a name="behavior-class-diagram"></a><div class="figure-contents"><span class="inlinemediaobject"><img src="images/controls/behavior-class-diagram.png" alt="Behavior Class Diagram"></span></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;3.5.&nbsp;Behavior Class Diagram</i></p></div><br class="figure-break"><p>Control exposes the following Behavior related methods:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#getBehaviors()" target="_blank">getBehaviors()</a>
+          - returns the Control's Set of Behaviors
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#hasBehaviors()" target="_blank">hasBehaviors()</a>
+          - returns true if the Control has any Behaviors
+        </p></li></ul></div><p>AbstractControl contains a <code class="classname">Set</code> that holds the
+    <code class="classname">Behaviors</code> added to the <code class="classname">Control</code>.
+    It also exposes the following methods for managing <code class="classname">Behaviors</code>:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+            <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/AbstractControl.html#addBehavior(org.apache.click.Behavior)" target="_blank">addBehavior(Behavior)</a>
+          - adds the given Behavior to the Control's Set of Behaviors
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/AbstractControl.html#removeBehavior(org.apache.click.Behavior)" target="_blank">removeBehavior(Behavior)</a>
+          - removes the given Behavior from the Control's Set of Behaviors
+        </p></li></ul></div><p>The Behavior interface (<span class="emphasis"><em>interceptor methods</em></span>) is
+    covered next:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Behavior.html#preResponse(org.apache.click.Control)" target="_blank">preResponse(Control)</a>
+          - defines an interceptor method that is invoked before the response is written.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Behavior.html#preRenderHeadElements(org.apache.click.Control)" target="_blank">preRenderHeadElements(Control)</a>
+          - defines an interceptor method that is invoked after <code class="methodname">preResponse()</code>
+          but before the <code class="classname">Control</code> <code class="methodname">getHeadElements()</code>
+          is called. This is a good place to add custom JavaScript or CSS elements
+          to Controls.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Behavior.html#preDestroy(org.apache.click.Control)" target="_blank">preDestroy()</a>
+          - defines an interceptor method that is invoked before the
+          <code class="classname">Control</code> <code class="methodname">onDestroy()</code>
+          event handler. This interceptor method allows the behavior to cleanup
+          any resources.
+        </p></li></ul></div><div class="sect2" title="3.8.1.&nbsp;Behavior Execution"><div class="titlepage"><div><div><h3 class="title"><a name="behavior-execution"></a>3.8.1.&nbsp;Behavior Execution</h3></div></div></div><p>When a Behavior is added to a Control, the Control is automatically
+        registered with the
+        <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/ControlRegistry.html" target="_blank">ControlRegistry</a>.
+        Registering with the ControlRegistry allows the Click runtime to quickly
+        and easily access controls that have Behaviors and process them. Controls
+        without behaviors won't be registered and won't be processed.
+        </p><p>Click will invoke all the registered Behavior's
+        <span class="emphasis"><em>interceptor methods</em></span> at
+        the appropriate time during the <code class="classname">Control</code> life
+        cycle.
+        </p></div><div class="sect2" title="3.8.2.&nbsp;Behavior Example"><div class="titlepage"><div><div><h3 class="title"><a name="behavior-example"></a>3.8.2.&nbsp;Behavior Example</h3></div></div></div><p>Let's look at a simple Behavior example. Say
+        we want to put focus on a Field in our Form. Normally we would use the
+        following JavaScript snippet somewhere in our page template:
+        </p><pre class="programlisting">
+        document.getElementById(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">'form_nameField'</span>).focus();
+</pre><p>If we want this behavior on another page we can copy and paste
+this snippet to the other page template and update the field ID. Alternatively
+we can create a custom <code class="classname">FocusBehavior</code> that adds the
+necessary JavaScript to a target Field:
+</p><pre class="programlisting">
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> FocusBehavior <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">implements</span> Behavior {
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> preRenderHeadElements(Control control) {
+            String id = control.getId();
+            JsScript jsScript = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> JsScript(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"document.getElementById('"</span> + id + <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"').focus();"</span>);
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Set script to execute as soon as browser dom is ready. NOTE: The</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// JavaScript logic determining when the DOM is ready is added by</span>
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// the Form control, through the script '/click/control.js'.</span>
+            script.setExecuteOnDomReady(true);
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add the JavaScript element to the Control</span>
+            control.getHeadElements().add(jsScript);
+        }
+
+        ...
+    } </pre><p>Below is an example using the <code class="classname">FocusBehavior</code>:
+        </p><pre class="programlisting">
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> MyPage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> Form form = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> Form(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"form"</span>);
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">private</span> TextField nameField = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> TextField(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"nameField"</span>);
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> MyPage() {
+            addControl(form);
+            form.add(nameField);
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Create the custom behavior</span>
+            FocusBehavior focus = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> FocusBehavior();
+
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Add the behavior to the field</span>
+            nameField.addBehavior(focus);
+        }
+    } </pre><p>At runtime the <span class="emphasis"><em>nameField</em></span> will be registered with
+    the <code class="classname">ControlRegistry</code> when the <code class="classname">FocusBehavior</code>
+    is added to the field.
+    </p><p>Before the Control's HEAD elements are rendered, Click will invoke the
+    <code class="classname">FocusBehavior</code> <span class="emphasis"><em>interceptor method</em></span>,
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Behavior.html#preRenderHeadElements(org.apache.click.Control)" target="_blank">preRenderHeadElements(Control)</a>,
+    passing the <span class="emphasis"><em>nameField</em></span> as an argument.
+    </p><p>The FocusBehavior <code class="methodname">preRenderHeadElements</code> method
+    will add the JavaScript code to the Field HEAD elements which will be rendered
+    as part of the server response.
+    </p><p>Our JavaScript snippet is executed by the browser as soon as the DOM
+    is ready, in other words <span class="emphasis"><em>after</em></span> our nameField has been
+    rendered. Focus will be set on the <span class="emphasis"><em>nameField</em></span>.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s07.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.7.&nbsp;Layouts&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Ajax</td></tr></table></div></body></html>

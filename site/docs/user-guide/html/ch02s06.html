@@ -1,0 +1,70 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.6.&nbsp;Page Templating</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Pages"><link rel="prev" href="ch02s05.html" title="2.5.&nbsp;Page Navigation"><link rel="next" href="ch02s07.html" title="2.7.&nbsp;Page Actions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.6.&nbsp;Page Templating</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s05.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;2.&nbsp;Pages</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s07.html">Next</a></td></tr></table><hr></div><div class="sect1" title="2.6.&nbsp;Page Templating"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="page-templating"></a>2.6.&nbsp;Page Templating</h2></div></div></div><p>Click supports page templating (a.k.a. <span class="emphasis"><em>Tiles</em></span> in
+    Struts) enabling you to create a standardized look and feel for your web
+    application and greatly reducing the amount of HTML you need to maintain.
+    </p><p>To implement templating define a border template base Page which
+    content Pages should extend. The template base Page class overrides the Page
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Page.html#getTemplate()" target="_blank">getTemplate()</a>
+    method, returning the path of the border template to render. For example:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">package</span> com.mycorp.page;
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> BorderedPage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * @see Page#getTemplate()
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> String getTemplate() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"/border.htm"</span>;
+    }
+}</pre><p>The BorderedPage template <code class="varname">border.htm</code>:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;html&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;head&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;title&gt;</span><code class="varname">$title</code><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/title&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;link</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">rel</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"stylesheet"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"text/css"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">href</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"style.css"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">title</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Style"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/head&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;body&gt;</span>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;h2</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">class</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"title"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span><code class="varname">$title</code><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/h2&gt;</span>
+
+    <span class="command"><strong>#parse</strong></span>(<code class="varname">$path</code>)
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/body&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/html&gt;</span>
+    </pre><p>Other pages insert their content into this template using the Velocity
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../velocity/vtl-reference-guide.html#parse" target="_blank">#parse</a>
+    directive, passing it their contents pages
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Page.html#path" target="_blank">path</a>. The
+    <code class="varname">$path</code> value is automatically added to the VelocityContext
+    by the ClickServlet.
+    </p><p>An example bordered Home page is provided below:
+    </p><div class="literallayout"><p>&lt;page&nbsp;path="<code class="varname">home.htm</code>"&nbsp;classname="<span class="token">com.mycorp.page.Home</span>"/&gt;</p></div><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">package</span> com.mycorp.page;
+
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> Home <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> BorderedPage {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> String title = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"Home"</span>;
+
+}</pre><p>The Home page's content <code class="varname">home.htm</code>:
+    </p><div class="literallayout"><p>&lt;b&gt;Welcome&lt;/b&gt;&nbsp;to&nbsp;Home&nbsp;page&nbsp;your&nbsp;starting&nbsp;point&nbsp;for&nbsp;the&nbsp;application.</p></div><p>When a request is made for the Home page (home.htm) Velocity will
+    merge the <code class="varname">border.htm</code> page and <code class="varname">home.htm</code>
+    page together returning:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;html&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;head&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;title&gt;</span>Home<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/title&gt;</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;link</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">rel</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"stylesheet"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">type</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"text/css"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">href</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"style.css"</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">title</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"Style"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">/&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/head&gt;</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;body&gt;</span>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;h2</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="atn">class</span>=<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="pln">"title"</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&gt;</span>Home<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/h2&gt;</span>
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;b&gt;</span>Welcome<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/b&gt;</span> to Home page your application starting point.
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/body&gt;</span>
+<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="tag">&lt;/html&gt;</span></pre><p>Which may be rendered as:
+    </p><div class="figure"><a name="home-page-screenshot"></a><div class="figure-contents"><div class="mediaobject"><img src="images/pages/home-page-screenshot.png" alt="Home Page"></div></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;2.4.&nbsp;Home Page</i></p></div><br class="figure-break"><p>Note how the Home page class defines a <code class="varname">title</code> model
+    value which is referenced in the <code class="varname">border.htm</code> template as
+    <code class="varname">$title</code>. Each bordered page can define their own title
+    which is rendered in this template.
+    </p><p>Templating with JSP pages is also supported using the same pattern.
+    Please see the Click Examples application for a demonstration.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s05.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.5.&nbsp;Page Navigation&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.7.&nbsp;Page Actions</td></tr></table></div></body></html>

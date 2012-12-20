@@ -1,0 +1,45 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>4.6.&nbsp;Ajax Response Types</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Ajax"><link rel="prev" href="ch04s05.html" title="4.5.&nbsp;Ajax Page Action"><link rel="next" href="ch04s07.html" title="4.7.&nbsp;Ajax Error Handling"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.6.&nbsp;Ajax Response Types</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s05.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;4.&nbsp;Ajax</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04s07.html">Next</a></td></tr></table><hr></div><div class="sect1" title="4.6.&nbsp;Ajax Response Types"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajax-response-types"></a>4.6.&nbsp;Ajax Response Types</h2></div></div></div><p>The most common server response types are:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>HTML</p></li><li class="listitem"><p>XML</p></li><li class="listitem"><p>JSON</p></li></ul></div><p>Click Controls render themselves as XHTML markup so can be used in
+    either XML or HTML responses.
+    </p><p>Here is an example showing how to return different types of responses:</p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> HelloWorldPage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    ...
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> onInit() {
+        Behavior htmlBehavior = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> DefaultAjaxBehavior() {
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> ActionResult onAction() {
+                String html = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"&lt;h1&gt;Hello world&lt;/h1&gt;"</span>;
+
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Return an HTML snippet</span>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ActionResult(html, ActionResult.HTML);
+            }
+        };
+        htmlLink.addBehavior(htmlBehavior);
+
+        ...
+
+        Behavior xmlBehavior = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> DefaultAjaxBehavior() {
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> ActionResult onAction() {
+                String xml = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"&lt;payload&gt;Hello world&lt;/payload&gt;"</span>;
+
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Return an XML snippet</span>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ActionResult(xml, ActionResult.XML);
+            }
+        };
+        xmlLink.addBehavior(xmlBehavior);
+
+        ...
+
+        Behavior jsonBehavior = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> DefaultAjaxBehavior() {
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> ActionResult onAction() {
+                String json = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"{\"value\": \"Hello world\"}"</span>;
+
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Return an JSON snippet</span>
+                <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> ActionResult(json, ActionResult.JSON);
+            }
+        };
+        jsonLink.addBehavior(jsonBehavior);
+    }
+} </pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s05.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch04s07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.5.&nbsp;Ajax Page Action&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;4.7.&nbsp;Ajax Error Handling</td></tr></table></div></body></html>

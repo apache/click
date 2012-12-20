@@ -1,0 +1,70 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>6.7.&nbsp;Logging</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Best Practices"><link rel="prev" href="ch06s06.html" title="6.6.&nbsp;Menus"><link rel="next" href="ch06s08.html" title="6.8.&nbsp;Error Handling"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6.7.&nbsp;Logging</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06s06.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;6.&nbsp;Best Practices</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06s08.html">Next</a></td></tr></table><hr></div><div class="sect1" title="6.7.&nbsp;Logging"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="logging"></a>6.7.&nbsp;Logging</h2></div></div></div><p> 
+    For application logging you should use one of the well established 
+    logging libraries such as Java Util Logging (JUL) or Log4J.
+    </p><p>
+    The library you use will largely depend upon the application server you are targeting.
+    For Apache Tomcat or RedHat JBoss the  
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://logging.apache.org/log4j/" target="_blank">Log4j</a> library is a good 
+    choice. While for the IBM WebSphere or Oracle WebLogic application servers Java Util
+    Logging is better choice as this library is better supported.
+    </p><p>
+    If you have to target multiple application servers you should consider using the
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://www.slf4j.org/" target="_blank">SLF4J</a> library which uses compile time bindings
+    to an underlying logging implementation. 
+    </p><p>
+    As a general principle you should
+    probably avoid <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://jakarta.apache.org/commons/logging/" target="_blank">Commons Logging</a> 
+    because of the class loading issues associated with it. If you are using
+    Commons Logging please make sure you have the latest version.
+    </p><p>
+    It is a best place to define a logger method in a common base page, for example:
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> BasePage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">protected</span> Logger logger;
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> Logger getLogger() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (logger == null) {
+            logger = Logger.getLogger(getClass());
+        }
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> logger;
+    }
+}</pre><p>Using this pattern all your application bases should extend
+    <code class="classname">BasePage</code> so they can use the
+    <code class="methodname">getLogger()</code> method.
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> CustomerListPage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> BasePage {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> onGet() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">try</span> {
+            ..
+        } <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">catch</span> (Exception e) {
+            getLogger().error(e);
+        }
+    }
+}</pre><p>If you have some very heavy debug statement you should possibly use an
+    <code class="methodname">isDebugEnabled</code> switch so it is not invoked if debug is
+    not required.
+    </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> CustomerListPage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> BasePage {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> onGet() {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (getLogger().isDebugEnabled()) {
+            String msg = ..
+
+            getLogger().debug(msg);
+        }
+
+        ..
+    }
+}</pre><p>
+    Please note the Click logging facility is not designed for application use,
+    and is for Click internal use only. When Click is running in
+    <code class="literal">production</code> mode it will not produce any logging output.
+    By default Click logs to the console using
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/service/ConsoleLogService.html" target="_blank">ConsoleLogService</a>. 
+    </p><p>
+    If you need to configure Click to log to an alternative destination please configure a LogService such as
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/service/JdkLogService.html" target="_blank">JdkLogService</a>,
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/service/Log4JLogService.html" target="_blank">Log4JLogService</a> or
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../extras-api/org/apache/click/extras/service/Slf4jLogService.html" target="_blank">Slf4jLogService</a>.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06s06.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch06.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch06s08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">6.6.&nbsp;Menus&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;6.8.&nbsp;Error Handling</td></tr></table></div></body></html>

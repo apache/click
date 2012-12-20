@@ -1,0 +1,656 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+<html>
+<head>
+ <!-- saved from url=(0014)about:internet -->
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <meta name="description" lang="en" content="Apache Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Apache Click, Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
+ <title>Apache Click</title>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <link rel="stylesheet" type="text/css" href="../syntax-highlighter.css"/>
+ <style type="text/css">
+  dl {
+    margin-left: 2em;
+  }
+  dt {
+    font-weight: 700;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+  }
+  .change {
+    margin-bottom: 0.75em;
+  }
+  .upgrade {
+    margin-bottom: 0.75em;
+    margin-top: 0.75em;
+  }
+  .release-header {
+    background: #EFEFF7;
+    padding: 4px;
+    padding-left: 8px;
+    border: 1px solid #99A4DF;
+  }
+  pre {
+    padding: 4px;
+    border: 1px solid #99A4DF;
+  }
+  a {
+  	text-decoration: none;
+  }
+ </style>
+<script type="text/javascript" src="../syntax-highlighter.js"></script>
+</head>
+<!--Activate syntax highlighting-->
+ <body onload="prettyPrint();">
+
+<h1>Upgrade Path</h1>
+
+This section discusses the changes you will need to make when upgrading from
+one Click version to the next. Please note while the upmost effort is made to ensure
+there is no impact between releases, some architectural changes will require
+you to modify existing applications to upgrade to a newer version.
+<p/>
+If you experience any unexpected and undocumented impacts when upgrading between
+versions please email the Click user group.
+
+<p>&nbsp;</p>
+
+<h2>Version Upgrades</h2>
+
+<dl>
+  <dt><a name="2.3.0"></a>
+  <div class="release-header">Version 2.3.0 Upgrade</div>
+  </dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change"><a name="deprecated-stateful-pages"></a>
+          Deprecated stateful page support: <a href="click-api/org/apache/click/Page.html#setStateful(boolean)">Page.setStateful()</a>.
+          <p/>
+          Stateful pages had the following issues:
+          <ul>
+            <li>
+            Stateful pages was introduced to make it easier to store page state across
+            multiple HTTP requests. However developing a stateful page is very different
+            from developing a stateless one and this lead to Click applications that are
+            inconsistent and harder to maintain.
+            </li>
+            <li>
+            In addition stateful page support has never been implemented consistently
+            across the framework and some components did not work correctly.
+            </li>
+            <li>
+            Stateful pages are very coarse grained, making it difficult to control
+            which objects are stored in the session.
+            </li>
+            <li>
+            Stateful pages have also introduced unnecessary complexity in the framework
+            itself, which can now be phased out.
+            </li>
+          </ul>
+          Unfortunately there is no direct upgrade path from a stateful page.
+          However the majority of use cases are catered for by the new stateful
+          controls: Table, Form, TabbedPanel, Field and AbstractLink.
+      </li>
+      <li class="change"><a name="removed-bypass-validation"></a>
+          The <tt>bypass validation</tt> feature introduced in 2.2.0 raised security
+           concerns and was removed in this release.
+        <p/>
+        The main problem was with <tt>bypassValidation</tt> is that
+        an attacker can set the <tt>bypassValidation</tt> hidden field to true, thus bypassing
+        validation on the server. In addition , Form.isValid returned <tt>true</tt>
+        even when validation was bypassed.
+        <p/>
+        If you are currently using <tt>bypassValidation</tt> for dynamic forms,
+        you can bypass form validation by setting <tt>Form.setValidate(false)</tt>,
+        for example:
+        <pre class="prettyprint">
+public void onInit() {
+        super.onInit();
+
+        form.add(nameField);
+        form.add(checkbox);
+
+        // NB: when using form.submit() the submit button cannot be
+        // called 'submit'. If it is, the browser is likely to throw a JS exception.
+        checkbox.setAttribute("onclick", "form.submit()");
+
+        ...
+
+        // NB: Bind the submit button. If it wasn't clicked it means the Form was submitted
+        // using JavaScript and we don't want to validate yet
+        ClickUtils.bind(submit);
+
+        // If submit was not clicked, don't validate
+        if(form.isFormSubmission() && !submit.isClicked()) {
+            form.setValidate(false);
+        }
+
+        submit.setActionListener(new ActionListener() {
+
+            public boolean onAction(Control source) {
+                // We can safely call isValid from within the submit action handler
+                // since validation is always active if the submit button was clicked
+                if (form.isValid()) {
+                addModel("msg", "Form is valid after validation");
+            }
+                return true;
+            }
+        });
+    } </pre>
+      </li>
+      <li class="change">
+        Control IDs now render underscores instead of periods. If you targeted
+        Controls through CSS or JavaScript where the ID had a period, you need
+        to change to underscores.
+      </li>
+      <li class="change">
+        The DateField control now accepts month and day names spelled in the 
+        locale of the browser or application (see 
+        <a href="click-api/org/apache/click/Context.html#getLocale()">Context.getLocale()</a>).
+        In previous version a few locales used localized spelling of month and 
+        week days names and the remaining locales used English names.  
+      </li>
+    </ul>
+  </dd>
+  <dt><a name="2.2.0"></a>
+  <div class="release-header">Version 2.2.0 Upgrade</div></dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change"><a name="migrate-imports"></a>
+        Migrated Click Controls from the old string based
+        <a href="click-api/org/apache/click/Control.html#getHtmlImports()">HTML imports</a>
+        to the new <a href="click-api/org/apache/click/element/Element.html">Element</a>
+        based <a href="click-api/org/apache/click/Control.html#getHeadElements()">HEAD elements</a>.
+        <p/>
+        Unfortunately this change can lead to runtime behavioral errors for
+        applications using the string based <tt>getHtmlImports</tt> approach.
+        <p/>
+        As runtime errors are often more expensive to fix than compile time errors,
+        we have decided to remove the <tt>getHtmlImports</tt> method from the
+        Page and Control classes. In addition we have set <tt>getHtmlImports</tt>
+        to <tt>final</tt> in Page and Control. This ensures existing codebases
+        don't accidentally override this method in custom controls and pages.
+        In a future release of Click these final methods will be removed as well.
+        <p/>
+        This means Click 2.2.0 will force you to migrate from <tt>getHtmlImports</tt>
+        to <tt>getHeadElements</tt>.
+        <p/>
+        Here is a typical example of converting a <tt>getHtmlImports</tt> method
+        to <tt>getHeadElements</tt>.
+        <p/>
+        Before:
+
+        <pre class="prettyprint">
+public class MyPage extends BorderPage {
+     protected static final String HTML_IMPORT =
+         "&lt;link rel=\"stylesheet\" type=\"text/css\" src=\"{0}/js/mylib.css\"/&gt;\n"
+         + "&lt;script type=\"text/javascript\" src=\"{0}/js/mylib.js\"&gt;&lt;/script&gt;\n"
+         + "&lt;script type=\"text/javascript\"&gt;alert('Hello World!');&lt;/script&gt;\n";
+
+     public String getHtmlImports() {
+         String[] args = { getContext().getRequest().getContextPath() };
+         return MessageFormat.format(HTML_IMPORTS, args);
+     }
+}
+</pre>
+
+        After:
+        <pre class="prettyprint">
+public class MyPage extends BorderPage {
+
+    public List getHeadElements() {
+        // Cater for stateful pages. If you don't use stateful pages you don't need this check
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+            headElements.add(new CssImport("/js/mylib.css"));
+            headElements.add(new JsImport("/js/mylib.js"));
+
+            JsScript script = new JsScript();
+            script.setContent("alert('Hello World!');");
+            headElements.add(script);
+        }
+        return headElements;
+    }
+}
+</pre>
+      </li>
+      <li class="change">
+      	  Field disabled behavior has changed slightly. In previous versions,
+          disabled fields were processed and validated which isn't the desired
+          behavior since HTML form POSTs do not submit disabled fields values.
+          In addition Form copied disabled field values to domain objects.
+          <p/>
+          Starting from Click 2.2.0 the disabled behavior has changed as follows:
+          <ul>
+              <li>
+                  Disabled fields are not processed or validated
+              </li>
+              <li>
+                  Disabled field values are not copied to domain objects
+              </li>
+              <li>
+                  Disabled fields are automatically enabled if the field has an
+                  incoming request parameter, indicating that the field was enabled
+                  on the client using JavaScript. Please note that this behavior does
+                  not apply to Checkbox or Radio fields. See the
+                  <a href="click-api/org/apache/click/control/Field.html#setDisabled(boolean)">setDisabled()</a>
+                  javadoc for details.
+              </li>
+          </ul>
+      </li>
+      <li class="change">
+        In previous releases, the default autobinding mode (<tt>public</tt>)
+        binded only public Page fields. In 2.2.0 the default autobinding mode
+        has been replaced with a new <tt>default</tt> mode which binds both
+        public fields and fields annotated with the @Bindable annotation.
+        <p/>
+        Please note, for backward compatibility the autobinding attribute still
+        accepts the <tt>public</tt> value.
+      </li>
+      <li class="change">
+        Added new method <a href="click-api/org/apache/click/control/Container.html#replace(org.apache.click.control Control, org.apache.click.control Control)">Container.replace</a>
+        for replacing an existing control with a new control. AbstractContainer
+        has an implementation of this method which should cater for most use cases.
+        <p/>
+        If however you have custom controls that override the
+        <a href="click-api/org/apache/click/control/Container.html#insert(org.apache.click.Control, int)">insert</a> or
+        <a href="click-api/org/apache/click/control/Container.html#add(org.apache.click.Control)">add</a>
+        methods, you need to ensure that
+        <a href="click-api/org/apache/click/control/Container.html#replace(org.apache.click.Control, org.apache.click.Control)">replace</a>
+        will function correctly for your control.
+        <p/>
+        For example, if a custom insert method adds the control to an
+        internal list the <tt>replace</tt> method must be overridden to replace
+        the control on that list as well.
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="2.1.0"></a>
+  <div class="release-header">Version 2.1.0 Upgrade</div></dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change">
+      	  Requires Java version 1.5 or later.
+      </li>
+      <li class="change">
+          Deprecated methods: <a href="click-api/org/apache/click/Control.html#getHtmlImports()">Control.getHtmlImports()</a> and
+          <a href="click-api/org/apache/click/Page.html#getHtmlImports()">Page.getHtmlImports()</a>.
+          These methods have been deprecated in favor of
+          <a href="click-api/org/apache/click/Control.html#getHeadElements()">Control.getHeadElements()</a>
+          and <a href="click-api/org/apache/click/Page.html#getHeadElements()">Page.getHeadElements()</a>.
+      </li>
+      <li class="change">
+          Deprecated methods: <a href="click-api/org/apache/click/Page.html#getPageImports()">Page.getPageImports()</a>
+          and <a href="click-api/org/apache/click/Page.html#setPageImports(org.apache.click.util.PageImports)">Page.setPageImports()</a>.
+          These methods have been deprecated in favor of
+          <a href="click-api/org/apache/click/Page.html#getHeadElements()">Page.getHeadElements()</a>.
+      </li>
+      <li class="change">
+          Click automatically deploy resources from JARs and folders on the
+          classpath that are located under a predefined directory. In previous
+          versions of Click that directory was <tt>META-INF/web</tt>.
+          <p/>
+          The new Servlet 3.0 specification introduced a similar concept where
+          resources can be packaged in a JAR and served directly without having
+          to be deployed. The directory defined by Servlet 3.0 is
+          <tt>META-INF/resources</tt>.
+          <p/>
+          Click 2.1.0 aligns with Servlet 3.0 in that resources are also deployed
+          from <tt>META-INF/resources</tt>.
+          <p/>
+          For backwards compatibility Click will still deploy resources from
+          <tt>META-INF/web</tt>, however it is highly recommended to deploy
+          resources from <tt>META-INF/resources</tt> instead.
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="2.0.1"></a>
+  <div class="release-header">Version 2.0.1 Upgrade</div></dt>
+  <dd>
+    <div style="margin-top: 15px; margin-left:-2em;margin-bottom:1em;">
+      This is our first Apache Incubator release and is based on <a href="#1.5.1">Click 1.5.1</a>.
+      <p/>
+      Please note that because of licensing issues, certain third-party
+      libraries were removed and are hosted externally.
+      <p/>
+      Note the following changes when upgrading from 1.5 to 2.0.1:
+    </div>
+    <ul style="padding: 0em; margin-left:0em;margin-bottom: 2em">
+      <li class="change">
+        All <tt>net.sf.click.*</tt> packages have been renamed to <tt>org.apache.click.*</tt>.
+        When upgrading you must replace all references to <tt>net.sf.click.*</tt> with
+        <tt>org.apache.click.*</tt>.
+
+        <p/>
+        You can use your favorite IDE and do a global search/replace or
+        alternatively use Ant's <a target="blank" class="external" href="http://ant.apache.org/manual/CoreTasks/replace.html">replace task</a>.
+
+        <p/>
+        Make sure you update the files <tt>web.xml</tt> and <tt>click.xml</tt> as well.
+      </li>
+      <li class="change">
+          JSCalendar which is licensed under LGPL is incompatible with Apache license
+          and had to be removed. DateField was refactored accordingly and does
+          not contain any Calendar specific code.
+          <p/>
+          The following methods were removed:
+          <ul>
+              <li>
+                  <tt>public String getCalendarPattern()</tt>
+              </li>
+              <li>
+                  <tt>public boolean getShowTime()</tt> and <tt>public void setShowTime(boolean showTime)</tt>
+              </li>
+              <li>
+                  <tt>public String getStyle()</tt> and <tt>public void setStyle(String style)</tt>
+              </li>
+              <li>
+                  <tt>protected int getFirstDayOfWeek()</tt>
+              </li>
+              <li>
+                  <tt>protected String parseDateFormatPattern(String pattern)</tt>
+              </li>
+          </ul>
+          <p/>
+          Since the calendar popup is not available to help users pick dates, it
+          becomes difficult for users to know the format of the Date.
+          To remedy this situation, Click 2.0.1 introduces a new resource key,
+          <tt>date-title</tt>, which is set as the title of DateField. The new
+          property provides users with visual feedback of the <tt>date format</tt>
+          specified on the DateField. For those building i18n applications remember to add this property
+          to <span style="color:navy;">DateField_&lt;lang&gt;.properties.</span>
+          You can also send us patches for your languages and we will
+          include it in the distribution.
+      </li>
+      <li>
+          A new project called <a target="blank" class="external" href="http://code.google.com/p/click-calendar/">Click Calendar</a>
+          was created as a port of the old DateField functionality. This project
+          contains a CalendarField which can be used as a replacement for the
+          old DateField.
+          <p/>
+          For example to have the popup Calendar functionality replace this:
+          <pre class="prettyprint">
+import org.apache.click.extras.control.DateField;
+
+...
+
+DateField dateField = new DateField("date");
+</pre>
+
+          with this:
+          <pre class="prettyprint">
+import net.sf.click.extras.control.CalendarField;
+
+...
+
+DateField dateField = new CalendarField("date");
+</pre>
+          CalendarField subclasses DateField so the above snippet is valid.
+          <p/>
+          See the <a target="blank" class="external" href="http://code.google.com/p/click-calendar/">Click Calendar</a>
+          project for more details.
+      </li>
+      <li class="change">
+          The Chart controls which is licensed under LGPL is incompatible with
+          Apache license and had to be moved.
+          <p/>
+          A new project called <a target="blank" class="external" href="http://code.google.com/p/click-charts/">Click Charts</a>
+          was created as a port of the Chart controls. This project consists of
+          the BarChart, LineChart and PieChart controls and can be used as drop
+          in replacements. See the project for more details.
+      </li>
+      <li class="change">
+          The ColorPicker was replaced by Sebo Zoltan's implementation, available from
+          <a target="blank" class="external" href="http://www.dhtmlgoodies.com/index.html?whichScript=submitted-color-picker">www.dhtmlgoodies.com</a>.
+          <p/>
+          Changes was only made to the JavaScript, CSS and
+          images. The ColorPicker API remains unchanged.
+      </li>
+      <li class="change">
+          The RichTextArea, found in Click examples, was based upon the
+          <a target="blank" class="external" href="http://tinymce.moxiecode.com/">TinyMCE</a>
+          project (LGPL) and was replaced by the <a target="blank" class="external" href="">YUI editor</a>
+          (BSD license), which is compatible with the Apache license.
+          <p/>
+          The TinyMCE example was moved to the <a target="blank" class="external" href="http://code.google.com/p/clickclick/">ClickClick extensions</a>
+          project.
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="1.5"></a>
+  <div class="release-header">Version 1.5 Upgrade</div></dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="upgrade">
+       <b>Please Note</b> Click version 1.5 is <b>not</b> binary compatible with version 1.4. To upgrade your
+       applications to use version Click 1.5 you will need to:
+       <ol style="margin-top:1em;">
+        <li>Recompile your application with the 1.5 Click libraries.</li>
+        <li>Retrofit the new Control 
+        <a href="click-api/org/apache/click/Control.html#render(org.apache.click.util.HtmlStringBuffer)">render()</a>
+        method to any on your custom control rendering.</li>
+        <li>Replace any Control <tt>toString()</tt> methods with an equivalent <a href="click-api/org/apache/click/Control.html#render(org.apache.click.util.HtmlStringBuffer)">render()</a>
+        method. For further details see the example below.</li>
+        <li>Form.add(Field), FieldSet.add(Field) and Table.addColumn(Column) now return
+        their argument instead of void, which enables you to chain calls for example<br>
+        <pre class="prettyprint">
+  table.add(new Column("name")).setSortable(true);
+  form.add(new TextField("firstname")).setValue("Bob"); </pre>
+        If you created a custom Form, FieldSet or Table and overrode the <em>add</em>
+        or <em>addColumn</em> method, you will be forced to return the methods argument.
+        For example if you had:
+        <pre class="prettyprint">
+public class MyTable {
+    public void addColumn(Column column) {
+      ...
+    }
+} </pre>
+       you will need to update as follows:
+       <pre class="prettyprint">
+public class MyTable {
+    public Column addColumn(Column column) {
+      ...
+      // You must return the column
+      return column;
+    }
+} </pre>
+        </li>
+       </ol>
+       Note that Click 1.5 is still compatible with Java JDK 1.4 or later.
+      </li>
+      <li class="upgrade">
+       Deprecated methods: <a href="click-api/org/apache/click/Control.html#setListener(java.lang.Object, java.lang.String)">Control.setListener(Object, String)</a> and
+       <a href="click-api/org/apache/click/Control.html#getContext()">Control.getContext()</a>.
+       These methods have been deprecated on the Control interface as they are not required for ClickServlet -> Control API. 
+       This refactoring is part of making the Control interface as small as possible, 
+       which  allows more flexibility in future releases.
+       <p/>
+       Note these methods are still available on <a href="click-api/org/apache/click/control/AbstractControl.html">AbstractControl</a>,
+       so this change should have minimal impact on existing code bases.
+      </li>
+      <li class="upgrade">
+       Upgrade custom Control rendering code to use new 
+       <a href="click-api/org/apache/click/Control.html#render(org.apache.click.util.HtmlStringBuffer)">render</a>
+       method. This method allows improved rendering performance, because all controls can be
+       rendered from a single buffer that is created when rendering starts.
+       <p/>
+       If your created custom controls override <em>toString()</em>, please adapt it to the following pattern. From this:
+       <pre class="prettyprint">
+public class HtmlTable extends AbstractControl {
+    ...
+
+    public String toString() {
+        int estimatedControlSize = 1000;
+        HtmlStringBuffer buffer = new HtmlStringBuffer(estimatedControlSize);
+
+        // Rendering Start
+        buffer.elementStart(<span style="font-weight:bold;color:#000099">"table"</span>);
+        appendAttributes(buffer);
+        buffer.elementClose();
+    
+        renderRows(buffer);
+
+        buffer.closeElement(<span style="font-weight:bold;color:#000099">"table"</span>);
+        // Rendering End
+     
+        return buffer.toString();
+    } 
+} </pre>
+       to this:
+<pre class="prettyprint">
+public class HtmlTable extends AbstractControl {
+    ...
+
+    public void render(HtmlStringBuffer buffer) {
+        // Rendering Start
+        buffer.elementStart(<span style="font-weight:bold;color:#000099">"table"</span>);
+        appendAttributes(buffer);
+        buffer.elementClose();
+    
+        renderRows(buffer);
+
+        buffer.closeElement(<span style="font-weight:bold;color:#000099">"table"</span>);
+        <span style="color:green">// Rendering End</span>
+    }
+
+    public String toString() {
+        int estimatedControlSize = 1000;
+        HtmlStringBuffer buffer = new HtmlStringBuffer(estimatedControlSize);
+        render(buffer);
+        return buffer.toString();
+    } 
+} </pre>
+       Note, the code between the commented section, was moved from <em>toString</em> to the <em>render</em> method.
+       <p/>
+       Also note that invoking a Control's <a href="click-api/org/apache/click/control/AbstractControl.html#toString()">toString()</a>
+       method still outputs the same HTML representation, as toString() delegates to the
+       <a href="click-api/org/apache/click/Control.html#render(org.apache.click.util.HtmlStringBuffer)">render</a>
+       method.
+       <p/>
+       <b>Please note</b> a common problem when overriding <em>render</em> in custom components, is
+       invoking <em>super.toString()</em> in order to render the Control's default
+       markup:
+       <pre class="prettyprint">
+public class CustomField extends Field {
+    ...
+
+    public void render(HtmlStringBuffer buffer) {
+        <span style="background:#F3FF0F">String field = super.toString();</span> // BEWARE this line will cause StackOverflowError
+        ...
+    }
+
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        render(buffer);
+        return buffer.toString();
+    }
+} </pre>
+      The highlighted line above will cause a StackOverflowError, meaning an infinite
+      loop was encountered. The reason for the error will become obvious when 
+      tracing the sequence of calls:
+      <ol style="margin-top: 2em;;margin-bottom: 2em">
+          <li>The first statement in the method <em>CustomField.render</em> invokes
+              <em>super.toString</em>. In this example the super class is Field, thus
+              the actual method invoked is <em>Field.toString</em></li>
+          <li><em>Field.toString</em> performs its own rendering by invoking <em>Field.render</em>.
+            However since CustomField overrides <em>Field.render</em>, <em>Field.toString</em>
+            will invoke <em>CustomField.render</em> instead.</li>
+          <li>This leads us back to step 1. where <em>CustomField.render</em> invokes
+              <em>super.toString</em>. This creates the infinite loop and leads to the StackOverflowError.</li>
+      </ol>
+      <p/>
+      The fix is straight forward. If you override a Control's <em>render</em>
+      method, but still want to render the Control's default markup, invoke
+      <em>super.render</em> instead of <em>super.toString</em>.
+      Here is the correct version:
+      <pre class="prettyprint">
+public class CustomField extends Field {
+    ...
+
+    public void render(HtmlStringBuffer buffer) {
+        <span style="background:#F3FF0F">super.render(buffer);</span> // NOTE StackOverflowError won't occur
+        ...
+    }
+
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        render(buffer);
+        return buffer.toString();
+    }
+} </pre>
+      </li>
+      <li class="upgrade">
+       Certain controls were retrofitted as containers. These include 
+       <a href="click-api/org/apache/click/control/Form.html">Form</a>,
+       <a href="click-api/org/apache/click/control/FieldSet.html">FieldSet</a>
+       and <a href="click-api/org/apache/click/control/Panel.html">Panel</a>.
+      </li>
+      <li class="upgrade">
+       Click 1.5 introduces two new properties: <span style="color:navy;">file-size-limit-exceeded-error</span>
+       and <span style="color:navy;">post-size-limit-exceeded-error</span>.
+       For those building i18n applications remember to add these two properties
+       to your <span style="color:navy;">click-control_&lt;lang&gt;.properties.</span>
+       <br>If you send us patches for your preferred language we will include them in the distribution.
+      </li>
+      <li class="upgrade">
+       ClickLogger has been replaced with <a href="click-api/org/apache/click/service/LogService.html">LogService</a>.
+       LogService is an interface with a default implementation <a href="click-api/org/apache/click/service/ConsoleLogService.html">ConsoleLogService</a>.
+       There are also alternative implementations <a href="extras-api/org/apache/click/extras/service/Log4JLogService.html">Log4JLogService</a>
+       and <a href="extras-api/org/apache/click/extras/service/JdkLogService.html">JdkLogService</a>.
+       <p/>
+       It is possible to write your own LogService instance or extend from
+       an existing implementation. To setup Click to use an alternative instance you have to
+       specify the LogService implementation in <em>click.xml</em>:
+       <pre class="prettyprint">
+&lt;click-app charset="UTF-8"&gt;
+    &lt;pages package="org.apache.click.examples.page"/&gt;
+    &lt;log-service classname="org.apache.click.extras.service.JdkLogService"/&gt;
+&lt;/click-app&gt; </pre>
+       <p/>
+       While it is generally not recommended to use the Click LogService in your application code, you can retrieve it using the ClickUtils method
+       <a href="click-api/org/apache/click/util/ClickUtils.html#getLogService()">getLogService()</a>.
+      </li>
+    </ul>
+  </dd>
+</dl>
+
+<!-- FOOTER -->
+<div id="footer">
+    <hr/>
+    <p>
+    <a target='_blank' href='http://www.apache.org' title='Apache Software Foundation'>
+        <img id="asf-logo" src="http://www.apache.org/images/asf-logo.gif" alt="Apache Software Foundation"/>
+    </a>
+    Copyright &copy; 2001-2010 Apache Software Foundation. Apache Click,
+    Click, Apache, the Apache feather logo, and the Apache Click project logo are
+    trademarks of The Apache Software Foundation.
+    <a href="http://cayenne.apache.org/privacy-policy.html">Privacy policy.</a>
+    </p>
+</div>
+
+</body>
+</html>
+

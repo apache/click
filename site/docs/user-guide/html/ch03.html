@@ -1,0 +1,53 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;3.&nbsp;Controls</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="index.html" title="Apache Click"><link rel="prev" href="ch02s13.html" title="2.13.&nbsp;Page HEAD Elements"><link rel="next" href="ch03s02.html" title="3.2.&nbsp;Control Listener"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Controls</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s13.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s02.html">Next</a></td></tr></table><hr></div><div class="chapter" title="Chapter&nbsp;3.&nbsp;Controls"><div class="titlepage"><div><div><h2 class="title"><a name="chapter-controls"></a>Chapter&nbsp;3.&nbsp;Controls</h2></div></div></div><div class="toc"><dl><dt><span class="sect1"><a href="ch03.html#control-interface">3.1. Control Interface</a></span></dt><dt><span class="sect1"><a href="ch03s02.html">3.2. Control Listener</a></span></dt><dt><span class="sect1"><a href="ch03s03.html">3.3. Control Classes</a></span></dt><dt><span class="sect1"><a href="ch03s04.html">3.4. Message Properties</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03s04.html#message-resolution">3.4.1. Message Resolution</a></span></dt><dt><span class="sect2"><a href="ch03s04.html#control-properties">3.4.2. Control Properties</a></span></dt><dt><span class="sect2"><a href="ch03s04.html#accessing-messages">3.4.3. Accessing Messages</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch03s05.html">3.5. Control HEAD Elements</a></span></dt><dt><span class="sect1"><a href="ch03s06.html">3.6. Container</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03s06.html#abstractcontainer">3.6.1. AbstractContainer</a></span></dt><dt><span class="sect2"><a href="ch03s06.html#abstractcontainerfield">3.6.2. AbstractContainerField</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch03s07.html">3.7. Layouts</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03s07.html#template-layout">3.7.1. Template layout</a></span></dt><dt><span class="sect2"><a href="ch03s07.html#programmatic-layout">3.7.2. Programmatic layout</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch03s08.html">3.8. Behavior</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03s08.html#behavior-execution">3.8.1. Behavior Execution</a></span></dt><dt><span class="sect2"><a href="ch03s08.html#behavior-example">3.8.2. Behavior Example</a></span></dt></dl></dd></dl></div><p>Apache Click provides a rich set of Controls which support client side
+  rendering and server side processing. Please see the
+  <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/control/package-summary.html" target="_blank">Javadoc</a>,
+  which provides extensive information and examples of the core Controls.
+  </p><p>This chapter covers Control in detail including the Control life cycle,
+  Control listeners and localization.
+
+  </p><div class="sect1" title="3.1.&nbsp;Control Interface"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="control-interface"></a>3.1.&nbsp;Control Interface</h2></div></div></div><p> Controls provide the server side components that process user input,
+    and render their display to the user. Controls are equivalent to Visual
+    Basic Controls or Delphi Components.
+    </p><p>Controls handle the processing of user input in the
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#onProcess()" target="_blank">onProcess</a>
+    method and render their HTML display using the toString() method. The
+    execution sequence for a Control being processed and rendered is illustrated
+    in the figure below.
+    </p><div class="figure"><a name="control-post-sequence-diagram"></a><div class="figure-contents"><span class="inlinemediaobject"><img src="images/controls/control-post-sequence-diagram.png" alt="Post Sequence Diagram"></span></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;3.1.&nbsp;Post Sequence Diagram
+      </i></p></div><br class="figure-break"><p>In Click all control classes must implement the
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html" target="_blank">Control</a> interface.
+    The Control interface is depicted in the figure below.
+    </p><div class="figure"><a name="control-class-diagram"></a><div class="figure-contents"><span class="inlinemediaobject"><img src="images/controls/control-class-diagram.png" alt="Control Interface Diagram"></span></div><p xmlns:fo="http://www.w3.org/1999/XSL/Format" class="title"><i>Figure&nbsp;3.2.&nbsp;Control Interface Diagram
+      </i></p></div><br class="figure-break"><p>Methods on the Control interface include:
+    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#getHeadElements()" target="_blank">getHeadElements()</a>
+          - defines the controls HTML header imports.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#getMessages()" target="_blank">getMessages()</a>
+          - defines the controls localized messages map.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#getName()" target="_blank">getName()</a> /
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#setName(java.lang.String)" target="_blank">setName()</a>
+          &nbsp; - &nbsp; defines the controls name in the Page model or Form fields.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#getParent()" target="_blank">getParent()</a> /
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#setParent(java.lang.Object)" target="_blank">setParent()</a>
+          &nbsp; - &nbsp; defines the controls parent.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#onDeploy(javax.servlet.ServletContext)" target="_blank">onDeploy()</a>
+          - deploy resources on startup.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#onInit()" target="_blank">onInit()</a>
+          - on initialize event handler.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#onProcess()" target="_blank">onProcess()</a>
+          - process request event handler.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#onDestroy()" target="_blank">onDestroy()</a>
+          - on destroy event handler.
+        </p></li><li class="listitem"><p>
+          <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Control.html#render(org.apache.click.util.HtmlStringBuffer)" target="_blank">render()</a>
+          - generate the control's HTML representation.
+        </p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s13.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.13.&nbsp;Page HEAD Elements&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.2.&nbsp;Control Listener</td></tr></table></div></body></html>

@@ -1,0 +1,865 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+<html>
+<head>
+ <!-- saved from url=(0014)about:internet -->
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <meta name="description" lang="en" content="Apache Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Apache Click, Click, Click Framework, Java, JEE, J2EE, web application framework, open source"/>
+ <title>Apache Click</title>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <link rel="stylesheet" type="text/css" href="../syntax-highlighter.css"/>
+ <style type="text/css">
+   dt { margin-top:2em; }
+   dd { margin:1em; margin-left:2em; }
+   dt a { padding-top: 1em; }
+ </style>
+ <script type="text/javascript" src="../syntax-highlighter.js"></script>
+</head>
+<body onload="prettyPrint();">
+  
+<h1>Frequently Asked Questions</h1>
+<ol>
+  <li><a href="#getting-help">How to get help?</a>
+  </li>
+  <li><a href="#commercial-support">What about Commercial Support?</a>
+  </li>
+  <li><a href="#tool-support">What development tools are there?</a>
+  </li>
+  <li><a href="#html-control">How can the GUI designer define the HTML if Click Controls generates everything?</a>
+  </li>
+  <li><a href="#customize-look-and-feel">How can I customize a control's look and feel (Stylesheet, JavaScript and other resources)?</a>
+  </li>
+  <li><a href="#shared-template">How can I have many Pages using the same HTML template?</a>
+  </li>
+  <li><a href="#listener-returns">Why do control listener methods have to return a boolean value?</a>
+  </li> 
+  <li><a href="#exclude-fields">Can you exclude some fields from a Form?</a>
+  </li> 
+  <li><a href="#localization">How do you internationalize Pages and Controls?</a>
+  </li>
+  <li><a href="#utf8-encoding">How do you encode Pages in the UTF-8 character set?</a>
+  </li>
+  <li><a href="#charset">How do you specify the character set which is used in your application?</a>
+  </li>
+  <li><a href="#multiple-posts">How can you prevent multiple form posts?</a>
+  </li>
+  <li><a href="#html-pages">How can I use *.html Click pages?</a>
+  </li>
+  <li><a href="#alternative-extension">Can Click be mapped to an extension other than *.htm?</a>
+  </li>
+  <li><a href="#cayenne-integration">What JARs should I use with Click and Cayenne?</a>
+  </li>
+  <li><a href="#spring-integration">How can you integrate Click into Spring?</a>
+  </li>
+  <li><a href="#jsp-support">Does Click support JSP?</a>
+  </li>
+  <li><a href="#pdf-and-excel-rendering">How can I render PDF and Excel documents?</a>
+  </li>
+  <li><a href="#performance">What is the performance of Click?</a>
+  </li>
+  <li><a href="#unit-testing">How do I unit test Click pages?</a>
+  </li>
+  <li><a href="#restricted-env">How do I deploy Click resources in restricted environments?</a>
+  </li>
+  <li><a href="#logging">Why doesn't Click use Commons Logging / Log4J for logging?</a>
+  </li>
+  <li><a href="#why-velocity">Why doesn't Click use FreeMarker as the default rendering engine?</a>
+  </li>
+  <li><a href="#portlet">Can Click be used to develop Portlet applications?</a>
+  </li>
+  <li><a href="#why-click">Why develop a new Web Application Framework?</a>
+  </li>
+</ol>
+<p>&nbsp;</p>
+
+<dl>
+
+  <dt><a name="getting-help"></a>
+      <b>1.&nbsp; How to get help?</b>
+  </dt>
+  <dd>
+    OK you have read the documentation and reviewed the
+    <a href="examples.html">Examples</a> applications, but there is still something
+    you still don't understand. What do you do?
+    <p/>
+    You go to the click-user or click-development mail
+    <a href="click-online.html#mailing-lists">news groups</a>.
+    <p/>
+    This is where you get support from in open source projects. Its free, friendly
+    and usually pretty responsive.
+    <p/>
+    These news groups are where other people ask questions, and where users
+    and developers discuss ideas. Its highly recommended, so don't be shy.
+    <p/>
+    To sign up to these mail groups follow the instructions at the following links:
+    <ul>
+    	<li><a href="click-online.html#user-mailing-list">click-user</a> - for Click usage discussions and help</li>
+    	<li><a href="click-online.html#development-mailing-list">click-development</a> - for Click framework development discussions</li>
+    </ul>
+  </dd>
+
+
+  <dt><a name="commercial-support"></a>
+      <b>2.&nbsp; What about Commercial Support?</b>
+  </dt>
+  <dd>
+  	If you want commercial support or training for Click, you can obtain this 
+  	from
+	<a target="_blank" href="http://click.avoka.com">Avoka Technologies</a>.
+	<p/>
+	For more details please email <a href="mailto:medgar@avoka.com">Malcolm Edgar</a>.	
+  </dd>
+
+
+  <dt><a name="tool-support"></a>
+      <b>3.&nbsp; What development tools are there?</b>
+  </dt>
+  <dd>
+   Recommended Click development tools include:
+   <p/>
+   <ul>
+    <li>
+     <a href="click-ide.html">ClickIDE</a> 
+     <p/>
+     ClickIDE is an Eclipse Web Tools Project (<a target="blank" class="external" href="http://www.eclipse.org/webtools/">WTP</a>)
+     plugin.
+     <p/>
+     To use the ClickIDE plugin, create a "Dynamic Web Project" and select the
+     "Click" Project Faclet. 
+     <p/>
+     <img alt="ClickIDE Config Editor" src="../images/clickide_config_editor_1.png"/>
+     <br/>
+    </li>
+    <li>
+     <a target="blank" class="external" href="http://code.google.com/p/click4nb/">Netbeans Plug-in</a>
+     <p/>
+     NetBeans plug-in for Click is under development by
+     <a href="http://hantsy.blogspot.com/" class="external" target="_blank">Hantsy Bai</a>.
+     <p/>
+     <img alt="Create page wizard" src="../images/netbeans-create-page.png"/>
+    </li>
+    <li>
+     <a target="blank" class="external" href="http://velocitywebedit.sourceforge.net">Velocitywebedit</a>
+     <p/>
+     Velocitywebedit is a Velocity and HTML Editor plugin for Eclipse.
+     <p/>
+     <img alt="Velocity WebEdit Eclipse plugin" src="../images/velwebedit.png"/>
+     <p/>
+     After installing Velocity Web Edit configure Eclipse *.htm file associations 
+     to use Velocity Editor. Do this via the Eclipse menus:
+     Window &gt; Preferences &gt; General &gt; File Associations
+     </li>
+    <li>
+     <a target="blank" class="external" href="http://code.google.com/p/veloeclipse/">Veloeclipse</a> &nbsp; - &nbsp;
+     Velocity and HTML Editor plugin for Eclipse
+    </li>
+    <li>
+     <a target="blank" class="external" href="http://veloedit.sourceforge.net">Veloedit</a> &nbsp; - &nbsp;
+     Velocity and HTML Editor plugin for Eclipse
+     </li>
+   </ul>  
+  </dd>
+
+
+  <dt><a name="html-control"></a>
+      <b>4.&nbsp; How can the GUI designer define the HTML if Click Controls generates everything?</b>
+  </dt>
+  <dd>
+  In Click there is nothing preventing you from laying out HTML forms by hand. 
+  It just provides the option of doing it automatically for you.
+  <p/>
+  There are a number of approaches you can use for generating for HTML,
+  each with pros &amp; cons:
+  <p/>
+  <ol>
+  <li>
+  <u>Use Click forms and controls to do all the HTML rendering for you.</u> 
+  <p/>
+  This a 80/20 approach where you can quickly get stuff developed, but it may
+  not meet all your UI style requirements. 
+  <p/>
+  Please note the Forms control provides many 
+  <a href="click-api/org/apache/click/control/Form.html#auto-layout">auto layout</a> 
+  options, see the <a href="examples.html">click-examples</a> 'Form Properties' 
+  for a demonstration. 
+  <p/>
+  The Form control also renders the class attributes 'form', 'fields', 'errors' and 'buttons'
+  in the form's HTML elements enabling fine grained CSS control. 
+  <p/>
+  As an example you could configure a form to display the labels on top, and want to
+  increase the vertical spacing between fields. To do this simply define the CSS
+  style in front of your form:
+  <pre class="codeHtml">
+ &lt;style type="<span class="st">text/css</span>"&gt;
+    td.<span class="kw">fields</span> { padding-top: 0.75em; }
+ &lt;/style&gt; 
+ 
+ <span class="red">$</span><span class="blue">form</span> </pre>
+  Fields are also rendered with an 'id' attribute enabling manipulation of individual fields.
+  <p/>
+  </li><li>
+  <u>Subclass Click Form/Controls to customise HTML rendering.</u> 
+  <p/>
+  This is a good approach for ensuring a common LAF across your web application, 
+  but you will have to get your hands dirty and write some code.
+  </li><li>
+  <u>Use Panel class to create reusable HTML blocks.</u> 
+  <p/>
+  The 
+  <a href="click-api/org/apache/click/control/Panel.html">Panel</a> 
+  control support custom Velocity templates, which is an ideal way
+  to create reusable HTML sections which you can include in many pages.
+  Panels also support nested controls, enabling your sections to support 
+  control based behaviour.
+  </li><li>
+  <u>Use Velocity macros for a generic HTML layout.</u>
+  <p/>
+  This is easy to do and gives you good reuse across your web application.
+  <p/>
+  Please see the Form 
+  <a href="click-api/org/apache/click/control/Form.html#velocity-macros">velocity macros</a> 
+  example, and also see the <a href="examples.html">click-examples</a> 'Velocity Macro' 
+  demonstration. 
+  </li><li>
+  <u>Layout your HTML forms by hand.</u> 
+  <p/>
+  This gives you the ultimate control in presentation, but provides no reuse 
+  across your web application. 
+  <p/>
+  Please see the Form
+  <a href="click-api/org/apache/click/control/Form.html#manual-layout">manual layout</a>
+  example.
+  </li>
+  </ol>
+  </dd>
+
+
+  <dt><a name="customize-look-and-feel"></a>
+      <b>5.&nbsp; How can I customize a control's look and feel (Stylesheet, JavaScript and other resources)?</b>
+  </dt>
+  <dd>
+   See the section <a href="user-guide/html/ch04s03.html#deploying-custom-resources">auto deployed files</a>
+   for details on how to customize and override a control's resources.
+  </dd>
+
+
+  <dt><a name="shared-template"></a>
+      <b>6.&nbsp; How can I have many Pages using the same HTML template?</b>
+  </dt>
+  <dd>
+   To do this use the Page templating technique detailed in the 
+   <a href="user-guide/html/ch02s06.html">Page Templating</a> topic.
+   <p/>
+   Page templating is highly recommended for your web applications, as it provides
+   numerous benefits including:
+   <ul>
+      <li>greatly reduces the amount of HTML you need to maintain</li>
+      <li>ensures you have a common look and feel across you application</li>
+      <li>makes your application more robust, as there is less code to test</li>
+   </ul>
+   For a live demonstration of page templating deploy and run the
+   <a href="examples.html">click-examples</a> application.
+  </dd>
+
+
+    
+  <dt><a name="listener-returns"></a>
+      <b>7.&nbsp; Why do control listeners methods have to return a boolean value?</b>
+  </dt>
+  <dd>
+  Control listener methods have to return a boolean value to state whether the
+  Pages controls and methods should continue to be processed. To continue
+  processing listener methods should return true, to abort they should return false.
+  <p/>
+  The reason you may want to abort further processing is so you can navigate 
+  directly to another page, rather than continuing to execute other control or 
+  page methods which may be time consuming. You can use this feature like a break 
+  or goto statement. For example:
+  
+<pre class="codeJava">
+<span class="kw">public boolean</span> onLogoutClick() {
+   setRedirect(Logout.<span class="kw">class</span>);
+   <span class="kw">return false</span>;
+} 
+</pre>
+  
+  Please see the Page <a href="user-guide/html/ch02s05.html">Navigation</a> topic
+  for more details.
+  </dd>
+
+
+  <dt><a name="exclude-fields"></a>
+      <b>8.&nbsp; Can you exclude some fields from a Form?</b>
+  </dt>
+  <dd>
+   To exclude some fields from being displayed in a shared Form class use the
+   <a href="click-api/org/apache/click/control/Form.html#removeFields(java.util.List)">Form.removeFields()</a>
+   method. 
+   <p/>
+   You can even do this in your page template. Just make sure you call you call 
+   it before $form renders itself. For example:
+<pre class="codeHtml">
+  <span class="red">$</span><span class="blue">form</span>.<span class="blue">removeFields</span>(["field11", "field15", "field22"])
+
+  <span class="red">$</span><span class="blue">form</span>
+</pre>
+  </dd>
+
+
+  <dt><a name="localization"></a>
+      <b>9.&nbsp; How do you internationalize Pages and Controls?</b>
+  </dt>
+  <dd>
+   Click provides good support for application localization and 
+   internationalization (I18N) requirements.
+
+   <h4>Page Messages</h4>
+
+   The Page class supports page specific string localisation bundles using the 
+   method 
+   <a href="click-api/org/apache/click/Page.html#getMessage(java.lang.String)">getMessage(String)</a>.
+   For example a Login class with three locale string property files on the classpath:
+<pre class="codeConfig">
+/com/mycorp/pages/Login.properties
+/com/mycorp/pages/Login_en.properties
+/com/mycorp/pages/Login_fr.properties </pre>
+
+   In your Login Page class you can use the <tt>getMessage()</tt> method
+   to lookup request localized message strings. 
+   
+<pre class="codeJava">
+<span class="kw">public void</span> onInit() {
+    addModel(<span class="st">"title"</span>, getMessage(<span class="st">"title"</span>));
+} </pre>
+
+   In your HTML page template you can also access the localize message using
+   the <a href="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</a>
+   object which is added to the template using the name "messages". For example:
+
+    <pre class="codeHtml">
+    &lt;h2&gt;<span class="red">$</span><span class="blue">messages.title</span>&lt;/h2&gt; </pre>
+
+   You can also define Field and AbstractLink label and title values in your pages
+   properties file using control name lookup convention. For details please see
+   the Javadoc:
+   <ul style="margin-top:1em;">
+    <li>
+     <a href="click-api/org/apache/click/control/AbstractLink.html#getLabel()">AbstractLink.getLabel()</a>
+    </li>
+    <li>
+     <a href="click-api/org/apache/click/control/AbstractLink.html#getTitle()">AbstractLink.getTitle()</a>
+    </li>
+    <li>
+     <a href="click-api/org/apache/click/control/Field.html#getLabel()">Field.getLabel()</a>
+    </li>
+    <li>
+     <a href="click-api/org/apache/click/control/Field.html#getTitle()">Field.getTitle()</a>
+    </li>
+    <li>
+     <a href="click-api/org/apache/click/control/FieldSet.html#getLegend()">FieldSet.getLegend()</a>
+    </li>
+    <li>
+     <a href="click-api/org/apache/click/control/Panel.html#getLabel()">Panel.getLabel()</a>
+    </li>
+   </ul>
+
+   <h4>Control Messages</h4>
+  
+   The Control classes share a common messages properties file:
+<pre class="codeConfig">
+/click-control.properties </pre>  
+
+   The AbstractControl class provides a number of
+   <a href="click-api/org/apache/click/control/AbstractControl.html#getMessage(java.lang.String)">getMessage(String)</a>
+   methods which support localized strings and message formatting.
+   Please also see the Control topic <a href="user-guide/html/ch03s04.html">Message Properties</a>.
+  </dd>
+
+
+  <dt><a name="utf8-encoding"></a>
+      <b>10.&nbsp; How do you encode Pages in the UTF-8 character set?</b>
+  </dt>
+  <dd>
+  To encode pages in the UTF-8 character set you need to create a
+  <tt>WEB-INF/velocity.properties</tt> file with the properties:
+<pre class="codeConfig">
+<span class="red">input.encoding</span>=<span class="blue">UTF-8</span> </pre>
+  This will configure the Velocity runtime to use UTF-8.
+  <p/>  
+  You will also need to set the page headers content type to UTF-8. You can do this globally for all
+  your applications pages using the <tt>headers</tt> element in your 
+  <tt>WEB-INF/click.xml</tt> file:
+<pre class="codeConfig">
+&lt;click&gt;
+ ..
+ &lt;headers&gt;
+   &lt;header name="<span class="red">Content-Type</span>" value="<span class="blue">text/html;charset=UTF-8</span>"/&gt;
+ &lt;/headers&gt;
+ ..
+&lt;/click&gt; </pre>
+  This will set the pages <tt>HttpServletResponse</tt> "Content-Type" header to be 
+  "text/html;charset=UTF-8". Alternatively you can override the Page 
+  <a href="click-api/org/apache/click/Page.html#getContentType()">getContentType()</a> method
+  to this content type.
+  </dd>
+
+
+  <dt><a name="charset"></a>
+      <b>11.&nbsp; How do you specify the character set which is used in your application?</b>
+  </dt>
+  <dd>
+  
+  You can specify your application character set in <tt>WEB-INF/click.xml</tt>:
+
+<pre class="codeConfig">
+&lt;click charset="<span class="blue">UTF-8</span>"&gt;
+ ..
+&lt;/click&gt; </pre>
+
+  This character set is used for Velocity input encoding, and response Content-Type. 
+  So if you specify the character set in <tt>WEB-INF/click.xml</tt>, 
+  you don't have to create <tt>WEB-INF/velocity.properties</tt>.
+  <p/>
+  If you want to use the other character set in your Velocity templates, 
+  you can override input encoding by <tt>WEB-INF/velocity.properties</tt>. 
+  See <a href="#utf8-encoding">the previous topic</a>.
+
+  </dd>
+
+
+  <dt><a name="multiple-posts"></a>
+      <b>12.&nbsp; How can you prevent multiple form posts?</b>
+  </dt>
+  <dd>
+  You can prevent multiple form posts by using the Post Redirect pattern. With 
+  this pattern once the user has posted a form you redirect to another page.
+  If the user then presses the refresh button, they will be making a GET request
+  on the current page.
+  <pre class="prettyprint">
+public class Purchase extends Page {
+    ..
+
+    public boolean onPurchase() {
+        if (form.isValid()) {
+            Order order = new Order();
+            form.copyTo(order);
+            getOrderService().save(order);
+
+            // Perform a redirect after post to protect against users pressing
+            // the refresh or back button
+            setRedirect(Purchase.class);
+            return false;
+        }
+        return true;
+    }
+} </pre>
+  <p/>
+  Please see the <a target="blank" href="http://www.theserverside.com/articles/content/RedirectAfterPost/article.html">Redirect After Post</a> 
+  article for more information on this topic.
+  <p/>
+  Another common way duplicate posts occur is if the user accidentally
+  click the Form's submit button twice, in quick succession. Redirecting to another
+  won't protect against the second accidental submit.
+  <p/>
+  Click provides a clean way to prevent users from resubmitting the same Form
+  through the Form's
+  <a href="click-api/org/apache/click/control/Form.html#onSubmitCheck(org.apache.click.Page, java.lang.String)">onSubmitCheck()</a>
+  method:
+  
+<pre class="prettyprint">
+public class Purchase extends Page {
+    ..
+    
+    public boolean onSecurityCheck() {
+        // Placing the onSubmitCheck in the onSecurityCheck event, prevents the
+        // page from being processed if a Form is resubmitted a second time
+        return form.onSubmitCheck(this, "/invalid-submit.html");
+    }
+} </pre>
+  <p/>
+  Please see the Click Examples 'Page Flow' for a demonstration of the
+  Post-Redirect and submit check patterns.
+  </dd>
+
+
+  <dt><a name="html-pages"></a>
+      <b>13.&nbsp; How can I use *.html Click pages?</b>
+  </dt>
+  <dd>
+  Click does not automatically map *.html files as Click pages. These files
+  are not processed by the ClickServlet and are intended for use as static content.
+  <p/>
+  However see the FAQ on <a href="#alternative-extension">alternative extensions</a>.
+  </dd>
+
+
+  <dt><a name="alternative-extension"></a>
+      <b>14.&nbsp; Can Click be mapped to an extension other than *.htm?</b>
+  </dt>
+  <dd>
+  By default Click supports *.htm and *.jsp extensions.
+  <p/>
+  However you can map templates with different extensions, for example *.xml, by
+  subclassing <tt>XmlConfigService</tt> and specify extra mappings by overriding
+  <tt>isTemplate(String path)</tt>. You can read more details
+  <a href="click-api/org/apache/click/service/XmlConfigService.html#isTemplate(java.lang.String)">here</a>.
+
+  <p/>
+  You can also map URLs to different extensions using
+  <a href="http://tuckey.org/urlrewrite/">Url Rewrite Filter</a>. It is even
+  possible to rewrite to REST like URLs:
+  <ul>
+    <li>rewrite URL from <span style="color:red;font-style:italic">http://www.mycorp.com/book.htm?id=324</span> to <span style="color:blue;font-style:italic">http://www.mycorp.com/book/324</span> (which will retrieve the book where id=324)</li> 
+    <li>rewrite URL from <span style="color:red;font-style:italic">http://www.mycorp.com/books.htm</span> to <span style="color:blue;font-style:italic">http://www.mycorp.com/books</span> (which will retrieve the list of books)</li>
+  </ul>
+  </dd>
+
+
+  <dt><a name="cayenne-integration"></a>
+      <b>15.&nbsp; What JARs should I use with Click and Cayenne?</b>
+  </dt>
+  <dd>
+   To get Click and Cayenne to work happily with each other you will need to 
+   include the following JAR files in your WEB-INF/lib directory:
+   <ul style="margin-top:1em;">
+    <li>ashwood-2.0.jar</li>
+    <li>cayenne-server-3x.jar</li>
+    <li>click-2x.jar</li>
+    <li>click-extras-2x.jar</li>
+    <li>commons-collections-3.1.jar</li>
+    <li>commons-logging-1.1.jar</li>
+   </ul>
+  </dd>
+
+
+  <dt><a name="spring-integration"></a>
+      <b>16.&nbsp; How can you integrate Click into Spring?</b>
+  </dt>
+  <dd>
+   To integrate Spring with Click configure the
+   <a href="extras-api/org/apache/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
+   instead of the normal ClickServlet. The SpringClickServlet is contained in the 
+   <a href="extras-api/overview-summary.html">Extras</a> library and provides excellent integration options.
+   <p/>
+   The Spring MVC Framework however, is not compatible with Click. The Spring framework
+   uses a low level command pattern design like Struts and WebWork.
+   Spring uses a <tt>DispatcherServlet</tt> to route requests to <tt>Controller</tt> 
+   objects and then passes the <tt>ModelAndView</tt> results to the rendering layer.
+
+<pre class="prettyprint">
+public interface Controller {
+   public ModelAndView handleRequest(HttpServletRequest request, 
+                                     HttpServletResponse response) throws Exception;
+} </pre>
+
+  In Spring MVC the integration plugin points are the Controllers.
+  <p/>
+  Click uses higher level design constructs focusing on Pages and Controls. Click uses its
+  own <tt>ClickServlet</tt> for dispatching requests to <tt>Pages</tt> and <tt>Control</tt>s, 
+  which are Click's plugin points.
+  </dd> 
+
+
+  <dt><a name="jsp-support"></a>
+      <b>17.&nbsp; Does Click support JSP?</b>
+  </dt>
+  <dd>
+   Click fully supports JSP pages. 
+   <p/>
+   JSP Pages can be automatically loaded, like Velocity templates, or
+   can be explicitly defined in the <tt>click.xml</tt> file.
+
+ <pre class="codeConfig">
+&lt;pages package="com.mycorp.pages"/&gt;
+  &lt;page path="<span class="blue">customers-table.jsp</span>" class="<span class="red">CustomersTable</span>"/&gt;
+&lt;/pages&gt; </pre>
+   
+   The page's model data values are automatically added to the request as
+   attributes so they are available in the JSP. Other Click values added 
+   as request attributes include:
+   <p/>
+   <ul>
+  <li>context &nbsp; - &nbsp; 
+   the Servlet context path, e.g. <span class="">/mycorp</span>
+  </li>  
+  <li>format &nbsp; - &nbsp; 
+   the <a href="click-api/org/apache/click/util/Format.html">Format</a> 
+    object for formatting the display of objects
+  </li>
+  <li>forward &nbsp; - &nbsp; 
+   the page JSP resource (.jsp file)
+  </li>
+  <li>messages &nbsp; - &nbsp; 
+   the <a target="topic" href="click-api/org/apache/click/util/MessagesMap.html">MessagesMap</a> adaptor
+   for the Page <a href="click-api/org/apache/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
+   method
+  </li>
+  <li>path &nbsp; - &nbsp; the mapped request <a href="click-api/org/apache/click/Page.html#path">path</a> 
+    of the page. Note this will have a .htm not a .jsp extension
+  </li>
+   </ul>
+   <p/>
+  </dd>
+
+
+  <dt><a name="pdf-and-excel-rendering"></a>
+      <b>18.&nbsp; How can I render PDF and Excel documents?</b>
+  </dt>
+  <dd>
+   By making use of the <a href="user-guide/html/ch02s08.html">Direct Rendering</a>
+   support you can render directly to the servlet response and bypass the page
+   template rendering.
+   <p/>
+   In order to bypass the Page template rendering you <strong>must</strong> set
+   the <tt>Page path</tt> to <tt>null</tt>. If Click does not know the location of the
+   Page template, it won't render it. If you do not set the Page path to null,
+   Click will attempt to render the Page template which can lead to undesirable results.
+   <p/>
+   Here is an example to render either a PDF or Excel document:
+<pre class="prettyprint">
+
+public MyPage extends Page {
+
+    /** The PDF report type request parameter. */
+    public static final String PDF = "pdf";
+
+    /** The Excel report type request parameter. */
+    public static final String EXCEL = "excel";
+
+    /**
+     * The Page#onGet renders the report to the servlet output stream.
+     */
+    public void onGet() {
+        HttpServletResponse response = getContext().getResponse();
+
+        // report type is a request parameter which specifies either PDF or Excel
+        String reportType = getContext().getRequestParameter("reportType");
+
+        // Retrieve either a PDF or Excel document as an InputStream
+        InputStream inputStream = getInputStream(reportType);
+
+        // Set response headers
+        String mimeType = getMimeType(reportType);
+        response.setHeader("Content-Disposition", "attachment; filename=\"report.pdf\"");
+        response.setContentType(mimeType);
+        response.setHeader("Pragma", "no-cache");
+
+        OutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+
+            // Write out PDF Document to response stream
+            IOUtils.copy(inputStream, outputStream);
+
+            // By setting the Page path to null, we bypass template rendering
+            setPath(null);
+
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+
+        } finally {
+            ClickUtils.close(outputStream);
+        }
+    }
+
+    /**
+     * This method should contain the logic to retrieve the report as either a PDF
+     * or Excel document.
+     */
+    public InputStream getReport(String reportType) {
+        InputStream inputStream = null;
+        if (PDF.equals(reportType)) {
+            ...
+        } else if (EXCEL.equals(reportType)) {
+            ...
+        }
+        return inputStream;
+    }
+
+    /**
+     * This method returns the report mime type based on the specified report type.
+     */
+    public String getMimeType(String reportType) {
+        if (PDF.equals(reportType)) {
+            return ClickUtils.getMimeType(".pdf");
+        } else if (EXCEL.equals(reportType)) {
+            return ClickUtils.getMimeType(".xls");
+        }
+    }
+}
+</pre>
+  <p/>
+  </dd>
+
+
+  <dt><a name="performance"></a>
+      <b>19.&nbsp; What is the performance of Click?</b>
+  </dt>
+  <dd>
+  Click is fast. 
+  <p/>
+  When the Click framework processes a request it creates a relatively small 
+  number of objects. These include a Page, a Context, a Format and a number of
+  Controls which in turn contain some Lists, Maps and Strings.
+  <p/>
+  The allocation of small/moderate numbers of short lived objects by 
+  modern JVMs is very, very fast. Please see the IBM article 
+  <a target="blank" class="external" href="http://www-128.ibm.com/developerworks/java/library/j-jtp09275.html">Urban performance legends, revisited</a>.
+  <p/>
+  The amount of actual work Click does is pretty small. 
+  <p/>
+  The <tt>onProcess()</tt> methods traverse a list of Controls and do simple 
+  operations.  
+  <p/>
+  The Control <tt>toString()</tt> methods can allocate large StringBuffers when 
+  rendering tables, but forms rarely get larger than 4,000 characters.  
+  When Click creates a new StringBuffer it attempts to determine the
+  maximum likely size to avoid additional memory allocation and arraycopy
+  operations.
+  <p/>
+  There is not much reflection in Click at all. With reflection only really used by
+  the Control call back listeners:
+  <blockquote> 
+  <tt style="white-space:nowrap">okButton.setListener(<span class="kw">this</span>, <span class="st">"onOkClicked"</span>);</tt>
+  </blockquote>
+  The next step in processing the request is rendering the response.
+  Velocity is largely responsible for this step. 
+  <p/>
+  Velocity is also fast.
+  <p/>
+  While hard performance numbers are difficult to come by in this area, 
+  until recently Velocity was considered to be faster than JSP. 
+  However, recent discussions on Velocity mail lists indicate that JSP 
+  compilers have improved to the point where JSP has a small performance lead over
+  Velocity. What ever the case, JSP is very fast and so is Velocity.
+  </dd>
+
+
+  <dt><a name="unit-testing"></a>
+      <b>20.&nbsp; How do I unit test Click pages?</b>
+  </dt>
+  <dd>
+  It is generally recommended that you don't write JUnit style automated unit 
+  tests for Click pages as the cost to benefit ratio is quite poor.
+  If you have complex business logic in an Click page you should refactor this
+  code into a business level service class which you can readily unit test and 
+  reuse in multiple places.
+  <p/>
+  If you still need to write unit tests for your Click pages, please read the 
+  <a href="mock-api/overview-summary.html">documentation</a> on the
+  <a href="mock-api/org/apache/click/MockContainer.html">MockContainer</a> and
+  <a href="mock-api/org/apache/click/MockContext.html">MockContext</a> classes.
+  </dd>
+
+
+  <dt><a name="restricted-env"></a>
+      <b>21.&nbsp; How do I deploy Click resources in restricted environments?</b>
+  </dt>
+  <dd>
+  Often times one need to run Click applications in restricted environments.
+  Examples include:
+  <p/>
+  <ul>
+      <li>WAR/EAR is not unpacked - common with WebLogic and Websphere servers</li>
+      <li>File system permissions are restricted</li>
+      <li>Hosting applications on <a href="http://code.google.com/appengine/docs/java/overview.html">Google App Engine</a></li>
+  </ul>
+  Click works perfectly fine in these environments. The only issue one might
+  encounter is Click's auto-deploy feature where static resources are copied
+  to the webapp root directory at application startup. In restricted environments
+  it might not be possible for Click to deploy its resources.
+  <p/>
+  Please see the user-guide section, <a href="user-guide/html/ch04s03.html#deploying-restricted-env">Deploying resources in a restricted environment</a>,
+  for various solutions.
+  </dd>
+
+
+  <dt><a name="logging"></a>
+      <b>22.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b>
+  </dt>
+  <dd>
+   Click by default does not use Commons Logging / Log4J to avoid the class 
+   loader and configuration issues which often occur with these framework, and
+   instead default to System.out using the <tt>ConsoleLogger</tt>.
+   <p/>
+   Click provides support for configurable <tt>LogService</tt>s and provides
+   <tt>JdkLogService</tt> and <tt>Log4JLogService</tt> classes in Click Extras.
+  </dd>
+
+
+  <dt><a name="why-velocity"></a>
+      <b>23.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b>
+  </dt>
+  <dd>
+   FreeMarker is a powerful templating engine which was evaluated along side 
+   Velocity for use in Click. While FreeMarker has many sophisticated
+   features Velocity lacks, Velocity was chosen as the default engine because 
+   it is easier to learn and doesn't use an XML style markup syntax.
+   <p/>
+   Please note however that Click provides support for FreeMarker with the 
+   <tt>FreemarkerTemplateService</tt> in Click Extras.
+  </dd>
+
+
+  <dt><a name="portlet"></a>
+      <b>24.&nbsp; Can Click be used to develop Portlet applications?</b>
+  </dt>
+  <dd>
+  Unfortunately no. Click is built on top of the Servlet specification which is
+  incompatible with the Portlet specification. However in a future Click release
+  the <a target="_blank" class="external" href="http://portals.apache.org/bridges/">Portals Bridges</a>
+  project could be leveraged to allow Click applications to run inside a Portlet
+  container.
+  </dd>
+
+
+  <dt><a name="why-click"></a>
+      <b>25.&nbsp; Why develop a new Web Application Framework?</b>
+  </dt>
+  <dd>
+  Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
+  while Tapestry is too complicated. 
+  <p/>
+  For a more comprehensive answer please see <a href="why-click.html">Why Click</a>.
+  </dd>
+
+
+</dl>
+
+<!-- FOOTER -->
+<div id="footer">
+    <hr/>
+    <p>
+    <a target='_blank' href='http://www.apache.org' title='Apache Software Foundation'>
+        <img id="asf-logo" src="http://www.apache.org/images/asf-logo.gif" alt="Apache Software Foundation"/>
+    </a>
+    Copyright &copy; 2001-2010 Apache Software Foundation. Apache Click,
+    Click, Apache, the Apache feather logo, and the Apache Click project logo are
+    trademarks of The Apache Software Foundation.
+    <a href="http://cayenne.apache.org/privacy-policy.html">Privacy policy.</a>
+    </p>
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,80 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.4.&nbsp;Security</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Pages"><link rel="prev" href="ch02s03.html" title="2.3.&nbsp;Request Parameter Auto Binding"><link rel="next" href="ch02s05.html" title="2.5.&nbsp;Page Navigation"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.4.&nbsp;Security</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s03.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;2.&nbsp;Pages</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s05.html">Next</a></td></tr></table><hr></div><div class="sect1" title="2.4.&nbsp;Security"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="page-security"></a>2.4.&nbsp;Security</h2></div></div></div><p>Pages provide an
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="../../click-api/org/apache/click/Page.html#onSecurityCheck()" target="_blank">onSecurityCheck</a>
+    event handler which application pages can override to implement a
+    programmatic security model.
+    </p><p>Please note you generally don't need to use this capability, and where
+    possible you should use the declarative JEE security model. See the Best
+    Practices <a class="link" href="ch06.html#security" title="6.1.&nbsp;Security">Security</a> topic for more details.
+    </p><div class="sect2" title="2.4.1.&nbsp;Application Authentication"><div class="titlepage"><div><div><h3 class="title"><a name="applications-authentication"></a>2.4.1.&nbsp;Application Authentication</h3></div></div></div><p>Applications can use the <code class="methodname">onSecurityCheck()</code>
+      method to implement their own security model. The example class below
+      provides a base Secure page class which other pages can extend to ensure
+      the user is logged in. In this example the login page creates a session
+      when a user successfully authenticates. This Secure page then checks to
+      make sure the user has a session, otherwise the request is redirected to
+      the login page.
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> Secure <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * @see Page#onSecurityCheck()
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onSecurityCheck() {
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (getContext().hasSession()) {
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> true;
+
+        } <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">else</span> {
+            setRedirect(LoginPage.<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span>);
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+        }
+    }
+}</pre></div><div class="sect2" title="2.4.2.&nbsp;Container Authentication"><div class="titlepage"><div><div><h3 class="title"><a name="container-authentication"></a>2.4.2.&nbsp;Container Authentication</h3></div></div></div><p>Alternatively you can also use the security services provided by
+      the JEE Servlet Container. For instance to ensure users have been
+      authenticated by the Serlvet Container you could use a Secure page of:
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> Secure <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * @see Page#onSecurityCheck()
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onSecurityCheck() {
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (getContext().getRequest().<a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html#getRemoteUser()" target="_blank"><code class="varname">getRemoteUser</code></a>() != null) {
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> true;
+
+        } <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">else</span> {
+            setRedirect(LoginPage.<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span>);
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+        }
+    }
+}</pre></div><div class="sect2" title="2.4.3.&nbsp;Container Access Control"><div class="titlepage"><div><div><h3 class="title"><a name="container-access-control"></a>2.4.3.&nbsp;Container Access Control</h3></div></div></div><p>The Servlet Container also provides facilities to enforce role
+      based access control (authorization). The example below is a base page
+      to ensure only users in the "admin" role can access the page, otherwise
+      users are redirected to the login page. Application Admin pages would
+      extend this secure page to provide their functionality.
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> AdminPage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * @see Page#onSecurityCheck()
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">boolean</span> onSecurityCheck() {
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">if</span> (getContext().getRequest().<a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)" target="_blank"><code class="varname">isUserInRole</code></a>(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"admin"</span>)) {
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> true;
+
+        } <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">else</span> {
+            setRedirect(LoginPage.<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span>);
+            <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> false;
+        }
+    }
+}</pre></div><div class="sect2" title="2.4.4.&nbsp;Logging Out"><div class="titlepage"><div><div><h3 class="title"><a name="logging-out"></a>2.4.4.&nbsp;Logging Out</h3></div></div></div><p>To logout using the application or container based security models
+      you would simply invalidate the session.
+      </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> Logout <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">/**
+     * @see Page#onInit()
+     */</span>
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">void</span> onInit() {
+        getContext().getSession().<a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/http/HttpSession.html#invalidate()" target="_blank"><code class="varname">invalidate</code></a>();
+    }
+}</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s03.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.3.&nbsp;Request Parameter Auto Binding&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.5.&nbsp;Page Navigation</td></tr></table></div></body></html>

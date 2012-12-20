@@ -1,0 +1,52 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>4.5.&nbsp;Ajax Page Action</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.0"><link rel="home" href="index.html" title="Apache Click"><link rel="up" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Ajax"><link rel="prev" href="ch04s04.html" title="4.4.&nbsp;First Ajax Example"><link rel="next" href="ch04s06.html" title="4.6.&nbsp;Ajax Response Types"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.5.&nbsp;Ajax Page Action</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s04.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;4.&nbsp;Ajax</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04s06.html">Next</a></td></tr></table><hr></div><div class="sect1" title="4.5.&nbsp;Ajax Page Action"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ajax-page-action"></a>4.5.&nbsp;Ajax Page Action</h2></div></div></div><p>Page Actions are <span class="emphasis"><em>page methods</em></span> that can be invoked
+    directly from the browser. So instead of handling the Ajax request with a
+    Control, the request is handled with a <span class="emphasis"><em>page method</em></span>.
+    </p><p>Similar to the AjaxBehavior <code class="methodname">onAction</code> method,
+    <span class="emphasis"><em>page methods</em></span> returns an <code class="classname">ActionResult</code>
+    containing the data to render to the browser.
+    </p><p>Page Actions have been covered earlier. Please click
+    <a class="link" href="ch02s07.html" title="2.7.&nbsp;Page Actions">here</a> for a detailed overview.
+    </p><p>Using a Page Action for handling an Ajax request is no different from
+    the normal HTTP version. To invoke a Page Action, specify the parameter
+    <code class="varname">"pageAction"</code> and the name of the page method eg:
+    <span class="symbol">"onLinkClicked"</span>.
+    </p><p>Here is an example using the
+    <a xmlns:fo="http://www.w3.org/1999/XSL/Format" class="external" href="http://www.jquery.com" target="_blank">jQuery</a> JavaScript library to make
+    an Ajax request to a Page Action:
+    </p><pre class="programlisting">jQuery(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">'#some-link-id'</span>).click(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">function</span>() {
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// The ViewCustomerPage url</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">var</span> url = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">'$context/view-customers.htm'</span>;
+
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Specify the pageAction parameter and page method to invoke: 'onLinkClicked'</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">var</span> extraData = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">'pageAction=</span><span class="symbol">onLinkClicked</span><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">';
+</span>
+  <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Perform the Ajax request</span>
+  jQuery.get(url, extraData, <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">function</span>(response) {
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Update the target element with the server response</span>
+    jQuery(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"#target"</span>).html(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"&lt;p&gt;"</span> + response + <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"&lt;/p&gt;"</span>);
+  });
+
+}); </pre><p>The JavaScript snippet above will send a request to the
+  <code class="classname">ViewCustomerPage</code> method <span class="symbol">"onLinkClicked"</span>,
+  which returns an <span class="token">ActionResult</span> instance:
+  </p><pre class="programlisting"><span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">class</span> ViewCustomerPage <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">extends</span> Page {
+
+    ...
+
+    <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">public</span> <span class="token">ActionResult</span> <span class="symbol">onLinkClicked()</span> {
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Formatted date instance that will be returned to the browser</span>
+        String now = format.currentDate(<span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"MMM, yyyy dd HH:MM:ss"</span>);
+
+        String msg = <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="str">"PageAction method &lt;tt&gt;onLinkClicked()&lt;/tt&gt; invoked at: "</span> + now;
+
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="com">// Return an action result containing the message</span>
+        <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">return</span> <span xmlns:fo="http://www.w3.org/1999/XSL/Format" class="kwd">new</span> <span class="token">ActionResult</span>(msg, ActionResult.HTML);
+    }
+} </pre><p>The <span class="token">ActionResult</span> contains the data that is rendered to the
+    client browser. In the example above, the action result is an HTML snippet
+    containing todays date.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s04.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch04s06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.4.&nbsp;First Ajax Example&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;4.6.&nbsp;Ajax Response Types</td></tr></table></div></body></html>
