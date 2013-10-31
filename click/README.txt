@@ -82,6 +82,10 @@ downloaded using the command:
 
     ant get-deps
 
+or in the case of running behind a proxy, by using the command:
+
+   ant get-deps-proxy
+
 To run all tests execute the command:
 
     ant test-all

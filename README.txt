@@ -1,12 +1,15 @@
-Apech Click - SVN Repository Structure
-======================================
+Apache Click - SVN Repository Structure
+=======================================
 
-[click]      - Apache Click main source repository with everything that is also 
+[click]      - Apache Click main source repository with everything that's also 
                included in the official distribution.
 			   
-[examples]   - Other examples made using Apache Click, that are not part of the 
-               official distribution, but might be interesing for study.
+[examples]   - Some other example web applications made with Apache Click,  
+               (but not part of the official distribution), that might be interesing
+			   for the new users.
 			   
 [sandbox]    - Developer's sandbox with experiments and shared sources
 
-[tools]      - Tools for Apache Click (such as IDE plug-ins, developemnt ANT tasks, etc.)
+[site]       - The generated public site that it's being deployed on http://click.apache.org
+
+[tools]      - Tools for Apache Click: IDE plug-ins, developemnt ANT tasks, docs generator, etc.)
