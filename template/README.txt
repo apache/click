@@ -1,6 +1,6 @@
 
-Click Quick Start Application
-=============================
+project-name Application
+======================
 
 The structure of this web application is detailed below:
 

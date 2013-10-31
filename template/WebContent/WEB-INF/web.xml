@@ -3,13 +3,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4">
-         
-	<!-- 
-	Provides a web application performance filter which compresses the response
-	and sets the Expires header on selected static resources. 
-	The "cachable-paths" init parameter tells the filter resources can have 
-	their Expires header set so the browser will cache them.
-	-->
+
+    <display-name>project-name</display-name>
+
+    <!--
+    Provides a web application performance filter which compresses the response
+    and sets the Expires header on selected static resources.
+    The "cachable-paths" init parameter tells the filter resources can have
+    their Expires header set so the browser will cache them.
+    -->
 	<filter>
 		<filter-name>PerformanceFilter</filter-name>
 		<filter-class>org.apache.click.extras.filter.PerformanceFilter</filter-class>

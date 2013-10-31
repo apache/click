@@ -110,8 +110,8 @@
       <pathelement location="lib/${jar.collections}"/>
       <pathelement location="lib/${jar.io}"/>
       <pathelement location="lib/${jar.lang}"/>
-   	  <pathelement location="lib/${jar.mvel2}"/>
-   	  <pathelement location="lib/${jar.ognl}"/>
+      <pathelement location="lib/${jar.mvel2}"/>
+      <pathelement location="lib/${jar.ognl}"/>
       <pathelement location="lib/${jar.servlet}"/>
       <pathelement location="lib/${jar.upload}"/>
       <pathelement location="lib/${jar.velocity}"/>
@@ -157,7 +157,7 @@
       <pathelement location="framework/classes"/>
       <pathelement location="extras/classes"/> 
       <pathelement location="mock/classes"/> 
-   	  <fileset dir="lib">
+      <fileset dir="lib">
          <include name="**/*.jar"/>
       </fileset>
    </path>
@@ -194,8 +194,8 @@
             <exclude name="lib/${jar.lang}"/>
             <exclude name="lib/${jar.log4j}"/>
             <exclude name="lib/${jar.junit}"/>
-         	<exclude name="lib/${jar.mvel2}"/>
-         	<exclude name="lib/${jar.ognl}"/>
+            <exclude name="lib/${jar.mvel2}"/>
+            <exclude name="lib/${jar.ognl}"/>
             <exclude name="lib/${jar.servlet}"/>
             <exclude name="lib/${jar.slf4j}"/>
             <exclude name="lib/${jar.velocity}"/>
@@ -233,8 +233,8 @@
       <available file="dist/${click}.jar" property="isClickAvail"/>
       <fail message="Build framework first with 'build-framework'">
          <condition>
-  	        <or><isfalse value="${isClickAvail}"/></or>
-  	     </condition>
+            <or><isfalse value="${isClickAvail}"/></or>
+         </condition>
       </fail>
       <delete file="dist/${click-extras}.jar" quiet="false"/>
       <delete dir="extras/classes" quiet="false"/>
@@ -245,8 +245,8 @@
             <exclude name="${exclude-hibernate}"/>
          </fileset>
       </copy>
- 	    <copy file="LICENSE.txt" todir="extras/classes/META-INF"/>
- 	    <copy file="NOTICE.txt" todir="extras/classes/META-INF"/>
+        <copy file="LICENSE.txt" todir="extras/classes/META-INF"/>
+        <copy file="NOTICE.txt" todir="extras/classes/META-INF"/>
       <javac srcdir="extras/src"
              destdir="extras/classes"
              debug="true"
@@ -272,7 +272,7 @@
          </manifest>
          <fileset dir="extras/classes"/>
       </jar>  
-	  <delete dir="temp" quiet="false"/>
+      <delete dir="temp" quiet="false"/>
    </target>
 
 
@@ -289,8 +289,8 @@
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
- 	  <copy file="LICENSE.txt" todir="${dir.classes}/META-INF"/>
- 	  <copy file="NOTICE.txt" todir="${dir.classes}/META-INF"/>
+      <copy file="LICENSE.txt" todir="${dir.classes}/META-INF"/>
+      <copy file="NOTICE.txt" todir="${dir.classes}/META-INF"/>
       <!-- No Dependencies -->
       <javac srcdir="${dir.source}"
              destdir="${dir.classes}"
@@ -299,7 +299,7 @@
              source="${javac.source}">
          <classpath refid="classpath.framework"/>
       </javac>  
-   	  <jar destfile="dist/${click-nodeps}.jar">
+      <jar destfile="dist/${click-nodeps}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
            <attribute name="Package" value="org.apache.click"/>
@@ -316,7 +316,7 @@
          </manifest>
          <fileset dir="${dir.classes}"/>
       </jar>
-	    <!-- With Dependencies -->
+        <!-- With Dependencies -->
       <unzip src="lib/${jar.codec}" dest="${dir.classes}">
         <!-- Exclude .html pages -->
         <patternset>
@@ -324,8 +324,8 @@
           <exclude name="**/*.html"/>
         </patternset>
       </unzip>
-	  <delete dir="temp" quiet="false"/>
-   	  <unzip src="lib/${jar.collections}" dest="temp"/>
+      <delete dir="temp" quiet="false"/>
+      <unzip src="lib/${jar.collections}" dest="temp"/>
       <unzip src="lib/${jar.io}" dest="temp"/>
       <unzip src="lib/${jar.lang}" dest="temp"/> 
       <unzip src="lib/${jar.mvel2}" dest="temp"/> 
@@ -337,7 +337,7 @@
             <exclude name="META-INF/**"/>
          </fileset>
       </copy>
-	  <delete dir="temp" quiet="false"/>
+      <delete dir="temp" quiet="false"/>
       <jar destfile="dist/${click}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
@@ -366,8 +366,8 @@
       <available file="dist/${click}.jar" property="isClickAvail"/>
       <fail message="Build framework first with 'build-framework'">
          <condition>
-  	        <or><isfalse value="${isClickAvail}"/></or>
-  	     </condition>
+            <or><isfalse value="${isClickAvail}"/></or>
+         </condition>
       </fail>
       <delete file="dist/${click-mock}.jar" quiet="false"/>
       <delete dir="mock/classes" quiet="false"/>
@@ -377,8 +377,8 @@
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
- 	  <copy file="LICENSE.txt" todir="mock/classes/META-INF"/>
- 	  <copy file="NOTICE.txt" todir="mock/classes/META-INF"/>
+      <copy file="LICENSE.txt" todir="mock/classes/META-INF"/>
+      <copy file="NOTICE.txt" todir="mock/classes/META-INF"/>
       <javac srcdir="mock/src"
              destdir="mock/classes"
              debug="true"
@@ -458,8 +458,8 @@
       <available file="lib/${jar.checkstyle}" property="isJarAvail"/>
       <fail message="The Checkstyle JAR is not on the classpath. To resolve this download the JAR dependencies with 'ant get-deps'.">
          <condition>
-  	        <or><isfalse value="${isJarAvail}"/></or>
-  	     </condition>
+            <or><isfalse value="${isJarAvail}"/></or>
+         </condition>
       </fail>
 
       <taskdef resource="checkstyletask.properties"
@@ -469,7 +469,7 @@
          <fileset dir="framework/src/org/apache/click/" includes="**/*.java"/>
          <fileset dir="extras/src" includes="**/*.java"/>
          <fileset dir="mock/src" includes="**/*.java"/>
-      	<classpath refid="classpath.checkstyle"/>
+        <classpath refid="classpath.checkstyle"/>
       </checkstyle>
    </target>
 
@@ -478,14 +478,14 @@
       <available file="lib/${jar.codec}" property="isCodecAvail"/>
       <fail message="Download JAR dependencies first with 'ant get-deps'">
          <condition>
-  	        <or><isfalse value="${isCodecAvail}"/></or>
-  	     </condition>
+            <or><isfalse value="${isCodecAvail}"/></or>
+         </condition>
       </fail>
       <available file="lib/${jar.junit}" property="isJUnitAvail"/>
       <fail message="Download JAR dependencies first with 'ant get-deps'">
          <condition>
-  	        <or><isfalse value="${isJUnitAvail}"/></or>
-  	     </condition>
+            <or><isfalse value="${isJUnitAvail}"/></or>
+         </condition>
       </fail>
    </target>
 
@@ -507,7 +507,7 @@
 
    <target name="deploy-examples" description="copy example WAR files to app server"> 
       <delete file="${dir.appserver}/click-examples.war" quiet="true"/>
-   	  <sleep seconds="5"/>
+      <sleep seconds="5"/>
       <copy file="dist/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
 
@@ -518,12 +518,12 @@
       Task Definitions
       -->
       <taskdef name="linetrim"
-   	           classname="org.apache.click.tools.devtasks.LineTrimTask"
-   	           classpath="lib/click-dev-tasks-1.1.jar"/>
+               classname="org.apache.click.tools.devtasks.LineTrimTask"
+               classpath="lib/click-dev-tasks-1.1.jar"/>
 
       <taskdef name="replacetabs"
-   	           classname="org.apache.click.tools.devtasks.ReplaceTabsTask"
-      	        classpath="lib/click-dev-tasks-1.1.jar"/>
+               classname="org.apache.click.tools.devtasks.ReplaceTabsTask"
+                classpath="lib/click-dev-tasks-1.1.jar"/>
 
       <linetrim srcdir="framework/src" includes="**/*.java"/>
       <replacetabs srcdir="framework/src" includes="**/*.java"/>
@@ -544,8 +544,8 @@
       <downloadMacro name="${jar.io}" path="commons-io/commons-io/${commons-io.version}"/>
       <downloadMacro name="${jar.lang}" path="commons-lang/commons-lang/${commons-lang.version}"/>
       <downloadMacro name="${jar.log4j}" path="log4j/log4j/${log4j.version}"/>
-   	  <downloadMacro name="${jar.mvel2}" path="org/mvel/mvel2/${mvel2.version}"/>
-   	  <downloadMacro name="${jar.ognl}" path="ognl/ognl/${ognl.version}"/>
+      <downloadMacro name="${jar.mvel2}" path="org/mvel/mvel2/${mvel2.version}"/>
+      <downloadMacro name="${jar.ognl}" path="ognl/ognl/${ognl.version}"/>
       <downloadMacro name="${jar.upload}" path="commons-fileupload/commons-fileupload/${commons-fileupload.version}"/>
       <downloadMacro name="${jar.junit}" path="junit/junit/${junit.version}"/>
       <downloadMacro name="${jar.servlet}" path="javax/servlet/servlet-api/${servlet-api.version}"/>
@@ -589,9 +589,9 @@
 
    <target name="download-checkstyle" if="checkstyle.true">
      <get src="http://clickclick.googlecode.com/svn/trunk/checkstyle/${jar.checkstyle}"
- 	       dest="lib/${jar.checkstyle}"
- 	       verbose="true"
- 	       usetimestamp="true"/>
+           dest="lib/${jar.checkstyle}"
+           verbose="true"
+           usetimestamp="true"/>
    </target>
 
 
@@ -601,31 +601,31 @@
 
 Main targets:
 
-	build-all             build framework, extras, mock, examples
-	build-distribution    build distribution ZIP file
-	build-examples        build click-examples WAR file
-	build-extras          build click-extras JAR file
-	build-mock            build click-mock JAR file
-	build-framework       build click framework JAR file
-	build-maven-bundles   build Maven repository upload bundles
-	build-sources         build source ZIP files for use with IDEs
-	test-all              run all unit tests
-	checkstyle            run checkstyle report on Java source
-	deploy-examples       copy click-examples WAR file to app server
-	get-deps              download JAR dependencies
-	get-deps-proxy        download JAR dependencies via proxy
-	help                  display the Help message
-	javadoc               create Javadoc HTML files
-	project-quick-start   build application template
+    build-all             build framework, extras, mock, examples
+    build-distribution    build distribution ZIP file
+    build-examples        build click-examples WAR file
+    build-extras          build click-extras JAR file
+    build-mock            build click-mock JAR file
+    build-framework       build click framework JAR file
+    build-maven-bundles   build Maven repository upload bundles
+    build-sources         build source ZIP files for use with IDEs
+    test-all              run all unit tests
+    checkstyle            run checkstyle report on Java source
+    deploy-examples       copy click-examples WAR file to app server
+    get-deps              download JAR dependencies
+    get-deps-proxy        download JAR dependencies via proxy
+    help                  display the Help message
+    javadoc               create Javadoc HTML files
+    project-quick-start   build application template
 
 Environment:
 
-	java.home = ${java.home}
-	ant.home  = ${ant.home}
+    java.home = ${java.home}
+    ant.home  = ${ant.home}
 
 Please ensure you have configured build.properties</echo>
    </target> 
-	
+
    <target name="javadoc" description="create Javadoc HTML files" depends="prepare-hibernate">
       <!-- Framework -->
       <delete quiet="false" failonerror="false">
@@ -637,7 +637,7 @@ Please ensure you have configured build.properties</echo>
                     windowtitle="Click Framework API - v${version}"
                     doctitle="Click API - v${version}"
                     classpath="classpath.framework"
-      	            overview="documentation/docs/core-overview.html"
+                    overview="documentation/docs/core-overview.html"
                     excludes=""/>
 
       <!-- Extras -->
@@ -701,14 +701,14 @@ Please ensure you have configured build.properties</echo>
       <copy file="documentation/images/checkbox-tree.png"
             todir="documentation/docs/extras-api/org/apache/click/extras/tree"/>
       <copy file="documentation/docs/javadoc-stylesheet.css"  
-      	    overwrite="true"
-      	    tofile="documentation/docs/click-api/stylesheet.css"/>
+            overwrite="true"
+            tofile="documentation/docs/click-api/stylesheet.css"/>
       <copy file="documentation/docs/javadoc-stylesheet.css"  
             overwrite="true"
-  	        tofile="documentation/docs/extras-api/stylesheet.css"/>
+            tofile="documentation/docs/extras-api/stylesheet.css"/>
       <copy file="documentation/docs/javadoc-stylesheet.css"  
-      	    overwrite="true"
-	        tofile="documentation/docs/mock-api/stylesheet.css"/>
+            overwrite="true"
+            tofile="documentation/docs/mock-api/stylesheet.css"/>
    </target>
 
 
@@ -851,8 +851,8 @@ Please ensure you have configured build.properties</echo>
                version="true"
                verbose="false"
                windowtitle="@{windowtitle}"
-      	       packagenames="org.apache.click.*"
-         	     overview="@{overview}"
+               packagenames="org.apache.click.*"
+                 overview="@{overview}"
                doctitle="@{doctitle}"
                encoding="UTF-8"
                charset="UTF-8"
@@ -891,112 +891,81 @@ Please ensure you have configured build.properties</echo>
    </macrodef>
 
 
-    <!--
-     Quickstart project task
-     -->
-
+    <!-- Quickstart project task -->
    <target name="project-quick-start" description="build application template">
-      <!--
-      Task Definitions
-      -->
+
+      <!-- Task Definitions -->
       <taskdef name="package"
-   	           classname="org.apache.click.tools.devtasks.PackageTask"
-   	           classpath="lib/click-dev-tasks-1.1.jar"/>
+               classname="org.apache.click.tools.devtasks.PackageTask"
+               classpath="lib/click-dev-tasks-1.1.jar"/>
 
       <available file="lib/${jar.servlet}" property="isServletJarAvail"/>
       <fail message="The lib/${jar.servlet} JAR is not available. To resolve this download the JAR dependencies with 'ant get-deps'.">
          <condition>
-  	        <or><isfalse value="${isServletJarAvail}"/></or>
-  	     </condition>
+            <or><isfalse value="${isServletJarAvail}"/></or>
+         </condition>
       </fail>
       <available file="lib/${jar.log4j}" property="isLog4JJarAvail"/>
       <fail message="The lib/${jar.log4j} JAR is not available. To resolve this download the JAR dependencies with 'ant get-deps'.">
          <condition>
-  	        <or><isfalse value="${isLog4JJarAvail}"/></or>
-  	     </condition>
+            <or><isfalse value="${isLog4JJarAvail}"/></or>
+         </condition>
       </fail>
       <available file="dist/${click}.jar" property="isClickAvail"/>
       <fail message="The dist/${click} JAR is not available. To resolve this build the project with 'ant build-distribution'.">
          <condition>
-  	        <or><isfalse value="${isClickAvail}"/></or>
-  	     </condition>
+            <or><isfalse value="${isClickAvail}"/></or>
+         </condition>
       </fail>
-      <input 
-      	message="Please enter the project name (e.g. quickstart):" 
-        defaultvalue="quickstart"
-        addproperty="project-name"/>
-      <input 
-      	message="Please enter the root package name (e.g. com.${project-name}):" 
-        defaultvalue="com.${project-name}"
-        addproperty="package-name"/>
-      <input 
-    	  message="Please enter the web app context path:" 
-    	  defaultvalue="${project-name}"
-        addproperty="context-path"/>
-       <dirname property="project-path" file="../${project-name}"/>
-       <input
-         message="The directory '${project-path}/${project-name}' will be deleted. Continue (y/n)?"
-         validargs="y,n"
-         addproperty="do.delete"/>
+
+      <input message="Please enter the project name (without spaces, e.g. quickstart):"
+             defaultvalue="quickstart"
+             addproperty="project-name"/>
+      <input message="Please enter the root package name (e.g. com.${project-name}):"
+             defaultvalue="com.${project-name}"
+             addproperty="package-name"/>
+      <input message="Please enter the web app context path:"
+             defaultvalue="${project-name}"
+             addproperty="context-path"/>
+      <dirname property="project-path" file="../${project-name}"/>
+      <input message="The directory '${project-path}/${project-name}' will be deleted. Continue (y/n)?"
+             validargs="y,n"
+             addproperty="do.delete"/>
+
        <condition property="do.abort">
           <equals arg1="n" arg2="${do.delete}"/>
        </condition>
        <fail if="do.abort">Quickstart aborted.</fail>
 
       <delete 
-      	dir="../${project-name}" 
-      	quiet="false"/>
-   	  <package 
-   	  	projectName="${project-name}" 
-   	  	packageName="${package-name}"/>
+        dir="../${project-name}"
+        quiet="false"/>
+      <package
+        projectName="${project-name}"
+        packageName="${package-name}"/>
+
       <copy todir="../${project-name}/WebContent">
-      	<fileset dir="template/WebContent"/>
+        <fileset dir="template/WebContent"/>
       </copy>
-      <copy 
-      	todir="../${project-name}/WebContent/WEB-INF/lib"
-      	file="dist/${click}.jar"/>
-      <copy 
-      	todir="../${project-name}/WebContent/WEB-INF/lib"
-      	file="dist/${click-extras}.jar"/>
-      <copy 
-      	todir="../${project-name}/WebContent/WEB-INF/lib"
-      	file="lib/${jar.log4j}"/>
-      <copy 
-      	todir="../${project-name}/lib"
-      	file="lib/servlet-api-2.4.jar"/>
-      <copy 
-      	todir="../${project-name}" 
-      	file="template/build.xml"/>
-      <copy 
-      	todir="../${project-name}" 
-      	file="template/README.txt"/>
+      <copy todir="../${project-name}/WebContent/WEB-INF/lib" file="dist/${click}.jar"/>
+      <copy todir="../${project-name}/WebContent/WEB-INF/lib" file="dist/${click-extras}.jar"/>
+      <copy todir="../${project-name}/WebContent/WEB-INF/lib" file="lib/${jar.log4j}"/>
+      <copy todir="../${project-name}/lib"                    file="lib/servlet-api-2.4.jar"/>
+      <copy todir="../${project-name}"                        file="template/build.xml"/>
+      <copy todir="../${project-name}"                        file="template/README.txt"/>
       <copy todir="${package.path}">
         <fileset dir="template/src/template"/>
       </copy>
-   	  <replace 
-   	  	token="package template" 
-   	  	value="package ${package-name}"
-   	  	dir="../${project-name}/src"/>
-   	  <replace 
-   	  	token="import template" 
-   	  	value="import ${package-name}"
-   	  	dir="../${project-name}/src"/>
- 	  <replace 
- 	  	token="template" 
- 	  	value="${package-name}"
- 	  	file="../${project-name}/WebContent/WEB-INF/click.xml"/>   
- 	  <replace 
- 	  	token="project-name" 
- 	  	value="${project-name}"
- 	  	file="../${project-name}/WebContent/border-template.htm"/>   
- 	  <replace 
- 	  	token="project-name" 
- 	  	value="${project-name}"
- 	  	file="../${project-name}/WebContent/click/error.htm"/>   
- 	  <replace
- 	  	token="template-context"
- 	  	value="${context-path}"
- 	  	dir="../${project-name}"/>
+
+      <replace token="package template" value="package ${package-name}" dir="../${project-name}/src"/>
+      <replace token="import template"  value="import ${package-name}"  dir="../${project-name}/src"/>
+      <replace token="project-name"     value="${project-name}"         file="../${project-name}/build.xml"/>
+      <replace token="project-name"     value="${project-name}"         file="../${project-name}/README.txt"/>
+      <replace token="project-name"     value="${project-name}"         file="../${project-name}/WebContent/border-template.htm"/>
+      <replace token="project-name"     value="${project-name}"         file="../${project-name}/WebContent/WEB-INF/web.xml"/>
+      <replace token="project-name"     value="${project-name}"         file="../${project-name}/WebContent/click/error.htm"/>
+      <replace token="template"         value="${package-name}"         file="../${project-name}/WebContent/WEB-INF/click.xml"/>
+      <replace token="template-context" value="${context-path}"         dir="../${project-name}"/>
    </target>
 
 
