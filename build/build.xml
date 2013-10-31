@@ -19,10 +19,7 @@
 -->
 <project name="click" default="help" basedir="..">
 
-   <!-- 
-    Project Properties 
-    -->
-    
+   <!--  Project Properties -->
    <property file="./build/build.properties"/>
    <xmlproperty file="./build/javascript-syntax-highlighter.xml"/>
    <property name="click" value="click-${version}"/>
@@ -52,11 +49,8 @@
    <property name="maven-bundle" value="../maven-upload"/>
 
 
-    <!--
-     Macro Definitions
-     -->
-    
-    <macrodef name="downloadMacro">
+    <!-- Macro Definitions -->
+    <macrodef name="downloadMacro" description="Macro to download a JAR from a Maven repository">
         <attribute name="name"/>
         <attribute name="path"/>
         <sequential>
@@ -67,7 +61,7 @@
         </sequential>
     </macrodef> 
 
-    <macrodef name="buildBundleMacro">
+    <macrodef name="buildBundleMacro" description="Macro to build a Maven Bundle">
         <attribute name="name"/>
         <sequential>
             <mkdir dir="${maven-bundle}/@{name}"/>
@@ -76,34 +70,29 @@
                      token="VERSION" 
                      value="${version}"/>
 
-            <!--
-                Replace the TEMPLATE token with the value of the template pom
-            -->
+            <!-- Replace the TEMPLATE token with the value of the template pom -->
             <loadfile property="pom-template" srcFile="build/template.pom"/>
             <replace file="${maven-bundle}/@{name}/@{name}-${version}.pom"
                      value="${pom-template}">
               <replacetoken>&lt;!--TEMPLATE--&gt;</replacetoken>
             </replace>
-            <copy file="dist/@{name}-${version}.jar" todir="${maven-bundle}/@{name}/"/>
+            <copy file="dist/@{name}-${version}.jar"         todir="${maven-bundle}/@{name}/"/>
+            <copy file="dist/@{name}-${version}-sources.jar" todir="${maven-bundle}/@{name}/"/>
+            <copy file="dist/@{name}-${version}-javadoc.jar" todir="${maven-bundle}/@{name}/"/>
         </sequential>
     </macrodef>
 
     <macrodef name="digestMacro">
         <attribute name="file"/>
         <sequential>
-            <!--
-            Calculating checksum currently not very useful
-            -->
+            <!--  Calculating checksum currently not very useful  -->
             <checksum file="@{file}" forceOverwrite="true" fileext=".md5"/>
             <checksum file="@{file}" forceOverwrite="true" algorithm="SHA1" fileext=".sha1"/>
         </sequential>
     </macrodef>
 
 
-   <!-- 
-    Path Definitions
-    -->
-   
+   <!-- Path Definitions -->
    <path id="classpath.framework">
       <pathelement location="framework/classes"/>
       <pathelement location="lib/${jar.codec}"/>
@@ -162,10 +151,7 @@
       </fileset>
    </path>
 
-   <!-- 
-    Target Definitions 
-    -->
-   
+   <!-- Target Definitions -->
    <target name="build-all" 
            depends="build-framework, build-mock, build-extras, build-examples" 
            description="build Click framework, extras, mock, examples"/>
@@ -408,7 +394,7 @@
 
 
    <target name="build-maven-bundles" 
-           depends="build-framework, build-mock, build-extras"
+           depends="build-framework, build-mock, build-extras, build-sources, build-javadoc-jars"
            description="build Maven repository upload bundles">
       <!-- Start with a clean directory -->
       <delete dir="${maven-bundle}" quiet="false"/>
@@ -421,40 +407,70 @@
 
 
    <target name="build-sources"
-           description="build source ZIP files for use with IDEs">
+           description="build source JAR files for use with IDEs or Maven">
       <property name="dir.source" value="framework/src"/>
       <!-- zip the framework without dependencies-->
-      <zip destfile="dist/${click-nodeps}-src.zip">
+      <jar destfile="dist/${click-nodeps}-sources.jar">
          <fileset dir="${dir.source}">
             <exclude name="**/.html"/>
             <exclude name="**/.css"/>
             <exclude name="**/.js"/>
             <exclude name="**/.gif"/>
          </fileset>
-      </zip>
-      <!-- zip the framework with dependencies:-->
-      <!-- this is not ready since the sources for the used jars are not available -->
-      <zip destfile="dist/${click}-src.zip">
+      </jar>
+      <!-- zip the framework with dependencies-->
+      <jar destfile="dist/${click}-sources.jar">
          <fileset dir="${dir.source}">
             <exclude name="**/package.html"/>
          </fileset>
-      </zip>
+      </jar>
       <!-- zip extras -->
-      <zip destfile="dist/${click-extras}-src.zip" >
+      <jar destfile="dist/${click-extras}-sources.jar" >
          <fileset dir="extras/src">
             <exclude name="**/*.html"/>
          </fileset>
-      </zip>
+      </jar>
       <!-- zip mock -->
-      <zip destfile="dist/${click-mock}-src.zip" >
+      <jar destfile="dist/${click-mock}-sources.jar" >
          <fileset dir="mock/src">
             <exclude name="**/*.html"/>
          </fileset>
-      </zip>
+      </jar>
    </target>
 
+    <target name="build-javadoc-jars"
+            description="build javadoc JAR files for use with IDEs or Maven"
+            depends="javadoc">
+        <!-- zip the framework without dependencies-->
+        <copy file="LICENSE.txt" todir="documentation/docs/click-api/META-INF"/>
+        <copy file="NOTICE.txt" todir="documentation/docs/click-api/META-INF"/>
+        <zip destfile="dist/${click-nodeps}-javadoc.jar">
+            <fileset dir="documentation/docs/click-api">
+            </fileset>
+        </zip>
+        <!-- zip the framework with dependencies-->
+        <zip destfile="dist/${click}-javadoc.jar">
+            <fileset dir="documentation/docs/click-api">
+            </fileset>
+        </zip>
+        <!-- zip extras -->
+        <copy file="LICENSE.txt" todir="documentation/docs/extras-api/META-INF"/>
+        <copy file="NOTICE.txt" todir="documentation/docs/extras-api/META-INF"/>
+        <zip destfile="dist/${click-extras}-javadoc.jar" >
+            <fileset dir="documentation/docs/extras-api">
+            </fileset>
+        </zip>
+        <!-- zip mock -->
+        <copy file="LICENSE.txt" todir="documentation/docs/mock-api/META-INF"/>
+        <copy file="NOTICE.txt" todir="documentation/docs/mock-api/META-INF"/>
+        <zip destfile="dist/${click-mock}-javadoc.jar" >
+            <fileset dir="documentation/docs/mock-api">
+            </fileset>
+        </zip>
+    </target>
 
-   <target name="checkstyle" description="run checkstyle report on Java source">
+
+    <target name="checkstyle" description="run checkstyle report on Java source">
       <available file="lib/${jar.checkstyle}" property="isJarAvail"/>
       <fail message="The Checkstyle JAR is not on the classpath. To resolve this download the JAR dependencies with 'ant get-deps'.">
          <condition>
@@ -525,39 +541,40 @@
                classname="org.apache.click.tools.devtasks.ReplaceTabsTask"
                 classpath="lib/click-dev-tasks-1.1.jar"/>
 
-      <linetrim srcdir="framework/src" includes="**/*.java"/>
+      <linetrim    srcdir="framework/src" includes="**/*.java"/>
       <replacetabs srcdir="framework/src" includes="**/*.java"/>
-      <linetrim srcdir="extras/src" includes="**/*.java"/>
-      <replacetabs srcdir="extras/src" includes="**/*.java"/>
-      <linetrim srcdir="mock/src" includes="**/*.java"/>
-      <replacetabs srcdir="mock/src" includes="**/*.java"/>
-      <linetrim srcdir="examples/src" includes="**/*.java"/>
-      <replacetabs srcdir="examples/src" includes="**/*.java"/>
-      <linetrim srcdir="template/src" includes="**/*.java"/>
-      <replacetabs srcdir="template/src" includes="**/*.java"/>
+      <linetrim    srcdir="extras/src"    includes="**/*.java"/>
+      <replacetabs srcdir="extras/src"    includes="**/*.java"/>
+      <linetrim    srcdir="mock/src"      includes="**/*.java"/>
+      <replacetabs srcdir="mock/src"      includes="**/*.java"/>
+      <linetrim    srcdir="examples/src"  includes="**/*.java"/>
+      <replacetabs srcdir="examples/src"  includes="**/*.java"/>
+      <linetrim    srcdir="template/src"  includes="**/*.java"/>
+      <replacetabs srcdir="template/src"  includes="**/*.java"/>
    </target>
 
  
    <target name="get-deps" description="download JAR dependencies">
-      <downloadMacro name="${jar.codec}" path="commons-codec/commons-codec/${commons-codec.version}"/>
+      <downloadMacro name="${jar.codec}"       path="commons-codec/commons-codec/${commons-codec.version}"/>
       <downloadMacro name="${jar.collections}" path="commons-collections/commons-collections/${commons-collections.version}"/>
-      <downloadMacro name="${jar.io}" path="commons-io/commons-io/${commons-io.version}"/>
-      <downloadMacro name="${jar.lang}" path="commons-lang/commons-lang/${commons-lang.version}"/>
-      <downloadMacro name="${jar.log4j}" path="log4j/log4j/${log4j.version}"/>
-      <downloadMacro name="${jar.mvel2}" path="org/mvel/mvel2/${mvel2.version}"/>
-      <downloadMacro name="${jar.ognl}" path="ognl/ognl/${ognl.version}"/>
-      <downloadMacro name="${jar.upload}" path="commons-fileupload/commons-fileupload/${commons-fileupload.version}"/>
-      <downloadMacro name="${jar.junit}" path="junit/junit/${junit.version}"/>
-      <downloadMacro name="${jar.servlet}" path="javax/servlet/servlet-api/${servlet-api.version}"/>
-      <downloadMacro name="${jar.slf4j}" path="org/slf4j/slf4j-api/${slf4j.version}"/>
-      <downloadMacro name="${jar.spring}" path="org/springframework/spring/${spring.version}"/>
-      <downloadMacro name="${jar.velocity}" path="org/apache/velocity/velocity/${velocity.version}"/>
-      <downloadMacro name="${jar.cayenne}" path="org/apache/cayenne/cayenne-server/${cayenne.version}"/>
-      <downloadMacro name="${jar.freemarker}" path="org/freemarker/freemarker/${freemarker.version}"/>
-      <ant antfile="build.xml" 
-           dir="examples"
-           target="get-deps"
-           inheritall="false"/>
+      <downloadMacro name="${jar.io}"          path="commons-io/commons-io/${commons-io.version}"/>
+      <downloadMacro name="${jar.lang}"        path="commons-lang/commons-lang/${commons-lang.version}"/>
+      <downloadMacro name="${jar.log4j}"       path="log4j/log4j/${log4j.version}"/>
+      <downloadMacro name="${jar.mvel2}"       path="org/mvel/mvel2/${mvel2.version}"/>
+      <downloadMacro name="${jar.ognl}"        path="ognl/ognl/${ognl.version}"/>
+      <downloadMacro name="${jar.upload}"      path="commons-fileupload/commons-fileupload/${commons-fileupload.version}"/>
+      <downloadMacro name="${jar.junit}"       path="junit/junit/${junit.version}"/>
+      <downloadMacro name="${jar.servlet}"     path="javax/servlet/servlet-api/${servlet-api.version}"/>
+      <downloadMacro name="${jar.slf4j}"       path="org/slf4j/slf4j-api/${slf4j.version}"/>
+      <downloadMacro name="${jar.spring}"      path="org/springframework/spring/${spring.version}"/>
+      <downloadMacro name="${jar.velocity}"    path="org/apache/velocity/velocity/${velocity.version}"/>
+      <downloadMacro name="${jar.cayenne}"     path="org/apache/cayenne/cayenne-server/${cayenne.version}"/>
+      <downloadMacro name="${jar.freemarker}"  path="org/freemarker/freemarker/${freemarker.version}"/>
+
+
+      <!-- gets the dependencies for click-examples too-->
+      <ant antfile="build.xml"  dir="examples" target="get-deps"  inheritall="false"/>
+
 
       <!-- Check if hibernate download is enabled -->
       <condition property="hibernate.true">
