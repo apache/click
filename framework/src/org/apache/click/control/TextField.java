@@ -210,13 +210,11 @@ public class TextField extends Field {
 
     /**
      * Set the input field HTML5 autocomplete status.
-     *
-     * @return true if input field HTML5 autocomplete enabled.
      */
     public void setAutocomplete(boolean autocomplete) {
         if (autocomplete) {
             setAttribute("autocomplete", "on");
-        } else{
+        } else {
             setAttribute("autocomplete", "off");
         }
     }
