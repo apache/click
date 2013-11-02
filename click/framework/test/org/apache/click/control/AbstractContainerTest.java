@@ -30,7 +30,7 @@ public class AbstractContainerTest extends TestCase {
      * Test AbstractContainer#add(Control) and #insert(Control, int)
      * pre conditions.
      */
-    public void testInsertPreCondistion() {
+    public void testInsertPreCondition() {
         MockContext.initContext();
         AbstractContainer container = new AbstractContainer("form") {
             private static final long serialVersionUID = 1L;

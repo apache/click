@@ -354,7 +354,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
-     * @see ConfigService#getProperyService()
+     * @see ConfigService#getPropertyService()
      *
      * @return the application property service.
      */

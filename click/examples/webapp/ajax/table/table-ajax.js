@@ -36,7 +36,7 @@ jQuery(document).ready(function() {
 
         // Prevent the default browser behavior of navigating to the link
         event.preventDefault();
-    })
+    });
 
     // Register a 'live' click handler on the sorting links of the table header (<th>),
     // as well as the paging links on the <div> banner.
@@ -49,7 +49,7 @@ jQuery(document).ready(function() {
         // Prevent the default browser behavior of navigating to the link
         return false;
     })
-})
+});
 
 function editOrDeleteCustomer(event) {
     var link = jQuery(event.currentTarget);

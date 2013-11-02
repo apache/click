@@ -103,7 +103,7 @@ public class PropertyUtils {
      * @return the property value for the given source object and property name
      */
     public static Object getValue(Object source, String name, Map cache) {
-        Validate.notNull(cache, "Null cache paramenter");
+        Validate.notNull(cache, "Null cache parameter");
 
         String basePart = name;
         String remainingPart = null;

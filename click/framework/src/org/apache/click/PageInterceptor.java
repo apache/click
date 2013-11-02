@@ -49,7 +49,7 @@ package org.apache.click;
  * <p/>
  * Note application scope interceptors are more efficient that request scope
  * interceptors, but you are responsible for ensuring that they are thread safe
- * and support reentrant method invocations as multiple page requests are
+ * and support re-entrant method invocations as multiple page requests are
  * processed at the same time.
  *
  * <h3><a name="configuration"></a>Configuration</h3>

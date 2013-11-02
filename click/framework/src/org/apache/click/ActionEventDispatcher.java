@@ -269,15 +269,15 @@ public class ActionEventDispatcher {
      * @see #fireAjaxBehaviors(org.apache.click.Context, org.apache.click.Control)
      *
      * @param context the request context
-     * @param ajaxBbehaviorSourceSet the set of controls with attached AjaxBehaviors
+     * @param ajaxBehaviorSourceSet the set of controls with attached AjaxBehaviors
      *
      * @return true if the page should continue processing, false otherwise
      */
-    protected boolean fireAjaxBehaviors(Context context, Set<Control> ajaxBbehaviorSourceSet) {
+    protected boolean fireAjaxBehaviors(Context context, Set<Control> ajaxBehaviorSourceSet) {
 
         boolean continueProcessing = true;
 
-        for (Iterator<Control> it = ajaxBbehaviorSourceSet.iterator(); it.hasNext();) {
+        for (Iterator<Control> it = ajaxBehaviorSourceSet.iterator(); it.hasNext();) {
             Control source = it.next();
 
             // Pop the first entry in the set
@@ -369,7 +369,7 @@ public class ActionEventDispatcher {
                             if (behaviorActionResult == null) {
                                 buffer.append(" (ActionResult is null and will be ignored)");
                             } else {
-                                buffer.append(" (ActionResult will be ignored since another AjaxBehavior already retuned a non-null ActionResult)");
+                                buffer.append(" (ActionResult will be ignored since another AjaxBehavior already returned a non-null ActionResult)");
                             }
                         }
 

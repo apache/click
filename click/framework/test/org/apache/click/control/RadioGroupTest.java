@@ -122,7 +122,7 @@ public class RadioGroupTest extends TestCase {
     }
 
     /**
-     * Coverage test of addAll(Colelction<Object>).
+     * Coverage test of addAll(Collection<Object>).
      */
     public void testAddAllObject() {
         MockContext.initContext();
@@ -157,7 +157,7 @@ public class RadioGroupTest extends TestCase {
     }
     
     /**
-     * Coverage test of addAll(Colelction<Object>).
+     * Coverage test of addAll(Collection<Object>).
      */
     public void testFocusJs() {
         MockContext.initContext();
