@@ -106,8 +106,9 @@ public class TextField extends Field {
     /** The field HTML5 placeholder attribute. */
     protected String placeholder;
 
-    /** The text field size attribute. The default size is 20. */
-    protected int size = 20;
+    /** The text field size attribute. If the size is > 0, this is rendered as the
+     * HTML attribute 'size' . */
+    protected int size = 0;
 
     // ----------------------------------------------------------- Constructors
 
@@ -366,7 +367,9 @@ public class TextField extends Field {
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("id", getId());
         buffer.appendAttributeEscaped("value", getValue());
-        buffer.appendAttribute("size", getSize());
+        if (getSize() > 0) {
+            buffer.appendAttribute("size", getSize());
+        }
         buffer.appendAttribute("title", getTitle());
         if (getTabIndex() > 0) {
             buffer.appendAttribute("tabindex", getTabIndex());

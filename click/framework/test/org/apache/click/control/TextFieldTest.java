@@ -28,6 +28,24 @@ import org.apache.click.servlet.MockRequest;
 public class TextFieldTest extends TestCase {
 
     /**
+     * Tests TextField size handling.
+     *
+     * CLK-601
+     */
+    public void testSize(){
+        MockContext context = MockContext.initContext();
+        TextField textField = new TextField("text");
+        assertEquals(textField.getSize(),0); // default value is 0, i.e. is used from the browser.
+        assertTrue(!textField.toString().contains("size")); // the size parameter should not be rendered
+        System.out.println("textField.toString() = " + textField.toString());
+
+        TextField textField2 = new TextField("text2");
+        textField2.setSize(40); // if a size is set, than it should also be rendered.
+        assertTrue(textField2.toString().contains("size=\"40\""));
+        System.out.println("textField2.toString() = " + textField2.toString());
+    }
+
+    /**
      * Test TextField onProcess behavior.
      */
     public void testOnProcess() {
