@@ -42,7 +42,7 @@ import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.prototypejs.DateField;
 import org.apache.click.util.ClickUtils;
 import org.springframework.stereotype.Component;
 

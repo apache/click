@@ -33,7 +33,7 @@ import org.apache.click.examples.control.InvestmentSelect;
 import org.apache.click.examples.domain.Customer;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.service.CustomerService;
-import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.prototypejs.DateField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.FieldColumn;
 import org.apache.click.extras.control.FormTable;

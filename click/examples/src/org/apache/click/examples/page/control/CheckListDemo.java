@@ -22,7 +22,7 @@ import org.apache.click.control.Option;
 import org.apache.click.control.Submit;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
-import org.apache.click.extras.control.CheckList;
+import org.apache.click.extras.prototypejs.CheckList;
 import org.apache.click.extras.control.PageSubmit;
 
 /**

@@ -31,7 +31,7 @@ import org.apache.click.control.TextField;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.quartz.JobAndSimpleTrigger;
 import org.apache.click.examples.quartz.SchedulerService;
-import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.prototypejs.DateField;
 import org.quartz.JobDetail;
 import org.quartz.ee.servlet.QuartzInitializerListener;
 import org.quartz.impl.StdSchedulerFactory;

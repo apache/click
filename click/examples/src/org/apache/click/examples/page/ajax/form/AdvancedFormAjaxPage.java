@@ -31,7 +31,7 @@ import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.examples.page.BorderPage;
-import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.prototypejs.DateField;
 import org.apache.click.extras.control.IntegerField;
 
 /**

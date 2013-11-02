@@ -32,7 +32,7 @@ import org.apache.click.examples.control.InvestmentSelect;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.examples.util.ExampleUtils;
-import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.prototypejs.DateField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.PageSubmit;
 

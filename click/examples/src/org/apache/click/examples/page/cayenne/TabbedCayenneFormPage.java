@@ -31,7 +31,7 @@ import org.apache.click.examples.service.ClientService;
 import org.apache.click.extras.cayenne.CayenneForm;
 import org.apache.click.extras.cayenne.QuerySelect;
 import org.apache.click.extras.cayenne.TabbedCayenneForm;
-import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.prototypejs.DateField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.IntegerField;
 import org.springframework.stereotype.Component;

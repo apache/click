@@ -31,7 +31,7 @@ import org.apache.click.examples.control.PackagingRadioGroup;
 import org.apache.click.examples.page.BorderPage;
 import org.apache.click.examples.page.HomePage;
 import org.apache.click.extras.control.CreditCardField;
-import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.prototypejs.DateField;
 import org.apache.click.extras.control.IntegerField;
 import org.apache.click.extras.control.PageSubmit;
 import org.apache.click.util.ContainerUtils;

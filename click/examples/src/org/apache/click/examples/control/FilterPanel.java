@@ -22,7 +22,7 @@ import java.util.Date;
 
 import org.apache.click.control.Form;
 import org.apache.click.control.Panel;
-import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.prototypejs.DateField;
 
 /**
  * Provides a custom date FilterPanel.

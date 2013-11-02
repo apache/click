@@ -28,7 +28,7 @@ import org.apache.click.examples.domain.Address;
 import org.apache.click.examples.domain.Client;
 import org.apache.click.examples.domain.SystemCode;
 import org.apache.click.examples.service.ClientService;
-import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.prototypejs.DateField;
 import org.apache.click.extras.control.EmailField;
 
 /**

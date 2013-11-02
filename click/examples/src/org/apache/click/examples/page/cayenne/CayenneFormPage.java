@@ -29,7 +29,7 @@ import org.apache.click.control.TextField;
 import org.apache.click.examples.domain.Client;
 import org.apache.click.examples.service.ClientService;
 import org.apache.click.extras.cayenne.QuerySelect;
-import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.prototypejs.DateField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.extras.control.IntegerField;
 import org.springframework.stereotype.Component;

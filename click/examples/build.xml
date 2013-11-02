@@ -32,6 +32,7 @@
    <property name="jar.cayenne" value="cayenne-server-${cayenne.version}.jar"/>
    <property name="jar.click" value="click-${version}.jar"/>
    <property name="jar.click-extras" value="click-extras-${version}.jar"/>
+   <property name="jar.click-extras-prototypejs" value="click-extras-prototypejs-${version}.jar"/>
    <property name="jar.hsqldb" value="hsqldb-${hsqldb.version}.jar"/>
    <property name="jar.jstl" value="jstl-${jstl.version}.jar"/>
    <property name="jar.log4j" value="log4j-${log4j.version}.jar"/>
@@ -71,6 +72,7 @@
    <path id="classpath">
       <pathelement location="../dist/${jar.click}"/>
       <pathelement location="../dist/${jar.click-extras}"/>
+      <pathelement location="../dist/${jar.click-extras-prototypejs}"/>
       <pathelement location="../lib/${jar.servlet}"/>
       <fileset dir="${dir.weblib}">
         <include name="*.jar"/>
@@ -126,6 +128,7 @@
         <fileset dir="../dist">
             <include name="${jar.click}"/>
             <include name="${jar.click-extras}"/>
+            <include name="${jar.click-extras-prototypejs}"/>
         </fileset>
       </deploy>
 
@@ -136,6 +139,7 @@
          </manifest>
          <lib file="../dist/${jar.click}"/>
          <lib file="../dist/${jar.click-extras}"/>
+         <lib file="../dist/${jar.click-extras-prototypejs}"/>
          <fileset dir="${dir.webapp}">
             <exclude name="**/web.xml"/>
          </fileset>
@@ -150,7 +154,15 @@
   	        <or><isfalse value="${isExtrasAvail}"/></or>
   	     </condition>
       </fail>
-      <delete dir="${dir.webapp}/WEB-INF/classes" quiet="false"/>
+
+       <available file="../dist/${jar.click-extras-prototypejs}" property="isExtrasPrototypejsAvail"/>
+       <fail message="Build extras-prototypejs first with 'build-extras-prototypejs'">
+           <condition>
+               <or><isfalse value="${isExtrasPrototypejsAvail}"/></or>
+           </condition>
+       </fail>
+
+       <delete dir="${dir.webapp}/WEB-INF/classes" quiet="false"/>
       <mkdir dir="${dir.webapp}/WEB-INF/classes"/>
       <copy todir="${dir.webapp}/WEB-INF/classes">
          <fileset dir="src">

@@ -1,0 +1,33 @@
+<!--
+#* Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.*#
+-->
+
+#if(${field.showTextField})
+  <input id="${id}" type="text" name="${field.name}" value="${value}" ${attributes}/>
+#else
+  <input id="${id}" type="hidden" name="${field.name}" value="${value}" ${attributes}/>
+  <span id="${id}_p" style="background-color:${value}" class="colorPickerPreview"></span>
+#end
+
+<img align="top" class="colorPickerImg" id="${id}_i"
+    onclick="Click.colorPicker.showColorPicker({
+        inputObjId:'${id}', imageId: '${id}_i', closeMsg:'${closeMsg}',
+        clearMsg: '${noColorMsg}', resourcePath:'${path}', isRequired:${field.required}
+        #if(!${field.showTextField}),previewId:'${id}_p' #end
+    })"
+    title="${chooseColorMsg}" src="${path}/click/colorpicker/images/color-picker.png"/>

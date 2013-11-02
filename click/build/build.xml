@@ -24,6 +24,7 @@
    <xmlproperty file="./build/javascript-syntax-highlighter.xml"/>
    <property name="click" value="click-${version}"/>
    <property name="click-extras" value="click-extras-${version}"/>
+   <property name="click-extras-prototypejs" value="click-extras-prototypejs-${version}"/>
    <property name="click-nodeps" value="click-nodeps-${version}"/>
    <property name="click-mock" value="click-mock-${version}"/>
 
@@ -118,7 +119,16 @@
       <pathelement location="dist/${click}.jar"/>
    </path>
 
-   <path id="classpath.mock">
+    <path id="classpath.extras-prototypejs">
+        <pathelement location="prototypejs/classes"/>
+        <pathelement location="lib/${jar.log4j}"/>
+        <pathelement location="lib/${jar.servlet}"/>
+        <pathelement location="lib/${jar.slf4j}"/>
+        <pathelement location="dist/${click}.jar"/>
+        <pathelement location="dist/${click-extras}.jar"/>
+    </path>
+
+    <path id="classpath.mock">
       <pathelement location="mock/classes"/>
       <pathelement location="lib/${jar.codec}"/>
       <pathelement location="lib/${jar.collections}"/>
@@ -136,6 +146,7 @@
       <pathelement location="lib/${jar.spring}"/>
       <pathelement location="dist/${click}.jar"/>
       <pathelement location="dist/${click-extras}.jar"/>
+      <pathelement location="dist/${click-extras-prototypejs}.jar"/>
    </path>
 
    <path id="classpath.test"> 
@@ -153,12 +164,12 @@
 
    <!-- Target Definitions -->
    <target name="build-all" 
-           depends="build-framework, build-mock, build-extras, build-examples" 
+           depends="build-framework, build-mock, build-extras, build-extras-prototypejs, build-examples"
            description="build Click framework, extras, mock, examples"/>
 
 
    <target name="build-distribution" 
-           depends="clean, build-framework, build-mock, build-extras, build-examples, javadoc" 
+           depends="clean, build-framework, build-mock, build-extras, build-extras-prototypejs, build-examples, javadoc"
            description="build distribution ZIP file">
       <!-- create distribution zip file -->
       <delete dir="${click}" quiet="false"/>
@@ -261,8 +272,59 @@
       <delete dir="temp" quiet="false"/>
    </target>
 
+    <target name="build-extras-prototypejs" description="build extras-prototypejs JAR file" depends="check-deps">
+        <available file="dist/${click}.jar" property="isClickAvail"/>
+        <fail message="Build framework first with 'build-framework'">
+            <condition>
+                <or><isfalse value="${isClickAvail}"/></or>
+            </condition>
+        </fail>
+        <available file="dist/${click-extras}.jar" property="isClickExtrasAvail"/>
+        <fail message="Build extras first with 'build-extras'">
+            <condition>
+                <or><isfalse value="${isClickExtrasAvail}"/></or>
+            </condition>
+        </fail>
+        <delete file="dist/${click-extras-prototypejs}.jar" quiet="false"/>
+        <delete dir="prototypejs/classes" quiet="false"/>
+        <mkdir dir="prototypejs/classes"/>
+        <copy todir="prototypejs/classes">
+            <fileset dir="prototypejs/src">
+                <exclude name="**/package.html"/>
+                <exclude name="${exclude-hibernate}"/>
+            </fileset>
+        </copy>
+        <copy file="LICENSE.txt" todir="prototypejs/classes/META-INF"/>
+        <copy file="NOTICE.txt" todir="prototypejs/classes/META-INF"/>
+        <javac srcdir="prototypejs/src"
+               destdir="prototypejs/classes"
+               debug="true"
+               excludes="**/Test*, ${exclude-hibernate}"
+               encoding="UTF-8"
+               source="${javac.source}">
+            <classpath refid="classpath.extras-prototypejs"/>
+        </javac>
+        <jar destfile="dist/${click-extras-prototypejs}.jar">
+            <manifest>
+                <attribute name="Click-Version" value="${version}"/>
+                <attribute name="Package" value="org.apache.click.extras.prototypejs"/>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Created-By" value="Apache Ant"/>
+                <attribute name="Build-Jdk" value="${java.version}"/>
+                <attribute name="Extension-Name" value="org.apache.click.extras.prototypejs"/>
+                <attribute name="Specification-Title" value="Click is a Java-based web application framework" />
+                <attribute name="Specification-Vendor" value="Apache Software Foundation"/>
+                <attribute name="Implementation-Title" value="org.apache.click.extras.prototypejs"/>
+                <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+                <attribute name="Implementation-Vendor" value="Apache Software Foundation"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+            </manifest>
+            <fileset dir="prototypejs/classes"/>
+        </jar>
+        <delete dir="temp" quiet="false"/>
+    </target>
 
-   <target name="build-framework" description="build framework JAR file" depends="check-deps">
+    <target name="build-framework" description="build framework JAR file" depends="check-deps">
       <mkdir dir="dist"/>
       <delete file="dist/${click}.jar" quiet="false"/>
       <delete file="dist/${click-nodeps}.jar" quiet="false"/>
@@ -394,7 +456,7 @@
 
 
    <target name="build-maven-bundles" 
-           depends="build-framework, build-mock, build-extras, build-sources, build-javadoc-jars"
+           depends="build-framework, build-mock, build-extras, build-extras-prototypejs, build-sources, build-javadoc-jars"
            description="build Maven repository upload bundles">
       <!-- Start with a clean directory -->
       <delete dir="${maven-bundle}" quiet="false"/>
@@ -402,6 +464,7 @@
       <buildBundleMacro name="click"/>
       <buildBundleMacro name="click-nodeps"/>
       <buildBundleMacro name="click-extras"/>
+      <buildBundleMacro name="click-extras-prototypejs"/>
       <buildBundleMacro name="click-mock"/>
    </target>
 
@@ -424,13 +487,22 @@
             <exclude name="**/package.html"/>
          </fileset>
       </jar>
+
       <!-- zip extras -->
       <jar destfile="dist/${click-extras}-sources.jar" >
          <fileset dir="extras/src">
             <exclude name="**/*.html"/>
          </fileset>
       </jar>
-      <!-- zip mock -->
+
+       <!-- zip extras-prototypejs -->
+       <jar destfile="dist/${click-extras-prototypejs}-sources.jar" >
+           <fileset dir="prototypejs/src">
+               <exclude name="**/*.html"/>
+           </fileset>
+       </jar>
+
+       <!-- zip mock -->
       <jar destfile="dist/${click-mock}-sources.jar" >
          <fileset dir="mock/src">
             <exclude name="**/*.html"/>
@@ -460,6 +532,13 @@
             <fileset dir="documentation/docs/extras-api">
             </fileset>
         </zip>
+        <!-- zip extras-prototypejs -->
+        <copy file="LICENSE.txt" todir="documentation/docs/prototypejs-api/META-INF"/>
+        <copy file="NOTICE.txt" todir="documentation/docs/prototypejs-api/META-INF"/>
+        <zip destfile="dist/${click-extras-prototypejs}-javadoc.jar" >
+            <fileset dir="documentation/docs/prototypejs-api">
+            </fileset>
+        </zip>
         <!-- zip mock -->
         <copy file="LICENSE.txt" todir="documentation/docs/mock-api/META-INF"/>
         <copy file="NOTICE.txt" todir="documentation/docs/mock-api/META-INF"/>
@@ -484,6 +563,7 @@
       <checkstyle config="build/checkstyle-checks.xml">
          <fileset dir="framework/src/org/apache/click/" includes="**/*.java"/>
          <fileset dir="extras/src" includes="**/*.java"/>
+         <fileset dir="prototypejs/src" includes="**/*.java"/>
          <fileset dir="mock/src" includes="**/*.java"/>
         <classpath refid="classpath.checkstyle"/>
       </checkstyle>
@@ -515,7 +595,10 @@
       <delete>
         <fileset dir="extras/test" includes="TEST-*.txt"/>
       </delete>
-      <delete>
+       <delete>
+           <fileset dir="prototypejs/test" includes="TEST-*.txt"/>
+       </delete>
+       <delete>
         <fileset dir="mock/test" includes="TEST-*.txt"/>
       </delete>
    </target>
@@ -541,16 +624,18 @@
                classname="org.apache.click.tools.devtasks.ReplaceTabsTask"
                 classpath="lib/click-dev-tasks-1.1.jar"/>
 
-      <linetrim    srcdir="framework/src" includes="**/*.java"/>
-      <replacetabs srcdir="framework/src" includes="**/*.java"/>
-      <linetrim    srcdir="extras/src"    includes="**/*.java"/>
-      <replacetabs srcdir="extras/src"    includes="**/*.java"/>
-      <linetrim    srcdir="mock/src"      includes="**/*.java"/>
-      <replacetabs srcdir="mock/src"      includes="**/*.java"/>
-      <linetrim    srcdir="examples/src"  includes="**/*.java"/>
-      <replacetabs srcdir="examples/src"  includes="**/*.java"/>
-      <linetrim    srcdir="template/src"  includes="**/*.java"/>
-      <replacetabs srcdir="template/src"  includes="**/*.java"/>
+      <linetrim    srcdir="framework/src"   includes="**/*.java"/>
+      <replacetabs srcdir="framework/src"   includes="**/*.java"/>
+      <linetrim    srcdir="extras/src"      includes="**/*.java"/>
+      <replacetabs srcdir="extras/src"      includes="**/*.java"/>
+      <linetrim    srcdir="prototypejs/src" includes="**/*.java"/>
+      <replacetabs srcdir="prototypejs/src" includes="**/*.java"/>
+      <linetrim    srcdir="mock/src"        includes="**/*.java"/>
+      <replacetabs srcdir="mock/src"        includes="**/*.java"/>
+      <linetrim    srcdir="examples/src"    includes="**/*.java"/>
+      <replacetabs srcdir="examples/src"    includes="**/*.java"/>
+      <linetrim    srcdir="template/src"    includes="**/*.java"/>
+      <replacetabs srcdir="template/src"    includes="**/*.java"/>
    </target>
 
  
@@ -670,7 +755,20 @@ Please ensure you have configured build.properties</echo>
                     overview="documentation/docs/extras-overview.html"
                     excludes="${exclude-hibernate-package}"/>
 
-      <!-- Mock -->
+       <!-- Extras-prototypejs -->
+       <delete quiet="false" failonerror="false">
+           <fileset dir="documentation/docs/prototypejs-api" includes="**/*"/>
+       </delete>
+
+       <javadocMacro src="prototypejs/src"
+                     destdir="documentation/docs/prototypejs-api"
+                     windowtitle="Click Extras Prototype.js API - v${version}"
+                     doctitle="Click Extras Prototype.js API - v${version}"
+                     classpath="classpath.extras-prototypejs"
+                     overview="documentation/docs/prototypejs-overview.html"
+                     excludes=""/>
+
+       <!-- Mock -->
       <delete quiet="false" failonerror="false">
          <fileset dir="documentation/docs/mock-api" includes="**/*"/>
       </delete>
@@ -694,7 +792,7 @@ Please ensure you have configured build.properties</echo>
       <copy file="documentation/images/service-package.png"
             todir="documentation/docs/extras-api/org/apache/click/extras/service/"/>
       <copy file="documentation/images/calendar.gif"
-            todir="documentation/docs/extras-api/org/apache/click/extras/control"/>
+            todir="documentation/docs/prototypejs-api/org/apache/click/extras/prototypejs"/>
       <copy file="documentation/images/form-table.png"
             todir="documentation/docs/extras-api/org/apache/click/extras/control"/>
       <copy file="documentation/images/menu.png"
@@ -711,8 +809,8 @@ Please ensure you have configured build.properties</echo>
             todir="documentation/docs/click-api/org/apache/click/control"/>
       <copy file="documentation/images/inline-paginator.png"
             todir="documentation/docs/extras-api/org/apache/click/extras/control"/>
-      <copy file="extras/src/META-INF/resources/click/colorpicker/images/color-picker.png"
-            todir="documentation/docs/extras-api/org/apache/click/extras/control/colorpicker"/>
+      <copy file="prototypejs/src/META-INF/resources/click/colorpicker/images/color-picker.png"
+            todir="documentation/docs/prototypejs-api/org/apache/click/extras/prototypejs/colorpicker"/>
       <copy file="documentation/images/tree.png"
             todir="documentation/docs/extras-api/org/apache/click/extras/tree"/>
       <copy file="documentation/images/checkbox-tree.png"
@@ -723,7 +821,10 @@ Please ensure you have configured build.properties</echo>
       <copy file="documentation/docs/javadoc-stylesheet.css"  
             overwrite="true"
             tofile="documentation/docs/extras-api/stylesheet.css"/>
-      <copy file="documentation/docs/javadoc-stylesheet.css"  
+       <copy file="documentation/docs/javadoc-stylesheet.css"
+             overwrite="true"
+             tofile="documentation/docs/prototypejs-api/stylesheet.css"/>
+       <copy file="documentation/docs/javadoc-stylesheet.css"
             overwrite="true"
             tofile="documentation/docs/mock-api/stylesheet.css"/>
    </target>
@@ -806,8 +907,45 @@ Please ensure you have configured build.properties</echo>
       </delete>
    </target>
 
+    <target name="test-prototypejs" depends="check-deps">
+        <copy todir="prototypejs/classes">
+            <fileset dir="prototypejs/src">
+                <exclude name="**/package.html"/>
+            </fileset>
+        </copy>
+        <copy todir="prototypejs/classes">
+            <fileset dir="prototypejs/test">
+                <exclude name="**/package.html"/>
+            </fileset>
+        </copy>
+        <javac srcdir="prototypejs/src;prototypejs/test;mock/src"
+               destdir="prototypejs/classes"
+               debug="true"
+               encoding="UTF-8"
+               source="${javac.source}">
+            <classpath refid="classpath.framework"/>
+            <classpath refid="classpath.extras"/>
+            <classpath refid="classpath.extras-prototypejs"/>
+            <classpath refid="classpath.test"/>
+        </javac>
+        <junit haltonfailure="yes" showoutput="true">
+            <classpath refid="classpath.extras-prototypejs"/>
+            <classpath refid="classpath.extras"/>
+            <classpath refid="classpath.framework"/>
+            <classpath refid="classpath.test"/>
+            <formatter type="plain"/>
+            <batchtest fork="yes" todir="prototypejs/test">
+                <fileset dir="prototypejs/test">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        <delete>
+            <fileset dir="prototypejs/test" includes="TEST-*.txt"/>
+        </delete>
+    </target>
 
-   <target name="test-mock" depends="check-deps">
+    <target name="test-mock" depends="check-deps">
       <copy todir="mock/classes">
          <fileset dir="mock/src">
             <exclude name="**/package.html"/>
@@ -845,7 +983,7 @@ Please ensure you have configured build.properties</echo>
    </target>
 
 
-   <target name="test-all" depends="test-framework, test-extras, test-mock"
+   <target name="test-all" depends="test-framework, test-extras, test-prototypejs, test-mock"
        description="run all unit tests"/>
 
 
