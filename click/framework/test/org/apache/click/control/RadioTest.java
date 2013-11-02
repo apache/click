@@ -184,6 +184,7 @@ public class RadioTest extends TestCase {
 
     /**
      * Coverage test of help property.
+     *
      */
     public void testHelp() {
         MockContext.initContext();
@@ -191,8 +192,9 @@ public class RadioTest extends TestCase {
         Radio field = new Radio("value");
         field.setHelp("help");
 
-        // Note that help is currently not rendered.
-        assertFalse(field.toString().contains("help"));
+        // Note that help is now rendered.
+        assertTrue(field.toString().contains("help"));
+        System.out.println("field.toString() = " + field.toString());
     }
 
     /**

@@ -80,4 +80,13 @@ public class FieldTest extends TestCase {
         assertEquals(expectedValue, field.getValue());
         assertTrue(field.isValid());
     }
+
+    public void testHelp() {
+        MockContext context = MockContext.initContext();
+        Field field = new TextField("text");
+        // the help property can contain HTML too.
+        field.setHelp("<span class=\"help\">my help</span>");
+        assertTrue(field.toString().contains("my help"));
+        System.out.println("field.toString() = " + field.toString());
+    }
 }

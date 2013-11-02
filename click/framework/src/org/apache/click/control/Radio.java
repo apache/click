@@ -400,5 +400,10 @@ public class Radio extends Field {
             buffer.appendAttributeEscaped("value", getValue());
             buffer.elementEnd();
         }
+
+        // render the help hint if available
+        if (getHelp() != null) {
+            buffer.append(getHelp());
+        }
     }
 }
