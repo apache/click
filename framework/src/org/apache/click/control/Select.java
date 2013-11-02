@@ -129,7 +129,7 @@ import org.apache.click.util.HtmlStringBuffer;
  *     private Select locationSelect = new Select("location");
  *
  *     public LocationPage() {
- *         locationSelect.setMutliple(true);
+ *         locationSelect.setMultiple(true);
  *         locationSelect.setRequired(true);
  *         locationSelect.setSize(7);
  *         locationSelect.add("QLD");
@@ -157,7 +157,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * <table class='form'>
  * <tr>
  * <td align='left'><label >Location</label><font color="red">*</font></td>
- * <td align='left'><select name='location'size='7' multiple ><option value='QLD'>QLD</option><option value='NSW'>NSW</option><option value='NT'>NT</option><option value='SA'>SA</option><option value='TAS'>TAS</option><option value='VIC'>VIC</option><option value='WA'>WA</option></select></td>
+ * <td align='left'><select name='location' size='7' multiple ><option value='QLD'>QLD</option><option value='NSW'>NSW</option><option value='NT'>NT</option><option value='SA'>SA</option><option value='TAS'>TAS</option><option value='VIC'>VIC</option><option value='WA'>WA</option></select></td>
  * </tr>
  * <tr><td colspan='2'>&nbsp;</td></tr>
  * <tr align='left'><td colspan='2'><input type='submit' value='  OK  '/></td></tr>
@@ -215,7 +215,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * this problem you can set a
  * {@link #setDataProvider(org.apache.click.dataprovider.DataProvider) dataProvider}
  * which allows the Select to fetch data when needed. This is
- * particularly useful if retrieveing Select data is expensive e.g. loading
+ * particularly useful if retrieving Select data is expensive e.g. loading
  * from a database.
  * <p/>
  * Below is a simple example:

@@ -42,7 +42,7 @@ Clicking the link will show a permission denied message without doing a redirect
 
     // Register a function that is invoked as soon as the DOM is loaded
     jQuery(document).ready(function() {
-        var resultElm = jQuery("#result")
+        var resultElm = jQuery("#result");
 
         // Hide the result div initially if it contains no content
         if (jQuery.trim(resultElm.text()).length == 0) {
@@ -58,9 +58,9 @@ Clicking the link will show a permission denied message without doing a redirect
 
             // Prevent the default browser behavior of navigating to the link
             return false;
-        })
+        });
 
- // Register a 'click' handler that makes an Ajax request
+        // Register a 'click' handler that makes an Ajax request
         jQuery("#secureLinkWithMessageId").click(function(event){
             // Make ajax request
             messageLinkClicked();
@@ -68,7 +68,7 @@ Clicking the link will show a permission denied message without doing a redirect
             // Prevent the default browser behavior of navigating to the link
             return false;
         })
-    })
+    });
 
     function redirectLinkClicked() {
         var link = jQuery('#secureLinkWithRedirectId');

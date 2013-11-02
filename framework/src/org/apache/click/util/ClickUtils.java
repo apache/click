@@ -2621,7 +2621,7 @@ public class ClickUtils {
                 // If this was the last state for the page, remove the page state map
                 context.removeSessionAttribute(resourcePath);
             } else {
-                // Check if control state was emoved
+                // Check if control state was removed
                 if (pop != null) {
                     // If control state was removed, set session attribute to force
                     // session replication in a cluster

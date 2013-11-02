@@ -88,7 +88,7 @@ import org.apache.click.util.Format;
  *
  *     <context-param>
  *         <param-name>config-service-class</param-name>
- *         <param-value>com.mycorp.service.CustomConfigSerivce</param-value>
+ *         <param-value>com.mycorp.service.CustomConfigService</param-value>
  *     </context-param>
  *
  * ...
@@ -119,7 +119,7 @@ public interface ConfigService {
     public static final String NOT_FOUND_PATH = "/click/not-found.htm";
 
     /** The page auto binding mode. */
-    public enum AutoBinding { DEFAULT, ANNOTATION, NONE };
+    public enum AutoBinding { DEFAULT, ANNOTATION, NONE }
 
     /**
      * The servlet context attribute name. The ClickServlet stores the

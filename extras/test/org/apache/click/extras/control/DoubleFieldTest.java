@@ -132,7 +132,7 @@ public class DoubleFieldTest extends TestCase {
         assertEquals("20", doubleField.getValue());
         assertEquals(new Double(20), doubleField.getValueObject());
 
-        // Test requried value larger than max value
+        // Test required value larger than max value
         doubleField.setMaxValue(21);
         assertTrue(doubleField.onProcess());
         assertTrue(doubleField.isValid());

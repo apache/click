@@ -802,7 +802,7 @@ public abstract class AbstractLink extends AbstractControl implements Stateful {
             // A null value can only occur for Ajax requests which processes
             // parameters defined on the link, not the incoming parameters.
             // The reason for not processing the null value is because it would
-            // nullify parametesr that was set during onInit
+            // nullify the parameter that was set during onInit
             if (values == null) {
                 continue;
             }

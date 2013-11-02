@@ -67,7 +67,7 @@ public class SubmitTest extends TestCase {
         assertTrue(button.isValid());
         assertFalse(button.isDisabled());
 
-        // Diasabled button without request param
+        // Disabled button without request param
         request.removeParameter("button");
         button.setDisabled(true);
         assertTrue(button.onProcess());

@@ -132,7 +132,7 @@ public interface Stateful {
      *     int storedNumber = ((Integer) stateArray[1]).intValue();
      *     setNumber(storedNumber);
      *
-     *     boolean storedBoolen = ((Boolean) stateArray[2]).booleanValue();
+     *     boolean storedBoolean = ((Boolean) stateArray[2]).booleanValue();
      *     setBoolean(storedBoolean);
      * } </pre>
      *

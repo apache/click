@@ -153,7 +153,7 @@ public class CheckListTest extends TestCase {
     }
 
     /**
-     * Check that a readonly CheckList uses diabled attribute instead of
+     * Check that a readonly CheckList uses disabled attribute instead of
      * readonly attribute.
      *
      * CLK-751

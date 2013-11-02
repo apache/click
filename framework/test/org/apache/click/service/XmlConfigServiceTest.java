@@ -410,7 +410,7 @@ public class XmlConfigServiceTest extends TestCase {
         PrintStream pstr = makeXmlStream(tmpdir, "WEB-INF/click.xml");
         pstr.println("<click-app>");
 
-        // Dclare the pages package
+        // Declare the pages package
                 pstr.println("<pages package='org.apache.click.pages'/>");
         pstr.println("<pages package='org.apache.click.pages'>");
 

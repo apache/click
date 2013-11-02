@@ -46,7 +46,7 @@ public interface AjaxBehavior extends Behavior {
      * <pre class="prettyprint">
      * public void onInit() {
      *     ActionLink link = new ActionLink("link");
-     *     link.addBehaior(new DefaultAjaxBehavior() {
+     *     link.addBehavior(new DefaultAjaxBehavior() {
      *
      *         public ActionResult onAction(Control source) {
      *             ActionResult result = new ActionResult("&lt;h1&gt;Hello world&lt;/h1&gt;", ActionResult.HTML);

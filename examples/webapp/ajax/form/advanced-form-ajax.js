@@ -37,7 +37,7 @@ jQuery(document).ready(function() {
         // Prevent the default browser behavior of navigating to the link
         return false;
     })
-})
+});
 
 function postForm(event) {
     // Retrieve the Form and submit button elements

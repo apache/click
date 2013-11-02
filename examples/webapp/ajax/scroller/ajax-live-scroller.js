@@ -88,4 +88,4 @@ $(document).ready(function(){
     function getFetchThreshold() {
         return 0.85 * jQuery(document).height() - jQuery(window).height();
     }
-})
+});
