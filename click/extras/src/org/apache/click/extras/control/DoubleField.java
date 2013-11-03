@@ -34,7 +34,7 @@ import java.text.ParseException;
  * DoubleField will validate the number when the control is processed and invoke
  * the control listener if defined.
  * <p/>
- * The DoubleField uses a JavaScript onkeypress() doubleFilter() method to prevent
+ * The DoubleField uses a JavaScript onkeypress() Click.doubleFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
  * reference the {@link org.apache.click.util.PageImports} object in your page
  * header section. For example:
@@ -70,7 +70,7 @@ public class DoubleField extends NumberField {
      */
     public DoubleField(String name) {
         super(name);
-        setAttribute("onkeypress", "javascript:return doubleFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.doubleFilter(event);");
         setTextAlign("left");
     }
 
@@ -82,7 +82,7 @@ public class DoubleField extends NumberField {
      */
     public DoubleField(String name, String label) {
         super(name, label);
-        setAttribute("onkeypress", "javascript:return doubleFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.doubleFilter(event);");
         setTextAlign("left");
     }
 
@@ -141,7 +141,7 @@ public class DoubleField extends NumberField {
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public DoubleField() {
-        setAttribute("onkeypress", "javascript:return doubleFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.doubleFilter(event);");
         setTextAlign("left");
     }
 

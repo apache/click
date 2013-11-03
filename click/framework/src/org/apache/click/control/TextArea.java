@@ -70,7 +70,7 @@ public class TextArea extends Field {
      */
     protected final static String VALIDATE_TEXTAREA_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   var msg = validateTextField(\n"
+        + "   var msg = Click.validateTextField(\n"
         + "         ''{0}'',{1}, {2}, {3}, [''{4}'',''{5}'',''{6}'']);\n"
         + "   if (msg) '{'\n"
         + "      return msg + ''|{0}'';\n"

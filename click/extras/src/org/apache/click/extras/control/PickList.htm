@@ -44,25 +44,25 @@
 </td>
 <td valign="middle">
   <input id="${id}_add" type="button" value="&gt;" style="width:60px;"
-         onclick="pickListMove(document.getElementById('${id}_unselected'), document.getElementById('$id'), document.getElementById('${id}_hidden'), true)"
+         onclick="Click.pickListMove(document.getElementById('${id}_unselected'), document.getElementById('$id'), document.getElementById('${id}_hidden'), true)"
     #if($readOnly || $disabled)
       disabled="disabled"
     #end
   /><br/>
   <input id="${id}_remove" type="button" value="&lt;" style="width:60px;"
-         onclick="pickListMove(document.getElementById('$id'), document.getElementById('${id}_unselected'), document.getElementById('${id}_hidden'), false)"
+         onclick="Click.pickListMove(document.getElementById('$id'), document.getElementById('${id}_unselected'), document.getElementById('${id}_hidden'), false)"
     #if($readOnly || $disabled)
       disabled="disabled"
     #end
   /><br/>
   <input id="${id}_add_all" type="button" value="&gt;&gt;" style="width:60px;"
-         onclick="pickListMoveAll(document.getElementById('${id}_unselected'), document.getElementById('$id'), document.getElementById('${id}_hidden'), true)"
+         onclick="Click.pickListMoveAll(document.getElementById('${id}_unselected'), document.getElementById('$id'), document.getElementById('${id}_hidden'), true)"
     #if($readOnly || $disabled)
       disabled="disabled"
     #end
   /><br/>
   <input id="${id}_remove_all" type="button" value="&lt;&lt;" style="width:60px;"
-         onclick="pickListMoveAll(document.getElementById('$id'), document.getElementById('${id}_unselected'), document.getElementById('${id}_hidden'), false)"
+         onclick="Click.pickListMoveAll(document.getElementById('$id'), document.getElementById('${id}_unselected'), document.getElementById('${id}_hidden'), false)"
     #if($readOnly || $disabled)
       disabled="disabled"
     #end

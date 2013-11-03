@@ -2930,7 +2930,7 @@ public class Form extends AbstractContainer implements Stateful {
                     buffer.append(functionNames.get(i).toString());
                     buffer.append(";\n");
                 }
-                buffer.append("   return validateForm(msgs, '");
+                buffer.append("   return Click.validateForm(msgs, '");
                 buffer.append(getId());
                 buffer.append("', '");
                 buffer.append(getErrorsAlign());

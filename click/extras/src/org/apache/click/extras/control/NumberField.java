@@ -74,7 +74,7 @@ import org.apache.click.util.ClickUtils;
  * <li><tt>click/extras-control.js</tt></li>
  * </ul>
  *
- * The NumberField uses a JavaScript onkeypress() doubleFilter() method to prevent
+ * The NumberField uses a JavaScript onkeypress() Click.doubleFilter() method to prevent
  * users from entering invalid characters.  To enable number key filtering
  * reference the variables <tt class="blue">$jsElements</tt> and
  * <tt class="blue">$headElements</tt> in your page template. For example:
@@ -120,7 +120,7 @@ public class NumberField extends TextField {
      */
     protected final static String VALIDATE_NUMBER_FIELD_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   var msg = validateNumberField(\n"
+        + "   var msg = Click.validateNumberField(\n"
         + "         ''{0}'',{1}, {2}, {3}, [''{4}'',''{5}'',''{6}'']);\n"
         + "   if (msg) '{'\n"
         + "      return msg + ''|{0}'';\n"
@@ -152,7 +152,7 @@ public class NumberField extends TextField {
      */
     public NumberField(String name) {
         super(name);
-        setAttribute("onkeypress", "javascript:return doubleFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.doubleFilter(event);");
         setTextAlign("right");
     }
 
@@ -164,7 +164,7 @@ public class NumberField extends TextField {
      */
     public NumberField(String name, String label) {
         super(name, label);
-        setAttribute("onkeypress", "javascript:return doubleFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.doubleFilter(event);");
         setTextAlign("right");
     }
 
@@ -223,7 +223,7 @@ public class NumberField extends TextField {
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public NumberField() {
-        setAttribute("onkeypress", "javascript:return doubleFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.doubleFilter(event);");
         setTextAlign("right");
     }
 

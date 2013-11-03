@@ -38,7 +38,7 @@ if ( typeof Click.domready == 'undefined' ) {
             }
         }
     }
-};
+}
 
 /**
  * This function is based on work done by Dean Edwards, Diego Perini,
@@ -120,79 +120,8 @@ Click.addLoadEvent = function(func) {
 
 addLoadEvent=Click.addLoadEvent;
 
-function doubleFilter(event) {
-    var keyCode;
-    if (document.all) {
-        keyCode = event.keyCode;
-    } else if (document.getElementById) {
-        keyCode = event.which;
-    } else if (document.layers) {
-        keyCode = event.which;
-    }
 
-    if (keyCode >= 33 && keyCode <= 43) {
-        return false;
-
-    } else if (keyCode == 47) {
-        return false;
-
-    } else if (keyCode >= 58 && keyCode <= 126) {
-        return false;
-
-    } else {
-        return true;
-    }
-}
-
-function integerFilter(event) {
-    var keyCode;
-    if (document.all) {
-        keyCode = event.keyCode;
-    } else if (document.getElementById) {
-        keyCode = event.which;
-    } else if (document.layers) {
-        keyCode = event.which;
-    }
-
-    if (keyCode >= 33 && keyCode <= 44) {
-        return false;
-
-    } else if (keyCode >= 46 && keyCode <= 47) {
-        return false;
-
-    } else if (keyCode >= 58 && keyCode <= 126) {
-        return false;
-
-    } else {
-        return true;
-    }
-}
-
-function noLetterFilter(event) {
-    var keyCode;
-    if (document.all) {
-        keyCode = event.keyCode;
-    } else if (document.getElementById) {
-        keyCode = event.which;
-    } else if (document.layers) {
-        keyCode = event.which;
-    }
-
-    if (keyCode >= 33 && keyCode <= 39) {
-        return false;
-
-    } else if (keyCode == 47) {
-        return false;
-
-    } else if (keyCode >= 58 && keyCode <= 126) {
-        return false;
-
-    } else {
-        return true;
-    }
-}
-
-function setFocus(id) {
+Click.setFocus = function(id) {
     var field = document.getElementById(id);
     if (field && field.focus && field.type != "hidden" && field.disabled != true) {
     	try {
@@ -200,9 +129,9 @@ function setFocus(id) {
 		} catch (err) {
 		}
     }
-}
+};
 
-function trim(str) {
+Click.trim = function(str) {
     while (str.charAt(0) == (" ")) {
         str = str.substring(1);
       }
@@ -210,7 +139,7 @@ function trim(str) {
           str = str.substring(0,str.length-1);
       }
       return str;
-}
+};
 
 Click.hasClass=function(element,cls){
     var className=element.className;
@@ -218,13 +147,13 @@ Click.hasClass=function(element,cls){
         return new RegExp('\\b'+cls+'\\b').test(className);
     }
     return false;
-}
+};
 
 Click.addClass=function(element,cls){
     if(!Click.hasClass(element,cls)) {
         element.className += element.className ? ' ' + cls : cls;
     }
-}
+};
 
 Click.removeClass=function(element,cls){
     var className=element.className;
@@ -237,20 +166,20 @@ Click.removeClass=function(element,cls){
 
     var rep = new RegExp('(^|\\s)' + cls + '(?:\\s|$)');
     element.className = className.replace(rep, '$1');
-}
+};
 
 Click.setFieldValidClass=function(field) {
     Click.removeClass(field,'error');
-}
+};
 
 Click.setFieldErrorClass=function(field) {
     Click.addClass(field,'error');
-}
+};
 
-function validateTextField(id, required, minLength, maxLength, msgs) {
+Click.validateTextField = function(id, required, minLength, maxLength, msgs) {
     var field = document.getElementById(id);
     if (field) {
-        var value = trim(field.value);
+        var value = Click.trim(field.value);
         if (required) {
             if (value.length == 0) {
                 Click.setFieldErrorClass(field);
@@ -274,9 +203,9 @@ function validateTextField(id, required, minLength, maxLength, msgs) {
     } else {
         return 'Field ' + id + ' not found.';
     }
-}
+};
 
-function validateCheckbox(id, required, msgs) {
+Click.validateCheckbox = function(id, required, msgs) {
     var field = document.getElementById(id);
     if (field) {
         if (required) {
@@ -289,9 +218,9 @@ function validateCheckbox(id, required, msgs) {
     } else {
         return 'Field ' + id + ' not found.';
     }
-}
+};
 
-function validateSelect(id, defaultValue, required, msgs) {
+Click.validateSelect = function(id, defaultValue, required, msgs) {
     var field = document.getElementById(id);
     if (field) {
         if (required) {
@@ -307,9 +236,9 @@ function validateSelect(id, defaultValue, required, msgs) {
     } else {
         return 'Field ' + id + ' not found.';
     }
-}
+};
 
-function validateRadioGroup(radioName, formId, required, msgs) {
+Click.validateRadioGroup = function(radioName, formId, required, msgs) {
     if(required){
         var form = document.getElementById(formId);
         if(form){
@@ -322,12 +251,12 @@ function validateRadioGroup(radioName, formId, required, msgs) {
             return msgs[0];
         }
     }
-}
+};
 
-function validateFileField(id, required, msgs) {
+Click.validateFileField = function(id, required, msgs) {
     var field = document.getElementById(id);
     if (field) {
-        var value = trim(field.value);
+        var value = Click.trim(field.value);
         if (required) {
             if (value.length == 0) {
                 Click.setFieldErrorClass(field);
@@ -337,9 +266,9 @@ function validateFileField(id, required, msgs) {
     } else {
         return 'Field ' + id + ' not found.';
     }
-}
+};
 
-function validateForm(msgs, id, align, style) {
+Click.validateForm = function(msgs, id, align, style) {
     var errorsHtml = '';
     var focusFieldId = null;
 
@@ -361,7 +290,7 @@ function validateForm(msgs, id, align, style) {
 				errorsHtml += style;
             }
             errorsHtml += '">';
-            errorsHtml += '<a class="error" href="javascript:setFocus(\'';
+            errorsHtml += '<a class="error" href="javascript:Click.setFocus(\'';
             errorsHtml += fieldId;
             errorsHtml += '\');">';
             errorsHtml += fieldMsg;
@@ -377,14 +306,14 @@ function validateForm(msgs, id, align, style) {
         document.getElementById(id + '-errorsDiv').innerHTML = errorsHtml;
         document.getElementById(id + '-errorsTr').style.display = 'inline';
 
-        setFocus(focusFieldId);
+        Click.setFocus(focusFieldId);
 
         return false;
 
     } else {
         return true;
     }
-}
+};
 
 /**
  * Submit the form and checks that no field or button is called 'submit' as
@@ -398,7 +327,7 @@ Click.submit=function(form) {
         return false;
     }
 
-if (form) {
+    if (form) {
         var formElements = form.elements;
         for (var i=0; i < formElements.length; i++) {
             var el = formElements[i];
@@ -410,4 +339,4 @@ if (form) {
     }
     form.submit();
     return true;
-}
+};

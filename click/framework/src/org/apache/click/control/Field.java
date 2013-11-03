@@ -417,7 +417,7 @@ public abstract class Field extends AbstractControl implements Stateful {
     public String getFocusJavaScript() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(32);
 
-        buffer.append("setFocus('");
+        buffer.append("Click.setFocus('");
         buffer.append(getId());
         buffer.append("');");
 

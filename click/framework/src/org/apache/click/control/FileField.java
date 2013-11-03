@@ -82,7 +82,7 @@ public class FileField extends Field {
      */
     protected final static String VALIDATE_FILEFIELD_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   var msg = validateFileField(''{0}'',{1}, [''{2}'']);\n"
+        + "   var msg = Click.validateFileField(''{0}'',{1}, [''{2}'']);\n"
         + "   if (msg) '{'\n"
         + "      return msg + ''|{0}'';\n"
         + "   '}' else '{'\n"

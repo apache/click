@@ -105,7 +105,7 @@ public class RegexField extends TextField {
      */
     protected final static String VALIDATE_REGEXFIELD_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   var msg = validateRegexField(\n"
+        + "   var msg = Click.validateRegexField(\n"
         + "         ''{0}'',{1}, {2}, {3}, ''{4}'', [''{5}'',''{6}'',''{7}'', ''{8}'']);\n"
         + "   if (msg) '{'\n"
         + "      return msg + ''|{0}'';\n"

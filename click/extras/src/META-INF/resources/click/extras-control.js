@@ -16,22 +16,18 @@
 // under the License.
 
 /*
- * This file is dependend upon /click/control.js functions.
+ * This file depends on /click/control.js.
  */
 
- /* Ensure Click namespace exists */
+/* Ensure Click namespace exists */
 if ( typeof Click == 'undefined' )
   Click = {};
 
 /* Validate Functions */
-
-function validateCreditCardField(id, typeId, required, minLength, maxLength, msgs){
-	
-	var msg = validateTextField(id, required, minLength, maxLength, msgs);
-	
+Click.validateCreditCardField = function(id, typeId, required, minLength, maxLength, msgs) {
+	var msg = Click.validateTextField(id, required, minLength, maxLength, msgs);
 	if(msg){
 		return msg;
-		
 	} else {
 		var field = document.getElementById(id);
 		var value = field.value;
@@ -84,10 +80,10 @@ function validateCreditCardField(id, typeId, required, minLength, maxLength, msg
 		Click.setFieldValidClass(field);
 		return null;
 	}
-}
+};
 
-function validateEmailField (id, required, minLength, maxLength, msgs){
-	var msg = validateTextField(id, required, minLength, maxLength, msgs);
+Click.validateEmailField = function(id, required, minLength, maxLength, msgs) {
+	var msg = Click.validateTextField(id, required, minLength, maxLength, msgs);
 	if (msg) {
 		return msg;
 	} else {
@@ -103,12 +99,12 @@ function validateEmailField (id, required, minLength, maxLength, msgs){
 				return msgs[3];
 			}
 	
-			if (!isLetterOrDigit(value.charAt(0))) {
+			if (!Click.isLetterOrDigit(value.charAt(0))) {
 				Click.setFieldErrorClass(field);
 				return msgs[3];
 			}
 	
-			if (!isLetterOrDigit(value.charAt(length - 1))) {
+			if (!Click.isLetterOrDigit(value.charAt(length - 1))) {
 				Click.setFieldErrorClass(field);
 				return msgs[3];
 			}
@@ -116,9 +112,9 @@ function validateEmailField (id, required, minLength, maxLength, msgs){
 	}
 	Click.setFieldValidClass(field);
 	return null;
-}
+};
 
-function validateNumberField(id, required, minValue, maxValue, msgs){
+Click.validateNumberField = function(id, required, minValue, maxValue, msgs) {
 	var field = document.getElementById(id);
 	if(field){
 		var value = field.value;
@@ -143,9 +139,9 @@ function validateNumberField(id, required, minValue, maxValue, msgs){
 	} else {
 		return 'Field ' + id + ' not found.';
 	}
-}
+};
 
-function validatePickList(id, required, msgs){
+Click.validatePickList = function(id, required, msgs) {
 	var field = document.getElementById(id);
 	if(field){
 		if (field.options.length == 0) {
@@ -161,10 +157,10 @@ function validatePickList(id, required, msgs){
 	} else {
 		return 'Field ' + id + ' not found.';
 	}
-}
+};
 
-function validateRegexField(id, required, minLength, maxLength, regex, msgs){
-	var msg = validateTextField(id, required, minLength, maxLength, msgs);
+Click.validateRegexField = function(id, required, minLength, maxLength, regex, msgs) {
+	var msg = Click.validateTextField(id, required, minLength, maxLength, msgs);
 	if (msg) {
 		return msg;
 	} else {
@@ -178,10 +174,83 @@ function validateRegexField(id, required, minLength, maxLength, regex, msgs){
 		}
 	}
 	return null;
-}
+};
+
+/* Filter */
+Click.noLetterFilter = function(event) {
+    var keyCode;
+    if (document.all) {
+        keyCode = event.keyCode;
+    } else if (document.getElementById) {
+        keyCode = event.which;
+    } else if (document.layers) {
+        keyCode = event.which;
+    }
+
+    if (keyCode >= 33 && keyCode <= 39) {
+        return false;
+
+    } else if (keyCode == 47) {
+        return false;
+
+    } else if (keyCode >= 58 && keyCode <= 126) {
+        return false;
+
+    } else {
+        return true;
+    }
+};
+
+Click.integerFilter = function(event) {
+    var keyCode;
+    if (document.all) {
+        keyCode = event.keyCode;
+    } else if (document.getElementById) {
+        keyCode = event.which;
+    } else if (document.layers) {
+        keyCode = event.which;
+    }
+
+    if (keyCode >= 33 && keyCode <= 44) {
+        return false;
+
+    } else if (keyCode >= 46 && keyCode <= 47) {
+        return false;
+
+    } else if (keyCode >= 58 && keyCode <= 126) {
+        return false;
+
+    } else {
+        return true;
+    }
+};
+
+Click.doubleFilter = function(event) {
+    var keyCode;
+    if (document.all) {
+        keyCode = event.keyCode;
+    } else if (document.getElementById) {
+        keyCode = event.which;
+    } else if (document.layers) {
+        keyCode = event.which;
+    }
+
+    if (keyCode >= 33 && keyCode <= 43) {
+        return false;
+
+    } else if (keyCode == 47) {
+        return false;
+
+    } else if (keyCode >= 58 && keyCode <= 126) {
+        return false;
+
+    } else {
+        return true;
+    }
+};
 
 /* Misc Functions */
-
+// todo: where is this function used?
 function initMenu() {
 	if (document.all && document.getElementById) {
 		var navRoot = document.getElementById("dmenu");
@@ -191,10 +260,10 @@ function initMenu() {
 				if (node.nodeName == "LI") {
 					node.onmouseover = function() {
 						this.className += " over";
-					}
+					};
 					node.onmouseout = function() {
 						this.className = this.className.replace(" over", "");
-					}
+					};
 				}
 			}
 		}
@@ -202,37 +271,37 @@ function initMenu() {
 }
 
 
-function isLetter (c){
+Click.isLetter = function(c) {
 	return ( ((c >= "a") && (c <= "z")) || ((c >= "A") && (c <= "Z")) )
-}
+};
 
-function isDigit (c){
+Click.isDigit = function(c) {
 	return ((c >= "0") && (c <= "9"))
-}
+};
 
-function isLetterOrDigit (c){
-	return (isLetter(c) || isDigit(c))
-}
+Click.isLetterOrDigit = function(c) {
+	return (Click.isLetter(c) || Click.isDigit(c))
+};
 
-function pickListMove(from, to, hidden, isSelected){
-	var values = new Object();
+Click.pickListMove = function(from, to, hidden, isSelected) {
+	var values = {};
 	for(var i=0;i<from.options.length;i++){
 		if(from.options[i].selected){
 			values[from.options[i].value] = true;
 		}
 	}
-	pickListMoveItem(from, to, values, hidden, isSelected);
-}
+	Click.pickListMoveItem(from, to, values, hidden, isSelected);
+};
 
-function pickListMoveAll(from, to, hidden, isSelected){
-	var values = new Object();
-	for(i=0; i<from.options.length; i++){
+Click.pickListMoveAll = function(from, to, hidden, isSelected) {
+	var values = {};
+	for(var i=0; i<from.options.length; i++){
 		values[from.options[i].value] = true;
 	}
-	pickListMoveItem(from, to, values, hidden, isSelected);
-}
+	Click.pickListMoveItem(from, to, values, hidden, isSelected);
+};
 
-function pickListMoveItem(from, to, values, hidden, isSelected){
+Click.pickListMoveItem = function(from, to, values, hidden, isSelected){
 	for(var i=0; i<hidden.options.length; i++){
 		if(values[hidden.options[i].value]){
 			hidden.options[i].selected = isSelected;
@@ -251,7 +320,7 @@ function pickListMoveItem(from, to, values, hidden, isSelected){
 			toIndex++;
 		}
 	}
-}
+};
 
 /**
  * Define the SubmitLink action. This function creates hidden fields for
@@ -278,7 +347,7 @@ Click.submitLinkAction = function(link, formId) {
   }
   form.submit();
   return false;
-}
+};
 
 /**
  * Return the url parameters as an array of key/value pairs or null
@@ -289,15 +358,15 @@ Click.getUrlParams = function(url) {
     return null;
   }
   url = unescape(url);
-  var start = url.indexOf('?')
+  var start = url.indexOf('?');
   if (start == -1) {
     return null;
   }
   url=url.substring(start + 1);
   var pairs=url.split("&");
-  var params = new Array();
+  var params = [];
   for (var i=0;i<pairs.length;i++) {
-    var param = new Object();
+    var param = {};
     var pos = pairs[i].indexOf('=');
     if (pos >= 0) {
       param.name = pairs[i].substring(0,pos);
@@ -306,7 +375,7 @@ Click.getUrlParams = function(url) {
     }
   }
   return params;
-}
+};
 
 /**
  * Return the tab sheet number for the element with the given ID.
@@ -320,7 +389,7 @@ Click.getTabSheetNumber=function(id) {
     }
     if (parent) return parent.getAttribute("id").substr(10);
     return 1;
-}
+};
 
 /**
  * Return true if the node is a tab sheet, false otherwise.
@@ -332,7 +401,7 @@ Click.isTabSheet=function(node) {
         if(id.indexOf('tab-sheet-')>=0) return true;
     }
     return false;
-}
+};
 
 /**
  * Validate a TabbedForm.
@@ -360,7 +429,7 @@ Click.validateTabbedForm=function(msgs, id, align, style) {
             }
             errorsHtml += '">';
             errorsHtml += '<a class="error" href="javascript:onShowTab(Click.getTabSheetNumber(\''
-                + fieldId + '\'));setFocus(\'';
+                + fieldId + '\'));Click.setFocus(\'';
             errorsHtml += fieldId;
             errorsHtml += '\');">';
             errorsHtml += fieldMsg;
@@ -375,10 +444,10 @@ Click.validateTabbedForm=function(msgs, id, align, style) {
         document.getElementById(id + '-errorsDiv').innerHTML = errorsHtml;
         document.getElementById(id + '-errorsTr').style.display = 'inline';
 
-        setFocus(focusFieldId);
+        Click.setFocus(focusFieldId);
 
         return false;
     } else {
         return true;
     }
-}
+};

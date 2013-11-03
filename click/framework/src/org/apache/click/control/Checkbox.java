@@ -56,7 +56,7 @@ public class Checkbox extends Field {
      */
     protected final static String VALIDATE_CHECKBOX_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   var msg = validateCheckbox(''{0}'',{1}, [''{2}'']);\n"
+        + "   var msg = Click.validateCheckbox(''{0}'',{1}, [''{2}'']);\n"
         + "   if (msg) '{'\n"
         + "      return msg + ''|{0}'';\n"
         + "   '}' else '{'\n"

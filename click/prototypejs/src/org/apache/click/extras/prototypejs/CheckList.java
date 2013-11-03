@@ -579,7 +579,7 @@ public class CheckList extends Field {
     public String getFocusJavaScript() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        buffer.append("setFocus('");
+        buffer.append("Click.setFocus('");
         buffer.append(getName() + "_0");
         buffer.append("');");
 

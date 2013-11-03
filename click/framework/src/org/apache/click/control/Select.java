@@ -299,7 +299,7 @@ public class Select extends Field {
      */
     protected final static String VALIDATE_SELECT_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   var msg = validateSelect(''{0}'', ''{3}'', {1}, [''{2}'']);\n"
+        + "   var msg = Click.validateSelect(''{0}'', ''{3}'', {1}, [''{2}'']);\n"
         + "   if (msg) '{'\n"
         + "      return msg + ''|{0}'';\n"
         + "   '}' else '{'\n"

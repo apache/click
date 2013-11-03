@@ -190,7 +190,7 @@ public class PickList extends Field {
      */
     protected final static String VALIDATE_PICKLIST_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   var msg = validatePickList(\n"
+        + "   var msg = Click.validatePickList(\n"
         + "         ''{0}'',{1}, [''{2}'']);\n"
         + "   if (msg) '{'\n"
         + "      return msg + ''|{0}'';\n"

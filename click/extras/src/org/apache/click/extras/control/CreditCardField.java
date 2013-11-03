@@ -177,7 +177,7 @@ public class CreditCardField extends TextField {
      */
     protected final static String VALIDATE_CREDITCARD_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   var msg = validateCreditCardField(\n"
+        + "   var msg = Click.validateCreditCardField(\n"
         + "         ''{0}'', ''{1}'', {2}, {3}, {4}, [''{5}'',''{6}'',''{7}'', ''{8}'']);\n"
         + "   if (msg) '{'\n"
         + "      return msg + ''|{0}'';\n"
@@ -208,7 +208,7 @@ public class CreditCardField extends TextField {
         super(name);
         setMaxLength(19);
         setSize(19);
-        setAttribute("onkeypress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.integerFilter(event);");
         cardTypeSelect.addAll(CARD_OPTIONS);
     }
 
@@ -222,7 +222,7 @@ public class CreditCardField extends TextField {
         super(name, label);
         setMaxLength(19);
         setSize(19);
-        setAttribute("onkeypress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.integerFilter(event);");
         cardTypeSelect.addAll(CARD_OPTIONS);
     }
 
@@ -286,7 +286,7 @@ public class CreditCardField extends TextField {
         super();
         setMaxLength(19);
         setSize(19);
-        setAttribute("onkeypress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.integerFilter(event);");
         cardTypeSelect.addAll(CARD_OPTIONS);
     }
 

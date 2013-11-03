@@ -70,7 +70,7 @@ public class IntegerField extends NumberField {
      */
     public IntegerField(String name) {
         super(name);
-        setAttribute("onkeypress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.integerFilter(event);");
         setTextAlign("left");
     }
 
@@ -82,7 +82,7 @@ public class IntegerField extends NumberField {
      */
     public IntegerField(String name, boolean required) {
         super(name, required);
-        setAttribute("onkeypress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.integerFilter(event);");
         setTextAlign("left");
     }
 
@@ -94,7 +94,7 @@ public class IntegerField extends NumberField {
      */
     public IntegerField(String name, String label) {
         super(name, label);
-        setAttribute("onkeypress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.integerFilter(event);");
         setTextAlign("left");
     }
 
@@ -143,7 +143,7 @@ public class IntegerField extends NumberField {
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public IntegerField() {
-        setAttribute("onkeypress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return Click.integerFilter(event);");
         setTextAlign("left");
     }
 

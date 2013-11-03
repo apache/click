@@ -80,7 +80,7 @@ public class EmailField extends TextField {
      */
     protected final static String VALIDATE_EMAILFIELD_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   var msg = validateEmailField(\n"
+        + "   var msg = Click.validateEmailField(\n"
         + "         ''{0}'',{1}, {2}, {3}, [''{4}'',''{5}'',''{6}'', ''{7}'']);\n"
         + "   if (msg) '{'\n"
         + "      return msg + ''|{0}'';\n"

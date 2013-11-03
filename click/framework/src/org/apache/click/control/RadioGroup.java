@@ -109,7 +109,7 @@ public class RadioGroup extends Field {
      */
     protected final static String VALIDATE_RADIOGROUP_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   var msg = validateRadioGroup(''{1}'', ''{2}'', {3}, [''{4}'']);\n"
+        + "   var msg = Click.validateRadioGroup(''{1}'', ''{2}'', {3}, [''{4}'']);\n"
         + "   if (msg) '{'\n"
         + "      return msg + ''|{5}'';\n"
         + "   '}' else '{'\n"
@@ -318,7 +318,7 @@ public class RadioGroup extends Field {
         }
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(32);
-        buffer.append("setFocus('");
+        buffer.append("Click.setFocus('");
         buffer.append(id);
         buffer.append("');");
 
