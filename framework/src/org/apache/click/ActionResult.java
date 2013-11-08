@@ -307,7 +307,7 @@ public class ActionResult {
      * @return true if the action result should be cached by the client browser,
      * false otherwise
      */
-    public boolean isCacheActionRestul() {
+    public boolean isCacheActionResult() {
         return cacheActionResult;
     }
 
@@ -553,7 +553,7 @@ public class ActionResult {
     private void prepare(Context context) {
         HttpServletResponse response = context.getResponse();
 
-        if (!isCacheActionRestul()) {
+        if (!isCacheActionResult()) {
             // Set headers to disable cache
             response.setHeader("Pragma", "no-cache");
             response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
