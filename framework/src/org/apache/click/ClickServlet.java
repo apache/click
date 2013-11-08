@@ -1310,7 +1310,7 @@ public class ClickServlet extends HttpServlet {
      * include string, numbers and booleans.
      * <p/>
      * Type conversion is performed using the <tt>TypeConverter</tt>
-     * returned by the {@link #getTypeConverter()} method.
+     * of the <tt>PropertyService</tt>.
      *
      * @param page the page whose fields are to be processed
      */

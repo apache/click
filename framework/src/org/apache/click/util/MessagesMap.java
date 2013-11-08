@@ -292,9 +292,9 @@ public class MessagesMap implements Map<String, String> {
 
     /**
      * This method initializes and populates the internal{@link #messages} map
-     * and {@link #MESSAGES_CACHE} if it is not already initialized.
+     * and cache {@link #getMessagesCache()} if it is not already initialized.
      * <p/>
-     * <b>Please Note:</b> populating {@link #MESSAGES_CACHE} is not thread safe
+     * <b>Please Note:</b> populating the cache {@link #getMessagesCache()} is not thread safe
      * and access to the cache must be properly synchronized.
      */
     protected void ensureInitialized() {

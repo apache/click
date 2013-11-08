@@ -643,7 +643,8 @@ Environment:
 Please ensure you have configured build.properties</echo>
    </target> 
 
-   <target name="javadoc" description="create Javadoc HTML files" depends="prepare-hibernate">
+   <target name="javadoc" description="create Javadoc HTML files" depends="prepare-hibernate,
+                                                                  build-framework,build-extras,build-mock">
       <!-- Framework -->
       <delete quiet="false" failonerror="false">
          <fileset dir="documentation/docs/click-api" includes="**/*"/>
@@ -879,7 +880,7 @@ Please ensure you have configured build.properties</echo>
             <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
             <link href="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
             <link href="http://click.apache.org/docs/click-api/"/>
-            <link href="http://docs.jboss.org/hibernate/stable/core/api/"/>
+            <link href="http://docs.jboss.org/hibernate/orm/3.2/api/"/>
             <link href="http://static.springframework.org/spring/docs/2.5.x/api/"/>
          </javadoc>
 
