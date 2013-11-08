@@ -67,6 +67,8 @@
   </li>
   <li><a href="#alternative-extension">Can Click be mapped to an extension other than *.htm?</a>
   </li>
+  <li><a href="#why-reflection-exception">Why am I getting "IllegalAccessException: Class org.apache.click.util.PropertyUtils can not access a member ..."? </a>
+  </li>
   <li><a href="#cayenne-integration">What JARs should I use with Click and Cayenne?</a>
   </li>
   <li><a href="#spring-integration">How can you integrate Click into Spring?</a>
@@ -534,9 +536,20 @@ public class Purchase extends Page {
   </ul>
   </dd>
 
+  <dt><a name="why-reflection-exception"></a>
+      <b>15.&nbsp; Why am I getting "IllegalAccessException: Class org.apache.click.util.PropertyUtils can not access a member ..."</b>
+  </dt>
+  <dd>
+      If you are getting an exception containing:
+<pre>
+   java.lang.IllegalAccessException:
+             Class org.apache.click.util.PropertyUtils can not access a member of class "com.YourOwnClass" with modifiers "public".
+</pre>
+      it's because "com.YourOwnClass" is not public. Make sure you add "public" to your class definition.
+  </dd>
 
   <dt><a name="cayenne-integration"></a>
-      <b>15.&nbsp; What JARs should I use with Click and Cayenne?</b>
+      <b>16.&nbsp; What JARs should I use with Click and Cayenne?</b>
   </dt>
   <dd>
    To get Click and Cayenne to work happily with each other you will need to 
@@ -553,7 +566,7 @@ public class Purchase extends Page {
 
 
   <dt><a name="spring-integration"></a>
-      <b>16.&nbsp; How can you integrate Click into Spring?</b>
+      <b>17.&nbsp; How can you integrate Click into Spring?</b>
   </dt>
   <dd>
    To integrate Spring with Click configure the
@@ -581,7 +594,7 @@ public interface Controller {
 
 
   <dt><a name="jsp-support"></a>
-      <b>17.&nbsp; Does Click support JSP?</b>
+      <b>18.&nbsp; Does Click support JSP?</b>
   </dt>
   <dd>
    Click fully supports JSP pages. 
@@ -623,7 +636,7 @@ public interface Controller {
 
 
   <dt><a name="pdf-and-excel-rendering"></a>
-      <b>18.&nbsp; How can I render PDF and Excel documents?</b>
+      <b>19.&nbsp; How can I render PDF and Excel documents?</b>
   </dt>
   <dd>
    By making use of the <a href="user-guide/html/ch02s08.html">Direct Rendering</a>
@@ -713,7 +726,7 @@ public MyPage extends Page {
 
 
   <dt><a name="performance"></a>
-      <b>19.&nbsp; What is the performance of Click?</b>
+      <b>20.&nbsp; What is the performance of Click?</b>
   </dt>
   <dd>
   Click is fast. 
@@ -756,7 +769,7 @@ public MyPage extends Page {
 
 
   <dt><a name="unit-testing"></a>
-      <b>20.&nbsp; How do I unit test Click pages?</b>
+      <b>21.&nbsp; How do I unit test Click pages?</b>
   </dt>
   <dd>
   It is generally recommended that you don't write JUnit style automated unit 
@@ -773,7 +786,7 @@ public MyPage extends Page {
 
 
   <dt><a name="restricted-env"></a>
-      <b>21.&nbsp; How do I deploy Click resources in restricted environments?</b>
+      <b>22.&nbsp; How do I deploy Click resources in restricted environments?</b>
   </dt>
   <dd>
   Often times one need to run Click applications in restricted environments.
@@ -795,7 +808,7 @@ public MyPage extends Page {
 
 
   <dt><a name="logging"></a>
-      <b>22.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b>
+      <b>23.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b>
   </dt>
   <dd>
    Click by default does not use Commons Logging / Log4J to avoid the class 
@@ -808,7 +821,7 @@ public MyPage extends Page {
 
 
   <dt><a name="why-velocity"></a>
-      <b>23.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b>
+      <b>24.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b>
   </dt>
   <dd>
    FreeMarker is a powerful templating engine which was evaluated along side 
@@ -822,7 +835,7 @@ public MyPage extends Page {
 
 
   <dt><a name="portlet"></a>
-      <b>24.&nbsp; Can Click be used to develop Portlet applications?</b>
+      <b>25.&nbsp; Can Click be used to develop Portlet applications?</b>
   </dt>
   <dd>
   Unfortunately no. Click is built on top of the Servlet specification which is
@@ -834,7 +847,7 @@ public MyPage extends Page {
 
 
   <dt><a name="why-click"></a>
-      <b>25.&nbsp; Why develop a new Web Application Framework?</b>
+      <b>26.&nbsp; Why develop a new Web Application Framework?</b>
   </dt>
   <dd>
   Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
