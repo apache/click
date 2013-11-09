@@ -1,8 +1,7 @@
 
-#*********************************
+#**
  * Write drop down menu and Search
- *********************************#
-
+ *#
 #macro( writeMenu $rootMenu )
 
 <table id="menuTable" border="0" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 2px;">

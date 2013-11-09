@@ -15,10 +15,9 @@
 ## specific language governing permissions and limitations
 ## under the License.
 
-#*********************************
+#**
  * Write drop down JavaScrip menu
- *********************************#
-
+ *#
 #macro( writeMenu $rootMenu )
 
 <table id="menuTable" border="0" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 2px;">
@@ -52,10 +51,9 @@
 #end
 
 
-#*********************
+#**
  * Write generic form
- *********************#
-
+ *#
 #macro( writeForm $form )
 	
 $form.startTag()	
@@ -109,10 +107,9 @@ $form.endTag()
 #end
 
 
-#*********************************************
+#**
  * Write drop down border template header menu
- *********************************************#
- 
+ *#
 #macro( writeInfoBar )
 
 &nbsp; | &nbsp;
