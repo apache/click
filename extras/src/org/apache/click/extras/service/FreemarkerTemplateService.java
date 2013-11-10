@@ -218,12 +218,14 @@ public class FreemarkerTemplateService implements TemplateService {
             configuration.getTemplate(ERROR_PAGE_PATH);
             deployedErrorTemplate = true;
         } catch (IOException ioe) {
+            /* ignore */
         }
 
         try {
             configuration.getTemplate(NOT_FOUND_PAGE_PATH);
             deployedNotFoundTemplate = true;
         } catch (IOException ioe) {
+            /* ignore */
         }
     }
 

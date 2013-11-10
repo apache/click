@@ -428,7 +428,7 @@ public class HibernateForm extends Form {
     protected String getClassname(Class<?> aClass) {
 
         String classname = aClass.getName();
-        if (classname.indexOf("$$") != -1) {
+        if (classname.contains("$$")) {
             classname = classname.substring(0, classname.indexOf("$"));
         }
 

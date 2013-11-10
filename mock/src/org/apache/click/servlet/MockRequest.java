@@ -314,9 +314,7 @@ public class MockRequest implements HttpServletRequest {
     public void setHeader(String name, String... values) {
         List<String> list = new ArrayList<String>(values.length);
         headers.put(name, list);
-        for (String value : values) {
-            list.add(value);
-        }
+        Collections.addAll(list, values);
     }
 
     /**

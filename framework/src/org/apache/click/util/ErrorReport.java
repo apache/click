@@ -147,7 +147,7 @@ public class ErrorReport {
                 if (getCause() instanceof IllegalArgumentException) {
                     line = tokenizer.nextToken();
 
-                    if (line.indexOf("org.apache.commons.lang.Validate") != -1) {
+                    if (line.contains("org.apache.commons.lang.Validate")) {
                         line = tokenizer.nextToken();
                     }
                 }
@@ -155,7 +155,7 @@ public class ErrorReport {
                 int nameStart = line.indexOf("at ");
                 int nameEnd = line.indexOf("(");
                 nameEnd = line.lastIndexOf(".", nameEnd);
-                if (line.indexOf("$") != -1) {
+                if (line.contains("$")) {
                     nameEnd = line.indexOf("$");
                 }
 

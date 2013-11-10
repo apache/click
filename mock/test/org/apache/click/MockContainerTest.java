@@ -91,7 +91,7 @@ public class MockContainerTest extends TestCase {
             container.stop();
             container.start();
 
-            // Third test exectes the test against the test.htm template
+            // Third test executes the test against the test.htm template
             testPage = container.testPage("/test.htm");
 
             // Check that the page set a ID value as a request attribute

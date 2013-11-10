@@ -27,7 +27,7 @@ import org.apache.click.service.LogService;
 
 /**
  * Provides a JDK Util
- * <a target="_blank" href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/logging/package-summary.html">Logging</a>
+ * <a target="_blank" href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/logging/package-summary.html">Logging</a>
  * LogService adapter class with a logger name of "<tt>Click</tt>".
  *
  * <h3>Configuration</h3>

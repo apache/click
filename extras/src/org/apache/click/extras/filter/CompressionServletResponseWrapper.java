@@ -133,6 +133,7 @@ public class CompressionServletResponseWrapper extends HttpServletResponseWrappe
                 }
             }
         } catch (IOException e) {
+            /* ignore */
         }
     }
 

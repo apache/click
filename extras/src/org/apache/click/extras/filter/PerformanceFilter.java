@@ -595,7 +595,7 @@ public class PerformanceFilter implements Filter {
     protected boolean isExcludePath(String path) {
         if (!excludeFiles.isEmpty()) {
             for (int i = 0; i < excludeFiles.size(); i++) {
-                String file = excludeFiles.get(i).toString();
+                String file = excludeFiles.get(i);
                 if (path.endsWith(file)) {
                     return true;
                 }
@@ -604,7 +604,7 @@ public class PerformanceFilter implements Filter {
 
         if (!excludeDirs.isEmpty()) {
             for (int i = 0; i < excludeDirs.size(); i++) {
-                String dir = excludeDirs.get(i).toString();
+                String dir = excludeDirs.get(i);
                 if (path.startsWith(dir)) {
                     return true;
                 }
@@ -693,14 +693,14 @@ public class PerformanceFilter implements Filter {
      */
     protected boolean useForeverCacheHeader(String path) {
         String versionIndicator = getResourceVersionIndicator(path);
-        if (path.startsWith("/click/") && path.indexOf(versionIndicator) != -1) {
+        if (path.startsWith("/click/") && path.contains(versionIndicator)) {
             return true;
         }
         versionIndicator = getApplicationResourceVersionIndicator(path);
 
         // Only apply application version if one is defined
         if (StringUtils.isNotBlank(versionIndicator)) {
-            if (path.indexOf(versionIndicator) != -1) {
+            if (path.contains(versionIndicator)) {
                 return true;
             }
         }
@@ -717,7 +717,7 @@ public class PerformanceFilter implements Filter {
     protected boolean useConfiguredCacheHeader(String path) {
         if (!includeFiles.isEmpty()) {
             for (int i = 0; i < includeFiles.size(); i++) {
-                String file = includeFiles.get(i).toString();
+                String file = includeFiles.get(i);
                 if (path.endsWith(file)) {
                     return true;
                 }
@@ -726,7 +726,7 @@ public class PerformanceFilter implements Filter {
 
         if (!includeDirs.isEmpty()) {
             for (int i = 0; i < includeDirs.size(); i++) {
-                String dir = includeDirs.get(i).toString();
+                String dir = includeDirs.get(i);
                 if (path.startsWith(dir)) {
                     return true;
                 }
@@ -767,7 +767,7 @@ public class PerformanceFilter implements Filter {
 
             while (e.hasMoreElements()) {
                 String name = (String) e.nextElement();
-                if (name.indexOf("gzip") != -1) {
+                if (name.contains("gzip")) {
                     return true;
                 }
             }

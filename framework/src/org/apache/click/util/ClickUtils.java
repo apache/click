@@ -505,7 +505,7 @@ public class ClickUtils {
 
             while (e.hasMoreElements()) {
                 String name = (String) e.nextElement();
-                if (name.indexOf("gzip") != -1) {
+                if (name.contains("gzip")) {
                     compress = true;
                     break;
                 }

@@ -808,7 +808,7 @@ public class ContainerUtils {
      */
     private static boolean hasMatchingProperty(Field field, Set<String> properties) {
         String fieldName = field.getName();
-        if (fieldName.indexOf(".") != -1) {
+        if (fieldName.contains(".")) {
             fieldName = fieldName.substring(0, fieldName.indexOf("."));
         }
         return properties.contains(fieldName);
@@ -905,6 +905,7 @@ public class ContainerUtils {
         try {
             method = sourceClass.getMethod(getterName, (Class[]) null);
         } catch (Exception e) {
+            /* ignore */
         }
 
         if (method == null) {

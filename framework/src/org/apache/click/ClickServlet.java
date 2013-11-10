@@ -1811,7 +1811,7 @@ public class ClickServlet extends HttpServlet {
                 }
 
                 // If Ajax request does not target a valid page, return a 404
-                // repsonse status, allowing JavaScript to display a proper message
+                // response status, allowing JavaScript to display a proper message
                 if (ConfigService.NOT_FOUND_PATH.equals(page.getPath())) {
                     HttpServletResponse response = context.getResponse();
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -1985,13 +1985,10 @@ public class ClickServlet extends HttpServlet {
                 // Initialize the ConfigService instance
                 configService.onInit(servletContext);
 
+            } catch (RuntimeException e) {
+                throw e;
             } catch (Exception e) {
-
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
-                } else {
-                    throw new RuntimeException(e);
-                }
+                throw new RuntimeException(e);
             }
         }
     }
@@ -2011,13 +2008,10 @@ public class ClickServlet extends HttpServlet {
             try {
                 configService.onDestroy();
 
+            } catch (RuntimeException e) {
+                throw e;
             } catch (Exception e) {
-
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
-                } else {
-                    throw new RuntimeException(e);
-                }
+                throw new RuntimeException(e);
             } finally {
                 servletContext.setAttribute(ConfigService.CONTEXT_NAME, null);
             }
