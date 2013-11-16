@@ -486,6 +486,8 @@ public class FieldSetTest extends TestCase {
      * by multiple threads.
      */
     public void testLabelStyle() {
+        MockContext.initContext();
+
         Form form = new Form("form");
         FieldSet fieldset = new FieldSet("fieldset");
         form.add(fieldset);

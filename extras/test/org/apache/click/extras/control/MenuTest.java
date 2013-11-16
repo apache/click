@@ -68,6 +68,8 @@ public class MenuTest extends TestCase {
      * CLK-724
      */
     public void testAccessForMenuWithoutRoles() {
+        MockContext.initContext();
+
         // Setup
         Menu menu = new Menu("menu");
         RoleAccessController controller = new RoleAccessController();

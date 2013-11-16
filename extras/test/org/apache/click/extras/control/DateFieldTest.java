@@ -98,6 +98,8 @@ public class DateFieldTest extends TestCase {
      * @throws java.lang.Exception
      */
     public void testFormatPattern() {
+        MockContext.initContext();
+
         DateField calendarField = new DateField("Delivery date");
         assertEquals("dd MMM yyyy", calendarField.getFormatPattern());
         assertEquals("dd NNN yyyy", calendarField.getCalendarPattern());

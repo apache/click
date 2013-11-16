@@ -93,6 +93,8 @@ public class TextAreaTest extends TestCase {
      * cross-site scripting attacks (XSS).
      */
     public void testEscapeValue() {
+        MockContext.initContext();
+
         TextArea field = new TextArea("name");
         String value = "<script>";
         String expected = "&lt;script&gt;";

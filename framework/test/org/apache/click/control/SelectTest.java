@@ -190,6 +190,8 @@ public class SelectTest extends TestCase {
      * CLK-745
      */
     public void testDataProviderValues() {
+        MockContext.initContext();
+
         // Setup Select
         Select select  = new Select("gender");
 
