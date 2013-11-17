@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemHeaders;
 
 /**
  * Mock implementation of <tt>org.apache.commons.fileupload.FileItem</tt>.
@@ -89,4 +90,10 @@ public class MockFileItem implements FileItem {
     public void write(File arg0) throws Exception {
     }
 
+    public FileItemHeaders getHeaders() {
+        return null;
+    }
+
+    public void setHeaders(FileItemHeaders fileItemHeaders) {
+    }
 }
