@@ -18,7 +18,7 @@
     <license rdf:resource="http://usefulinc.com/doap/licenses/asl20" />
     <name>Apache Click</name>
     <homepage rdf:resource="http://click.apache.org" />
-    <asfext:pmc rdf:resource="http://click.apache.org" />
+    <asfext:pmc rdf:resource="http://attic.apache.org" />
     <shortdesc>Simple and easy-to-use Java Web Framework</shortdesc>
     <description>Apache Click is a modern Java web application framework, providing
     a natural rich client style programming model. Click provides a page and
