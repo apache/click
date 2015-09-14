@@ -33,6 +33,7 @@
     <mailing-list rdf:resource="http://click.apache.org/docs/click-online.html#mailing-lists" />
     <download-page rdf:resource="http://click.apache.org/docs/downloads.html" />
     <programming-language>Java</programming-language>
+	<category rdf:resource="http://projects.apache.org/category/retired" />
 	<category rdf:resource="http://projects.apache.org/category/library" />
 	<category rdf:resource="http://projects.apache.org/category/network-server" />
 	<category rdf:resource="http://projects.apache.org/category/network-client" />
